@@ -151,20 +151,20 @@ public class FacelogDefaultImpl implements IFaceLog {
 	}
 
 	@Override
-	public PersonBean savePerson(PersonBean personBean, byte[] idPhoto, byte[] feature, List<FaceBean> faceBeans,
-			Token token) {
+	public PersonBean savePerson(PersonBean personBean, byte[] idPhoto, byte[] feature, String featureVersion,
+			List<FaceBean> faceBeans, Token token) {
 		return null;
 	}
 
 	@Override
 	public PersonBean savePerson(PersonBean personBean, byte[] idPhoto, byte[] feature,
-			Map<ByteBuffer, FaceBean> faceInfo, Token token) {
+			String featureVersion, Map<ByteBuffer, FaceBean> faceInfo, Token token) {
 		return null;
 	}
 
 	@Override
-	public PersonBean savePerson(PersonBean personBean, byte[] idPhoto, byte[] feature, byte[] featureImage,
-			FaceBean featureFaceBean, Token token) {
+	public PersonBean savePerson(PersonBean personBean, byte[] idPhoto, byte[] feature, String featureVersion,
+			byte[] featureImage, FaceBean featureFaceBean, Token token) {
 		return null;
 	}
 
@@ -179,15 +179,30 @@ public class FacelogDefaultImpl implements IFaceLog {
 	}
 
 	@Override
+	public List<Integer> loadUpdatedPersons(String timestamp) {
+		return null;
+	}
+
+	@Override
 	public List<Integer> loadPersonIdByUpdateTime(long timestamp) {
 		return null;
 	}
 
 	@Override
+	public List<Integer> loadPersonIdByUpdateTime(String timestamp) {
+		return null;
+	}
+	
+	@Override
 	public List<String> loadFeatureMd5ByUpdate(long timestamp) {
 		return null;
 	}
 
+	@Override
+	public List<String> loadFeatureMd5ByUpdate(String timestamp) {
+		return null;
+	}
+	
 	@Override
 	public void addLog(LogBean logBean, Token token) throws DuplicateRecordException {
 		
@@ -232,7 +247,17 @@ public class FacelogDefaultImpl implements IFaceLog {
 	}
 
 	@Override
+	public List<LogLightBean> loadLogLightByVerifyTime(String timestamp, int startRow, int numRows) {
+		return null;
+	}
+	
+	@Override
 	public int countLogLightByVerifyTime(long timestamp) {
+		return 0;
+	}
+
+	@Override
+	public int countLogLightByVerifyTime(String timestamp) {
 		return 0;
 	}
 
@@ -253,20 +278,20 @@ public class FacelogDefaultImpl implements IFaceLog {
 	}
 
 	@Override
-	public FeatureBean addFeature(byte[] feature, Integer personId, List<FaceBean> faecBeans, Token token)
+	public FeatureBean addFeature(byte[] feature, String featureVersion, Integer personId, List<FaceBean> faecBeans, Token token)
 			throws DuplicateRecordException {
 		return null;
 	}
 
 	@Override
-	public FeatureBean addFeature(final byte[] feature, final Integer personId, final boolean asIdPhotoIfAbsent, final byte[] featurePhoto, final FaceBean faceBean, Token token)
+	public FeatureBean addFeature(final byte[] feature, String featureVersion, final Integer personId, final boolean asIdPhotoIfAbsent, final byte[] featurePhoto, final FaceBean faceBean, Token token)
 			throws DuplicateRecordException {
 		return null;
 	}
 
 	@Override
-	public FeatureBean addFeature(byte[] feature, Integer personId, Map<ByteBuffer, FaceBean> faceInfo,
-			Token token) throws DuplicateRecordException {
+	public FeatureBean addFeature(byte[] feature, String featureVersion, Integer personId,
+			Map<ByteBuffer, FaceBean> faceInfo, Token token) throws DuplicateRecordException {
 		return null;
 	}
 	
@@ -548,6 +573,11 @@ public class FacelogDefaultImpl implements IFaceLog {
 	}
 
 	@Override
+	public List<PermitBean> loadPermitByUpdate(String timestamp) {
+		return null;
+	}
+	
+	@Override
 	public List<Integer> loadPersonGroupByWhere(String where, int startRow, int numRows) {
 		return null;
 	}
@@ -736,6 +766,5 @@ public class FacelogDefaultImpl implements IFaceLog {
 	@Override
 	public void bindBorder(Integer personGroupId, Integer deviceGroupId, Token token) {
 	}
-
 
 }

@@ -1118,11 +1118,11 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
                 dirtyCount++;
             }
 
-            if (bean.checkSdkVersionModified()) {
+            if (bean.checkUsedSdksModified()) {
                 if (dirtyCount>0) {
                     sql.append(",");
                 }
-                sql.append("sdk_version");
+                sql.append("used_sdks");
                 dirtyCount++;
             }
 
@@ -1344,13 +1344,13 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
                 sql.append("version=?");
             }
 
-            if (bean.checkSdkVersionModified()) {
+            if (bean.checkUsedSdksModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
                     useComma=true;
                 }
-                sql.append("sdk_version=?");
+                sql.append("used_sdks=?");
             }
 
             if (bean.checkSerialNoModified()) {
@@ -1867,51 +1867,11 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
         return deleteUsingTemplate(bean);
     }
     
-
-    /**
-     * Retrieves an array of FlDeviceBean using the sdk_version index.
-     *
-     * @param sdkVersion the sdk_version column's value filter.
-     * @return an array of FlDeviceBean
-     * @throws DaoException
-     */
-    public FlDeviceBean[] loadByIndexSdkVersion(String sdkVersion) throws DaoException
-    {
-        return (FlDeviceBean[])this.loadByIndexSdkVersionAsList(sdkVersion).toArray(new FlDeviceBean[0]);
-    }
-    
-    /**
-     * Retrieves a list of FlDeviceBean using the sdk_version index.
-     *
-     * @param sdkVersion the sdk_version column's value filter.
-     * @return a list of FlDeviceBean
-     * @throws DaoException
-     */
-    public List<FlDeviceBean> loadByIndexSdkVersionAsList(String sdkVersion) throws DaoException
-    {
-        FlDeviceBean bean = this.createBean();
-        bean.setSdkVersion(sdkVersion);
-        return loadUsingTemplateAsList(bean);
-    }
-    /**
-     * Deletes rows using the sdk_version index.
-     *
-     * @param sdkVersion the sdk_version column's value filter.
-     * @return the number of deleted objects
-     * @throws DaoException
-     */
-    public int deleteByIndexSdkVersion(String sdkVersion) throws DaoException
-    {
-        FlDeviceBean bean = this.createBean();
-        bean.setSdkVersion(sdkVersion);
-        return deleteUsingTemplate(bean);
-    }
-    
     
     /**
      * Retrieves a list of FlDeviceBean using the index specified by keyIndex.
      * @param keyIndex valid values: <br>
-     *        {@link Constant#FL_DEVICE_INDEX_MAC},{@link Constant#FL_DEVICE_INDEX_SERIAL_NO},{@link Constant#FL_DEVICE_INDEX_GROUP_ID},{@link Constant#FL_DEVICE_INDEX_SDK_VERSION}
+     *        {@link Constant#FL_DEVICE_INDEX_MAC},{@link Constant#FL_DEVICE_INDEX_SERIAL_NO},{@link Constant#FL_DEVICE_INDEX_GROUP_ID}
      * @param keys key values of index
      * @return a list of FlDeviceBean
      * @throws DaoException
@@ -1955,16 +1915,6 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
             }
             return this.loadByIndexGroupIdAsList((Integer)keys[0]);        
         }
-        case FL_DEVICE_INDEX_SDK_VERSION:{
-            if(keys.length != 1){
-                throw new IllegalArgumentException("argument number mismatch with index 'sdk_version' column number");
-            }
-            
-            if(null != keys[0] && !(keys[0] instanceof String)){
-                throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
-            }
-            return this.loadByIndexSdkVersionAsList((String)keys[0]);        
-        }
         default:
             throw new IllegalArgumentException(String.format("invalid keyIndex %d", keyIndex));
         }
@@ -1973,7 +1923,7 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
     /**
      * Deletes rows using key.
      * @param keyIndex valid values: <br>
-     *        {@link Constant#FL_DEVICE_INDEX_MAC},{@link Constant#FL_DEVICE_INDEX_SERIAL_NO},{@link Constant#FL_DEVICE_INDEX_GROUP_ID},{@link Constant#FL_DEVICE_INDEX_SDK_VERSION}
+     *        {@link Constant#FL_DEVICE_INDEX_MAC},{@link Constant#FL_DEVICE_INDEX_SERIAL_NO},{@link Constant#FL_DEVICE_INDEX_GROUP_ID}
      * @param keys key values of index
      * @return the number of deleted objects
      * @throws DaoException
@@ -2014,16 +1964,6 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
             }
             return this.deleteByIndexGroupId((Integer)keys[0]);
-        }
-        case FL_DEVICE_INDEX_SDK_VERSION:{
-            if(keys.length != 1){
-                throw new IllegalArgumentException("argument number mismatch with index 'sdk_version' column number");
-            }
-            
-            if(null != keys[0] && !(keys[0] instanceof String)){
-                throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
-            }
-            return this.deleteByIndexSdkVersion((String)keys[0]);
         }
         default:
             throw new IllegalArgumentException(String.format("invalid keyIndex %d", keyIndex));
@@ -2247,12 +2187,12 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("version ").append(sqlEqualsOperation).append("?");
                 }
             }
-            if (bean.checkSdkVersionModified()) {
+            if (bean.checkUsedSdksModified()) {
                 dirtyCount ++;
-                if (bean.getSdkVersion() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("sdk_version IS NULL");
+                if (bean.getUsedSdks() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("used_sdks IS NULL");
                 } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("sdk_version ").append(sqlEqualsOperation).append("?");
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("used_sdks ").append(sqlEqualsOperation).append("?");
                 }
             }
             if (bean.checkSerialNoModified()) {
@@ -2480,23 +2420,23 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
                         throw new DaoException("Unknown search type " + searchType);
                 }
             }
-            if (bean.checkSdkVersionModified()) {
+            if (bean.checkUsedSdksModified()) {
                 switch (searchType) {
                     case SEARCH_EXACT:
-                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getSdkVersion() + "]");
-                        if (bean.getSdkVersion() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, bean.getSdkVersion()); }
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getUsedSdks() + "]");
+                        if (bean.getUsedSdks() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getUsedSdks()); }
                         break;
                     case SEARCH_LIKE:
-                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getSdkVersion() + "%]");
-                        if ( bean.getSdkVersion()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getSdkVersion() + SQL_LIKE_WILDCARD); }
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getUsedSdks() + "%]");
+                        if ( bean.getUsedSdks()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getUsedSdks() + SQL_LIKE_WILDCARD); }
                         break;
                     case SEARCH_STARTING_LIKE:
-                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getSdkVersion() + "]");
-                        if ( bean.getSdkVersion() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getSdkVersion()); }
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getUsedSdks() + "]");
+                        if ( bean.getUsedSdks() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getUsedSdks()); }
                         break;
                     case SEARCH_ENDING_LIKE:
-                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getSdkVersion() + "%]");
-                        if (bean.getSdkVersion()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, bean.getSdkVersion() + SQL_LIKE_WILDCARD); }
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getUsedSdks() + "%]");
+                        if (bean.getUsedSdks()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getUsedSdks() + SQL_LIKE_WILDCARD); }
                         break;
                     default:
                         throw new DaoException("Unknown search type " + searchType);
@@ -2728,7 +2668,7 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
             bean.setManufacturer(rs.getString(7));
             bean.setMadeDate(rs.getDate(8));
             bean.setVersion(rs.getString(9));
-            bean.setSdkVersion(rs.getString(10));
+            bean.setUsedSdks(rs.getString(10));
             bean.setSerialNo(rs.getString(11));
             bean.setMac(rs.getString(12));
             bean.setRemark(rs.getString(13));
@@ -2804,9 +2744,9 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
                         ++pos;
                         bean.setVersion(rs.getString(pos));
                         break;
-                    case FL_DEVICE_ID_SDK_VERSION:
+                    case FL_DEVICE_ID_USED_SDKS:
                         ++pos;
-                        bean.setSdkVersion(rs.getString(pos));
+                        bean.setUsedSdks(rs.getString(pos));
                         break;
                     case FL_DEVICE_ID_SERIAL_NO:
                         ++pos;
@@ -2873,7 +2813,7 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
             bean.setManufacturer(rs.getString("manufacturer"));
             bean.setMadeDate(rs.getDate("made_date"));
             bean.setVersion(rs.getString("version"));
-            bean.setSdkVersion(rs.getString("sdk_version"));
+            bean.setUsedSdks(rs.getString("used_sdks"));
             bean.setSerialNo(rs.getString("serial_no"));
             bean.setMac(rs.getString("mac"));
             bean.setRemark(rs.getString("remark"));

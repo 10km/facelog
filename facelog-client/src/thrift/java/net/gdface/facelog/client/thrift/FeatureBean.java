@@ -44,13 +44,13 @@ public final class FeatureBean
     @ThriftField
     public void setMd5(final String md5) { this.md5 = md5; }
 
-    private String sdkVersion;
+    private String version;
 
-    @ThriftField(value=5, name="sdkVersion", requiredness=Requiredness.OPTIONAL)
-    public String getSdkVersion() { return sdkVersion; }
+    @ThriftField(value=5, name="version", requiredness=Requiredness.OPTIONAL)
+    public String getVersion() { return version; }
 
     @ThriftField
-    public void setSdkVersion(final String sdkVersion) { this.sdkVersion = sdkVersion; }
+    public void setVersion(final String version) { this.version = version; }
 
     private Integer personId;
 
@@ -84,7 +84,7 @@ public final class FeatureBean
             .add("modified", modified)
             .add("initialized", initialized)
             .add("md5", md5)
-            .add("sdkVersion", sdkVersion)
+            .add("version", version)
             .add("personId", personId)
             .add("feature", feature)
             .add("updateTime", updateTime)

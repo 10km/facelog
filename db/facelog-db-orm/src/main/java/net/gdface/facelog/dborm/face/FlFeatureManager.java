@@ -1054,11 +1054,11 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
                 dirtyCount++;
             }
 
-            if (bean.checkSdkVersionModified()) {
+            if (bean.checkVersionModified()) {
                 if (dirtyCount>0) {
                     sql.append(",");
                 }
-                sql.append("sdk_version");
+                sql.append("version");
                 dirtyCount++;
             }
 
@@ -1159,13 +1159,13 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
                 sql.append("md5=?");
             }
 
-            if (bean.checkSdkVersionModified()) {
+            if (bean.checkVersionModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
                     useComma=true;
                 }
-                sql.append("sdk_version=?");
+                sql.append("version=?");
             }
 
             if (bean.checkPersonIdModified()) {
@@ -1350,6 +1350,46 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
 
 
     /**
+     * Retrieves an array of FlFeatureBean using the feature_version index.
+     *
+     * @param version the version column's value filter.
+     * @return an array of FlFeatureBean
+     * @throws DaoException
+     */
+    public FlFeatureBean[] loadByIndexVersion(String version) throws DaoException
+    {
+        return (FlFeatureBean[])this.loadByIndexVersionAsList(version).toArray(new FlFeatureBean[0]);
+    }
+    
+    /**
+     * Retrieves a list of FlFeatureBean using the feature_version index.
+     *
+     * @param version the version column's value filter.
+     * @return a list of FlFeatureBean
+     * @throws DaoException
+     */
+    public List<FlFeatureBean> loadByIndexVersionAsList(String version) throws DaoException
+    {
+        FlFeatureBean bean = this.createBean();
+        bean.setVersion(version);
+        return loadUsingTemplateAsList(bean);
+    }
+    /**
+     * Deletes rows using the feature_version index.
+     *
+     * @param version the version column's value filter.
+     * @return the number of deleted objects
+     * @throws DaoException
+     */
+    public int deleteByIndexVersion(String version) throws DaoException
+    {
+        FlFeatureBean bean = this.createBean();
+        bean.setVersion(version);
+        return deleteUsingTemplate(bean);
+    }
+    
+
+    /**
      * Retrieves an array of FlFeatureBean using the person_id index.
      *
      * @param personId the person_id column's value filter.
@@ -1388,51 +1428,11 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
         return deleteUsingTemplate(bean);
     }
     
-
-    /**
-     * Retrieves an array of FlFeatureBean using the sdk_version index.
-     *
-     * @param sdkVersion the sdk_version column's value filter.
-     * @return an array of FlFeatureBean
-     * @throws DaoException
-     */
-    public FlFeatureBean[] loadByIndexSdkVersion(String sdkVersion) throws DaoException
-    {
-        return (FlFeatureBean[])this.loadByIndexSdkVersionAsList(sdkVersion).toArray(new FlFeatureBean[0]);
-    }
-    
-    /**
-     * Retrieves a list of FlFeatureBean using the sdk_version index.
-     *
-     * @param sdkVersion the sdk_version column's value filter.
-     * @return a list of FlFeatureBean
-     * @throws DaoException
-     */
-    public List<FlFeatureBean> loadByIndexSdkVersionAsList(String sdkVersion) throws DaoException
-    {
-        FlFeatureBean bean = this.createBean();
-        bean.setSdkVersion(sdkVersion);
-        return loadUsingTemplateAsList(bean);
-    }
-    /**
-     * Deletes rows using the sdk_version index.
-     *
-     * @param sdkVersion the sdk_version column's value filter.
-     * @return the number of deleted objects
-     * @throws DaoException
-     */
-    public int deleteByIndexSdkVersion(String sdkVersion) throws DaoException
-    {
-        FlFeatureBean bean = this.createBean();
-        bean.setSdkVersion(sdkVersion);
-        return deleteUsingTemplate(bean);
-    }
-    
     
     /**
      * Retrieves a list of FlFeatureBean using the index specified by keyIndex.
      * @param keyIndex valid values: <br>
-     *        {@link Constant#FL_FEATURE_INDEX_PERSON_ID},{@link Constant#FL_FEATURE_INDEX_SDK_VERSION}
+     *        {@link Constant#FL_FEATURE_INDEX_VERSION},{@link Constant#FL_FEATURE_INDEX_PERSON_ID}
      * @param keys key values of index
      * @return a list of FlFeatureBean
      * @throws DaoException
@@ -1444,6 +1444,16 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
             throw new NullPointerException();
         }
         switch(keyIndex){
+        case FL_FEATURE_INDEX_VERSION:{
+            if(keys.length != 1){
+                throw new IllegalArgumentException("argument number mismatch with index 'feature_version' column number");
+            }
+            
+            if(null != keys[0] && !(keys[0] instanceof String)){
+                throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
+            }
+            return this.loadByIndexVersionAsList((String)keys[0]);        
+        }
         case FL_FEATURE_INDEX_PERSON_ID:{
             if(keys.length != 1){
                 throw new IllegalArgumentException("argument number mismatch with index 'person_id' column number");
@@ -1454,16 +1464,6 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
             }
             return this.loadByIndexPersonIdAsList((Integer)keys[0]);        
         }
-        case FL_FEATURE_INDEX_SDK_VERSION:{
-            if(keys.length != 1){
-                throw new IllegalArgumentException("argument number mismatch with index 'sdk_version' column number");
-            }
-            
-            if(null != keys[0] && !(keys[0] instanceof String)){
-                throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
-            }
-            return this.loadByIndexSdkVersionAsList((String)keys[0]);        
-        }
         default:
             throw new IllegalArgumentException(String.format("invalid keyIndex %d", keyIndex));
         }
@@ -1472,7 +1472,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
     /**
      * Deletes rows using key.
      * @param keyIndex valid values: <br>
-     *        {@link Constant#FL_FEATURE_INDEX_PERSON_ID},{@link Constant#FL_FEATURE_INDEX_SDK_VERSION}
+     *        {@link Constant#FL_FEATURE_INDEX_VERSION},{@link Constant#FL_FEATURE_INDEX_PERSON_ID}
      * @param keys key values of index
      * @return the number of deleted objects
      * @throws DaoException
@@ -1484,6 +1484,16 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
             throw new NullPointerException();
         }
         switch(keyIndex){
+        case FL_FEATURE_INDEX_VERSION:{
+            if(keys.length != 1){
+                throw new IllegalArgumentException("argument number mismatch with index 'feature_version' column number");
+            }
+            
+            if(null != keys[0] && !(keys[0] instanceof String)){
+                throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
+            }
+            return this.deleteByIndexVersion((String)keys[0]);
+        }
         case FL_FEATURE_INDEX_PERSON_ID:{
             if(keys.length != 1){
                 throw new IllegalArgumentException("argument number mismatch with index 'person_id' column number");
@@ -1493,16 +1503,6 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
             }
             return this.deleteByIndexPersonId((Integer)keys[0]);
-        }
-        case FL_FEATURE_INDEX_SDK_VERSION:{
-            if(keys.length != 1){
-                throw new IllegalArgumentException("argument number mismatch with index 'sdk_version' column number");
-            }
-            
-            if(null != keys[0] && !(keys[0] instanceof String)){
-                throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
-            }
-            return this.deleteByIndexSdkVersion((String)keys[0]);
         }
         default:
             throw new IllegalArgumentException(String.format("invalid keyIndex %d", keyIndex));
@@ -1662,12 +1662,12 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("md5 ").append(sqlEqualsOperation).append("?");
                 }
             }
-            if (bean.checkSdkVersionModified()) {
+            if (bean.checkVersionModified()) {
                 dirtyCount ++;
-                if (bean.getSdkVersion() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("sdk_version IS NULL");
+                if (bean.getVersion() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("version IS NULL");
                 } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("sdk_version ").append(sqlEqualsOperation).append("?");
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("version ").append(sqlEqualsOperation).append("?");
                 }
             }
             if (bean.checkPersonIdModified()) {
@@ -1741,23 +1741,23 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
                         throw new DaoException("Unknown search type " + searchType);
                 }
             }
-            if (bean.checkSdkVersionModified()) {
+            if (bean.checkVersionModified()) {
                 switch (searchType) {
                     case SEARCH_EXACT:
-                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getSdkVersion() + "]");
-                        if (bean.getSdkVersion() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, bean.getSdkVersion()); }
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getVersion() + "]");
+                        if (bean.getVersion() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getVersion()); }
                         break;
                     case SEARCH_LIKE:
-                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getSdkVersion() + "%]");
-                        if ( bean.getSdkVersion()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getSdkVersion() + SQL_LIKE_WILDCARD); }
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getVersion() + "%]");
+                        if ( bean.getVersion()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getVersion() + SQL_LIKE_WILDCARD); }
                         break;
                     case SEARCH_STARTING_LIKE:
-                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getSdkVersion() + "]");
-                        if ( bean.getSdkVersion() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getSdkVersion()); }
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getVersion() + "]");
+                        if ( bean.getVersion() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getVersion()); }
                         break;
                     case SEARCH_ENDING_LIKE:
-                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getSdkVersion() + "%]");
-                        if (bean.getSdkVersion()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.CHAR);} } else { ps.setString(++dirtyCount, bean.getSdkVersion() + SQL_LIKE_WILDCARD); }
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getVersion() + "%]");
+                        if (bean.getVersion()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getVersion() + SQL_LIKE_WILDCARD); }
                         break;
                     default:
                         throw new DaoException("Unknown search type " + searchType);
@@ -1893,7 +1893,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
         try
         {
             bean.setMd5(rs.getString(1));
-            bean.setSdkVersion(rs.getString(2));
+            bean.setVersion(rs.getString(2));
             bean.setPersonId(Manager.getInteger(rs, 3));
             bean.setFeature(Manager.getBytes(rs, 4));
             bean.setUpdateTime(rs.getTimestamp(5));
@@ -1933,9 +1933,9 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
                         ++pos;
                         bean.setMd5(rs.getString(pos));
                         break;
-                    case FL_FEATURE_ID_SDK_VERSION:
+                    case FL_FEATURE_ID_VERSION:
                         ++pos;
-                        bean.setSdkVersion(rs.getString(pos));
+                        bean.setVersion(rs.getString(pos));
                         break;
                     case FL_FEATURE_ID_PERSON_ID:
                         ++pos;
@@ -1978,7 +1978,7 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
         try
         {
             bean.setMd5(rs.getString("md5"));
-            bean.setSdkVersion(rs.getString("sdk_version"));
+            bean.setVersion(rs.getString("version"));
             bean.setPersonId(Manager.getInteger(rs, "person_id"));
             bean.setFeature(Manager.getBytes(rs, "feature"));
             bean.setUpdateTime(rs.getTimestamp("update_time"));

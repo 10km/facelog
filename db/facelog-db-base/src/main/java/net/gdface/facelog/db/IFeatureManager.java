@@ -377,6 +377,34 @@ public interface IFeatureManager extends TableManager<FeatureBean>
 
 
      /**
+     * Retrieves an array of FeatureBean using the feature_version index.
+     *
+     * @param version the version column's value filter.
+     * @return an array of FeatureBean
+     * @throws RuntimeDaoException
+     */
+    public FeatureBean[] loadByIndexVersion(String version)throws RuntimeDaoException;
+    
+    /**
+     * Retrieves a list of FeatureBean using the feature_version index.
+     *
+     * @param version the version column's value filter.
+     * @return a list of FeatureBean
+     * @throws RuntimeDaoException
+     */
+    public java.util.List<FeatureBean> loadByIndexVersionAsList(String version)throws RuntimeDaoException;
+
+    /**
+     * Deletes rows using the feature_version index.
+     *
+     * @param version the version column's value filter.
+     * @return the number of deleted objects
+     * @throws RuntimeDaoException
+     */
+    public int deleteByIndexVersion(String version)throws RuntimeDaoException;
+    
+
+     /**
      * Retrieves an array of FeatureBean using the person_id index.
      *
      * @param personId the person_id column's value filter.
@@ -402,34 +430,6 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @throws RuntimeDaoException
      */
     public int deleteByIndexPersonId(Integer personId)throws RuntimeDaoException;
-    
-
-     /**
-     * Retrieves an array of FeatureBean using the sdk_version index.
-     *
-     * @param sdkVersion the sdk_version column's value filter.
-     * @return an array of FeatureBean
-     * @throws RuntimeDaoException
-     */
-    public FeatureBean[] loadByIndexSdkVersion(String sdkVersion)throws RuntimeDaoException;
-    
-    /**
-     * Retrieves a list of FeatureBean using the sdk_version index.
-     *
-     * @param sdkVersion the sdk_version column's value filter.
-     * @return a list of FeatureBean
-     * @throws RuntimeDaoException
-     */
-    public java.util.List<FeatureBean> loadByIndexSdkVersionAsList(String sdkVersion)throws RuntimeDaoException;
-
-    /**
-     * Deletes rows using the sdk_version index.
-     *
-     * @param sdkVersion the sdk_version column's value filter.
-     * @return the number of deleted objects
-     * @throws RuntimeDaoException
-     */
-    public int deleteByIndexSdkVersion(String sdkVersion)throws RuntimeDaoException;
     
 
     //45

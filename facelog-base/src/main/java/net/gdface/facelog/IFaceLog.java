@@ -265,13 +265,14 @@ public interface IFaceLog{
 	 * <br>{@code DEVICE_ONLY}
 	 * @param personBean {@code fl_person}表记录
 	 * @param idPhoto 标准照图像,可为null
-	 * @param feature 用于验证的人脸特征数据,不可重复, 参见 {@link #addFeature(byte[], Integer, List, Token)}
-	 * @param faceBeans 可为{@code null},参见 {@link #addFeature(byte[], Integer, List, Token)}
+	 * @param feature 用于验证的人脸特征数据,不可重复, 参见 {@link #addFeature(byte[], String, Integer, List, Token)}
+	 * @param featureVersion 特征(SDk)版本号
+	 * @param faceBeans 可为{@code null},参见 {@link #addFeature(byte[], String, Integer, List, Token)}
 	 * @param token 访问令牌
 	 * @return 保存的{@link PersonBean}
 	 */
 	@DeriveMethod(methodSuffix="WithPhotoAndFeatureMultiFaces")
-	public PersonBean savePerson(PersonBean personBean, byte[] idPhoto, byte[] feature, List<FaceBean> faceBeans, Token token);
+	public PersonBean savePerson(PersonBean personBean, byte[] idPhoto, byte[] feature, String featureVersion, List<FaceBean> faceBeans, Token token);
 
 	/**
 	 * 保存人员信息记录
@@ -279,13 +280,14 @@ public interface IFaceLog{
 	 * @param personBean {@code fl_person}表记录
 	 * @param idPhoto 标准照图像,可为null
 	 * @param feature 用于验证的人脸特征数据 
+	 * @param featureVersion 特征(SDk)版本号
 	 * @param faceInfo 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null 
 	 * @param token (设备)访问令牌
 	 * @return 保存的{@link PersonBean}对象
 	 */
 	@DeriveMethod(methodSuffix="WithPhotoAndFeatureMultiImage")
-	public PersonBean savePerson(PersonBean personBean, byte[] idPhoto, byte[] feature, Map<ByteBuffer, FaceBean> faceInfo,
-			Token token);
+	public PersonBean savePerson(PersonBean personBean, byte[] idPhoto, byte[] feature, String featureVersion,
+			Map<ByteBuffer, FaceBean> faceInfo, Token token);
 
 	/**
 	 * 保存人员信息记录<br>
@@ -293,14 +295,15 @@ public interface IFaceLog{
 	 * @param personBean 人员信息对象,{@code fl_person}表记录
 	 * @param idPhoto 标准照图像,可以为{@code null}
 	 * @param feature 人脸特征数据,可以为{@code null}
+	 * @param featureVersion 特征(SDk)版本号
 	 * @param featureImage 提取特征源图像,为null 时,默认使用idPhoto
 	 * @param featureFaceBean 人脸位置对象,为null 时,不保存人脸数据
 	 * @param token (设备)访问令牌
 	 * @return 保存的{@link PersonBean}
 	 */
 	@DeriveMethod(methodSuffix="Full")
-	public PersonBean savePerson(PersonBean personBean, byte[] idPhoto, byte[] feature, byte[] featureImage,
-			FaceBean featureFaceBean, Token token);
+	public PersonBean savePerson(PersonBean personBean, byte[] idPhoto, byte[] feature, String featureVersion,
+			byte[] featureImage, FaceBean featureFaceBean, Token token);
 
 	/**
 	 * 替换personId指定的人员记录的人脸特征数据,同时删除原特征数据记录(fl_feature)及关联的fl_face表记录
@@ -318,6 +321,15 @@ public interface IFaceLog{
 	 * @return 返回fl_person.id 列表
 	 */
 	public List<Integer> loadUpdatedPersons(long timestamp);
+	/**
+	 * (主动更新机制实现)<br>
+	 * 返回fl_person.update_time字段大于指定时间戳( {@code timestamp} )的所有fl_person记录<br>
+	 * 同时包含fl_feature更新记录引用的fl_person记录
+	 * @param timestamp 时间戳,{@code yyyy-MM-dd HH:mm:ss}或{@code yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}(ISO8601)格式日期字符串
+	 * @return 返回fl_person.id 列表
+	 */
+	@DeriveMethod(methodSuffix="Timestr")
+	public List<Integer> loadUpdatedPersons(String timestamp);
 
 	/**
 	 * (主动更新机制实现)<br>
@@ -326,6 +338,14 @@ public interface IFaceLog{
 	 * @return 返回fl_person.id 列表
 	 */
 	public List<Integer> loadPersonIdByUpdateTime(long timestamp);
+	/**
+	 * (主动更新机制实现)<br>
+	 * 返回 fl_person.update_time 字段大于指定时间戳( {@code timestamp} )的所有fl_person记录
+	 * @param timestamp 时间戳,{@code yyyy-MM-dd HH:mm:ss}或{@code yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}(ISO8601)格式日期字符串
+	 * @return 返回fl_person.id 列表
+	 */
+	@DeriveMethod(methodSuffix="TimeStr")
+	public List<Integer> loadPersonIdByUpdateTime(String timestamp);
 
 	/**
 	 * (主动更新机制实现)<br>
@@ -334,6 +354,15 @@ public interface IFaceLog{
 	 * @return 返回 fl_feature.md5 列表
 	 */
 	public List<String> loadFeatureMd5ByUpdate(long timestamp);
+
+	/**
+	 * (主动更新机制实现)<br>
+	 * 返回 fl_feature.update_time 字段大于指定时间戳( {@code timestamp} )的所有fl_feature记录
+	 * @param timestamp 时间戳,{@code yyyy-MM-dd HH:mm:ss}或{@code yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}(ISO8601)格式日期字符串
+	 * @return 返回 fl_feature.md5 列表
+	 */
+	@DeriveMethod(methodSuffix="TimeStr")
+	public List<String> loadFeatureMd5ByUpdate(String timestamp);
 
 	/**
 	 * 添加一条验证日志记录
@@ -411,18 +440,37 @@ public interface IFaceLog{
     /**
      * (主动更新机制实现)<br>
      * 返回 fl_log_light.verify_time 字段大于指定时间戳({@code timestamp})的所有记录
-     * @param timestamp 时间戳
+	 * @param timestamp 时间戳,{@code yyyy-MM-dd HH:mm:ss}或{@code yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}(ISO8601)格式日期字符串
 	 * @param startRow 记录起始行号 (first row = 1, last row = -1)
 	 * @param numRows 返回记录条数 为负值是返回{@code startRow}开始的所有行
      */
 	public List<LogLightBean> loadLogLightByVerifyTime(long timestamp,int startRow, int numRows);
+    /**
+     * (主动更新机制实现)<br>
+     * 返回 fl_log_light.verify_time 字段大于指定时间戳({@code timestamp})的所有记录
+     * @param timestamp 时间戳
+	 * @param startRow 记录起始行号 (first row = 1, last row = -1)
+	 * @param numRows 返回记录条数 为负值是返回{@code startRow}开始的所有行
+     */
+	@DeriveMethod(methodSuffix="Timestr")
+	public List<LogLightBean> loadLogLightByVerifyTime(String timestamp, int startRow, int numRows);
+
     /**
      * 返回fl_log_light.verify_time 字段大于指定时间戳({@code timestamp})的记录总数
      * @param timestamp 时间戳
      * @return 满足条件的记录条数
      * @see #countLogLightByWhere(String)
      */
-	 public int countLogLightByVerifyTime(long timestamp);
+	public int countLogLightByVerifyTime(long timestamp);
+    /**
+     * 返回fl_log_light.verify_time 字段大于指定时间戳({@code timestamp})的记录总数
+     * @param timestamp 时间戳,{@code yyyy-MM-dd HH:mm:ss}或{@code yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}(ISO8601)格式日期字符串
+     * @return 满足条件的记录条数
+     * @see #countLogLightByWhere(String)
+     */
+	@DeriveMethod(methodSuffix="Timestr")
+	public int countLogLightByVerifyTime(String timestamp);
+
 	/**
 	 * 判断{@code md5}指定的图像记录是否存在
 	 * @param md5 图像的MD5校验码
@@ -454,19 +502,21 @@ public interface IFaceLog{
 	 * 增加一个人脸特征记录，如果记录已经存在则抛出异常<br>
 	 * {@code DEVICE_ONLY}
 	 * @param feature 人脸特征数据
+	 * @param featureVersion 特征(SDk)版本号
 	 * @param personId 关联的人员id(fl_person.id),可为null
 	 * @param faecBeans 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null
 	 * @param token (设备)访问令牌
 	 * @return 保存的人脸特征记录{@link FeatureBean}
 	 * @throws DuplicateRecordException 
 	 */
-	public FeatureBean addFeature(byte[] feature, Integer personId, List<FaceBean> faecBeans, Token token) throws DuplicateRecordException;
+	public FeatureBean addFeature(byte[] feature, String featureVersion, Integer personId, List<FaceBean> faecBeans, Token token) throws DuplicateRecordException;
 	
 	/**
 	 * 增加一个人脸特征记录，如果记录已经存在则抛出异常<br>
 	 * 适用于一张人脸图像提取一个人脸特征的算法<br>
 	 * {@code DEVICE_ONLY}
 	 * @param feature 特征数据
+	 * @param featureVersion 特征(SDk)版本号
 	 * @param personId 关联的人员id(fl_person.id),可为null
 	 * @param asIdPhotoIfAbsent 如果{@code personId}指定的记录没指定身份照片,
 	 * 是否用{@code featurePhoto}作为身份照片,{@code featurePhoto}为{@code null}时无效
@@ -478,12 +528,13 @@ public interface IFaceLog{
 	 * @since 2.1.2
 	 */
 	@DeriveMethod(methodSuffix="WithImage")
-	FeatureBean addFeature(final byte[] feature, final Integer personId, final boolean asIdPhotoIfAbsent, final byte[] featurePhoto, final FaceBean faceBean, Token token)throws DuplicateRecordException;
+	FeatureBean addFeature(final byte[] feature, String featureVersion, final Integer personId, final boolean asIdPhotoIfAbsent, final byte[] featurePhoto, final FaceBean faceBean, Token token)throws DuplicateRecordException;
 
 	/**
 	 * 增加一个人脸特征记录,特征数据由faceInfo指定的多张图像合成，如果记录已经存在则抛出异常
 	 * <br>{@code DEVICE_ONLY}
 	 * @param feature 特征数据
+	 * @param featureVersion 特征(SDk)版本号
 	 * @param personId 关联的人员id(fl_person.id),可为null
 	 * @param faceInfo 生成特征数据的图像及人脸信息对象(每张图对应一张人脸),可为null
 	 * @param token (设备)访问令牌
@@ -491,7 +542,7 @@ public interface IFaceLog{
 	 * @throws DuplicateRecordException 
 	 */
 	@DeriveMethod(methodSuffix="Multi")
-	public FeatureBean addFeature(byte[] feature, Integer personId, Map<ByteBuffer, FaceBean> faceInfo, Token token)
+	public FeatureBean addFeature(byte[] feature, String featureVersion, Integer personId, Map<ByteBuffer, FaceBean> faceInfo, Token token)
 			throws DuplicateRecordException;
 
 	/**
@@ -965,6 +1016,15 @@ public interface IFaceLog{
 	 * @return
 	 */
 	public List<PermitBean> loadPermitByUpdate(long timestamp);
+	/**
+	 * (主动更新机制实现)<br>
+	 * 返回 fl_permit.create_time 字段大于指定时间戳( {@code timestamp} )的所有fl_permit记录
+	 * @param timestamp 时间戳,{@code yyyy-MM-dd HH:mm:ss}或{@code yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}(ISO8601)格式日期字符串
+	 * @return
+	 */
+	@DeriveMethod(methodSuffix="Timestr")
+	public List<PermitBean> loadPermitByUpdate(String timestamp);
+
     /**
      * 查询{@code where} SQL条件语句指定的记录
      * @param where 'WHERE'开头的SQL条件语句,为{@code null}或空时加载所有记录
@@ -1250,5 +1310,6 @@ public interface IFaceLog{
 	 * @return
 	 */
 	public boolean isLocal();
+
 
 }

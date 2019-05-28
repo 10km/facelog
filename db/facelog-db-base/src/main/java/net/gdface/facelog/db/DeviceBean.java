@@ -67,9 +67,9 @@ public final class DeviceBean
     @ApiModelProperty(value = "设备版本号"  ,dataType="String")
     private String version;
 
-    /** comments:(特征码)算法版本号,用于区分不同人脸识别算法生成的特征数据(允许字母,数字,-,.,_符号) */
-    @ApiModelProperty(value = "(特征码)算法版本号,用于区分不同人脸识别算法生成的特征数据(允许字母,数字,-,.,_符号)" ,required=true ,dataType="String")
-    private String sdkVersion;
+    /** comments:支持的特征码(算法)版本号列表(逗号分隔),特征版本号用于区分不同人脸识别算法生成的特征数据(SDK版本号命名允许字母,数字,-,.,_符号) */
+    @ApiModelProperty(value = "支持的特征码(算法)版本号列表(逗号分隔),特征版本号用于区分不同人脸识别算法生成的特征数据(SDK版本号命名允许字母,数字,-,.,_符号)" ,required=true ,dataType="String")
+    private String usedSdks;
 
     /** comments:设备序列号 */
     @ApiModelProperty(value = "设备序列号"  ,dataType="String")
@@ -869,72 +869,72 @@ public final class DeviceBean
         return 0L !=  (initialized & FL_DEVICE_ID_VERSION_MASK);
     }
     /**
-     * Getter method for {@link #sdkVersion}.<br>
+     * Getter method for {@link #usedSdks}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_device.sdk_version</li>
-     * <li>comments: (特征码)算法版本号,用于区分不同人脸识别算法生成的特征数据(允许字母,数字,-,.,_符号)</li>
+     * <li>full name: fl_device.used_sdks</li>
+     * <li>comments: 支持的特征码(算法)版本号列表(逗号分隔),特征版本号用于区分不同人脸识别算法生成的特征数据(SDK版本号命名允许字母,数字,-,.,_符号)</li>
      * <li>NOT NULL</li>
-     * <li>column size: 32</li>
-     * <li>JDBC type returned by the driver: Types.CHAR</li>
+     * <li>column size: 128</li>
+     * <li>JDBC type returned by the driver: Types.VARCHAR</li>
      * </ul>
      *
-     * @return the value of sdkVersion
+     * @return the value of usedSdks
      */
     @ThriftField(value=13)
-    public String getSdkVersion(){
-        return sdkVersion;
+    public String getUsedSdks(){
+        return usedSdks;
     }
     /**
-     * Setter method for {@link #sdkVersion}.<br>
+     * Setter method for {@link #usedSdks}.<br>
      * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value( NOT NULL) to be assigned to sdkVersion
+     * @param newVal the new value( NOT NULL) to be assigned to usedSdks
      */
-    public void setSdkVersion(String newVal)
+    public void setUsedSdks(String newVal)
     {
         checkMutable();
 
-        modified |= FL_DEVICE_ID_SDK_VERSION_MASK;
-        initialized |= FL_DEVICE_ID_SDK_VERSION_MASK;
+        modified |= FL_DEVICE_ID_USED_SDKS_MASK;
+        initialized |= FL_DEVICE_ID_USED_SDKS_MASK;
 
-        if (Objects.equals(newVal, sdkVersion)) {
+        if (Objects.equals(newVal, usedSdks)) {
             return;
         }
-        sdkVersion = newVal;
+        usedSdks = newVal;
     }
     /** 
      * setter for thrift:swift support<br>
      * without modification for {@link #modified} and {@link #initialized}<br>
      * <b>NOTE:</b>DO NOT use the method in your code
      */
-    @ThriftField(name = "sdkVersion")
-    public void writeSdkVersion(String newVal){
+    @ThriftField(name = "usedSdks")
+    public void writeUsedSdks(String newVal){
         checkMutable();
-        sdkVersion = newVal;
+        usedSdks = newVal;
     }
     /**
-     * Determines if the sdkVersion has been modified.
+     * Determines if the usedSdks has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean checkSdkVersionModified()
+    public boolean checkUsedSdksModified()
     {
-        return 0L !=  (modified & FL_DEVICE_ID_SDK_VERSION_MASK);
+        return 0L !=  (modified & FL_DEVICE_ID_USED_SDKS_MASK);
     }
 
     /**
-     * Determines if the sdkVersion has been initialized.<br>
+     * Determines if the usedSdks has been initialized.<br>
      *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean checkSdkVersionInitialized()
+    public boolean checkUsedSdksInitialized()
     {
-        return 0L !=  (initialized & FL_DEVICE_ID_SDK_VERSION_MASK);
+        return 0L !=  (initialized & FL_DEVICE_ID_USED_SDKS_MASK);
     }
     /**
      * Getter method for {@link #serialNo}.<br>
@@ -1508,8 +1508,8 @@ public final class DeviceBean
             return checkMadeDateModified();
         case FL_DEVICE_ID_VERSION:
             return checkVersionModified();
-        case FL_DEVICE_ID_SDK_VERSION:
-            return checkSdkVersionModified();
+        case FL_DEVICE_ID_USED_SDKS:
+            return checkUsedSdksModified();
         case FL_DEVICE_ID_SERIAL_NO:
             return checkSerialNoModified();
         case FL_DEVICE_ID_MAC:
@@ -1550,8 +1550,8 @@ public final class DeviceBean
             return checkMadeDateInitialized();
         case FL_DEVICE_ID_VERSION:
             return checkVersionInitialized();
-        case FL_DEVICE_ID_SDK_VERSION:
-            return checkSdkVersionInitialized();
+        case FL_DEVICE_ID_USED_SDKS:
+            return checkUsedSdksInitialized();
         case FL_DEVICE_ID_SERIAL_NO:
             return checkSerialNoInitialized();
         case FL_DEVICE_ID_MAC:
@@ -1606,7 +1606,7 @@ public final class DeviceBean
             FL_DEVICE_ID_MANUFACTURER_MASK |
             FL_DEVICE_ID_MADE_DATE_MASK |
             FL_DEVICE_ID_VERSION_MASK |
-            FL_DEVICE_ID_SDK_VERSION_MASK |
+            FL_DEVICE_ID_USED_SDKS_MASK |
             FL_DEVICE_ID_SERIAL_NO_MASK |
             FL_DEVICE_ID_MAC_MASK |
             FL_DEVICE_ID_REMARK_MASK |
@@ -1635,7 +1635,7 @@ public final class DeviceBean
         this.manufacturer = null;
         this.madeDate = null;
         this.version = null;
-        this.sdkVersion = null;
+        this.usedSdks = null;
         this.serialNo = null;
         this.mac = null;
         this.remark = null;
@@ -1667,7 +1667,7 @@ public final class DeviceBean
             .append(getManufacturer(), obj.getManufacturer())
             .append(getMadeDate(), obj.getMadeDate())
             .append(getVersion(), obj.getVersion())
-            .append(getSdkVersion(), obj.getSdkVersion())
+            .append(getUsedSdks(), obj.getUsedSdks())
             .append(getSerialNo(), obj.getSerialNo())
             .append(getMac(), obj.getMac())
             .append(getRemark(), obj.getRemark())
@@ -1820,13 +1820,13 @@ public final class DeviceBean
                 append(builder,fullIfStringOrBytes,getVersion());
             }
         }
-        if(checkSdkVersionInitialized()){
-            if(!notNull || null != getSdkVersion()){
+        if(checkUsedSdksInitialized()){
+            if(!notNull || null != getUsedSdks()){
                 if(count++ >0){
                     builder.append(",");
                 }
-                builder.append("sdk_version=");
-                append(builder,fullIfStringOrBytes,getSdkVersion());
+                builder.append("used_sdks=");
+                append(builder,fullIfStringOrBytes,getUsedSdks());
             }
         }
         if(checkSerialNoInitialized()){
@@ -1907,7 +1907,7 @@ public final class DeviceBean
             .append(getManufacturer(), object.getManufacturer())
             .append(getMadeDate(), object.getMadeDate())
             .append(getVersion(), object.getVersion())
-            .append(getSdkVersion(), object.getSdkVersion())
+            .append(getUsedSdks(), object.getUsedSdks())
             .append(getSerialNo(), object.getSerialNo())
             .append(getMac(), object.getMac())
             .append(getRemark(), object.getRemark())
@@ -1944,7 +1944,7 @@ public final class DeviceBean
         setManufacturer((String)null);
         setMadeDate((java.util.Date)null);
         setVersion((String)null);
-        setSdkVersion((String)null);
+        setUsedSdks((String)null);
         setSerialNo((String)null);
         setMac((String)null);
         setRemark((String)null);
@@ -2059,8 +2059,8 @@ public final class DeviceBean
             return (T)getMadeDate();        
         case FL_DEVICE_ID_VERSION: 
             return (T)getVersion();        
-        case FL_DEVICE_ID_SDK_VERSION: 
-            return (T)getSdkVersion();        
+        case FL_DEVICE_ID_USED_SDKS: 
+            return (T)getUsedSdks();        
         case FL_DEVICE_ID_SERIAL_NO: 
             return (T)getSerialNo();        
         case FL_DEVICE_ID_MAC: 
@@ -2111,8 +2111,8 @@ public final class DeviceBean
         case FL_DEVICE_ID_VERSION:
             setVersion((String)value);
             break;
-        case FL_DEVICE_ID_SDK_VERSION:
-            setSdkVersion((String)value);
+        case FL_DEVICE_ID_USED_SDKS:
+            setUsedSdks((String)value);
             break;
         case FL_DEVICE_ID_SERIAL_NO:
             setSerialNo((String)value);
@@ -2289,13 +2289,13 @@ public final class DeviceBean
             return this;
         }
         /** 
-         * fill the field : fl_device.sdk_version
-         * @param sdkVersion (特征码)算法版本号,用于区分不同人脸识别算法生成的特征数据(允许字母,数字,-,.,_符号)
-         * @see DeviceBean#getSdkVersion()
-         * @see DeviceBean#setSdkVersion(String)
+         * fill the field : fl_device.used_sdks
+         * @param usedSdks 支持的特征码(算法)版本号列表(逗号分隔),特征版本号用于区分不同人脸识别算法生成的特征数据(SDK版本号命名允许字母,数字,-,.,_符号)
+         * @see DeviceBean#getUsedSdks()
+         * @see DeviceBean#setUsedSdks(String)
          */
-        public Builder sdkVersion(String sdkVersion){
-            TEMPLATE.get().setSdkVersion(sdkVersion);
+        public Builder usedSdks(String usedSdks){
+            TEMPLATE.get().setUsedSdks(usedSdks);
             return this;
         }
         /** 

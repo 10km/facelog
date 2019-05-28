@@ -658,7 +658,7 @@ var FeatureBean = module.exports.FeatureBean = function(args) {
   this.modified = null;
   this.initialized = null;
   this.md5 = null;
-  this.sdkVersion = null;
+  this.version = null;
   this.personId = null;
   this.feature = null;
   this.updateTime = null;
@@ -681,8 +681,8 @@ var FeatureBean = module.exports.FeatureBean = function(args) {
     if (args.md5 !== undefined && args.md5 !== null) {
       this.md5 = args.md5;
     }
-    if (args.sdkVersion !== undefined && args.sdkVersion !== null) {
-      this.sdkVersion = args.sdkVersion;
+    if (args.version !== undefined && args.version !== null) {
+      this.version = args.version;
     }
     if (args.personId !== undefined && args.personId !== null) {
       this.personId = args.personId;
@@ -739,7 +739,7 @@ FeatureBean.prototype.read = function(input) {
       break;
       case 5:
       if (ftype == Thrift.Type.STRING) {
-        this.sdkVersion = input.readString();
+        this.version = input.readString();
       } else {
         input.skip(ftype);
       }
@@ -796,9 +796,9 @@ FeatureBean.prototype.write = function(output) {
     output.writeString(this.md5);
     output.writeFieldEnd();
   }
-  if (this.sdkVersion !== null && this.sdkVersion !== undefined) {
-    output.writeFieldBegin('sdkVersion', Thrift.Type.STRING, 5);
-    output.writeString(this.sdkVersion);
+  if (this.version !== null && this.version !== undefined) {
+    output.writeFieldBegin('version', Thrift.Type.STRING, 5);
+    output.writeString(this.version);
     output.writeFieldEnd();
   }
   if (this.personId !== null && this.personId !== undefined) {
@@ -1778,7 +1778,7 @@ var DeviceBean = module.exports.DeviceBean = function(args) {
   this.manufacturer = null;
   this.madeDate = null;
   this.version = null;
-  this.sdkVersion = null;
+  this.usedSdks = null;
   this.serialNo = null;
   this.mac = null;
   this.remark = null;
@@ -1829,8 +1829,8 @@ var DeviceBean = module.exports.DeviceBean = function(args) {
     if (args.version !== undefined && args.version !== null) {
       this.version = args.version;
     }
-    if (args.sdkVersion !== undefined && args.sdkVersion !== null) {
-      this.sdkVersion = args.sdkVersion;
+    if (args.usedSdks !== undefined && args.usedSdks !== null) {
+      this.usedSdks = args.usedSdks;
     }
     if (args.serialNo !== undefined && args.serialNo !== null) {
       this.serialNo = args.serialNo;
@@ -1955,7 +1955,7 @@ DeviceBean.prototype.read = function(input) {
       break;
       case 13:
       if (ftype == Thrift.Type.STRING) {
-        this.sdkVersion = input.readString();
+        this.usedSdks = input.readString();
       } else {
         input.skip(ftype);
       }
@@ -2080,9 +2080,9 @@ DeviceBean.prototype.write = function(output) {
     output.writeString(this.version);
     output.writeFieldEnd();
   }
-  if (this.sdkVersion !== null && this.sdkVersion !== undefined) {
-    output.writeFieldBegin('sdkVersion', Thrift.Type.STRING, 13);
-    output.writeString(this.sdkVersion);
+  if (this.usedSdks !== null && this.usedSdks !== undefined) {
+    output.writeFieldBegin('usedSdks', Thrift.Type.STRING, 13);
+    output.writeString(this.usedSdks);
     output.writeFieldEnd();
   }
   if (this.serialNo !== null && this.serialNo !== undefined) {

@@ -163,18 +163,16 @@ public interface Constant {
     public static final int FL_DEVICE_INDEX_SERIAL_NO = 1;
     /** fl_device index (group_id) */
     public static final int FL_DEVICE_INDEX_GROUP_ID = 2;
-    /** fl_device index (sdk_version) */
-    public static final int FL_DEVICE_INDEX_SDK_VERSION = 3;
     /** fl_device_group index (parent) */
     public static final int FL_DEVICE_GROUP_INDEX_PARENT = 0;
     /** fl_face index (feature_md5) */
     public static final int FL_FACE_INDEX_FEATURE_MD5 = 0;
     /** fl_face index (image_md5) */
     public static final int FL_FACE_INDEX_IMAGE_MD5 = 1;
+    /** fl_feature index (version) */
+    public static final int FL_FEATURE_INDEX_VERSION = 0;
     /** fl_feature index (person_id) */
-    public static final int FL_FEATURE_INDEX_PERSON_ID = 0;
-    /** fl_feature index (sdk_version) */
-    public static final int FL_FEATURE_INDEX_SDK_VERSION = 1;
+    public static final int FL_FEATURE_INDEX_PERSON_ID = 1;
     /** fl_image index (device_id) */
     public static final int FL_IMAGE_INDEX_DEVICE_ID = 0;
     /** fl_log index (compare_face) */
@@ -225,9 +223,9 @@ public interface Constant {
     /** Identify the fl_device.version field (ordinal:9). */
     public static final int FL_DEVICE_ID_VERSION = 8;
     public static final int FL_DEVICE_ID_VERSION_MASK = 1 << 8;
-    /** Identify the fl_device.sdk_version field (ordinal:10). */
-    public static final int FL_DEVICE_ID_SDK_VERSION = 9;
-    public static final int FL_DEVICE_ID_SDK_VERSION_MASK = 1 << 9;
+    /** Identify the fl_device.used_sdks field (ordinal:10). */
+    public static final int FL_DEVICE_ID_USED_SDKS = 9;
+    public static final int FL_DEVICE_ID_USED_SDKS_MASK = 1 << 9;
     /** Identify the fl_device.serial_no field (ordinal:11). */
     public static final int FL_DEVICE_ID_SERIAL_NO = 10;
     public static final int FL_DEVICE_ID_SERIAL_NO_MASK = 1 << 10;
@@ -339,9 +337,9 @@ public interface Constant {
     /** Identify the fl_feature.md5 field (ordinal:1). */
     public static final int FL_FEATURE_ID_MD5 = 0;
     public static final int FL_FEATURE_ID_MD5_MASK = 1 << 0;
-    /** Identify the fl_feature.sdk_version field (ordinal:2). */
-    public static final int FL_FEATURE_ID_SDK_VERSION = 1;
-    public static final int FL_FEATURE_ID_SDK_VERSION_MASK = 1 << 1;
+    /** Identify the fl_feature.version field (ordinal:2). */
+    public static final int FL_FEATURE_ID_VERSION = 1;
+    public static final int FL_FEATURE_ID_VERSION_MASK = 1 << 1;
     /** Identify the fl_feature.person_id field (ordinal:3). */
     public static final int FL_FEATURE_ID_PERSON_ID = 2;
     public static final int FL_FEATURE_ID_PERSON_ID_MASK = 1 << 2;
@@ -542,7 +540,7 @@ public interface Constant {
                             + ",fl_device.manufacturer"
                             + ",fl_device.made_date"
                             + ",fl_device.version"
-                            + ",fl_device.sdk_version"
+                            + ",fl_device.used_sdks"
                             + ",fl_device.serial_no"
                             + ",fl_device.mac"
                             + ",fl_device.remark"
@@ -560,7 +558,7 @@ public interface Constant {
                             + ",manufacturer"
                             + ",made_date"
                             + ",version"
-                            + ",sdk_version"
+                            + ",used_sdks"
                             + ",serial_no"
                             + ",mac"
                             + ",remark"
@@ -579,7 +577,7 @@ public interface Constant {
                             + ",manufacturer"
                             + ",madeDate"
                             + ",version"
-                            + ",sdkVersion"
+                            + ",usedSdks"
                             + ",serialNo"
                             + ",mac"
                             + ",remark"
@@ -690,20 +688,20 @@ public interface Constant {
     /////////////////// fl_feature ////////////
     /** Contains all the full fields of the fl_feature table.*/
     public static final String FL_FEATURE_FULL_FIELDS ="fl_feature.md5"
-                            + ",fl_feature.sdk_version"
+                            + ",fl_feature.version"
                             + ",fl_feature.person_id"
                             + ",fl_feature.feature"
                             + ",fl_feature.update_time";
     /** Field that contains the comma separated fields of the fl_feature table. */
     public static final String FL_FEATURE_FIELDS = "md5"
-                            + ",sdk_version"
+                            + ",version"
                             + ",person_id"
                             + ",feature"
                             + ",update_time";
     public static final java.util.List<String> FL_FEATURE_FIELDS_LIST = java.util.Arrays.asList(FL_FEATURE_FIELDS.split(","));
     /** Field that contains the comma separated java fields of the fl_feature table. */
     public static final String FL_FEATURE_JAVA_FIELDS = "md5"
-                            + ",sdkVersion"
+                            + ",version"
                             + ",personId"
                             + ",feature"
                             + ",updateTime";

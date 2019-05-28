@@ -61,7 +61,7 @@ struct FeatureBean {
   2: required i32 modified;
   3: required i32 initialized;
   4: optional string md5;
-  5: optional string sdkVersion;
+  5: optional string version;
   6: optional i32 personId;
   7: optional binary feature;
   8: optional i64 updateTime;
@@ -141,7 +141,7 @@ struct DeviceBean {
   10: optional string manufacturer;
   11: optional i64 madeDate;
   12: optional string version;
-  13: optional string sdkVersion;
+  13: optional string usedSdks;
   14: optional string serialNo;
   15: optional string mac;
   16: optional string remark;
@@ -217,9 +217,9 @@ exception ServiceSecurityException {
 }
 
 service IFaceLog {
-  FeatureBean addFeature(1: optional binary feature, 2: optional i32 personId, 3: optional list<FaceBean> faecBeans, 4: optional Token token) throws (1: DuplicateRecordException ex1, 2: ServiceRuntimeException ex2);
-  FeatureBean addFeatureMulti(1: optional binary feature, 2: optional i32 personId, 3: optional map<binary, FaceBean> faceInfo, 4: optional Token token) throws (1: DuplicateRecordException ex1, 2: ServiceRuntimeException ex2);
-  FeatureBean addFeatureWithImage(1: optional binary feature, 2: optional i32 personId, 3: required bool asIdPhotoIfAbsent, 4: optional binary featurePhoto, 5: optional FaceBean faceBean, 6: optional Token token) throws (1: DuplicateRecordException ex1, 2: ServiceRuntimeException ex2);
+  FeatureBean addFeature(1: optional binary feature, 2: optional string featureVersion, 3: optional i32 personId, 4: optional list<FaceBean> faecBeans, 5: optional Token token) throws (1: DuplicateRecordException ex1, 2: ServiceRuntimeException ex2);
+  FeatureBean addFeatureMulti(1: optional binary feature, 2: optional string featureVersion, 3: optional i32 personId, 4: optional map<binary, FaceBean> faceInfo, 5: optional Token token) throws (1: DuplicateRecordException ex1, 2: ServiceRuntimeException ex2);
+  FeatureBean addFeatureWithImage(1: optional binary feature, 2: optional string featureVersion, 3: optional i32 personId, 4: required bool asIdPhotoIfAbsent, 5: optional binary featurePhoto, 6: optional FaceBean faceBean, 7: optional Token token) throws (1: DuplicateRecordException ex1, 2: ServiceRuntimeException ex2);
   ImageBean addImage(1: optional binary imageData, 2: optional i32 deviceId, 3: optional FaceBean faceBean, 4: optional i32 personId, 5: optional Token token) throws (1: DuplicateRecordException ex1, 2: ServiceRuntimeException ex2);
   void addLog(1: optional LogBean logBean, 2: optional Token token) throws (1: DuplicateRecordException ex1, 2: ServiceRuntimeException ex2);
   void addLogFull(1: optional LogBean logBean, 2: optional FaceBean faceBean, 3: optional binary featureImage, 4: optional Token token) throws (1: DuplicateRecordException ex1, 2: ServiceRuntimeException ex2);
@@ -240,6 +240,7 @@ service IFaceLog {
   i32 countDeviceGroupByWhere(1: optional string where) throws (1: ServiceRuntimeException ex1);
   i32 countLogByWhere(1: optional string where) throws (1: ServiceRuntimeException ex1);
   i32 countLogLightByVerifyTime(1: required i64 timestamp) throws (1: ServiceRuntimeException ex1);
+  i32 countLogLightByVerifyTimeTimestr(1: optional string timestamp) throws (1: ServiceRuntimeException ex1);
   i32 countLogLightByWhere(1: optional string where) throws (1: ServiceRuntimeException ex1);
   i32 countPersonByWhere(1: optional string where) throws (1: ServiceRuntimeException ex1);
   i32 countPersonGroupByWhere(1: optional string where) throws (1: ServiceRuntimeException ex1);
@@ -318,16 +319,21 @@ service IFaceLog {
   list<i32> loadDeviceGroupIdByWhere(1: optional string where) throws (1: ServiceRuntimeException ex1);
   list<i32> loadDeviceIdByWhere(1: optional string where) throws (1: ServiceRuntimeException ex1);
   list<string> loadFeatureMd5ByUpdate(1: required i64 timestamp) throws (1: ServiceRuntimeException ex1);
+  list<string> loadFeatureMd5ByUpdateTimeStr(1: optional string timestamp) throws (1: ServiceRuntimeException ex1);
   list<LogBean> loadLogByWhere(1: optional string where, 2: required i32 startRow, 3: required i32 numRows) throws (1: ServiceRuntimeException ex1);
   list<LogLightBean> loadLogLightByVerifyTime(1: required i64 timestamp, 2: required i32 startRow, 3: required i32 numRows) throws (1: ServiceRuntimeException ex1);
+  list<LogLightBean> loadLogLightByVerifyTimeTimestr(1: optional string timestamp, 2: required i32 startRow, 3: required i32 numRows) throws (1: ServiceRuntimeException ex1);
   list<LogLightBean> loadLogLightByWhere(1: optional string where, 2: required i32 startRow, 3: required i32 numRows) throws (1: ServiceRuntimeException ex1);
   list<PermitBean> loadPermitByUpdate(1: required i64 timestamp) throws (1: ServiceRuntimeException ex1);
+  list<PermitBean> loadPermitByUpdateTimestr(1: optional string timestamp) throws (1: ServiceRuntimeException ex1);
   list<PersonBean> loadPersonByWhere(1: optional string where, 2: required i32 startRow, 3: required i32 numRows) throws (1: ServiceRuntimeException ex1);
   list<i32> loadPersonGroupByWhere(1: optional string where, 2: required i32 startRow, 3: required i32 numRows) throws (1: ServiceRuntimeException ex1);
   list<i32> loadPersonGroupIdByWhere(1: optional string where) throws (1: ServiceRuntimeException ex1);
   list<i32> loadPersonIdByUpdateTime(1: required i64 timestamp) throws (1: ServiceRuntimeException ex1);
+  list<i32> loadPersonIdByUpdateTimeTimeStr(1: optional string timestamp) throws (1: ServiceRuntimeException ex1);
   list<i32> loadPersonIdByWhere(1: optional string where) throws (1: ServiceRuntimeException ex1);
   list<i32> loadUpdatedPersons(1: required i64 timestamp) throws (1: ServiceRuntimeException ex1);
+  list<i32> loadUpdatedPersonsTimestr(1: optional string timestamp) throws (1: ServiceRuntimeException ex1);
   void offline(1: optional Token token) throws (1: ServiceSecurityException ex1, 2: ServiceRuntimeException ex2);
   Token online(1: optional DeviceBean device) throws (1: ServiceSecurityException ex1, 2: ServiceRuntimeException ex2);
   DeviceBean registerDevice(1: optional DeviceBean newDevice) throws (1: ServiceSecurityException ex1, 2: ServiceRuntimeException ex2);
@@ -340,12 +346,12 @@ service IFaceLog {
   DeviceBean saveDevice(1: optional DeviceBean deviceBean, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
   DeviceGroupBean saveDeviceGroup(1: optional DeviceGroupBean deviceGroupBean, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
   PersonBean savePerson(1: optional PersonBean personBean, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
-  PersonBean savePersonFull(1: optional PersonBean personBean, 2: optional binary idPhoto, 3: optional binary feature, 4: optional binary featureImage, 5: optional FaceBean featureFaceBean, 6: optional Token token) throws (1: ServiceRuntimeException ex1);
+  PersonBean savePersonFull(1: optional PersonBean personBean, 2: optional binary idPhoto, 3: optional binary feature, 4: optional string featureVersion, 5: optional binary featureImage, 6: optional FaceBean featureFaceBean, 7: optional Token token) throws (1: ServiceRuntimeException ex1);
   PersonGroupBean savePersonGroup(1: optional PersonGroupBean personGroupBean, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
   PersonBean savePersonWithPhoto(1: optional PersonBean personBean, 2: optional binary idPhoto, 3: optional Token token) throws (1: ServiceRuntimeException ex1);
   PersonBean savePersonWithPhotoAndFeature(1: optional PersonBean personBean, 2: optional binary idPhoto, 3: optional FeatureBean featureBean, 4: optional Token token) throws (1: ServiceRuntimeException ex1);
-  PersonBean savePersonWithPhotoAndFeatureMultiFaces(1: optional PersonBean personBean, 2: optional binary idPhoto, 3: optional binary feature, 4: optional list<FaceBean> faceBeans, 5: optional Token token) throws (1: ServiceRuntimeException ex1);
-  PersonBean savePersonWithPhotoAndFeatureMultiImage(1: optional PersonBean personBean, 2: optional binary idPhoto, 3: optional binary feature, 4: optional map<binary, FaceBean> faceInfo, 5: optional Token token) throws (1: ServiceRuntimeException ex1);
+  PersonBean savePersonWithPhotoAndFeatureMultiFaces(1: optional PersonBean personBean, 2: optional binary idPhoto, 3: optional binary feature, 4: optional string featureVersion, 5: optional list<FaceBean> faceBeans, 6: optional Token token) throws (1: ServiceRuntimeException ex1);
+  PersonBean savePersonWithPhotoAndFeatureMultiImage(1: optional PersonBean personBean, 2: optional binary idPhoto, 3: optional binary feature, 4: optional string featureVersion, 5: optional map<binary, FaceBean> faceInfo, 6: optional Token token) throws (1: ServiceRuntimeException ex1);
   PersonBean savePersonWithPhotoAndFeatureSaved(1: optional PersonBean personBean, 2: optional string idPhotoMd5, 3: optional string featureMd5, 4: optional Token token) throws (1: ServiceRuntimeException ex1);
   void savePersons(1: optional list<PersonBean> persons, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
   i32 savePersonsWithPhoto(1: optional map<binary, PersonBean> persons, 2: optional Token token) throws (1: ServiceRuntimeException ex1);

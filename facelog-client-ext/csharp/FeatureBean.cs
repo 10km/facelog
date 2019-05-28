@@ -31,7 +31,7 @@ public partial class FeatureBean : TBase
 
   public string Md5 { get; set; }
 
-  public string SdkVersion { get; set; }
+  public string Version { get; set; }
 
   public int? PersonId { get; set; }
 
@@ -99,7 +99,7 @@ public partial class FeatureBean : TBase
             break;
           case 5:
             if (field.Type == TType.String) {
-              SdkVersion = iprot.ReadString();
+              Version = iprot.ReadString();
             } else { 
               TProtocolUtil.Skip(iprot, field.Type);
             }
@@ -178,12 +178,12 @@ public partial class FeatureBean : TBase
         oprot.WriteString(Md5);
         oprot.WriteFieldEnd();
       }
-      if (SdkVersion != null) {
-        field.Name = "sdkVersion";
+      if (Version != null) {
+        field.Name = "version";
         field.Type = TType.String;
         field.ID = 5;
         oprot.WriteFieldBegin(field);
-        oprot.WriteString(SdkVersion);
+        oprot.WriteString(Version);
         oprot.WriteFieldEnd();
       }
       if (PersonId != null) {
@@ -231,9 +231,9 @@ public partial class FeatureBean : TBase
       __sb.Append(", Md5: ");
       __sb.Append(Md5);
     }
-    if (SdkVersion != null) {
-      __sb.Append(", SdkVersion: ");
-      __sb.Append(SdkVersion);
+    if (Version != null) {
+      __sb.Append(", Version: ");
+      __sb.Append(Version);
     }
     if (PersonId != null) {
       __sb.Append(", PersonId: ");

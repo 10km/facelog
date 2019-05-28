@@ -46,7 +46,7 @@ public class FlDeviceComparator implements Comparator<FlDeviceBean>,Constant
      *   <li>{@link Constant#FL_DEVICE_ID_MANUFACTURER}
      *   <li>{@link Constant#FL_DEVICE_ID_MADE_DATE}
      *   <li>{@link Constant#FL_DEVICE_ID_VERSION}
-     *   <li>{@link Constant#FL_DEVICE_ID_SDK_VERSION}
+     *   <li>{@link Constant#FL_DEVICE_ID_USED_SDKS}
      *   <li>{@link Constant#FL_DEVICE_ID_SERIAL_NO}
      *   <li>{@link Constant#FL_DEVICE_ID_MAC}
      *   <li>{@link Constant#FL_DEVICE_ID_REMARK}
@@ -81,7 +81,7 @@ public class FlDeviceComparator implements Comparator<FlDeviceBean>,Constant
      *   <li>{@link Constant#FL_DEVICE_ID_MANUFACTURER})
      *   <li>{@link Constant#FL_DEVICE_ID_MADE_DATE})
      *   <li>{@link Constant#FL_DEVICE_ID_VERSION})
-     *   <li>{@link Constant#FL_DEVICE_ID_SDK_VERSION})
+     *   <li>{@link Constant#FL_DEVICE_ID_USED_SDKS})
      *   <li>{@link Constant#FL_DEVICE_ID_SERIAL_NO})
      *   <li>{@link Constant#FL_DEVICE_ID_MAC})
      *   <li>{@link Constant#FL_DEVICE_ID_REMARK})
@@ -204,15 +204,15 @@ public class FlDeviceComparator implements Comparator<FlDeviceBean>,Constant
                     iReturn = b1.getVersion().compareTo(b2.getVersion());
                 }
                 break;
-            case FL_DEVICE_ID_SDK_VERSION:
-                if (b1.getSdkVersion() == null && b2.getSdkVersion() != null) {
+            case FL_DEVICE_ID_USED_SDKS:
+                if (b1.getUsedSdks() == null && b2.getUsedSdks() != null) {
                     iReturn = -1;
-                } else if (b1.getSdkVersion() == null && b2.getSdkVersion() == null) {
+                } else if (b1.getUsedSdks() == null && b2.getUsedSdks() == null) {
                     iReturn = 0;
-                } else if (b1.getSdkVersion() != null && b2.getSdkVersion() == null) {
+                } else if (b1.getUsedSdks() != null && b2.getUsedSdks() == null) {
                     iReturn = 1;
                 } else {
-                    iReturn = b1.getSdkVersion().compareTo(b2.getSdkVersion());
+                    iReturn = b1.getUsedSdks().compareTo(b2.getUsedSdks());
                 }
                 break;
             case FL_DEVICE_ID_SERIAL_NO:

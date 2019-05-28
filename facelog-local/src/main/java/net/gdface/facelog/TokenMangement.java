@@ -288,14 +288,11 @@ class TokenMangement implements ServiceConstant {
 				|| Objects.equal(0,newDevice.getId()),
 				"for device registeration the 'newDevice' must be a new record,so id field must be not be set or be zero");
 		// sdk_version字段不可为空
-		checkArgument(!Strings.isNullOrEmpty(newDevice.getSdkVersion()), "sdkVersion must not be null or empty");
-
-		// sdk_version字段内容只允许字母,数字,-,.,_符号
-		checkArgument(newDevice.getSdkVersion().matches(SDK_VERSION_REGEX), "invalid sdk version format");
+		checkArgument(!Strings.isNullOrEmpty(newDevice.getUsedSdks()), "sdkVersion must not be null or empty");
 
 		// 检查sdk_version是否允许注册
-		checkArgument(FEATURE_CONFIG.validateSdkVersion(newDevice.getSdkVersion()), 
-				"UNSUPPORTED SDK Version [%s]",newDevice.getSdkVersion());
+		checkArgument(FEATURE_CONFIG.allValidSdkVersions(newDevice.getUsedSdks()), 
+				"UNSUPPORTED SDK Version [%s]",newDevice.getUsedSdks());
 
 		DeviceBean dmac = this.dao.daoGetDeviceByIndexMac(newDevice.getMac());
 		DeviceBean dsn = this.dao.daoGetDeviceByIndexSerialNo(newDevice.getSerialNo());

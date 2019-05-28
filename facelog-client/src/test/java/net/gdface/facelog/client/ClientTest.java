@@ -59,7 +59,7 @@ public class ClientTest implements CommonConstant {
 				.build(IFaceLogThriftClient.class, IFaceLogClient.class);
 		rootToken = facelogClient.applyRootToken("guyadong", false);
 		byte[] address = new byte[]{0x20,0x20,0x20,0x20,0x20,0x20};
-		device = DeviceBean.builder().mac(NetworkUtil.formatMac(address, null)).serialNo("12322333").build();
+		device = DeviceBean.builder().mac(NetworkUtil.formatMac(address, null)).serialNo("12322333").version("MTFSDKARM512").build();
 		logger.info(device.toString(true,false));
 		// 注册设备 
 		device = facelogClient.registerDevice(device);
@@ -119,7 +119,7 @@ public class ClientTest implements CommonConstant {
 //					.imageMd5(FaceUtilits.getMD5String(imgdata))
 //					.build();
 			byte[] feature = new byte[]{1,1,3,1,1,};
-			newPerson = facelogClient.savePerson(newPerson,imgdata,feature,(List<FaceBean>)null,deviceToken);
+			newPerson = facelogClient.savePerson(newPerson,imgdata,feature,null,(List<FaceBean>)null, deviceToken);
 			logger.info("person = {}", newPerson.toString());
 			PersonBean person = facelogClient.getPerson(newPerson.getId());
 			logger.info("person = {}", person.toString());
@@ -128,7 +128,7 @@ public class ClientTest implements CommonConstant {
 			{
 				// 添加一个新的特征
 				byte[] feature2 = new byte[]{1,1,3,1,3,44};
-				facelogClient.savePerson(person, null, feature2, (List<FaceBean>)null,deviceToken);
+				facelogClient.savePerson(person, null, feature2, null,(List<FaceBean>)null, deviceToken);
 			}
 			facelogClient.deletePerson(person.getId(), rootToken);
 		} catch(ServiceRuntimeException e){

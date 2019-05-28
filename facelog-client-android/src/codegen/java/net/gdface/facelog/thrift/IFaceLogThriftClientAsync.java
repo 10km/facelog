@@ -149,9 +149,10 @@ public class IFaceLogThriftClientAsync {
         }
     }
     /**
-     * see also {@link net.gdface.facelog.IFaceLog#addFeature(byte[],java.lang.Integer,boolean,byte[],net.gdface.facelog.db.FaceBean,net.gdface.facelog.Token)}
+     * see also {@link net.gdface.facelog.IFaceLog#addFeature(byte[],java.lang.String,java.lang.Integer,boolean,byte[],net.gdface.facelog.db.FaceBean,net.gdface.facelog.Token)}
      */
     public ListenableFuture<FeatureBean> addFeature(byte[] feature,
+        String featureVersion,
         Integer personId,
         boolean asIdPhotoIfAbsent,
         byte[] featurePhoto,
@@ -172,6 +173,7 @@ public class IFaceLogThriftClientAsync {
                     feature,
                     byte[].class,
                     okio.ByteString.class),
+            featureVersion,
             personId,
             asIdPhotoIfAbsent,
             TypeTransformer.getInstance().to(
@@ -189,18 +191,20 @@ public class IFaceLogThriftClientAsync {
         return nativeCallback.feature;
     }
     public void addFeature(byte[] feature,
+        String featureVersion,
         Integer personId,
         boolean asIdPhotoIfAbsent,
         byte[] featurePhoto,
         FaceBean faceBean,
         Token token,
         FutureCallback<FeatureBean>callback){
-        factory.addCallback(addFeature(feature,personId,asIdPhotoIfAbsent,featurePhoto,faceBean,token), callback);
+        factory.addCallback(addFeature(feature,featureVersion,personId,asIdPhotoIfAbsent,featurePhoto,faceBean,token), callback);
     }
     /**
-     * see also {@link net.gdface.facelog.IFaceLog#addFeature(byte[],java.lang.Integer,java.util.List,net.gdface.facelog.Token)}
+     * see also {@link net.gdface.facelog.IFaceLog#addFeature(byte[],java.lang.String,java.lang.Integer,java.util.List,net.gdface.facelog.Token)}
      */
     public ListenableFuture<FeatureBean> addFeature(byte[] feature,
+        String featureVersion,
         Integer personId,
         List<FaceBean> faecBeans,
         Token token){
@@ -219,6 +223,7 @@ public class IFaceLogThriftClientAsync {
                     feature,
                     byte[].class,
                     okio.ByteString.class),
+            featureVersion,
             personId,
             TypeTransformer.getInstance().to(
                     faecBeans,
@@ -231,16 +236,18 @@ public class IFaceLogThriftClientAsync {
         return nativeCallback.feature;
     }
     public void addFeature(byte[] feature,
+        String featureVersion,
         Integer personId,
         List<FaceBean> faecBeans,
         Token token,
         FutureCallback<FeatureBean>callback){
-        factory.addCallback(addFeature(feature,personId,faecBeans,token), callback);
+        factory.addCallback(addFeature(feature,featureVersion,personId,faecBeans,token), callback);
     }
     /**
-     * see also {@link net.gdface.facelog.IFaceLog#addFeature(byte[],java.lang.Integer,java.util.Map,net.gdface.facelog.Token)}
+     * see also {@link net.gdface.facelog.IFaceLog#addFeature(byte[],java.lang.String,java.lang.Integer,java.util.Map,net.gdface.facelog.Token)}
      */
     public ListenableFuture<FeatureBean> addFeature(byte[] feature,
+        String featureVersion,
         Integer personId,
         Map<ByteBuffer, FaceBean> faceInfo,
         Token token){
@@ -259,6 +266,7 @@ public class IFaceLogThriftClientAsync {
                     feature,
                     byte[].class,
                     okio.ByteString.class),
+            featureVersion,
             personId,
             TypeTransformer.getInstance().to(
                     faceInfo,
@@ -273,11 +281,12 @@ public class IFaceLogThriftClientAsync {
         return nativeCallback.feature;
     }
     public void addFeature(byte[] feature,
+        String featureVersion,
         Integer personId,
         Map<ByteBuffer, FaceBean> faceInfo,
         Token token,
         FutureCallback<FeatureBean>callback){
-        factory.addCallback(addFeature(feature,personId,faceInfo,token), callback);
+        factory.addCallback(addFeature(feature,featureVersion,personId,faceInfo,token), callback);
     }
     /**
      * see also {@link net.gdface.facelog.IFaceLog#addImage(byte[],java.lang.Integer,net.gdface.facelog.db.FaceBean,java.lang.Integer,net.gdface.facelog.Token)}
@@ -819,6 +828,25 @@ public class IFaceLogThriftClientAsync {
     public void countLogByWhere(String where,
         FutureCallback<Integer>callback){
         factory.addCallback(countLogByWhere(where), callback);
+    }
+    /**
+     * see also {@link net.gdface.facelog.IFaceLog#countLogLightByVerifyTime(java.lang.String)}
+     */
+    public ListenableFuture<Integer> countLogLightByVerifyTime(String timestamp){
+        MethodCallback<Integer,Integer> nativeCallback = 
+            new MethodCallback<Integer,Integer>(
+                new Function<Integer,Integer>() {
+                        @Override
+                        public Integer apply(Integer input) {
+                            return input;
+                }});
+        nativeCallback.service.countLogLightByVerifyTimeTimestr(
+                timestamp,nativeCallback);
+        return nativeCallback.feature;
+    }
+    public void countLogLightByVerifyTime(String timestamp,
+        FutureCallback<Integer>callback){
+        factory.addCallback(countLogLightByVerifyTime(timestamp), callback);
     }
     /**
      * see also {@link net.gdface.facelog.IFaceLog#countLogLightByVerifyTime(long)}
@@ -2623,6 +2651,28 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(loadDeviceIdByWhere(where), callback);
     }
     /**
+     * see also {@link net.gdface.facelog.IFaceLog#loadFeatureMd5ByUpdate(java.lang.String)}
+     */
+    public ListenableFuture<List<String>> loadFeatureMd5ByUpdate(String timestamp){
+        MethodCallback<List<String>,List<String>> nativeCallback = 
+            new MethodCallback<List<String>,List<String>>(
+                new Function<List<String>,List<String>>() {
+                        @Override
+                        public List<String> apply(List<String> input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    String.class,
+                    String.class);
+                }});
+        nativeCallback.service.loadFeatureMd5ByUpdateTimeStr(
+                timestamp,nativeCallback);
+        return nativeCallback.feature;
+    }
+    public void loadFeatureMd5ByUpdate(String timestamp,
+        FutureCallback<List<String>>callback){
+        factory.addCallback(loadFeatureMd5ByUpdate(timestamp), callback);
+    }
+    /**
      * see also {@link net.gdface.facelog.IFaceLog#loadFeatureMd5ByUpdate(long)}
      */
     public ListenableFuture<List<String>> loadFeatureMd5ByUpdate(long timestamp){
@@ -2671,6 +2721,34 @@ public class IFaceLogThriftClientAsync {
         int numRows,
         FutureCallback<List<LogBean>>callback){
         factory.addCallback(loadLogByWhere(where,startRow,numRows), callback);
+    }
+    /**
+     * see also {@link net.gdface.facelog.IFaceLog#loadLogLightByVerifyTime(java.lang.String,int,int)}
+     */
+    public ListenableFuture<List<LogLightBean>> loadLogLightByVerifyTime(String timestamp,
+        int startRow,
+        int numRows){
+        MethodCallback<List<LogLightBean>,List<net.gdface.facelog.client.thrift.LogLightBean>> nativeCallback = 
+            new MethodCallback<List<LogLightBean>,List<net.gdface.facelog.client.thrift.LogLightBean>>(
+                new Function<List<net.gdface.facelog.client.thrift.LogLightBean>,List<LogLightBean>>() {
+                        @Override
+                        public List<LogLightBean> apply(List<net.gdface.facelog.client.thrift.LogLightBean> input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.LogLightBean.class,
+                    LogLightBean.class);
+                }});
+        nativeCallback.service.loadLogLightByVerifyTimeTimestr(
+                timestamp,
+            startRow,
+            numRows,nativeCallback);
+        return nativeCallback.feature;
+    }
+    public void loadLogLightByVerifyTime(String timestamp,
+        int startRow,
+        int numRows,
+        FutureCallback<List<LogLightBean>>callback){
+        factory.addCallback(loadLogLightByVerifyTime(timestamp,startRow,numRows), callback);
     }
     /**
      * see also {@link net.gdface.facelog.IFaceLog#loadLogLightByVerifyTime(long,int,int)}
@@ -2727,6 +2805,28 @@ public class IFaceLogThriftClientAsync {
         int numRows,
         FutureCallback<List<LogLightBean>>callback){
         factory.addCallback(loadLogLightByWhere(where,startRow,numRows), callback);
+    }
+    /**
+     * see also {@link net.gdface.facelog.IFaceLog#loadPermitByUpdate(java.lang.String)}
+     */
+    public ListenableFuture<List<PermitBean>> loadPermitByUpdate(String timestamp){
+        MethodCallback<List<PermitBean>,List<net.gdface.facelog.client.thrift.PermitBean>> nativeCallback = 
+            new MethodCallback<List<PermitBean>,List<net.gdface.facelog.client.thrift.PermitBean>>(
+                new Function<List<net.gdface.facelog.client.thrift.PermitBean>,List<PermitBean>>() {
+                        @Override
+                        public List<PermitBean> apply(List<net.gdface.facelog.client.thrift.PermitBean> input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.PermitBean.class,
+                    PermitBean.class);
+                }});
+        nativeCallback.service.loadPermitByUpdateTimestr(
+                timestamp,nativeCallback);
+        return nativeCallback.feature;
+    }
+    public void loadPermitByUpdate(String timestamp,
+        FutureCallback<List<PermitBean>>callback){
+        factory.addCallback(loadPermitByUpdate(timestamp), callback);
     }
     /**
      * see also {@link net.gdface.facelog.IFaceLog#loadPermitByUpdate(long)}
@@ -2829,6 +2929,28 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(loadPersonGroupIdByWhere(where), callback);
     }
     /**
+     * see also {@link net.gdface.facelog.IFaceLog#loadPersonIdByUpdateTime(java.lang.String)}
+     */
+    public ListenableFuture<List<Integer>> loadPersonIdByUpdateTime(String timestamp){
+        MethodCallback<List<Integer>,List<Integer>> nativeCallback = 
+            new MethodCallback<List<Integer>,List<Integer>>(
+                new Function<List<Integer>,List<Integer>>() {
+                        @Override
+                        public List<Integer> apply(List<Integer> input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    Integer.class,
+                    Integer.class);
+                }});
+        nativeCallback.service.loadPersonIdByUpdateTimeTimeStr(
+                timestamp,nativeCallback);
+        return nativeCallback.feature;
+    }
+    public void loadPersonIdByUpdateTime(String timestamp,
+        FutureCallback<List<Integer>>callback){
+        factory.addCallback(loadPersonIdByUpdateTime(timestamp), callback);
+    }
+    /**
      * see also {@link net.gdface.facelog.IFaceLog#loadPersonIdByUpdateTime(long)}
      */
     public ListenableFuture<List<Integer>> loadPersonIdByUpdateTime(long timestamp){
@@ -2871,6 +2993,28 @@ public class IFaceLogThriftClientAsync {
     public void loadPersonIdByWhere(String where,
         FutureCallback<List<Integer>>callback){
         factory.addCallback(loadPersonIdByWhere(where), callback);
+    }
+    /**
+     * see also {@link net.gdface.facelog.IFaceLog#loadUpdatedPersons(java.lang.String)}
+     */
+    public ListenableFuture<List<Integer>> loadUpdatedPersons(String timestamp){
+        MethodCallback<List<Integer>,List<Integer>> nativeCallback = 
+            new MethodCallback<List<Integer>,List<Integer>>(
+                new Function<List<Integer>,List<Integer>>() {
+                        @Override
+                        public List<Integer> apply(List<Integer> input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    Integer.class,
+                    Integer.class);
+                }});
+        nativeCallback.service.loadUpdatedPersonsTimestr(
+                timestamp,nativeCallback);
+        return nativeCallback.feature;
+    }
+    public void loadUpdatedPersons(String timestamp,
+        FutureCallback<List<Integer>>callback){
+        factory.addCallback(loadUpdatedPersons(timestamp), callback);
     }
     /**
      * see also {@link net.gdface.facelog.IFaceLog#loadUpdatedPersons(long)}
@@ -3179,11 +3323,12 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(saveDeviceGroup(deviceGroupBean,token), callback);
     }
     /**
-     * see also {@link net.gdface.facelog.IFaceLog#savePerson(net.gdface.facelog.db.PersonBean,byte[],byte[],byte[],net.gdface.facelog.db.FaceBean,net.gdface.facelog.Token)}
+     * see also {@link net.gdface.facelog.IFaceLog#savePerson(net.gdface.facelog.db.PersonBean,byte[],byte[],java.lang.String,byte[],net.gdface.facelog.db.FaceBean,net.gdface.facelog.Token)}
      */
     public ListenableFuture<PersonBean> savePerson(PersonBean personBean,
         byte[] idPhoto,
         byte[] feature,
+        String featureVersion,
         byte[] featureImage,
         FaceBean featureFaceBean,
         Token token){
@@ -3210,6 +3355,7 @@ public class IFaceLogThriftClientAsync {
                     feature,
                     byte[].class,
                     okio.ByteString.class),
+            featureVersion,
             TypeTransformer.getInstance().to(
                     featureImage,
                     byte[].class,
@@ -3227,18 +3373,20 @@ public class IFaceLogThriftClientAsync {
     public void savePerson(PersonBean personBean,
         byte[] idPhoto,
         byte[] feature,
+        String featureVersion,
         byte[] featureImage,
         FaceBean featureFaceBean,
         Token token,
         FutureCallback<PersonBean>callback){
-        factory.addCallback(savePerson(personBean,idPhoto,feature,featureImage,featureFaceBean,token), callback);
+        factory.addCallback(savePerson(personBean,idPhoto,feature,featureVersion,featureImage,featureFaceBean,token), callback);
     }
     /**
-     * see also {@link net.gdface.facelog.IFaceLog#savePerson(net.gdface.facelog.db.PersonBean,byte[],byte[],java.util.List,net.gdface.facelog.Token)}
+     * see also {@link net.gdface.facelog.IFaceLog#savePerson(net.gdface.facelog.db.PersonBean,byte[],byte[],java.lang.String,java.util.List,net.gdface.facelog.Token)}
      */
     public ListenableFuture<PersonBean> savePerson(PersonBean personBean,
         byte[] idPhoto,
         byte[] feature,
+        String featureVersion,
         List<FaceBean> faceBeans,
         Token token){
         MethodCallback<PersonBean,net.gdface.facelog.client.thrift.PersonBean> nativeCallback = 
@@ -3264,6 +3412,7 @@ public class IFaceLogThriftClientAsync {
                     feature,
                     byte[].class,
                     okio.ByteString.class),
+            featureVersion,
             TypeTransformer.getInstance().to(
                     faceBeans,
                     FaceBean.class,
@@ -3277,17 +3426,19 @@ public class IFaceLogThriftClientAsync {
     public void savePerson(PersonBean personBean,
         byte[] idPhoto,
         byte[] feature,
+        String featureVersion,
         List<FaceBean> faceBeans,
         Token token,
         FutureCallback<PersonBean>callback){
-        factory.addCallback(savePerson(personBean,idPhoto,feature,faceBeans,token), callback);
+        factory.addCallback(savePerson(personBean,idPhoto,feature,featureVersion,faceBeans,token), callback);
     }
     /**
-     * see also {@link net.gdface.facelog.IFaceLog#savePerson(net.gdface.facelog.db.PersonBean,byte[],byte[],java.util.Map,net.gdface.facelog.Token)}
+     * see also {@link net.gdface.facelog.IFaceLog#savePerson(net.gdface.facelog.db.PersonBean,byte[],byte[],java.lang.String,java.util.Map,net.gdface.facelog.Token)}
      */
     public ListenableFuture<PersonBean> savePerson(PersonBean personBean,
         byte[] idPhoto,
         byte[] feature,
+        String featureVersion,
         Map<ByteBuffer, FaceBean> faceInfo,
         Token token){
         MethodCallback<PersonBean,net.gdface.facelog.client.thrift.PersonBean> nativeCallback = 
@@ -3313,6 +3464,7 @@ public class IFaceLogThriftClientAsync {
                     feature,
                     byte[].class,
                     okio.ByteString.class),
+            featureVersion,
             TypeTransformer.getInstance().to(
                     faceInfo,
                     ByteBuffer.class,
@@ -3328,10 +3480,11 @@ public class IFaceLogThriftClientAsync {
     public void savePerson(PersonBean personBean,
         byte[] idPhoto,
         byte[] feature,
+        String featureVersion,
         Map<ByteBuffer, FaceBean> faceInfo,
         Token token,
         FutureCallback<PersonBean>callback){
-        factory.addCallback(savePerson(personBean,idPhoto,feature,faceInfo,token), callback);
+        factory.addCallback(savePerson(personBean,idPhoto,feature,featureVersion,faceInfo,token), callback);
     }
     /**
      * see also {@link net.gdface.facelog.IFaceLog#savePerson(net.gdface.facelog.db.PersonBean,byte[],net.gdface.facelog.Token)}

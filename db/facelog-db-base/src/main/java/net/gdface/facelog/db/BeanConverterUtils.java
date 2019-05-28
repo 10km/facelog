@@ -159,7 +159,7 @@ public class BeanConverterUtils implements Constant {
             manufacturer("getManufacturer","setManufacturer"),
             madeDate("getMadeDate","setMadeDate"),
             version("getVersion","setVersion"),
-            sdkVersion("getSdkVersion","setSdkVersion"),
+            usedSdks("getUsedSdks","setUsedSdks"),
             serialNo("getSerialNo","setSerialNo"),
             mac("getMac","setMac"),
             remark("getRemark","setRemark"),
@@ -283,8 +283,8 @@ public class BeanConverterUtils implements Constant {
             getSetterNoThrow(Column.madeDate.setter,java.util.Date.class,Long.class,long.class);  
             getGetter(Column.version.getter);
             getSetterNoThrow(Column.version.setter,String.class); 
-            getGetter(Column.sdkVersion.getter);
-            getSetterNoThrow(Column.sdkVersion.setter,String.class); 
+            getGetter(Column.usedSdks.getter);
+            getSetterNoThrow(Column.usedSdks.setter,String.class); 
             getGetter(Column.serialNo.getter);
             getSetterNoThrow(Column.serialNo.setter,String.class); 
             getGetter(Column.mac.getter);
@@ -369,10 +369,10 @@ public class BeanConverterUtils implements Constant {
                         selfModified |= FL_DEVICE_ID_VERSION_MASK;
                     }
                 }
-                if( bitCheck(Column.sdkVersion.name(),initialized) && (null != (getterMethod = methods.get(Column.sdkVersion.getter)))){
-                    left.setSdkVersion(cast(String.class,getterMethod.invoke(right)));
-                    if(bitCheck(Column.sdkVersion.name(),modified)){
-                        selfModified |= FL_DEVICE_ID_SDK_VERSION_MASK;
+                if( bitCheck(Column.usedSdks.name(),initialized) && (null != (getterMethod = methods.get(Column.usedSdks.getter)))){
+                    left.setUsedSdks(cast(String.class,getterMethod.invoke(right)));
+                    if(bitCheck(Column.usedSdks.name(),modified)){
+                        selfModified |= FL_DEVICE_ID_USED_SDKS_MASK;
                     }
                 }
                 if( bitCheck(Column.serialNo.name(),initialized) && (null != (getterMethod = methods.get(Column.serialNo.getter)))){
@@ -515,12 +515,12 @@ public class BeanConverterUtils implements Constant {
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get(Column.sdkVersion.setter)) && left.checkSdkVersionInitialized()){
+                if(null != (setterMethod = methods.get(Column.usedSdks.setter)) && left.checkUsedSdksInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get(Column.sdkVersion.setter),left.getSdkVersion()));
-                        bitOR(Column.sdkVersion.name(),initialized);
-                        if(left.checkSdkVersionModified()){
-                            bitOR(Column.sdkVersion.name(),modified);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.usedSdks.setter),left.getUsedSdks()));
+                        bitOR(Column.usedSdks.name(),initialized);
+                        if(left.checkUsedSdksModified()){
+                            bitOR(Column.usedSdks.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
@@ -1480,7 +1480,7 @@ public class BeanConverterUtils implements Constant {
         static enum Column{
             /** column method info */
             md5("getMd5","setMd5"),
-            sdkVersion("getSdkVersion","setSdkVersion"),
+            version("getVersion","setVersion"),
             personId("getPersonId","setPersonId"),
             feature("getFeature","setFeature"),
             updateTime("getUpdateTime","setUpdateTime");
@@ -1584,8 +1584,8 @@ public class BeanConverterUtils implements Constant {
 
             getGetter(Column.md5.getter);
             getSetterNoThrow(Column.md5.setter,String.class); 
-            getGetter(Column.sdkVersion.getter);
-            getSetterNoThrow(Column.sdkVersion.setter,String.class); 
+            getGetter(Column.version.getter);
+            getSetterNoThrow(Column.version.setter,String.class); 
             getGetter(Column.personId.getter);
             getSetterNoThrow(Column.personId.setter,Integer.class,int.class);                    
             getGetter(Column.feature.getter);
@@ -1614,10 +1614,10 @@ public class BeanConverterUtils implements Constant {
                         selfModified |= FL_FEATURE_ID_MD5_MASK;
                     }
                 }
-                if( bitCheck(Column.sdkVersion.name(),initialized) && (null != (getterMethod = methods.get(Column.sdkVersion.getter)))){
-                    left.setSdkVersion(cast(String.class,getterMethod.invoke(right)));
-                    if(bitCheck(Column.sdkVersion.name(),modified)){
-                        selfModified |= FL_FEATURE_ID_SDK_VERSION_MASK;
+                if( bitCheck(Column.version.name(),initialized) && (null != (getterMethod = methods.get(Column.version.getter)))){
+                    left.setVersion(cast(String.class,getterMethod.invoke(right)));
+                    if(bitCheck(Column.version.name(),modified)){
+                        selfModified |= FL_FEATURE_ID_VERSION_MASK;
                     }
                 }
                 if( bitCheck(Column.personId.name(),initialized) && (null != (getterMethod = methods.get(Column.personId.getter)))){
@@ -1664,12 +1664,12 @@ public class BeanConverterUtils implements Constant {
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get(Column.sdkVersion.setter)) && left.checkSdkVersionInitialized()){
+                if(null != (setterMethod = methods.get(Column.version.setter)) && left.checkVersionInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get(Column.sdkVersion.setter),left.getSdkVersion()));
-                        bitOR(Column.sdkVersion.name(),initialized);
-                        if(left.checkSdkVersionModified()){
-                            bitOR(Column.sdkVersion.name(),modified);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.version.setter),left.getVersion()));
+                        bitOR(Column.version.name(),initialized);
+                        if(left.checkVersionModified()){
+                            bitOR(Column.version.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }

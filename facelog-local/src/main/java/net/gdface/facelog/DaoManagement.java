@@ -312,26 +312,27 @@ public class DaoManagement extends BaseDao implements ServiceConstant,Constant{
 		return super.daoDeleteImage(imageMd5);
 	}
 
-	protected FeatureBean daoMakeFeature(ByteBuffer feature, String sdkVersion){
+	protected FeatureBean daoMakeFeature(ByteBuffer feature, String featureVersion){
 		Assert.notEmpty(feature, "feature");
-		// sdkVersion不可为空
-		checkArgument(!Strings.isNullOrEmpty(sdkVersion),"sdkVersion is null or empty");
-	    // sdkVersion内容只允许字母,数字,-,.,_符号
-	    checkArgument(sdkVersion.matches(SDK_VERSION_REGEX), "invalid sdk version format");
+		// featureVersion不可为空
+		checkArgument(!Strings.isNullOrEmpty(featureVersion),"featureVersion is null or empty");
+	    // featureVersion内容只允许字母,数字,-,.,_符号
+	    checkArgument(featureVersion.matches(SDK_VERSION_REGEX), "invalid sdk version format");
 		return FeatureBean.builder()
 				.md5(FaceUtilits.getMD5String(feature))	
 				.feature(feature)
+				.version(featureVersion)
 				.build();
 	}
 	
 	/**
 	 * 返回 persionId 关联的指定SDK的人脸特征记录
 	 * @param personId 人员id(fl_person.id)
-	 * @param sdkVersion 算法(SDK)版本号
+	 * @param featureVersion 算法(SDK)版本号
 	 * @return 返回 fl_feature.md5  列表
 	 */
-	protected List<FeatureBean> daoGetFeaturesByPersonIdAndSdkVersion(int personId,String sdkVersion) {
-		FeatureBean tmpl = FeatureBean.builder().personId(personId).sdkVersion(sdkVersion).build();
+	protected List<FeatureBean> daoGetFeaturesByPersonIdAndSdkVersion(int personId,String featureVersion) {
+		FeatureBean tmpl = FeatureBean.builder().personId(personId).version(featureVersion).build();
 		return daoLoadFeatureUsingTemplate(tmpl, 1, -1);
 	}
 	
@@ -340,43 +341,44 @@ public class DaoManagement extends BaseDao implements ServiceConstant,Constant{
 	 * 如果用户的特征记录数量超过限制，且没有开启自动更新机制则抛出异常,
 	 * 如果已有特征数量超过限制，且开启了自动特征更新机制则删除最老的记录,确保记录总数不超过限制
 	 * @param feature 人脸特征数据
-	 * @param sdkVersion SDK版本号
+	 * @param featureVersion SDK版本号
 	 * @param refPersonByPersonId 所属的人员记录
 	 * @param impFaceByFeatureMd5 关联的人脸信息记录
 	 * @return
 	 * @throws DuplicateRecordException
 	 */
-	protected FeatureBean daoAddFeature(ByteBuffer feature,String sdkVersion, 
+	protected FeatureBean daoAddFeature(ByteBuffer feature,String featureVersion, 
 			PersonBean refPersonByPersonId, Collection<FaceBean> impFaceByFeatureMd5) throws DuplicateRecordException{
-		FEATURE_CONFIG.checkSdkVersion(sdkVersion);
+		FEATURE_CONFIG.checkSdkVersion(featureVersion);
 		boolean removeOld = false;
 		List<FeatureBean> features = null;
 		if(null != refPersonByPersonId && refPersonByPersonId.getId() != null){
 			Integer personId = refPersonByPersonId.getId();
-			features = daoGetFeaturesByPersonIdAndSdkVersion(personId,sdkVersion);
+			features = daoGetFeaturesByPersonIdAndSdkVersion(personId,featureVersion);
 			int count = features.size();
-			int limitCount = FEATURE_CONFIG.getFeatureLimitPerPerson(sdkVersion);
+			int limitCount = FEATURE_CONFIG.getFeatureLimitPerPerson(featureVersion);
 			// 如果用户的特征记录数量超过限制，且没有开启自动更新机制则抛出异常
 			checkState(count < limitCount || FEATURE_CONFIG.featureAutoUpdateEnabled(),
-					"person(id=%s)'s  %s feature count  exceed max limit(%s)",personId,sdkVersion,limitCount);
+					"person(id=%s)'s  %s feature count  exceed max limit(%s)",personId,featureVersion,limitCount);
 			// 如果已有特征数量超过限制，且开启了自动特征更新机制则删除最老的记录
 			if(count >= limitCount && FEATURE_CONFIG.featureAutoUpdateEnabled()){
 				removeOld = true;
 			}
 		}
-		FeatureBean newFeature = daoAddFeature(daoMakeFeature(feature, sdkVersion), refPersonByPersonId, impFaceByFeatureMd5, null);
+		FeatureBean newFeature = daoAddFeature(daoMakeFeature(feature, featureVersion), refPersonByPersonId, impFaceByFeatureMd5, null);
 		// 放在成功添加记录之后再执行删除，以防止因为添加特征抛出异常而导致发送错误的通知消息
 		if(removeOld){
-			int limitCount = FEATURE_CONFIG.getFeatureLimitPerPerson(sdkVersion);			
+			int limitCount = FEATURE_CONFIG.getFeatureLimitPerPerson(featureVersion);			
 			// 以update_time字段排序,删除最旧的记录
 			Collections.sort(features, new FeatureComparator(FL_FEATURE_ID_UPDATE_TIME,/** 降序 */true));
 			for(int i = limitCount-1;i < features.size() -1 ;++i){
 				daoDeleteFeature(features.get(i).getMd5(), true);
+				logger.info("AUTOUPDATE:remove feature [{}] and associated image",features.get(i).getMd5());
 			}
 		}
 		return newFeature;
 	}
-	protected FeatureBean daoAddFeature(ByteBuffer feature,PersonBean personBean,Map<ByteBuffer, FaceBean> faceInfo,DeviceBean deviceBean) throws DuplicateRecordException{
+	protected FeatureBean daoAddFeature(ByteBuffer feature,String featureVersion,PersonBean personBean,Map<ByteBuffer, FaceBean> faceInfo, DeviceBean deviceBean) throws DuplicateRecordException{
 		if(null != faceInfo){
 			for(Entry<ByteBuffer, FaceBean> entry:faceInfo.entrySet()){
 				ByteBuffer imageBytes = entry.getKey();
@@ -384,7 +386,7 @@ public class DaoManagement extends BaseDao implements ServiceConstant,Constant{
 				daoAddImage(imageBytes, deviceBean, Arrays.asList(faceBean), Arrays.asList(personBean));
 			}
 		}
-		return daoAddFeature(feature, deviceBean.getSdkVersion(), personBean, null == faceInfo?null:faceInfo.values());
+		return daoAddFeature(feature, featureVersion, personBean, null == faceInfo?null:faceInfo.values());
 	}
 
 	/**
@@ -482,8 +484,8 @@ public class DaoManagement extends BaseDao implements ServiceConstant,Constant{
 	}
 
 	protected PersonBean daoSavePerson(PersonBean bean, ByteBuffer idPhoto, ByteBuffer feature,
-			Map<ByteBuffer, FaceBean> faceInfo, DeviceBean deviceBean) throws DuplicateRecordException {
-		return daoSavePerson(bean, idPhoto, daoAddFeature(feature, bean, faceInfo, deviceBean), null);
+			String featureVersion, Map<ByteBuffer, FaceBean> faceInfo, DeviceBean deviceBean) throws DuplicateRecordException {
+		return daoSavePerson(bean, idPhoto, daoAddFeature(feature, featureVersion, bean, faceInfo, deviceBean), deviceBean);
 	}
 
 	/**
@@ -491,6 +493,7 @@ public class DaoManagement extends BaseDao implements ServiceConstant,Constant{
 	 * @param bean 人员信息对象
 	 * @param idPhoto 标准照图像
 	 * @param feature 人脸特征数据
+	 * @param featureVersion 特征(SDk)版本号
 	 * @param featureImage 提取特征源图像,为null 时,默认使用idPhoto
 	 * @param featureFaceBean 人脸位置对象,为null 时,不保存人脸数据
 	 * @param deviceBean featureImage来源设备对象
@@ -498,7 +501,7 @@ public class DaoManagement extends BaseDao implements ServiceConstant,Constant{
 	 * @throws DuplicateRecordException 
 	 */
 	protected PersonBean daoSavePerson(PersonBean bean, ByteBuffer idPhoto, ByteBuffer feature,
-			ByteBuffer featureImage, FaceBean featureFaceBean, DeviceBean deviceBean) throws DuplicateRecordException {
+			String featureVersion, ByteBuffer featureImage, FaceBean featureFaceBean, DeviceBean deviceBean) throws DuplicateRecordException {
 		Map<ByteBuffer, FaceBean> faceInfo = null;
 		if (null != featureFaceBean) {
 			if (Judge.isEmpty(featureImage)){
@@ -508,7 +511,7 @@ public class DaoManagement extends BaseDao implements ServiceConstant,Constant{
 				faceInfo = ImmutableMap.of(featureImage, featureFaceBean);
 			}
 		}
-		return daoSavePerson(bean, idPhoto, daoAddFeature(feature, bean, faceInfo, deviceBean), null);
+		return daoSavePerson(bean, idPhoto, daoAddFeature(feature, featureVersion, bean, faceInfo, deviceBean), deviceBean);
 	}
 	/**
 	 * 删除personId指定的人员(person)记录及关联的所有记录

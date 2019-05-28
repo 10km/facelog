@@ -68,7 +68,7 @@ public interface DaoConstant {
                             + ",fl_device.manufacturer"
                             + ",fl_device.made_date"
                             + ",fl_device.version"
-                            + ",fl_device.sdk_version"
+                            + ",fl_device.used_sdks"
                             + ",fl_device.serial_no"
                             + ",fl_device.mac"
                             + ",fl_device.remark"
@@ -86,7 +86,7 @@ public interface DaoConstant {
                             + ",manufacturer"
                             + ",made_date"
                             + ",version"
-                            + ",sdk_version"
+                            + ",used_sdks"
                             + ",serial_no"
                             + ",mac"
                             + ",remark"
@@ -106,7 +106,7 @@ public interface DaoConstant {
                             + ",manufacturer"
                             + ",madeDate"
                             + ",version"
-                            + ",sdkVersion"
+                            + ",usedSdks"
                             + ",serialNo"
                             + ",mac"
                             + ",remark"
@@ -126,8 +126,7 @@ public interface DaoConstant {
         public static enum Index{
             /** fl_device index (mac) */indexMac,
             /** fl_device index (serial_no) */indexSerialNo,
-            /** fl_device index (group_id) */indexGroupId,
-            /** fl_device index (sdk_version) */indexSdkVersion
+            /** fl_device index (group_id) */indexGroupId
         }
         /** Column Constant definition for fl_device */
         public static enum Column{            
@@ -149,8 +148,8 @@ public interface DaoConstant {
             madeDate("fl_device","made_date",8,"getMadeDate","setMadeDate"),
             /** constant for fl_device.version  */
             version("fl_device","version",9,"getVersion","setVersion"),
-            /** constant for fl_device.sdk_version  */
-            sdkVersion("fl_device","sdk_version",10,"getSdkVersion","setSdkVersion"),
+            /** constant for fl_device.used_sdks  */
+            usedSdks("fl_device","used_sdks",10,"getUsedSdks","setUsedSdks"),
             /** constant for fl_device.serial_no  */
             serialNo("fl_device","serial_no",11,"getSerialNo","setSerialNo"),
             /** constant for fl_device.mac  */
@@ -409,13 +408,13 @@ public interface DaoConstant {
         public static final String[] PRIMARYKEY_NAMES = {"md5"};
         /** Contains all the full fields of the fl_feature table.*/
         public static final String FULL_FIELDS ="fl_feature.md5"
-                            + ",fl_feature.sdk_version"
+                            + ",fl_feature.version"
                             + ",fl_feature.person_id"
                             + ",fl_feature.feature"
                             + ",fl_feature.update_time";
         /** Field that contains the comma separated fields of the fl_feature table. */
         public static final String FIELDS = "md5"
-                            + ",sdk_version"
+                            + ",version"
                             + ",person_id"
                             + ",feature"
                             + ",update_time";
@@ -423,7 +422,7 @@ public interface DaoConstant {
         public static final java.util.List<String> FIELDS_LIST = java.util.Collections.unmodifiableList(java.util.Arrays.asList(FIELDS.split(",")));
         /** Field that contains the comma separated java fields of the fl_feature table. */
         public static final String JAVA_FIELDS = "md5"
-                            + ",sdkVersion"
+                            + ",version"
                             + ",personId"
                             + ",feature"
                             + ",updateTime";
@@ -437,15 +436,15 @@ public interface DaoConstant {
             /** imported key fl_log(verify_feature) TO fl_feature */verifyFeatureOfLog
         }
         public static enum Index{
-            /** fl_feature index (person_id) */indexPersonId,
-            /** fl_feature index (sdk_version) */indexSdkVersion
+            /** fl_feature index (version) */indexVersion,
+            /** fl_feature index (person_id) */indexPersonId
         }
         /** Column Constant definition for fl_feature */
         public static enum Column{            
             /** constant for fl_feature.md5  */
             md5("fl_feature","md5",1,"getMd5","setMd5"),
-            /** constant for fl_feature.sdk_version  */
-            sdkVersion("fl_feature","sdk_version",2,"getSdkVersion","setSdkVersion"),
+            /** constant for fl_feature.version  */
+            version("fl_feature","version",2,"getVersion","setVersion"),
             /** constant for fl_feature.person_id  */
             personId("fl_feature","person_id",3,"getPersonId","setPersonId"),
             /** constant for fl_feature.feature  */

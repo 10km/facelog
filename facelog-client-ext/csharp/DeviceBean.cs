@@ -47,7 +47,7 @@ public partial class DeviceBean : TBase
 
   public string Version { get; set; }
 
-  public string SdkVersion { get; set; }
+  public string UsedSdks { get; set; }
 
   public string SerialNo { get; set; }
 
@@ -179,7 +179,7 @@ public partial class DeviceBean : TBase
             break;
           case 13:
             if (field.Type == TType.String) {
-              SdkVersion = iprot.ReadString();
+              UsedSdks = iprot.ReadString();
             } else { 
               TProtocolUtil.Skip(iprot, field.Type);
             }
@@ -350,12 +350,12 @@ public partial class DeviceBean : TBase
         oprot.WriteString(Version);
         oprot.WriteFieldEnd();
       }
-      if (SdkVersion != null) {
-        field.Name = "sdkVersion";
+      if (UsedSdks != null) {
+        field.Name = "usedSdks";
         field.Type = TType.String;
         field.ID = 13;
         oprot.WriteFieldBegin(field);
-        oprot.WriteString(SdkVersion);
+        oprot.WriteString(UsedSdks);
         oprot.WriteFieldEnd();
       }
       if (SerialNo != null) {
@@ -467,9 +467,9 @@ public partial class DeviceBean : TBase
       __sb.Append(", Version: ");
       __sb.Append(Version);
     }
-    if (SdkVersion != null) {
-      __sb.Append(", SdkVersion: ");
-      __sb.Append(SdkVersion);
+    if (UsedSdks != null) {
+      __sb.Append(", UsedSdks: ");
+      __sb.Append(UsedSdks);
     }
     if (SerialNo != null) {
       __sb.Append(", SerialNo: ");

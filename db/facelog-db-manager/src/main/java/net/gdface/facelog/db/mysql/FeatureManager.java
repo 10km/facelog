@@ -946,6 +946,42 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
      // override IFeatureManager
 
     @Override 
+    public FeatureBean[] loadByIndexVersion(String version)
+    {
+        return this.loadByIndexVersionAsList(version).toArray(new FeatureBean[0]);
+    }
+    
+    // override IFeatureManager
+
+    @Override 
+    public java.util.List<FeatureBean> loadByIndexVersionAsList(String version)
+    {
+        try{
+            return this.beanConverter.fromRight(this.nativeManager.loadByIndexVersionAsList(version));
+        }
+        catch(DaoException e)
+        {
+            throw new RuntimeDaoException(e);
+        }
+    }
+
+    // override IFeatureManager
+
+    @Override 
+    public int deleteByIndexVersion(String version)
+    {
+        try{
+            return this.nativeManager.deleteByIndexVersion(version);
+        }
+        catch(DaoException e)
+        {
+            throw new RuntimeDaoException(e);
+        }
+    }
+    
+     // override IFeatureManager
+
+    @Override 
     public FeatureBean[] loadByIndexPersonId(Integer personId)
     {
         return this.loadByIndexPersonIdAsList(personId).toArray(new FeatureBean[0]);
@@ -979,47 +1015,11 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
         }
     }
     
-     // override IFeatureManager
-
-    @Override 
-    public FeatureBean[] loadByIndexSdkVersion(String sdkVersion)
-    {
-        return this.loadByIndexSdkVersionAsList(sdkVersion).toArray(new FeatureBean[0]);
-    }
-    
-    // override IFeatureManager
-
-    @Override 
-    public java.util.List<FeatureBean> loadByIndexSdkVersionAsList(String sdkVersion)
-    {
-        try{
-            return this.beanConverter.fromRight(this.nativeManager.loadByIndexSdkVersionAsList(sdkVersion));
-        }
-        catch(DaoException e)
-        {
-            throw new RuntimeDaoException(e);
-        }
-    }
-
-    // override IFeatureManager
-
-    @Override 
-    public int deleteByIndexSdkVersion(String sdkVersion)
-    {
-        try{
-            return this.nativeManager.deleteByIndexSdkVersion(sdkVersion);
-        }
-        catch(DaoException e)
-        {
-            throw new RuntimeDaoException(e);
-        }
-    }
-    
     
     /**
      * Retrieves a list of FeatureBean using the index specified by keyIndex.
      * @param keyIndex valid values: <br>
-     *        {@link Constant#FL_FEATURE_INDEX_PERSON_ID},{@link Constant#FL_FEATURE_INDEX_SDK_VERSION}
+     *        {@link Constant#FL_FEATURE_INDEX_VERSION},{@link Constant#FL_FEATURE_INDEX_PERSON_ID}
      * @param keys key values of index
      * @return a list of FeatureBean
      */
@@ -1036,7 +1036,7 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
     /**
      * Deletes rows using key.
      * @param keyIndex valid values: <br>
-     *        {@link Constant#FL_FEATURE_INDEX_PERSON_ID},{@link Constant#FL_FEATURE_INDEX_SDK_VERSION}
+     *        {@link Constant#FL_FEATURE_INDEX_VERSION},{@link Constant#FL_FEATURE_INDEX_PERSON_ID}
      * @param keys key values of index
      * @return the number of deleted objects
      */

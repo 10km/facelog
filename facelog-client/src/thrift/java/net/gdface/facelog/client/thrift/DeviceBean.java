@@ -108,13 +108,13 @@ public final class DeviceBean
     @ThriftField
     public void setVersion(final String version) { this.version = version; }
 
-    private String sdkVersion;
+    private String usedSdks;
 
-    @ThriftField(value=13, name="sdkVersion", requiredness=Requiredness.OPTIONAL)
-    public String getSdkVersion() { return sdkVersion; }
+    @ThriftField(value=13, name="usedSdks", requiredness=Requiredness.OPTIONAL)
+    public String getUsedSdks() { return usedSdks; }
 
     @ThriftField
-    public void setSdkVersion(final String sdkVersion) { this.sdkVersion = sdkVersion; }
+    public void setUsedSdks(final String usedSdks) { this.usedSdks = usedSdks; }
 
     private String serialNo;
 
@@ -188,7 +188,7 @@ public final class DeviceBean
             .add("manufacturer", manufacturer)
             .add("madeDate", madeDate)
             .add("version", version)
-            .add("sdkVersion", sdkVersion)
+            .add("usedSdks", usedSdks)
             .add("serialNo", serialNo)
             .add("mac", mac)
             .add("remark", remark)

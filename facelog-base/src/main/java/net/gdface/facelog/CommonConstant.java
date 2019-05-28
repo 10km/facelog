@@ -32,6 +32,9 @@ public interface CommonConstant {
     /** 超级管理员用户名 */
     public static final String ROOT_NAME = "root";
     
+    /** ISO8601时间格式 */
+    public static final String ISO8601_FORMATTER_STR = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+    
     /** 用于SQL语句的时间戳格式转换格式 */
     public static final String TIMESTAMP_FORMATTER_STR = "yyyy-MM-dd HH:mm:ss";
     

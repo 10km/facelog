@@ -5,7 +5,7 @@
 	</root>
 	<token description ="令牌(安全)管理参数">
 		<!-- <salt description ="用于password加密的salt,必须是32MD5字符串(小写)">48c22d7ad7cd2a2166a6f818b6d7ab3e</salt> -->
-		<salt description ="用于password加密的salt,创建系统时设定就不可再更改">6AE29B5A44C018611994DD453362F1C73208A84A2FE6D1FF49896AAC9C2B56C0</salt>
+		<salt hide="true" description ="用于password加密的salt,创建系统时设定就不可再更改">6AE29B5A44C018611994DD453362F1C73208A84A2FE6D1FF49896AAC9C2B56C0</salt>
 		<device>
 			<validate description="是否执行设备令牌验证">true</validate>
 		</device>
@@ -112,7 +112,7 @@
 			<idleConnectionTestPeriod description="c3p0 property:测试空闲连接的间隔时间"></idleConnectionTestPeriod>
 		</c3p0>
 	</database>
-	<security>
+	<security hide="true">
 		<operator>
 			<table>
 				<person>
@@ -155,11 +155,11 @@
 			<maximumPoolSize description="最大线程数量">128</maximumPoolSize>
 			<keepAliveTime description="空闲线程保留时间(秒)">60</keepAliveTime>
 			<queueCapacity description="任务队列容量">1024</queueCapacity>
-			<nameFormat description="线程命名格式">cached-pool-%d</nameFormat>
+			<nameFormat readonly="true" description="线程命名格式">cached-pool-%d</nameFormat>
 		</cachedPool>
 		<timerPool description="定时任务线程池配置">
 			<corePoolSize description="线程数量,默认值:1">1</corePoolSize>
-			<nameFormat description="线程命名格式">timer-pool-%d</nameFormat>
+			<nameFormat readonly="true" description="线程命名格式">timer-pool-%d</nameFormat>
 		</timerPool>
 	</executor>
 	<syslog description ="系统日志配置">
