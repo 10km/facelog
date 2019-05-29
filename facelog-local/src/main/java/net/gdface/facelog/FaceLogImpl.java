@@ -58,7 +58,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 	private final RedisDeviceGroupListener redisDeviceGroupListener = new RedisDeviceGroupListener();
 	private final RedisFeatureListener redisFeatureListener = new RedisFeatureListener();
 	private final RedisPermitListener redisPermitListener = new RedisPermitListener();
-	private final RedisLogListener redisLogListener = new RedisLogListener(rm.getRedisParameters().get(MQParam.HB_MONITOR_CHANNEL));
+	private final RedisLogListener redisLogListener = new RedisLogListener(rm.getRedisParameters().get(MQParam.LOG_MONITOR_CHANNEL));
 
 	//private final RedisLogConsumer redisLogConsumer  = new RedisLogConsumer(this);
 	static{
