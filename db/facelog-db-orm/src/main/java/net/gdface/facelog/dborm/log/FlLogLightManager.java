@@ -1267,9 +1267,13 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
     }
    
     @Override
-
     public <T>T runAsTransaction(Callable<T> fun) throws DaoException{
-        return Manager.getInstance().runAsTransaction(fun);
+        return Manager.getInstance().runAsTransaction(fun,TableListener.ListenerContainer.TRANSACTION_LISTENER);
+    }
+    
+    @Override
+    public void runAsTransaction(Runnable fun) throws DaoException{
+        Manager.getInstance().runAsTransaction(fun,TableListener.ListenerContainer.TRANSACTION_LISTENER);
     }
     
     class DeleteBeanAction extends Action.BaseAdapter<FlLogLightBean>{

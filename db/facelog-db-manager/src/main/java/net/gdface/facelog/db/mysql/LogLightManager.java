@@ -423,6 +423,18 @@ public class LogLightManager extends TableManager.BaseAdapter<LogLightBean> impl
         }
     }
     
+    @Override
+    public void runAsTransaction(Runnable fun) {
+        try{
+            this.nativeManager.runAsTransaction(fun);
+        }
+        catch(DaoException e)
+        {
+            throw new RuntimeDaoException(e);
+        }
+    }
+    
+    
     private net.gdface.facelog.dborm.TableManager.Action<net.gdface.facelog.dborm.log.FlLogLightBean> toNative(final Action<LogLightBean> action){
         if(null == action){
             throw new NullPointerException();

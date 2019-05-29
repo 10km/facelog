@@ -1181,6 +1181,18 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
         }
     }
     
+    @Override
+    public void runAsTransaction(Runnable fun) {
+        try{
+            this.nativeManager.runAsTransaction(fun);
+        }
+        catch(DaoException e)
+        {
+            throw new RuntimeDaoException(e);
+        }
+    }
+    
+    
     private net.gdface.facelog.dborm.TableManager.Action<net.gdface.facelog.dborm.log.FlLogBean> toNative(final Action<LogBean> action){
         if(null == action){
             throw new NullPointerException();

@@ -1437,6 +1437,18 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         }
     }
     
+    @Override
+    public void runAsTransaction(Runnable fun) {
+        try{
+            this.nativeManager.runAsTransaction(fun);
+        }
+        catch(DaoException e)
+        {
+            throw new RuntimeDaoException(e);
+        }
+    }
+    
+    
     private net.gdface.facelog.dborm.TableManager.Action<net.gdface.facelog.dborm.device.FlDeviceBean> toNative(final Action<DeviceBean> action){
         if(null == action){
             throw new NullPointerException();

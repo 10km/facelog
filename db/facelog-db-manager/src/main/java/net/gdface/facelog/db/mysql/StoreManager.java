@@ -666,6 +666,18 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
         }
     }
     
+    @Override
+    public void runAsTransaction(Runnable fun) {
+        try{
+            this.nativeManager.runAsTransaction(fun);
+        }
+        catch(DaoException e)
+        {
+            throw new RuntimeDaoException(e);
+        }
+    }
+    
+    
     private net.gdface.facelog.dborm.TableManager.Action<net.gdface.facelog.dborm.image.FlStoreBean> toNative(final Action<StoreBean> action){
         if(null == action){
             throw new NullPointerException();

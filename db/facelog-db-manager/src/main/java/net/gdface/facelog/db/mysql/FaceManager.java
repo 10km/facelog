@@ -1218,6 +1218,18 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
         }
     }
     
+    @Override
+    public void runAsTransaction(Runnable fun) {
+        try{
+            this.nativeManager.runAsTransaction(fun);
+        }
+        catch(DaoException e)
+        {
+            throw new RuntimeDaoException(e);
+        }
+    }
+    
+    
     private net.gdface.facelog.dborm.TableManager.Action<net.gdface.facelog.dborm.face.FlFaceBean> toNative(final Action<FaceBean> action){
         if(null == action){
             throw new NullPointerException();

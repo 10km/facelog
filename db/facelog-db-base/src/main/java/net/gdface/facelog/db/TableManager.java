@@ -436,17 +436,6 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
                     return saveCollection(bean , args );
                 }});
         }
-        
-        @Override
-        public void runAsTransaction(final Runnable fun)throws RuntimeDaoException{
-            this.runAsTransaction(new Callable<Object>() {
-                @Override
-                public Object call() throws Exception {
-                    fun.run();
-                    return null;
-                }
-            });
-        }
     }    
 
     /**

@@ -1443,6 +1443,18 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
         }
     }
     
+    @Override
+    public void runAsTransaction(Runnable fun) {
+        try{
+            this.nativeManager.runAsTransaction(fun);
+        }
+        catch(DaoException e)
+        {
+            throw new RuntimeDaoException(e);
+        }
+    }
+    
+    
     private net.gdface.facelog.dborm.TableManager.Action<net.gdface.facelog.dborm.device.FlDeviceGroupBean> toNative(final Action<DeviceGroupBean> action){
         if(null == action){
             throw new NullPointerException();

@@ -1271,6 +1271,18 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
         }
     }
     
+    @Override
+    public void runAsTransaction(Runnable fun) {
+        try{
+            this.nativeManager.runAsTransaction(fun);
+        }
+        catch(DaoException e)
+        {
+            throw new RuntimeDaoException(e);
+        }
+    }
+    
+    
     private net.gdface.facelog.dborm.TableManager.Action<net.gdface.facelog.dborm.face.FlFeatureBean> toNative(final Action<FeatureBean> action){
         if(null == action){
             throw new NullPointerException();
