@@ -5,8 +5,6 @@ import net.gdface.thrift.exception.BaseServiceException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import com.facebook.swift.codec.ThriftStruct;
-import com.facebook.swift.codec.ThriftField;
-import com.facebook.swift.codec.ThriftField.Requiredness;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
