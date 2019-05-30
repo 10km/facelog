@@ -25,6 +25,12 @@ import static com.google.common.base.Preconditions.*;
 import static net.gdface.facelog.client.DemoConfig.CONSOLE_CONFIG;
 import static gu.dtalk.engine.DeviceUtils.DEVINFO_PROVIDER;
 
+/**
+ * 基于facelog的dtalk 设备模拟器<br>
+ * 前端设备可以参照此逻辑实现dtalk引擎的启动
+ * @author guyadong
+ *
+ */
 public class DtalkDemo {
 	private static final Logger logger = LoggerFactory.getLogger(DtalkDemo.class);
 
@@ -162,8 +168,10 @@ public class DtalkDemo {
 	 * @param args
 	 */
 	public static void main(String []args){
+		// 解析命令行参数
 		CONSOLE_CONFIG.parseCommandLine(args);
 		System.out.println("Dtalk simulator for Facelog Device is starting(facelog设备dtalk模拟器启动)");
+		// 根据从命令行获取的host,port参数决定是否使用CUSTOM连接
 		boolean useCustom = 
 				   DefaultCustomConnectConfigProvider.initHost(CONSOLE_CONFIG.getServiceHost())
 				|| DefaultCustomConnectConfigProvider.initPort(CONSOLE_CONFIG.getServicePort());
