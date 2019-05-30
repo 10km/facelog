@@ -26,15 +26,22 @@ public class DtalkEngineForFacelog {
 	private final SampleConnector connAdapter;
 	private final RedisSubscriber subscriber;
 	private final byte[] devMac;
-	public DtalkEngineForFacelog(MenuItem root, Function<Token,Integer>  ranker) {
-		JedisPoolLazy pool = JedisPoolLazy.getInstance(RedisConfigType.CUSTOM.readRedisParam(),false);
+	public DtalkEngineForFacelog(MenuItem root, Function<Token,Integer>  ranker,RedisConfigType redisConfigType) {
+		JedisPoolLazy pool = JedisPoolLazy.getInstance(redisConfigType.readRedisParam(),false);
 		subscriber = RedisFactory.getSubscriber(pool);
 		devMac = DEVINFO_PROVIDER.getMac();
 		connAdapter = new SampleConnector(pool)
 				.setSelfMac(FaceUtilits.toHex(devMac))
-				.setItemAdapter(new ItemEngine(pool).setRoot(root))
-				.setRequestValidator(new TokenRequestValidator(ranker));
-		
+				.setItemAdapter(new ItemEngine(pool).setRoot(root));
+		if(ranker != null){
+			connAdapter.setRequestValidator(new TokenRequestValidator(ranker));
+		}
+	}
+	public DtalkEngineForFacelog(MenuItem root, Function<Token,Integer>  ranker) {
+		this(root, ranker, RedisConfigType.CUSTOM);
+	}
+	public DtalkEngineForFacelog(MenuItem root, RedisConfigType redisConfigType) {
+		this(root, null, redisConfigType);
 	}
 	/**
 	 * 启动连接

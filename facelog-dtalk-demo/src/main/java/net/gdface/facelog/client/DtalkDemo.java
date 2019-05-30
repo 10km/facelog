@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import gu.dtalk.redis.RedisConfigType;
 import net.gdface.facelog.ServiceSecurityException;
 import net.gdface.facelog.Token;
 import net.gdface.facelog.client.dtalk.DtalkEngineForFacelog;
@@ -29,6 +30,8 @@ public class DtalkDemo {
 
 	private final IFaceLogClient facelogClient;
 
+	private final RedisConfigType redisConfigType;
+
 	private Token deviceToken;
 
 	private DeviceBean device;
@@ -36,9 +39,16 @@ public class DtalkDemo {
 	private DtalkEngineForFacelog engine;
 
 	private ConnectConfigProvider config;
-	public DtalkDemo(IFaceLogClient facelogClient, ConnectConfigProvider config) throws ServiceSecurityException {
+
+	public DtalkDemo(IFaceLogClient facelogClient, ConnectConfigProvider config) {
 		this.facelogClient = checkNotNull(facelogClient,"facelogClient is null");
 		this.config = config;
+		this.redisConfigType = null;
+	}
+	public DtalkDemo(RedisConfigType redisConfigType) {
+		this.facelogClient=null;
+		this.config = null;
+		this.redisConfigType = checkNotNull(redisConfigType,"redisConfigType is null");
 	}
 	private DtalkDemo initDevice() throws ServiceSecurityException{
 		devMac = DEVINFO_PROVIDER.getMac();
@@ -49,28 +59,37 @@ public class DtalkDemo {
 				.usedSdks("MTFSDKARM512")
 				.build();
 		logger.info(device.toString(true,false));
-		// 注册设备 
-		device = this.facelogClient.registerDevice(device);
-		logger.info("registered device {}",device.toString(true, false));
-		// 申请设备令牌
-		deviceToken = this.facelogClient.online(device);
-		logger.info("设备令牌 = {}",deviceToken);	
+		if(facelogClient !=null){
+			// 注册设备 
+			device = this.facelogClient.registerDevice(device);
+			logger.info("registered device {}",device.toString(true, false));
+			// 申请设备令牌
+			deviceToken = this.facelogClient.online(device);
+			logger.info("设备令牌 = {}",deviceToken);
+		}
 		return this;
 	}
+	
 	/**
 	 * 启动连接
 	 */
 	private void start() {
 		FacelogMenu root = FacelogMenu.makeActiveInstance(config).init().register(DemoListener.INSTANCE);
-		engine = facelogClient.initDtalkEngine(deviceToken, root);
+		if(facelogClient != null){
+			engine = facelogClient.initDtalkEngine(deviceToken, root);
+		}else{
+			engine = new DtalkEngineForFacelog(root,redisConfigType);
+		}
 		engine.start();
-		// 启动设备心跳
-		facelogClient.setTokenHelper(DeviceTokenHelper.HELPER)
+		if(facelogClient !=null){
+			// 启动设备心跳
+			facelogClient.setTokenHelper(DeviceTokenHelper.HELPER)
 			.startServiceHeartbeatListener(deviceToken, true)
 			.makeHeartbeat(device.getId(), deviceToken, null)
 			/** 间隔2秒发送心跳，重新启动定时任务 */
 			.setInterval(2, TimeUnit.SECONDS)
 			.start();
+		}
 	}
 	/**
 	 * 等待程序结束

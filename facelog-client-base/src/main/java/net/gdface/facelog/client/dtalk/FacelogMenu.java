@@ -18,6 +18,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.base.MoreObjects;
+import com.google.common.base.Strings;
 import com.google.common.base.Supplier;
 
 import static com.google.common.base.Preconditions.*;
@@ -55,6 +56,9 @@ public class FacelogMenu extends RootMenu{
 	/* 扩展命令所在菜单名 */
 	private static final String MENU_CMD_EXT = "cmdext";
 	public static final String OPTION__DEVICE_STATUS = "/device/status";
+	
+	public static final String OPTION_FACELOG_HOST = "/facelog/host";
+	public static final String OPTION_FACELOG_PORT = "/facelog/port";
 	/* 单实例 */
 	private static volatile FacelogMenu activeInstance;
 	/* 连接配置参数 */
@@ -115,8 +119,8 @@ public class FacelogMenu extends RootMenu{
 				.name("facelog")
 				.uiName("facelog 服务器")
 				.addChilds(
-						OptionType.STRING.builder().name("host").uiName("主机名称").instance().setValue(config.getHost()),
-						OptionType.INTEGER.builder().name("port").uiName("端口号,<=0使用默认值").instance().setValue(config.getPort()))
+						OptionType.STRING.builder().name("host").uiName("主机名称").instance(),
+						OptionType.INTEGER.builder().name("port").uiName("端口号,<=0使用默认值").instance())
 				.instance();
 
 		commands = 
@@ -172,7 +176,27 @@ public class FacelogMenu extends RootMenu{
 					.instance();
 		addChilds(device,facelog,commands,cmdext);
 		registerSetStatusAdapter(new CmdSetStatusAdapter(this));
+		if(config != null){
+			setFacelogLocation(config.getHost(),config.getPort());
+		}
 		return this;
+	}
+	
+	/**
+	 * 设置facelog服务器位置
+	 * @param host 主机名
+	 * @param port 端口号
+	 * @return 当前{@link FacelogMenu}对象
+	 */
+	public FacelogMenu setFacelogLocation(String host,Integer port){
+		if(Strings.isNullOrEmpty(host)){
+			findStringOption(OPTION_FACELOG_HOST).setValue(host);
+		}
+		if(port != null && port > 0 ){
+			findIntOption(OPTION_FACELOG_PORT).setValue(port);
+		}
+		return this;
+		
 	}
 	public FacelogMenu register(ValueListener<Object> listener){
 		listener.registerTo(this);
