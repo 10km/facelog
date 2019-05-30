@@ -8,6 +8,7 @@ import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.RedisFactory;
 import gu.simplemq.redis.RedisSubscriber;
 import net.gdface.facelog.Token;
+import net.gdface.utils.FaceUtilits;
 import net.gdface.utils.NetworkUtil;
 
 import static gu.dtalk.CommonUtils.*;
@@ -28,10 +29,12 @@ public class DtalkEngineForFacelog {
 	public DtalkEngineForFacelog(MenuItem root, Function<Token,Integer>  ranker) {
 		JedisPoolLazy pool = JedisPoolLazy.getInstance(RedisConfigType.CUSTOM.readRedisParam(),false);
 		subscriber = RedisFactory.getSubscriber(pool);
+		devMac = DEVINFO_PROVIDER.getMac();
 		connAdapter = new SampleConnector(pool)
+				.setSelfMac(FaceUtilits.toHex(devMac))
 				.setItemAdapter(new ItemEngine(pool).setRoot(root))
 				.setRequestValidator(new TokenRequestValidator(ranker));
-		devMac = DEVINFO_PROVIDER.getMac();
+		
 	}
 	/**
 	 * 启动连接
