@@ -141,14 +141,6 @@ public enum ConnectConfigType implements ConnectConfigProvider {
 	}
 
 	/**
-	 * @return
-	 * @deprecated replaced by {@link #lookupFacelogConnect()}
-	 * @throws FaceLogConnectException
-	 */
-	public static ConnectConfigType lookupRedisConnect() throws FaceLogConnectException{
-		return lookupFacelogConnect();
-	}
-	/**
 	 * 与{@link #lookupFacelogConnect()}功能相似,不同的时当没有找到有效redis连接时,不抛出异常,返回{@code null}
 	 * @param logger
 	 * @return 返回第一个能建立有效连接的配置,否则返回{@code null}
@@ -159,13 +151,6 @@ public enum ConnectConfigType implements ConnectConfigProvider {
 		} catch (FaceLogConnectException e) {
 			return null;
 		}
-	}
-	/**
-	 * @return
-	 * @deprecated replaced by {@link #lookupFacelogConnectUnchecked()}
-	 */
-	public static ConnectConfigType lookupRedisConnectUnchecked() {
-		return lookupFacelogConnectUnchecked();
 	}
 	private ConnectConfigProvider checkInstance(){
 		if(null == instance){
