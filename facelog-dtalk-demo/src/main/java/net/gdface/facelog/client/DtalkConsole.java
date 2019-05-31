@@ -55,7 +55,7 @@ public class DtalkConsole extends BaseConsole {
 				checkArgument(type.testConnect(),"NOT CONNECT TO facelog service %s:%s",
 						type.getHost(),type.getPort());
 			}else{
-				type = ConnectConfigType.lookupRedisConnect();
+				type = ConnectConfigType.lookupFacelogConnect();
 			}
 			IFaceLogClient facelogClient = ClientFactory.builder()
 					.setHostAndPort(type.getHost(), type.getPort())

@@ -188,7 +188,7 @@ public class DtalkDemo {
 				}
 			}else{
 				// 自动寻找 facelog,找不到会抛出FaceLogConnectException异常
-				type = ConnectConfigType.lookupRedisConnect();
+				type = ConnectConfigType.lookupFacelogConnect();
 			}
 			// 联网运行模式
 			IFaceLogClient facelogClient = ClientFactory.builder()

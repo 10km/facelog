@@ -3,7 +3,7 @@ package net.gdface.facelog.client.location;
 import gu.dtalk.engine.DefaultDevInfoProvider;
 
 public class MacProvider extends DefaultDevInfoProvider {
-	private static ConnectConfigType connectType = ConnectConfigType.lookupRedisConnectUnchecked();
+	private static ConnectConfigType connectType = ConnectConfigType.lookupFacelogConnectUnchecked();
 
 	public MacProvider() {
 		super(hostOf(),portOf());

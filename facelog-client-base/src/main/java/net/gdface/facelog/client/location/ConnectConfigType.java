@@ -97,10 +97,10 @@ public enum ConnectConfigType implements ConnectConfigProvider {
 	 * <li>{@link ConnectConfigType#LAN}</li>
 	 * <li>{@link ConnectConfigType#CLOUD}</li>
 	 * <li>{@link ConnectConfigType#LOCALHOST}</li>
-	 * @return
+	 * @return {@link ConnectConfigType}实例
 	 * @throws FaceLogConnectException 没有找到有效redis连接
 	 */
-	public static ConnectConfigType lookupRedisConnect() throws FaceLogConnectException{
+	public static ConnectConfigType lookupFacelogConnect() throws FaceLogConnectException{
 		// double check
 		if(activeConnectType == null){
 			synchronized (ConnectConfigType.class) {
@@ -141,16 +141,31 @@ public enum ConnectConfigType implements ConnectConfigProvider {
 	}
 
 	/**
-	 * 与{@link #lookupRedisConnect()}功能相似,不同的时当没有找到有效redis连接时,不抛出异常,返回{@code null}
+	 * @return
+	 * @deprecated replaced by {@link #lookupFacelogConnect()}
+	 * @throws FaceLogConnectException
+	 */
+	public static ConnectConfigType lookupRedisConnect() throws FaceLogConnectException{
+		return lookupFacelogConnect();
+	}
+	/**
+	 * 与{@link #lookupFacelogConnect()}功能相似,不同的时当没有找到有效redis连接时,不抛出异常,返回{@code null}
 	 * @param logger
 	 * @return 返回第一个能建立有效连接的配置,否则返回{@code null}
 	 */
-	public static ConnectConfigType lookupRedisConnectUnchecked() {
+	public static ConnectConfigType lookupFacelogConnectUnchecked() {
 		try {
-			return lookupRedisConnect();
+			return lookupFacelogConnect();
 		} catch (FaceLogConnectException e) {
 			return null;
 		}
+	}
+	/**
+	 * @return
+	 * @deprecated replaced by {@link #lookupFacelogConnectUnchecked()}
+	 */
+	public static ConnectConfigType lookupRedisConnectUnchecked() {
+		return lookupFacelogConnectUnchecked();
 	}
 	private ConnectConfigProvider checkInstance(){
 		if(null == instance){
