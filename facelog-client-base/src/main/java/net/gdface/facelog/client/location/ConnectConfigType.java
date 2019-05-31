@@ -2,6 +2,7 @@ package net.gdface.facelog.client.location;
 
 import java.util.Iterator;
 import java.util.ServiceLoader;
+import java.util.concurrent.TimeUnit;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
@@ -70,17 +71,22 @@ public enum ConnectConfigType implements ConnectConfigProvider {
 	private static volatile ConnectConfigType activeConnectType = null;
 
 	/**
-	 * 测试redis连接
+	 * 测试thrift服务连接<br>
+	 * {@code timeoutMills}>0时设置连接超时参数
+	 * @param timeoutMills 指定连接超时(毫秒)
 	 * @return 连接成功返回{@code true},否则返回{@code false}
 	 */
-	public synchronized boolean testConnect(){
+	public synchronized boolean testConnect(long timeoutMills){
 		connectable = false;
 		if(instance != null){
 //			System.out.printf("try to connect %s...\n", this);
 			try{
-				connectable = ClientFactory.builder()
-						.setHostAndPort(instance.getHost(),instance.getPort())
-						.testConnect();
+				ClientFactory clientFactory = ClientFactory.builder()
+						.setHostAndPort(instance.getHost(),instance.getPort());
+				if(timeoutMills > 0){
+					clientFactory.setTimeout(timeoutMills, TimeUnit.MILLISECONDS);
+				}
+				connectable = clientFactory.testConnect();
 			}catch (Exception e) {
 			}
 			if(connectable){
@@ -90,7 +96,13 @@ public enum ConnectConfigType implements ConnectConfigProvider {
 		}
 		return connectable;
 	}
-
+	/**
+	 * 测试redis连接(使用swift默认的连接超时参数)
+	 * @return 连接成功返回{@code true},否则返回{@code false}
+	 */
+	public boolean testConnect(){
+		return testConnect(0);
+	}
 	/**
 	 * 按照如下优先顺序测试配置的facelog服务连接，返回第一个能建立有效连接的配置，否则抛出异常<br>
 	 * <li>{@link ConnectConfigType#CUSTOM}</li>
