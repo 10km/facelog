@@ -107,9 +107,11 @@ public class DtalkDemo {
 	private void start() {
 		FacelogMenu root = FacelogMenu.makeActiveInstance(config).init().register(DemoListener.INSTANCE);
 		if(facelogClient != null){
+			// 联网运行
 			logger.info("Dtalk Device connect into facelog(设备接入facelog)");
 			engine = facelogClient.initDtalkEngine(deviceToken, root);
 		}else{
+			// 脱网运行
 			logger.info("Dtalk Device running without facelog(设备离线运行)");
 			engine = new DtalkEngineForFacelog(root,redisConfigType);
 		}
