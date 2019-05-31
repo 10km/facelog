@@ -3,7 +3,7 @@ package net.gdface.facelog.client.location;
 import net.gdface.facelog.CommonConstant;
 
 /**
- * 局域网配置
+ * {@link ConnectConfigProvider}局域网配置
  * @author guyadong
  *
  */

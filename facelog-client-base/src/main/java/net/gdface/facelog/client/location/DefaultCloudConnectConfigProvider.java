@@ -3,7 +3,7 @@ package net.gdface.facelog.client.location;
 import net.gdface.facelog.CommonConstant;
 
 /**
- * 公有云配置
+ * {@link ConnectConfigProvider}公有云配置
  * @author guyadong
  *
  */
