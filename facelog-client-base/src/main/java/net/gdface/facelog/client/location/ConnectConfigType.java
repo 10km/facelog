@@ -2,8 +2,6 @@ package net.gdface.facelog.client.location;
 
 import java.util.Iterator;
 import java.util.ServiceLoader;
-import java.util.concurrent.TimeUnit;
-
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
@@ -80,15 +78,7 @@ public enum ConnectConfigType implements ConnectConfigProvider {
 		connectable = false;
 		if(instance != null){
 //			System.out.printf("try to connect %s...\n", this);
-			try{
-				ClientFactory clientFactory = ClientFactory.builder()
-						.setHostAndPort(instance.getHost(),instance.getPort());
-				if(timeoutMills > 0){
-					clientFactory.setTimeout(timeoutMills, TimeUnit.MILLISECONDS);
-				}
-				connectable = clientFactory.testConnect();
-			}catch (Exception e) {
-			}
+			connectable = ClientFactory.testConnect(instance.getHost(),instance.getPort(),timeoutMills);
 			if(connectable){
 				System.out.println(toString() + " connect OK\n");
 			}

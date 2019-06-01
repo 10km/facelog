@@ -1,6 +1,10 @@
 package net.gdface.facelog.client.location;
 
+import java.net.UnknownHostException;
+
 import net.gdface.facelog.CommonConstant;
+import net.gdface.thrift.ClientFactory;
+import net.gdface.utils.JcifsUtil;
 
 /**
  * {@link ConnectConfigProvider}局域网配置
@@ -8,10 +12,44 @@ import net.gdface.facelog.CommonConstant;
  *
  */
 public class DefaultLocalConnectConfigProvider implements ConnectConfigProvider,CommonConstant {
+	private static final String DEFAULT_LANDFACELOGHOST = "landfaceloghost";
+	private static String landfaceloghost = DEFAULT_LANDFACELOGHOST;
+	private static final String LANDTALKHOST = "landtalkhost";
 
+	/**
+	 * 返回局域网redis主机名
+	 * @return landtalkhost
+	 */
+	public static String getLanfaceloghost() {
+		return landfaceloghost;
+	}
+
+	/**
+	 * 初始化局域网redis主机名，默认值为'landtalkhost'
+	 * @param lanfaceloghost 要设置的 landtalkhost
+	 */
+	public static void initLanfaceloghost(String lanfaceloghost) {
+		DefaultLocalConnectConfigProvider.landfaceloghost = lanfaceloghost;
+	}
 	@Override
 	public String getHost() {
-		return "landtalkhost";
+		try {
+			return JcifsUtil.hostAddressOf(landfaceloghost);
+		} catch (UnknownHostException e) {
+			try {
+				// 如果外部设置了不同的主机名,则不再尝试解析landtalkhost
+				if(DEFAULT_LANDFACELOGHOST.equals(landfaceloghost)){
+					// 如果LANDTALKHOST有facelog连接则用此IP地址
+					String address = JcifsUtil.hostAddressOf(LANDTALKHOST);
+					if(ClientFactory.testConnect(address, getPort(), 0)){
+						return address;
+					}
+				}
+			} catch (UnknownHostException e1) {
+				
+			}
+		}
+		return landfaceloghost;
 	}
 
 	@Override
