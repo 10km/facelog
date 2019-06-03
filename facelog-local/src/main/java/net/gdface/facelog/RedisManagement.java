@@ -155,7 +155,7 @@ class RedisManagement implements ServiceConstant{
 		return System.getProperty("os.name").startsWith("Windows")?".exe":"";
 	}
 	private static final String shell(){
-		return System.getProperty("os.name").startsWith("Windows")?"cmd /c":"sh";
+		return System.getProperty("os.name").startsWith("Windows")?"cmd /c":"sh -c";
 	}
 	/** 启动本地 redis 服务器 */
 	private static final  void startLocalServer(Map<PropName, Object> parameters){
