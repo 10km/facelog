@@ -173,7 +173,11 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		try {
 			return new SimpleDateFormat(TIMESTAMP_FORMATTER_STR).parse(date);
 		} catch (ParseException e) {
-			return new SimpleDateFormat(ISO8601_FORMATTER_STR).parse(date);
+			try {
+				return new SimpleDateFormat(DATE_FORMATTER_STR).parse(date);				
+			} catch (ParseException e2) {
+				return new SimpleDateFormat(ISO8601_FORMATTER_STR).parse(date);
+			}
 		}
 	}
 	@Override
@@ -313,7 +317,15 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 			throw wrapServiceRuntimeException(e);
 		}
 	}
-
+	@Override
+	public void setPersonExpiryDate(int personId,String expiryDate, Token token){
+		try{
+			Enable.PERSON_ONLY.check(tm, token);
+			dm.daoSetPersonExpiryDate(dm.daoGetPerson(personId),toDate(checkNotNull(expiryDate,"timestamp is null")));
+		} catch (Exception e) {
+			throw wrapServiceRuntimeException(e);
+		}
+	}
 	@Override
 	public  void setPersonExpiryDate(final List<Integer> personIdList,final long expiryDate, Token token){
 		try{		

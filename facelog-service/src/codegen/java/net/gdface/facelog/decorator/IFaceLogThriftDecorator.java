@@ -3186,6 +3186,29 @@ public class IFaceLogThriftDecorator {
         }
     }
     /**
+     * @see {@link net.gdface.facelog.IFaceLog#setPersonExpiryDate(int,java.lang.String,net.gdface.facelog.Token)}
+     */
+    @ThriftMethod(value = "setPersonExpiryDateTimeStr" )
+    public void setPersonExpiryDateTimeStr(int personId,
+        String expiryDate,
+        Token token) 
+        throws ServiceRuntimeException{
+        try{
+             delegate().setPersonExpiryDate(personId,
+                expiryDate,
+                TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.Token.class));
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
      * @see {@link net.gdface.facelog.IFaceLog#setPersonExpiryDate(int,long,net.gdface.facelog.Token)}
      */
     @ThriftMethod(value = "setPersonExpiryDate" )

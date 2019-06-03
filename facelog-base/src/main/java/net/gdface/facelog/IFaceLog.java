@@ -148,6 +148,16 @@ public interface IFaceLog{
 	public void setPersonExpiryDate(int personId, long expiryDate, Token token) ;
 
 	/**
+	 * 修改 personId 指定的人员记录的有效期
+	 * <br>{@code PERSON_ONLY}
+	 * @param personId
+	 * @param expiryDate 失效日期,{@code yyyy-MM-dd}或{@code yyyy-MM-dd HH:mm:ss}或{@code yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}(ISO8601)格式日期字符串
+	 * @param token 访问令牌
+	 */
+	@DeriveMethod(methodSuffix="TimeStr")
+	public void setPersonExpiryDate(int personId, String expiryDate, Token token);
+
+	/**
 	 * 修改 personIdList 指定的人员记录的有效期
 	 * <br>{@code PERSON_ONLY}
 	 * @param personIdList 人员id列表
@@ -325,7 +335,7 @@ public interface IFaceLog{
 	 * (主动更新机制实现)<br>
 	 * 返回fl_person.update_time字段大于指定时间戳( {@code timestamp} )的所有fl_person记录<br>
 	 * 同时包含fl_feature更新记录引用的fl_person记录
-	 * @param timestamp 时间戳,{@code yyyy-MM-dd HH:mm:ss}或{@code yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}(ISO8601)格式日期字符串
+	 * @param timestamp 时间戳,{@code yyyy-MM-dd}或{@code yyyy-MM-dd HH:mm:ss}或{@code yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}(ISO8601)格式日期字符串
 	 * @return 返回fl_person.id 列表
 	 */
 	@DeriveMethod(methodSuffix="Timestr")
@@ -341,7 +351,7 @@ public interface IFaceLog{
 	/**
 	 * (主动更新机制实现)<br>
 	 * 返回 fl_person.update_time 字段大于指定时间戳( {@code timestamp} )的所有fl_person记录
-	 * @param timestamp 时间戳,{@code yyyy-MM-dd HH:mm:ss}或{@code yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}(ISO8601)格式日期字符串
+	 * @param timestamp 时间戳,{@code yyyy-MM-dd}或{@code yyyy-MM-dd HH:mm:ss}或{@code yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}(ISO8601)格式日期字符串
 	 * @return 返回fl_person.id 列表
 	 */
 	@DeriveMethod(methodSuffix="TimeStr")
@@ -358,7 +368,7 @@ public interface IFaceLog{
 	/**
 	 * (主动更新机制实现)<br>
 	 * 返回 fl_feature.update_time 字段大于指定时间戳( {@code timestamp} )的所有fl_feature记录
-	 * @param timestamp 时间戳,{@code yyyy-MM-dd HH:mm:ss}或{@code yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}(ISO8601)格式日期字符串
+	 * @param timestamp 时间戳,{@code yyyy-MM-dd}或{@code yyyy-MM-dd HH:mm:ss}或{@code yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}(ISO8601)格式日期字符串
 	 * @return 返回 fl_feature.md5 列表
 	 */
 	@DeriveMethod(methodSuffix="TimeStr")
@@ -440,7 +450,7 @@ public interface IFaceLog{
     /**
      * (主动更新机制实现)<br>
      * 返回 fl_log_light.verify_time 字段大于指定时间戳({@code timestamp})的所有记录
-	 * @param timestamp 时间戳,{@code yyyy-MM-dd HH:mm:ss}或{@code yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}(ISO8601)格式日期字符串
+	 * @param timestamp 时间戳,{@code yyyy-MM-dd}或{@code yyyy-MM-dd HH:mm:ss}或{@code yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}(ISO8601)格式日期字符串
 	 * @param startRow 记录起始行号 (first row = 1, last row = -1)
 	 * @param numRows 返回记录条数 为负值是返回{@code startRow}开始的所有行
      */
@@ -464,7 +474,7 @@ public interface IFaceLog{
 	public int countLogLightByVerifyTime(long timestamp);
     /**
      * 返回fl_log_light.verify_time 字段大于指定时间戳({@code timestamp})的记录总数
-     * @param timestamp 时间戳,{@code yyyy-MM-dd HH:mm:ss}或{@code yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}(ISO8601)格式日期字符串
+     * @param timestamp 时间戳,{@code yyyy-MM-dd}或{@code yyyy-MM-dd HH:mm:ss}或{@code yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}(ISO8601)格式日期字符串
      * @return 满足条件的记录条数
      * @see #countLogLightByWhere(String)
      */
@@ -1019,7 +1029,7 @@ public interface IFaceLog{
 	/**
 	 * (主动更新机制实现)<br>
 	 * 返回 fl_permit.create_time 字段大于指定时间戳( {@code timestamp} )的所有fl_permit记录
-	 * @param timestamp 时间戳,{@code yyyy-MM-dd HH:mm:ss}或{@code yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}(ISO8601)格式日期字符串
+	 * @param timestamp 时间戳,,{@code yyyy-MM-dd}或{@code yyyy-MM-dd HH:mm:ss}或{@code yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}(ISO8601)格式日期字符串
 	 * @return
 	 */
 	@DeriveMethod(methodSuffix="Timestr")

@@ -86,6 +86,10 @@ public class FacelogDefaultImpl implements IFaceLog {
 	}
 
 	@Override
+	public void setPersonExpiryDate(int personId, String expiryDate, Token token) {
+	}
+	
+	@Override
 	public void setPersonExpiryDate(List<Integer> personIdList, long expiryDate, Token token) {
 		
 	}

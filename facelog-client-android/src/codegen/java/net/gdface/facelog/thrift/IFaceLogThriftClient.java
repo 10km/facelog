@@ -4117,6 +4117,34 @@ public class IFaceLogThriftClient implements IFaceLog {
     }
     @Override
     public void setPersonExpiryDate(final int personId,
+        final String expiryDate,
+        final Token token) 
+        {
+        try{
+             syncCall(new Function<Void,Void>() {
+                @Override
+                public Void apply(Void input) {
+                    return input;
+                }},
+                new ServiceAsyncCall<Void>(){
+                @Override
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<Void> nativeCallback){
+                    service.setPersonExpiryDateTimeStr(personId,expiryDate,TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                }});
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);
+        }
+    }
+    @Override
+    public void setPersonExpiryDate(final int personId,
         final long expiryDate,
         final Token token) 
         {

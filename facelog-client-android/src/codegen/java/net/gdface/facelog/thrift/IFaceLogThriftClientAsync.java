@@ -3752,6 +3752,37 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(saveServiceConfig(token), callback);
     }
     /**
+     * see also {@link net.gdface.facelog.IFaceLog#setPersonExpiryDate(int,java.lang.String,net.gdface.facelog.Token)}
+     */
+    public ListenableFuture<Void> setPersonExpiryDate(int personId,
+        String expiryDate,
+        Token token){
+        MethodCallback<Void,Void> nativeCallback = 
+            new MethodCallback<Void,Void>(
+                new Function<Void,Void>() {
+                        @Override
+                        public Void apply(Void input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    Void.class,
+                    Void.class);
+                }});
+        nativeCallback.service.setPersonExpiryDateTimeStr(
+                personId,
+            expiryDate,
+            TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
+    }
+    public void setPersonExpiryDate(int personId,
+        String expiryDate,
+        Token token,
+        FutureCallback<Void>callback){
+        factory.addCallback(setPersonExpiryDate(personId,expiryDate,token), callback);
+    }
+    /**
      * see also {@link net.gdface.facelog.IFaceLog#setPersonExpiryDate(int,long,net.gdface.facelog.Token)}
      */
     public ListenableFuture<Void> setPersonExpiryDate(int personId,

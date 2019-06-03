@@ -1273,6 +1273,16 @@ public interface IFaceLog
             @ThriftField(value=3, name="token", requiredness=Requiredness.OPTIONAL) final Token token
         );
 
+        @ThriftMethod(value = "setPersonExpiryDateTimeStr",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1)
+                      })
+        ListenableFuture<Void> setPersonExpiryDateTimeStr(
+            @ThriftField(value=1, name="personId", requiredness=Requiredness.REQUIRED) final int personId,
+            @ThriftField(value=2, name="expiryDate", requiredness=Requiredness.OPTIONAL) final String expiryDate,
+            @ThriftField(value=3, name="token", requiredness=Requiredness.OPTIONAL) final Token token
+        );
+
         @ThriftMethod(value = "setProperties",
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
@@ -2608,6 +2618,16 @@ public interface IFaceLog
     void setPersonExpiryDateList(
         @ThriftField(value=1, name="personIdList", requiredness=Requiredness.OPTIONAL) final List<Integer> personIdList,
         @ThriftField(value=2, name="expiryDate", requiredness=Requiredness.REQUIRED) final long expiryDate,
+        @ThriftField(value=3, name="token", requiredness=Requiredness.OPTIONAL) final Token token
+    ) throws ServiceRuntimeException;
+
+    @ThriftMethod(value = "setPersonExpiryDateTimeStr",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1)
+                  })
+    void setPersonExpiryDateTimeStr(
+        @ThriftField(value=1, name="personId", requiredness=Requiredness.REQUIRED) final int personId,
+        @ThriftField(value=2, name="expiryDate", requiredness=Requiredness.OPTIONAL) final String expiryDate,
         @ThriftField(value=3, name="token", requiredness=Requiredness.OPTIONAL) final Token token
     ) throws ServiceRuntimeException;
 

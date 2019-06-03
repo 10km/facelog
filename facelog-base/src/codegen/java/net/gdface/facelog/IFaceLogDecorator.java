@@ -1035,6 +1035,11 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
+    public void setPersonExpiryDate (int personId,String expiryDate,Token token) {
+         delegate().setPersonExpiryDate(personId,expiryDate,token);
+    }
+
+    @Override
     public void setPersonExpiryDate (int personId,long expiryDate,Token token) {
          delegate().setPersonExpiryDate(personId,expiryDate,token);
     }

@@ -159,6 +159,7 @@ public partial class IFaceLog {
     void saveServiceConfig(Token token);
     void setPersonExpiryDate(int personId, long expiryDate, Token token);
     void setPersonExpiryDateList(List<int> personIdList, long expiryDate, Token token);
+    void setPersonExpiryDateTimeStr(int personId, string expiryDate, Token token);
     void setProperties(Dictionary<string, string> config, Token token);
     void setProperty(string key, string @value, Token token);
     string taskQueueOf(string task, Token token);
@@ -312,6 +313,7 @@ public partial class IFaceLog {
     Task saveServiceConfigAsync(Token token);
     Task setPersonExpiryDateAsync(int personId, long expiryDate, Token token);
     Task setPersonExpiryDateListAsync(List<int> personIdList, long expiryDate, Token token);
+    Task setPersonExpiryDateTimeStrAsync(int personId, string expiryDate, Token token);
     Task setPropertiesAsync(Dictionary<string, string> config, Token token);
     Task setPropertyAsync(string key, string @value, Token token);
     Task<string> taskQueueOfAsync(string task, Token token);
@@ -606,6 +608,8 @@ public partial class IFaceLog {
     void End_setPersonExpiryDate(IAsyncResult asyncResult);
     IAsyncResult Begin_setPersonExpiryDateList(AsyncCallback callback, object state, List<int> personIdList, long expiryDate, Token token);
     void End_setPersonExpiryDateList(IAsyncResult asyncResult);
+    IAsyncResult Begin_setPersonExpiryDateTimeStr(AsyncCallback callback, object state, int personId, string expiryDate, Token token);
+    void End_setPersonExpiryDateTimeStr(IAsyncResult asyncResult);
     IAsyncResult Begin_setProperties(AsyncCallback callback, object state, Dictionary<string, string> config, Token token);
     void End_setProperties(IAsyncResult asyncResult);
     IAsyncResult Begin_setProperty(AsyncCallback callback, object state, string key, string @value, Token token);
@@ -8939,6 +8943,61 @@ public partial class IFaceLog {
     }
 
     
+    public IAsyncResult Begin_setPersonExpiryDateTimeStr(AsyncCallback callback, object state, int personId, string expiryDate, Token token)
+    {
+      return send_setPersonExpiryDateTimeStr(callback, state, personId, expiryDate, token);
+    }
+
+    public void End_setPersonExpiryDateTimeStr(IAsyncResult asyncResult)
+    {
+      oprot_.Transport.EndFlush(asyncResult);
+      recv_setPersonExpiryDateTimeStr();
+    }
+
+    public async Task setPersonExpiryDateTimeStrAsync(int personId, string expiryDate, Token token)
+    {
+      await Task.Run(() =>
+      {
+        setPersonExpiryDateTimeStr(personId, expiryDate, token);
+      });
+    }
+
+    public void setPersonExpiryDateTimeStr(int personId, string expiryDate, Token token)
+    {
+      var asyncResult = Begin_setPersonExpiryDateTimeStr(null, null, personId, expiryDate, token);
+      End_setPersonExpiryDateTimeStr(asyncResult);
+
+    }
+    public IAsyncResult send_setPersonExpiryDateTimeStr(AsyncCallback callback, object state, int personId, string expiryDate, Token token)
+    {
+      oprot_.WriteMessageBegin(new TMessage("setPersonExpiryDateTimeStr", TMessageType.Call, seqid_));
+      setPersonExpiryDateTimeStr_args args = new setPersonExpiryDateTimeStr_args();
+      args.PersonId = personId;
+      args.ExpiryDate = expiryDate;
+      args.Token = token;
+      args.Write(oprot_);
+      oprot_.WriteMessageEnd();
+      return oprot_.Transport.BeginFlush(callback, state);
+    }
+
+    public void recv_setPersonExpiryDateTimeStr()
+    {
+      TMessage msg = iprot_.ReadMessageBegin();
+      if (msg.Type == TMessageType.Exception) {
+        TApplicationException x = TApplicationException.Read(iprot_);
+        iprot_.ReadMessageEnd();
+        throw x;
+      }
+      setPersonExpiryDateTimeStr_result result = new setPersonExpiryDateTimeStr_result();
+      result.Read(iprot_);
+      iprot_.ReadMessageEnd();
+      if (result.Ex1 != null) {
+        throw result.Ex1;
+      }
+      return;
+    }
+
+    
     public IAsyncResult Begin_setProperties(AsyncCallback callback, object state, Dictionary<string, string> config, Token token)
     {
       return send_setProperties(callback, state, config, token);
@@ -9596,6 +9655,7 @@ public partial class IFaceLog {
       processMap_["saveServiceConfig"] = saveServiceConfig_ProcessAsync;
       processMap_["setPersonExpiryDate"] = setPersonExpiryDate_ProcessAsync;
       processMap_["setPersonExpiryDateList"] = setPersonExpiryDateList_ProcessAsync;
+      processMap_["setPersonExpiryDateTimeStr"] = setPersonExpiryDateTimeStr_ProcessAsync;
       processMap_["setProperties"] = setProperties_ProcessAsync;
       processMap_["setProperty"] = setProperty_ProcessAsync;
       processMap_["taskQueueOf"] = taskQueueOf_ProcessAsync;
@@ -14640,6 +14700,41 @@ public partial class IFaceLog {
       oprot.Transport.Flush();
     }
 
+    public async Task setPersonExpiryDateTimeStr_ProcessAsync(int seqid, TProtocol iprot, TProtocol oprot)
+    {
+      setPersonExpiryDateTimeStr_args args = new setPersonExpiryDateTimeStr_args();
+      args.Read(iprot);
+      iprot.ReadMessageEnd();
+      setPersonExpiryDateTimeStr_result result = new setPersonExpiryDateTimeStr_result();
+      try
+      {
+        try
+        {
+          await iface_.setPersonExpiryDateTimeStrAsync(args.PersonId.Value, args.ExpiryDate, args.Token);
+        }
+        catch (ServiceRuntimeException ex1)
+        {
+          result.Ex1 = ex1;
+        }
+        oprot.WriteMessageBegin(new TMessage("setPersonExpiryDateTimeStr", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+      }
+      catch (TTransportException)
+      {
+        throw;
+      }
+      catch (Exception ex)
+      {
+        Console.Error.WriteLine("Error occurred in processor:");
+        Console.Error.WriteLine(ex.ToString());
+        TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
+        oprot.WriteMessageBegin(new TMessage("setPersonExpiryDateTimeStr", TMessageType.Exception, seqid));
+        x.Write(oprot);
+      }
+      oprot.WriteMessageEnd();
+      oprot.Transport.Flush();
+    }
+
     public async Task setProperties_ProcessAsync(int seqid, TProtocol iprot, TProtocol oprot)
     {
       setProperties_args args = new setProperties_args();
@@ -15106,6 +15201,7 @@ public partial class IFaceLog {
       processMap_["saveServiceConfig"] = saveServiceConfig_Process;
       processMap_["setPersonExpiryDate"] = setPersonExpiryDate_Process;
       processMap_["setPersonExpiryDateList"] = setPersonExpiryDateList_Process;
+      processMap_["setPersonExpiryDateTimeStr"] = setPersonExpiryDateTimeStr_Process;
       processMap_["setProperties"] = setProperties_Process;
       processMap_["setProperty"] = setProperty_Process;
       processMap_["taskQueueOf"] = taskQueueOf_Process;
@@ -20144,6 +20240,41 @@ public partial class IFaceLog {
         Console.Error.WriteLine(ex.ToString());
         TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
         oprot.WriteMessageBegin(new TMessage("setPersonExpiryDateList", TMessageType.Exception, seqid));
+        x.Write(oprot);
+      }
+      oprot.WriteMessageEnd();
+      oprot.Transport.Flush();
+    }
+
+    public void setPersonExpiryDateTimeStr_Process(int seqid, TProtocol iprot, TProtocol oprot)
+    {
+      setPersonExpiryDateTimeStr_args args = new setPersonExpiryDateTimeStr_args();
+      args.Read(iprot);
+      iprot.ReadMessageEnd();
+      setPersonExpiryDateTimeStr_result result = new setPersonExpiryDateTimeStr_result();
+      try
+      {
+        try
+        {
+          iface_.setPersonExpiryDateTimeStr(args.PersonId.Value, args.ExpiryDate, args.Token);
+        }
+        catch (ServiceRuntimeException ex1)
+        {
+          result.Ex1 = ex1;
+        }
+        oprot.WriteMessageBegin(new TMessage("setPersonExpiryDateTimeStr", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+      }
+      catch (TTransportException)
+      {
+        throw;
+      }
+      catch (Exception ex)
+      {
+        Console.Error.WriteLine("Error occurred in processor:");
+        Console.Error.WriteLine(ex.ToString());
+        TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
+        oprot.WriteMessageBegin(new TMessage("setPersonExpiryDateTimeStr", TMessageType.Exception, seqid));
         x.Write(oprot);
       }
       oprot.WriteMessageEnd();
@@ -52424,6 +52555,226 @@ public partial class IFaceLog {
 
     public override string ToString() {
       StringBuilder __sb = new StringBuilder("setPersonExpiryDateList_result(");
+      bool __first = true;
+      if (Ex1 != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Ex1: ");
+        __sb.Append(Ex1== null ? "<null>" : Ex1.ToString());
+      }
+      __sb.Append(")");
+      return __sb.ToString();
+    }
+
+  }
+
+
+  #if !SILVERLIGHT
+  [Serializable]
+  #endif
+  public partial class setPersonExpiryDateTimeStr_args : TBase
+  {
+
+    public int PersonId { get; set; }
+
+    public string ExpiryDate { get; set; }
+
+    public Token Token { get; set; }
+
+    public setPersonExpiryDateTimeStr_args() {
+    }
+
+    public setPersonExpiryDateTimeStr_args(int personId) : this() {
+      this.PersonId = personId;
+    }
+
+    public void Read (TProtocol iprot)
+    {
+      iprot.IncrementRecursionDepth();
+      try
+      {
+        bool isset_personId = false;
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 1:
+              if (field.Type == TType.I32) {
+                PersonId = iprot.ReadI32();
+                isset_personId = true;
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 2:
+              if (field.Type == TType.String) {
+                ExpiryDate = iprot.ReadString();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 3:
+              if (field.Type == TType.Struct) {
+                Token = new Token();
+                Token.Read(iprot);
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+        if (!isset_personId)
+          throw new TProtocolException(TProtocolException.INVALID_DATA, "required field PersonId not set");
+      }
+      finally
+      {
+        iprot.DecrementRecursionDepth();
+      }
+    }
+
+    public void Write(TProtocol oprot) {
+      oprot.IncrementRecursionDepth();
+      try
+      {
+        TStruct struc = new TStruct("setPersonExpiryDateTimeStr_args");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+        field.Name = "personId";
+        field.Type = TType.I32;
+        field.ID = 1;
+        oprot.WriteFieldBegin(field);
+        oprot.WriteI32(PersonId);
+        oprot.WriteFieldEnd();
+        if (ExpiryDate != null) {
+          field.Name = "expiryDate";
+          field.Type = TType.String;
+          field.ID = 2;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteString(ExpiryDate);
+          oprot.WriteFieldEnd();
+        }
+        if (Token != null) {
+          field.Name = "token";
+          field.Type = TType.Struct;
+          field.ID = 3;
+          oprot.WriteFieldBegin(field);
+          Token.Write(oprot);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+      finally
+      {
+        oprot.DecrementRecursionDepth();
+      }
+    }
+
+    public override string ToString() {
+      StringBuilder __sb = new StringBuilder("setPersonExpiryDateTimeStr_args(");
+      __sb.Append(", PersonId: ");
+      __sb.Append(PersonId);
+      if (ExpiryDate != null) {
+        __sb.Append(", ExpiryDate: ");
+        __sb.Append(ExpiryDate);
+      }
+      if (Token != null) {
+        __sb.Append(", Token: ");
+        __sb.Append(Token== null ? "<null>" : Token.ToString());
+      }
+      __sb.Append(")");
+      return __sb.ToString();
+    }
+
+  }
+
+
+  #if !SILVERLIGHT
+  [Serializable]
+  #endif
+  public partial class setPersonExpiryDateTimeStr_result : TBase
+  {
+
+    public ServiceRuntimeException Ex1 { get; set; }
+
+    public setPersonExpiryDateTimeStr_result() {
+    }
+
+    public void Read (TProtocol iprot)
+    {
+      iprot.IncrementRecursionDepth();
+      try
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 1:
+              if (field.Type == TType.Struct) {
+                Ex1 = new ServiceRuntimeException();
+                Ex1.Read(iprot);
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+      finally
+      {
+        iprot.DecrementRecursionDepth();
+      }
+    }
+
+    public void Write(TProtocol oprot) {
+      oprot.IncrementRecursionDepth();
+      try
+      {
+        TStruct struc = new TStruct("setPersonExpiryDateTimeStr_result");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+
+        if (this.Ex1 != null) {
+          field.Name = "Ex1";
+          field.Type = TType.Struct;
+          field.ID = 1;
+          oprot.WriteFieldBegin(field);
+          Ex1.Write(oprot);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+      finally
+      {
+        oprot.DecrementRecursionDepth();
+      }
+    }
+
+    public override string ToString() {
+      StringBuilder __sb = new StringBuilder("setPersonExpiryDateTimeStr_result(");
       bool __first = true;
       if (Ex1 != null) {
         if(!__first) { __sb.Append(", "); }

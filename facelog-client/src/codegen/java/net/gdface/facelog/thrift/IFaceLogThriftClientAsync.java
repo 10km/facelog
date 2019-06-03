@@ -2838,6 +2838,27 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(saveServiceConfig(token), callback);
     }
     /**
+     * see also {@link net.gdface.facelog.IFaceLog#setPersonExpiryDate(int,java.lang.String,net.gdface.facelog.Token)}
+     */
+    public ListenableFuture<Void> setPersonExpiryDate(int personId,
+        String expiryDate,
+        Token token){        
+        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
+        ListenableFuture<Void> future = async.setPersonExpiryDateTimeStr(personId,
+            expiryDate,
+            TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class));
+        return factory.wrap(async,future);
+    }
+    public void setPersonExpiryDate(int personId,
+        String expiryDate,
+        Token token,
+        FutureCallback<Void>callback){
+        factory.addCallback(setPersonExpiryDate(personId,expiryDate,token), callback);
+    }
+    /**
      * see also {@link net.gdface.facelog.IFaceLog#setPersonExpiryDate(int,long,net.gdface.facelog.Token)}
      */
     public ListenableFuture<Void> setPersonExpiryDate(int personId,

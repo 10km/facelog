@@ -21124,6 +21124,149 @@ IFaceLog_setPersonExpiryDateList_result.prototype.write = function(output) {
   return;
 };
 
+var IFaceLog_setPersonExpiryDateTimeStr_args = function(args) {
+  this.personId = null;
+  this.expiryDate = null;
+  this.token = null;
+  if (args) {
+    if (args.personId !== undefined && args.personId !== null) {
+      this.personId = args.personId;
+    } else {
+      throw new Thrift.TProtocolException(Thrift.TProtocolExceptionType.UNKNOWN, 'Required field personId is unset!');
+    }
+    if (args.expiryDate !== undefined && args.expiryDate !== null) {
+      this.expiryDate = args.expiryDate;
+    }
+    if (args.token !== undefined && args.token !== null) {
+      this.token = new ttypes.Token(args.token);
+    }
+  }
+};
+IFaceLog_setPersonExpiryDateTimeStr_args.prototype = {};
+IFaceLog_setPersonExpiryDateTimeStr_args.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+      if (ftype == Thrift.Type.I32) {
+        this.personId = input.readI32();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 2:
+      if (ftype == Thrift.Type.STRING) {
+        this.expiryDate = input.readString();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 3:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.token = new ttypes.Token();
+        this.token.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+IFaceLog_setPersonExpiryDateTimeStr_args.prototype.write = function(output) {
+  output.writeStructBegin('IFaceLog_setPersonExpiryDateTimeStr_args');
+  if (this.personId !== null && this.personId !== undefined) {
+    output.writeFieldBegin('personId', Thrift.Type.I32, 1);
+    output.writeI32(this.personId);
+    output.writeFieldEnd();
+  }
+  if (this.expiryDate !== null && this.expiryDate !== undefined) {
+    output.writeFieldBegin('expiryDate', Thrift.Type.STRING, 2);
+    output.writeString(this.expiryDate);
+    output.writeFieldEnd();
+  }
+  if (this.token !== null && this.token !== undefined) {
+    output.writeFieldBegin('token', Thrift.Type.STRUCT, 3);
+    this.token.write(output);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+var IFaceLog_setPersonExpiryDateTimeStr_result = function(args) {
+  this.ex1 = null;
+  if (args instanceof ttypes.ServiceRuntimeException) {
+    this.ex1 = args;
+    return;
+  }
+  if (args) {
+    if (args.ex1 !== undefined && args.ex1 !== null) {
+      this.ex1 = args.ex1;
+    }
+  }
+};
+IFaceLog_setPersonExpiryDateTimeStr_result.prototype = {};
+IFaceLog_setPersonExpiryDateTimeStr_result.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.ex1 = new ttypes.ServiceRuntimeException();
+        this.ex1.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 0:
+        input.skip(ftype);
+        break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+IFaceLog_setPersonExpiryDateTimeStr_result.prototype.write = function(output) {
+  output.writeStructBegin('IFaceLog_setPersonExpiryDateTimeStr_result');
+  if (this.ex1 !== null && this.ex1 !== undefined) {
+    output.writeFieldBegin('ex1', Thrift.Type.STRUCT, 1);
+    this.ex1.write(output);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
 var IFaceLog_setProperties_args = function(args) {
   this.config = null;
   this.token = null;
@@ -29795,6 +29938,57 @@ IFaceLogClient.prototype.recv_setPersonExpiryDateList = function(input,mtype,rse
   }
   callback(null);
 };
+IFaceLogClient.prototype.setPersonExpiryDateTimeStr = function(personId, expiryDate, token, callback) {
+  this._seqid = this.new_seqid();
+  if (callback === undefined) {
+    var _defer = Q.defer();
+    this._reqs[this.seqid()] = function(error, result) {
+      if (error) {
+        _defer.reject(error);
+      } else {
+        _defer.resolve(result);
+      }
+    };
+    this.send_setPersonExpiryDateTimeStr(personId, expiryDate, token);
+    return _defer.promise;
+  } else {
+    this._reqs[this.seqid()] = callback;
+    this.send_setPersonExpiryDateTimeStr(personId, expiryDate, token);
+  }
+};
+
+IFaceLogClient.prototype.send_setPersonExpiryDateTimeStr = function(personId, expiryDate, token) {
+  var output = new this.pClass(this.output);
+  output.writeMessageBegin('setPersonExpiryDateTimeStr', Thrift.MessageType.CALL, this.seqid());
+  var params = {
+    personId: personId,
+    expiryDate: expiryDate,
+    token: token
+  };
+  var args = new IFaceLog_setPersonExpiryDateTimeStr_args(params);
+  args.write(output);
+  output.writeMessageEnd();
+  return this.output.flush();
+};
+
+IFaceLogClient.prototype.recv_setPersonExpiryDateTimeStr = function(input,mtype,rseqid) {
+  var callback = this._reqs[rseqid] || function() {};
+  delete this._reqs[rseqid];
+  if (mtype == Thrift.MessageType.EXCEPTION) {
+    var x = new Thrift.TApplicationException();
+    x.read(input);
+    input.readMessageEnd();
+    return callback(x);
+  }
+  var result = new IFaceLog_setPersonExpiryDateTimeStr_result();
+  result.read(input);
+  input.readMessageEnd();
+
+  if (null !== result.ex1) {
+    return callback(result.ex1);
+  }
+  callback(null);
+};
 IFaceLogClient.prototype.setProperties = function(config, token, callback) {
   this._seqid = this.new_seqid();
   if (callback === undefined) {
@@ -36050,6 +36244,47 @@ IFaceLogProcessor.prototype.process_setPersonExpiryDateList = function(seqid, in
       } else {
         result_obj = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
         output.writeMessageBegin("setPersonExpiryDateList", Thrift.MessageType.EXCEPTION, seqid);
+      }
+      result_obj.write(output);
+      output.writeMessageEnd();
+      output.flush();
+    });
+  }
+};
+IFaceLogProcessor.prototype.process_setPersonExpiryDateTimeStr = function(seqid, input, output) {
+  var args = new IFaceLog_setPersonExpiryDateTimeStr_args();
+  args.read(input);
+  input.readMessageEnd();
+  if (this._handler.setPersonExpiryDateTimeStr.length === 3) {
+    Q.fcall(this._handler.setPersonExpiryDateTimeStr.bind(this._handler), args.personId, args.expiryDate, args.token)
+      .then(function(result) {
+        var result_obj = new IFaceLog_setPersonExpiryDateTimeStr_result({success: result});
+        output.writeMessageBegin("setPersonExpiryDateTimeStr", Thrift.MessageType.REPLY, seqid);
+        result_obj.write(output);
+        output.writeMessageEnd();
+        output.flush();
+      }, function (err) {
+        var result;
+        if (err instanceof ttypes.ServiceRuntimeException) {
+          result = new IFaceLog_setPersonExpiryDateTimeStr_result(err);
+          output.writeMessageBegin("setPersonExpiryDateTimeStr", Thrift.MessageType.REPLY, seqid);
+        } else {
+          result = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
+          output.writeMessageBegin("setPersonExpiryDateTimeStr", Thrift.MessageType.EXCEPTION, seqid);
+        }
+        result.write(output);
+        output.writeMessageEnd();
+        output.flush();
+      });
+  } else {
+    this._handler.setPersonExpiryDateTimeStr(args.personId, args.expiryDate, args.token, function (err, result) {
+      var result_obj;
+      if ((err === null || typeof err === 'undefined') || err instanceof ttypes.ServiceRuntimeException) {
+        result_obj = new IFaceLog_setPersonExpiryDateTimeStr_result((err !== null || typeof err === 'undefined') ? err : {success: result});
+        output.writeMessageBegin("setPersonExpiryDateTimeStr", Thrift.MessageType.REPLY, seqid);
+      } else {
+        result_obj = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
+        output.writeMessageBegin("setPersonExpiryDateTimeStr", Thrift.MessageType.EXCEPTION, seqid);
       }
       result_obj.write(output);
       output.writeMessageEnd();

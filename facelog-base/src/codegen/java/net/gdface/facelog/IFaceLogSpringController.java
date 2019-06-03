@@ -660,7 +660,7 @@ public class IFaceLogSpringController {
     // port-23
     /**
      * 返回fl_log_light.verify_time 字段大于指定时间戳({@code timestamp})的记录总数
-     * @param timestamp 时间戳,{@code yyyy-MM-dd HH:mm:ss}或{@code yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}(ISO8601)格式日期字符串
+     * @param timestamp 时间戳,{@code yyyy-MM-dd}或{@code yyyy-MM-dd HH:mm:ss}或{@code yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}(ISO8601)格式日期字符串
      * @return 满足条件的记录条数
      * @see #countLogLightByWhere(String)
      */
@@ -2454,7 +2454,7 @@ public class IFaceLogSpringController {
     /**
      * (主动更新机制实现)<br>
      * 返回 fl_feature.update_time 字段大于指定时间戳( {@code timestamp} )的所有fl_feature记录
-     * @param timestamp 时间戳,{@code yyyy-MM-dd HH:mm:ss}或{@code yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}(ISO8601)格式日期字符串
+     * @param timestamp 时间戳,{@code yyyy-MM-dd}或{@code yyyy-MM-dd HH:mm:ss}或{@code yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}(ISO8601)格式日期字符串
      * @return 返回 fl_feature.md5 列表
      */
     @ResponseBody
@@ -2549,7 +2549,7 @@ public class IFaceLogSpringController {
     /**
      * (主动更新机制实现)<br>
      * 返回 fl_log_light.verify_time 字段大于指定时间戳({@code timestamp})的所有记录
-     * @param timestamp 时间戳,{@code yyyy-MM-dd HH:mm:ss}或{@code yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}(ISO8601)格式日期字符串
+     * @param timestamp 时间戳,{@code yyyy-MM-dd}或{@code yyyy-MM-dd HH:mm:ss}或{@code yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}(ISO8601)格式日期字符串
      * @param startRow 记录起始行号 (first row = 1, last row = -1)
      * @param numRows 返回记录条数 为负值是返回{@code startRow}开始的所有行
      */
@@ -2598,7 +2598,7 @@ public class IFaceLogSpringController {
     /**
      * (主动更新机制实现)<br>
      * 返回 fl_permit.create_time 字段大于指定时间戳( {@code timestamp} )的所有fl_permit记录
-     * @param timestamp 时间戳,{@code yyyy-MM-dd HH:mm:ss}或{@code yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}(ISO8601)格式日期字符串
+     * @param timestamp 时间戳,,{@code yyyy-MM-dd}或{@code yyyy-MM-dd HH:mm:ss}或{@code yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}(ISO8601)格式日期字符串
      * @return 
      */
     @ResponseBody
@@ -2712,7 +2712,7 @@ public class IFaceLogSpringController {
     /**
      * (主动更新机制实现)<br>
      * 返回 fl_person.update_time 字段大于指定时间戳( {@code timestamp} )的所有fl_person记录
-     * @param timestamp 时间戳,{@code yyyy-MM-dd HH:mm:ss}或{@code yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}(ISO8601)格式日期字符串
+     * @param timestamp 时间戳,{@code yyyy-MM-dd}或{@code yyyy-MM-dd HH:mm:ss}或{@code yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}(ISO8601)格式日期字符串
      * @return 返回fl_person.id 列表
      */
     @ResponseBody
@@ -2780,7 +2780,7 @@ public class IFaceLogSpringController {
      * (主动更新机制实现)<br>
      * 返回fl_person.update_time字段大于指定时间戳( {@code timestamp} )的所有fl_person记录<br>
      * 同时包含fl_feature更新记录引用的fl_person记录
-     * @param timestamp 时间戳,{@code yyyy-MM-dd HH:mm:ss}或{@code yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}(ISO8601)格式日期字符串
+     * @param timestamp 时间戳,{@code yyyy-MM-dd}或{@code yyyy-MM-dd HH:mm:ss}或{@code yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}(ISO8601)格式日期字符串
      * @return 返回fl_person.id 列表
      */
     @ResponseBody
@@ -3372,6 +3372,31 @@ public class IFaceLogSpringController {
      * 修改 personId 指定的人员记录的有效期
      * <br>{@code PERSON_ONLY}
      * @param personId
+     * @param expiryDate 失效日期,{@code yyyy-MM-dd}或{@code yyyy-MM-dd HH:mm:ss}或{@code yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}(ISO8601)格式日期字符串
+     * @param token 访问令牌
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/setPersonExpiryDateTimeStr", method = RequestMethod.POST)
+    @ApiOperation(value = "修改 personId 指定的人员记录的有效期\n"
++" <br>{@code PERSON_ONLY}",httpMethod="POST")
+    public Response setPersonExpiryDate( @RequestBody SetPersonExpiryDateTimeStrArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                delegate().setPersonExpiryDate(args.personId,args.expiryDate,args.token);
+                response.onComplete();
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // port-141
+    /**
+     * 修改 personId 指定的人员记录的有效期
+     * <br>{@code PERSON_ONLY}
+     * @param personId
      * @param expiryDate 失效日期
      * @param token 访问令牌
      */
@@ -3392,7 +3417,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-141
+    // port-142
     /**
      * 修改 personIdList 指定的人员记录的有效期
      * <br>{@code PERSON_ONLY}
@@ -3418,7 +3443,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-142
+    // port-143
     /**
      * 修改一组配置参数
      * <br>{@code ROOT_ONLY}
@@ -3442,7 +3467,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-143
+    // port-144
     /**
      * 修改/增加指定的配置参数
      * <br>{@code ROOT_ONLY}
@@ -3467,7 +3492,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-144
+    // port-145
     /**
      * 根据任务名返回redis队列名
      * <br>{@link TokenMangement.Enable#ALL}
@@ -3491,7 +3516,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-145
+    // port-146
     /**
      * 注册一个任务名<br>
      * 方法将会根据任务名在redis上生成一个对应的队列<br>
@@ -3519,7 +3544,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-146
+    // port-147
     /**
      * 删除管理边界<br>
      * 删除fl_person_group.root_group和fl_device_group.root_group字段的互相指向,设置为{@code null},
@@ -3552,7 +3577,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-147
+    // port-148
     /**
      * (设备端)设备删除
      * <br>{@code DEVICE_ONLY}
@@ -3577,7 +3602,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-148
+    // port-149
     /**
      * 更新设备记录(必须是已经存在的设备记录，否则抛出异常)
      * @param deviceBean
@@ -3599,7 +3624,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-149
+    // port-150
     /**
      * 返回服务版本号
      * @return 
@@ -3619,7 +3644,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-150
+    // port-151
     /**
      * 返回服务版本的详细信息<br>
      * <ul>
@@ -3909,7 +3934,7 @@ public class IFaceLogSpringController {
      * wrap arguments for method {@link #countLogLightByVerifyTime(CountLogLightByVerifyTimeTimestrArgs)}
      */
     public static class CountLogLightByVerifyTimeTimestrArgs{
-        @ApiModelProperty(value ="时间戳,{@code yyyy-MM-dd HH:mm:ss}或{@code yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}(ISO8601)格式日期字符串" ,required=true ,dataType="String")
+        @ApiModelProperty(value ="时间戳,{@code yyyy-MM-dd}或{@code yyyy-MM-dd HH:mm:ss}或{@code yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}(ISO8601)格式日期字符串" ,required=true ,dataType="String")
         public String timestamp;
     }
     /**
@@ -4589,7 +4614,7 @@ public class IFaceLogSpringController {
      * wrap arguments for method {@link #loadFeatureMd5ByUpdate(LoadFeatureMd5ByUpdateTimeStrArgs)}
      */
     public static class LoadFeatureMd5ByUpdateTimeStrArgs{
-        @ApiModelProperty(value ="时间戳,{@code yyyy-MM-dd HH:mm:ss}或{@code yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}(ISO8601)格式日期字符串" ,required=true ,dataType="String")
+        @ApiModelProperty(value ="时间戳,{@code yyyy-MM-dd}或{@code yyyy-MM-dd HH:mm:ss}或{@code yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}(ISO8601)格式日期字符串" ,required=true ,dataType="String")
         public String timestamp;
     }
     /**
@@ -4629,7 +4654,7 @@ public class IFaceLogSpringController {
      * wrap arguments for method {@link #loadLogLightByVerifyTime(LoadLogLightByVerifyTimeArgs)}
      */
     public static class LoadLogLightByVerifyTimeArgs{
-        @ApiModelProperty(value ="时间戳,{@code yyyy-MM-dd HH:mm:ss}或{@code yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}(ISO8601)格式日期字符串" ,required=true ,dataType="long")
+        @ApiModelProperty(value ="时间戳,{@code yyyy-MM-dd}或{@code yyyy-MM-dd HH:mm:ss}或{@code yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}(ISO8601)格式日期字符串" ,required=true ,dataType="long")
         public long timestamp;
         @ApiModelProperty(value ="记录起始行号 (first row = 1, last row = -1)" ,required=true ,dataType="int")
         public int startRow;
@@ -4653,7 +4678,7 @@ public class IFaceLogSpringController {
      * wrap arguments for method {@link #loadPermitByUpdate(LoadPermitByUpdateTimestrArgs)}
      */
     public static class LoadPermitByUpdateTimestrArgs{
-        @ApiModelProperty(value ="时间戳,{@code yyyy-MM-dd HH:mm:ss}或{@code yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}(ISO8601)格式日期字符串" ,required=true ,dataType="String")
+        @ApiModelProperty(value ="时间戳,,{@code yyyy-MM-dd}或{@code yyyy-MM-dd HH:mm:ss}或{@code yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}(ISO8601)格式日期字符串" ,required=true ,dataType="String")
         public String timestamp;
     }
     /**
@@ -4701,7 +4726,7 @@ public class IFaceLogSpringController {
      * wrap arguments for method {@link #loadPersonIdByUpdateTime(LoadPersonIdByUpdateTimeTimeStrArgs)}
      */
     public static class LoadPersonIdByUpdateTimeTimeStrArgs{
-        @ApiModelProperty(value ="时间戳,{@code yyyy-MM-dd HH:mm:ss}或{@code yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}(ISO8601)格式日期字符串" ,required=true ,dataType="String")
+        @ApiModelProperty(value ="时间戳,{@code yyyy-MM-dd}或{@code yyyy-MM-dd HH:mm:ss}或{@code yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}(ISO8601)格式日期字符串" ,required=true ,dataType="String")
         public String timestamp;
     }
     /**
@@ -4725,7 +4750,7 @@ public class IFaceLogSpringController {
      * wrap arguments for method {@link #loadUpdatedPersons(LoadUpdatedPersonsTimestrArgs)}
      */
     public static class LoadUpdatedPersonsTimestrArgs{
-        @ApiModelProperty(value ="时间戳,{@code yyyy-MM-dd HH:mm:ss}或{@code yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}(ISO8601)格式日期字符串" ,required=true ,dataType="String")
+        @ApiModelProperty(value ="时间戳,{@code yyyy-MM-dd}或{@code yyyy-MM-dd HH:mm:ss}或{@code yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}(ISO8601)格式日期字符串" ,required=true ,dataType="String")
         public String timestamp;
     }
     /**
@@ -4980,6 +5005,18 @@ public class IFaceLogSpringController {
     }
     /**
      * argClass-140<br>
+     * wrap arguments for method {@link #setPersonExpiryDate(SetPersonExpiryDateTimeStrArgs)}
+     */
+    public static class SetPersonExpiryDateTimeStrArgs{
+        @ApiModelProperty(value ="" ,required=true ,dataType="int")
+        public int personId;
+        @ApiModelProperty(value ="失效日期,{@code yyyy-MM-dd}或{@code yyyy-MM-dd HH:mm:ss}或{@code yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}(ISO8601)格式日期字符串" ,required=true ,dataType="String")
+        public String expiryDate;
+        @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
+        public Token token;
+    }
+    /**
+     * argClass-141<br>
      * wrap arguments for method {@link #setPersonExpiryDate(SetPersonExpiryDateArgs)}
      */
     public static class SetPersonExpiryDateArgs{
@@ -4991,7 +5028,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-141<br>
+     * argClass-142<br>
      * wrap arguments for method {@link #setPersonExpiryDate(SetPersonExpiryDateListArgs)}
      */
     public static class SetPersonExpiryDateListArgs{
@@ -5003,7 +5040,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-142<br>
+     * argClass-143<br>
      * wrap arguments for method {@link #setProperties(SetPropertiesArgs)}
      */
     public static class SetPropertiesArgs{
@@ -5013,7 +5050,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-143<br>
+     * argClass-144<br>
      * wrap arguments for method {@link #setProperty(SetPropertyArgs)}
      */
     public static class SetPropertyArgs{
@@ -5025,7 +5062,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-144<br>
+     * argClass-145<br>
      * wrap arguments for method {@link #taskQueueOf(TaskQueueOfArgs)}
      */
     public static class TaskQueueOfArgs{
@@ -5035,7 +5072,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-145<br>
+     * argClass-146<br>
      * wrap arguments for method {@link #taskRegister(TaskRegisterArgs)}
      */
     public static class TaskRegisterArgs{
@@ -5045,7 +5082,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-146<br>
+     * argClass-147<br>
      * wrap arguments for method {@link #unbindBorder(UnbindBorderArgs)}
      */
     public static class UnbindBorderArgs{
@@ -5057,7 +5094,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-147<br>
+     * argClass-148<br>
      * wrap arguments for method {@link #unregisterDevice(UnregisterDeviceArgs)}
      */
     public static class UnregisterDeviceArgs{
@@ -5067,7 +5104,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-148<br>
+     * argClass-149<br>
      * wrap arguments for method {@link #updateDevice(UpdateDeviceArgs)}
      */
     public static class UpdateDeviceArgs{
