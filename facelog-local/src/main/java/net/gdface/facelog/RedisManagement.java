@@ -184,7 +184,7 @@ class RedisManagement implements ServiceConstant{
 			if(System.getProperty("os.name").startsWith("Windows")){
 				cmd = shell() + " " + Joiner.on(' ').join(args);	
 			}else{
-				cmd = shell() + " \"" + Joiner.on(' ').join(args) + "\"";
+				cmd = Joiner.on(' ').join(args);
 			}
 			
 			logger.debug("cmd(启动命令): {}",cmd);
