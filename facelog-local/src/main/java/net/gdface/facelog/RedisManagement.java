@@ -169,7 +169,7 @@ class RedisManagement implements ServiceConstant{
 				.append(suffixOfExe()).toString();
 		checkArgument(new File(exe).canExecute(),"NOT EXECUTABLE FILE(非可执行文件名) %s",exe);
 
-		ArrayList<String> args = Lists.newArrayList(shell(),exe);
+		ArrayList<String> args = Lists.newArrayList(exe);
 		// 命令行指定端口
 		if(parameters.containsKey(PropName.port)){
 			args.add("--port " + parameters.get(PropName.port));
@@ -180,7 +180,13 @@ class RedisManagement implements ServiceConstant{
 		}
 		try {
 			logger.info("start redis server(启动redis服务器)");
-			String cmd = Joiner.on(' ').join(args);
+			String cmd;
+			if(System.getProperty("os.name").startsWith("Windows")){
+				cmd = shell() + " " + Joiner.on(' ').join(args);	
+			}else{
+				cmd = shell() + " \"" + Joiner.on(' ').join(args) + "\"";
+			}
+			
 			logger.debug("cmd(启动命令): {}",cmd);
 			Runtime.getRuntime().exec(cmd);
 		} catch (IOException e) {
