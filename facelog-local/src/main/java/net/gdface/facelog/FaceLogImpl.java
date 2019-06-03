@@ -52,10 +52,10 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 	private final TokenValidatorDeviceListener tokenValidatorDeviceListener = new TokenValidatorDeviceListener(dm);
 	private final TokenValidatorDeviceGroupListener tokenValidatorDeviceGroupListener = new TokenValidatorDeviceGroupListener(dm);
 
-	private final RedisPersonListener redisPersonListener = new RedisPersonListener();
-	private final RedisPersonGroupListener redisPersonGroupListener = new RedisPersonGroupListener();
-	private final RedisDeviceListener redisDeviceListener = new RedisDeviceListener();
-	private final RedisDeviceGroupListener redisDeviceGroupListener = new RedisDeviceGroupListener();
+	private final RedisPersonListener redisPersonListener = new RedisPersonListener(dm);
+	private final RedisPersonGroupListener redisPersonGroupListener = new RedisPersonGroupListener(dm);
+	private final RedisDeviceListener redisDeviceListener = new RedisDeviceListener(dm);
+	private final RedisDeviceGroupListener redisDeviceGroupListener = new RedisDeviceGroupListener(dm);
 	private final RedisFeatureListener redisFeatureListener = new RedisFeatureListener();
 	private final RedisPermitListener redisPermitListener = new RedisPermitListener();
 	private final RedisLogListener redisLogListener = new RedisLogListener(rm.getRedisParameters().get(MQParam.LOG_MONITOR_CHANNEL));

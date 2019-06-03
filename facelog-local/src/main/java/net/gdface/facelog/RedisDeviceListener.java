@@ -18,11 +18,13 @@ import net.gdface.facelog.db.exception.RuntimeDaoException;
 class RedisDeviceListener extends TableListener.Adapter<DeviceBean> implements ChannelConstant{
 
 	private final RedisPublisher publisher;
+	private final BaseDao dao;
 	private DeviceBean beforeUpdatedBean;
-	public RedisDeviceListener() {
-		this(JedisPoolLazy.getDefaultInstance());
+	public RedisDeviceListener(BaseDao dao) {
+		this(dao, JedisPoolLazy.getDefaultInstance());
 	}
-	public RedisDeviceListener(JedisPoolLazy jedisPoolLazy) {
+	public RedisDeviceListener(BaseDao dao, JedisPoolLazy jedisPoolLazy) {
+		this.dao = checkNotNull(dao,"dao is null");
 		this.publisher = RedisFactory.getPublisher(checkNotNull(jedisPoolLazy,"jedisPoolLazy is null"));
 	}
 	@Override
@@ -36,12 +38,14 @@ class RedisDeviceListener extends TableListener.Adapter<DeviceBean> implements C
 	@Override
 	public void beforeUpdate(DeviceBean bean) throws RuntimeDaoException {
 		// 保留更新前的数据
-		beforeUpdatedBean = bean.clone();
+		beforeUpdatedBean = dao.daoGetDevice(bean.getId()).clone();
 	}
 	@Override
 	public void afterUpdate(DeviceBean bean) {
 		// beforeUpdatedBean 为 null，只可能因为侦听器是被异步调用的
 		checkState(beforeUpdatedBean != null,"beforeUpdatedBean must not be null");
+		// 保存修改信息
+		beforeUpdatedBean.setModified(bean.getModified());
 		new RedisPublishTask<DeviceBean>(
 				PUBSUB_DEVICE_UPDATE, 
 				beforeUpdatedBean, 

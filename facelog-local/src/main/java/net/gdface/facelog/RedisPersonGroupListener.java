@@ -18,11 +18,13 @@ import net.gdface.facelog.db.exception.RuntimeDaoException;
 class RedisPersonGroupListener extends TableListener.Adapter<PersonGroupBean> implements ChannelConstant{
 
 	private final RedisPublisher publisher;
-	private PersonGroupBean beforeUpdatedBean;	
-	public RedisPersonGroupListener() {
-		this(JedisPoolLazy.getDefaultInstance());
+	private final BaseDao dao;
+	private PersonGroupBean beforeUpdatedBean;
+	public RedisPersonGroupListener(BaseDao dao) {
+		this(dao, JedisPoolLazy.getDefaultInstance());
 	}
-	public RedisPersonGroupListener(JedisPoolLazy jedisPoolLazy) {
+	public RedisPersonGroupListener(BaseDao dao, JedisPoolLazy jedisPoolLazy) {
+		this.dao = checkNotNull(dao,"dao is null");
 		this.publisher = RedisFactory.getPublisher(checkNotNull(jedisPoolLazy,"jedisPoolLazy is null"));
 	}
 	@Override
@@ -36,12 +38,14 @@ class RedisPersonGroupListener extends TableListener.Adapter<PersonGroupBean> im
 	@Override
 	public void beforeUpdate(PersonGroupBean bean) throws RuntimeDaoException {
 		// 保留更新前的数据
-		beforeUpdatedBean = bean.clone();
+		beforeUpdatedBean = dao.daoGetPersonGroup(bean.getId()).clone();
 	}
 	@Override
 	public void afterUpdate(PersonGroupBean bean) {
 		// beforeUpdatedBean 为 null，只可能因为侦听器是被异步调用的
 		checkState(beforeUpdatedBean != null,"beforeUpdatedBean must not be null");
+		// 保存修改信息
+		beforeUpdatedBean.setModified(bean.getModified());
 		new RedisPublishTask<PersonGroupBean>(
 				PUBSUB_PERSONGROUP_UPDATE, 
 				beforeUpdatedBean, 
