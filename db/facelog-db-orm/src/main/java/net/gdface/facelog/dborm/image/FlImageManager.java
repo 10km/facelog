@@ -2241,6 +2241,7 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
                 protected void onRemove(List<FlImageBean> effectBeans) throws DaoException {
                     for(FlImageBean bean:effectBeans){
                         bean.setDeviceId(null);
+                        Event.UPDATE_BEFORE.fire(listenerContainer, bean);
                         Event.UPDATE.fire(listenerContainer, bean);
                         bean.resetIsModified();
                     }

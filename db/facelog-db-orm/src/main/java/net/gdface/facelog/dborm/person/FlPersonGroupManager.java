@@ -2600,6 +2600,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
                 protected void onRemove(List<FlPersonGroupBean> effectBeans) throws DaoException {
                     for(FlPersonGroupBean bean:effectBeans){
                         bean.setParent(null);
+                        Event.UPDATE_BEFORE.fire(listenerContainer, bean);
                         Event.UPDATE.fire(listenerContainer, bean);
                         bean.resetIsModified();
                     }

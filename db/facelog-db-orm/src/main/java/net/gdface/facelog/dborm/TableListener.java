@@ -109,16 +109,19 @@ public interface TableListener<B>{
     public void done()throws DaoException;
 
     /**
-     * listener event
+     * listener event:<br>
      * {@code INSERT} insert a bean<br>
      * {@code UPDATE} update a bean<br>
      * {@code DELETE} delete a bean<br>
+     * {@code UPDATE_BEFORE} before updating a bean<br>
      * @author guyadong
      *
      */
-    public static enum Event{
-        /** insert a bean */
-        INSERT,UPDATE,DELETE;
+    public static enum Event{        
+        /** insert a bean */INSERT,
+        /** update a bean */UPDATE,
+        /** delete a bean */DELETE,
+        /** before updating a bean */UPDATE_BEFORE,;
         /**
          * fire current event by  {@link ListenerContainer}
          * @param container
@@ -138,6 +141,9 @@ public interface TableListener<B>{
                 break;
             case DELETE:
                 container.afterDelete(bean);
+                break;
+            case UPDATE_BEFORE:
+                container.beforeUpdate(bean);
                 break;
             default:
                 break;
@@ -213,7 +219,7 @@ public interface TableListener<B>{
                                 listener.afterInsert(bean);
                             }catch(Exception e){
                                 System.out.printf("afterInsert listener error:%s\n",e.getMessage());
-                            }                            
+                            }
                         }
                     });
 
@@ -246,7 +252,7 @@ public interface TableListener<B>{
                                 listener.afterUpdate(bean);
                             }catch(Exception e){
                                 System.out.printf("afterUpdate listener error:%s\n",e.getMessage());
-                            }                            
+                            }
                         }
                     });
 
@@ -279,7 +285,7 @@ public interface TableListener<B>{
                                 listener.afterUpdate(bean);
                             }catch(Exception e){
                                 System.out.printf("afterDelete listener error:%s\n",e.getMessage());
-                            }                            
+                            }
                         }
                     });
 

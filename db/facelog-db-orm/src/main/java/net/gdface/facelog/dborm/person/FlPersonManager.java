@@ -3070,6 +3070,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
                 protected void onRemove(List<FlPersonBean> effectBeans) throws DaoException {
                     for(FlPersonBean bean:effectBeans){
                         bean.setGroupId(null);
+                        Event.UPDATE_BEFORE.fire(listenerContainer, bean);
                         Event.UPDATE.fire(listenerContainer, bean);
                         bean.resetIsModified();
                     }
@@ -3088,6 +3089,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
                 protected void onRemove(List<FlPersonBean> effectBeans) throws DaoException {
                     for(FlPersonBean bean:effectBeans){
                         bean.setImageMd5(null);
+                        Event.UPDATE_BEFORE.fire(listenerContainer, bean);
                         Event.UPDATE.fire(listenerContainer, bean);
                         bean.resetIsModified();
                     }

@@ -3015,6 +3015,7 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
                 protected void onRemove(List<FlDeviceBean> effectBeans) throws DaoException {
                     for(FlDeviceBean bean:effectBeans){
                         bean.setGroupId(null);
+                        Event.UPDATE_BEFORE.fire(listenerContainer, bean);
                         Event.UPDATE.fire(listenerContainer, bean);
                         bean.resetIsModified();
                     }
