@@ -297,7 +297,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		try{
 			Enable.PERSON_ONLY.check(tm, token);
 			// 有效期设置为昨天
-			Date yesterday = new Date(new Date().getTime() - 86400000L);
+			Date yesterday = new Date(System.currentTimeMillis() - 86400000L);
 			dm.daoSetPersonExpiryDate(dm.daoGetPerson(personId),yesterday);
 		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
