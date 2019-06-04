@@ -158,8 +158,8 @@ public interface CommonConstant {
     /** 设备心跳包失效时间(秒) */
     public static final String HEARTBEAT_EXPIRE = "heartbeat.expire";
     
-    /** REDIS 安装位置 */
-    public static final String REDIS_HOME = "redis.home";
+    /** REDIS SERVER 可执行程序路径 */
+    public static final String REDIS_EXE = "redis.exe";
     
     /** REDIS 没启动时是否等待 */
     public static final String REDIS_WAITIFABSENT = "redis.waitIfAbsent";

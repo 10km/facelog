@@ -36,7 +36,7 @@
 	</heartbeat>
 
 	<redis description = "redis 参数配置">
-		<home description="redis 安装位置"></home>
+		<exe description="redis server 可执行程序路径"></exe>
 		<waitIfAbsent description="redis 没启动时是否等待"></waitIfAbsent>
 		<tryCount description="redis 等待重试次数">10</tryCount>
 		<tryInterval description="redis 等待重试间隔(毫秒)">2000</tryInterval>
