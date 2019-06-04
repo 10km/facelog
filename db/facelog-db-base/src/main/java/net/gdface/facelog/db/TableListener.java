@@ -282,7 +282,7 @@ public interface TableListener<B>{
                         @Override
                         public void run() {
                             try{
-                                listener.afterUpdate(bean);
+                                listener.afterDelete(bean);
                             }catch(Exception e){
                                 System.out.printf("afterDelete listener error:%s\n",e.getMessage());
                             }
