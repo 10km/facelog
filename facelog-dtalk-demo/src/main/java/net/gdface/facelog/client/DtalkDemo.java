@@ -77,7 +77,7 @@ public class DtalkDemo {
 
 		device = DeviceBean.builder()
 				.mac(FaceUtilits.toHex(devMac))
-				.serialNo("5432122")
+//				.serialNo("5432122")
 				.usedSdks("MTFSDKARM512")
 				.build();
 		logger.info(device.toString(true,false));
