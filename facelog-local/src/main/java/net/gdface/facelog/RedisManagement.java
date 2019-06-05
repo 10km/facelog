@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.google.common.base.Joiner;
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
@@ -20,6 +21,7 @@ import gu.simplemq.redis.JedisPoolLazy.PropName;
 import gu.simplemq.redis.JedisUtils;
 import net.gdface.utils.NetworkUtil;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.Protocol;
 import redis.clients.jedis.exceptions.JedisConnectionException;
 import redis.clients.jedis.exceptions.JedisDataException;
 
@@ -179,7 +181,7 @@ class RedisManagement implements ServiceConstant{
 			args.add((String) parameters.get(PropName.password));
 		}
 		try {
-			logger.info("start redis server(启动redis服务器)");
+			logger.info("start redis server(启动redis服务器) {}",MoreObjects.firstNonNull( parameters.get(PropName.port), Protocol.DEFAULT_PORT));
 			
 			String cmd = Joiner.on(' ').join(args);
 			logger.debug("cmd(启动命令): {}",cmd);
@@ -255,7 +257,7 @@ class RedisManagement implements ServiceConstant{
 			}
 		}
 		try {
-			logger.info("start webredis server(启动webredis服务器)");
+			logger.info("start webredis server(启动webredis服务器) {}",MoreObjects.firstNonNull(parameters.get(WEBREDIS_PORT), DEFAULT_WEBREDIS_PORT));
 			String cmd = Joiner.on(' ').join(args);
 			logger.debug("cmd(启动命令): {}",cmd);
 			return new ProcessBuilder(args)

@@ -12,13 +12,13 @@ public interface CommonConstant {
     /** 默认服务端口号 */
     public static final int DEFAULT_PORT = 26411;
     /** 默认XHR(XML Http Request)服务端口号 */
-    public static final int DEFAULT_PORT_XHR = 36411;
-    /** 默认XHR(XML Http Request)服务端口号 */
-    public static final int DEFAULT_PORT_RESTFUL = 46411;
+    public static final int DEFAULT_PORT_XHR = 26412;
+    /** 默认RESTful服务端口号 */
+    public static final int DEFAULT_PORT_RESTFUL = 26413;
     /** 默认webredis主机名 */
     public static final String DEFAULT_WEBREDIS_HOST = "locahost";
     /** 默认webredis服务端口号 */
-    public static final int DEFAULT_WEBREDIS_PORT = 16379;
+    public static final int DEFAULT_WEBREDIS_PORT = 26415;
     /** 默认心跳包间隔(秒) */
     public static final int DEFAULT_HEARTBEAT_PERIOD = 8;
     /** 默认心跳包失效时间(秒) */

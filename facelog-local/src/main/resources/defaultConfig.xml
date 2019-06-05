@@ -56,7 +56,7 @@
 	<webredis description="webredis参数配置">
 		<file description="webredis 启动脚本路径"></file>
 		<host description="webredis主机名,为非本机名('localhost','127.0.0.1')时,不执行本地webredis启动">localhost</host>
-		<port description="webredis服务端口">16379</port>
+		<port description="webredis服务端口"></port>
 		<rhost description="redis 主机名">${redis.host}</rhost>
 		<rport description="redis 端口">${redis.port}</rport>
 		<rauth description="redis 密码">${redis.password}</rauth>
@@ -65,11 +65,11 @@
 	</webredis>
 	<xhr description="XHR(XML HTTP Request)服务参数配置">
 		<start description="XHR服务端是否启动">true</start>
-		<port description="XHR服务端口">36411</port>
+		<port description="XHR服务端口"></port>
 	</xhr>
 	<restful description="RESTful web服务参数配置">
 		<start description="RESTful 服务端是否启动">true</start>
-		<port description="RESTful服务端口">46411</port>
+		<port description="RESTful服务端口"></port>
 		<swaggerEnable description="是否显示在线swagger文档">true</swaggerEnable>
 	</restful>
 	<feature description="特征参数配置">
