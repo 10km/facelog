@@ -3584,21 +3584,22 @@ public class IFaceLogSpringController {
     }
     // port-148
     /**
-     * (设备端)设备删除
+     * (设备端)删除当前设备<br>
+     * 从fl_device表中删除当前设备记录
      * <br>{@code DEVICE_ONLY}
-     * @param deviceId
      * @param token 设备验证令牌
      * @throws ServiceSecurityException
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/unregisterDevice", method = RequestMethod.POST)
-    @ApiOperation(value = "(设备端)设备删除\n"
+    @ApiOperation(value = "(设备端)删除当前设备<br>\n"
++" 从fl_device表中删除当前设备记录\n"
 +" <br>{@code DEVICE_ONLY}",httpMethod="POST")
     public Response unregisterDevice( @RequestBody UnregisterDeviceArgs args) 
     {
             Response response = responseFactory.newIFaceLogResponse();
             try{
-                delegate().unregisterDevice(args.deviceId,args.token);
+                delegate().unregisterDevice(args.token);
                 response.onComplete();
             }
             catch(Exception e){
@@ -5111,8 +5112,6 @@ public class IFaceLogSpringController {
      * wrap arguments for method {@link #unregisterDevice(UnregisterDeviceArgs)}
      */
     public static class UnregisterDeviceArgs{
-        @ApiModelProperty(value ="" ,required=true ,dataType="int")
-        public int deviceId;
         @ApiModelProperty(value ="设备验证令牌" ,required=true ,dataType="Token")
         public Token token;
     }

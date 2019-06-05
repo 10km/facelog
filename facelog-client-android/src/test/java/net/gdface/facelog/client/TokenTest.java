@@ -175,7 +175,7 @@ public class TokenTest implements CommonConstant {
 			logger.info(device.toString(true,false));
 			device = facelogClient.registerDevice(device);
 			Token deviceToken = facelogClient.online(device);
-			facelogClient.unregisterDevice(device.getId(), deviceToken);
+			facelogClient.unregisterDevice(deviceToken);
 		} catch(BaseServiceRuntimeException e){
 			e.printServiceStackTrace();
 			assertTrue(e.getMessage(),false);

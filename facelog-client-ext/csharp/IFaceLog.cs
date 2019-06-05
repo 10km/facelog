@@ -165,7 +165,7 @@ public partial class IFaceLog {
     string taskQueueOf(string task, Token token);
     string taskRegister(string task, Token token);
     void unbindBorder(int personGroupId, int deviceGroupId, Token token);
-    void unregisterDevice(int deviceId, Token token);
+    void unregisterDevice(Token token);
     DeviceBean updateDevice(DeviceBean deviceBean, Token token);
     string version();
     Dictionary<string, string> versionInfo();
@@ -319,7 +319,7 @@ public partial class IFaceLog {
     Task<string> taskQueueOfAsync(string task, Token token);
     Task<string> taskRegisterAsync(string task, Token token);
     Task unbindBorderAsync(int personGroupId, int deviceGroupId, Token token);
-    Task unregisterDeviceAsync(int deviceId, Token token);
+    Task unregisterDeviceAsync(Token token);
     Task<DeviceBean> updateDeviceAsync(DeviceBean deviceBean, Token token);
     Task<string> versionAsync();
     Task<Dictionary<string, string>> versionInfoAsync();
@@ -620,7 +620,7 @@ public partial class IFaceLog {
     string End_taskRegister(IAsyncResult asyncResult);
     IAsyncResult Begin_unbindBorder(AsyncCallback callback, object state, int personGroupId, int deviceGroupId, Token token);
     void End_unbindBorder(IAsyncResult asyncResult);
-    IAsyncResult Begin_unregisterDevice(AsyncCallback callback, object state, int deviceId, Token token);
+    IAsyncResult Begin_unregisterDevice(AsyncCallback callback, object state, Token token);
     void End_unregisterDevice(IAsyncResult asyncResult);
     IAsyncResult Begin_updateDevice(AsyncCallback callback, object state, DeviceBean deviceBean, Token token);
     DeviceBean End_updateDevice(IAsyncResult asyncResult);
@@ -9284,9 +9284,9 @@ public partial class IFaceLog {
     }
 
     
-    public IAsyncResult Begin_unregisterDevice(AsyncCallback callback, object state, int deviceId, Token token)
+    public IAsyncResult Begin_unregisterDevice(AsyncCallback callback, object state, Token token)
     {
-      return send_unregisterDevice(callback, state, deviceId, token);
+      return send_unregisterDevice(callback, state, token);
     }
 
     public void End_unregisterDevice(IAsyncResult asyncResult)
@@ -9295,25 +9295,24 @@ public partial class IFaceLog {
       recv_unregisterDevice();
     }
 
-    public async Task unregisterDeviceAsync(int deviceId, Token token)
+    public async Task unregisterDeviceAsync(Token token)
     {
       await Task.Run(() =>
       {
-        unregisterDevice(deviceId, token);
+        unregisterDevice(token);
       });
     }
 
-    public void unregisterDevice(int deviceId, Token token)
+    public void unregisterDevice(Token token)
     {
-      var asyncResult = Begin_unregisterDevice(null, null, deviceId, token);
+      var asyncResult = Begin_unregisterDevice(null, null, token);
       End_unregisterDevice(asyncResult);
 
     }
-    public IAsyncResult send_unregisterDevice(AsyncCallback callback, object state, int deviceId, Token token)
+    public IAsyncResult send_unregisterDevice(AsyncCallback callback, object state, Token token)
     {
       oprot_.WriteMessageBegin(new TMessage("unregisterDevice", TMessageType.Call, seqid_));
       unregisterDevice_args args = new unregisterDevice_args();
-      args.DeviceId = deviceId;
       args.Token = token;
       args.Write(oprot_);
       oprot_.WriteMessageEnd();
@@ -14924,7 +14923,7 @@ public partial class IFaceLog {
       {
         try
         {
-          await iface_.unregisterDeviceAsync(args.DeviceId.Value, args.Token);
+          await iface_.unregisterDeviceAsync(args.Token);
         }
         catch (ServiceSecurityException ex1)
         {
@@ -20470,7 +20469,7 @@ public partial class IFaceLog {
       {
         try
         {
-          iface_.unregisterDevice(args.DeviceId.Value, args.Token);
+          iface_.unregisterDevice(args.Token);
         }
         catch (ServiceSecurityException ex1)
         {
@@ -53996,15 +53995,9 @@ public partial class IFaceLog {
   public partial class unregisterDevice_args : TBase
   {
 
-    public int DeviceId { get; set; }
-
     public Token Token { get; set; }
 
     public unregisterDevice_args() {
-    }
-
-    public unregisterDevice_args(int deviceId) : this() {
-      this.DeviceId = deviceId;
     }
 
     public void Read (TProtocol iprot)
@@ -54012,7 +54005,6 @@ public partial class IFaceLog {
       iprot.IncrementRecursionDepth();
       try
       {
-        bool isset_deviceId = false;
         TField field;
         iprot.ReadStructBegin();
         while (true)
@@ -54024,14 +54016,6 @@ public partial class IFaceLog {
           switch (field.ID)
           {
             case 1:
-              if (field.Type == TType.I32) {
-                DeviceId = iprot.ReadI32();
-                isset_deviceId = true;
-              } else { 
-                TProtocolUtil.Skip(iprot, field.Type);
-              }
-              break;
-            case 2:
               if (field.Type == TType.Struct) {
                 Token = new Token();
                 Token.Read(iprot);
@@ -54046,8 +54030,6 @@ public partial class IFaceLog {
           iprot.ReadFieldEnd();
         }
         iprot.ReadStructEnd();
-        if (!isset_deviceId)
-          throw new TProtocolException(TProtocolException.INVALID_DATA, "required field DeviceId not set");
       }
       finally
       {
@@ -54062,16 +54044,10 @@ public partial class IFaceLog {
         TStruct struc = new TStruct("unregisterDevice_args");
         oprot.WriteStructBegin(struc);
         TField field = new TField();
-        field.Name = "deviceId";
-        field.Type = TType.I32;
-        field.ID = 1;
-        oprot.WriteFieldBegin(field);
-        oprot.WriteI32(DeviceId);
-        oprot.WriteFieldEnd();
         if (Token != null) {
           field.Name = "token";
           field.Type = TType.Struct;
-          field.ID = 2;
+          field.ID = 1;
           oprot.WriteFieldBegin(field);
           Token.Write(oprot);
           oprot.WriteFieldEnd();
@@ -54087,10 +54063,11 @@ public partial class IFaceLog {
 
     public override string ToString() {
       StringBuilder __sb = new StringBuilder("unregisterDevice_args(");
-      __sb.Append(", DeviceId: ");
-      __sb.Append(DeviceId);
+      bool __first = true;
       if (Token != null) {
-        __sb.Append(", Token: ");
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Token: ");
         __sb.Append(Token== null ? "<null>" : Token.ToString());
       }
       __sb.Append(")");

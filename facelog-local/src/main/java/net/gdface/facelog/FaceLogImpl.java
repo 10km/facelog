@@ -165,7 +165,6 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		}
 		return token.getType() == TokenType.DEVICE ? dm.daoGetDevice(token.getId()) : null;
 	}
-	
 	private static Date toDate(String date) throws ParseException{
 		if(Strings.isNullOrEmpty(date)){
 			return null;
@@ -1444,10 +1443,12 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		}
     }
     @Override
-	public void unregisterDevice(int deviceId,Token token)
+	public void unregisterDevice(Token token)
 			throws ServiceSecurityException{
     	try{
-    		tm.unregisterDevice(deviceId,token);
+    		Enable.DEVICE_ONLY.check(tm, token);
+    		checkArgument(token != null, "token is null");
+    		tm.unregisterDevice(token.getId());
     	} catch (RuntimeException e) {
 			throwServiceException(e);
 		}

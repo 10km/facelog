@@ -321,14 +321,11 @@ class TokenMangement implements ServiceConstant {
 	/**
 	 * 设备注销
 	 * @param deviceId
-	 * @param token
 	 * @throws ServiceSecurityException
 	 */
-	protected void unregisterDevice(int deviceId,Token token)
+	protected void unregisterDevice(int deviceId)
 			throws ServiceSecurityException{
 		TokenOp.UNREGISTER.asContextTokenOp();
-		Enable.DEVICE_ONLY.check(this, token);
-		checkValidDeviceId(deviceId);
 		this.dao.daoDeleteDevice(deviceId);
 	}
 	/**

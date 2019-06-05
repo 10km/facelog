@@ -3380,18 +3380,16 @@ public class IFaceLogThriftDecorator {
         }
     }
     /**
-     * @see {@link net.gdface.facelog.IFaceLog#unregisterDevice(int,net.gdface.facelog.Token)}
+     * @see {@link net.gdface.facelog.IFaceLog#unregisterDevice(net.gdface.facelog.Token)}
      */
     @ThriftMethod(value = "unregisterDevice" ,exception = {
                 @ThriftException(type=ServiceSecurityException.class, id=1),
                 @ThriftException(type=ServiceRuntimeException.class, id=2)
                 })
-    public void unregisterDevice(int deviceId,
-        Token token) 
+    public void unregisterDevice(Token token) 
         throws ServiceSecurityException,ServiceRuntimeException{
         try{
-             delegate().unregisterDevice(deviceId,
-                TypeTransformer.getInstance().to(
+             delegate().unregisterDevice(TypeTransformer.getInstance().to(
                     token,
                     Token.class,
                     net.gdface.facelog.Token.class));

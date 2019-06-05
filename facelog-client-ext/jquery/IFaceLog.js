@@ -22072,14 +22072,8 @@ IFaceLog_unbindBorder_result.prototype.write = function(output) {
 };
 
 IFaceLog_unregisterDevice_args = function(args) {
-  this.deviceId = null;
   this.token = null;
   if (args) {
-    if (args.deviceId !== undefined && args.deviceId !== null) {
-      this.deviceId = args.deviceId;
-    } else {
-      throw new Thrift.TProtocolException(Thrift.TProtocolExceptionType.UNKNOWN, 'Required field deviceId is unset!');
-    }
     if (args.token !== undefined && args.token !== null) {
       this.token = new Token(args.token);
     }
@@ -22100,13 +22094,6 @@ IFaceLog_unregisterDevice_args.prototype.read = function(input) {
     switch (fid)
     {
       case 1:
-      if (ftype == Thrift.Type.I32) {
-        this.deviceId = input.readI32().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
       if (ftype == Thrift.Type.STRUCT) {
         this.token = new Token();
         this.token.read(input);
@@ -22114,6 +22101,9 @@ IFaceLog_unregisterDevice_args.prototype.read = function(input) {
         input.skip(ftype);
       }
       break;
+      case 0:
+        input.skip(ftype);
+        break;
       default:
         input.skip(ftype);
     }
@@ -22125,13 +22115,8 @@ IFaceLog_unregisterDevice_args.prototype.read = function(input) {
 
 IFaceLog_unregisterDevice_args.prototype.write = function(output) {
   output.writeStructBegin('IFaceLog_unregisterDevice_args');
-  if (this.deviceId !== null && this.deviceId !== undefined) {
-    output.writeFieldBegin('deviceId', Thrift.Type.I32, 1);
-    output.writeI32(this.deviceId);
-    output.writeFieldEnd();
-  }
   if (this.token !== null && this.token !== undefined) {
-    output.writeFieldBegin('token', Thrift.Type.STRUCT, 2);
+    output.writeFieldBegin('token', Thrift.Type.STRUCT, 1);
     this.token.write(output);
     output.writeFieldEnd();
   }
@@ -29318,21 +29303,20 @@ IFaceLogClient.prototype.recv_unbindBorder = function() {
   }
   return;
 };
-IFaceLogClient.prototype.unregisterDevice = function(deviceId, token, callback) {
+IFaceLogClient.prototype.unregisterDevice = function(token, callback) {
   if (callback === undefined) {
-    this.send_unregisterDevice(deviceId, token);
+    this.send_unregisterDevice(token);
     this.recv_unregisterDevice();
   } else {
-    var postData = this.send_unregisterDevice(deviceId, token, true);
+    var postData = this.send_unregisterDevice(token, true);
     return this.output.getTransport()
       .jqRequest(this, postData, arguments, this.recv_unregisterDevice);
   }
 };
 
-IFaceLogClient.prototype.send_unregisterDevice = function(deviceId, token, callback) {
+IFaceLogClient.prototype.send_unregisterDevice = function(token, callback) {
   this.output.writeMessageBegin('unregisterDevice', Thrift.MessageType.CALL, this.seqid);
   var params = {
-    deviceId: deviceId,
     token: token
   };
   var args = new IFaceLog_unregisterDevice_args(params);

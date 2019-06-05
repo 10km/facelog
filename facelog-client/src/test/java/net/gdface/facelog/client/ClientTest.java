@@ -71,7 +71,7 @@ public class ClientTest implements CommonConstant {
 
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
-		facelogClient.unregisterDevice(device.getId(), deviceToken);
+		facelogClient.unregisterDevice(deviceToken);
 		facelogClient.releaseRootToken(rootToken);
 	}
 

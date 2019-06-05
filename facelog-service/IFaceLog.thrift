@@ -364,7 +364,7 @@ service IFaceLog {
   string taskQueueOf(1: optional string task, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
   string taskRegister(1: optional string task, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
   void unbindBorder(1: optional i32 personGroupId, 2: optional i32 deviceGroupId, 3: optional Token token) throws (1: ServiceRuntimeException ex1);
-  void unregisterDevice(1: required i32 deviceId, 2: optional Token token) throws (1: ServiceSecurityException ex1, 2: ServiceRuntimeException ex2);
+  void unregisterDevice(1: optional Token token) throws (1: ServiceSecurityException ex1, 2: ServiceRuntimeException ex2);
   DeviceBean updateDevice(1: optional DeviceBean deviceBean, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
   string version() throws (1: ServiceRuntimeException ex1);
   map<string, string> versionInfo() throws (1: ServiceRuntimeException ex1);

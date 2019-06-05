@@ -1075,20 +1075,19 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
-    public void unregisterDevice (int deviceId,Token token) throws ServiceSecurityException{
-         delegate().unregisterDevice(deviceId,token);
+    public void unregisterDevice (Token token) throws ServiceSecurityException{
+         delegate().unregisterDevice(token);
     }
 
     /**
-     * {@link IFaceLog#unregisterDevice(int,Token)}对应的unchecked方法,
+     * {@link IFaceLog#unregisterDevice(Token)}对应的unchecked方法,
      * 所有显式申明的异常都被封装到{@link RuntimeException}抛出<br>
-     * @param deviceId
      * @param token
      * @return void
      */
-    public void unregisterDeviceUnchecked (int deviceId,Token token) {
+    public void unregisterDeviceUnchecked (Token token) {
         try{
-             delegate().unregisterDevice(deviceId,token);
+             delegate().unregisterDevice(token);
         } catch(RuntimeException e){
             throw e;
         } catch(Exception e){

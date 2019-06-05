@@ -1340,8 +1340,7 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntimeException.class, id=2)
                       })
         ListenableFuture<Void> unregisterDevice(
-            @ThriftField(value=1, name="deviceId", requiredness=Requiredness.REQUIRED) final int deviceId,
-            @ThriftField(value=2, name="token", requiredness=Requiredness.OPTIONAL) final Token token
+            @ThriftField(value=1, name="token", requiredness=Requiredness.OPTIONAL) final Token token
         );
 
         @ThriftMethod(value = "updateDevice",
@@ -2692,8 +2691,7 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=2)
                   })
     void unregisterDevice(
-        @ThriftField(value=1, name="deviceId", requiredness=Requiredness.REQUIRED) final int deviceId,
-        @ThriftField(value=2, name="token", requiredness=Requiredness.OPTIONAL) final Token token
+        @ThriftField(value=1, name="token", requiredness=Requiredness.OPTIONAL) final Token token
     ) throws ServiceSecurityException, ServiceRuntimeException;
 
     @ThriftMethod(value = "updateDevice",

@@ -3303,13 +3303,11 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
-    public void unregisterDevice(int deviceId,
-        Token token) 
+    public void unregisterDevice(Token token) 
         throws ServiceSecurityException{
         net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
         try{
-             instance.unregisterDevice(deviceId,
-                TypeTransformer.getInstance().to(
+             instance.unregisterDevice(TypeTransformer.getInstance().to(
                     token,
                     Token.class,
                     net.gdface.facelog.client.thrift.Token.class));

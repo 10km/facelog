@@ -602,7 +602,7 @@ public class FacelogDefaultImpl implements IFaceLog {
 	}
 
 	@Override
-	public void unregisterDevice(int deviceId, Token token) throws ServiceSecurityException {
+	public void unregisterDevice(Token token) throws ServiceSecurityException {
 		
 	}
 

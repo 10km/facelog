@@ -22048,14 +22048,8 @@ IFaceLog_unbindBorder_result.prototype.write = function(output) {
 };
 
 var IFaceLog_unregisterDevice_args = function(args) {
-  this.deviceId = null;
   this.token = null;
   if (args) {
-    if (args.deviceId !== undefined && args.deviceId !== null) {
-      this.deviceId = args.deviceId;
-    } else {
-      throw new Thrift.TProtocolException(Thrift.TProtocolExceptionType.UNKNOWN, 'Required field deviceId is unset!');
-    }
     if (args.token !== undefined && args.token !== null) {
       this.token = new ttypes.Token(args.token);
     }
@@ -22076,13 +22070,6 @@ IFaceLog_unregisterDevice_args.prototype.read = function(input) {
     switch (fid)
     {
       case 1:
-      if (ftype == Thrift.Type.I32) {
-        this.deviceId = input.readI32();
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
       if (ftype == Thrift.Type.STRUCT) {
         this.token = new ttypes.Token();
         this.token.read(input);
@@ -22090,6 +22077,9 @@ IFaceLog_unregisterDevice_args.prototype.read = function(input) {
         input.skip(ftype);
       }
       break;
+      case 0:
+        input.skip(ftype);
+        break;
       default:
         input.skip(ftype);
     }
@@ -22101,13 +22091,8 @@ IFaceLog_unregisterDevice_args.prototype.read = function(input) {
 
 IFaceLog_unregisterDevice_args.prototype.write = function(output) {
   output.writeStructBegin('IFaceLog_unregisterDevice_args');
-  if (this.deviceId !== null && this.deviceId !== undefined) {
-    output.writeFieldBegin('deviceId', Thrift.Type.I32, 1);
-    output.writeI32(this.deviceId);
-    output.writeFieldEnd();
-  }
   if (this.token !== null && this.token !== undefined) {
-    output.writeFieldBegin('token', Thrift.Type.STRUCT, 2);
+    output.writeFieldBegin('token', Thrift.Type.STRUCT, 1);
     this.token.write(output);
     output.writeFieldEnd();
   }
@@ -30321,7 +30306,7 @@ IFaceLogClient.prototype.recv_unbindBorder = function(input,mtype,rseqid) {
   }
   callback(null);
 };
-IFaceLogClient.prototype.unregisterDevice = function(deviceId, token, callback) {
+IFaceLogClient.prototype.unregisterDevice = function(token, callback) {
   this._seqid = this.new_seqid();
   if (callback === undefined) {
     var _defer = Q.defer();
@@ -30332,19 +30317,18 @@ IFaceLogClient.prototype.unregisterDevice = function(deviceId, token, callback) 
         _defer.resolve(result);
       }
     };
-    this.send_unregisterDevice(deviceId, token);
+    this.send_unregisterDevice(token);
     return _defer.promise;
   } else {
     this._reqs[this.seqid()] = callback;
-    this.send_unregisterDevice(deviceId, token);
+    this.send_unregisterDevice(token);
   }
 };
 
-IFaceLogClient.prototype.send_unregisterDevice = function(deviceId, token) {
+IFaceLogClient.prototype.send_unregisterDevice = function(token) {
   var output = new this.pClass(this.output);
   output.writeMessageBegin('unregisterDevice', Thrift.MessageType.CALL, this.seqid());
   var params = {
-    deviceId: deviceId,
     token: token
   };
   var args = new IFaceLog_unregisterDevice_args(params);
@@ -36575,8 +36559,8 @@ IFaceLogProcessor.prototype.process_unregisterDevice = function(seqid, input, ou
   var args = new IFaceLog_unregisterDevice_args();
   args.read(input);
   input.readMessageEnd();
-  if (this._handler.unregisterDevice.length === 2) {
-    Q.fcall(this._handler.unregisterDevice.bind(this._handler), args.deviceId, args.token)
+  if (this._handler.unregisterDevice.length === 1) {
+    Q.fcall(this._handler.unregisterDevice.bind(this._handler), args.token)
       .then(function(result) {
         var result_obj = new IFaceLog_unregisterDevice_result({success: result});
         output.writeMessageBegin("unregisterDevice", Thrift.MessageType.REPLY, seqid);
@@ -36597,7 +36581,7 @@ IFaceLogProcessor.prototype.process_unregisterDevice = function(seqid, input, ou
         output.flush();
       });
   } else {
-    this._handler.unregisterDevice(args.deviceId, args.token, function (err, result) {
+    this._handler.unregisterDevice(args.token, function (err, result) {
       var result_obj;
       if ((err === null || typeof err === 'undefined') || err instanceof ttypes.ServiceSecurityException || err instanceof ttypes.ServiceRuntimeException) {
         result_obj = new IFaceLog_unregisterDevice_result((err !== null || typeof err === 'undefined') ? err : {success: result});

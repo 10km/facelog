@@ -4349,8 +4349,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
-    public void unregisterDevice(final int deviceId,
-        final Token token) 
+    public void unregisterDevice(final Token token) 
         throws ServiceSecurityException{
         try{
              syncCall(new Function<Void,Void>() {
@@ -4361,7 +4360,7 @@ public class IFaceLogThriftClient implements IFaceLog {
                 new ServiceAsyncCall<Void>(){
                 @Override
                 public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<Void> nativeCallback){
-                    service.unregisterDevice(deviceId,TypeTransformer.getInstance().to(
+                    service.unregisterDevice(TypeTransformer.getInstance().to(
                     token,
                     Token.class,
                     net.gdface.facelog.client.thrift.Token.class),nativeCallback);

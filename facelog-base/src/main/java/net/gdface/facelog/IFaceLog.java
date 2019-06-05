@@ -1070,13 +1070,13 @@ public interface IFaceLog{
 	 */
 	public DeviceBean registerDevice(DeviceBean newDevice) throws ServiceSecurityException;
 	/**
-	 * (设备端)设备删除
+	 * (设备端)删除当前设备<br>
+	 * 从fl_device表中删除当前设备记录
 	 * <br>{@code DEVICE_ONLY}
-	 * @param deviceId
 	 * @param token 设备验证令牌
 	 * @throws ServiceSecurityException
 	 */
-	public void unregisterDevice(int deviceId,Token token)
+	public void unregisterDevice(Token token)
 			throws ServiceSecurityException;
 	/**
 	 * 设备申请上线,每次调用都会产生一个新的令牌
