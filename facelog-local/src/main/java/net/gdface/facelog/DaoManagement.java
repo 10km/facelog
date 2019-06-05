@@ -687,4 +687,36 @@ public class DaoManagement extends BaseDao implements ServiceConstant,Constant{
 				personBean == null ? null : Arrays.asList(personBean));
 		return daoAddLog(logBean, deviceBean, faceBean, null, personBean);
 	}
+	/**
+	 * 设置 personId 指定的人员为禁止状态<br>
+	 * @param personId 
+	 * @param moveToGroupId 将用户移动到指定的用户组，为{@code null}则不移动
+	 * @param deletePhoto 为{@code true}删除用户标准照
+	 * @param deleteFeature 为{@code true}删除用户所有的人脸特征数据(包括照片)
+	 * @param deleteLog 为{@code true}删除用户所有通行日志
+	 */
+	protected void daoDisablePerson(int personId, Integer moveToGroupId, 
+			boolean deletePhoto, boolean deleteFeature, boolean deleteLog){
+		PersonBean personBean = daoGetPerson(personId);
+		if(personBean == null){
+			return;
+		}
+		// 有效期设置为昨天
+		Date yesterday = new Date(System.currentTimeMillis() - 86400000L);
+		personBean.setExpiryDate(yesterday);
+		if(moveToGroupId != null){
+			personBean.setGroupId(moveToGroupId);
+		}
+		daoSavePerson(personBean);
+		if(deletePhoto){
+			// 删除标准照
+			daoDeleteImage(personBean.getImageMd5());
+		}
+		if(deleteFeature){
+			daoDeleteAllFeaturesByPersonId(personId,true);
+		}
+		if(deleteLog){
+			daoDeleteLogBeansByPersonIdOnPerson(personId);
+		}
+	}
 }

@@ -130,13 +130,17 @@ public interface IFaceLog{
 	public boolean isDisable(int personId);
 
 	/**
-	 * 设置 personId 指定的人员为禁止状态
+	 * 设置 personId 指定的人员为禁止状态<br>
+	 * 将{@code fl_person.expiry_date}设置为昨天
 	 * <br>{@code PERSON_ONLY}
-	 * @param personId
+	 * @param personId 
+	 * @param moveToGroupId 将用户移动到指定的用户组，为{@code null}则不移动
+	 * @param deletePhoto 为{@code true}删除用户标准照
+	 * @param deleteFeature 为{@code true}删除用户所有的人脸特征数据(包括照片)
+	 * @param deleteLog 为{@code true}删除用户所有通行日志
 	 * @param token 访问令牌
-	 * @see #setPersonExpiryDate(int, long, Token)
 	 */
-	public void disablePerson(int personId, Token token);
+	public void disablePerson(int personId, Integer moveToGroupId, boolean deletePhoto, boolean deleteFeature, boolean deleteLog, Token token);
 
 	/**
 	 * 修改 personId 指定的人员记录的有效期

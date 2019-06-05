@@ -6238,12 +6238,34 @@ IFaceLog_deletePersonsByPapersNum_result.prototype.write = function(output) {
 
 var IFaceLog_disablePerson_args = function(args) {
   this.personId = null;
+  this.moveToGroupId = null;
+  this.deletePhoto = null;
+  this.deleteFeature = null;
+  this.deleteLog = null;
   this.token = null;
   if (args) {
     if (args.personId !== undefined && args.personId !== null) {
       this.personId = args.personId;
     } else {
       throw new Thrift.TProtocolException(Thrift.TProtocolExceptionType.UNKNOWN, 'Required field personId is unset!');
+    }
+    if (args.moveToGroupId !== undefined && args.moveToGroupId !== null) {
+      this.moveToGroupId = args.moveToGroupId;
+    }
+    if (args.deletePhoto !== undefined && args.deletePhoto !== null) {
+      this.deletePhoto = args.deletePhoto;
+    } else {
+      throw new Thrift.TProtocolException(Thrift.TProtocolExceptionType.UNKNOWN, 'Required field deletePhoto is unset!');
+    }
+    if (args.deleteFeature !== undefined && args.deleteFeature !== null) {
+      this.deleteFeature = args.deleteFeature;
+    } else {
+      throw new Thrift.TProtocolException(Thrift.TProtocolExceptionType.UNKNOWN, 'Required field deleteFeature is unset!');
+    }
+    if (args.deleteLog !== undefined && args.deleteLog !== null) {
+      this.deleteLog = args.deleteLog;
+    } else {
+      throw new Thrift.TProtocolException(Thrift.TProtocolExceptionType.UNKNOWN, 'Required field deleteLog is unset!');
     }
     if (args.token !== undefined && args.token !== null) {
       this.token = new ttypes.Token(args.token);
@@ -6272,6 +6294,34 @@ IFaceLog_disablePerson_args.prototype.read = function(input) {
       }
       break;
       case 2:
+      if (ftype == Thrift.Type.I32) {
+        this.moveToGroupId = input.readI32();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 3:
+      if (ftype == Thrift.Type.BOOL) {
+        this.deletePhoto = input.readBool();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 4:
+      if (ftype == Thrift.Type.BOOL) {
+        this.deleteFeature = input.readBool();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 5:
+      if (ftype == Thrift.Type.BOOL) {
+        this.deleteLog = input.readBool();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 6:
       if (ftype == Thrift.Type.STRUCT) {
         this.token = new ttypes.Token();
         this.token.read(input);
@@ -6295,8 +6345,28 @@ IFaceLog_disablePerson_args.prototype.write = function(output) {
     output.writeI32(this.personId);
     output.writeFieldEnd();
   }
+  if (this.moveToGroupId !== null && this.moveToGroupId !== undefined) {
+    output.writeFieldBegin('moveToGroupId', Thrift.Type.I32, 2);
+    output.writeI32(this.moveToGroupId);
+    output.writeFieldEnd();
+  }
+  if (this.deletePhoto !== null && this.deletePhoto !== undefined) {
+    output.writeFieldBegin('deletePhoto', Thrift.Type.BOOL, 3);
+    output.writeBool(this.deletePhoto);
+    output.writeFieldEnd();
+  }
+  if (this.deleteFeature !== null && this.deleteFeature !== undefined) {
+    output.writeFieldBegin('deleteFeature', Thrift.Type.BOOL, 4);
+    output.writeBool(this.deleteFeature);
+    output.writeFieldEnd();
+  }
+  if (this.deleteLog !== null && this.deleteLog !== undefined) {
+    output.writeFieldBegin('deleteLog', Thrift.Type.BOOL, 5);
+    output.writeBool(this.deleteLog);
+    output.writeFieldEnd();
+  }
   if (this.token !== null && this.token !== undefined) {
-    output.writeFieldBegin('token', Thrift.Type.STRUCT, 2);
+    output.writeFieldBegin('token', Thrift.Type.STRUCT, 6);
     this.token.write(output);
     output.writeFieldEnd();
   }
@@ -24643,7 +24713,7 @@ IFaceLogClient.prototype.recv_deletePersonsByPapersNum = function(input,mtype,rs
   }
   return callback('deletePersonsByPapersNum failed: unknown result');
 };
-IFaceLogClient.prototype.disablePerson = function(personId, token, callback) {
+IFaceLogClient.prototype.disablePerson = function(personId, moveToGroupId, deletePhoto, deleteFeature, deleteLog, token, callback) {
   this._seqid = this.new_seqid();
   if (callback === undefined) {
     var _defer = Q.defer();
@@ -24654,19 +24724,23 @@ IFaceLogClient.prototype.disablePerson = function(personId, token, callback) {
         _defer.resolve(result);
       }
     };
-    this.send_disablePerson(personId, token);
+    this.send_disablePerson(personId, moveToGroupId, deletePhoto, deleteFeature, deleteLog, token);
     return _defer.promise;
   } else {
     this._reqs[this.seqid()] = callback;
-    this.send_disablePerson(personId, token);
+    this.send_disablePerson(personId, moveToGroupId, deletePhoto, deleteFeature, deleteLog, token);
   }
 };
 
-IFaceLogClient.prototype.send_disablePerson = function(personId, token) {
+IFaceLogClient.prototype.send_disablePerson = function(personId, moveToGroupId, deletePhoto, deleteFeature, deleteLog, token) {
   var output = new this.pClass(this.output);
   output.writeMessageBegin('disablePerson', Thrift.MessageType.CALL, this.seqid());
   var params = {
     personId: personId,
+    moveToGroupId: moveToGroupId,
+    deletePhoto: deletePhoto,
+    deleteFeature: deleteFeature,
+    deleteLog: deleteLog,
     token: token
   };
   var args = new IFaceLog_disablePerson_args(params);
@@ -32114,8 +32188,8 @@ IFaceLogProcessor.prototype.process_disablePerson = function(seqid, input, outpu
   var args = new IFaceLog_disablePerson_args();
   args.read(input);
   input.readMessageEnd();
-  if (this._handler.disablePerson.length === 2) {
-    Q.fcall(this._handler.disablePerson.bind(this._handler), args.personId, args.token)
+  if (this._handler.disablePerson.length === 6) {
+    Q.fcall(this._handler.disablePerson.bind(this._handler), args.personId, args.moveToGroupId, args.deletePhoto, args.deleteFeature, args.deleteLog, args.token)
       .then(function(result) {
         var result_obj = new IFaceLog_disablePerson_result({success: result});
         output.writeMessageBegin("disablePerson", Thrift.MessageType.REPLY, seqid);
@@ -32136,7 +32210,7 @@ IFaceLogProcessor.prototype.process_disablePerson = function(seqid, input, outpu
         output.flush();
       });
   } else {
-    this._handler.disablePerson(args.personId, args.token, function (err, result) {
+    this._handler.disablePerson(args.personId, args.moveToGroupId, args.deletePhoto, args.deleteFeature, args.deleteLog, args.token, function (err, result) {
       var result_obj;
       if ((err === null || typeof err === 'undefined') || err instanceof ttypes.ServiceRuntimeException) {
         result_obj = new IFaceLog_disablePerson_result((err !== null || typeof err === 'undefined') ? err : {success: result});

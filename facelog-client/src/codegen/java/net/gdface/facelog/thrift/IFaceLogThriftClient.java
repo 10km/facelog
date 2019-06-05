@@ -1004,11 +1004,19 @@ public class IFaceLogThriftClient implements IFaceLog {
     }
     @Override
     public void disablePerson(int personId,
+        Integer moveToGroupId,
+        boolean deletePhoto,
+        boolean deleteFeature,
+        boolean deleteLog,
         Token token) 
         {
         net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
         try{
              instance.disablePerson(personId,
+                moveToGroupId,
+                deletePhoto,
+                deleteFeature,
+                deleteLog,
                 TypeTransformer.getInstance().to(
                     token,
                     Token.class,

@@ -444,8 +444,8 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
-    public void disablePerson (int personId,Token token) {
-         delegate().disablePerson(personId,token);
+    public void disablePerson (int personId,Integer moveToGroupId,boolean deletePhoto,boolean deleteFeature,boolean deleteLog,Token token) {
+         delegate().disablePerson(personId,moveToGroupId,deletePhoto,deleteFeature,deleteLog,token);
     }
 
     @Override

@@ -297,12 +297,15 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 	}
 
 	@Override
-	public void disablePerson(int personId, Token token){
+	public void disablePerson(final int personId, final Integer moveToGroupId, 
+			final boolean deletePhoto, final boolean deleteFeature, final boolean deleteLog, Token token){
 		try{
 			Enable.PERSON_ONLY.check(tm, token);
-			// 有效期设置为昨天
-			Date yesterday = new Date(System.currentTimeMillis() - 86400000L);
-			dm.daoSetPersonExpiryDate(dm.daoGetPerson(personId),yesterday);
+			BaseDao.daoRunAsTransaction(new Runnable(){
+				@Override
+				public void run() {
+					dm.daoDisablePerson(personId, moveToGroupId, deletePhoto, deleteFeature, deleteLog);
+				}});
 		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
 		}

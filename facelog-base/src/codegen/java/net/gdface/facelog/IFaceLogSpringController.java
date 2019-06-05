@@ -1080,21 +1080,26 @@ public class IFaceLogSpringController {
     }
     // port-41
     /**
-     * 设置 personId 指定的人员为禁止状态
+     * 设置 personId 指定的人员为禁止状态<br>
+     * 将{@code fl_person.expiry_date}设置为昨天
      * <br>{@code PERSON_ONLY}
      * @param personId
+     * @param moveToGroupId 将用户移动到指定的用户组，为{@code null}则不移动
+     * @param deletePhoto 为{@code true}删除用户标准照
+     * @param deleteFeature 为{@code true}删除用户所有的人脸特征数据(包括照片)
+     * @param deleteLog 为{@code true}删除用户所有通行日志
      * @param token 访问令牌
-     * @see #setPersonExpiryDate(int, long, Token)
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/disablePerson", method = RequestMethod.POST)
-    @ApiOperation(value = "设置 personId 指定的人员为禁止状态\n"
+    @ApiOperation(value = "设置 personId 指定的人员为禁止状态<br>\n"
++" 将{@code fl_person.expiry_date}设置为昨天\n"
 +" <br>{@code PERSON_ONLY}",httpMethod="POST")
     public Response disablePerson( @RequestBody DisablePersonArgs args) 
     {
             Response response = responseFactory.newIFaceLogResponse();
             try{
-                delegate().disablePerson(args.personId,args.token);
+                delegate().disablePerson(args.personId,args.moveToGroupId,args.deletePhoto,args.deleteFeature,args.deleteLog,args.token);
                 response.onComplete();
             }
             catch(Exception e){
@@ -4114,6 +4119,14 @@ public class IFaceLogSpringController {
     public static class DisablePersonArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
         public int personId;
+        @ApiModelProperty(value ="将用户移动到指定的用户组，为{@code null}则不移动" ,required=true ,dataType="Integer")
+        public Integer moveToGroupId;
+        @ApiModelProperty(value ="为{@code true}删除用户标准照" ,required=true ,dataType="boolean")
+        public boolean deletePhoto;
+        @ApiModelProperty(value ="为{@code true}删除用户所有的人脸特征数据(包括照片)" ,required=true ,dataType="boolean")
+        public boolean deleteFeature;
+        @ApiModelProperty(value ="为{@code true}删除用户所有通行日志" ,required=true ,dataType="boolean")
+        public boolean deleteLog;
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }

@@ -1277,9 +1277,13 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(deletePersonsByPapersNum(papersNumlist,token), callback);
     }
     /**
-     * see also {@link net.gdface.facelog.IFaceLog#disablePerson(int,net.gdface.facelog.Token)}
+     * see also {@link net.gdface.facelog.IFaceLog#disablePerson(int,java.lang.Integer,boolean,boolean,boolean,net.gdface.facelog.Token)}
      */
     public ListenableFuture<Void> disablePerson(int personId,
+        Integer moveToGroupId,
+        boolean deletePhoto,
+        boolean deleteFeature,
+        boolean deleteLog,
         Token token){
         MethodCallback<Void,Void> nativeCallback = 
             new MethodCallback<Void,Void>(
@@ -1293,6 +1297,10 @@ public class IFaceLogThriftClientAsync {
                 }});
         nativeCallback.service.disablePerson(
                 personId,
+            moveToGroupId,
+            deletePhoto,
+            deleteFeature,
+            deleteLog,
             TypeTransformer.getInstance().to(
                     token,
                     Token.class,
@@ -1300,9 +1308,13 @@ public class IFaceLogThriftClientAsync {
         return nativeCallback.feature;
     }
     public void disablePerson(int personId,
+        Integer moveToGroupId,
+        boolean deletePhoto,
+        boolean deleteFeature,
+        boolean deleteLog,
         Token token,
         FutureCallback<Void>callback){
-        factory.addCallback(disablePerson(personId,token), callback);
+        factory.addCallback(disablePerson(personId,moveToGroupId,deletePhoto,deleteFeature,deleteLog,token), callback);
     }
     /**
      * see also {@link net.gdface.facelog.IFaceLog#disablePerson(java.util.List,net.gdface.facelog.Token)}

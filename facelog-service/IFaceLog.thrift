@@ -257,7 +257,7 @@ service IFaceLog {
   i32 deletePersonGroupPermit(1: required i32 personGroupId, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
   i32 deletePersons(1: optional list<i32> personIdList, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
   i32 deletePersonsByPapersNum(1: optional list<string> papersNumlist, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
-  void disablePerson(1: required i32 personId, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
+  void disablePerson(1: required i32 personId, 2: optional i32 moveToGroupId, 3: required bool deletePhoto, 4: required bool deleteFeature, 5: required bool deleteLog, 6: optional Token token) throws (1: ServiceRuntimeException ex1);
   void disablePersonList(1: optional list<i32> personIdList, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
   bool existsDevice(1: required i32 id) throws (1: ServiceRuntimeException ex1);
   bool existsFeature(1: optional string md5) throws (1: ServiceRuntimeException ex1);

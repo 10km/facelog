@@ -1362,6 +1362,10 @@ public class IFaceLogThriftClient implements IFaceLog {
     }
     @Override
     public void disablePerson(final int personId,
+        final Integer moveToGroupId,
+        final boolean deletePhoto,
+        final boolean deleteFeature,
+        final boolean deleteLog,
         final Token token) 
         {
         try{
@@ -1373,7 +1377,7 @@ public class IFaceLogThriftClient implements IFaceLog {
                 new ServiceAsyncCall<Void>(){
                 @Override
                 public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<Void> nativeCallback){
-                    service.disablePerson(personId,TypeTransformer.getInstance().to(
+                    service.disablePerson(personId,moveToGroupId,deletePhoto,deleteFeature,deleteLog,TypeTransformer.getInstance().to(
                     token,
                     Token.class,
                     net.gdface.facelog.client.thrift.Token.class),nativeCallback);

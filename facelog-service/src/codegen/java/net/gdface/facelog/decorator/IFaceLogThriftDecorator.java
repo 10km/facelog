@@ -1045,14 +1045,22 @@ public class IFaceLogThriftDecorator {
         }
     }
     /**
-     * @see {@link net.gdface.facelog.IFaceLog#disablePerson(int,net.gdface.facelog.Token)}
+     * @see {@link net.gdface.facelog.IFaceLog#disablePerson(int,java.lang.Integer,boolean,boolean,boolean,net.gdface.facelog.Token)}
      */
     @ThriftMethod(value = "disablePerson" )
     public void disablePerson(int personId,
+        Integer moveToGroupId,
+        boolean deletePhoto,
+        boolean deleteFeature,
+        boolean deleteLog,
         Token token) 
         throws ServiceRuntimeException{
         try{
              delegate().disablePerson(personId,
+                moveToGroupId,
+                deletePhoto,
+                deleteFeature,
+                deleteLog,
                 TypeTransformer.getInstance().to(
                     token,
                     Token.class,

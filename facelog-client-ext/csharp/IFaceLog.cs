@@ -58,7 +58,7 @@ public partial class IFaceLog {
     int deletePersonGroupPermit(int personGroupId, Token token);
     int deletePersons(List<int> personIdList, Token token);
     int deletePersonsByPapersNum(List<string> papersNumlist, Token token);
-    void disablePerson(int personId, Token token);
+    void disablePerson(int personId, int moveToGroupId, bool deletePhoto, bool deleteFeature, bool deleteLog, Token token);
     void disablePersonList(List<int> personIdList, Token token);
     bool existsDevice(int id);
     bool existsFeature(string md5);
@@ -212,7 +212,7 @@ public partial class IFaceLog {
     Task<int> deletePersonGroupPermitAsync(int personGroupId, Token token);
     Task<int> deletePersonsAsync(List<int> personIdList, Token token);
     Task<int> deletePersonsByPapersNumAsync(List<string> papersNumlist, Token token);
-    Task disablePersonAsync(int personId, Token token);
+    Task disablePersonAsync(int personId, int moveToGroupId, bool deletePhoto, bool deleteFeature, bool deleteLog, Token token);
     Task disablePersonListAsync(List<int> personIdList, Token token);
     Task<bool> existsDeviceAsync(int id);
     Task<bool> existsFeatureAsync(string md5);
@@ -406,7 +406,7 @@ public partial class IFaceLog {
     int End_deletePersons(IAsyncResult asyncResult);
     IAsyncResult Begin_deletePersonsByPapersNum(AsyncCallback callback, object state, List<string> papersNumlist, Token token);
     int End_deletePersonsByPapersNum(IAsyncResult asyncResult);
-    IAsyncResult Begin_disablePerson(AsyncCallback callback, object state, int personId, Token token);
+    IAsyncResult Begin_disablePerson(AsyncCallback callback, object state, int personId, int moveToGroupId, bool deletePhoto, bool deleteFeature, bool deleteLog, Token token);
     void End_disablePerson(IAsyncResult asyncResult);
     IAsyncResult Begin_disablePersonList(AsyncCallback callback, object state, List<int> personIdList, Token token);
     void End_disablePersonList(IAsyncResult asyncResult);
@@ -3060,9 +3060,9 @@ public partial class IFaceLog {
     }
 
     
-    public IAsyncResult Begin_disablePerson(AsyncCallback callback, object state, int personId, Token token)
+    public IAsyncResult Begin_disablePerson(AsyncCallback callback, object state, int personId, int moveToGroupId, bool deletePhoto, bool deleteFeature, bool deleteLog, Token token)
     {
-      return send_disablePerson(callback, state, personId, token);
+      return send_disablePerson(callback, state, personId, moveToGroupId, deletePhoto, deleteFeature, deleteLog, token);
     }
 
     public void End_disablePerson(IAsyncResult asyncResult)
@@ -3071,25 +3071,29 @@ public partial class IFaceLog {
       recv_disablePerson();
     }
 
-    public async Task disablePersonAsync(int personId, Token token)
+    public async Task disablePersonAsync(int personId, int moveToGroupId, bool deletePhoto, bool deleteFeature, bool deleteLog, Token token)
     {
       await Task.Run(() =>
       {
-        disablePerson(personId, token);
+        disablePerson(personId, moveToGroupId, deletePhoto, deleteFeature, deleteLog, token);
       });
     }
 
-    public void disablePerson(int personId, Token token)
+    public void disablePerson(int personId, int moveToGroupId, bool deletePhoto, bool deleteFeature, bool deleteLog, Token token)
     {
-      var asyncResult = Begin_disablePerson(null, null, personId, token);
+      var asyncResult = Begin_disablePerson(null, null, personId, moveToGroupId, deletePhoto, deleteFeature, deleteLog, token);
       End_disablePerson(asyncResult);
 
     }
-    public IAsyncResult send_disablePerson(AsyncCallback callback, object state, int personId, Token token)
+    public IAsyncResult send_disablePerson(AsyncCallback callback, object state, int personId, int moveToGroupId, bool deletePhoto, bool deleteFeature, bool deleteLog, Token token)
     {
       oprot_.WriteMessageBegin(new TMessage("disablePerson", TMessageType.Call, seqid_));
       disablePerson_args args = new disablePerson_args();
       args.PersonId = personId;
+      args.MoveToGroupId = moveToGroupId;
+      args.DeletePhoto = deletePhoto;
+      args.DeleteFeature = deleteFeature;
+      args.DeleteLog = deleteLog;
       args.Token = token;
       args.Write(oprot_);
       oprot_.WriteMessageEnd();
@@ -11151,7 +11155,7 @@ public partial class IFaceLog {
       {
         try
         {
-          await iface_.disablePersonAsync(args.PersonId.Value, args.Token);
+          await iface_.disablePersonAsync(args.PersonId.Value, args.MoveToGroupId.Value, args.DeletePhoto.Value, args.DeleteFeature.Value, args.DeleteLog.Value, args.Token);
         }
         catch (ServiceRuntimeException ex1)
         {
@@ -16697,7 +16701,7 @@ public partial class IFaceLog {
       {
         try
         {
-          iface_.disablePerson(args.PersonId.Value, args.Token);
+          iface_.disablePerson(args.PersonId.Value, args.MoveToGroupId.Value, args.DeletePhoto.Value, args.DeleteFeature.Value, args.DeleteLog.Value, args.Token);
         }
         catch (ServiceRuntimeException ex1)
         {
@@ -30125,13 +30129,24 @@ public partial class IFaceLog {
 
     public int PersonId { get; set; }
 
+    public int? MoveToGroupId { get; set; }
+
+    public bool DeletePhoto { get; set; }
+
+    public bool DeleteFeature { get; set; }
+
+    public bool DeleteLog { get; set; }
+
     public Token Token { get; set; }
 
     public disablePerson_args() {
     }
 
-    public disablePerson_args(int personId) : this() {
+    public disablePerson_args(int personId, bool deletePhoto, bool deleteFeature, bool deleteLog) : this() {
       this.PersonId = personId;
+      this.DeletePhoto = deletePhoto;
+      this.DeleteFeature = deleteFeature;
+      this.DeleteLog = deleteLog;
     }
 
     public void Read (TProtocol iprot)
@@ -30140,6 +30155,9 @@ public partial class IFaceLog {
       try
       {
         bool isset_personId = false;
+        bool isset_deletePhoto = false;
+        bool isset_deleteFeature = false;
+        bool isset_deleteLog = false;
         TField field;
         iprot.ReadStructBegin();
         while (true)
@@ -30159,6 +30177,37 @@ public partial class IFaceLog {
               }
               break;
             case 2:
+              if (field.Type == TType.I32) {
+                MoveToGroupId = iprot.ReadI32();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 3:
+              if (field.Type == TType.Bool) {
+                DeletePhoto = iprot.ReadBool();
+                isset_deletePhoto = true;
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 4:
+              if (field.Type == TType.Bool) {
+                DeleteFeature = iprot.ReadBool();
+                isset_deleteFeature = true;
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 5:
+              if (field.Type == TType.Bool) {
+                DeleteLog = iprot.ReadBool();
+                isset_deleteLog = true;
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 6:
               if (field.Type == TType.Struct) {
                 Token = new Token();
                 Token.Read(iprot);
@@ -30175,6 +30224,12 @@ public partial class IFaceLog {
         iprot.ReadStructEnd();
         if (!isset_personId)
           throw new TProtocolException(TProtocolException.INVALID_DATA, "required field PersonId not set");
+        if (!isset_deletePhoto)
+          throw new TProtocolException(TProtocolException.INVALID_DATA, "required field DeletePhoto not set");
+        if (!isset_deleteFeature)
+          throw new TProtocolException(TProtocolException.INVALID_DATA, "required field DeleteFeature not set");
+        if (!isset_deleteLog)
+          throw new TProtocolException(TProtocolException.INVALID_DATA, "required field DeleteLog not set");
       }
       finally
       {
@@ -30195,10 +30250,36 @@ public partial class IFaceLog {
         oprot.WriteFieldBegin(field);
         oprot.WriteI32(PersonId);
         oprot.WriteFieldEnd();
+        if (MoveToGroupId != null) {
+          field.Name = "moveToGroupId";
+          field.Type = TType.I32;
+          field.ID = 2;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteI32(MoveToGroupId.Value);
+          oprot.WriteFieldEnd();
+        }
+        field.Name = "deletePhoto";
+        field.Type = TType.Bool;
+        field.ID = 3;
+        oprot.WriteFieldBegin(field);
+        oprot.WriteBool(DeletePhoto);
+        oprot.WriteFieldEnd();
+        field.Name = "deleteFeature";
+        field.Type = TType.Bool;
+        field.ID = 4;
+        oprot.WriteFieldBegin(field);
+        oprot.WriteBool(DeleteFeature);
+        oprot.WriteFieldEnd();
+        field.Name = "deleteLog";
+        field.Type = TType.Bool;
+        field.ID = 5;
+        oprot.WriteFieldBegin(field);
+        oprot.WriteBool(DeleteLog);
+        oprot.WriteFieldEnd();
         if (Token != null) {
           field.Name = "token";
           field.Type = TType.Struct;
-          field.ID = 2;
+          field.ID = 6;
           oprot.WriteFieldBegin(field);
           Token.Write(oprot);
           oprot.WriteFieldEnd();
@@ -30216,6 +30297,16 @@ public partial class IFaceLog {
       StringBuilder __sb = new StringBuilder("disablePerson_args(");
       __sb.Append(", PersonId: ");
       __sb.Append(PersonId);
+      if (MoveToGroupId != null) {
+        __sb.Append(", MoveToGroupId: ");
+        __sb.Append(MoveToGroupId);
+      }
+      __sb.Append(", DeletePhoto: ");
+      __sb.Append(DeletePhoto);
+      __sb.Append(", DeleteFeature: ");
+      __sb.Append(DeleteFeature);
+      __sb.Append(", DeleteLog: ");
+      __sb.Append(DeleteLog);
       if (Token != null) {
         __sb.Append(", Token: ");
         __sb.Append(Token== null ? "<null>" : Token.ToString());

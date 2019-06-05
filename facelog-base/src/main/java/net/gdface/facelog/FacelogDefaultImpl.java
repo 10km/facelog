@@ -76,7 +76,7 @@ public class FacelogDefaultImpl implements IFaceLog {
 	}
 
 	@Override
-	public void disablePerson(int personId, Token token) {
+	public void disablePerson(int personId, Integer moveToGroupId, boolean deletePhoto, boolean deleteFeature, boolean deleteLog, Token token) {
 		
 	}
 

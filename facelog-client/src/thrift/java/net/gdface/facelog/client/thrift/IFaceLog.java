@@ -405,7 +405,11 @@ public interface IFaceLog
                       })
         ListenableFuture<Void> disablePerson(
             @ThriftField(value=1, name="personId", requiredness=Requiredness.REQUIRED) final int personId,
-            @ThriftField(value=2, name="token", requiredness=Requiredness.OPTIONAL) final Token token
+            @ThriftField(value=2, name="moveToGroupId", requiredness=Requiredness.OPTIONAL) final Integer moveToGroupId,
+            @ThriftField(value=3, name="deletePhoto", requiredness=Requiredness.REQUIRED) final boolean deletePhoto,
+            @ThriftField(value=4, name="deleteFeature", requiredness=Requiredness.REQUIRED) final boolean deleteFeature,
+            @ThriftField(value=5, name="deleteLog", requiredness=Requiredness.REQUIRED) final boolean deleteLog,
+            @ThriftField(value=6, name="token", requiredness=Requiredness.OPTIONAL) final Token token
         );
 
         @ThriftMethod(value = "disablePersonList",
@@ -1753,7 +1757,11 @@ public interface IFaceLog
                   })
     void disablePerson(
         @ThriftField(value=1, name="personId", requiredness=Requiredness.REQUIRED) final int personId,
-        @ThriftField(value=2, name="token", requiredness=Requiredness.OPTIONAL) final Token token
+        @ThriftField(value=2, name="moveToGroupId", requiredness=Requiredness.OPTIONAL) final Integer moveToGroupId,
+        @ThriftField(value=3, name="deletePhoto", requiredness=Requiredness.REQUIRED) final boolean deletePhoto,
+        @ThriftField(value=4, name="deleteFeature", requiredness=Requiredness.REQUIRED) final boolean deleteFeature,
+        @ThriftField(value=5, name="deleteLog", requiredness=Requiredness.REQUIRED) final boolean deleteLog,
+        @ThriftField(value=6, name="token", requiredness=Requiredness.OPTIONAL) final Token token
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "disablePersonList",
