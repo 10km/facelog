@@ -51,7 +51,8 @@ public class FacelogMenu extends RootMenu{
 	public static final String CMD_PERSON_MSG = "personMessage";
 	/** 对图像检测人脸提取人脸特征 */
 	public static final String CMD_FEATURE = "feature";
-
+	/** 算法授权 */
+	public static final String CMD_LICENSE = "license";
 	/** 基本命令所在菜单名 */
 	private static final String MENU_CMD = "cmd";
 	/* 扩展命令所在菜单名 */
@@ -169,6 +170,11 @@ public class FacelogMenu extends RootMenu{
 								).instance(),
 						ItemBuilder.builder(CmdItem.class).name(CMD_FEATURE).uiName("提取人脸特征").hide().addChilds(
 								OptionType.IMAGE.builder().name("image").uiName("人脸图像").required().instance()
+								).instance(),
+						ItemBuilder.builder(CmdItem.class).name(CMD_LICENSE).uiName("人脸识别算法授权").addChilds(
+								OptionType.STRING.builder().name("sdkVersion").uiName("算法类型").required().instance(),
+								OptionType.STRING.builder().name("licenseKey").uiName("授权关键字").required().instance(),
+								OptionType.STRING.builder().name("licenseCode").uiName("授权码").instance()
 								).instance()
 						)
 				.instance();
