@@ -2,6 +2,7 @@ package net.gdface.facelog.client;
 
 import static com.google.common.base.Preconditions.*;
 
+import java.lang.reflect.Proxy;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -41,6 +42,7 @@ import net.gdface.facelog.hb.ServiceHeartbeatListener;
 import net.gdface.facelog.thrift.IFaceLogThriftClient;
 import net.gdface.facelog.thrift.IFaceLogThriftClientAsync;
 import net.gdface.thrift.ClientFactory;
+import net.gdface.utils.Delegator;
 import net.gdface.utils.NetworkUtil;
 
 /**
@@ -104,11 +106,19 @@ public class ClientExtendTools{
 			return false;
 		}
 	}
-	ClientExtendTools(IFaceLogThriftClient syncInstance) {
+	private static <T>T unwrap(Object value,Class<T> clazz){
+		if(Proxy.isProxyClass(value.getClass())){
+			return unwrap(Proxy.getInvocationHandler(value),clazz);
+		}else if(value instanceof Delegator){
+			return unwrap(((Delegator<?>)value).delegate(),clazz);
+		}
+		return clazz.cast(value);
+	}
+	ClientExtendTools(IFaceLog syncInstance) {
 		super();
 		this.syncInstance = checkNotNull(syncInstance,"syncInstance is null");
 		this.asyncInstance = null;
-		this.factory = syncInstance.getFactory();
+		this.factory = unwrap(syncInstance,IFaceLogThriftClient.class).getFactory();
 	}
 	ClientExtendTools(IFaceLogThriftClientAsync asyncInstance) {
 		super();
