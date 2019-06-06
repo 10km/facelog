@@ -44,14 +44,15 @@ public class DateTimeJsonFilter implements IDateTimeFilter {
 	 * bit0为0时,bit 1~31分别代表每月1~31日<br>
 	 */
 	public static final int DEFAULT_DAY = 0xffffffff;
-	public static final ImmutableMap<String, Object> DEFAULT_FILTER = ImmutableMap.<String,Object>of(
+	private static final ImmutableMap<String, Object> defaultJsonFilterDefine = ImmutableMap.<String,Object>of(
 				FIELD_HOUR, DEFAULT_HOUR,FIELD_DAY, 
 				DEFAULT_DAY,
-				AS_LASTDAY_IF_OVERFLOW, true)	;
+				AS_LASTDAY_IF_OVERFLOW, true);
+	public static final DateTimeJsonFilter DEFAULT_FILTER = new DateTimeJsonFilter();
 	private static final int MAX_DAY_OF_MONTH = 31;
 	private static final BaseJsonEncoder encoder = BaseJsonEncoder.getEncoder();
 	private String filter = null;
-	private final JSONObject normalized = new JSONObject().fluentPutAll(DEFAULT_FILTER);
+	private final JSONObject normalized = new JSONObject().fluentPutAll(defaultJsonFilterDefine);
 	public DateTimeJsonFilter() {
 		this(null);
 	}
@@ -77,7 +78,7 @@ public class DateTimeJsonFilter implements IDateTimeFilter {
 
 	private void init (){
 		try {
-			normalized.putAll(MoreObjects.firstNonNull(encoder.fromJson(filter,JSONObject.class),DEFAULT_FILTER));
+			normalized.putAll(MoreObjects.firstNonNull(encoder.fromJson(filter,JSONObject.class),defaultJsonFilterDefine));
 
 		} catch (JSONException e) {
 			logger.debug(e.getMessage());
@@ -178,6 +179,10 @@ public class DateTimeJsonFilter implements IDateTimeFilter {
 	@Override
 	public String filter(){
 		return filter;
+	}
+
+	public String toJSONString() {
+		return normalized.toJSONString();
 	}
 
 	/**
