@@ -11,9 +11,10 @@ import org.slf4j.LoggerFactory;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.MoreObjects;
+import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
-
+import com.google.common.collect.Iterables;
 import gu.simplemq.json.BaseJsonEncoder;
 import static net.gdface.facelog.CommonConstant.*;
 
@@ -53,6 +54,15 @@ public class DateTimeJsonFilter implements IDateTimeFilter {
 	private static final BaseJsonEncoder encoder = BaseJsonEncoder.getEncoder();
 	private String filter = null;
 	private final JSONObject normalized = new JSONObject().fluentPutAll(defaultJsonFilterDefine);
+	private boolean alwaysTrue;
+	private Integer hour;
+	private Integer day;
+	private static final Predicate<String> additionalRuleFilter = new Predicate<String>(){
+
+		@Override
+		public boolean apply(String input) {
+			return input.matches("^(m|w|date)\\d+");
+		}};
 	public DateTimeJsonFilter() {
 		this(null);
 	}
@@ -79,7 +89,19 @@ public class DateTimeJsonFilter implements IDateTimeFilter {
 	private void init (){
 		try {
 			normalized.putAll(MoreObjects.firstNonNull(encoder.fromJson(filter,JSONObject.class),defaultJsonFilterDefine));
-
+			hour = MoreObjects.firstNonNull(getIntegerOrNull(FIELD_HOUR), DEFAULT_HOUR);
+			day = MoreObjects.firstNonNull(getIntegerOrNull(FIELD_DAY), DEFAULT_DAY);
+			alwaysTrue = false;
+			if(Strings.isNullOrEmpty(filter)){
+				alwaysTrue = true;
+				return;
+			}
+			if((hour & 0xffffff) == 0xffffff && ((day & 0xff) == 0xff || (day & 0xfffffffe) == 0xfffffffe)){
+				if(!Iterables.tryFind(normalized.keySet(), additionalRuleFilter).isPresent()){
+					alwaysTrue = true;
+					return;	
+				}
+			}
 		} catch (JSONException e) {
 			logger.debug(e.getMessage());
 		}
@@ -112,6 +134,9 @@ public class DateTimeJsonFilter implements IDateTimeFilter {
 	@Override
 	public boolean apply(Date date) {
 		if(date != null){
+			if(alwaysTrue){
+				return true;
+			}
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTime(date);
 			int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
@@ -119,25 +144,23 @@ public class DateTimeJsonFilter implements IDateTimeFilter {
 			int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
 			int lastDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 			
-			int hour = MoreObjects.firstNonNull(getIntegerOrNull(FIELD_HOUR), DEFAULT_HOUR);
-			int day = MoreObjects.firstNonNull(getIntegerOrNull(FIELD_DAY), DEFAULT_DAY);
 			boolean asLastdayIfOverflow = MoreObjects.firstNonNull(getBooleanUncheck(AS_LASTDAY_IF_OVERFLOW), true);
 
-			Integer extFilter = null;
+			Integer extRuleMask = null;
 			String datekey = String.format("%s%s",PREFIX_DATEKEY,new SimpleDateFormat("MMdd").format(date));
 			String wkey = String.format("%s%d",PREFIX_WKEY,dayOfWeek);
 			String mkey = String.format("%s%d",PREFIX_MKEY,dayOfMonth);
 			if(normalized.containsKey(datekey)){
-				extFilter = getIntegerOrNull(datekey);
+				extRuleMask = getIntegerOrNull(datekey);
 			}else if(normalized.containsKey(mkey)){
-				extFilter = getIntegerOrNull(mkey);
+				extRuleMask = getIntegerOrNull(mkey);
 			}else if(asLastdayIfOverflow && (dayOfMonth == lastDay)){
-				extFilter = maxOverflowKey(dayOfMonth);
+				extRuleMask = maxOverflowKey(dayOfMonth);
 			}else if(normalized.containsKey(wkey)){
-				extFilter = getIntegerOrNull(wkey);
+				extRuleMask = getIntegerOrNull(wkey);
 			}
-			if(extFilter != null){
-				return 0 != (extFilter & hour);
+			if(extRuleMask != null){
+				return 0 != (extRuleMask & hour);
 			}
 			int dayMask = (1 == (day & 1)) ? (1 << dayOfWeek) :  (1 << dayOfMonth);
 			if (0 == (day & 1) && (dayOfMonth == lastDay) && asLastdayIfOverflow){
@@ -186,7 +209,7 @@ public class DateTimeJsonFilter implements IDateTimeFilter {
 	}
 
 	/**
-	 * 返回归一化的过滤器字符串
+	 * 返回归一化的过滤器字符串(JSON)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
