@@ -929,9 +929,9 @@ facelog 基于[dtalk](https://gitee.com/l0km/dtalk)框架实现设备命令定�
 										## 比如我们定义了m31为0x0,而当前日期是6月30日(最后一天)，6月没有31日，如果该字段为true，则将m31规则应用于当前日期。
 	}
 
-[IDateTimeFilter](facelog-base/src/main/java/net/gdface/facelog/IDateTimeFilter.java)定义了时间过滤器接口，
+[IDateTimeFilter](../facelog-base/src/main/java/net/gdface/facelog/IDateTimeFilter.java)定义了时间过滤器接口，
 
-[DateTimeJsonFilter](facelog-base/src/main/java/net/gdface/facelog/DateTimeJsonFilter.java)按上述规则实现了过滤器接口。
+[DateTimeJsonFilter](../facelog-base/src/main/java/net/gdface/facelog/DateTimeJsonFilter.java)按上述规则实现了过滤器接口。
 
 
 ### 服务端异常
