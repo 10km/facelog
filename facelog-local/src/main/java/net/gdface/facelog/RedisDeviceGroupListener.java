@@ -18,11 +18,13 @@ import net.gdface.facelog.db.exception.RuntimeDaoException;
 class RedisDeviceGroupListener extends TableListener.Adapter<DeviceGroupBean> implements ChannelConstant{
 
 	private final RedisPublisher publisher;
+	private final BaseDao dao;
 	private DeviceGroupBean beforeUpdatedBean;
-	public RedisDeviceGroupListener() {
-		this(JedisPoolLazy.getDefaultInstance());
+	public RedisDeviceGroupListener(BaseDao dao) {
+		this(dao, JedisPoolLazy.getDefaultInstance());
 	}
-	public RedisDeviceGroupListener(JedisPoolLazy jedisPoolLazy) {
+	public RedisDeviceGroupListener(BaseDao dao, JedisPoolLazy jedisPoolLazy) {
+		this.dao = checkNotNull(dao,"dao is null");
 		this.publisher = RedisFactory.getPublisher(checkNotNull(jedisPoolLazy,"jedisPoolLazy is null"));
 	}
 	@Override
@@ -37,17 +39,20 @@ class RedisDeviceGroupListener extends TableListener.Adapter<DeviceGroupBean> im
 	@Override
 	public void beforeUpdate(DeviceGroupBean bean) throws RuntimeDaoException {
 		// 保留更新前的数据
-		beforeUpdatedBean = bean.clone();
+		beforeUpdatedBean = dao.daoGetDeviceGroup(bean.getId()).clone();
 	}
 	@Override
 	public void afterUpdate(DeviceGroupBean bean) {
 		// beforeUpdatedBean 为 null，只可能因为侦听器是被异步调用的
 		checkState(beforeUpdatedBean != null,"beforeUpdatedBean must not be null");
+		// 保存修改信息
+		beforeUpdatedBean.setModified(bean.getModified());
 		new RedisPublishTask<DeviceGroupBean>(
 				PUBSUB_DEVICEGROUP_UPDATE, 
 				beforeUpdatedBean, 
 				publisher)
 		.execute();
+		beforeUpdatedBean = null;
 	}
 
 	@Override

@@ -1,7 +1,8 @@
 package net.gdface.facelog.hb;
 
 import java.util.Iterator;
-import java.util.Set;
+import java.util.LinkedHashMap;
+import java.util.Map.Entry;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -14,7 +15,7 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.base.Strings;
 import com.google.common.base.Supplier;
-import com.google.common.collect.Sets;
+import com.google.common.collect.Maps;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
@@ -62,9 +63,9 @@ public class DeviceHeartbeat extends BaseServiceHeartbeatListener implements Cha
 	/** {@link #scheduledExecutor}的自动退出封装 */
 	private final ScheduledExecutorService timerExecutor;
 	private ScheduledFuture<?> future;
-	/** 附加任务表 */
-	private final Set<Runnable> additionalTasks = Sets.newLinkedHashSet();
-	/** 定时报道任务 */
+	/** 附加任务表,执行定时任务发送心跳包时执行附加任务表中的任务对象 */
+	private final LinkedHashMap<String,Runnable> additionalTasks = Maps.newLinkedHashMap();
+	/** 定时任务 */
 	private final Runnable timerTask = new Runnable(){
 		@Override
 		public void run() {
@@ -74,16 +75,16 @@ public class DeviceHeartbeat extends BaseServiceHeartbeatListener implements Cha
 				table.expire(hardwareAddress);
 				Channel<DeviceHeartdbeatPackage> monitorChannel = monitorChannelSupplier.get();
 				if(null != monitorChannel){
-//					logger.info("send hb ->{}",monitorChannel.name);
 					publisher.publish(monitorChannel, heartBeatPackage);
 				}
 				synchronized (additionalTasks) {
-					for(Iterator<Runnable> itor = additionalTasks.iterator(); itor.hasNext(); ){
+					for(Iterator<Entry<String, Runnable>> itor = additionalTasks.entrySet().iterator(); itor.hasNext(); ){
+						Entry<String, Runnable> entry = itor.next();
 						try {
-							itor.next().run();
+							entry.getValue().run();
 						} catch (Exception e) {
 							itor.remove();
-							logger.info(e.getMessage());
+							logger.info("additionalTask [{}] removed:caused by {}",entry.getKey(),e.getMessage());
 						}
 					}					
 				}
@@ -229,34 +230,56 @@ public class DeviceHeartbeat extends BaseServiceHeartbeatListener implements Cha
 		monitorChannelSupplier.reload = true;
 		return true;
 	}
+	
 	/**
 	 * 添加附加任务<br>
 	 * 附加任务在执行时抛出异常则自动被移除不再执行
-	 * @param runnable
-	 * @return
-	 * @see java.util.Set#add(java.lang.Object)
+	 * @param name 任务名,不可为{@code null},如果同名任务已经存在则覆盖
+	 * @param task 任务对象,不可为{@code null}
+	 * @return 返回{@code name}之前关联的任务对象，如果{@code name}为新加入任务名则返回{@code null}
+	 * @see {@link LinkedHashMap#put(Object, Object)}
 	 */
-	public boolean addAdditionalTask(Runnable runnable) {
+	public Runnable addAdditionalTask(String name,Runnable task) {
+		checkArgument(null != name,"name is null");
+		checkArgument(null != task,"task is null");
 		synchronized (additionalTasks) {
-			return additionalTasks.add(runnable);
+			return additionalTasks.put(name,task);
 		}
 	}
+
 	/**
 	 * 删除附加任务
-	 * @param runnable
-	 * @return
-	 * @see java.util.Set#remove(java.lang.Object)
+	 * @param task
 	 */
-	public boolean removeAdditionalTask(Runnable runnable) {
+	public void removeAdditionalTask(Runnable task) {
 		synchronized (additionalTasks) {
-			return additionalTasks.remove(runnable);	
+			if(null != task){
+				for(Iterator<Entry<String, Runnable>> itor = additionalTasks.entrySet().iterator();itor.hasNext();){
+					Entry<String, Runnable> entry = itor.next();
+					if(task == entry.getValue()){
+						itor.remove();
+					}
+				}
+			}
 		}
 	}
 	/**
-	 * 清除附加任务
-	 * @see java.util.Set#clear()
+	 * 删除{@code name}指定附加任务
+	 * @param name 任务名
+	 */
+	public void removeAdditionalTask(String name) {
+		if(null != name){
+			synchronized (additionalTasks) {
+				additionalTasks.remove(name);	
+			}
+		}
+	}
+	/**
+	 * 清除所有附加任务
 	 */
 	public void clear() {
-		additionalTasks.clear();
+		synchronized (additionalTasks) {
+			additionalTasks.clear();
+		}
 	}
 }

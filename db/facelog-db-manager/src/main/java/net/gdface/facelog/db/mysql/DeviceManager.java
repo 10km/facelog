@@ -1181,47 +1181,11 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
         }
     }
     
-     // override IDeviceManager
-
-    @Override 
-    public DeviceBean[] loadByIndexSdkVersion(String sdkVersion)
-    {
-        return this.loadByIndexSdkVersionAsList(sdkVersion).toArray(new DeviceBean[0]);
-    }
-    
-    // override IDeviceManager
-
-    @Override 
-    public java.util.List<DeviceBean> loadByIndexSdkVersionAsList(String sdkVersion)
-    {
-        try{
-            return this.beanConverter.fromRight(this.nativeManager.loadByIndexSdkVersionAsList(sdkVersion));
-        }
-        catch(DaoException e)
-        {
-            throw new RuntimeDaoException(e);
-        }
-    }
-
-    // override IDeviceManager
-
-    @Override 
-    public int deleteByIndexSdkVersion(String sdkVersion)
-    {
-        try{
-            return this.nativeManager.deleteByIndexSdkVersion(sdkVersion);
-        }
-        catch(DaoException e)
-        {
-            throw new RuntimeDaoException(e);
-        }
-    }
-    
     
     /**
      * Retrieves a list of DeviceBean using the index specified by keyIndex.
      * @param keyIndex valid values: <br>
-     *        {@link Constant#FL_DEVICE_INDEX_MAC},{@link Constant#FL_DEVICE_INDEX_SERIAL_NO},{@link Constant#FL_DEVICE_INDEX_GROUP_ID},{@link Constant#FL_DEVICE_INDEX_SDK_VERSION}
+     *        {@link Constant#FL_DEVICE_INDEX_MAC},{@link Constant#FL_DEVICE_INDEX_SERIAL_NO},{@link Constant#FL_DEVICE_INDEX_GROUP_ID}
      * @param keys key values of index
      * @return a list of DeviceBean
      */
@@ -1238,7 +1202,7 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
     /**
      * Deletes rows using key.
      * @param keyIndex valid values: <br>
-     *        {@link Constant#FL_DEVICE_INDEX_MAC},{@link Constant#FL_DEVICE_INDEX_SERIAL_NO},{@link Constant#FL_DEVICE_INDEX_GROUP_ID},{@link Constant#FL_DEVICE_INDEX_SDK_VERSION}
+     *        {@link Constant#FL_DEVICE_INDEX_MAC},{@link Constant#FL_DEVICE_INDEX_SERIAL_NO},{@link Constant#FL_DEVICE_INDEX_GROUP_ID}
      * @param keys key values of index
      * @return the number of deleted objects
      */
@@ -1472,6 +1436,18 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
             throw new RuntimeDaoException(e);
         }
     }
+    
+    @Override
+    public void runAsTransaction(Runnable fun) {
+        try{
+            this.nativeManager.runAsTransaction(fun);
+        }
+        catch(DaoException e)
+        {
+            throw new RuntimeDaoException(e);
+        }
+    }
+    
     
     private net.gdface.facelog.dborm.TableManager.Action<net.gdface.facelog.dborm.device.FlDeviceBean> toNative(final Action<DeviceBean> action){
         if(null == action){

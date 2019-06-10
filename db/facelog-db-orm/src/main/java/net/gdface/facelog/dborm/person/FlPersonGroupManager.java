@@ -2600,6 +2600,7 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
                 protected void onRemove(List<FlPersonGroupBean> effectBeans) throws DaoException {
                     for(FlPersonGroupBean bean:effectBeans){
                         bean.setParent(null);
+                        Event.UPDATE_BEFORE.fire(listenerContainer, bean);
                         Event.UPDATE.fire(listenerContainer, bean);
                         bean.resetIsModified();
                     }
@@ -2725,9 +2726,13 @@ public class FlPersonGroupManager extends TableManager.BaseAdapter<FlPersonGroup
     }
    
     @Override
-
     public <T>T runAsTransaction(Callable<T> fun) throws DaoException{
-        return Manager.getInstance().runAsTransaction(fun);
+        return Manager.getInstance().runAsTransaction(fun,TableListener.ListenerContainer.TRANSACTION_LISTENER);
+    }
+    
+    @Override
+    public void runAsTransaction(Runnable fun) throws DaoException{
+        Manager.getInstance().runAsTransaction(fun,TableListener.ListenerContainer.TRANSACTION_LISTENER);
     }
     
     class DeleteBeanAction extends Action.BaseAdapter<FlPersonGroupBean>{

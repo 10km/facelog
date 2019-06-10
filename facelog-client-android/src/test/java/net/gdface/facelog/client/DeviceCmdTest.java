@@ -89,7 +89,7 @@ public class DeviceCmdTest implements ChannelConstant{
 	}
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
-		facelogClient.unregisterDevice(device.getId(), deviceToken);
+		facelogClient.unregisterDevice(deviceToken);
 		facelogClient.releaseRootToken(rootToken);
 	}
 

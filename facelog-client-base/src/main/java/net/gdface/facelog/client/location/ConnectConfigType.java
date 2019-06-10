@@ -2,7 +2,6 @@ package net.gdface.facelog.client.location;
 
 import java.util.Iterator;
 import java.util.ServiceLoader;
-
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
@@ -70,19 +69,16 @@ public enum ConnectConfigType implements ConnectConfigProvider {
 	private static volatile ConnectConfigType activeConnectType = null;
 
 	/**
-	 * 测试redis连接
+	 * 测试thrift服务连接<br>
+	 * {@code timeoutMills}>0时设置连接超时参数
+	 * @param timeoutMills 指定连接超时(毫秒)
 	 * @return 连接成功返回{@code true},否则返回{@code false}
 	 */
-	public synchronized boolean testConnect(){
+	public synchronized boolean testConnect(long timeoutMills){
 		connectable = false;
 		if(instance != null){
 //			System.out.printf("try to connect %s...\n", this);
-			try{
-				connectable = ClientFactory.builder()
-						.setHostAndPort(instance.getHost(),instance.getPort())
-						.testConnect();
-			}catch (Exception e) {
-			}
+			connectable = ClientFactory.testConnect(instance.getHost(),instance.getPort(),timeoutMills);
 			if(connectable){
 				System.out.println(toString() + " connect OK\n");
 			}
@@ -90,17 +86,23 @@ public enum ConnectConfigType implements ConnectConfigProvider {
 		}
 		return connectable;
 	}
-
+	/**
+	 * 测试redis连接(使用swift默认的连接超时参数)
+	 * @return 连接成功返回{@code true},否则返回{@code false}
+	 */
+	public boolean testConnect(){
+		return testConnect(0);
+	}
 	/**
 	 * 按照如下优先顺序测试配置的facelog服务连接，返回第一个能建立有效连接的配置，否则抛出异常<br>
 	 * <li>{@link ConnectConfigType#CUSTOM}</li>
 	 * <li>{@link ConnectConfigType#LAN}</li>
 	 * <li>{@link ConnectConfigType#CLOUD}</li>
 	 * <li>{@link ConnectConfigType#LOCALHOST}</li>
-	 * @return
+	 * @return {@link ConnectConfigType}实例
 	 * @throws FaceLogConnectException 没有找到有效redis连接
 	 */
-	public static ConnectConfigType lookupRedisConnect() throws FaceLogConnectException{
+	public static ConnectConfigType lookupFacelogConnect() throws FaceLogConnectException{
 		// double check
 		if(activeConnectType == null){
 			synchronized (ConnectConfigType.class) {
@@ -141,13 +143,13 @@ public enum ConnectConfigType implements ConnectConfigProvider {
 	}
 
 	/**
-	 * 与{@link #lookupRedisConnect()}功能相似,不同的时当没有找到有效redis连接时,不抛出异常,返回{@code null}
+	 * 与{@link #lookupFacelogConnect()}功能相似,不同的时当没有找到有效redis连接时,不抛出异常,返回{@code null}
 	 * @param logger
 	 * @return 返回第一个能建立有效连接的配置,否则返回{@code null}
 	 */
-	public static ConnectConfigType lookupRedisConnectUnchecked() {
+	public static ConnectConfigType lookupFacelogConnectUnchecked() {
 		try {
-			return lookupRedisConnect();
+			return lookupFacelogConnect();
 		} catch (FaceLogConnectException e) {
 			return null;
 		}

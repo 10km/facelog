@@ -39,6 +39,7 @@ import gu.simplemq.redis.JedisUtils;
 import static com.google.common.base.Preconditions.checkArgument;
 
 import net.gdface.facelog.db.Constant.JdbcProperty;
+import net.gdface.utils.FaceUtilits;
 import redis.clients.jedis.JedisPoolConfig;
 
 /**
@@ -210,8 +211,8 @@ public class GlobalConfig implements ServiceConstant{
 			logger.info("{}({}):{}", "jedisPoolConfig.maxTotal",descriptionOf(REDIS_POOL_MAXTOTAL),
 					((JedisPoolConfig)params.get(PropName.jedisPoolConfig)).getMaxTotal());
 		}
-		if(CONFIG.containsKey(REDIS_HOME)){
-			logger.info("{}:{}",descriptionOf(REDIS_HOME),CONFIG.getString(REDIS_HOME));
+		if(CONFIG.containsKey(REDIS_EXE)){
+			logger.info("{}:{}",descriptionOf(REDIS_EXE),CONFIG.getString(REDIS_EXE));
 		}
 	}
 	/** log 输出令牌管理参数 */
@@ -330,6 +331,7 @@ public class GlobalConfig implements ServiceConstant{
 	 * 将{@code value}用分隔符{@code ;,\t\r\f\n}切分为不含空格和分隔符的一组字符串
 	 * @param value
 	 * @return {@code value}为{@code null}时返回空表
+	 * @deprecated replace by {@link net.gdface.utils.FaceUtilits#elementsOf(String)}
 	 */
 	public static ImmutableList<String> getExplodedStringAsList(String value) {
 		Builder<String> builder = ImmutableList.builder();
@@ -351,7 +353,7 @@ public class GlobalConfig implements ServiceConstant{
 		getEnumList(final Class<E> enumType,String key){
 		checkArgument(null != enumType,"enumType is null");
 		checkArgument(!Strings.isNullOrEmpty(key),"key is null or empty");
-		List<String> strList = getExplodedStringAsList(CONFIG.getString(key,""));
+		List<String> strList = FaceUtilits.elementsOf(CONFIG.getString(key,""));
 		List<E> enumList = Lists.transform(strList, new Function<String,E>(){
 			@Override
 			public E apply(String input) {

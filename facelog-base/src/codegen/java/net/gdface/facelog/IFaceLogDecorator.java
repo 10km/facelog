@@ -7,6 +7,7 @@ import net.gdface.facelog.db.FaceBean;
 import net.gdface.facelog.db.FeatureBean;
 import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.LogBean;
+import net.gdface.facelog.db.PermitBean;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.PersonGroupBean;
 /**
@@ -37,14 +38,15 @@ public class IFaceLogDecorator implements IFaceLog{
     }    
 
     @Override
-    public FeatureBean addFeature (byte[] feature,Integer personId,boolean asIdPhotoIfAbsent,byte[] featurePhoto,FaceBean faceBean,Token token) throws DuplicateRecordException{
-        return delegate().addFeature(feature,personId,asIdPhotoIfAbsent,featurePhoto,faceBean,token);
+    public FeatureBean addFeature (byte[] feature,String featureVersion,Integer personId,boolean asIdPhotoIfAbsent,byte[] featurePhoto,FaceBean faceBean,Token token) throws DuplicateRecordException{
+        return delegate().addFeature(feature,featureVersion,personId,asIdPhotoIfAbsent,featurePhoto,faceBean,token);
     }
 
     /**
-     * {@link IFaceLog#addFeature(byte[],java.lang.Integer,boolean,byte[],FaceBean,Token)}对应的unchecked方法,
+     * {@link IFaceLog#addFeature(byte[],java.lang.String,java.lang.Integer,boolean,byte[],FaceBean,Token)}对应的unchecked方法,
      * 所有显式申明的异常都被封装到{@link RuntimeException}抛出<br>
      * @param feature
+     * @param featureVersion
      * @param personId
      * @param asIdPhotoIfAbsent
      * @param featurePhoto
@@ -52,9 +54,9 @@ public class IFaceLogDecorator implements IFaceLog{
      * @param token
      * @return FeatureBean
      */
-    public FeatureBean addFeatureUnchecked (byte[] feature,Integer personId,boolean asIdPhotoIfAbsent,byte[] featurePhoto,FaceBean faceBean,Token token) {
+    public FeatureBean addFeatureUnchecked (byte[] feature,String featureVersion,Integer personId,boolean asIdPhotoIfAbsent,byte[] featurePhoto,FaceBean faceBean,Token token) {
         try{
-            return delegate().addFeature(feature,personId,asIdPhotoIfAbsent,featurePhoto,faceBean,token);
+            return delegate().addFeature(feature,featureVersion,personId,asIdPhotoIfAbsent,featurePhoto,faceBean,token);
         } catch(RuntimeException e){
             throw e;
         } catch(Exception e){
@@ -63,22 +65,23 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
-    public FeatureBean addFeature (byte[] feature,Integer personId,List<FaceBean> faecBeans,Token token) throws DuplicateRecordException{
-        return delegate().addFeature(feature,personId,faecBeans,token);
+    public FeatureBean addFeature (byte[] feature,String featureVersion,Integer personId,List<FaceBean> faecBeans,Token token) throws DuplicateRecordException{
+        return delegate().addFeature(feature,featureVersion,personId,faecBeans,token);
     }
 
     /**
-     * {@link IFaceLog#addFeature(byte[],java.lang.Integer,List,Token)}对应的unchecked方法,
+     * {@link IFaceLog#addFeature(byte[],java.lang.String,java.lang.Integer,List,Token)}对应的unchecked方法,
      * 所有显式申明的异常都被封装到{@link RuntimeException}抛出<br>
      * @param feature
+     * @param featureVersion
      * @param personId
      * @param faecBeans
      * @param token
      * @return FeatureBean
      */
-    public FeatureBean addFeatureUnchecked (byte[] feature,Integer personId,List<FaceBean> faecBeans,Token token) {
+    public FeatureBean addFeatureUnchecked (byte[] feature,String featureVersion,Integer personId,List<FaceBean> faecBeans,Token token) {
         try{
-            return delegate().addFeature(feature,personId,faecBeans,token);
+            return delegate().addFeature(feature,featureVersion,personId,faecBeans,token);
         } catch(RuntimeException e){
             throw e;
         } catch(Exception e){
@@ -87,22 +90,23 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
-    public FeatureBean addFeature (byte[] feature,Integer personId,Map<java.nio.ByteBuffer, FaceBean> faceInfo,Token token) throws DuplicateRecordException{
-        return delegate().addFeature(feature,personId,faceInfo,token);
+    public FeatureBean addFeature (byte[] feature,String featureVersion,Integer personId,Map<java.nio.ByteBuffer, FaceBean> faceInfo,Token token) throws DuplicateRecordException{
+        return delegate().addFeature(feature,featureVersion,personId,faceInfo,token);
     }
 
     /**
-     * {@link IFaceLog#addFeature(byte[],java.lang.Integer,Map,Token)}对应的unchecked方法,
+     * {@link IFaceLog#addFeature(byte[],java.lang.String,java.lang.Integer,Map,Token)}对应的unchecked方法,
      * 所有显式申明的异常都被封装到{@link RuntimeException}抛出<br>
      * @param feature
+     * @param featureVersion
      * @param personId
      * @param faceInfo
      * @param token
      * @return FeatureBean
      */
-    public FeatureBean addFeatureUnchecked (byte[] feature,Integer personId,Map<java.nio.ByteBuffer, FaceBean> faceInfo,Token token) {
+    public FeatureBean addFeatureUnchecked (byte[] feature,String featureVersion,Integer personId,Map<java.nio.ByteBuffer, FaceBean> faceInfo,Token token) {
         try{
-            return delegate().addFeature(feature,personId,faceInfo,token);
+            return delegate().addFeature(feature,featureVersion,personId,faceInfo,token);
         } catch(RuntimeException e){
             throw e;
         } catch(Exception e){
@@ -351,6 +355,11 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
+    public int countLogLightByVerifyTime (String timestamp) {
+        return delegate().countLogLightByVerifyTime(timestamp);
+    }
+
+    @Override
     public int countLogLightByVerifyTime (long timestamp) {
         return delegate().countLogLightByVerifyTime(timestamp);
     }
@@ -436,8 +445,8 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
-    public void disablePerson (int personId,Token token) {
-         delegate().disablePerson(personId,token);
+    public void disablePerson (int personId,Integer moveToGroupId,boolean deletePhoto,boolean deleteFeature,boolean deleteLog,Token token) {
+         delegate().disablePerson(personId,moveToGroupId,deletePhoto,deleteFeature,deleteLog,token);
     }
 
     @Override
@@ -546,17 +555,17 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
-    public boolean getGroupPermit (int deviceId,int personGroupId) {
+    public PermitBean getGroupPermit (int deviceId,int personGroupId) {
         return delegate().getGroupPermit(deviceId,personGroupId);
     }
 
     @Override
-    public boolean getGroupPermitOnDeviceGroup (int deviceGroupId,int personGroupId) {
+    public PermitBean getGroupPermitOnDeviceGroup (int deviceGroupId,int personGroupId) {
         return delegate().getGroupPermitOnDeviceGroup(deviceGroupId,personGroupId);
     }
 
     @Override
-    public List<Boolean> getGroupPermits (int deviceId,List<Integer> personGroupIdList) {
+    public List<PermitBean> getGroupPermits (int deviceId,List<Integer> personGroupIdList) {
         return delegate().getGroupPermits(deviceId,personGroupIdList);
     }
 
@@ -611,12 +620,12 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
-    public boolean getPersonPermit (int deviceId,int personId) {
+    public PermitBean getPersonPermit (int deviceId,int personId) {
         return delegate().getPersonPermit(deviceId,personId);
     }
 
     @Override
-    public List<Boolean> getPersonPermits (int deviceId,List<Integer> personIdList) {
+    public List<PermitBean> getPersonPermits (int deviceId,List<Integer> personIdList) {
         return delegate().getPersonPermits(deviceId,personIdList);
     }
 
@@ -741,6 +750,11 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
+    public List<String> loadFeatureMd5ByUpdate (String timestamp) {
+        return delegate().loadFeatureMd5ByUpdate(timestamp);
+    }
+
+    @Override
     public List<String> loadFeatureMd5ByUpdate (long timestamp) {
         return delegate().loadFeatureMd5ByUpdate(timestamp);
     }
@@ -748,6 +762,11 @@ public class IFaceLogDecorator implements IFaceLog{
     @Override
     public List<LogBean> loadLogByWhere (String where,int startRow,int numRows) {
         return delegate().loadLogByWhere(where,startRow,numRows);
+    }
+
+    @Override
+    public List<net.gdface.facelog.db.LogLightBean> loadLogLightByVerifyTime (String timestamp,int startRow,int numRows) {
+        return delegate().loadLogLightByVerifyTime(timestamp,startRow,numRows);
     }
 
     @Override
@@ -761,7 +780,12 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
-    public List<net.gdface.facelog.db.PermitBean> loadPermitByUpdate (long timestamp) {
+    public List<PermitBean> loadPermitByUpdate (String timestamp) {
+        return delegate().loadPermitByUpdate(timestamp);
+    }
+
+    @Override
+    public List<PermitBean> loadPermitByUpdate (long timestamp) {
         return delegate().loadPermitByUpdate(timestamp);
     }
 
@@ -781,6 +805,11 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
+    public List<Integer> loadPersonIdByUpdateTime (String timestamp) {
+        return delegate().loadPersonIdByUpdateTime(timestamp);
+    }
+
+    @Override
     public List<Integer> loadPersonIdByUpdateTime (long timestamp) {
         return delegate().loadPersonIdByUpdateTime(timestamp);
     }
@@ -788,6 +817,11 @@ public class IFaceLogDecorator implements IFaceLog{
     @Override
     public List<Integer> loadPersonIdByWhere (String where) {
         return delegate().loadPersonIdByWhere(where);
+    }
+
+    @Override
+    public List<Integer> loadUpdatedPersons (String timestamp) {
+        return delegate().loadUpdatedPersons(timestamp);
     }
 
     @Override
@@ -947,18 +981,18 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
-    public PersonBean savePerson (PersonBean personBean,byte[] idPhoto,byte[] feature,byte[] featureImage,FaceBean featureFaceBean,Token token) {
-        return delegate().savePerson(personBean,idPhoto,feature,featureImage,featureFaceBean,token);
+    public PersonBean savePerson (PersonBean personBean,byte[] idPhoto,byte[] feature,String featureVersion,byte[] featureImage,FaceBean featureFaceBean,Token token) {
+        return delegate().savePerson(personBean,idPhoto,feature,featureVersion,featureImage,featureFaceBean,token);
     }
 
     @Override
-    public PersonBean savePerson (PersonBean personBean,byte[] idPhoto,byte[] feature,List<FaceBean> faceBeans,Token token) {
-        return delegate().savePerson(personBean,idPhoto,feature,faceBeans,token);
+    public PersonBean savePerson (PersonBean personBean,byte[] idPhoto,byte[] feature,String featureVersion,List<FaceBean> faceBeans,Token token) {
+        return delegate().savePerson(personBean,idPhoto,feature,featureVersion,faceBeans,token);
     }
 
     @Override
-    public PersonBean savePerson (PersonBean personBean,byte[] idPhoto,byte[] feature,Map<java.nio.ByteBuffer, FaceBean> faceInfo,Token token) {
-        return delegate().savePerson(personBean,idPhoto,feature,faceInfo,token);
+    public PersonBean savePerson (PersonBean personBean,byte[] idPhoto,byte[] feature,String featureVersion,Map<java.nio.ByteBuffer, FaceBean> faceInfo,Token token) {
+        return delegate().savePerson(personBean,idPhoto,feature,featureVersion,faceInfo,token);
     }
 
     @Override
@@ -1002,6 +1036,11 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
+    public void setPersonExpiryDate (int personId,String expiryDate,Token token) {
+         delegate().setPersonExpiryDate(personId,expiryDate,token);
+    }
+
+    @Override
     public void setPersonExpiryDate (int personId,long expiryDate,Token token) {
          delegate().setPersonExpiryDate(personId,expiryDate,token);
     }
@@ -1037,20 +1076,19 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
-    public void unregisterDevice (int deviceId,Token token) throws ServiceSecurityException{
-         delegate().unregisterDevice(deviceId,token);
+    public void unregisterDevice (Token token) throws ServiceSecurityException{
+         delegate().unregisterDevice(token);
     }
 
     /**
-     * {@link IFaceLog#unregisterDevice(int,Token)}对应的unchecked方法,
+     * {@link IFaceLog#unregisterDevice(Token)}对应的unchecked方法,
      * 所有显式申明的异常都被封装到{@link RuntimeException}抛出<br>
-     * @param deviceId
      * @param token
      * @return void
      */
-    public void unregisterDeviceUnchecked (int deviceId,Token token) {
+    public void unregisterDeviceUnchecked (Token token) {
         try{
-             delegate().unregisterDevice(deviceId,token);
+             delegate().unregisterDevice(token);
         } catch(RuntimeException e){
             throw e;
         } catch(Exception e){

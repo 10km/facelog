@@ -34,6 +34,7 @@ CREATE TABLE IF NOT EXISTS fl_device_group (
   `leaf`        tinyint(1) DEFAULT NULL COMMENT '是否为叶子节点, 1:叶子节点 0:分支节点,null:两者都可',
   `parent`      int(11) DEFAULT NULL COMMENT '上一级设备组id',
   `root_group`  int(11) DEFAULT NULL COMMENT '指向人员组id,用于应用层定义管理员/操作员的管理边界,此字段不为null代表此设备组为管理边界,指向的人员组为此设备组的拥有者的顶级组',
+  `schedule`    varchar(4096) DEFAULT NULL COMMENT '设备工作时间表,为null或空为7x24小时工作,格式为JSON,参见开发手册',
   `remark`      varchar(256) DEFAULT NULL COMMENT '备注',
   `ext_bin`     blob DEFAULT NULL COMMENT '应用项目自定义二进制扩展字段(最大64KB)',
   `ext_txt`     text DEFAULT NULL COMMENT '应用项目自定义文本扩展字段(最大64KB)',
@@ -60,6 +61,7 @@ CREATE TABLE IF NOT EXISTS fl_person_group (
 CREATE TABLE IF NOT EXISTS fl_permit (
   `device_group_id`   int(11) NOT NULL COMMENT '外键,设备组id',
   `person_group_id`    int(11) NOT NULL COMMENT '外键,人员组id',
+  `schedule`    varchar(4096) DEFAULT NULL COMMENT '允许通行时间表,为null或空为7x24小时工作,格式为JSON,参见开发手册',
   `remark`      varchar(256) DEFAULT NULL COMMENT '备注',
   `ext_bin`     blob DEFAULT NULL COMMENT '应用项目自定义二进制扩展字段(最大64KB)',
   `ext_txt`     text DEFAULT NULL COMMENT '应用项目自定义文本扩展字段(最大64KB)',
@@ -79,7 +81,7 @@ CREATE TABLE IF NOT EXISTS fl_device (
   `manufacturer`varchar(32) DEFAULT NULL COMMENT '设备制造商',
   `made_date`   date DEFAULT NULL COMMENT '设备生产日期',
   `version`     varchar(32) DEFAULT NULL COMMENT '设备版本号',
-  `sdk_version` char(32) NOT NULL COMMENT '(特征码)算法版本号,用于区分不同人脸识别算法生成的特征数据(允许字母,数字,-,.,_符号)',
+  `used_sdks`   varchar(128) NOT NULL COMMENT '支持的特征码(算法)版本号列表(逗号分隔),特征版本号用于区分不同人脸识别算法生成的特征数据(SDK版本号命名允许字母,数字,-,.,_符号)',
   `serial_no`   varchar(32) DEFAULT NULL UNIQUE COMMENT '设备序列号',
   `mac`         char(12) DEFAULT NULL UNIQUE COMMENT '6字节MAC地址(HEX)',
   `remark`      varchar(256) DEFAULT NULL COMMENT '备注',
@@ -88,8 +90,7 @@ CREATE TABLE IF NOT EXISTS fl_device (
   `create_time` timestamp DEFAULT CURRENT_TIMESTAMP,
   `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (group_id)  REFERENCES fl_device_group(id) ON DELETE SET NULL,
-  INDEX `group_id` (`group_id` ASC),
-  INDEX `sdk_version` (`sdk_version` ASC)
+  INDEX `group_id` (`group_id` ASC)
 ) COMMENT '前端设备基本信息' DEFAULT CHARSET=utf8;
 
 /*
@@ -148,12 +149,12 @@ CREATE TABLE IF NOT EXISTS fl_person (
 */
 CREATE TABLE IF NOT EXISTS fl_feature (
   `md5`         char(32) NOT NULL PRIMARY KEY COMMENT '主键,特征码md5校验码',
-  `sdk_version` char(32) NOT NULL COMMENT '(特征码)算法版本号,用于区分不同人脸识别算法生成的特征数据(允许字母,数字,-,.,_符号)',
+  `version`     varchar(32) NOT NULL COMMENT '特征码(算法)版本号,用于区分不同人脸识别算法生成的特征数据(允许字母,数字,-,.,_符号)',
   `person_id`   int(11)  DEFAULT NULL COMMENT '外键,所属用户id',
   `feature`     blob     NOT NULL COMMENT '二进制特征数据',
   `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (person_id)  REFERENCES fl_person(id) ON DELETE CASCADE,
-  INDEX `sdk_version` (`sdk_version` ASC)
+  INDEX `feature_version` (`version` ASC)
 ) COMMENT '用于验证身份的人脸特征数据表' DEFAULT CHARSET=utf8;
 
 

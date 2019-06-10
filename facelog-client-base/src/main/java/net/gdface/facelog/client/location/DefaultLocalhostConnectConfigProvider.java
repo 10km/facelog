@@ -1,7 +1,7 @@
 package net.gdface.facelog.client.location;
 import net.gdface.facelog.CommonConstant;
 /**
- * {@link RedisConfigProvider}默认实现，只用于测试
+ * {@link ConnectConfigProvider}默认实现，只用于测试
  * @author guyadong
  *
  */

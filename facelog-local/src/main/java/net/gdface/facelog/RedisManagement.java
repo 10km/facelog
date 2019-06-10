@@ -1,6 +1,5 @@
 package net.gdface.facelog;
 
-import java.io.File;
 import java.io.IOException;
 import java.lang.ProcessBuilder.Redirect;
 import java.util.ArrayList;
@@ -9,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.google.common.base.Joiner;
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
@@ -21,6 +21,7 @@ import gu.simplemq.redis.JedisPoolLazy.PropName;
 import gu.simplemq.redis.JedisUtils;
 import net.gdface.utils.NetworkUtil;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.Protocol;
 import redis.clients.jedis.exceptions.JedisConnectionException;
 import redis.clients.jedis.exceptions.JedisDataException;
 
@@ -38,10 +39,9 @@ class RedisManagement implements ServiceConstant{
 	private static final String HEARTBEAT_MONITOR_PREFIX = "hb_monitor_";
 
 	private static String redisURI;
-	/** 本地redis服务器启动标志 */
-	private static boolean localServerStarted = false;
 	/** redis数据库配置参数 */
-	private static Map<PropName, Object> parameters;
+	private final static Map<PropName, Object> parameters;
+	private static Process redisProcess;
 	private static Process webredisProcess;
 	private static String webredisURL = null;
 	/** webredis服务参数 */
@@ -116,19 +116,31 @@ class RedisManagement implements ServiceConstant{
 		do{
 			try{
 				// 测试服务器连接和访问
-				Jedis jedis = poolLazy.apply();
-				try{
-					jedis.keys("*");
-				}finally{
-					poolLazy.free();
-				}
+				JedisUtils.checkConnect(parameters);
 				return;
 			}catch(JedisConnectionException e){
 				if(selfBind){
 					// 如果 redis服务器指定为本地启动则尝试启动服务器
-					if( CONFIG.containsKey(REDIS_HOME) && !localServerStarted){
-						startLocalServer(parameters);
-						localServerStarted = true;	
+					if( CONFIG.containsKey(REDIS_EXE)){
+						redisProcess = startLocalServer(parameters);
+						for(int c=0;c<3;++c){
+							try {
+								Thread.sleep(2000);
+								try {
+									redisProcess.exitValue();
+									break;
+								} catch (IllegalThreadStateException itse) {
+									// 服务已启动状态下测试连接
+									if(JedisUtils.testConnect(poolLazy.getParameters())){
+										return;
+									}
+								}
+
+							} catch (InterruptedException ie) {
+								break;
+							}
+						}
+						throw new IllegalStateException("FAIL TO START WEBREDIS SERVER(启动redis失败) ");
 					}else {
 						throw new RuntimeException(
 								String.format("cann't connect redis server(无法连接redis服务器,请检查redis服务器是否启动以及密码是否正确) %s",redisURI),e);
@@ -150,46 +162,40 @@ class RedisManagement implements ServiceConstant{
 		throw new RuntimeException(String.format("cann't connect redis server(无法连接redis服务器) %s",redisURI));
 
 	}
-	private static final String REDIS_SERVER_EXE = "redis-server";
-	private static final String suffixOfExe(){
-		return System.getProperty("os.name").startsWith("Windows")?".exe":"";
-	}
-	private static final String shell(){
-		return System.getProperty("os.name").startsWith("Windows")?"cmd /c":"sh";
-	}
-	/** 启动本地 redis 服务器 */
-	private static final  void startLocalServer(Map<PropName, Object> parameters){
-		String home = CONFIG.getString(REDIS_HOME,"");
-		checkArgument(!home.isEmpty(),"NOT DEFINE(参数没有定义) %s",REDIS_HOME);
-		// redis-server 可执行程序路径
-		String exe = new StringBuffer()
-				.append(home)
-				.append(File.separator)
-				.append(REDIS_SERVER_EXE)
-				.append(suffixOfExe()).toString();
-		checkArgument(new File(exe).canExecute(),"NOT EXECUTABLE FILE(非可执行文件名) %s",exe);
+	/** 启动本地 redis 服务器 
+	 * @return redis server 进程对象，{@link Process}
+	 */
+	private static final  Process startLocalServer(Map<PropName, Object> parameters){
+		String redisExe = CONFIG.getString(REDIS_EXE,"");
+		checkArgument(!redisExe.isEmpty(),"NOT DEFINE(参数没有定义) %s",REDIS_EXE);
 
-		ArrayList<String> args = Lists.newArrayList(shell(),exe);
+		ArrayList<String> args = Lists.newArrayList(redisExe);
 		// 命令行指定端口
 		if(parameters.containsKey(PropName.port)){
-			args.add("--port " + parameters.get(PropName.port));
+			args.add("--port");
+			args.add(Integer.toString((Integer) parameters.get(PropName.port)));
 		}
 		// 命令行指定password
 		if(parameters.containsKey(PropName.password)){
-			args.add("--requirepass " + parameters.get(PropName.password));
+			args.add("--requirepass");
+			args.add((String) parameters.get(PropName.password));
 		}
 		try {
-			logger.info("start redis server(启动redis服务器)");
+			logger.info("start redis server(启动redis服务器) {}",MoreObjects.firstNonNull( parameters.get(PropName.port), Protocol.DEFAULT_PORT));
+			
 			String cmd = Joiner.on(' ').join(args);
 			logger.debug("cmd(启动命令): {}",cmd);
-			Runtime.getRuntime().exec(cmd);
+			return new ProcessBuilder(args)
+					.redirectError(Redirect.INHERIT)
+					.redirectOutput(Redirect.INHERIT)
+					.start();
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}	
 	}
 	/** 中止本地 redis 服务器*/
 	private static void  shutdownLocalServer(){
-		if(localServerStarted){
+		if(redisProcess != null){
 			logger.info("shutdown redis server(关闭redis服务器)");
 			HashMap<PropName, Object> param = JedisPoolLazy.initParameters(parameters);
 			Jedis jedis = new Jedis(JedisUtils.getCanonicalURI(param));
@@ -208,6 +214,8 @@ class RedisManagement implements ServiceConstant{
 			}finally{
 				jedis.close();
 			}
+			redisProcess = null;
+
 		}
 	}
 	/** 
@@ -249,7 +257,7 @@ class RedisManagement implements ServiceConstant{
 			}
 		}
 		try {
-			logger.info("start webredis server(启动webredis服务器)");
+			logger.info("start webredis server(启动webredis服务器) {}",MoreObjects.firstNonNull(parameters.get(WEBREDIS_PORT), DEFAULT_WEBREDIS_PORT));
 			String cmd = Joiner.on(' ').join(args);
 			logger.debug("cmd(启动命令): {}",cmd);
 			return new ProcessBuilder(args)
@@ -298,6 +306,7 @@ class RedisManagement implements ServiceConstant{
 								webredisProcess.exitValue();
 								break;
 							} catch (IllegalThreadStateException e) {
+								// 服务已启动状态下测试连接
 								if(NetworkUtil.testHttpConnectChecked(webredisURL, responseValidator)){
 									RedisManagement.webredisURL = webredisURL;
 									return;

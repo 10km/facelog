@@ -1,5 +1,10 @@
 package net.gdface.facelog.client.location;
 
+/**
+ * facelog连接异常
+ * @author guyadong
+ *
+ */
 public class FaceLogConnectException extends Exception {
 
 	private static final long serialVersionUID = 1L;

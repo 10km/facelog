@@ -91,7 +91,8 @@ public class SubAdapters implements ChannelConstant{
 #end
 #end###foreach($tableName in $tableNames)
 #subscriberDef(['fl_person','fl_device','fl_feature'] false 'Pubsub' ['Insert'])
-#subscriberDef(['fl_person','fl_device','fl_feature'] true  'Pubsub' ['Update','Delete'])
+#subscriberDef(['fl_person','fl_device'] true  'Pubsub' ['Update','Delete'])
+#subscriberDef(['fl_feature'] true  'Pubsub' ['Delete'])
 #subscriberDef(['fl_person_group','fl_device_group'] false 'Pubsub' ['Insert'])
 #subscriberDef(['fl_person_group','fl_device_group'] true  'Pubsub' ['Update','Delete'])
 #subscriberDef(['fl_permit'] true 'Pubsub' ['Insert','Update','Delete'] )

@@ -5,6 +5,7 @@ import gu.dtalk.MenuItem;
 import gu.dtalk.OptionBuilder;
 import gu.dtalk.OptionType;
 import gu.dtalk.RootMenu;
+import gu.dtalk.StringOption;
 import gu.dtalk.SwitchOption;
 import gu.dtalk.event.ValueChangeEvent;
 import gu.dtalk.event.ValueListener;
@@ -18,6 +19,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.base.MoreObjects;
+import com.google.common.base.Strings;
 import com.google.common.base.Supplier;
 
 import static com.google.common.base.Preconditions.*;
@@ -49,12 +51,16 @@ public class FacelogMenu extends RootMenu{
 	public static final String CMD_PERSON_MSG = "personMessage";
 	/** 对图像检测人脸提取人脸特征 */
 	public static final String CMD_FEATURE = "feature";
-
+	/** 算法授权 */
+	public static final String CMD_LICENSE = "license";
 	/** 基本命令所在菜单名 */
 	private static final String MENU_CMD = "cmd";
 	/* 扩展命令所在菜单名 */
 	private static final String MENU_CMD_EXT = "cmdext";
 	public static final String OPTION__DEVICE_STATUS = "/device/status";
+	
+	public static final String OPTION_FACELOG_HOST = "/facelog/host";
+	public static final String OPTION_FACELOG_PORT = "/facelog/port";
 	/* 单实例 */
 	private static volatile FacelogMenu activeInstance;
 	/* 连接配置参数 */
@@ -102,8 +108,11 @@ public class FacelogMenu extends RootMenu{
 						OptionType.IP.builder().name("IP").uiName("IP地址").readonly(true).instance().setValue(ip),
 						OptionType.MAC.builder().name("mac").uiName("物理地址").readonly(true).instance().setValue(mac).setReadOnly(true),
 						OptionType.STRING.builder().name("gps").uiName("位置(GPS)").readonly(true).instance(),
-						OptionType.PASSWORD.builder().name("password").uiName("连接密码").instance().setValue(DEVINFO_PROVIDER.getPassword()),
+						OptionBuilder.builder(StringOption.class).name("password").uiName("连接密码").instance().setValue(DEVINFO_PROVIDER.getPassword())
+								/** 添加侦听器，当password修改时保存 */
+								.addListener(new PasswordChangeListener()),
 						OptionType.STRING.builder().name("version").uiName("版本号").readonly(true).instance().setValue("unknow"),
+						OptionType.STRING.builder().name("sdkVersion").uiName("SDK版本号").readonly(true).instance().setValue("unknow"),
 						OptionBuilder.builder(IntOption.class).name("status").uiName("当前设备状态").readonly(true).value(0).hide().instance()
 								/** 添加侦听器，当设备状态值改变时同步修改心跳包的状态值 */
 								.addListener(new StatusListener()),
@@ -114,8 +123,8 @@ public class FacelogMenu extends RootMenu{
 				.name("facelog")
 				.uiName("facelog 服务器")
 				.addChilds(
-						OptionType.STRING.builder().name("host").uiName("主机名称").instance().setValue(config.getHost()),
-						OptionType.INTEGER.builder().name("port").uiName("端口号,<=0使用默认值").instance().setValue(config.getPort()))
+						OptionType.STRING.builder().name("host").uiName("主机名称").instance(),
+						OptionType.INTEGER.builder().name("port").uiName("端口号,<=0使用默认值").instance())
 				.instance();
 
 		commands = 
@@ -161,6 +170,11 @@ public class FacelogMenu extends RootMenu{
 								).instance(),
 						ItemBuilder.builder(CmdItem.class).name(CMD_FEATURE).uiName("提取人脸特征").hide().addChilds(
 								OptionType.IMAGE.builder().name("image").uiName("人脸图像").required().instance()
+								).instance(),
+						ItemBuilder.builder(CmdItem.class).name(CMD_LICENSE).uiName("人脸识别算法授权").addChilds(
+								OptionType.STRING.builder().name("sdkVersion").uiName("算法类型").required().instance(),
+								OptionType.STRING.builder().name("licenseKey").uiName("授权关键字").required().instance(),
+								OptionType.STRING.builder().name("licenseCode").uiName("授权码").instance()
 								).instance()
 						)
 				.instance();
@@ -171,7 +185,27 @@ public class FacelogMenu extends RootMenu{
 					.instance();
 		addChilds(device,facelog,commands,cmdext);
 		registerSetStatusAdapter(new CmdSetStatusAdapter(this));
+		if(config != null){
+			setFacelogLocation(config.getHost(),config.getPort());
+		}
 		return this;
+	}
+	
+	/**
+	 * 设置facelog服务器位置
+	 * @param host 主机名
+	 * @param port 端口号
+	 * @return 当前{@link FacelogMenu}对象
+	 */
+	public FacelogMenu setFacelogLocation(String host,Integer port){
+		if(Strings.isNullOrEmpty(host)){
+			findStringOption(OPTION_FACELOG_HOST).setValue(host);
+		}
+		if(port != null && port > 0 ){
+			findIntOption(OPTION_FACELOG_PORT).setValue(port);
+		}
+		return this;
+		
 	}
 	public FacelogMenu register(ValueListener<Object> listener){
 		listener.registerTo(this);
@@ -422,4 +456,18 @@ public class FacelogMenu extends RootMenu{
 			}
 		}
 	}
+	/**
+	 * 当密码修改时保存密码
+	 * @author guyadong
+	 *
+	 */
+	private class PasswordChangeListener extends ValueListener<String>{
+
+		private PasswordChangeListener() {
+		}
+
+		@Override
+		protected void doUpdate(ValueChangeEvent<BaseOption<String>> event) {
+			DEVINFO_PROVIDER.savePassword(event.option().getValue());
+		}}
 }

@@ -1,6 +1,5 @@
 package net.gdface.facelog.client;
 
-import java.lang.reflect.Proxy;
 import java.net.URI;
 import java.net.URL;
 import java.util.List;
@@ -19,22 +18,12 @@ import net.gdface.facelog.hb.DeviceHeartbeatListener;
 import net.gdface.facelog.hb.DeviceHeartbeat;
 import net.gdface.facelog.hb.HeartbeatMonitor;
 import net.gdface.facelog.hb.ServiceHeartbeatListener;
-import net.gdface.facelog.thrift.IFaceLogThriftClient;
-import net.gdface.utils.Delegator;
 
 public class IFaceLogClient extends IFaceLogDecorator {
 	public final ClientExtendTools clientTools;
 	public IFaceLogClient(IFaceLog delegate) {
-		super(delegate);		
-		clientTools = new ClientExtendTools(unwrap(delegate,IFaceLogThriftClient.class));
-	}
-	private static <T>T unwrap(Object value,Class<T> clazz){
-		if(Proxy.isProxyClass(value.getClass())){
-			return unwrap(Proxy.getInvocationHandler(value),clazz);
-		}else if(value instanceof Delegator){
-			return unwrap(((Delegator<?>)value).delegate(),clazz);
-		}
-		return clazz.cast(value);
+		super(delegate);
+		clientTools = new ClientExtendTools(delegate);
 	}
 	/**
 	 * 如果{@code host}是本机地址则用facelog服务主机名替换

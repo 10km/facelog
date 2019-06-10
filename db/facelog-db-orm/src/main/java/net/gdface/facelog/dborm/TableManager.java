@@ -436,17 +436,6 @@ public interface TableManager<B extends BaseBean<B>> extends Constant {
                     return saveCollection(bean , args );
                 }});
         }
-        
-        @Override
-        public void runAsTransaction(final Runnable fun)throws DaoException{
-            this.runAsTransaction(new Callable<Object>() {
-                @Override
-                public Object call() throws Exception {
-                    fun.run();
-                    return null;
-                }
-            });
-        }
     }    
 
     /**
@@ -1048,13 +1037,13 @@ public interface TableManager<B extends BaseBean<B>> extends Constant {
      * Retrieves a list of B bean using the index specified by keyIndex.
      * @param keyIndex valid values: <br>
      *        for fl_device table<br>
-     *        {@link Constant#FL_DEVICE_INDEX_MAC},{@link Constant#FL_DEVICE_INDEX_SERIAL_NO},{@link Constant#FL_DEVICE_INDEX_GROUP_ID},{@link Constant#FL_DEVICE_INDEX_SDK_VERSION}<br>     
+     *        {@link Constant#FL_DEVICE_INDEX_MAC},{@link Constant#FL_DEVICE_INDEX_SERIAL_NO},{@link Constant#FL_DEVICE_INDEX_GROUP_ID}<br>     
      *        for fl_device_group table<br>
      *        {@link Constant#FL_DEVICE_GROUP_INDEX_PARENT}<br>     
      *        for fl_face table<br>
      *        {@link Constant#FL_FACE_INDEX_FEATURE_MD5},{@link Constant#FL_FACE_INDEX_IMAGE_MD5}<br>     
      *        for fl_feature table<br>
-     *        {@link Constant#FL_FEATURE_INDEX_PERSON_ID},{@link Constant#FL_FEATURE_INDEX_SDK_VERSION}<br>     
+     *        {@link Constant#FL_FEATURE_INDEX_VERSION},{@link Constant#FL_FEATURE_INDEX_PERSON_ID}<br>     
      *        for fl_image table<br>
      *        {@link Constant#FL_IMAGE_INDEX_DEVICE_ID}<br>     
      *        for fl_log table<br>

@@ -12,13 +12,13 @@ public interface CommonConstant {
     /** 默认服务端口号 */
     public static final int DEFAULT_PORT = 26411;
     /** 默认XHR(XML Http Request)服务端口号 */
-    public static final int DEFAULT_PORT_XHR = 36411;
-    /** 默认XHR(XML Http Request)服务端口号 */
-    public static final int DEFAULT_PORT_RESTFUL = 46411;
+    public static final int DEFAULT_PORT_XHR = 26412;
+    /** 默认RESTful服务端口号 */
+    public static final int DEFAULT_PORT_RESTFUL = 26413;
     /** 默认webredis主机名 */
     public static final String DEFAULT_WEBREDIS_HOST = "locahost";
     /** 默认webredis服务端口号 */
-    public static final int DEFAULT_WEBREDIS_PORT = 16379;
+    public static final int DEFAULT_WEBREDIS_PORT = 26415;
     /** 默认心跳包间隔(秒) */
     public static final int DEFAULT_HEARTBEAT_PERIOD = 8;
     /** 默认心跳包失效时间(秒) */
@@ -32,11 +32,26 @@ public interface CommonConstant {
     /** 超级管理员用户名 */
     public static final String ROOT_NAME = "root";
     
+    /** ISO8601时间格式 */
+    public static final String ISO8601_FORMATTER_STR = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+    
     /** 用于SQL语句的时间戳格式转换格式 */
     public static final String TIMESTAMP_FORMATTER_STR = "yyyy-MM-dd HH:mm:ss";
     
+    /** 时间转换格式 */
+    public static final String DATE_FORMATTER_STR = "yyyy-MM-dd";
+    
     /** 用于验证sdk_version格式的正则表达式 */
     public static final String SDK_VERSION_REGEX = "[\\w\\.\\-]+";
+    
+    /** 每用户每个SDK版本允许建模最大数量默认值 */
+    public static final int DEFAULT_FEATURE_PERSON_LIMIT = 1;
+    
+    /** 特征参数配置前缀 */
+    public static final String FEATURE_PREFIX = "feature";
+    
+    /** 特征参数配置LIMIT前缀 */
+    public static final String FEATURE_PERSON_LIMIT_PREFIX = "feature.person.limit.";
     
     /**
      * 服务异常类型定义
@@ -143,8 +158,8 @@ public interface CommonConstant {
     /** 设备心跳包失效时间(秒) */
     public static final String HEARTBEAT_EXPIRE = "heartbeat.expire";
     
-    /** REDIS 安装位置 */
-    public static final String REDIS_HOME = "redis.home";
+    /** REDIS SERVER 可执行程序路径 */
+    public static final String REDIS_EXE = "redis.exe";
     
     /** REDIS 没启动时是否等待 */
     public static final String REDIS_WAITIFABSENT = "redis.waitIfAbsent";
@@ -217,7 +232,16 @@ public interface CommonConstant {
     
     /** RESTful web服务参数配置:是否显示在线swagger文档,默认值{@code true} */
     public static final String RESTFUL_SWAGGER_ENABLE = "restful.swaggerEnable";
-    
+
+    /** 特征参数配置:允许的SDK版本号(白名单),逗号分隔 */
+    public static final String FEATURE_SDKVERSION_WHITELIST = "feature.sdkVersion.whitelist";
+
+    /** 特征参数配置:启动特征码自动更新机制:当用户已经有特征码达到最大值时，再次添加特征将替换原有特征中最旧的 */
+    public static final String FEATURE_PERSON_UPDATE_AUTO = "feature.person.update.auto";
+
+    /** 特征参数配置:每用户每个SDK版本允许建模最大数量默认值 */
+    public static final String FEATURE_PERSON_LIMIT_DEFAULT = "feature.person.limit.default";
+
     /** 操作员对person表允许的操作 */
     public static final String SECURITY_OPERATOR_TABLE_PERSON_ALLOW = "security.operator.table.person.allow";
     

@@ -33,8 +33,8 @@ public  class FlFeatureBean
     /** comments:主键,特征码md5校验码 */
     private String md5;
 
-    /** comments:(特征码)算法版本号,用于区分不同人脸识别算法生成的特征数据(允许字母,数字,-,.,_符号) */
-    private String sdkVersion;
+    /** comments:特征码(算法)版本号,用于区分不同人脸识别算法生成的特征数据(允许字母,数字,-,.,_符号) */
+    private String version;
 
     /** comments:外键,所属用户id */
     private Integer personId;
@@ -212,61 +212,61 @@ public  class FlFeatureBean
         return 0L !=  (initialized & FL_FEATURE_ID_MD5_MASK);
     }
     /**
-     * Getter method for {@link #sdkVersion}.<br>
+     * Getter method for {@link #version}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_feature.sdk_version</li>
-     * <li>comments: (特征码)算法版本号,用于区分不同人脸识别算法生成的特征数据(允许字母,数字,-,.,_符号)</li>
+     * <li>full name: fl_feature.version</li>
+     * <li>comments: 特征码(算法)版本号,用于区分不同人脸识别算法生成的特征数据(允许字母,数字,-,.,_符号)</li>
      * <li>NOT NULL</li>
      * <li>column size: 32</li>
-     * <li>JDBC type returned by the driver: Types.CHAR</li>
+     * <li>JDBC type returned by the driver: Types.VARCHAR</li>
      * </ul>
      *
-     * @return the value of sdkVersion
+     * @return the value of version
      */
-    public String getSdkVersion(){
-        return sdkVersion;
+    public String getVersion(){
+        return version;
     }
     /**
-     * Setter method for {@link #sdkVersion}.<br>
+     * Setter method for {@link #version}.<br>
      * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value( NOT NULL) to be assigned to sdkVersion
+     * @param newVal the new value( NOT NULL) to be assigned to version
      */
-    public void setSdkVersion(String newVal)
+    public void setVersion(String newVal)
     {
         checkMutable();
 
-        modified |= FL_FEATURE_ID_SDK_VERSION_MASK;
-        initialized |= FL_FEATURE_ID_SDK_VERSION_MASK;
+        modified |= FL_FEATURE_ID_VERSION_MASK;
+        initialized |= FL_FEATURE_ID_VERSION_MASK;
 
-        if (Objects.equals(newVal, sdkVersion)) {
+        if (Objects.equals(newVal, version)) {
             return;
         }
-        sdkVersion = newVal;
+        version = newVal;
     }
     /**
-     * Determines if the sdkVersion has been modified.
+     * Determines if the version has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean checkSdkVersionModified()
+    public boolean checkVersionModified()
     {
-        return 0L !=  (modified & FL_FEATURE_ID_SDK_VERSION_MASK);
+        return 0L !=  (modified & FL_FEATURE_ID_VERSION_MASK);
     }
 
     /**
-     * Determines if the sdkVersion has been initialized.<br>
+     * Determines if the version has been initialized.<br>
      *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean checkSdkVersionInitialized()
+    public boolean checkVersionInitialized()
     {
-        return 0L !=  (initialized & FL_FEATURE_ID_SDK_VERSION_MASK);
+        return 0L !=  (initialized & FL_FEATURE_ID_VERSION_MASK);
     }
     /**
      * Getter method for {@link #personId}.<br>
@@ -481,8 +481,8 @@ public  class FlFeatureBean
         switch ( columnID ){
         case FL_FEATURE_ID_MD5:
             return checkMd5Modified();
-        case FL_FEATURE_ID_SDK_VERSION:
-            return checkSdkVersionModified();
+        case FL_FEATURE_ID_VERSION:
+            return checkVersionModified();
         case FL_FEATURE_ID_PERSON_ID:
             return checkPersonIdModified();
         case FL_FEATURE_ID_FEATURE:
@@ -499,8 +499,8 @@ public  class FlFeatureBean
         switch(columnID) {
         case FL_FEATURE_ID_MD5:
             return checkMd5Initialized();
-        case FL_FEATURE_ID_SDK_VERSION:
-            return checkSdkVersionInitialized();
+        case FL_FEATURE_ID_VERSION:
+            return checkVersionInitialized();
         case FL_FEATURE_ID_PERSON_ID:
             return checkPersonIdInitialized();
         case FL_FEATURE_ID_FEATURE:
@@ -539,7 +539,7 @@ public  class FlFeatureBean
      */
     public void resetModifiedExceptPrimaryKeys()
     {
-        modified &= (~(FL_FEATURE_ID_SDK_VERSION_MASK |
+        modified &= (~(FL_FEATURE_ID_VERSION_MASK |
             FL_FEATURE_ID_PERSON_ID_MASK |
             FL_FEATURE_ID_FEATURE_MASK |
             FL_FEATURE_ID_UPDATE_TIME_MASK));
@@ -555,7 +555,7 @@ public  class FlFeatureBean
     public void reset(){
         checkMutable();
         this.md5 = null;
-        this.sdkVersion = null;
+        this.version = null;
         this.personId = null;
         this.feature = null;
         /* DEFAULT:'CURRENT_TIMESTAMP'*/
@@ -574,7 +574,7 @@ public  class FlFeatureBean
         FlFeatureBean obj = (FlFeatureBean) object;
         return new EqualsBuilder()
             .append(getMd5(), obj.getMd5())
-            .append(getSdkVersion(), obj.getSdkVersion())
+            .append(getVersion(), obj.getVersion())
             .append(getPersonId(), obj.getPersonId())
             .append(getFeature(), obj.getFeature())
             .append(getUpdateTime(), obj.getUpdateTime())
@@ -651,13 +651,13 @@ public  class FlFeatureBean
                 append(builder,fullIfStringOrBytes,getMd5());
             }
         }
-        if(checkSdkVersionInitialized()){
-            if(!notNull || null != getSdkVersion()){
+        if(checkVersionInitialized()){
+            if(!notNull || null != getVersion()){
                 if(count++ >0){
                     builder.append(",");
                 }
-                builder.append("sdk_version=");
-                append(builder,fullIfStringOrBytes,getSdkVersion());
+                builder.append("version=");
+                append(builder,fullIfStringOrBytes,getVersion());
             }
         }
         if(checkPersonIdInitialized()){
@@ -694,7 +694,7 @@ public  class FlFeatureBean
     public int compareTo(FlFeatureBean object){
         return new CompareToBuilder()
             .append(getMd5(), object.getMd5())
-            .append(getSdkVersion(), object.getSdkVersion())
+            .append(getVersion(), object.getVersion())
             .append(getPersonId(), object.getPersonId())
             .append(getFeature(), object.getFeature())
             .append(getUpdateTime(), object.getUpdateTime())
@@ -719,7 +719,7 @@ public  class FlFeatureBean
         checkMutable();
         
         setMd5((String)null);
-        setSdkVersion((String)null);
+        setVersion((String)null);
         setPersonId((Integer)null);
         setFeature((java.nio.ByteBuffer)null);
         setUpdateTime((java.util.Date)null);
@@ -814,8 +814,8 @@ public  class FlFeatureBean
         switch( columnID ){
         case FL_FEATURE_ID_MD5: 
             return (T)getMd5();        
-        case FL_FEATURE_ID_SDK_VERSION: 
-            return (T)getSdkVersion();        
+        case FL_FEATURE_ID_VERSION: 
+            return (T)getVersion();        
         case FL_FEATURE_ID_PERSON_ID: 
             return (T)getPersonId();        
         case FL_FEATURE_ID_FEATURE: 
@@ -834,8 +834,8 @@ public  class FlFeatureBean
         case FL_FEATURE_ID_MD5:
             setMd5((String)value);
             break;
-        case FL_FEATURE_ID_SDK_VERSION:
-            setSdkVersion((String)value);
+        case FL_FEATURE_ID_VERSION:
+            setVersion((String)value);
             break;
         case FL_FEATURE_ID_PERSON_ID:
             setPersonId((Integer)value);
@@ -920,13 +920,13 @@ public  class FlFeatureBean
             return this;
         }
         /** 
-         * fill the field : fl_feature.sdk_version
-         * @param sdkVersion (特征码)算法版本号,用于区分不同人脸识别算法生成的特征数据(允许字母,数字,-,.,_符号)
-         * @see FlFeatureBean#getSdkVersion()
-         * @see FlFeatureBean#setSdkVersion(String)
+         * fill the field : fl_feature.version
+         * @param version 特征码(算法)版本号,用于区分不同人脸识别算法生成的特征数据(允许字母,数字,-,.,_符号)
+         * @see FlFeatureBean#getVersion()
+         * @see FlFeatureBean#setVersion(String)
          */
-        public Builder sdkVersion(String sdkVersion){
-            TEMPLATE.get().setSdkVersion(sdkVersion);
+        public Builder version(String version){
+            TEMPLATE.get().setVersion(version);
             return this;
         }
         /** 

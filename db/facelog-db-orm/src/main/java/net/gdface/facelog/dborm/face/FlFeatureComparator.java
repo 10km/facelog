@@ -38,7 +38,7 @@ public class FlFeatureComparator implements Comparator<FlFeatureBean>,Constant
      * Possible values are:
      * <ul>
      *   <li>{@link Constant#FL_FEATURE_ID_MD5}
-     *   <li>{@link Constant#FL_FEATURE_ID_SDK_VERSION}
+     *   <li>{@link Constant#FL_FEATURE_ID_VERSION}
      *   <li>{@link Constant#FL_FEATURE_ID_PERSON_ID}
      *   <li>{@link Constant#FL_FEATURE_ID_FEATURE}
      *   <li>{@link Constant#FL_FEATURE_ID_UPDATE_TIME}
@@ -61,7 +61,7 @@ public class FlFeatureComparator implements Comparator<FlFeatureBean>,Constant
      * Possible values are:
      * <ul>
      *   <li>{@link Constant#FL_FEATURE_ID_MD5})
-     *   <li>{@link Constant#FL_FEATURE_ID_SDK_VERSION})
+     *   <li>{@link Constant#FL_FEATURE_ID_VERSION})
      *   <li>{@link Constant#FL_FEATURE_ID_PERSON_ID})
      *   <li>{@link Constant#FL_FEATURE_ID_FEATURE})
      *   <li>{@link Constant#FL_FEATURE_ID_UPDATE_TIME})
@@ -92,15 +92,15 @@ public class FlFeatureComparator implements Comparator<FlFeatureBean>,Constant
                     iReturn = b1.getMd5().compareTo(b2.getMd5());
                 }
                 break;
-            case FL_FEATURE_ID_SDK_VERSION:
-                if (b1.getSdkVersion() == null && b2.getSdkVersion() != null) {
+            case FL_FEATURE_ID_VERSION:
+                if (b1.getVersion() == null && b2.getVersion() != null) {
                     iReturn = -1;
-                } else if (b1.getSdkVersion() == null && b2.getSdkVersion() == null) {
+                } else if (b1.getVersion() == null && b2.getVersion() == null) {
                     iReturn = 0;
-                } else if (b1.getSdkVersion() != null && b2.getSdkVersion() == null) {
+                } else if (b1.getVersion() != null && b2.getVersion() == null) {
                     iReturn = 1;
                 } else {
-                    iReturn = b1.getSdkVersion().compareTo(b2.getSdkVersion());
+                    iReturn = b1.getVersion().compareTo(b2.getVersion());
                 }
                 break;
             case FL_FEATURE_ID_PERSON_ID:

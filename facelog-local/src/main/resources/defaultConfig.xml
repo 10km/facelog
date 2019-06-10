@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-	<root>
+	<root description="root参数配置">
 		<password description="root帐户密码">root</password>
 	</root>
 	<token description ="令牌(安全)管理参数">
 		<!-- <salt description ="用于password加密的salt,必须是32MD5字符串(小写)">48c22d7ad7cd2a2166a6f818b6d7ab3e</salt> -->
-		<salt description ="用于password加密的salt,创建系统时设定就不可再更改">6AE29B5A44C018611994DD453362F1C73208A84A2FE6D1FF49896AAC9C2B56C0</salt>
+		<salt hide="true" description ="用于password加密的salt,创建系统时设定就不可再更改">6AE29B5A44C018611994DD453362F1C73208A84A2FE6D1FF49896AAC9C2B56C0</salt>
 		<device>
 			<validate description="是否执行设备令牌验证">true</validate>
 		</device>
@@ -23,7 +23,7 @@
 			</ackChannel>
 		</cmd>
 	</token>
-	<server>
+	<server description="服务器参数配置">
 		<port description="服务端口号">26411</port>
 		<connectiontLimit description="最大连接数"></connectiontLimit>
 		<idleConnectionTimeout description="空闲连接超时[秒]"></idleConnectionTimeout>
@@ -36,7 +36,7 @@
 	</heartbeat>
 
 	<redis description = "redis 参数配置">
-		<home description="redis 安装位置"></home>
+		<exe description="redis server 可执行程序路径"></exe>
 		<waitIfAbsent description="redis 没启动时是否等待"></waitIfAbsent>
 		<tryCount description="redis 等待重试次数">10</tryCount>
 		<tryInterval description="redis 等待重试间隔(毫秒)">2000</tryInterval>
@@ -50,13 +50,13 @@
 			<maxTotal description="jedis pool 最大线程数"></maxTotal>
 		</pool>
 	</redis>
-	<nodejs>
+	<nodejs description="NODE.js运行参数">
 		<exe description="node可执行程序路径"></exe>
 	</nodejs>
 	<webredis description="webredis参数配置">
 		<file description="webredis 启动脚本路径"></file>
 		<host description="webredis主机名,为非本机名('localhost','127.0.0.1')时,不执行本地webredis启动">localhost</host>
-		<port description="webredis服务端口">16379</port>
+		<port description="webredis服务端口"></port>
 		<rhost description="redis 主机名">${redis.host}</rhost>
 		<rport description="redis 端口">${redis.port}</rport>
 		<rauth description="redis 密码">${redis.password}</rauth>
@@ -65,30 +65,46 @@
 	</webredis>
 	<xhr description="XHR(XML HTTP Request)服务参数配置">
 		<start description="XHR服务端是否启动">true</start>
-		<port description="XHR服务端口">36411</port>
+		<port description="XHR服务端口"></port>
 	</xhr>
 	<restful description="RESTful web服务参数配置">
 		<start description="RESTful 服务端是否启动">true</start>
-		<port description="RESTful服务端口">46411</port>
+		<port description="RESTful服务端口"></port>
 		<swaggerEnable description="是否显示在线swagger文档">true</swaggerEnable>
 	</restful>
+	<feature description="特征参数配置">
+		<sdkVersion description="SDK版本号">
+			<whitelist description="允许的SDK版本号(白名单),逗号分隔">MTFSDKARM512,CASSDKARM4096,GFIR10472</whitelist>
+		</sdkVersion>
+		<person>
+			<update >
+				<auto description="启动特征码自动更新机制:当用户已经有特征码达到最大值时，再次添加特征将替换原有特征中最旧的">true</auto>
+			</update>
+			<limit>
+				<default description="每用户允每个SDK版本许建模最大数量默认值">4</default>
+				<MTFSDKARM512 description="MTFSDK1特征每用户允许建模最大数量">${feature.person.limit.default}</MTFSDKARM512>
+				<CASSDKARM4096 description="CASSDKARM4096特征每用户允许建模最大数量">${feature.person.limit.default}</CASSDKARM4096>
+				<GFIR10472 description="GFIR10472特征每用户允许建模最大数量">${feature.person.limit.default}</GFIR10472>
+			</limit>
+		</person>
+	</feature>
 	<database description="数据库参数配置">
 		<isDebug description="是否为调试状态">false</isDebug>
 		<jdbc>
 			<!-- JDBC驱动类名,目前只支持mysql,不要修改 -->
-			<driver description="JDBC driver class name"></driver>
+			<driver description="JDBC driver class name" hide="true"></driver>
 			<host description="数据库服务器地址">localhost</host>
 			<port description="数据库服务器端口">3306</port>
 			<schema description="数据库schema">test</schema>
 			<encoding description="数据库字符编码方式">utf8</encoding>
 			<!-- 数据库连接url,目前只支持mysql,不要修改 -->
-			<url description="数据库连接URL">jdbc:mysql://${database.jdbc.host}:${database.jdbc.port}/${database.jdbc.schema}?characterEncoding=${database.jdbc.encoding}
+			<url description="数据库连接URL" hide="true">jdbc:mysql://${database.jdbc.host}:${database.jdbc.port}/${database.jdbc.schema}?characterEncoding=${database.jdbc.encoding}
 			</url>
 			<username description="数据库访问用户名">root</username>
 			<password description="数据库访问密码"></password>
 		</jdbc>
 		<!-- 前只支持c3p0，不要修改 -->
-		<datasource description="数据源类型">c3p0</datasource>
+		<datasource description="数据源类型" hide="true">c3p0</datasource>
 		<c3p0>
 			<minPoolSize description="c3p0 property:连接池保持的最小连接数"></minPoolSize>
 			<maxPoolSize description="c3p0 property:连接池中拥有的最大连接数"></maxPoolSize>
@@ -96,7 +112,7 @@
 			<idleConnectionTestPeriod description="c3p0 property:测试空闲连接的间隔时间"></idleConnectionTestPeriod>
 		</c3p0>
 	</database>
-	<security>
+	<security hide="true" description="数据库表操作权限配置">
 		<operator>
 			<table>
 				<person>
@@ -139,11 +155,11 @@
 			<maximumPoolSize description="最大线程数量">128</maximumPoolSize>
 			<keepAliveTime description="空闲线程保留时间(秒)">60</keepAliveTime>
 			<queueCapacity description="任务队列容量">1024</queueCapacity>
-			<nameFormat description="线程命名格式">cached-pool-%d</nameFormat>
+			<nameFormat readonly="true" description="线程命名格式">cached-pool-%d</nameFormat>
 		</cachedPool>
 		<timerPool description="定时任务线程池配置">
 			<corePoolSize description="线程数量,默认值:1">1</corePoolSize>
-			<nameFormat description="线程命名格式">timer-pool-%d</nameFormat>
+			<nameFormat readonly="true" description="线程命名格式">timer-pool-%d</nameFormat>
 		</timerPool>
 	</executor>
 	<syslog description ="系统日志配置">

@@ -734,6 +734,14 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
                 dirtyCount++;
             }
 
+            if (bean.checkScheduleModified()) {
+                if (dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("schedule");
+                dirtyCount++;
+            }
+
             if (bean.checkRemarkModified()) {
                 if (dirtyCount>0) {
                     sql.append(",");
@@ -846,6 +854,15 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
                     useComma=true;
                 }
                 sql.append("person_group_id=?");
+            }
+
+            if (bean.checkScheduleModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("schedule=?");
             }
 
             if (bean.checkRemarkModified()) {
@@ -1194,6 +1211,14 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("person_group_id = ?");
                 }
             }
+            if (bean.checkScheduleModified()) {
+                dirtyCount ++;
+                if (bean.getSchedule() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("schedule IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("schedule ").append(sqlEqualsOperation).append("?");
+                }
+            }
             if (bean.checkRemarkModified()) {
                 dirtyCount ++;
                 if (bean.getRemark() == null) {
@@ -1258,6 +1283,28 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
             if (bean.checkPersonGroupIdModified()) {
                 // System.out.println("Setting for " + dirtyCount + " [" + bean.getPersonGroupId() + "]");
                 if (bean.getPersonGroupId() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.INTEGER);} } else { Manager.setInteger(ps, ++dirtyCount, bean.getPersonGroupId()); }
+            }
+            if (bean.checkScheduleModified()) {
+                switch (searchType) {
+                    case SEARCH_EXACT:
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getSchedule() + "]");
+                        if (bean.getSchedule() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getSchedule()); }
+                        break;
+                    case SEARCH_LIKE:
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getSchedule() + "%]");
+                        if ( bean.getSchedule()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getSchedule() + SQL_LIKE_WILDCARD); }
+                        break;
+                    case SEARCH_STARTING_LIKE:
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getSchedule() + "]");
+                        if ( bean.getSchedule() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getSchedule()); }
+                        break;
+                    case SEARCH_ENDING_LIKE:
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getSchedule() + "%]");
+                        if (bean.getSchedule()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getSchedule() + SQL_LIKE_WILDCARD); }
+                        break;
+                    default:
+                        throw new DaoException("Unknown search type " + searchType);
+                }
             }
             if (bean.checkRemarkModified()) {
                 switch (searchType) {
@@ -1430,10 +1477,11 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
         {
             bean.setDeviceGroupId(Manager.getInteger(rs, 1));
             bean.setPersonGroupId(Manager.getInteger(rs, 2));
-            bean.setRemark(rs.getString(3));
-            bean.setExtBin(Manager.getBytes(rs, 4));
-            bean.setExtTxt(rs.getString(5));
-            bean.setCreateTime(rs.getTimestamp(6));
+            bean.setSchedule(rs.getString(3));
+            bean.setRemark(rs.getString(4));
+            bean.setExtBin(Manager.getBytes(rs, 5));
+            bean.setExtTxt(rs.getString(6));
+            bean.setCreateTime(rs.getTimestamp(7));
         }
         catch(SQLException e)
         {
@@ -1473,6 +1521,10 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
                     case FL_PERMIT_ID_PERSON_GROUP_ID:
                         ++pos;
                         bean.setPersonGroupId(Manager.getInteger(rs, pos));
+                        break;
+                    case FL_PERMIT_ID_SCHEDULE:
+                        ++pos;
+                        bean.setSchedule(rs.getString(pos));
                         break;
                     case FL_PERMIT_ID_REMARK:
                         ++pos;
@@ -1520,6 +1572,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
         {
             bean.setDeviceGroupId(Manager.getInteger(rs, "device_group_id"));
             bean.setPersonGroupId(Manager.getInteger(rs, "person_group_id"));
+            bean.setSchedule(rs.getString("schedule"));
             bean.setRemark(rs.getString("remark"));
             bean.setExtBin(Manager.getBytes(rs, "ext_bin"));
             bean.setExtTxt(rs.getString("ext_txt"));
@@ -1860,9 +1913,13 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
     }
    
     @Override
-
     public <T>T runAsTransaction(Callable<T> fun) throws DaoException{
-        return Manager.getInstance().runAsTransaction(fun);
+        return Manager.getInstance().runAsTransaction(fun,TableListener.ListenerContainer.TRANSACTION_LISTENER);
+    }
+    
+    @Override
+    public void runAsTransaction(Runnable fun) throws DaoException{
+        Manager.getInstance().runAsTransaction(fun,TableListener.ListenerContainer.TRANSACTION_LISTENER);
     }
     
     class DeleteBeanAction extends Action.BaseAdapter<FlPermitBean>{

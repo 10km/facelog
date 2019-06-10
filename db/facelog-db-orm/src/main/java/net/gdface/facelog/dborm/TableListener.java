@@ -8,6 +8,7 @@
 package net.gdface.facelog.dborm;
 
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.Set;
 import java.util.concurrent.Executor;
 
@@ -108,16 +109,19 @@ public interface TableListener<B>{
     public void done()throws DaoException;
 
     /**
-     * listener event
+     * listener event:<br>
      * {@code INSERT} insert a bean<br>
      * {@code UPDATE} update a bean<br>
      * {@code DELETE} delete a bean<br>
+     * {@code UPDATE_BEFORE} before updating a bean<br>
      * @author guyadong
      *
      */
-    public static enum Event{
-        /** insert a bean */
-        INSERT,UPDATE,DELETE;
+    public static enum Event{        
+        /** insert a bean */INSERT,
+        /** update a bean */UPDATE,
+        /** delete a bean */DELETE,
+        /** before updating a bean */UPDATE_BEFORE,;
         /**
          * fire current event by  {@link ListenerContainer}
          * @param container
@@ -138,6 +142,9 @@ public interface TableListener<B>{
             case DELETE:
                 container.afterDelete(bean);
                 break;
+            case UPDATE_BEFORE:
+                container.beforeUpdate(bean);
+                break;
             default:
                 break;
             }
@@ -155,9 +162,38 @@ public interface TableListener<B>{
      */
     public static class ListenerContainer <B> implements TableListener<B> {
         private final Set<TableListener<B>> listeners = new LinkedHashSet<TableListener<B>>(16);
+        private static final InheritableThreadLocal<LinkedList<Runnable>> commitTasks = new InheritableThreadLocal<>();
+        
+        public static final TransactionListener TRANSACTION_LISTENER = new TransactionListener() {
+
+            @Override
+            public void beginTransaction() {
+                commitTasks.set(new LinkedList<Runnable>());
+            }
+
+            @Override
+            public void endTransaction(boolean commit) {
+                if(commit){
+                    if(null == commitTasks.get()){
+                        throw new IllegalStateException("'beginTransaction' must be called firstly");
+                    }
+                    for (Runnable task : commitTasks.get()) {
+                        task.run();
+                    }
+                }
+                commitTasks.remove();
+            }
+        };
         public ListenerContainer() {
         }
     
+        private static void runTask(Runnable task){
+            if(commitTasks.get() != null){
+                commitTasks.get().add(task);
+            }else {
+                task.run();
+            }
+        }
         @Override
         public void beforeInsert(B bean)throws DaoException{
             synchronized (listeners) {
@@ -172,14 +208,21 @@ public interface TableListener<B>{
         }
     
         @Override
-        public void afterInsert(B bean)throws DaoException{
+        public void afterInsert(final B bean)throws DaoException{
             synchronized (listeners) {
-                for(TableListener<B> listener:listeners){
-                    try{
-                        listener.afterInsert(bean);
-                    }catch(Exception e){
-                        System.out.printf("afterInsert listener error:%s\n",e.getMessage());
-                    }
+                for(final TableListener<B> listener:listeners){
+                    runTask(new Runnable() {
+                        
+                        @Override
+                        public void run() {
+                            try{
+                                listener.afterInsert(bean);
+                            }catch(Exception e){
+                                System.out.printf("afterInsert listener error:%s\n",e.getMessage());
+                            }
+                        }
+                    });
+
                 }
             }
         }
@@ -198,14 +241,21 @@ public interface TableListener<B>{
         }
     
         @Override
-        public void afterUpdate(B bean)throws DaoException{
+        public void afterUpdate(final B bean)throws DaoException{
             synchronized (listeners) {
-                for(TableListener<B> listener:listeners){
-                    try{
-                        listener.afterUpdate(bean);
-                    }catch(Exception e){
-                        System.out.printf("afterUpdate listener error:%s\n",e.getMessage());
-                    }
+                for(final TableListener<B> listener:listeners){
+                    runTask(new Runnable() {
+                        
+                        @Override
+                        public void run() {
+                            try{
+                                listener.afterUpdate(bean);
+                            }catch(Exception e){
+                                System.out.printf("afterUpdate listener error:%s\n",e.getMessage());
+                            }
+                        }
+                    });
+
                 }
             }
         }
@@ -224,14 +274,21 @@ public interface TableListener<B>{
         }
     
         @Override
-        public void afterDelete(B bean)throws DaoException{
+        public void afterDelete(final B bean)throws DaoException{
             synchronized (listeners) {
-                for(TableListener<B> listener:listeners){
-                    try{
-                        listener.afterDelete(bean);
-                    }catch(Exception e){
-                        System.out.printf("afterDelete listener error:%s\n",e.getMessage());
-                    }
+                for(final TableListener<B> listener:listeners){
+                    runTask(new Runnable() {
+                        
+                        @Override
+                        public void run() {
+                            try{
+                                listener.afterDelete(bean);
+                            }catch(Exception e){
+                                System.out.printf("afterDelete listener error:%s\n",e.getMessage());
+                            }
+                        }
+                    });
+
                 }
             }
         }
@@ -411,6 +468,10 @@ public interface TableListener<B>{
                     }
                 }});
         }
+    }
+    public static interface TransactionListener{
+        public void beginTransaction();
+        public void endTransaction(boolean commit);
     }
 }
 

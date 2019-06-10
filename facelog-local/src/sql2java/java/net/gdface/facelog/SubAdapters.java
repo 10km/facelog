@@ -285,43 +285,6 @@ public class SubAdapters implements ChannelConstant{
         }
     }    
     /**
-     * 订阅 fl_feature 表的 Update 消息,当表数据变化时执行相应的业务逻辑
-     * @author guyadong
-     *
-     */
-    public static class BaseFeatureUpdateSubAdapter implements IMessageAdapter<FeatureBean>{
-        /** 订阅频道 */
-        protected final Channel<FeatureBean> channel = PUBSUB_FEATURE_UPDATE.asMutable().setAdapter(this);
-        /**
-         * 向{@code subscriber}注册,注册后才能收到订阅消息
-         * @param subscriber 
-         * @return
-         * @see RedisSubscriber#register(Channel...)
-         */
-        public BaseFeatureUpdateSubAdapter register(RedisSubscriber subscriber){
-            subscriber.register(channel);
-            return this;
-        }
-        /**
-         * 向{@code subscriber}注销订阅的频道,注销后不会再收到订阅消息
-         * @param subscriber 
-         * @return
-         * @see RedisSubscriber#unregister(Channel...)
-         */
-        public BaseFeatureUpdateSubAdapter unregister(RedisSubscriber subscriber){
-            subscriber.unregister(channel);
-            return this;
-        }
-        /** 
-         * 应用项目重写此方法实现业务逻辑 
-         * @param feature fl_feature 表记录
-         */
-        @Override
-        public void onSubscribe(FeatureBean feature) throws SmqUnsubscribeException {
-            // 实现业务逻辑
-        }
-    }    
-    /**
      * 订阅 fl_feature 表的 Delete 消息,当表数据变化时执行相应的业务逻辑
      * @author guyadong
      *

@@ -1227,6 +1227,14 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
                 dirtyCount++;
             }
 
+            if (bean.checkScheduleModified()) {
+                if (dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("schedule");
+                dirtyCount++;
+            }
+
             if (bean.checkRemarkModified()) {
                 if (dirtyCount>0) {
                     sql.append(",");
@@ -1391,6 +1399,15 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
                     useComma=true;
                 }
                 sql.append("root_group=?");
+            }
+
+            if (bean.checkScheduleModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("schedule=?");
             }
 
             if (bean.checkRemarkModified()) {
@@ -2010,6 +2027,14 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("root_group = ?");
                 }
             }
+            if (bean.checkScheduleModified()) {
+                dirtyCount ++;
+                if (bean.getSchedule() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("schedule IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("schedule ").append(sqlEqualsOperation).append("?");
+                }
+            }
             if (bean.checkRemarkModified()) {
                 dirtyCount ++;
                 if (bean.getRemark() == null) {
@@ -2112,6 +2137,28 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
             if (bean.checkRootGroupModified()) {
                 // System.out.println("Setting for " + dirtyCount + " [" + bean.getRootGroup() + "]");
                 if (bean.getRootGroup() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.INTEGER);} } else { Manager.setInteger(ps, ++dirtyCount, bean.getRootGroup()); }
+            }
+            if (bean.checkScheduleModified()) {
+                switch (searchType) {
+                    case SEARCH_EXACT:
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getSchedule() + "]");
+                        if (bean.getSchedule() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getSchedule()); }
+                        break;
+                    case SEARCH_LIKE:
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getSchedule() + "%]");
+                        if ( bean.getSchedule()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getSchedule() + SQL_LIKE_WILDCARD); }
+                        break;
+                    case SEARCH_STARTING_LIKE:
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getSchedule() + "]");
+                        if ( bean.getSchedule() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getSchedule()); }
+                        break;
+                    case SEARCH_ENDING_LIKE:
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getSchedule() + "%]");
+                        if (bean.getSchedule()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getSchedule() + SQL_LIKE_WILDCARD); }
+                        break;
+                    default:
+                        throw new DaoException("Unknown search type " + searchType);
+                }
             }
             if (bean.checkRemarkModified()) {
                 switch (searchType) {
@@ -2291,11 +2338,12 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
             bean.setLeaf(Manager.getInteger(rs, 3));
             bean.setParent(Manager.getInteger(rs, 4));
             bean.setRootGroup(Manager.getInteger(rs, 5));
-            bean.setRemark(rs.getString(6));
-            bean.setExtBin(Manager.getBytes(rs, 7));
-            bean.setExtTxt(rs.getString(8));
-            bean.setCreateTime(rs.getTimestamp(9));
-            bean.setUpdateTime(rs.getTimestamp(10));
+            bean.setSchedule(rs.getString(6));
+            bean.setRemark(rs.getString(7));
+            bean.setExtBin(Manager.getBytes(rs, 8));
+            bean.setExtTxt(rs.getString(9));
+            bean.setCreateTime(rs.getTimestamp(10));
+            bean.setUpdateTime(rs.getTimestamp(11));
         }
         catch(SQLException e)
         {
@@ -2347,6 +2395,10 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
                     case FL_DEVICE_GROUP_ID_ROOT_GROUP:
                         ++pos;
                         bean.setRootGroup(Manager.getInteger(rs, pos));
+                        break;
+                    case FL_DEVICE_GROUP_ID_SCHEDULE:
+                        ++pos;
+                        bean.setSchedule(rs.getString(pos));
                         break;
                     case FL_DEVICE_GROUP_ID_REMARK:
                         ++pos;
@@ -2401,6 +2453,7 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
             bean.setLeaf(Manager.getInteger(rs, "leaf"));
             bean.setParent(Manager.getInteger(rs, "parent"));
             bean.setRootGroup(Manager.getInteger(rs, "root_group"));
+            bean.setSchedule(rs.getString("schedule"));
             bean.setRemark(rs.getString("remark"));
             bean.setExtBin(Manager.getBytes(rs, "ext_bin"));
             bean.setExtTxt(rs.getString("ext_txt"));
@@ -2600,6 +2653,7 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
                 protected void onRemove(List<FlDeviceGroupBean> effectBeans) throws DaoException {
                     for(FlDeviceGroupBean bean:effectBeans){
                         bean.setParent(null);
+                        Event.UPDATE_BEFORE.fire(listenerContainer, bean);
                         Event.UPDATE.fire(listenerContainer, bean);
                         bean.resetIsModified();
                     }
@@ -2725,9 +2779,13 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
     }
    
     @Override
-
     public <T>T runAsTransaction(Callable<T> fun) throws DaoException{
-        return Manager.getInstance().runAsTransaction(fun);
+        return Manager.getInstance().runAsTransaction(fun,TableListener.ListenerContainer.TRANSACTION_LISTENER);
+    }
+    
+    @Override
+    public void runAsTransaction(Runnable fun) throws DaoException{
+        Manager.getInstance().runAsTransaction(fun,TableListener.ListenerContainer.TRANSACTION_LISTENER);
     }
     
     class DeleteBeanAction extends Action.BaseAdapter<FlDeviceGroupBean>{

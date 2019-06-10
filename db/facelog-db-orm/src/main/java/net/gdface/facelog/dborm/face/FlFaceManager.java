@@ -2623,6 +2623,7 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
                 protected void onRemove(List<FlFaceBean> effectBeans) throws DaoException {
                     for(FlFaceBean bean:effectBeans){
                         bean.setFeatureMd5(null);
+                        Event.UPDATE_BEFORE.fire(listenerContainer, bean);
                         Event.UPDATE.fire(listenerContainer, bean);
                         bean.resetIsModified();
                     }
@@ -2751,9 +2752,13 @@ public class FlFaceManager extends TableManager.BaseAdapter<FlFaceBean>
     }
    
     @Override
-
     public <T>T runAsTransaction(Callable<T> fun) throws DaoException{
-        return Manager.getInstance().runAsTransaction(fun);
+        return Manager.getInstance().runAsTransaction(fun,TableListener.ListenerContainer.TRANSACTION_LISTENER);
+    }
+    
+    @Override
+    public void runAsTransaction(Runnable fun) throws DaoException{
+        Manager.getInstance().runAsTransaction(fun,TableListener.ListenerContainer.TRANSACTION_LISTENER);
     }
     
     class DeleteBeanAction extends Action.BaseAdapter<FlFaceBean>{

@@ -42,6 +42,7 @@ public class FlDeviceGroupComparator implements Comparator<FlDeviceGroupBean>,Co
      *   <li>{@link Constant#FL_DEVICE_GROUP_ID_LEAF}
      *   <li>{@link Constant#FL_DEVICE_GROUP_ID_PARENT}
      *   <li>{@link Constant#FL_DEVICE_GROUP_ID_ROOT_GROUP}
+     *   <li>{@link Constant#FL_DEVICE_GROUP_ID_SCHEDULE}
      *   <li>{@link Constant#FL_DEVICE_GROUP_ID_REMARK}
      *   <li>{@link Constant#FL_DEVICE_GROUP_ID_EXT_BIN}
      *   <li>{@link Constant#FL_DEVICE_GROUP_ID_EXT_TXT}
@@ -70,6 +71,7 @@ public class FlDeviceGroupComparator implements Comparator<FlDeviceGroupBean>,Co
      *   <li>{@link Constant#FL_DEVICE_GROUP_ID_LEAF})
      *   <li>{@link Constant#FL_DEVICE_GROUP_ID_PARENT})
      *   <li>{@link Constant#FL_DEVICE_GROUP_ID_ROOT_GROUP})
+     *   <li>{@link Constant#FL_DEVICE_GROUP_ID_SCHEDULE})
      *   <li>{@link Constant#FL_DEVICE_GROUP_ID_REMARK})
      *   <li>{@link Constant#FL_DEVICE_GROUP_ID_EXT_BIN})
      *   <li>{@link Constant#FL_DEVICE_GROUP_ID_EXT_TXT})
@@ -144,6 +146,17 @@ public class FlDeviceGroupComparator implements Comparator<FlDeviceGroupBean>,Co
                     iReturn = 1;
                 } else {
                     iReturn = b1.getRootGroup().compareTo(b2.getRootGroup());
+                }
+                break;
+            case FL_DEVICE_GROUP_ID_SCHEDULE:
+                if (b1.getSchedule() == null && b2.getSchedule() != null) {
+                    iReturn = -1;
+                } else if (b1.getSchedule() == null && b2.getSchedule() == null) {
+                    iReturn = 0;
+                } else if (b1.getSchedule() != null && b2.getSchedule() == null) {
+                    iReturn = 1;
+                } else {
+                    iReturn = b1.getSchedule().compareTo(b2.getSchedule());
                 }
                 break;
             case FL_DEVICE_GROUP_ID_REMARK:

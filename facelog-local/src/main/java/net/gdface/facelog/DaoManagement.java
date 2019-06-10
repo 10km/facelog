@@ -1,6 +1,7 @@
 package net.gdface.facelog;
 
 import static com.google.common.base.Preconditions.*;
+import static net.gdface.facelog.FeatureConfig.*;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
@@ -27,10 +28,12 @@ import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
+import net.gdface.facelog.db.Constant;
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.DeviceGroupBean;
 import net.gdface.facelog.db.FaceBean;
 import net.gdface.facelog.db.FeatureBean;
+import net.gdface.facelog.db.FeatureComparator;
 import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.PermitBean;
@@ -51,7 +54,7 @@ import net.gdface.utils.Judge;
  * @author guyadong
  *
  */
-public class DaoManagement extends BaseDao {
+public class DaoManagement extends BaseDao implements ServiceConstant,Constant{
 	private final CryptographGenerator cg;
 	public DaoManagement(CryptographGenerator cg) {
 		this.cg = checkNotNull(cg,"cg is null");
@@ -109,70 +112,74 @@ public class DaoManagement extends BaseDao {
 	 * 获取人员组通行权限<br>
 	 * 返回{@code personGroupId}指定的人员组在{@code deviceGroupId}指定的设备组上是否允许通行,
 	 * 本方法会对{@code personGroupId}的父结点向上回溯：
-	 * {@codepersonGroupId } 及其父结点,任何一个在permit表存在与{@code deviceId}所属设备级的关联记录中就返回true，
+	 * {@code personGroupId } 及其父结点,任何一个在permit表存在与{@code deviceId}所属设备级的关联记录中就返回true，
 	 * 输入参数为{@code null}或找不到指定的记录则返回false
 	 * @param deviceGroupId
 	 * @param personGroupId
-	 * @return 允许通行返回false，否则返回false
+	 * @return 允许通行返回指定的{@link PermitBean}记录，否则返回{@code null}
 	 */
-	protected boolean daoGetGroupPermitOnDeviceGroup(final Integer deviceGroupId,Integer personGroupId){
+	protected PermitBean daoGetGroupPermitOnDeviceGroup(final Integer deviceGroupId,Integer personGroupId){
 		PersonGroupBean personGroup;
 		if(null == deviceGroupId
 			|| null == personGroupId 
 			|| null == (personGroup = daoGetPersonGroup(personGroupId))){
-			return false;
+			return null;
 		}
-		List<PersonGroupBean> personGroupList = daoListOfParentForPersonGroup(personGroup);		
-
+		List<PersonGroupBean> personGroupList = daoListOfParentForPersonGroup(personGroup);
+		// first is self
+		Collections.reverse(personGroupList);
 		// person group 及其parent,任何一个在permit表中就返回true
-		return Iterators.tryFind(personGroupList.iterator(), new Predicate<PersonGroupBean>(){
+		Optional<PersonGroupBean> found = Iterators.tryFind(personGroupList.iterator(), new Predicate<PersonGroupBean>(){
 			@Override
 			public boolean apply(PersonGroupBean input) {
 					return daoExistsPermit(deviceGroupId, input.getId());
-			}}).isPresent();
+			}});
+		return found.isPresent() ?
+			daoGetPermit(deviceGroupId, found.get().getId())
+			: null;
 	}
 	/**
 	 * 获取人员组通行权限<br>
 	 * 返回{@code personGroupId}指定的人员组在{@code deviceId}设备上是否允许通行,
 	 * 本方法会对{@code personGroupId}的父结点向上回溯：
-	 * {@codepersonGroupId } 及其父结点,任何一个在permit表存在与{@code deviceId}所属设备级的关联记录中就返回true，
+	 * {@code personGroupId } 及其父结点,任何一个在permit表存在与{@code deviceId}所属设备级的关联记录中就返回true，
 	 * 输入参数为{@code null}或找不到指定的记录则返回false
-	 * @param deviceGroupId
+	 * @param deviceId
 	 * @param personGroupId
-	 * @return 允许通行返回false，否则返回false
+	 * @return 允许通行返回指定的{@link PermitBean}记录，否则返回{@code null}
 	 * @see #daoGetGroupPermitOnDeviceGroup(Integer, Integer)
 	 */
-	protected boolean daoGetGroupPermit(Integer deviceId,Integer personGroupId){
+	protected PermitBean daoGetGroupPermit(Integer deviceId,Integer personGroupId){
 		DeviceBean device;
 		if(null == deviceId || null ==(device = daoGetDevice(deviceId))){
-			return false;
+			return null;
 		}
 		return daoGetGroupPermitOnDeviceGroup(device.getGroupId(),personGroupId);
 	}
-	protected boolean daoGetPersonPermit(Integer deviceId,Integer personId){
+	protected PermitBean daoGetPersonPermit(Integer deviceId,Integer personId){
 		PersonBean person;
 		if( null == personId || null == (person = daoGetPerson(personId))){
-			return false;
+			return null;
 		}
 		return daoGetGroupPermit(deviceId,person.getGroupId());
 	}
-	protected List<Boolean> daoGetGroupPermit(final Integer deviceId,List<Integer> personGroupIdList){
+	protected List<PermitBean> daoGetGroupPermit(final Integer deviceId,List<Integer> personGroupIdList){
 		if(null == deviceId || null == personGroupIdList){
 			return Collections.emptyList();
 		}
-		return Lists.newArrayList(Lists.transform(personGroupIdList, new Function<Integer,Boolean>(){
+		return Lists.newArrayList(Lists.transform(personGroupIdList, new Function<Integer,PermitBean>(){
 			@Override
-			public Boolean apply(Integer input) {
+			public PermitBean apply(Integer input) {
 				return daoGetGroupPermit(deviceId,input);
 			}}));
 	}
-	protected List<Boolean> daoGetPermit(final Integer deviceId,List<Integer> personIdList){
+	protected List<PermitBean> daoGetPermit(final Integer deviceId,List<Integer> personIdList){
 		if(null == deviceId || null == personIdList){
 			return Collections.emptyList();
 		}
-		return Lists.newArrayList(Lists.transform(personIdList, new Function<Integer,Boolean>(){
+		return Lists.newArrayList(Lists.transform(personIdList, new Function<Integer,PermitBean>(){
 			@Override
-			public Boolean apply(Integer input) {
+			public PermitBean apply(Integer input) {
 				return daoGetPersonPermit(deviceId,input);
 			}}));
 	}
@@ -309,21 +316,73 @@ public class DaoManagement extends BaseDao {
 		return super.daoDeleteImage(imageMd5);
 	}
 
-	protected FeatureBean daoMakeFeature(ByteBuffer feature, String sdkVersion){
+	protected FeatureBean daoMakeFeature(ByteBuffer feature, String featureVersion){
 		Assert.notEmpty(feature, "feature");
-		// sdkVersion不可为空
-		checkArgument(!Strings.isNullOrEmpty(sdkVersion),"sdkVersion is null or empty");
-	    // sdkVersion内容只允许字母,数字,-,.,_符号
-	    checkArgument(sdkVersion.matches(SDK_VERSION_REGEX), "invalid sdk version format");
+		// featureVersion不可为空
+		checkArgument(!Strings.isNullOrEmpty(featureVersion),"featureVersion is null or empty");
+	    // featureVersion内容只允许字母,数字,-,.,_符号
+	    checkArgument(featureVersion.matches(SDK_VERSION_REGEX), "invalid sdk version format");
 		return FeatureBean.builder()
 				.md5(FaceUtilits.getMD5String(feature))	
 				.feature(feature)
+				.version(featureVersion)
 				.build();
 	}
-	protected FeatureBean daoAddFeature(ByteBuffer feature,String sdkVersion, PersonBean refPersonByPersonId, Collection<FaceBean> impFaceByFeatureMd5) throws DuplicateRecordException{
-		return daoAddFeature(daoMakeFeature(feature, sdkVersion), refPersonByPersonId, impFaceByFeatureMd5, null);
+	
+	/**
+	 * 返回 persionId 关联的指定SDK的人脸特征记录
+	 * @param personId 人员id(fl_person.id)
+	 * @param featureVersion 算法(SDK)版本号
+	 * @return 返回 fl_feature.md5  列表
+	 */
+	protected List<FeatureBean> daoGetFeaturesByPersonIdAndSdkVersion(int personId,String featureVersion) {
+		FeatureBean tmpl = FeatureBean.builder().personId(personId).version(featureVersion).build();
+		return daoLoadFeatureUsingTemplate(tmpl, 1, -1);
 	}
-	protected FeatureBean daoAddFeature(ByteBuffer feature,PersonBean personBean,Map<ByteBuffer, FaceBean> faceInfo,DeviceBean deviceBean) throws DuplicateRecordException{
+	
+	/**
+	 * 添加人脸特征数据到数据库<br>
+	 * 如果用户的特征记录数量超过限制，且没有开启自动更新机制则抛出异常,
+	 * 如果已有特征数量超过限制，且开启了自动特征更新机制则删除最老的记录,确保记录总数不超过限制
+	 * @param feature 人脸特征数据
+	 * @param featureVersion SDK版本号
+	 * @param refPersonByPersonId 所属的人员记录
+	 * @param impFaceByFeatureMd5 关联的人脸信息记录
+	 * @return
+	 * @throws DuplicateRecordException
+	 */
+	protected FeatureBean daoAddFeature(ByteBuffer feature,String featureVersion, 
+			PersonBean refPersonByPersonId, Collection<FaceBean> impFaceByFeatureMd5) throws DuplicateRecordException{
+		FEATURE_CONFIG.checkSdkVersion(featureVersion);
+		boolean removeOld = false;
+		List<FeatureBean> features = null;
+		if(null != refPersonByPersonId && refPersonByPersonId.getId() != null){
+			Integer personId = refPersonByPersonId.getId();
+			features = daoGetFeaturesByPersonIdAndSdkVersion(personId,featureVersion);
+			int count = features.size();
+			int limitCount = FEATURE_CONFIG.getFeatureLimitPerPerson(featureVersion);
+			// 如果用户的特征记录数量超过限制，且没有开启自动更新机制则抛出异常
+			checkState(count < limitCount || FEATURE_CONFIG.featureAutoUpdateEnabled(),
+					"person(id=%s)'s  %s feature count  exceed max limit(%s)",personId,featureVersion,limitCount);
+			// 如果已有特征数量超过限制，且开启了自动特征更新机制则删除最老的记录
+			if(count >= limitCount && FEATURE_CONFIG.featureAutoUpdateEnabled()){
+				removeOld = true;
+			}
+		}
+		FeatureBean newFeature = daoAddFeature(daoMakeFeature(feature, featureVersion), refPersonByPersonId, impFaceByFeatureMd5, null);
+		// 放在成功添加记录之后再执行删除，以防止因为添加特征抛出异常而导致发送错误的通知消息
+		if(removeOld){
+			int limitCount = FEATURE_CONFIG.getFeatureLimitPerPerson(featureVersion);			
+			// 以update_time字段排序,删除最旧的记录
+			Collections.sort(features, new FeatureComparator(FL_FEATURE_ID_UPDATE_TIME,/** 降序 */true));
+			for(int i = limitCount-1;i < features.size() -1 ;++i){
+				daoDeleteFeature(features.get(i).getMd5(), true);
+				logger.info("AUTOUPDATE:remove feature [{}] and associated image",features.get(i).getMd5());
+			}
+		}
+		return newFeature;
+	}
+	protected FeatureBean daoAddFeature(ByteBuffer feature,String featureVersion,PersonBean personBean,Map<ByteBuffer, FaceBean> faceInfo, DeviceBean deviceBean) throws DuplicateRecordException{
 		if(null != faceInfo){
 			for(Entry<ByteBuffer, FaceBean> entry:faceInfo.entrySet()){
 				ByteBuffer imageBytes = entry.getKey();
@@ -331,16 +390,30 @@ public class DaoManagement extends BaseDao {
 				daoAddImage(imageBytes, deviceBean, Arrays.asList(faceBean), Arrays.asList(personBean));
 			}
 		}
-		return daoAddFeature(feature, deviceBean.getSdkVersion(), personBean, null == faceInfo?null:faceInfo.values());
+		return daoAddFeature(feature, featureVersion, personBean, null == faceInfo?null:faceInfo.values());
 	}
 
-	protected List<String> daoDeleteFeature(String featureMd5,boolean deleteImage){
+	/**
+	 * 删除指定的特征
+	 * @param featureMd5
+	 * @param deleteImage 为{@code true}则删除关联的 image记录(如果该图像还关联其他特征则不删除)
+	 * @return 返回删除的特征记录关联的图像(image)记录的MD5
+	 */
+	protected List<String> daoDeleteFeature(final String featureMd5,boolean deleteImage){
 		List<String> imageKeys = daoGetImageKeysImportedByFeatureMd5(featureMd5);
 		if(deleteImage){
 			for(Iterator<String> itor = imageKeys.iterator();itor.hasNext();){
 				String md5 = itor.next();
-				daoDeleteImage(md5);
-				itor.remove();
+				// 如果该图像还关联其他特征则不删除
+				if(!Iterables.tryFind(daoGetFaceBeansByImageMd5OnImage(md5), new Predicate<FaceBean>(){
+
+					@Override
+					public boolean apply(FaceBean input) {
+						return !featureMd5.equals(input.getFeatureMd5());
+					}}).isPresent()){
+					daoDeleteImage(md5);	
+					itor.remove();
+				}
 			}
 		}else{
 			daoDeleteFaceBeansByFeatureMd5OnFeature(featureMd5);
@@ -415,8 +488,8 @@ public class DaoManagement extends BaseDao {
 	}
 
 	protected PersonBean daoSavePerson(PersonBean bean, ByteBuffer idPhoto, ByteBuffer feature,
-			Map<ByteBuffer, FaceBean> faceInfo, DeviceBean deviceBean) throws DuplicateRecordException {
-		return daoSavePerson(bean, idPhoto, daoAddFeature(feature, bean, faceInfo, deviceBean), null);
+			String featureVersion, Map<ByteBuffer, FaceBean> faceInfo, DeviceBean deviceBean) throws DuplicateRecordException {
+		return daoSavePerson(bean, idPhoto, daoAddFeature(feature, featureVersion, bean, faceInfo, deviceBean), deviceBean);
 	}
 
 	/**
@@ -424,6 +497,7 @@ public class DaoManagement extends BaseDao {
 	 * @param bean 人员信息对象
 	 * @param idPhoto 标准照图像
 	 * @param feature 人脸特征数据
+	 * @param featureVersion 特征(SDk)版本号
 	 * @param featureImage 提取特征源图像,为null 时,默认使用idPhoto
 	 * @param featureFaceBean 人脸位置对象,为null 时,不保存人脸数据
 	 * @param deviceBean featureImage来源设备对象
@@ -431,7 +505,7 @@ public class DaoManagement extends BaseDao {
 	 * @throws DuplicateRecordException 
 	 */
 	protected PersonBean daoSavePerson(PersonBean bean, ByteBuffer idPhoto, ByteBuffer feature,
-			ByteBuffer featureImage, FaceBean featureFaceBean, DeviceBean deviceBean) throws DuplicateRecordException {
+			String featureVersion, ByteBuffer featureImage, FaceBean featureFaceBean, DeviceBean deviceBean) throws DuplicateRecordException {
 		Map<ByteBuffer, FaceBean> faceInfo = null;
 		if (null != featureFaceBean) {
 			if (Judge.isEmpty(featureImage)){
@@ -441,7 +515,7 @@ public class DaoManagement extends BaseDao {
 				faceInfo = ImmutableMap.of(featureImage, featureFaceBean);
 			}
 		}
-		return daoSavePerson(bean, idPhoto, daoAddFeature(feature, bean, faceInfo, deviceBean), null);
+		return daoSavePerson(bean, idPhoto, daoAddFeature(feature, featureVersion, bean, faceInfo, deviceBean), deviceBean);
 	}
 	/**
 	 * 删除personId指定的人员(person)记录及关联的所有记录
@@ -616,5 +690,37 @@ public class DaoManagement extends BaseDao {
 				faceBean == null ? null : Arrays.asList(faceBean), 
 				personBean == null ? null : Arrays.asList(personBean));
 		return daoAddLog(logBean, deviceBean, faceBean, null, personBean);
+	}
+	/**
+	 * 设置 personId 指定的人员为禁止状态<br>
+	 * @param personId 
+	 * @param moveToGroupId 将用户移动到指定的用户组，为{@code null}则不移动
+	 * @param deletePhoto 为{@code true}删除用户标准照
+	 * @param deleteFeature 为{@code true}删除用户所有的人脸特征数据(包括照片)
+	 * @param deleteLog 为{@code true}删除用户所有通行日志
+	 */
+	protected void daoDisablePerson(int personId, Integer moveToGroupId, 
+			boolean deletePhoto, boolean deleteFeature, boolean deleteLog){
+		PersonBean personBean = daoGetPerson(personId);
+		if(personBean == null){
+			return;
+		}
+		// 有效期设置为昨天
+		Date yesterday = new Date(System.currentTimeMillis() - 86400000L);
+		personBean.setExpiryDate(yesterday);
+		if(moveToGroupId != null){
+			personBean.setGroupId(moveToGroupId);
+		}
+		daoSavePerson(personBean);
+		if(deletePhoto){
+			// 删除标准照
+			daoDeleteImage(personBean.getImageMd5());
+		}
+		if(deleteFeature){
+			daoDeleteAllFeaturesByPersonId(personId,true);
+		}
+		if(deleteLog){
+			daoDeleteLogBeansByPersonIdOnPerson(personId);
+		}
 	}
 }

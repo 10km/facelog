@@ -2244,6 +2244,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
                 protected void onRemove(List<FlLogBean> effectBeans) throws DaoException {
                     for(FlLogBean bean:effectBeans){
                         bean.setDeviceId(null);
+                        Event.UPDATE_BEFORE.fire(listenerContainer, bean);
                         Event.UPDATE.fire(listenerContainer, bean);
                         bean.resetIsModified();
                     }
@@ -2262,6 +2263,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
                 protected void onRemove(List<FlLogBean> effectBeans) throws DaoException {
                     for(FlLogBean bean:effectBeans){
                         bean.setVerifyFeature(null);
+                        Event.UPDATE_BEFORE.fire(listenerContainer, bean);
                         Event.UPDATE.fire(listenerContainer, bean);
                         bean.resetIsModified();
                     }
@@ -2280,6 +2282,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
                 protected void onRemove(List<FlLogBean> effectBeans) throws DaoException {
                     for(FlLogBean bean:effectBeans){
                         bean.setCompareFace(null);
+                        Event.UPDATE_BEFORE.fire(listenerContainer, bean);
                         Event.UPDATE.fire(listenerContainer, bean);
                         bean.resetIsModified();
                     }
@@ -2414,9 +2417,13 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
     }
    
     @Override
-
     public <T>T runAsTransaction(Callable<T> fun) throws DaoException{
-        return Manager.getInstance().runAsTransaction(fun);
+        return Manager.getInstance().runAsTransaction(fun,TableListener.ListenerContainer.TRANSACTION_LISTENER);
+    }
+    
+    @Override
+    public void runAsTransaction(Runnable fun) throws DaoException{
+        Manager.getInstance().runAsTransaction(fun,TableListener.ListenerContainer.TRANSACTION_LISTENER);
     }
     
     class DeleteBeanAction extends Action.BaseAdapter<FlLogBean>{

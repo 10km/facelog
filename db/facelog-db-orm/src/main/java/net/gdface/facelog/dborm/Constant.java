@@ -67,7 +67,7 @@ public interface Constant {
     
     public static final int FL_DEVICE_COLUMN_COUNT = 17;
     public static final int FL_DEVICE_PK_COUNT = 1;
-    public static final int FL_DEVICE_GROUP_COLUMN_COUNT = 10;
+    public static final int FL_DEVICE_GROUP_COLUMN_COUNT = 11;
     public static final int FL_DEVICE_GROUP_PK_COUNT = 1;
     public static final int FL_FACE_COLUMN_COUNT = 19;
     public static final int FL_FACE_PK_COUNT = 1;
@@ -77,7 +77,7 @@ public interface Constant {
     public static final int FL_IMAGE_PK_COUNT = 1;
     public static final int FL_LOG_COLUMN_COUNT = 9;
     public static final int FL_LOG_PK_COUNT = 1;
-    public static final int FL_PERMIT_COLUMN_COUNT = 6;
+    public static final int FL_PERMIT_COLUMN_COUNT = 7;
     public static final int FL_PERMIT_PK_COUNT = 2;
     public static final int FL_PERSON_COLUMN_COUNT = 17;
     public static final int FL_PERSON_PK_COUNT = 1;
@@ -162,18 +162,16 @@ public interface Constant {
     public static final int FL_DEVICE_INDEX_SERIAL_NO = 1;
     /** fl_device index (group_id) */
     public static final int FL_DEVICE_INDEX_GROUP_ID = 2;
-    /** fl_device index (sdk_version) */
-    public static final int FL_DEVICE_INDEX_SDK_VERSION = 3;
     /** fl_device_group index (parent) */
     public static final int FL_DEVICE_GROUP_INDEX_PARENT = 0;
     /** fl_face index (feature_md5) */
     public static final int FL_FACE_INDEX_FEATURE_MD5 = 0;
     /** fl_face index (image_md5) */
     public static final int FL_FACE_INDEX_IMAGE_MD5 = 1;
+    /** fl_feature index (version) */
+    public static final int FL_FEATURE_INDEX_VERSION = 0;
     /** fl_feature index (person_id) */
-    public static final int FL_FEATURE_INDEX_PERSON_ID = 0;
-    /** fl_feature index (sdk_version) */
-    public static final int FL_FEATURE_INDEX_SDK_VERSION = 1;
+    public static final int FL_FEATURE_INDEX_PERSON_ID = 1;
     /** fl_image index (device_id) */
     public static final int FL_IMAGE_INDEX_DEVICE_ID = 0;
     /** fl_log index (compare_face) */
@@ -224,9 +222,9 @@ public interface Constant {
     /** Identify the fl_device.version field (ordinal:9). */
     public static final int FL_DEVICE_ID_VERSION = 8;
     public static final int FL_DEVICE_ID_VERSION_MASK = 1 << 8;
-    /** Identify the fl_device.sdk_version field (ordinal:10). */
-    public static final int FL_DEVICE_ID_SDK_VERSION = 9;
-    public static final int FL_DEVICE_ID_SDK_VERSION_MASK = 1 << 9;
+    /** Identify the fl_device.used_sdks field (ordinal:10). */
+    public static final int FL_DEVICE_ID_USED_SDKS = 9;
+    public static final int FL_DEVICE_ID_USED_SDKS_MASK = 1 << 9;
     /** Identify the fl_device.serial_no field (ordinal:11). */
     public static final int FL_DEVICE_ID_SERIAL_NO = 10;
     public static final int FL_DEVICE_ID_SERIAL_NO_MASK = 1 << 10;
@@ -263,21 +261,24 @@ public interface Constant {
     /** Identify the fl_device_group.root_group field (ordinal:5). */
     public static final int FL_DEVICE_GROUP_ID_ROOT_GROUP = 4;
     public static final int FL_DEVICE_GROUP_ID_ROOT_GROUP_MASK = 1 << 4;
-    /** Identify the fl_device_group.remark field (ordinal:6). */
-    public static final int FL_DEVICE_GROUP_ID_REMARK = 5;
-    public static final int FL_DEVICE_GROUP_ID_REMARK_MASK = 1 << 5;
-    /** Identify the fl_device_group.ext_bin field (ordinal:7). */
-    public static final int FL_DEVICE_GROUP_ID_EXT_BIN = 6;
-    public static final int FL_DEVICE_GROUP_ID_EXT_BIN_MASK = 1 << 6;
-    /** Identify the fl_device_group.ext_txt field (ordinal:8). */
-    public static final int FL_DEVICE_GROUP_ID_EXT_TXT = 7;
-    public static final int FL_DEVICE_GROUP_ID_EXT_TXT_MASK = 1 << 7;
-    /** Identify the fl_device_group.create_time field (ordinal:9). */
-    public static final int FL_DEVICE_GROUP_ID_CREATE_TIME = 8;
-    public static final int FL_DEVICE_GROUP_ID_CREATE_TIME_MASK = 1 << 8;
-    /** Identify the fl_device_group.update_time field (ordinal:10). */
-    public static final int FL_DEVICE_GROUP_ID_UPDATE_TIME = 9;
-    public static final int FL_DEVICE_GROUP_ID_UPDATE_TIME_MASK = 1 << 9;
+    /** Identify the fl_device_group.schedule field (ordinal:6). */
+    public static final int FL_DEVICE_GROUP_ID_SCHEDULE = 5;
+    public static final int FL_DEVICE_GROUP_ID_SCHEDULE_MASK = 1 << 5;
+    /** Identify the fl_device_group.remark field (ordinal:7). */
+    public static final int FL_DEVICE_GROUP_ID_REMARK = 6;
+    public static final int FL_DEVICE_GROUP_ID_REMARK_MASK = 1 << 6;
+    /** Identify the fl_device_group.ext_bin field (ordinal:8). */
+    public static final int FL_DEVICE_GROUP_ID_EXT_BIN = 7;
+    public static final int FL_DEVICE_GROUP_ID_EXT_BIN_MASK = 1 << 7;
+    /** Identify the fl_device_group.ext_txt field (ordinal:9). */
+    public static final int FL_DEVICE_GROUP_ID_EXT_TXT = 8;
+    public static final int FL_DEVICE_GROUP_ID_EXT_TXT_MASK = 1 << 8;
+    /** Identify the fl_device_group.create_time field (ordinal:10). */
+    public static final int FL_DEVICE_GROUP_ID_CREATE_TIME = 9;
+    public static final int FL_DEVICE_GROUP_ID_CREATE_TIME_MASK = 1 << 9;
+    /** Identify the fl_device_group.update_time field (ordinal:11). */
+    public static final int FL_DEVICE_GROUP_ID_UPDATE_TIME = 10;
+    public static final int FL_DEVICE_GROUP_ID_UPDATE_TIME_MASK = 1 << 10;
     /** Identify the fl_face.id field (ordinal:1). */
     public static final int FL_FACE_ID_ID = 0;
     public static final int FL_FACE_ID_ID_MASK = 1 << 0;
@@ -338,9 +339,9 @@ public interface Constant {
     /** Identify the fl_feature.md5 field (ordinal:1). */
     public static final int FL_FEATURE_ID_MD5 = 0;
     public static final int FL_FEATURE_ID_MD5_MASK = 1 << 0;
-    /** Identify the fl_feature.sdk_version field (ordinal:2). */
-    public static final int FL_FEATURE_ID_SDK_VERSION = 1;
-    public static final int FL_FEATURE_ID_SDK_VERSION_MASK = 1 << 1;
+    /** Identify the fl_feature.version field (ordinal:2). */
+    public static final int FL_FEATURE_ID_VERSION = 1;
+    public static final int FL_FEATURE_ID_VERSION_MASK = 1 << 1;
     /** Identify the fl_feature.person_id field (ordinal:3). */
     public static final int FL_FEATURE_ID_PERSON_ID = 2;
     public static final int FL_FEATURE_ID_PERSON_ID_MASK = 1 << 2;
@@ -407,18 +408,21 @@ public interface Constant {
     /** Identify the fl_permit.person_group_id field (ordinal:2). */
     public static final int FL_PERMIT_ID_PERSON_GROUP_ID = 1;
     public static final int FL_PERMIT_ID_PERSON_GROUP_ID_MASK = 1 << 1;
-    /** Identify the fl_permit.remark field (ordinal:3). */
-    public static final int FL_PERMIT_ID_REMARK = 2;
-    public static final int FL_PERMIT_ID_REMARK_MASK = 1 << 2;
-    /** Identify the fl_permit.ext_bin field (ordinal:4). */
-    public static final int FL_PERMIT_ID_EXT_BIN = 3;
-    public static final int FL_PERMIT_ID_EXT_BIN_MASK = 1 << 3;
-    /** Identify the fl_permit.ext_txt field (ordinal:5). */
-    public static final int FL_PERMIT_ID_EXT_TXT = 4;
-    public static final int FL_PERMIT_ID_EXT_TXT_MASK = 1 << 4;
-    /** Identify the fl_permit.create_time field (ordinal:6). */
-    public static final int FL_PERMIT_ID_CREATE_TIME = 5;
-    public static final int FL_PERMIT_ID_CREATE_TIME_MASK = 1 << 5;
+    /** Identify the fl_permit.schedule field (ordinal:3). */
+    public static final int FL_PERMIT_ID_SCHEDULE = 2;
+    public static final int FL_PERMIT_ID_SCHEDULE_MASK = 1 << 2;
+    /** Identify the fl_permit.remark field (ordinal:4). */
+    public static final int FL_PERMIT_ID_REMARK = 3;
+    public static final int FL_PERMIT_ID_REMARK_MASK = 1 << 3;
+    /** Identify the fl_permit.ext_bin field (ordinal:5). */
+    public static final int FL_PERMIT_ID_EXT_BIN = 4;
+    public static final int FL_PERMIT_ID_EXT_BIN_MASK = 1 << 4;
+    /** Identify the fl_permit.ext_txt field (ordinal:6). */
+    public static final int FL_PERMIT_ID_EXT_TXT = 5;
+    public static final int FL_PERMIT_ID_EXT_TXT_MASK = 1 << 5;
+    /** Identify the fl_permit.create_time field (ordinal:7). */
+    public static final int FL_PERMIT_ID_CREATE_TIME = 6;
+    public static final int FL_PERMIT_ID_CREATE_TIME_MASK = 1 << 6;
     /** Identify the fl_person.id field (ordinal:1). */
     public static final int FL_PERSON_ID_ID = 0;
     public static final int FL_PERSON_ID_ID_MASK = 1 << 0;
@@ -541,7 +545,7 @@ public interface Constant {
                             + ",fl_device.manufacturer"
                             + ",fl_device.made_date"
                             + ",fl_device.version"
-                            + ",fl_device.sdk_version"
+                            + ",fl_device.used_sdks"
                             + ",fl_device.serial_no"
                             + ",fl_device.mac"
                             + ",fl_device.remark"
@@ -559,7 +563,7 @@ public interface Constant {
                             + ",manufacturer"
                             + ",made_date"
                             + ",version"
-                            + ",sdk_version"
+                            + ",used_sdks"
                             + ",serial_no"
                             + ",mac"
                             + ",remark"
@@ -578,7 +582,7 @@ public interface Constant {
                             + ",manufacturer"
                             + ",madeDate"
                             + ",version"
-                            + ",sdkVersion"
+                            + ",usedSdks"
                             + ",serialNo"
                             + ",mac"
                             + ",remark"
@@ -594,6 +598,7 @@ public interface Constant {
                             + ",fl_device_group.leaf"
                             + ",fl_device_group.parent"
                             + ",fl_device_group.root_group"
+                            + ",fl_device_group.schedule"
                             + ",fl_device_group.remark"
                             + ",fl_device_group.ext_bin"
                             + ",fl_device_group.ext_txt"
@@ -605,6 +610,7 @@ public interface Constant {
                             + ",leaf"
                             + ",parent"
                             + ",root_group"
+                            + ",schedule"
                             + ",remark"
                             + ",ext_bin"
                             + ",ext_txt"
@@ -617,6 +623,7 @@ public interface Constant {
                             + ",leaf"
                             + ",parent"
                             + ",rootGroup"
+                            + ",schedule"
                             + ",remark"
                             + ",extBin"
                             + ",extTxt"
@@ -689,20 +696,20 @@ public interface Constant {
     /////////////////// fl_feature ////////////
     /** Contains all the full fields of the fl_feature table.*/
     public static final String FL_FEATURE_FULL_FIELDS ="fl_feature.md5"
-                            + ",fl_feature.sdk_version"
+                            + ",fl_feature.version"
                             + ",fl_feature.person_id"
                             + ",fl_feature.feature"
                             + ",fl_feature.update_time";
     /** Field that contains the comma separated fields of the fl_feature table. */
     public static final String FL_FEATURE_FIELDS = "md5"
-                            + ",sdk_version"
+                            + ",version"
                             + ",person_id"
                             + ",feature"
                             + ",update_time";
     public static final java.util.List<String> FL_FEATURE_FIELDS_LIST = java.util.Arrays.asList(FL_FEATURE_FIELDS.split(","));
     /** Field that contains the comma separated java fields of the fl_feature table. */
     public static final String FL_FEATURE_JAVA_FIELDS = "md5"
-                            + ",sdkVersion"
+                            + ",version"
                             + ",personId"
                             + ",feature"
                             + ",updateTime";
@@ -774,6 +781,7 @@ public interface Constant {
     /** Contains all the full fields of the fl_permit table.*/
     public static final String FL_PERMIT_FULL_FIELDS ="fl_permit.device_group_id"
                             + ",fl_permit.person_group_id"
+                            + ",fl_permit.schedule"
                             + ",fl_permit.remark"
                             + ",fl_permit.ext_bin"
                             + ",fl_permit.ext_txt"
@@ -781,6 +789,7 @@ public interface Constant {
     /** Field that contains the comma separated fields of the fl_permit table. */
     public static final String FL_PERMIT_FIELDS = "device_group_id"
                             + ",person_group_id"
+                            + ",schedule"
                             + ",remark"
                             + ",ext_bin"
                             + ",ext_txt"
@@ -789,6 +798,7 @@ public interface Constant {
     /** Field that contains the comma separated java fields of the fl_permit table. */
     public static final String FL_PERMIT_JAVA_FIELDS = "deviceGroupId"
                             + ",personGroupId"
+                            + ",schedule"
                             + ",remark"
                             + ",extBin"
                             + ",extTxt"

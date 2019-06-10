@@ -76,9 +76,17 @@ public final class DeviceGroupBean
     @ThriftField
     public void setRootGroup(final Integer rootGroup) { this.rootGroup = rootGroup; }
 
+    private String schedule;
+
+    @ThriftField(value=9, name="schedule", requiredness=Requiredness.OPTIONAL)
+    public String getSchedule() { return schedule; }
+
+    @ThriftField
+    public void setSchedule(final String schedule) { this.schedule = schedule; }
+
     private String remark;
 
-    @ThriftField(value=9, name="remark", requiredness=Requiredness.OPTIONAL)
+    @ThriftField(value=10, name="remark", requiredness=Requiredness.OPTIONAL)
     public String getRemark() { return remark; }
 
     @ThriftField
@@ -86,7 +94,7 @@ public final class DeviceGroupBean
 
     private byte [] extBin;
 
-    @ThriftField(value=10, name="extBin", requiredness=Requiredness.OPTIONAL)
+    @ThriftField(value=11, name="extBin", requiredness=Requiredness.OPTIONAL)
     public byte [] getExtBin() { return extBin; }
 
     @ThriftField
@@ -94,7 +102,7 @@ public final class DeviceGroupBean
 
     private String extTxt;
 
-    @ThriftField(value=11, name="extTxt", requiredness=Requiredness.OPTIONAL)
+    @ThriftField(value=12, name="extTxt", requiredness=Requiredness.OPTIONAL)
     public String getExtTxt() { return extTxt; }
 
     @ThriftField
@@ -102,7 +110,7 @@ public final class DeviceGroupBean
 
     private Long createTime;
 
-    @ThriftField(value=12, name="createTime", requiredness=Requiredness.OPTIONAL)
+    @ThriftField(value=13, name="createTime", requiredness=Requiredness.OPTIONAL)
     public Long getCreateTime() { return createTime; }
 
     @ThriftField
@@ -110,7 +118,7 @@ public final class DeviceGroupBean
 
     private Long updateTime;
 
-    @ThriftField(value=13, name="updateTime", requiredness=Requiredness.OPTIONAL)
+    @ThriftField(value=14, name="updateTime", requiredness=Requiredness.OPTIONAL)
     public Long getUpdateTime() { return updateTime; }
 
     @ThriftField
@@ -128,6 +136,7 @@ public final class DeviceGroupBean
             .add("leaf", leaf)
             .add("parent", parent)
             .add("rootGroup", rootGroup)
+            .add("schedule", schedule)
             .add("remark", remark)
             .add("extBin", extBin)
             .add("extTxt", extTxt)

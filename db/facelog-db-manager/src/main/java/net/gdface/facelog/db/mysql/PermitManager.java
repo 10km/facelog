@@ -828,6 +828,18 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
         }
     }
     
+    @Override
+    public void runAsTransaction(Runnable fun) {
+        try{
+            this.nativeManager.runAsTransaction(fun);
+        }
+        catch(DaoException e)
+        {
+            throw new RuntimeDaoException(e);
+        }
+    }
+    
+    
     private net.gdface.facelog.dborm.TableManager.Action<net.gdface.facelog.dborm.permit.FlPermitBean> toNative(final Action<PermitBean> action){
         if(null == action){
             throw new NullPointerException();

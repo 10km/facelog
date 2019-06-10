@@ -68,7 +68,7 @@ public interface DaoConstant {
                             + ",fl_device.manufacturer"
                             + ",fl_device.made_date"
                             + ",fl_device.version"
-                            + ",fl_device.sdk_version"
+                            + ",fl_device.used_sdks"
                             + ",fl_device.serial_no"
                             + ",fl_device.mac"
                             + ",fl_device.remark"
@@ -86,7 +86,7 @@ public interface DaoConstant {
                             + ",manufacturer"
                             + ",made_date"
                             + ",version"
-                            + ",sdk_version"
+                            + ",used_sdks"
                             + ",serial_no"
                             + ",mac"
                             + ",remark"
@@ -106,7 +106,7 @@ public interface DaoConstant {
                             + ",manufacturer"
                             + ",madeDate"
                             + ",version"
-                            + ",sdkVersion"
+                            + ",usedSdks"
                             + ",serialNo"
                             + ",mac"
                             + ",remark"
@@ -126,8 +126,7 @@ public interface DaoConstant {
         public static enum Index{
             /** fl_device index (mac) */indexMac,
             /** fl_device index (serial_no) */indexSerialNo,
-            /** fl_device index (group_id) */indexGroupId,
-            /** fl_device index (sdk_version) */indexSdkVersion
+            /** fl_device index (group_id) */indexGroupId
         }
         /** Column Constant definition for fl_device */
         public static enum Column{            
@@ -149,8 +148,8 @@ public interface DaoConstant {
             madeDate("fl_device","made_date",8,"getMadeDate","setMadeDate"),
             /** constant for fl_device.version  */
             version("fl_device","version",9,"getVersion","setVersion"),
-            /** constant for fl_device.sdk_version  */
-            sdkVersion("fl_device","sdk_version",10,"getSdkVersion","setSdkVersion"),
+            /** constant for fl_device.used_sdks  */
+            usedSdks("fl_device","used_sdks",10,"getUsedSdks","setUsedSdks"),
             /** constant for fl_device.serial_no  */
             serialNo("fl_device","serial_no",11,"getSerialNo","setSerialNo"),
             /** constant for fl_device.mac  */
@@ -175,7 +174,7 @@ public interface DaoConstant {
     public static interface DeviceGroupConst{
         public static final String TABLENAME = "fl_device_group";
         /** column count for fl_device_group table */
-        public static final int COLUMN_COUNT = 10;
+        public static final int COLUMN_COUNT = 11;
         /** primary keys count for fl_device_group table */
         public static final int PRIMARY_KEY_COUNT = 1;
         /** foreign keys count for fl_device_group table */
@@ -190,6 +189,7 @@ public interface DaoConstant {
                             + ",fl_device_group.leaf"
                             + ",fl_device_group.parent"
                             + ",fl_device_group.root_group"
+                            + ",fl_device_group.schedule"
                             + ",fl_device_group.remark"
                             + ",fl_device_group.ext_bin"
                             + ",fl_device_group.ext_txt"
@@ -201,6 +201,7 @@ public interface DaoConstant {
                             + ",leaf"
                             + ",parent"
                             + ",root_group"
+                            + ",schedule"
                             + ",remark"
                             + ",ext_bin"
                             + ",ext_txt"
@@ -214,6 +215,7 @@ public interface DaoConstant {
                             + ",leaf"
                             + ",parent"
                             + ",rootGroup"
+                            + ",schedule"
                             + ",remark"
                             + ",extBin"
                             + ",extTxt"
@@ -244,16 +246,18 @@ public interface DaoConstant {
             parent("fl_device_group","parent",4,"getParent","setParent"),
             /** constant for fl_device_group.root_group  */
             rootGroup("fl_device_group","root_group",5,"getRootGroup","setRootGroup"),
+            /** constant for fl_device_group.schedule  */
+            schedule("fl_device_group","schedule",6,"getSchedule","setSchedule"),
             /** constant for fl_device_group.remark  */
-            remark("fl_device_group","remark",6,"getRemark","setRemark"),
+            remark("fl_device_group","remark",7,"getRemark","setRemark"),
             /** constant for fl_device_group.ext_bin  */
-            extBin("fl_device_group","ext_bin",7,"getExtBin","setExtBin"),
+            extBin("fl_device_group","ext_bin",8,"getExtBin","setExtBin"),
             /** constant for fl_device_group.ext_txt  */
-            extTxt("fl_device_group","ext_txt",8,"getExtTxt","setExtTxt"),
+            extTxt("fl_device_group","ext_txt",9,"getExtTxt","setExtTxt"),
             /** constant for fl_device_group.create_time  */
-            createTime("fl_device_group","create_time",9,"getCreateTime","setCreateTime"),
+            createTime("fl_device_group","create_time",10,"getCreateTime","setCreateTime"),
             /** constant for fl_device_group.update_time  */
-            updateTime("fl_device_group","update_time",10,"getUpdateTime","setUpdateTime");
+            updateTime("fl_device_group","update_time",11,"getUpdateTime","setUpdateTime");
             final ColumnMeta meta;
             private Column(String table,String field,int ordinal,String getter,String setter){
                 meta = new ColumnMeta(table,field,ordinal,getter,setter);
@@ -409,13 +413,13 @@ public interface DaoConstant {
         public static final String[] PRIMARYKEY_NAMES = {"md5"};
         /** Contains all the full fields of the fl_feature table.*/
         public static final String FULL_FIELDS ="fl_feature.md5"
-                            + ",fl_feature.sdk_version"
+                            + ",fl_feature.version"
                             + ",fl_feature.person_id"
                             + ",fl_feature.feature"
                             + ",fl_feature.update_time";
         /** Field that contains the comma separated fields of the fl_feature table. */
         public static final String FIELDS = "md5"
-                            + ",sdk_version"
+                            + ",version"
                             + ",person_id"
                             + ",feature"
                             + ",update_time";
@@ -423,7 +427,7 @@ public interface DaoConstant {
         public static final java.util.List<String> FIELDS_LIST = java.util.Collections.unmodifiableList(java.util.Arrays.asList(FIELDS.split(",")));
         /** Field that contains the comma separated java fields of the fl_feature table. */
         public static final String JAVA_FIELDS = "md5"
-                            + ",sdkVersion"
+                            + ",version"
                             + ",personId"
                             + ",feature"
                             + ",updateTime";
@@ -437,15 +441,15 @@ public interface DaoConstant {
             /** imported key fl_log(verify_feature) TO fl_feature */verifyFeatureOfLog
         }
         public static enum Index{
-            /** fl_feature index (person_id) */indexPersonId,
-            /** fl_feature index (sdk_version) */indexSdkVersion
+            /** fl_feature index (version) */indexVersion,
+            /** fl_feature index (person_id) */indexPersonId
         }
         /** Column Constant definition for fl_feature */
         public static enum Column{            
             /** constant for fl_feature.md5  */
             md5("fl_feature","md5",1,"getMd5","setMd5"),
-            /** constant for fl_feature.sdk_version  */
-            sdkVersion("fl_feature","sdk_version",2,"getSdkVersion","setSdkVersion"),
+            /** constant for fl_feature.version  */
+            version("fl_feature","version",2,"getVersion","setVersion"),
             /** constant for fl_feature.person_id  */
             personId("fl_feature","person_id",3,"getPersonId","setPersonId"),
             /** constant for fl_feature.feature  */
@@ -628,7 +632,7 @@ public interface DaoConstant {
     public static interface PermitConst{
         public static final String TABLENAME = "fl_permit";
         /** column count for fl_permit table */
-        public static final int COLUMN_COUNT = 6;
+        public static final int COLUMN_COUNT = 7;
         /** primary keys count for fl_permit table */
         public static final int PRIMARY_KEY_COUNT = 2;
         /** foreign keys count for fl_permit table */
@@ -640,6 +644,7 @@ public interface DaoConstant {
         /** Contains all the full fields of the fl_permit table.*/
         public static final String FULL_FIELDS ="fl_permit.device_group_id"
                             + ",fl_permit.person_group_id"
+                            + ",fl_permit.schedule"
                             + ",fl_permit.remark"
                             + ",fl_permit.ext_bin"
                             + ",fl_permit.ext_txt"
@@ -647,6 +652,7 @@ public interface DaoConstant {
         /** Field that contains the comma separated fields of the fl_permit table. */
         public static final String FIELDS = "device_group_id"
                             + ",person_group_id"
+                            + ",schedule"
                             + ",remark"
                             + ",ext_bin"
                             + ",ext_txt"
@@ -656,6 +662,7 @@ public interface DaoConstant {
         /** Field that contains the comma separated java fields of the fl_permit table. */
         public static final String JAVA_FIELDS = "deviceGroupId"
                             + ",personGroupId"
+                            + ",schedule"
                             + ",remark"
                             + ",extBin"
                             + ",extTxt"
@@ -678,14 +685,16 @@ public interface DaoConstant {
             deviceGroupId("fl_permit","device_group_id",1,"getDeviceGroupId","setDeviceGroupId"),
             /** constant for fl_permit.person_group_id  */
             personGroupId("fl_permit","person_group_id",2,"getPersonGroupId","setPersonGroupId"),
+            /** constant for fl_permit.schedule  */
+            schedule("fl_permit","schedule",3,"getSchedule","setSchedule"),
             /** constant for fl_permit.remark  */
-            remark("fl_permit","remark",3,"getRemark","setRemark"),
+            remark("fl_permit","remark",4,"getRemark","setRemark"),
             /** constant for fl_permit.ext_bin  */
-            extBin("fl_permit","ext_bin",4,"getExtBin","setExtBin"),
+            extBin("fl_permit","ext_bin",5,"getExtBin","setExtBin"),
             /** constant for fl_permit.ext_txt  */
-            extTxt("fl_permit","ext_txt",5,"getExtTxt","setExtTxt"),
+            extTxt("fl_permit","ext_txt",6,"getExtTxt","setExtTxt"),
             /** constant for fl_permit.create_time  */
-            createTime("fl_permit","create_time",6,"getCreateTime","setCreateTime");
+            createTime("fl_permit","create_time",7,"getCreateTime","setCreateTime");
             final ColumnMeta meta;
             private Column(String table,String field,int ordinal,String getter,String setter){
                 meta = new ColumnMeta(table,field,ordinal,getter,setter);

@@ -48,7 +48,7 @@ public class DeviceCmdTest implements ChannelConstant{
 		// 申请root令牌
 		rootToken = facelogClient.applyRootToken("guyadong", false);
 		byte[] address = new byte[]{0x20,0x20,0x20,0x20,0x20,0x20};
-		device = DeviceBean.builder().mac(NetworkUtil.formatMac(address, null)).serialNo("12322333").build();
+		device = DeviceBean.builder().mac(NetworkUtil.formatMac(address, null)).serialNo("12322333").version("MTFSDKARM512").build();
 		logger.info(device.toString(true,false));
 		// 注册设备 
 		device = facelogClient.registerDevice(device);
@@ -89,7 +89,7 @@ public class DeviceCmdTest implements ChannelConstant{
 	}
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
-		facelogClient.unregisterDevice(device.getId(), deviceToken);
+		facelogClient.unregisterDevice(deviceToken);
 		facelogClient.releaseRootToken(rootToken);
 	}
 

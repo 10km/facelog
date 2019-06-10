@@ -2,6 +2,8 @@ package net.gdface.facelog;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static net.gdface.facelog.FeatureConfig.*;
+
 
 import java.nio.ByteBuffer;
 import java.util.concurrent.TimeUnit;
@@ -47,6 +49,7 @@ class TokenMangement implements ServiceConstant {
 	private final int personTokenExpire;
 	/** 是否拒绝普通人员申请令牌 */
 	private final boolean rejectZero;
+
 	/**
 	 * @param dao
 	 */
@@ -276,18 +279,21 @@ class TokenMangement implements ServiceConstant {
 			throws ServiceSecurityException{
 		TokenOp.REGISTER.asContextTokenOp();
 		checkArgument(null != newDevice,"deviceBean must not be null");
-	    // 检查是否为新记录，
-	    checkArgument(newDevice.isNew(),
-	    		"for device registeration the 'newDevice' must be a new record,so the _isNew field must be true ");
-	    // ID为自增长键，新记录ID字段不能指定，由数据库分配
-	    checkArgument(
-	    		!newDevice.isModified(net.gdface.facelog.db.Constant.FL_DEVICE_ID_ID) 
-	    		|| Objects.equal(0,newDevice.getId()),
-	    		"for device registeration the 'newDevice' must be a new record,so id field must be not be set or be zero");
-	 // sdk_version字段不可为空
-	    checkArgument(!Strings.isNullOrEmpty(newDevice.getSdkVersion()), "sdkVersion must not be null or empty");
-	    // sdk_version字段内容只允许字母,数字,-,.,_符号
-	    checkArgument(newDevice.getSdkVersion().matches(SDK_VERSION_REGEX), "invalid sdk version format");
+		// 检查是否为新记录，
+		checkArgument(newDevice.isNew(),
+				"for device registeration the 'newDevice' must be a new record,so the _isNew field must be true ");
+		// ID为自增长键，新记录ID字段不能指定，由数据库分配
+		checkArgument(
+				!newDevice.isModified(net.gdface.facelog.db.Constant.FL_DEVICE_ID_ID) 
+				|| Objects.equal(0,newDevice.getId()),
+				"for device registeration the 'newDevice' must be a new record,so id field must be not be set or be zero");
+		// sdk_version字段不可为空
+		checkArgument(!Strings.isNullOrEmpty(newDevice.getUsedSdks()), "sdkVersion must not be null or empty");
+
+		// 检查sdk_version是否允许注册
+		checkArgument(FEATURE_CONFIG.allValidSdkVersions(newDevice.getUsedSdks()), 
+				"UNSUPPORTED SDK Version [%s]",newDevice.getUsedSdks());
+
 		DeviceBean dmac = this.dao.daoGetDeviceByIndexMac(newDevice.getMac());
 		DeviceBean dsn = this.dao.daoGetDeviceByIndexSerialNo(newDevice.getSerialNo());
 		if(null !=dmac ){
@@ -315,14 +321,11 @@ class TokenMangement implements ServiceConstant {
 	/**
 	 * 设备注销
 	 * @param deviceId
-	 * @param token
 	 * @throws ServiceSecurityException
 	 */
-	protected void unregisterDevice(int deviceId,Token token)
+	protected void unregisterDevice(int deviceId)
 			throws ServiceSecurityException{
 		TokenOp.UNREGISTER.asContextTokenOp();
-		Enable.DEVICE_ONLY.check(this, token);
-		checkValidDeviceId(deviceId);
 		this.dao.daoDeleteDevice(deviceId);
 	}
 	/**
