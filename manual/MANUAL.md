@@ -906,6 +906,34 @@ facelog 基于[dtalk](https://gitee.com/l0km/dtalk)框架实现设备命令定�
 
 
 测试代码位置:[`net.gdface.facelog.client.DeviceCmdTest`](../facelog-client/src/test/java/net/gdface/facelog/client/DeviceCmdTest.java)
+
+### 时间过滤器
+
+`fl_permit`,`fl_device_group`表中都有`schedule`字段用于时间排程，fl_permit表中用于定义通行时间，fl_device_group表中用于定义设备工作时间。该字段为String类型使用JSON格式描述的时间过滤器。JSON格式时间过滤定义如下：
+
+当String为空或null时，为全通过滤器，即没有任何限制。否则必须为如下JSON格式：
+
+	{
+		## hour,day为默认规则过滤器,根据day字段bit0的值可分为7x24小时过滤器和31x24小时过滤器，未定义时使用缺省值0xffffffff,即7x24小时过滤器		
+		day:0xffffffff,     ## 缺省日期过滤器(32位整数):对应位为1为符合过滤条件，为0不符合过滤条件
+							## bit0为1时,bit 1~7代表每周的天（1-星期日,2-星期一,3-星期二,4-星期三,5-星期四,6-星期五,7-星期六）,bit8~bit31未定义
+							## bit0为0时,bit 1~31分别代表每月1~31日
+		hour:0x00ffffff,    ## 缺省时间过滤器(32位整数):以小时为单位定义过滤时间，bit0~bit23代表一天的24小时，对应位为1为符合过滤条件，为0不符合过滤条件
+		## 以下为可选的例外规则过滤器，当存在例外过滤器时优先使用例外过滤器，例外过滤器的值(32位整数)即为过滤时间，参见hour定义
+		w1:0,				## 日期(周)过滤器，w1~w7（1-星期日,2-星期一,3-星期二,4-星期三,5-星期四,6-星期五,7-星期六）
+		m25:0x00ff00ff,		## 日期(月)过滤器，m1~w31分别代表每月的1日到31日
+		d0725:0x00ff00ff,   ## 日期(日期)过滤器，d0101~d1231,后面4位数字以(MMdd)代表日期
+		## 当例外规则过滤器之间存在冲突时（比如存在w1,m1,d0601,3个过滤器，而6月1日也是星期一也是6月第一天），优先顺序为日期，月，周
+
+		asLastdayIfOverflow:true/false  ## 溢出部分是否可作为每月最后一天
+										## 比如我们定义了m31为0x0,而当前日期是6月30日(最后一天)，6月没有31日，如果该字段为true，则将m31规则应用于当前日期。
+	}
+
+[IDateTimeFilter](facelog-base/src/main/java/net/gdface/facelog/IDateTimeFilter.java)定义了时间过滤器接口，
+
+[DateTimeJsonFilter](facelog-base/src/main/java/net/gdface/facelog/DateTimeJsonFilter.java)按上述规则实现了过滤器接口。
+
+
 ### 服务端异常
 
 调用 facelog 服务时有可能抛出以下异常:
