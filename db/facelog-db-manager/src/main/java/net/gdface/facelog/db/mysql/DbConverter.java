@@ -179,6 +179,9 @@ public class DbConverter implements IDbConverter<
             if(right.checkRootGroupInitialized()){
                 left.setRootGroup(right.getRootGroup());
             }
+            if(right.checkScheduleInitialized()){
+                left.setSchedule(right.getSchedule());
+            }
             if(right.checkRemarkInitialized()){
                 left.setRemark(right.getRemark());
             }
@@ -215,6 +218,9 @@ public class DbConverter implements IDbConverter<
             }
             if(left.checkRootGroupInitialized() ){
                 right.setRootGroup(left.getRootGroup());
+            }
+            if(left.checkScheduleInitialized() ){
+                right.setSchedule(left.getSchedule());
             }
             if(left.checkRemarkInitialized() ){
                 right.setRemark(left.getRemark());
@@ -560,6 +566,9 @@ public class DbConverter implements IDbConverter<
             if(right.checkPersonGroupIdInitialized()){
                 left.setPersonGroupId(right.getPersonGroupId());
             }
+            if(right.checkScheduleInitialized()){
+                left.setSchedule(right.getSchedule());
+            }
             if(right.checkRemarkInitialized()){
                 left.setRemark(right.getRemark());
             }
@@ -584,6 +593,9 @@ public class DbConverter implements IDbConverter<
             }
             if(left.checkPersonGroupIdInitialized() ){
                 right.setPersonGroupId(left.getPersonGroupId());
+            }
+            if(left.checkScheduleInitialized() ){
+                right.setSchedule(left.getSchedule());
             }
             if(left.checkRemarkInitialized() ){
                 right.setRemark(left.getRemark());

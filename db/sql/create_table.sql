@@ -34,6 +34,7 @@ CREATE TABLE IF NOT EXISTS fl_device_group (
   `leaf`        tinyint(1) DEFAULT NULL COMMENT '是否为叶子节点, 1:叶子节点 0:分支节点,null:两者都可',
   `parent`      int(11) DEFAULT NULL COMMENT '上一级设备组id',
   `root_group`  int(11) DEFAULT NULL COMMENT '指向人员组id,用于应用层定义管理员/操作员的管理边界,此字段不为null代表此设备组为管理边界,指向的人员组为此设备组的拥有者的顶级组',
+  `schedule`    varchar(4096) DEFAULT NULL COMMENT '设备工作时间表,为null或空为7x24小时工作,格式为JSON,参见开发手册',
   `remark`      varchar(256) DEFAULT NULL COMMENT '备注',
   `ext_bin`     blob DEFAULT NULL COMMENT '应用项目自定义二进制扩展字段(最大64KB)',
   `ext_txt`     text DEFAULT NULL COMMENT '应用项目自定义文本扩展字段(最大64KB)',
@@ -60,6 +61,7 @@ CREATE TABLE IF NOT EXISTS fl_person_group (
 CREATE TABLE IF NOT EXISTS fl_permit (
   `device_group_id`   int(11) NOT NULL COMMENT '外键,设备组id',
   `person_group_id`    int(11) NOT NULL COMMENT '外键,人员组id',
+  `schedule`    varchar(4096) DEFAULT NULL COMMENT '允许通行时间表,为null或空为7x24小时工作,格式为JSON,参见开发手册',
   `remark`      varchar(256) DEFAULT NULL COMMENT '备注',
   `ext_bin`     blob DEFAULT NULL COMMENT '应用项目自定义二进制扩展字段(最大64KB)',
   `ext_txt`     text DEFAULT NULL COMMENT '应用项目自定义文本扩展字段(最大64KB)',

@@ -116,23 +116,27 @@ public class DaoManagement extends BaseDao implements ServiceConstant,Constant{
 	 * 输入参数为{@code null}或找不到指定的记录则返回false
 	 * @param deviceGroupId
 	 * @param personGroupId
-	 * @return 允许通行返回false，否则返回false
+	 * @return 允许通行返回指定的{@link PermitBean}记录，否则返回{@code null}
 	 */
-	protected boolean daoGetGroupPermitOnDeviceGroup(final Integer deviceGroupId,Integer personGroupId){
+	protected PermitBean daoGetGroupPermitOnDeviceGroup(final Integer deviceGroupId,Integer personGroupId){
 		PersonGroupBean personGroup;
 		if(null == deviceGroupId
 			|| null == personGroupId 
 			|| null == (personGroup = daoGetPersonGroup(personGroupId))){
-			return false;
+			return null;
 		}
-		List<PersonGroupBean> personGroupList = daoListOfParentForPersonGroup(personGroup);		
-
+		List<PersonGroupBean> personGroupList = daoListOfParentForPersonGroup(personGroup);
+		// first is self
+		Collections.reverse(personGroupList);
 		// person group 及其parent,任何一个在permit表中就返回true
-		return Iterators.tryFind(personGroupList.iterator(), new Predicate<PersonGroupBean>(){
+		Optional<PersonGroupBean> found = Iterators.tryFind(personGroupList.iterator(), new Predicate<PersonGroupBean>(){
 			@Override
 			public boolean apply(PersonGroupBean input) {
 					return daoExistsPermit(deviceGroupId, input.getId());
-			}}).isPresent();
+			}});
+		return found.isPresent() ?
+			daoGetPermit(deviceGroupId, found.get().getId())
+			: null;
 	}
 	/**
 	 * 获取人员组通行权限<br>
@@ -142,40 +146,40 @@ public class DaoManagement extends BaseDao implements ServiceConstant,Constant{
 	 * 输入参数为{@code null}或找不到指定的记录则返回false
 	 * @param deviceId
 	 * @param personGroupId
-	 * @return 允许通行返回false，否则返回false
+	 * @return 允许通行返回指定的{@link PermitBean}记录，否则返回{@code null}
 	 * @see #daoGetGroupPermitOnDeviceGroup(Integer, Integer)
 	 */
-	protected boolean daoGetGroupPermit(Integer deviceId,Integer personGroupId){
+	protected PermitBean daoGetGroupPermit(Integer deviceId,Integer personGroupId){
 		DeviceBean device;
 		if(null == deviceId || null ==(device = daoGetDevice(deviceId))){
-			return false;
+			return null;
 		}
 		return daoGetGroupPermitOnDeviceGroup(device.getGroupId(),personGroupId);
 	}
-	protected boolean daoGetPersonPermit(Integer deviceId,Integer personId){
+	protected PermitBean daoGetPersonPermit(Integer deviceId,Integer personId){
 		PersonBean person;
 		if( null == personId || null == (person = daoGetPerson(personId))){
-			return false;
+			return null;
 		}
 		return daoGetGroupPermit(deviceId,person.getGroupId());
 	}
-	protected List<Boolean> daoGetGroupPermit(final Integer deviceId,List<Integer> personGroupIdList){
+	protected List<PermitBean> daoGetGroupPermit(final Integer deviceId,List<Integer> personGroupIdList){
 		if(null == deviceId || null == personGroupIdList){
 			return Collections.emptyList();
 		}
-		return Lists.newArrayList(Lists.transform(personGroupIdList, new Function<Integer,Boolean>(){
+		return Lists.newArrayList(Lists.transform(personGroupIdList, new Function<Integer,PermitBean>(){
 			@Override
-			public Boolean apply(Integer input) {
+			public PermitBean apply(Integer input) {
 				return daoGetGroupPermit(deviceId,input);
 			}}));
 	}
-	protected List<Boolean> daoGetPermit(final Integer deviceId,List<Integer> personIdList){
+	protected List<PermitBean> daoGetPermit(final Integer deviceId,List<Integer> personIdList){
 		if(null == deviceId || null == personIdList){
 			return Collections.emptyList();
 		}
-		return Lists.newArrayList(Lists.transform(personIdList, new Function<Integer,Boolean>(){
+		return Lists.newArrayList(Lists.transform(personIdList, new Function<Integer,PermitBean>(){
 			@Override
-			public Boolean apply(Integer input) {
+			public PermitBean apply(Integer input) {
 				return daoGetPersonPermit(deviceId,input);
 			}}));
 	}

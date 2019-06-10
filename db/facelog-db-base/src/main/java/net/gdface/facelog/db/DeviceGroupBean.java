@@ -51,6 +51,10 @@ public final class DeviceGroupBean
     @ApiModelProperty(value = "指向人员组id,用于应用层定义管理员/操作员的管理边界,此字段不为null代表此设备组为管理边界,指向的人员组为此设备组的拥有者的顶级组"  ,dataType="Integer")
     private Integer rootGroup;
 
+    /** comments:设备工作时间表,为null或空为7x24小时工作,格式为JSON,参见开发手册 */
+    @ApiModelProperty(value = "设备工作时间表,为null或空为7x24小时工作,格式为JSON,参见开发手册"  ,dataType="String")
+    private String schedule;
+
     /** comments:备注 */
     @ApiModelProperty(value = "备注"  ,dataType="String")
     private String remark;
@@ -569,6 +573,73 @@ public final class DeviceGroupBean
         return 0L !=  (initialized & FL_DEVICE_GROUP_ID_ROOT_GROUP_MASK);
     }
     /**
+     * Getter method for {@link #schedule}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_device_group.schedule</li>
+     * <li>comments: 设备工作时间表,为null或空为7x24小时工作,格式为JSON,参见开发手册</li>
+     * <li>column size: 4096</li>
+     * <li>JDBC type returned by the driver: Types.VARCHAR</li>
+     * </ul>
+     *
+     * @return the value of schedule
+     */
+    @ThriftField(value=9)
+    public String getSchedule(){
+        return schedule;
+    }
+    /**
+     * Setter method for {@link #schedule}.<br>
+     * The new value is set only if equals() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to schedule
+     */
+    public void setSchedule(String newVal)
+    {
+        checkMutable();
+
+        modified |= FL_DEVICE_GROUP_ID_SCHEDULE_MASK;
+        initialized |= FL_DEVICE_GROUP_ID_SCHEDULE_MASK;
+
+        if (Objects.equals(newVal, schedule)) {
+            return;
+        }
+        schedule = newVal;
+    }
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "schedule")
+    public void writeSchedule(String newVal){
+        checkMutable();
+        schedule = newVal;
+    }
+    /**
+     * Determines if the schedule has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkScheduleModified()
+    {
+        return 0L !=  (modified & FL_DEVICE_GROUP_ID_SCHEDULE_MASK);
+    }
+
+    /**
+     * Determines if the schedule has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkScheduleInitialized()
+    {
+        return 0L !=  (initialized & FL_DEVICE_GROUP_ID_SCHEDULE_MASK);
+    }
+    /**
      * Getter method for {@link #remark}.<br>
      * Meta Data Information (in progress):
      * <ul>
@@ -580,7 +651,7 @@ public final class DeviceGroupBean
      *
      * @return the value of remark
      */
-    @ThriftField(value=9)
+    @ThriftField(value=10)
     public String getRemark(){
         return remark;
     }
@@ -647,7 +718,7 @@ public final class DeviceGroupBean
      *
      * @return the value of extBin
      */
-    @ThriftField(value=10)
+    @ThriftField(value=11)
     public java.nio.ByteBuffer getExtBin(){
         return extBin;
     }
@@ -714,7 +785,7 @@ public final class DeviceGroupBean
      *
      * @return the value of extTxt
      */
-    @ThriftField(value=11)
+    @ThriftField(value=12)
     public String getExtTxt(){
         return extTxt;
     }
@@ -789,7 +860,7 @@ public final class DeviceGroupBean
      * use Long to represent date type for thrift:swift support 
      * @see #getCreateTime()
      */
-    @ThriftField(name = "createTime",value = 12)
+    @ThriftField(name = "createTime",value = 13)
     public Long readCreateTime(){
         return null == createTime ? null:createTime.getTime();
     }
@@ -882,7 +953,7 @@ public final class DeviceGroupBean
      * use Long to represent date type for thrift:swift support 
      * @see #getUpdateTime()
      */
-    @ThriftField(name = "updateTime",value = 13)
+    @ThriftField(name = "updateTime",value = 14)
     public Long readUpdateTime(){
         return null == updateTime ? null:updateTime.getTime();
     }
@@ -998,6 +1069,8 @@ public final class DeviceGroupBean
             return checkParentModified();
         case FL_DEVICE_GROUP_ID_ROOT_GROUP:
             return checkRootGroupModified();
+        case FL_DEVICE_GROUP_ID_SCHEDULE:
+            return checkScheduleModified();
         case FL_DEVICE_GROUP_ID_REMARK:
             return checkRemarkModified();
         case FL_DEVICE_GROUP_ID_EXT_BIN:
@@ -1026,6 +1099,8 @@ public final class DeviceGroupBean
             return checkParentInitialized();
         case FL_DEVICE_GROUP_ID_ROOT_GROUP:
             return checkRootGroupInitialized();
+        case FL_DEVICE_GROUP_ID_SCHEDULE:
+            return checkScheduleInitialized();
         case FL_DEVICE_GROUP_ID_REMARK:
             return checkRemarkInitialized();
         case FL_DEVICE_GROUP_ID_EXT_BIN:
@@ -1072,6 +1147,7 @@ public final class DeviceGroupBean
             FL_DEVICE_GROUP_ID_LEAF_MASK |
             FL_DEVICE_GROUP_ID_PARENT_MASK |
             FL_DEVICE_GROUP_ID_ROOT_GROUP_MASK |
+            FL_DEVICE_GROUP_ID_SCHEDULE_MASK |
             FL_DEVICE_GROUP_ID_REMARK_MASK |
             FL_DEVICE_GROUP_ID_EXT_BIN_MASK |
             FL_DEVICE_GROUP_ID_EXT_TXT_MASK |
@@ -1093,6 +1169,7 @@ public final class DeviceGroupBean
         this.leaf = null;
         this.parent = null;
         this.rootGroup = null;
+        this.schedule = null;
         this.remark = null;
         this.extBin = null;
         this.extTxt = null;
@@ -1118,6 +1195,7 @@ public final class DeviceGroupBean
             .append(getLeaf(), obj.getLeaf())
             .append(getParent(), obj.getParent())
             .append(getRootGroup(), obj.getRootGroup())
+            .append(getSchedule(), obj.getSchedule())
             .append(getRemark(), obj.getRemark())
             .append(getExtBin(), obj.getExtBin())
             .append(getExtTxt(), obj.getExtTxt())
@@ -1232,6 +1310,15 @@ public final class DeviceGroupBean
                 append(builder,fullIfStringOrBytes,getRootGroup());
             }
         }
+        if(checkScheduleInitialized()){
+            if(!notNull || null != getSchedule()){
+                if(count++ >0){
+                    builder.append(",");
+                }
+                builder.append("schedule=");
+                append(builder,fullIfStringOrBytes,getSchedule());
+            }
+        }
         if(checkRemarkInitialized()){
             if(!notNull || null != getRemark()){
                 if(count++ >0){
@@ -1288,6 +1375,7 @@ public final class DeviceGroupBean
             .append(getLeaf(), object.getLeaf())
             .append(getParent(), object.getParent())
             .append(getRootGroup(), object.getRootGroup())
+            .append(getSchedule(), object.getSchedule())
             .append(getRemark(), object.getRemark())
             .append(getExtBin(), object.getExtBin())
             .append(getExtTxt(), object.getExtTxt())
@@ -1318,6 +1406,7 @@ public final class DeviceGroupBean
         setLeaf((Integer)null);
         setParent((Integer)null);
         setRootGroup((Integer)null);
+        setSchedule((String)null);
         setRemark((String)null);
         setExtBin((java.nio.ByteBuffer)null);
         setExtTxt((String)null);
@@ -1422,6 +1511,8 @@ public final class DeviceGroupBean
             return (T)getParent();        
         case FL_DEVICE_GROUP_ID_ROOT_GROUP: 
             return (T)getRootGroup();        
+        case FL_DEVICE_GROUP_ID_SCHEDULE: 
+            return (T)getSchedule();        
         case FL_DEVICE_GROUP_ID_REMARK: 
             return (T)getRemark();        
         case FL_DEVICE_GROUP_ID_EXT_BIN: 
@@ -1455,6 +1546,9 @@ public final class DeviceGroupBean
             break;
         case FL_DEVICE_GROUP_ID_ROOT_GROUP:
             setRootGroup((Integer)value);
+            break;
+        case FL_DEVICE_GROUP_ID_SCHEDULE:
+            setSchedule((String)value);
             break;
         case FL_DEVICE_GROUP_ID_REMARK:
             setRemark((String)value);
@@ -1582,6 +1676,16 @@ public final class DeviceGroupBean
          */
         public Builder rootGroup(Integer rootGroup){
             TEMPLATE.get().setRootGroup(rootGroup);
+            return this;
+        }
+        /** 
+         * fill the field : fl_device_group.schedule
+         * @param schedule 设备工作时间表,为null或空为7x24小时工作,格式为JSON,参见开发手册
+         * @see DeviceGroupBean#getSchedule()
+         * @see DeviceGroupBean#setSchedule(String)
+         */
+        public Builder schedule(String schedule){
+            TEMPLATE.get().setSchedule(schedule);
             return this;
         }
         /** 

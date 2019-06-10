@@ -105,11 +105,12 @@ struct DeviceGroupBean {
   6: optional i32 leaf;
   7: optional i32 parent;
   8: optional i32 rootGroup;
-  9: optional string remark;
-  10: optional binary extBin;
-  11: optional string extTxt;
-  12: optional i64 createTime;
-  13: optional i64 updateTime;
+  9: optional string schedule;
+  10: optional string remark;
+  11: optional binary extBin;
+  12: optional string extTxt;
+  13: optional i64 createTime;
+  14: optional i64 updateTime;
 }
 
 struct PersonGroupBean {
@@ -151,6 +152,19 @@ struct DeviceBean {
   20: optional i64 updateTime;
 }
 
+struct PermitBean {
+  1: required bool _new;
+  2: required i32 modified;
+  3: required i32 initialized;
+  4: optional i32 deviceGroupId;
+  5: optional i32 personGroupId;
+  6: optional string schedule;
+  7: optional string remark;
+  8: optional binary extBin;
+  9: optional string extTxt;
+  10: optional i64 createTime;
+}
+
 struct PersonBean {
   1: required bool _new;
   2: required i32 modified;
@@ -184,18 +198,6 @@ struct LogLightBean {
   7: optional i32 papersType;
   8: optional string papersNum;
   9: optional i64 verifyTime;
-}
-
-struct PermitBean {
-  1: required bool _new;
-  2: required i32 modified;
-  3: required i32 initialized;
-  4: optional i32 deviceGroupId;
-  5: optional i32 personGroupId;
-  6: optional string remark;
-  7: optional binary extBin;
-  8: optional string extTxt;
-  9: optional i64 createTime;
 }
 
 struct Token {
@@ -279,9 +281,9 @@ service IFaceLog {
   list<string> getFeaturesByPersonId(1: required i32 personId) throws (1: ServiceRuntimeException ex1);
   list<string> getFeaturesByPersonIdAndSdkVersion(1: required i32 personId, 2: optional string sdkVersion) throws (1: ServiceRuntimeException ex1);
   list<string> getFeaturesOfPerson(1: required i32 personId) throws (1: ServiceRuntimeException ex1);
-  bool getGroupPermit(1: required i32 deviceId, 2: required i32 personGroupId) throws (1: ServiceRuntimeException ex1);
-  bool getGroupPermitOnDeviceGroup(1: required i32 deviceGroupId, 2: required i32 personGroupId) throws (1: ServiceRuntimeException ex1);
-  list<bool> getGroupPermits(1: required i32 deviceId, 2: optional list<i32> personGroupIdList) throws (1: ServiceRuntimeException ex1);
+  PermitBean getGroupPermit(1: required i32 deviceId, 2: required i32 personGroupId) throws (1: ServiceRuntimeException ex1);
+  PermitBean getGroupPermitOnDeviceGroup(1: required i32 deviceGroupId, 2: required i32 personGroupId) throws (1: ServiceRuntimeException ex1);
+  list<PermitBean> getGroupPermits(1: required i32 deviceId, 2: optional list<i32> personGroupIdList) throws (1: ServiceRuntimeException ex1);
   ImageBean getImage(1: optional string imageMD5) throws (1: ServiceRuntimeException ex1);
   binary getImageBytes(1: optional string imageMD5) throws (1: ServiceRuntimeException ex1);
   list<string> getImagesAssociatedByFeature(1: optional string featureMd5) throws (1: ServiceRuntimeException ex1);
@@ -292,8 +294,8 @@ service IFaceLog {
   list<PersonGroupBean> getPersonGroups(1: optional list<i32> groupIdList) throws (1: ServiceRuntimeException ex1);
   list<i32> getPersonGroupsBelongs(1: required i32 personId) throws (1: ServiceRuntimeException ex1);
   list<i32> getPersonGroupsPermittedBy(1: required i32 deviceGroupId) throws (1: ServiceRuntimeException ex1);
-  bool getPersonPermit(1: required i32 deviceId, 2: required i32 personId) throws (1: ServiceRuntimeException ex1);
-  list<bool> getPersonPermits(1: required i32 deviceId, 2: optional list<i32> personIdList) throws (1: ServiceRuntimeException ex1);
+  PermitBean getPersonPermit(1: required i32 deviceId, 2: required i32 personId) throws (1: ServiceRuntimeException ex1);
+  list<PermitBean> getPersonPermits(1: required i32 deviceId, 2: optional list<i32> personIdList) throws (1: ServiceRuntimeException ex1);
   list<PersonBean> getPersons(1: optional list<i32> idList) throws (1: ServiceRuntimeException ex1);
   list<i32> getPersonsOfGroup(1: required i32 personGroupId) throws (1: ServiceRuntimeException ex1);
   string getProperty(1: optional string key, 2: optional Token token) throws (1: ServiceRuntimeException ex1);

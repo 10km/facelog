@@ -39,6 +39,8 @@ public partial class DeviceGroupBean : TBase
 
   public int? RootGroup { get; set; }
 
+  public string Schedule { get; set; }
+
   public string Remark { get; set; }
 
   public byte[] ExtBin { get; set; }
@@ -137,33 +139,40 @@ public partial class DeviceGroupBean : TBase
             break;
           case 9:
             if (field.Type == TType.String) {
-              Remark = iprot.ReadString();
+              Schedule = iprot.ReadString();
             } else { 
               TProtocolUtil.Skip(iprot, field.Type);
             }
             break;
           case 10:
             if (field.Type == TType.String) {
-              ExtBin = iprot.ReadBinary();
+              Remark = iprot.ReadString();
             } else { 
               TProtocolUtil.Skip(iprot, field.Type);
             }
             break;
           case 11:
             if (field.Type == TType.String) {
-              ExtTxt = iprot.ReadString();
+              ExtBin = iprot.ReadBinary();
             } else { 
               TProtocolUtil.Skip(iprot, field.Type);
             }
             break;
           case 12:
+            if (field.Type == TType.String) {
+              ExtTxt = iprot.ReadString();
+            } else { 
+              TProtocolUtil.Skip(iprot, field.Type);
+            }
+            break;
+          case 13:
             if (field.Type == TType.I64) {
               CreateTime = iprot.ReadI64();
             } else { 
               TProtocolUtil.Skip(iprot, field.Type);
             }
             break;
-          case 13:
+          case 14:
             if (field.Type == TType.I64) {
               UpdateTime = iprot.ReadI64();
             } else { 
@@ -255,10 +264,18 @@ public partial class DeviceGroupBean : TBase
         oprot.WriteI32(RootGroup.Value);
         oprot.WriteFieldEnd();
       }
+      if (Schedule != null) {
+        field.Name = "schedule";
+        field.Type = TType.String;
+        field.ID = 9;
+        oprot.WriteFieldBegin(field);
+        oprot.WriteString(Schedule);
+        oprot.WriteFieldEnd();
+      }
       if (Remark != null) {
         field.Name = "remark";
         field.Type = TType.String;
-        field.ID = 9;
+        field.ID = 10;
         oprot.WriteFieldBegin(field);
         oprot.WriteString(Remark);
         oprot.WriteFieldEnd();
@@ -266,7 +283,7 @@ public partial class DeviceGroupBean : TBase
       if (ExtBin != null) {
         field.Name = "extBin";
         field.Type = TType.String;
-        field.ID = 10;
+        field.ID = 11;
         oprot.WriteFieldBegin(field);
         oprot.WriteBinary(ExtBin);
         oprot.WriteFieldEnd();
@@ -274,7 +291,7 @@ public partial class DeviceGroupBean : TBase
       if (ExtTxt != null) {
         field.Name = "extTxt";
         field.Type = TType.String;
-        field.ID = 11;
+        field.ID = 12;
         oprot.WriteFieldBegin(field);
         oprot.WriteString(ExtTxt);
         oprot.WriteFieldEnd();
@@ -282,7 +299,7 @@ public partial class DeviceGroupBean : TBase
       if (CreateTime != null) {
         field.Name = "createTime";
         field.Type = TType.I64;
-        field.ID = 12;
+        field.ID = 13;
         oprot.WriteFieldBegin(field);
         oprot.WriteI64(CreateTime.Value);
         oprot.WriteFieldEnd();
@@ -290,7 +307,7 @@ public partial class DeviceGroupBean : TBase
       if (UpdateTime != null) {
         field.Name = "updateTime";
         field.Type = TType.I64;
-        field.ID = 13;
+        field.ID = 14;
         oprot.WriteFieldBegin(field);
         oprot.WriteI64(UpdateTime.Value);
         oprot.WriteFieldEnd();
@@ -331,6 +348,10 @@ public partial class DeviceGroupBean : TBase
     if (RootGroup != null) {
       __sb.Append(", RootGroup: ");
       __sb.Append(RootGroup);
+    }
+    if (Schedule != null) {
+      __sb.Append(", Schedule: ");
+      __sb.Append(Schedule);
     }
     if (Remark != null) {
       __sb.Append(", Remark: ");

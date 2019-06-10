@@ -9468,7 +9468,7 @@ IFaceLog_getGroupPermit_result = function(args) {
   }
   if (args) {
     if (args.success !== undefined && args.success !== null) {
-      this.success = args.success;
+      this.success = new PermitBean(args.success);
     }
     if (args.ex1 !== undefined && args.ex1 !== null) {
       this.ex1 = args.ex1;
@@ -9490,8 +9490,9 @@ IFaceLog_getGroupPermit_result.prototype.read = function(input) {
     switch (fid)
     {
       case 0:
-      if (ftype == Thrift.Type.BOOL) {
-        this.success = input.readBool().value;
+      if (ftype == Thrift.Type.STRUCT) {
+        this.success = new PermitBean();
+        this.success.read(input);
       } else {
         input.skip(ftype);
       }
@@ -9516,8 +9517,8 @@ IFaceLog_getGroupPermit_result.prototype.read = function(input) {
 IFaceLog_getGroupPermit_result.prototype.write = function(output) {
   output.writeStructBegin('IFaceLog_getGroupPermit_result');
   if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.BOOL, 0);
-    output.writeBool(this.success);
+    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
+    this.success.write(output);
     output.writeFieldEnd();
   }
   if (this.ex1 !== null && this.ex1 !== undefined) {
@@ -9609,7 +9610,7 @@ IFaceLog_getGroupPermitOnDeviceGroup_result = function(args) {
   }
   if (args) {
     if (args.success !== undefined && args.success !== null) {
-      this.success = args.success;
+      this.success = new PermitBean(args.success);
     }
     if (args.ex1 !== undefined && args.ex1 !== null) {
       this.ex1 = args.ex1;
@@ -9631,8 +9632,9 @@ IFaceLog_getGroupPermitOnDeviceGroup_result.prototype.read = function(input) {
     switch (fid)
     {
       case 0:
-      if (ftype == Thrift.Type.BOOL) {
-        this.success = input.readBool().value;
+      if (ftype == Thrift.Type.STRUCT) {
+        this.success = new PermitBean();
+        this.success.read(input);
       } else {
         input.skip(ftype);
       }
@@ -9657,8 +9659,8 @@ IFaceLog_getGroupPermitOnDeviceGroup_result.prototype.read = function(input) {
 IFaceLog_getGroupPermitOnDeviceGroup_result.prototype.write = function(output) {
   output.writeStructBegin('IFaceLog_getGroupPermitOnDeviceGroup_result');
   if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.BOOL, 0);
-    output.writeBool(this.success);
+    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
+    this.success.write(output);
     output.writeFieldEnd();
   }
   if (this.ex1 !== null && this.ex1 !== undefined) {
@@ -9770,7 +9772,7 @@ IFaceLog_getGroupPermits_result = function(args) {
   }
   if (args) {
     if (args.success !== undefined && args.success !== null) {
-      this.success = Thrift.copyList(args.success, [null]);
+      this.success = Thrift.copyList(args.success, [PermitBean]);
     }
     if (args.ex1 !== undefined && args.ex1 !== null) {
       this.ex1 = args.ex1;
@@ -9803,7 +9805,8 @@ IFaceLog_getGroupPermits_result.prototype.read = function(input) {
         for (var _i215 = 0; _i215 < _size210; ++_i215)
         {
           var elem216 = null;
-          elem216 = input.readBool().value;
+          elem216 = new PermitBean();
+          elem216.read(input);
           this.success.push(elem216);
         }
         input.readListEnd();
@@ -9832,13 +9835,13 @@ IFaceLog_getGroupPermits_result.prototype.write = function(output) {
   output.writeStructBegin('IFaceLog_getGroupPermits_result');
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.LIST, 0);
-    output.writeListBegin(Thrift.Type.BOOL, this.success.length);
+    output.writeListBegin(Thrift.Type.STRUCT, this.success.length);
     for (var iter217 in this.success)
     {
       if (this.success.hasOwnProperty(iter217))
       {
         iter217 = this.success[iter217];
-        output.writeBool(iter217);
+        iter217.write(output);
       }
     }
     output.writeListEnd();
@@ -11321,7 +11324,7 @@ IFaceLog_getPersonPermit_result = function(args) {
   }
   if (args) {
     if (args.success !== undefined && args.success !== null) {
-      this.success = args.success;
+      this.success = new PermitBean(args.success);
     }
     if (args.ex1 !== undefined && args.ex1 !== null) {
       this.ex1 = args.ex1;
@@ -11343,8 +11346,9 @@ IFaceLog_getPersonPermit_result.prototype.read = function(input) {
     switch (fid)
     {
       case 0:
-      if (ftype == Thrift.Type.BOOL) {
-        this.success = input.readBool().value;
+      if (ftype == Thrift.Type.STRUCT) {
+        this.success = new PermitBean();
+        this.success.read(input);
       } else {
         input.skip(ftype);
       }
@@ -11369,8 +11373,8 @@ IFaceLog_getPersonPermit_result.prototype.read = function(input) {
 IFaceLog_getPersonPermit_result.prototype.write = function(output) {
   output.writeStructBegin('IFaceLog_getPersonPermit_result');
   if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.BOOL, 0);
-    output.writeBool(this.success);
+    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
+    this.success.write(output);
     output.writeFieldEnd();
   }
   if (this.ex1 !== null && this.ex1 !== undefined) {
@@ -11482,7 +11486,7 @@ IFaceLog_getPersonPermits_result = function(args) {
   }
   if (args) {
     if (args.success !== undefined && args.success !== null) {
-      this.success = Thrift.copyList(args.success, [null]);
+      this.success = Thrift.copyList(args.success, [PermitBean]);
     }
     if (args.ex1 !== undefined && args.ex1 !== null) {
       this.ex1 = args.ex1;
@@ -11515,7 +11519,8 @@ IFaceLog_getPersonPermits_result.prototype.read = function(input) {
         for (var _i279 = 0; _i279 < _size274; ++_i279)
         {
           var elem280 = null;
-          elem280 = input.readBool().value;
+          elem280 = new PermitBean();
+          elem280.read(input);
           this.success.push(elem280);
         }
         input.readListEnd();
@@ -11544,13 +11549,13 @@ IFaceLog_getPersonPermits_result.prototype.write = function(output) {
   output.writeStructBegin('IFaceLog_getPersonPermits_result');
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.LIST, 0);
-    output.writeListBegin(Thrift.Type.BOOL, this.success.length);
+    output.writeListBegin(Thrift.Type.STRUCT, this.success.length);
     for (var iter281 in this.success)
     {
       if (this.success.hasOwnProperty(iter281))
       {
         iter281 = this.success[iter281];
-        output.writeBool(iter281);
+        iter281.write(output);
       }
     }
     output.writeListEnd();

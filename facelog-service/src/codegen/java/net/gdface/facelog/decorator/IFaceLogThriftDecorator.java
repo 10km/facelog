@@ -1477,12 +1477,15 @@ public class IFaceLogThriftDecorator {
      * @see {@link net.gdface.facelog.IFaceLog#getGroupPermit(int,int)}
      */
     @ThriftMethod(value = "getGroupPermit" )
-    public boolean getGroupPermit(int deviceId,
+    public PermitBean getGroupPermit(int deviceId,
         int personGroupId) 
         throws ServiceRuntimeException{
         try{
-            return delegate().getGroupPermit(deviceId,
-                personGroupId);
+            return TypeTransformer.getInstance().to(
+                    delegate().getGroupPermit(deviceId,
+                personGroupId),
+                    PermitBean.class,
+                    PermitBean.class);
         }
         catch(ServiceRuntimeException e){
             throw e;
@@ -1495,12 +1498,15 @@ public class IFaceLogThriftDecorator {
      * @see {@link net.gdface.facelog.IFaceLog#getGroupPermitOnDeviceGroup(int,int)}
      */
     @ThriftMethod(value = "getGroupPermitOnDeviceGroup" )
-    public boolean getGroupPermitOnDeviceGroup(int deviceGroupId,
+    public PermitBean getGroupPermitOnDeviceGroup(int deviceGroupId,
         int personGroupId) 
         throws ServiceRuntimeException{
         try{
-            return delegate().getGroupPermitOnDeviceGroup(deviceGroupId,
-                personGroupId);
+            return TypeTransformer.getInstance().to(
+                    delegate().getGroupPermitOnDeviceGroup(deviceGroupId,
+                personGroupId),
+                    PermitBean.class,
+                    PermitBean.class);
         }
         catch(ServiceRuntimeException e){
             throw e;
@@ -1513,7 +1519,7 @@ public class IFaceLogThriftDecorator {
      * @see {@link net.gdface.facelog.IFaceLog#getGroupPermits(int,java.util.List)}
      */
     @ThriftMethod(value = "getGroupPermits" )
-    public List<Boolean> getGroupPermits(int deviceId,
+    public List<PermitBean> getGroupPermits(int deviceId,
         List<Integer> personGroupIdList) 
         throws ServiceRuntimeException{
         try{
@@ -1523,8 +1529,8 @@ public class IFaceLogThriftDecorator {
                     personGroupIdList,
                     Integer.class,
                     Integer.class)),
-                    Boolean.class,
-                    Boolean.class);
+                    PermitBean.class,
+                    PermitBean.class);
         }
         catch(ServiceRuntimeException e){
             throw e;
@@ -1730,12 +1736,15 @@ public class IFaceLogThriftDecorator {
      * @see {@link net.gdface.facelog.IFaceLog#getPersonPermit(int,int)}
      */
     @ThriftMethod(value = "getPersonPermit" )
-    public boolean getPersonPermit(int deviceId,
+    public PermitBean getPersonPermit(int deviceId,
         int personId) 
         throws ServiceRuntimeException{
         try{
-            return delegate().getPersonPermit(deviceId,
-                personId);
+            return TypeTransformer.getInstance().to(
+                    delegate().getPersonPermit(deviceId,
+                personId),
+                    PermitBean.class,
+                    PermitBean.class);
         }
         catch(ServiceRuntimeException e){
             throw e;
@@ -1748,7 +1757,7 @@ public class IFaceLogThriftDecorator {
      * @see {@link net.gdface.facelog.IFaceLog#getPersonPermits(int,java.util.List)}
      */
     @ThriftMethod(value = "getPersonPermits" )
-    public List<Boolean> getPersonPermits(int deviceId,
+    public List<PermitBean> getPersonPermits(int deviceId,
         List<Integer> personIdList) 
         throws ServiceRuntimeException{
         try{
@@ -1758,8 +1767,8 @@ public class IFaceLogThriftDecorator {
                     personIdList,
                     Integer.class,
                     Integer.class)),
-                    Boolean.class,
-                    Boolean.class);
+                    PermitBean.class,
+                    PermitBean.class);
         }
         catch(ServiceRuntimeException e){
             throw e;

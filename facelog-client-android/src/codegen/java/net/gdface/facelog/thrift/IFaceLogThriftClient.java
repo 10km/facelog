@@ -1937,18 +1937,21 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
-    public boolean getGroupPermit(final int deviceId,
+    public PermitBean getGroupPermit(final int deviceId,
         final int personGroupId) 
         {
         try{
-            return syncCall(new Function<Boolean,Boolean>() {
+            return syncCall(new Function<net.gdface.facelog.client.thrift.PermitBean,PermitBean>() {
                 @Override
-                public Boolean apply(Boolean input) {
-                    return input;
+                public PermitBean apply(net.gdface.facelog.client.thrift.PermitBean input) {
+                    return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.PermitBean.class,
+                    PermitBean.class);
                 }},
-                new ServiceAsyncCall<Boolean>(){
+                new ServiceAsyncCall<net.gdface.facelog.client.thrift.PermitBean>(){
                 @Override
-                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<Boolean> nativeCallback){
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<net.gdface.facelog.client.thrift.PermitBean> nativeCallback){
                     service.getGroupPermit(deviceId,personGroupId,nativeCallback);
                 }});
         }
@@ -1961,18 +1964,21 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
-    public boolean getGroupPermitOnDeviceGroup(final int deviceGroupId,
+    public PermitBean getGroupPermitOnDeviceGroup(final int deviceGroupId,
         final int personGroupId) 
         {
         try{
-            return syncCall(new Function<Boolean,Boolean>() {
+            return syncCall(new Function<net.gdface.facelog.client.thrift.PermitBean,PermitBean>() {
                 @Override
-                public Boolean apply(Boolean input) {
-                    return input;
+                public PermitBean apply(net.gdface.facelog.client.thrift.PermitBean input) {
+                    return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.PermitBean.class,
+                    PermitBean.class);
                 }},
-                new ServiceAsyncCall<Boolean>(){
+                new ServiceAsyncCall<net.gdface.facelog.client.thrift.PermitBean>(){
                 @Override
-                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<Boolean> nativeCallback){
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<net.gdface.facelog.client.thrift.PermitBean> nativeCallback){
                     service.getGroupPermitOnDeviceGroup(deviceGroupId,personGroupId,nativeCallback);
                 }});
         }
@@ -1985,21 +1991,21 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
-    public List<Boolean> getGroupPermits(final int deviceId,
+    public List<PermitBean> getGroupPermits(final int deviceId,
         final List<Integer> personGroupIdList) 
         {
         try{
-            return syncCall(new Function<List<Boolean>,List<Boolean>>() {
+            return syncCall(new Function<List<net.gdface.facelog.client.thrift.PermitBean>,List<PermitBean>>() {
                 @Override
-                public List<Boolean> apply(List<Boolean> input) {
+                public List<PermitBean> apply(List<net.gdface.facelog.client.thrift.PermitBean> input) {
                     return TypeTransformer.getInstance().to(
                     input,
-                    Boolean.class,
-                    Boolean.class);
+                    net.gdface.facelog.client.thrift.PermitBean.class,
+                    PermitBean.class);
                 }},
-                new ServiceAsyncCall<List<Boolean>>(){
+                new ServiceAsyncCall<List<net.gdface.facelog.client.thrift.PermitBean>>(){
                 @Override
-                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<List<Boolean>> nativeCallback){
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<List<net.gdface.facelog.client.thrift.PermitBean>> nativeCallback){
                     service.getGroupPermits(deviceId,TypeTransformer.getInstance().to(
                     personGroupIdList,
                     Integer.class,
@@ -2278,18 +2284,21 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
-    public boolean getPersonPermit(final int deviceId,
+    public PermitBean getPersonPermit(final int deviceId,
         final int personId) 
         {
         try{
-            return syncCall(new Function<Boolean,Boolean>() {
+            return syncCall(new Function<net.gdface.facelog.client.thrift.PermitBean,PermitBean>() {
                 @Override
-                public Boolean apply(Boolean input) {
-                    return input;
+                public PermitBean apply(net.gdface.facelog.client.thrift.PermitBean input) {
+                    return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.PermitBean.class,
+                    PermitBean.class);
                 }},
-                new ServiceAsyncCall<Boolean>(){
+                new ServiceAsyncCall<net.gdface.facelog.client.thrift.PermitBean>(){
                 @Override
-                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<Boolean> nativeCallback){
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<net.gdface.facelog.client.thrift.PermitBean> nativeCallback){
                     service.getPersonPermit(deviceId,personId,nativeCallback);
                 }});
         }
@@ -2302,21 +2311,21 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
-    public List<Boolean> getPersonPermits(final int deviceId,
+    public List<PermitBean> getPersonPermits(final int deviceId,
         final List<Integer> personIdList) 
         {
         try{
-            return syncCall(new Function<List<Boolean>,List<Boolean>>() {
+            return syncCall(new Function<List<net.gdface.facelog.client.thrift.PermitBean>,List<PermitBean>>() {
                 @Override
-                public List<Boolean> apply(List<Boolean> input) {
+                public List<PermitBean> apply(List<net.gdface.facelog.client.thrift.PermitBean> input) {
                     return TypeTransformer.getInstance().to(
                     input,
-                    Boolean.class,
-                    Boolean.class);
+                    net.gdface.facelog.client.thrift.PermitBean.class,
+                    PermitBean.class);
                 }},
-                new ServiceAsyncCall<List<Boolean>>(){
+                new ServiceAsyncCall<List<net.gdface.facelog.client.thrift.PermitBean>>(){
                 @Override
-                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<List<Boolean>> nativeCallback){
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<List<net.gdface.facelog.client.thrift.PermitBean>> nativeCallback){
                     service.getPersonPermits(deviceId,TypeTransformer.getInstance().to(
                     personIdList,
                     Integer.class,

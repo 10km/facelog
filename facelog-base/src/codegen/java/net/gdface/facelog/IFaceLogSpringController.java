@@ -14,6 +14,7 @@ import net.gdface.facelog.db.FaceBean;
 import net.gdface.facelog.db.FeatureBean;
 import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.LogBean;
+import net.gdface.facelog.db.PermitBean;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.PersonGroupBean;
 import java.util.ServiceLoader;
@@ -1572,7 +1573,7 @@ public class IFaceLogSpringController {
      * 输入参数为{@code null}或找不到指定的记录则返回false
      * @param deviceId
      * @param personGroupId
-     * @return 允许通行返回false，否则返回false
+     * @return 允许通行返回指定的{@link PermitBean}记录，否则返回{@code null}
      * @throws RuntimeDaoException
      */
     @ResponseBody
@@ -1603,7 +1604,7 @@ public class IFaceLogSpringController {
      * 输入参数为{@code null}或找不到指定的记录则返回false
      * @param deviceGroupId
      * @param personGroupId
-     * @return 允许通行返回false，否则返回false
+     * @return 允许通行返回指定的{@link PermitBean}记录，否则返回{@code null}
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/getGroupPermitOnDeviceGroup", method = RequestMethod.POST)
@@ -1627,6 +1628,9 @@ public class IFaceLogSpringController {
     // port-65
     /**
      * 参见 {@link #getGroupPermit(int, int)}
+     * @param deviceId
+     * @param personGroupIdList
+     * @return 
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/getGroupPermits", method = RequestMethod.POST)
@@ -1864,7 +1868,7 @@ public class IFaceLogSpringController {
      * 返回{@code personId}指定的人员在{@code deviceId}设备上是否允许通行
      * @param deviceId
      * @param personId
-     * @return 
+     * @return 允许通行返回指定的{@link PermitBean}记录，否则返回{@code null}
      * @throws RuntimeDaoException
      */
     @ResponseBody
@@ -1886,6 +1890,9 @@ public class IFaceLogSpringController {
     // port-77
     /**
      * 参见 {@link #getPersonPermit(int, int) }
+     * @param deviceId
+     * @param personIdList
+     * @return 
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/getPersonPermits", method = RequestMethod.POST)

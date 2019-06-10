@@ -1433,39 +1433,51 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
-    public boolean getGroupPermit(int deviceId,
+    public PermitBean getGroupPermit(int deviceId,
         int personGroupId) 
         {
         net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
         try{
-            return instance.getGroupPermit(deviceId,
-                personGroupId);
+            return TypeTransformer.getInstance().to(
+                    instance.getGroupPermit(deviceId,
+                personGroupId),
+                    net.gdface.facelog.client.thrift.PermitBean.class,
+                    PermitBean.class);
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
+        }
+        catch(RuntimeTApplicationException e){
+            return net.gdface.thrift.ThriftUtils.returnNull(e);
         }
         finally{
             factory.releaseInstance(instance);
         }
     }
     @Override
-    public boolean getGroupPermitOnDeviceGroup(int deviceGroupId,
+    public PermitBean getGroupPermitOnDeviceGroup(int deviceGroupId,
         int personGroupId) 
         {
         net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
         try{
-            return instance.getGroupPermitOnDeviceGroup(deviceGroupId,
-                personGroupId);
+            return TypeTransformer.getInstance().to(
+                    instance.getGroupPermitOnDeviceGroup(deviceGroupId,
+                personGroupId),
+                    net.gdface.facelog.client.thrift.PermitBean.class,
+                    PermitBean.class);
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
+        }
+        catch(RuntimeTApplicationException e){
+            return net.gdface.thrift.ThriftUtils.returnNull(e);
         }
         finally{
             factory.releaseInstance(instance);
         }
     }
     @Override
-    public List<Boolean> getGroupPermits(int deviceId,
+    public List<PermitBean> getGroupPermits(int deviceId,
         List<Integer> personGroupIdList) 
         {
         net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
@@ -1476,8 +1488,8 @@ public class IFaceLogThriftClient implements IFaceLog {
                     personGroupIdList,
                     Integer.class,
                     Integer.class)),
-                    Boolean.class,
-                    Boolean.class);
+                    net.gdface.facelog.client.thrift.PermitBean.class,
+                    PermitBean.class);
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -1690,23 +1702,29 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
-    public boolean getPersonPermit(int deviceId,
+    public PermitBean getPersonPermit(int deviceId,
         int personId) 
         {
         net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
         try{
-            return instance.getPersonPermit(deviceId,
-                personId);
+            return TypeTransformer.getInstance().to(
+                    instance.getPersonPermit(deviceId,
+                personId),
+                    net.gdface.facelog.client.thrift.PermitBean.class,
+                    PermitBean.class);
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
+        }
+        catch(RuntimeTApplicationException e){
+            return net.gdface.thrift.ThriftUtils.returnNull(e);
         }
         finally{
             factory.releaseInstance(instance);
         }
     }
     @Override
-    public List<Boolean> getPersonPermits(int deviceId,
+    public List<PermitBean> getPersonPermits(int deviceId,
         List<Integer> personIdList) 
         {
         net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
@@ -1717,8 +1735,8 @@ public class IFaceLogThriftClient implements IFaceLog {
                     personIdList,
                     Integer.class,
                     Integer.class)),
-                    Boolean.class,
-                    Boolean.class);
+                    net.gdface.facelog.client.thrift.PermitBean.class,
+                    PermitBean.class);
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);

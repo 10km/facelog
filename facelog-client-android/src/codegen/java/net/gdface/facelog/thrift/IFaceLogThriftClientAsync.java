@@ -1787,14 +1787,17 @@ public class IFaceLogThriftClientAsync {
     /**
      * see also {@link net.gdface.facelog.IFaceLog#getGroupPermit(int,int)}
      */
-    public ListenableFuture<Boolean> getGroupPermit(int deviceId,
+    public ListenableFuture<PermitBean> getGroupPermit(int deviceId,
         int personGroupId){
-        MethodCallback<Boolean,Boolean> nativeCallback = 
-            new MethodCallback<Boolean,Boolean>(
-                new Function<Boolean,Boolean>() {
+        MethodCallback<PermitBean,net.gdface.facelog.client.thrift.PermitBean> nativeCallback = 
+            new MethodCallback<PermitBean,net.gdface.facelog.client.thrift.PermitBean>(
+                new Function<net.gdface.facelog.client.thrift.PermitBean,PermitBean>() {
                         @Override
-                        public Boolean apply(Boolean input) {
-                            return input;
+                        public PermitBean apply(net.gdface.facelog.client.thrift.PermitBean input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.PermitBean.class,
+                    PermitBean.class);
                 }});
         nativeCallback.service.getGroupPermit(
                 deviceId,
@@ -1803,20 +1806,23 @@ public class IFaceLogThriftClientAsync {
     }
     public void getGroupPermit(int deviceId,
         int personGroupId,
-        FutureCallback<Boolean>callback){
+        FutureCallback<PermitBean>callback){
         factory.addCallback(getGroupPermit(deviceId,personGroupId), callback);
     }
     /**
      * see also {@link net.gdface.facelog.IFaceLog#getGroupPermitOnDeviceGroup(int,int)}
      */
-    public ListenableFuture<Boolean> getGroupPermitOnDeviceGroup(int deviceGroupId,
+    public ListenableFuture<PermitBean> getGroupPermitOnDeviceGroup(int deviceGroupId,
         int personGroupId){
-        MethodCallback<Boolean,Boolean> nativeCallback = 
-            new MethodCallback<Boolean,Boolean>(
-                new Function<Boolean,Boolean>() {
+        MethodCallback<PermitBean,net.gdface.facelog.client.thrift.PermitBean> nativeCallback = 
+            new MethodCallback<PermitBean,net.gdface.facelog.client.thrift.PermitBean>(
+                new Function<net.gdface.facelog.client.thrift.PermitBean,PermitBean>() {
                         @Override
-                        public Boolean apply(Boolean input) {
-                            return input;
+                        public PermitBean apply(net.gdface.facelog.client.thrift.PermitBean input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.PermitBean.class,
+                    PermitBean.class);
                 }});
         nativeCallback.service.getGroupPermitOnDeviceGroup(
                 deviceGroupId,
@@ -1825,23 +1831,23 @@ public class IFaceLogThriftClientAsync {
     }
     public void getGroupPermitOnDeviceGroup(int deviceGroupId,
         int personGroupId,
-        FutureCallback<Boolean>callback){
+        FutureCallback<PermitBean>callback){
         factory.addCallback(getGroupPermitOnDeviceGroup(deviceGroupId,personGroupId), callback);
     }
     /**
      * see also {@link net.gdface.facelog.IFaceLog#getGroupPermits(int,java.util.List)}
      */
-    public ListenableFuture<List<Boolean>> getGroupPermits(int deviceId,
+    public ListenableFuture<List<PermitBean>> getGroupPermits(int deviceId,
         List<Integer> personGroupIdList){
-        MethodCallback<List<Boolean>,List<Boolean>> nativeCallback = 
-            new MethodCallback<List<Boolean>,List<Boolean>>(
-                new Function<List<Boolean>,List<Boolean>>() {
+        MethodCallback<List<PermitBean>,List<net.gdface.facelog.client.thrift.PermitBean>> nativeCallback = 
+            new MethodCallback<List<PermitBean>,List<net.gdface.facelog.client.thrift.PermitBean>>(
+                new Function<List<net.gdface.facelog.client.thrift.PermitBean>,List<PermitBean>>() {
                         @Override
-                        public List<Boolean> apply(List<Boolean> input) {
+                        public List<PermitBean> apply(List<net.gdface.facelog.client.thrift.PermitBean> input) {
                             return TypeTransformer.getInstance().to(
                     input,
-                    Boolean.class,
-                    Boolean.class);
+                    net.gdface.facelog.client.thrift.PermitBean.class,
+                    PermitBean.class);
                 }});
         nativeCallback.service.getGroupPermits(
                 deviceId,
@@ -1853,7 +1859,7 @@ public class IFaceLogThriftClientAsync {
     }
     public void getGroupPermits(int deviceId,
         List<Integer> personGroupIdList,
-        FutureCallback<List<Boolean>>callback){
+        FutureCallback<List<PermitBean>>callback){
         factory.addCallback(getGroupPermits(deviceId,personGroupIdList), callback);
     }
     /**
@@ -2082,14 +2088,17 @@ public class IFaceLogThriftClientAsync {
     /**
      * see also {@link net.gdface.facelog.IFaceLog#getPersonPermit(int,int)}
      */
-    public ListenableFuture<Boolean> getPersonPermit(int deviceId,
+    public ListenableFuture<PermitBean> getPersonPermit(int deviceId,
         int personId){
-        MethodCallback<Boolean,Boolean> nativeCallback = 
-            new MethodCallback<Boolean,Boolean>(
-                new Function<Boolean,Boolean>() {
+        MethodCallback<PermitBean,net.gdface.facelog.client.thrift.PermitBean> nativeCallback = 
+            new MethodCallback<PermitBean,net.gdface.facelog.client.thrift.PermitBean>(
+                new Function<net.gdface.facelog.client.thrift.PermitBean,PermitBean>() {
                         @Override
-                        public Boolean apply(Boolean input) {
-                            return input;
+                        public PermitBean apply(net.gdface.facelog.client.thrift.PermitBean input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.PermitBean.class,
+                    PermitBean.class);
                 }});
         nativeCallback.service.getPersonPermit(
                 deviceId,
@@ -2098,23 +2107,23 @@ public class IFaceLogThriftClientAsync {
     }
     public void getPersonPermit(int deviceId,
         int personId,
-        FutureCallback<Boolean>callback){
+        FutureCallback<PermitBean>callback){
         factory.addCallback(getPersonPermit(deviceId,personId), callback);
     }
     /**
      * see also {@link net.gdface.facelog.IFaceLog#getPersonPermits(int,java.util.List)}
      */
-    public ListenableFuture<List<Boolean>> getPersonPermits(int deviceId,
+    public ListenableFuture<List<PermitBean>> getPersonPermits(int deviceId,
         List<Integer> personIdList){
-        MethodCallback<List<Boolean>,List<Boolean>> nativeCallback = 
-            new MethodCallback<List<Boolean>,List<Boolean>>(
-                new Function<List<Boolean>,List<Boolean>>() {
+        MethodCallback<List<PermitBean>,List<net.gdface.facelog.client.thrift.PermitBean>> nativeCallback = 
+            new MethodCallback<List<PermitBean>,List<net.gdface.facelog.client.thrift.PermitBean>>(
+                new Function<List<net.gdface.facelog.client.thrift.PermitBean>,List<PermitBean>>() {
                         @Override
-                        public List<Boolean> apply(List<Boolean> input) {
+                        public List<PermitBean> apply(List<net.gdface.facelog.client.thrift.PermitBean> input) {
                             return TypeTransformer.getInstance().to(
                     input,
-                    Boolean.class,
-                    Boolean.class);
+                    net.gdface.facelog.client.thrift.PermitBean.class,
+                    PermitBean.class);
                 }});
         nativeCallback.service.getPersonPermits(
                 deviceId,
@@ -2126,7 +2135,7 @@ public class IFaceLogThriftClientAsync {
     }
     public void getPersonPermits(int deviceId,
         List<Integer> personIdList,
-        FutureCallback<List<Boolean>>callback){
+        FutureCallback<List<PermitBean>>callback){
         factory.addCallback(getPersonPermits(deviceId,personIdList), callback);
     }
     /**

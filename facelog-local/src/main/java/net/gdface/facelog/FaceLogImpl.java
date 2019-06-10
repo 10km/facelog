@@ -1330,7 +1330,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		}
 	}
 	@Override
-	public boolean getGroupPermitOnDeviceGroup(int deviceGroupId,int personGroupId) {
+	public PermitBean getGroupPermitOnDeviceGroup(int deviceGroupId,int personGroupId) {
 		try{
 			return dm.daoGetGroupPermitOnDeviceGroup(deviceGroupId,personGroupId);
 		} catch (RuntimeException e) {
@@ -1338,7 +1338,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		}
 	}
 	@Override
-	public boolean getGroupPermit(int deviceId,int personGroupId) {
+	public PermitBean getGroupPermit(int deviceId,int personGroupId) {
 		try{
 			return dm.daoGetGroupPermit(deviceId,personGroupId);
 		} catch (RuntimeException e) {
@@ -1346,7 +1346,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		}
 	}
 	@Override
-	public boolean getPersonPermit(int deviceId,int personId) {
+	public PermitBean getPersonPermit(int deviceId,int personId) {
 		try{
 			return dm.daoGetPersonPermit(deviceId,personId);
 		} catch (RuntimeException e) {
@@ -1354,7 +1354,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		}
 	}
 	@Override
-	public List<Boolean> getGroupPermits(int deviceId,List<Integer> personGroupIdList) {
+	public List<PermitBean> getGroupPermits(int deviceId,List<Integer> personGroupIdList) {
 		try{
 			return dm.daoGetGroupPermit(deviceId, personGroupIdList);
 		} catch (RuntimeException e) {
@@ -1362,7 +1362,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		}
 	}
 	@Override
-	public List<Boolean> getPersonPermits(int deviceId,List<Integer> personIdList) {
+	public List<PermitBean> getPersonPermits(int deviceId,List<Integer> personIdList) {
 		try{
 			return dm.daoGetPermit(deviceId, personIdList);
 		} catch (RuntimeException e) {

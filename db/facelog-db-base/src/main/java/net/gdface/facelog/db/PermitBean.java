@@ -39,6 +39,10 @@ public final class PermitBean
     @ApiModelProperty(value = "外键,人员组id" ,required=true ,dataType="Integer")
     private Integer personGroupId;
 
+    /** comments:允许通行时间表,为null或空为7x24小时工作,格式为JSON,参见开发手册 */
+    @ApiModelProperty(value = "允许通行时间表,为null或空为7x24小时工作,格式为JSON,参见开发手册"  ,dataType="String")
+    private String schedule;
+
     /** comments:备注 */
     @ApiModelProperty(value = "备注"  ,dataType="String")
     private String remark;
@@ -333,6 +337,73 @@ public final class PermitBean
         return 0L !=  (initialized & FL_PERMIT_ID_PERSON_GROUP_ID_MASK);
     }
     /**
+     * Getter method for {@link #schedule}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_permit.schedule</li>
+     * <li>comments: 允许通行时间表,为null或空为7x24小时工作,格式为JSON,参见开发手册</li>
+     * <li>column size: 4096</li>
+     * <li>JDBC type returned by the driver: Types.VARCHAR</li>
+     * </ul>
+     *
+     * @return the value of schedule
+     */
+    @ThriftField(value=6)
+    public String getSchedule(){
+        return schedule;
+    }
+    /**
+     * Setter method for {@link #schedule}.<br>
+     * The new value is set only if equals() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to schedule
+     */
+    public void setSchedule(String newVal)
+    {
+        checkMutable();
+
+        modified |= FL_PERMIT_ID_SCHEDULE_MASK;
+        initialized |= FL_PERMIT_ID_SCHEDULE_MASK;
+
+        if (Objects.equals(newVal, schedule)) {
+            return;
+        }
+        schedule = newVal;
+    }
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "schedule")
+    public void writeSchedule(String newVal){
+        checkMutable();
+        schedule = newVal;
+    }
+    /**
+     * Determines if the schedule has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkScheduleModified()
+    {
+        return 0L !=  (modified & FL_PERMIT_ID_SCHEDULE_MASK);
+    }
+
+    /**
+     * Determines if the schedule has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkScheduleInitialized()
+    {
+        return 0L !=  (initialized & FL_PERMIT_ID_SCHEDULE_MASK);
+    }
+    /**
      * Getter method for {@link #remark}.<br>
      * Meta Data Information (in progress):
      * <ul>
@@ -344,7 +415,7 @@ public final class PermitBean
      *
      * @return the value of remark
      */
-    @ThriftField(value=6)
+    @ThriftField(value=7)
     public String getRemark(){
         return remark;
     }
@@ -411,7 +482,7 @@ public final class PermitBean
      *
      * @return the value of extBin
      */
-    @ThriftField(value=7)
+    @ThriftField(value=8)
     public java.nio.ByteBuffer getExtBin(){
         return extBin;
     }
@@ -478,7 +549,7 @@ public final class PermitBean
      *
      * @return the value of extTxt
      */
-    @ThriftField(value=8)
+    @ThriftField(value=9)
     public String getExtTxt(){
         return extTxt;
     }
@@ -553,7 +624,7 @@ public final class PermitBean
      * use Long to represent date type for thrift:swift support 
      * @see #getCreateTime()
      */
-    @ThriftField(name = "createTime",value = 9)
+    @ThriftField(name = "createTime",value = 10)
     public Long readCreateTime(){
         return null == createTime ? null:createTime.getTime();
     }
@@ -683,6 +754,8 @@ public final class PermitBean
             return checkDeviceGroupIdModified();
         case FL_PERMIT_ID_PERSON_GROUP_ID:
             return checkPersonGroupIdModified();
+        case FL_PERMIT_ID_SCHEDULE:
+            return checkScheduleModified();
         case FL_PERMIT_ID_REMARK:
             return checkRemarkModified();
         case FL_PERMIT_ID_EXT_BIN:
@@ -703,6 +776,8 @@ public final class PermitBean
             return checkDeviceGroupIdInitialized();
         case FL_PERMIT_ID_PERSON_GROUP_ID:
             return checkPersonGroupIdInitialized();
+        case FL_PERMIT_ID_SCHEDULE:
+            return checkScheduleInitialized();
         case FL_PERMIT_ID_REMARK:
             return checkRemarkInitialized();
         case FL_PERMIT_ID_EXT_BIN:
@@ -744,7 +819,8 @@ public final class PermitBean
      */
     public void resetModifiedExceptPrimaryKeys()
     {
-        modified &= (~(FL_PERMIT_ID_REMARK_MASK |
+        modified &= (~(FL_PERMIT_ID_SCHEDULE_MASK |
+            FL_PERMIT_ID_REMARK_MASK |
             FL_PERMIT_ID_EXT_BIN_MASK |
             FL_PERMIT_ID_EXT_TXT_MASK |
             FL_PERMIT_ID_CREATE_TIME_MASK));
@@ -761,6 +837,7 @@ public final class PermitBean
         checkMutable();
         this.deviceGroupId = null;
         this.personGroupId = null;
+        this.schedule = null;
         this.remark = null;
         this.extBin = null;
         this.extTxt = null;
@@ -781,6 +858,7 @@ public final class PermitBean
         return new EqualsBuilder()
             .append(getDeviceGroupId(), obj.getDeviceGroupId())
             .append(getPersonGroupId(), obj.getPersonGroupId())
+            .append(getSchedule(), obj.getSchedule())
             .append(getRemark(), obj.getRemark())
             .append(getExtBin(), obj.getExtBin())
             .append(getExtTxt(), obj.getExtTxt())
@@ -868,6 +946,15 @@ public final class PermitBean
                 append(builder,fullIfStringOrBytes,getPersonGroupId());
             }
         }
+        if(checkScheduleInitialized()){
+            if(!notNull || null != getSchedule()){
+                if(count++ >0){
+                    builder.append(",");
+                }
+                builder.append("schedule=");
+                append(builder,fullIfStringOrBytes,getSchedule());
+            }
+        }
         if(checkRemarkInitialized()){
             if(!notNull || null != getRemark()){
                 if(count++ >0){
@@ -912,6 +999,7 @@ public final class PermitBean
         return new CompareToBuilder()
             .append(getDeviceGroupId(), object.getDeviceGroupId())
             .append(getPersonGroupId(), object.getPersonGroupId())
+            .append(getSchedule(), object.getSchedule())
             .append(getRemark(), object.getRemark())
             .append(getExtBin(), object.getExtBin())
             .append(getExtTxt(), object.getExtTxt())
@@ -938,6 +1026,7 @@ public final class PermitBean
         
         setDeviceGroupId((Integer)null);
         setPersonGroupId((Integer)null);
+        setSchedule((String)null);
         setRemark((String)null);
         setExtBin((java.nio.ByteBuffer)null);
         setExtTxt((String)null);
@@ -1035,6 +1124,8 @@ public final class PermitBean
             return (T)getDeviceGroupId();        
         case FL_PERMIT_ID_PERSON_GROUP_ID: 
             return (T)getPersonGroupId();        
+        case FL_PERMIT_ID_SCHEDULE: 
+            return (T)getSchedule();        
         case FL_PERMIT_ID_REMARK: 
             return (T)getRemark();        
         case FL_PERMIT_ID_EXT_BIN: 
@@ -1057,6 +1148,9 @@ public final class PermitBean
             break;
         case FL_PERMIT_ID_PERSON_GROUP_ID:
             setPersonGroupId((Integer)value);
+            break;
+        case FL_PERMIT_ID_SCHEDULE:
+            setSchedule((String)value);
             break;
         case FL_PERMIT_ID_REMARK:
             setRemark((String)value);
@@ -1151,6 +1245,16 @@ public final class PermitBean
          */
         public Builder personGroupId(Integer personGroupId){
             TEMPLATE.get().setPersonGroupId(personGroupId);
+            return this;
+        }
+        /** 
+         * fill the field : fl_permit.schedule
+         * @param schedule 允许通行时间表,为null或空为7x24小时工作,格式为JSON,参见开发手册
+         * @see PermitBean#getSchedule()
+         * @see PermitBean#setSchedule(String)
+         */
+        public Builder schedule(String schedule){
+            TEMPLATE.get().setSchedule(schedule);
             return this;
         }
         /** 

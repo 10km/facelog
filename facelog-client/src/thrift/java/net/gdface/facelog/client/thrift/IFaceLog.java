@@ -586,7 +586,7 @@ public interface IFaceLog
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
-        ListenableFuture<Boolean> getGroupPermit(
+        ListenableFuture<PermitBean> getGroupPermit(
             @ThriftField(value=1, name="deviceId", requiredness=Requiredness.REQUIRED) final int deviceId,
             @ThriftField(value=2, name="personGroupId", requiredness=Requiredness.REQUIRED) final int personGroupId
         );
@@ -595,7 +595,7 @@ public interface IFaceLog
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
-        ListenableFuture<Boolean> getGroupPermitOnDeviceGroup(
+        ListenableFuture<PermitBean> getGroupPermitOnDeviceGroup(
             @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.REQUIRED) final int deviceGroupId,
             @ThriftField(value=2, name="personGroupId", requiredness=Requiredness.REQUIRED) final int personGroupId
         );
@@ -604,7 +604,7 @@ public interface IFaceLog
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
-        ListenableFuture<List<Boolean>> getGroupPermits(
+        ListenableFuture<List<PermitBean>> getGroupPermits(
             @ThriftField(value=1, name="deviceId", requiredness=Requiredness.REQUIRED) final int deviceId,
             @ThriftField(value=2, name="personGroupIdList", requiredness=Requiredness.OPTIONAL) final List<Integer> personGroupIdList
         );
@@ -693,7 +693,7 @@ public interface IFaceLog
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
-        ListenableFuture<Boolean> getPersonPermit(
+        ListenableFuture<PermitBean> getPersonPermit(
             @ThriftField(value=1, name="deviceId", requiredness=Requiredness.REQUIRED) final int deviceId,
             @ThriftField(value=2, name="personId", requiredness=Requiredness.REQUIRED) final int personId
         );
@@ -702,7 +702,7 @@ public interface IFaceLog
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
-        ListenableFuture<List<Boolean>> getPersonPermits(
+        ListenableFuture<List<PermitBean>> getPersonPermits(
             @ThriftField(value=1, name="deviceId", requiredness=Requiredness.REQUIRED) final int deviceId,
             @ThriftField(value=2, name="personIdList", requiredness=Requiredness.OPTIONAL) final List<Integer> personIdList
         );
@@ -1937,7 +1937,7 @@ public interface IFaceLog
                   exception = {
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
-    boolean getGroupPermit(
+    PermitBean getGroupPermit(
         @ThriftField(value=1, name="deviceId", requiredness=Requiredness.REQUIRED) final int deviceId,
         @ThriftField(value=2, name="personGroupId", requiredness=Requiredness.REQUIRED) final int personGroupId
     ) throws ServiceRuntimeException;
@@ -1946,7 +1946,7 @@ public interface IFaceLog
                   exception = {
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
-    boolean getGroupPermitOnDeviceGroup(
+    PermitBean getGroupPermitOnDeviceGroup(
         @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.REQUIRED) final int deviceGroupId,
         @ThriftField(value=2, name="personGroupId", requiredness=Requiredness.REQUIRED) final int personGroupId
     ) throws ServiceRuntimeException;
@@ -1955,7 +1955,7 @@ public interface IFaceLog
                   exception = {
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
-    List<Boolean> getGroupPermits(
+    List<PermitBean> getGroupPermits(
         @ThriftField(value=1, name="deviceId", requiredness=Requiredness.REQUIRED) final int deviceId,
         @ThriftField(value=2, name="personGroupIdList", requiredness=Requiredness.OPTIONAL) final List<Integer> personGroupIdList
     ) throws ServiceRuntimeException;
@@ -2044,7 +2044,7 @@ public interface IFaceLog
                   exception = {
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
-    boolean getPersonPermit(
+    PermitBean getPersonPermit(
         @ThriftField(value=1, name="deviceId", requiredness=Requiredness.REQUIRED) final int deviceId,
         @ThriftField(value=2, name="personId", requiredness=Requiredness.REQUIRED) final int personId
     ) throws ServiceRuntimeException;
@@ -2053,7 +2053,7 @@ public interface IFaceLog
                   exception = {
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
-    List<Boolean> getPersonPermits(
+    List<PermitBean> getPersonPermits(
         @ThriftField(value=1, name="deviceId", requiredness=Requiredness.REQUIRED) final int deviceId,
         @ThriftField(value=2, name="personIdList", requiredness=Requiredness.OPTIONAL) final List<Integer> personIdList
     ) throws ServiceRuntimeException;

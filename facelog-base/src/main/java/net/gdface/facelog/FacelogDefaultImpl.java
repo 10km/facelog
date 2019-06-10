@@ -534,26 +534,26 @@ public class FacelogDefaultImpl implements IFaceLog {
 	}
 
 	@Override
-	public boolean getGroupPermitOnDeviceGroup(int deviceGroupId, int personGroupId) {
-		return false;
+	public PermitBean getGroupPermitOnDeviceGroup(int deviceGroupId, int personGroupId) {
+		return null;
 	}
 	@Override
-	public boolean getGroupPermit(int deviceId, int personGroupId) {
-		return false;
-	}
-
-	@Override
-	public boolean getPersonPermit(int deviceId, int personId) {
-		return false;
-	}
-
-	@Override
-	public List<Boolean> getGroupPermits(int deviceId, List<Integer> personGroupIdList) {
+	public PermitBean getGroupPermit(int deviceId, int personGroupId) {
 		return null;
 	}
 
 	@Override
-	public List<Boolean> getPersonPermits(int deviceId, List<Integer> personIdList) {
+	public PermitBean getPersonPermit(int deviceId, int personId) {
+		return null;
+	}
+
+	@Override
+	public List<PermitBean> getGroupPermits(int deviceId, List<Integer> personGroupIdList) {
+		return null;
+	}
+
+	@Override
+	public List<PermitBean> getPersonPermits(int deviceId, List<Integer> personIdList) {
 		return null;
 	}
 	@Override

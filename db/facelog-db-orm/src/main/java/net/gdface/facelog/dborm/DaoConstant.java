@@ -174,7 +174,7 @@ public interface DaoConstant {
     public static interface DeviceGroupConst{
         public static final String TABLENAME = "fl_device_group";
         /** column count for fl_device_group table */
-        public static final int COLUMN_COUNT = 10;
+        public static final int COLUMN_COUNT = 11;
         /** primary keys count for fl_device_group table */
         public static final int PRIMARY_KEY_COUNT = 1;
         /** foreign keys count for fl_device_group table */
@@ -189,6 +189,7 @@ public interface DaoConstant {
                             + ",fl_device_group.leaf"
                             + ",fl_device_group.parent"
                             + ",fl_device_group.root_group"
+                            + ",fl_device_group.schedule"
                             + ",fl_device_group.remark"
                             + ",fl_device_group.ext_bin"
                             + ",fl_device_group.ext_txt"
@@ -200,6 +201,7 @@ public interface DaoConstant {
                             + ",leaf"
                             + ",parent"
                             + ",root_group"
+                            + ",schedule"
                             + ",remark"
                             + ",ext_bin"
                             + ",ext_txt"
@@ -213,6 +215,7 @@ public interface DaoConstant {
                             + ",leaf"
                             + ",parent"
                             + ",rootGroup"
+                            + ",schedule"
                             + ",remark"
                             + ",extBin"
                             + ",extTxt"
@@ -243,16 +246,18 @@ public interface DaoConstant {
             parent("fl_device_group","parent",4,"getParent","setParent"),
             /** constant for fl_device_group.root_group  */
             rootGroup("fl_device_group","root_group",5,"getRootGroup","setRootGroup"),
+            /** constant for fl_device_group.schedule  */
+            schedule("fl_device_group","schedule",6,"getSchedule","setSchedule"),
             /** constant for fl_device_group.remark  */
-            remark("fl_device_group","remark",6,"getRemark","setRemark"),
+            remark("fl_device_group","remark",7,"getRemark","setRemark"),
             /** constant for fl_device_group.ext_bin  */
-            extBin("fl_device_group","ext_bin",7,"getExtBin","setExtBin"),
+            extBin("fl_device_group","ext_bin",8,"getExtBin","setExtBin"),
             /** constant for fl_device_group.ext_txt  */
-            extTxt("fl_device_group","ext_txt",8,"getExtTxt","setExtTxt"),
+            extTxt("fl_device_group","ext_txt",9,"getExtTxt","setExtTxt"),
             /** constant for fl_device_group.create_time  */
-            createTime("fl_device_group","create_time",9,"getCreateTime","setCreateTime"),
+            createTime("fl_device_group","create_time",10,"getCreateTime","setCreateTime"),
             /** constant for fl_device_group.update_time  */
-            updateTime("fl_device_group","update_time",10,"getUpdateTime","setUpdateTime");
+            updateTime("fl_device_group","update_time",11,"getUpdateTime","setUpdateTime");
             final ColumnMeta meta;
             private Column(String table,String field,int ordinal,String getter,String setter){
                 meta = new ColumnMeta(table,field,ordinal,getter,setter);
@@ -627,7 +632,7 @@ public interface DaoConstant {
     public static interface PermitConst{
         public static final String TABLENAME = "fl_permit";
         /** column count for fl_permit table */
-        public static final int COLUMN_COUNT = 6;
+        public static final int COLUMN_COUNT = 7;
         /** primary keys count for fl_permit table */
         public static final int PRIMARY_KEY_COUNT = 2;
         /** foreign keys count for fl_permit table */
@@ -639,6 +644,7 @@ public interface DaoConstant {
         /** Contains all the full fields of the fl_permit table.*/
         public static final String FULL_FIELDS ="fl_permit.device_group_id"
                             + ",fl_permit.person_group_id"
+                            + ",fl_permit.schedule"
                             + ",fl_permit.remark"
                             + ",fl_permit.ext_bin"
                             + ",fl_permit.ext_txt"
@@ -646,6 +652,7 @@ public interface DaoConstant {
         /** Field that contains the comma separated fields of the fl_permit table. */
         public static final String FIELDS = "device_group_id"
                             + ",person_group_id"
+                            + ",schedule"
                             + ",remark"
                             + ",ext_bin"
                             + ",ext_txt"
@@ -655,6 +662,7 @@ public interface DaoConstant {
         /** Field that contains the comma separated java fields of the fl_permit table. */
         public static final String JAVA_FIELDS = "deviceGroupId"
                             + ",personGroupId"
+                            + ",schedule"
                             + ",remark"
                             + ",extBin"
                             + ",extTxt"
@@ -677,14 +685,16 @@ public interface DaoConstant {
             deviceGroupId("fl_permit","device_group_id",1,"getDeviceGroupId","setDeviceGroupId"),
             /** constant for fl_permit.person_group_id  */
             personGroupId("fl_permit","person_group_id",2,"getPersonGroupId","setPersonGroupId"),
+            /** constant for fl_permit.schedule  */
+            schedule("fl_permit","schedule",3,"getSchedule","setSchedule"),
             /** constant for fl_permit.remark  */
-            remark("fl_permit","remark",3,"getRemark","setRemark"),
+            remark("fl_permit","remark",4,"getRemark","setRemark"),
             /** constant for fl_permit.ext_bin  */
-            extBin("fl_permit","ext_bin",4,"getExtBin","setExtBin"),
+            extBin("fl_permit","ext_bin",5,"getExtBin","setExtBin"),
             /** constant for fl_permit.ext_txt  */
-            extTxt("fl_permit","ext_txt",5,"getExtTxt","setExtTxt"),
+            extTxt("fl_permit","ext_txt",6,"getExtTxt","setExtTxt"),
             /** constant for fl_permit.create_time  */
-            createTime("fl_permit","create_time",6,"getCreateTime","setCreateTime");
+            createTime("fl_permit","create_time",7,"getCreateTime","setCreateTime");
             final ColumnMeta meta;
             private Column(String table,String field,int ordinal,String getter,String setter){
                 meta = new ColumnMeta(table,field,ordinal,getter,setter);

@@ -972,9 +972,9 @@ public interface IFaceLog{
 	 * 输入参数为{@code null}或找不到指定的记录则返回false
 	 * @param deviceGroupId
 	 * @param personGroupId
-	 * @return 允许通行返回false，否则返回false
+	 * @return 允许通行返回指定的{@link PermitBean}记录，否则返回{@code null}
 	 */
-	boolean getGroupPermitOnDeviceGroup(int deviceGroupId, int personGroupId);
+	PermitBean getGroupPermitOnDeviceGroup(int deviceGroupId, int personGroupId);
 	/**
 	 * 获取人员组通行权限<br>
 	 * 返回{@code personGroupId}指定的人员组在{@code deviceId}设备上是否允许通行,
@@ -983,23 +983,33 @@ public interface IFaceLog{
 	 * 输入参数为{@code null}或找不到指定的记录则返回false
 	 * @param deviceId
 	 * @param personGroupId
-	 * @return 允许通行返回false，否则返回false
+	 * @return 允许通行返回指定的{@link PermitBean}记录，否则返回{@code null}
 	 * @throws RuntimeDaoException
 	 */
-	public boolean getGroupPermit(int deviceId,int personGroupId);
+	public PermitBean getGroupPermit(int deviceId,int personGroupId);
 	/**
 	 * 获取人员通行权限<br>
 	 * 返回{@code personId}指定的人员在{@code deviceId}设备上是否允许通行
 	 * @param deviceId
 	 * @param personId
-	 * @return
+	 * @return 允许通行返回指定的{@link PermitBean}记录，否则返回{@code null}
 	 * @throws RuntimeDaoException
 	 */
-	public boolean getPersonPermit(int deviceId,int personId);
-	/** 参见 {@link #getGroupPermit(int, int)} */
-	public List<Boolean> getGroupPermits(int deviceId,List<Integer> personGroupIdList);
-	/** 参见 {@link #getPersonPermit(int, int) } */
-	public List<Boolean> getPersonPermits(int deviceId,List<Integer> personIdList);
+	public PermitBean getPersonPermit(int deviceId,int personId);
+	/**
+	 * 参见 {@link #getGroupPermit(int, int)}
+	 * @param deviceId
+	 * @param personGroupIdList
+	 * @return
+	 */
+	public List<PermitBean> getGroupPermits(int deviceId,List<Integer> personGroupIdList);
+	/**
+	 * 参见 {@link #getPersonPermit(int, int) }
+	 * @param deviceId
+	 * @param personIdList
+	 * @return
+	 */
+	public List<PermitBean> getPersonPermits(int deviceId,List<Integer> personIdList);
 
 	/**
 	 * 从permit表返回允许在{@code deviceGroupId}指定的设备组通过的所有人员组{@link PersonGroupBean}对象的id<br>

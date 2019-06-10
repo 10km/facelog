@@ -7,6 +7,7 @@ import net.gdface.facelog.db.FaceBean;
 import net.gdface.facelog.db.FeatureBean;
 import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.LogBean;
+import net.gdface.facelog.db.PermitBean;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.PersonGroupBean;
 /**
@@ -554,17 +555,17 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
-    public boolean getGroupPermit (int deviceId,int personGroupId) {
+    public PermitBean getGroupPermit (int deviceId,int personGroupId) {
         return delegate().getGroupPermit(deviceId,personGroupId);
     }
 
     @Override
-    public boolean getGroupPermitOnDeviceGroup (int deviceGroupId,int personGroupId) {
+    public PermitBean getGroupPermitOnDeviceGroup (int deviceGroupId,int personGroupId) {
         return delegate().getGroupPermitOnDeviceGroup(deviceGroupId,personGroupId);
     }
 
     @Override
-    public List<Boolean> getGroupPermits (int deviceId,List<Integer> personGroupIdList) {
+    public List<PermitBean> getGroupPermits (int deviceId,List<Integer> personGroupIdList) {
         return delegate().getGroupPermits(deviceId,personGroupIdList);
     }
 
@@ -619,12 +620,12 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
-    public boolean getPersonPermit (int deviceId,int personId) {
+    public PermitBean getPersonPermit (int deviceId,int personId) {
         return delegate().getPersonPermit(deviceId,personId);
     }
 
     @Override
-    public List<Boolean> getPersonPermits (int deviceId,List<Integer> personIdList) {
+    public List<PermitBean> getPersonPermits (int deviceId,List<Integer> personIdList) {
         return delegate().getPersonPermits(deviceId,personIdList);
     }
 
@@ -779,12 +780,12 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
-    public List<net.gdface.facelog.db.PermitBean> loadPermitByUpdate (String timestamp) {
+    public List<PermitBean> loadPermitByUpdate (String timestamp) {
         return delegate().loadPermitByUpdate(timestamp);
     }
 
     @Override
-    public List<net.gdface.facelog.db.PermitBean> loadPermitByUpdate (long timestamp) {
+    public List<PermitBean> loadPermitByUpdate (long timestamp) {
         return delegate().loadPermitByUpdate(timestamp);
     }
 

@@ -1334,49 +1334,79 @@ public class IFaceLogThriftClientAsync {
     /**
      * see also {@link net.gdface.facelog.IFaceLog#getGroupPermit(int,int)}
      */
-    public ListenableFuture<Boolean> getGroupPermit(int deviceId,
+    public ListenableFuture<PermitBean> getGroupPermit(int deviceId,
         int personGroupId){        
         net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Boolean> future = async.getGroupPermit(deviceId,
-            personGroupId);
+        ListenableFuture<PermitBean> future = Futures.transform(
+            async.getGroupPermit(deviceId,
+            personGroupId),
+            new Function<net.gdface.facelog.client.thrift.PermitBean,PermitBean>(){
+                @Override
+                public PermitBean apply(net.gdface.facelog.client.thrift.PermitBean input) {
+                    return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.PermitBean.class,
+                    PermitBean.class);
+                }
+            });
         return factory.wrap(async,future);
     }
     public void getGroupPermit(int deviceId,
         int personGroupId,
-        FutureCallback<Boolean>callback){
+        FutureCallback<PermitBean>callback){
         factory.addCallback(getGroupPermit(deviceId,personGroupId), callback);
     }
     /**
      * see also {@link net.gdface.facelog.IFaceLog#getGroupPermitOnDeviceGroup(int,int)}
      */
-    public ListenableFuture<Boolean> getGroupPermitOnDeviceGroup(int deviceGroupId,
+    public ListenableFuture<PermitBean> getGroupPermitOnDeviceGroup(int deviceGroupId,
         int personGroupId){        
         net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Boolean> future = async.getGroupPermitOnDeviceGroup(deviceGroupId,
-            personGroupId);
+        ListenableFuture<PermitBean> future = Futures.transform(
+            async.getGroupPermitOnDeviceGroup(deviceGroupId,
+            personGroupId),
+            new Function<net.gdface.facelog.client.thrift.PermitBean,PermitBean>(){
+                @Override
+                public PermitBean apply(net.gdface.facelog.client.thrift.PermitBean input) {
+                    return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.PermitBean.class,
+                    PermitBean.class);
+                }
+            });
         return factory.wrap(async,future);
     }
     public void getGroupPermitOnDeviceGroup(int deviceGroupId,
         int personGroupId,
-        FutureCallback<Boolean>callback){
+        FutureCallback<PermitBean>callback){
         factory.addCallback(getGroupPermitOnDeviceGroup(deviceGroupId,personGroupId), callback);
     }
     /**
      * see also {@link net.gdface.facelog.IFaceLog#getGroupPermits(int,java.util.List)}
      */
-    public ListenableFuture<List<Boolean>> getGroupPermits(int deviceId,
+    public ListenableFuture<List<PermitBean>> getGroupPermits(int deviceId,
         List<Integer> personGroupIdList){        
         net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<List<Boolean>> future = async.getGroupPermits(deviceId,
+        ListenableFuture<List<PermitBean>> future = Futures.transform(
+            async.getGroupPermits(deviceId,
             TypeTransformer.getInstance().to(
                     personGroupIdList,
                     Integer.class,
-                    Integer.class));
+                    Integer.class)),
+            new Function<List<net.gdface.facelog.client.thrift.PermitBean>,List<PermitBean>>(){
+                @Override
+                public List<PermitBean> apply(List<net.gdface.facelog.client.thrift.PermitBean> input) {
+                    return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.PermitBean.class,
+                    PermitBean.class);
+                }
+            });
         return factory.wrap(async,future);
     }
     public void getGroupPermits(int deviceId,
         List<Integer> personGroupIdList,
-        FutureCallback<List<Boolean>>callback){
+        FutureCallback<List<PermitBean>>callback){
         factory.addCallback(getGroupPermits(deviceId,personGroupIdList), callback);
     }
     /**
@@ -1565,34 +1595,54 @@ public class IFaceLogThriftClientAsync {
     /**
      * see also {@link net.gdface.facelog.IFaceLog#getPersonPermit(int,int)}
      */
-    public ListenableFuture<Boolean> getPersonPermit(int deviceId,
+    public ListenableFuture<PermitBean> getPersonPermit(int deviceId,
         int personId){        
         net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Boolean> future = async.getPersonPermit(deviceId,
-            personId);
+        ListenableFuture<PermitBean> future = Futures.transform(
+            async.getPersonPermit(deviceId,
+            personId),
+            new Function<net.gdface.facelog.client.thrift.PermitBean,PermitBean>(){
+                @Override
+                public PermitBean apply(net.gdface.facelog.client.thrift.PermitBean input) {
+                    return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.PermitBean.class,
+                    PermitBean.class);
+                }
+            });
         return factory.wrap(async,future);
     }
     public void getPersonPermit(int deviceId,
         int personId,
-        FutureCallback<Boolean>callback){
+        FutureCallback<PermitBean>callback){
         factory.addCallback(getPersonPermit(deviceId,personId), callback);
     }
     /**
      * see also {@link net.gdface.facelog.IFaceLog#getPersonPermits(int,java.util.List)}
      */
-    public ListenableFuture<List<Boolean>> getPersonPermits(int deviceId,
+    public ListenableFuture<List<PermitBean>> getPersonPermits(int deviceId,
         List<Integer> personIdList){        
         net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<List<Boolean>> future = async.getPersonPermits(deviceId,
+        ListenableFuture<List<PermitBean>> future = Futures.transform(
+            async.getPersonPermits(deviceId,
             TypeTransformer.getInstance().to(
                     personIdList,
                     Integer.class,
-                    Integer.class));
+                    Integer.class)),
+            new Function<List<net.gdface.facelog.client.thrift.PermitBean>,List<PermitBean>>(){
+                @Override
+                public List<PermitBean> apply(List<net.gdface.facelog.client.thrift.PermitBean> input) {
+                    return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.PermitBean.class,
+                    PermitBean.class);
+                }
+            });
         return factory.wrap(async,future);
     }
     public void getPersonPermits(int deviceId,
         List<Integer> personIdList,
-        FutureCallback<List<Boolean>>callback){
+        FutureCallback<List<PermitBean>>callback){
         factory.addCallback(getPersonPermits(deviceId,personIdList), callback);
     }
     /**

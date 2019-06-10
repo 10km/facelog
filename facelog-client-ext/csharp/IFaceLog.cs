@@ -80,9 +80,9 @@ public partial class IFaceLog {
     List<string> getFeaturesByPersonId(int personId);
     List<string> getFeaturesByPersonIdAndSdkVersion(int personId, string sdkVersion);
     List<string> getFeaturesOfPerson(int personId);
-    bool getGroupPermit(int deviceId, int personGroupId);
-    bool getGroupPermitOnDeviceGroup(int deviceGroupId, int personGroupId);
-    List<bool> getGroupPermits(int deviceId, List<int> personGroupIdList);
+    PermitBean getGroupPermit(int deviceId, int personGroupId);
+    PermitBean getGroupPermitOnDeviceGroup(int deviceGroupId, int personGroupId);
+    List<PermitBean> getGroupPermits(int deviceId, List<int> personGroupIdList);
     ImageBean getImage(string imageMD5);
     byte[] getImageBytes(string imageMD5);
     List<string> getImagesAssociatedByFeature(string featureMd5);
@@ -93,8 +93,8 @@ public partial class IFaceLog {
     List<PersonGroupBean> getPersonGroups(List<int> groupIdList);
     List<int> getPersonGroupsBelongs(int personId);
     List<int> getPersonGroupsPermittedBy(int deviceGroupId);
-    bool getPersonPermit(int deviceId, int personId);
-    List<bool> getPersonPermits(int deviceId, List<int> personIdList);
+    PermitBean getPersonPermit(int deviceId, int personId);
+    List<PermitBean> getPersonPermits(int deviceId, List<int> personIdList);
     List<PersonBean> getPersons(List<int> idList);
     List<int> getPersonsOfGroup(int personGroupId);
     string getProperty(string key, Token token);
@@ -234,9 +234,9 @@ public partial class IFaceLog {
     Task<List<string>> getFeaturesByPersonIdAsync(int personId);
     Task<List<string>> getFeaturesByPersonIdAndSdkVersionAsync(int personId, string sdkVersion);
     Task<List<string>> getFeaturesOfPersonAsync(int personId);
-    Task<bool> getGroupPermitAsync(int deviceId, int personGroupId);
-    Task<bool> getGroupPermitOnDeviceGroupAsync(int deviceGroupId, int personGroupId);
-    Task<List<bool>> getGroupPermitsAsync(int deviceId, List<int> personGroupIdList);
+    Task<PermitBean> getGroupPermitAsync(int deviceId, int personGroupId);
+    Task<PermitBean> getGroupPermitOnDeviceGroupAsync(int deviceGroupId, int personGroupId);
+    Task<List<PermitBean>> getGroupPermitsAsync(int deviceId, List<int> personGroupIdList);
     Task<ImageBean> getImageAsync(string imageMD5);
     Task<byte[]> getImageBytesAsync(string imageMD5);
     Task<List<string>> getImagesAssociatedByFeatureAsync(string featureMd5);
@@ -247,8 +247,8 @@ public partial class IFaceLog {
     Task<List<PersonGroupBean>> getPersonGroupsAsync(List<int> groupIdList);
     Task<List<int>> getPersonGroupsBelongsAsync(int personId);
     Task<List<int>> getPersonGroupsPermittedByAsync(int deviceGroupId);
-    Task<bool> getPersonPermitAsync(int deviceId, int personId);
-    Task<List<bool>> getPersonPermitsAsync(int deviceId, List<int> personIdList);
+    Task<PermitBean> getPersonPermitAsync(int deviceId, int personId);
+    Task<List<PermitBean>> getPersonPermitsAsync(int deviceId, List<int> personIdList);
     Task<List<PersonBean>> getPersonsAsync(List<int> idList);
     Task<List<int>> getPersonsOfGroupAsync(int personGroupId);
     Task<string> getPropertyAsync(string key, Token token);
@@ -451,11 +451,11 @@ public partial class IFaceLog {
     IAsyncResult Begin_getFeaturesOfPerson(AsyncCallback callback, object state, int personId);
     List<string> End_getFeaturesOfPerson(IAsyncResult asyncResult);
     IAsyncResult Begin_getGroupPermit(AsyncCallback callback, object state, int deviceId, int personGroupId);
-    bool End_getGroupPermit(IAsyncResult asyncResult);
+    PermitBean End_getGroupPermit(IAsyncResult asyncResult);
     IAsyncResult Begin_getGroupPermitOnDeviceGroup(AsyncCallback callback, object state, int deviceGroupId, int personGroupId);
-    bool End_getGroupPermitOnDeviceGroup(IAsyncResult asyncResult);
+    PermitBean End_getGroupPermitOnDeviceGroup(IAsyncResult asyncResult);
     IAsyncResult Begin_getGroupPermits(AsyncCallback callback, object state, int deviceId, List<int> personGroupIdList);
-    List<bool> End_getGroupPermits(IAsyncResult asyncResult);
+    List<PermitBean> End_getGroupPermits(IAsyncResult asyncResult);
     IAsyncResult Begin_getImage(AsyncCallback callback, object state, string imageMD5);
     ImageBean End_getImage(IAsyncResult asyncResult);
     IAsyncResult Begin_getImageBytes(AsyncCallback callback, object state, string imageMD5);
@@ -477,9 +477,9 @@ public partial class IFaceLog {
     IAsyncResult Begin_getPersonGroupsPermittedBy(AsyncCallback callback, object state, int deviceGroupId);
     List<int> End_getPersonGroupsPermittedBy(IAsyncResult asyncResult);
     IAsyncResult Begin_getPersonPermit(AsyncCallback callback, object state, int deviceId, int personId);
-    bool End_getPersonPermit(IAsyncResult asyncResult);
+    PermitBean End_getPersonPermit(IAsyncResult asyncResult);
     IAsyncResult Begin_getPersonPermits(AsyncCallback callback, object state, int deviceId, List<int> personIdList);
-    List<bool> End_getPersonPermits(IAsyncResult asyncResult);
+    List<PermitBean> End_getPersonPermits(IAsyncResult asyncResult);
     IAsyncResult Begin_getPersons(AsyncCallback callback, object state, List<int> idList);
     List<PersonBean> End_getPersons(IAsyncResult asyncResult);
     IAsyncResult Begin_getPersonsOfGroup(AsyncCallback callback, object state, int personGroupId);
@@ -4338,15 +4338,15 @@ public partial class IFaceLog {
       return send_getGroupPermit(callback, state, deviceId, personGroupId);
     }
 
-    public bool End_getGroupPermit(IAsyncResult asyncResult)
+    public PermitBean End_getGroupPermit(IAsyncResult asyncResult)
     {
       oprot_.Transport.EndFlush(asyncResult);
       return recv_getGroupPermit();
     }
 
-    public async Task<bool> getGroupPermitAsync(int deviceId, int personGroupId)
+    public async Task<PermitBean> getGroupPermitAsync(int deviceId, int personGroupId)
     {
-      bool retval;
+      PermitBean retval;
       retval = await Task.Run(() =>
       {
         return getGroupPermit(deviceId, personGroupId);
@@ -4354,7 +4354,7 @@ public partial class IFaceLog {
       return retval;
     }
 
-    public bool getGroupPermit(int deviceId, int personGroupId)
+    public PermitBean getGroupPermit(int deviceId, int personGroupId)
     {
       var asyncResult = Begin_getGroupPermit(null, null, deviceId, personGroupId);
       return End_getGroupPermit(asyncResult);
@@ -4371,7 +4371,7 @@ public partial class IFaceLog {
       return oprot_.Transport.BeginFlush(callback, state);
     }
 
-    public bool recv_getGroupPermit()
+    public PermitBean recv_getGroupPermit()
     {
       TMessage msg = iprot_.ReadMessageBegin();
       if (msg.Type == TMessageType.Exception) {
@@ -4382,8 +4382,8 @@ public partial class IFaceLog {
       getGroupPermit_result result = new getGroupPermit_result();
       result.Read(iprot_);
       iprot_.ReadMessageEnd();
-      if (result.Success.HasValue) {
-        return result.Success.Value;
+      if (result.Success != null) {
+        return result.Success;
       }
       if (result.Ex1 != null) {
         throw result.Ex1;
@@ -4397,15 +4397,15 @@ public partial class IFaceLog {
       return send_getGroupPermitOnDeviceGroup(callback, state, deviceGroupId, personGroupId);
     }
 
-    public bool End_getGroupPermitOnDeviceGroup(IAsyncResult asyncResult)
+    public PermitBean End_getGroupPermitOnDeviceGroup(IAsyncResult asyncResult)
     {
       oprot_.Transport.EndFlush(asyncResult);
       return recv_getGroupPermitOnDeviceGroup();
     }
 
-    public async Task<bool> getGroupPermitOnDeviceGroupAsync(int deviceGroupId, int personGroupId)
+    public async Task<PermitBean> getGroupPermitOnDeviceGroupAsync(int deviceGroupId, int personGroupId)
     {
-      bool retval;
+      PermitBean retval;
       retval = await Task.Run(() =>
       {
         return getGroupPermitOnDeviceGroup(deviceGroupId, personGroupId);
@@ -4413,7 +4413,7 @@ public partial class IFaceLog {
       return retval;
     }
 
-    public bool getGroupPermitOnDeviceGroup(int deviceGroupId, int personGroupId)
+    public PermitBean getGroupPermitOnDeviceGroup(int deviceGroupId, int personGroupId)
     {
       var asyncResult = Begin_getGroupPermitOnDeviceGroup(null, null, deviceGroupId, personGroupId);
       return End_getGroupPermitOnDeviceGroup(asyncResult);
@@ -4430,7 +4430,7 @@ public partial class IFaceLog {
       return oprot_.Transport.BeginFlush(callback, state);
     }
 
-    public bool recv_getGroupPermitOnDeviceGroup()
+    public PermitBean recv_getGroupPermitOnDeviceGroup()
     {
       TMessage msg = iprot_.ReadMessageBegin();
       if (msg.Type == TMessageType.Exception) {
@@ -4441,8 +4441,8 @@ public partial class IFaceLog {
       getGroupPermitOnDeviceGroup_result result = new getGroupPermitOnDeviceGroup_result();
       result.Read(iprot_);
       iprot_.ReadMessageEnd();
-      if (result.Success.HasValue) {
-        return result.Success.Value;
+      if (result.Success != null) {
+        return result.Success;
       }
       if (result.Ex1 != null) {
         throw result.Ex1;
@@ -4456,15 +4456,15 @@ public partial class IFaceLog {
       return send_getGroupPermits(callback, state, deviceId, personGroupIdList);
     }
 
-    public List<bool> End_getGroupPermits(IAsyncResult asyncResult)
+    public List<PermitBean> End_getGroupPermits(IAsyncResult asyncResult)
     {
       oprot_.Transport.EndFlush(asyncResult);
       return recv_getGroupPermits();
     }
 
-    public async Task<List<bool>> getGroupPermitsAsync(int deviceId, List<int> personGroupIdList)
+    public async Task<List<PermitBean>> getGroupPermitsAsync(int deviceId, List<int> personGroupIdList)
     {
-      List<bool> retval;
+      List<PermitBean> retval;
       retval = await Task.Run(() =>
       {
         return getGroupPermits(deviceId, personGroupIdList);
@@ -4472,7 +4472,7 @@ public partial class IFaceLog {
       return retval;
     }
 
-    public List<bool> getGroupPermits(int deviceId, List<int> personGroupIdList)
+    public List<PermitBean> getGroupPermits(int deviceId, List<int> personGroupIdList)
     {
       var asyncResult = Begin_getGroupPermits(null, null, deviceId, personGroupIdList);
       return End_getGroupPermits(asyncResult);
@@ -4489,7 +4489,7 @@ public partial class IFaceLog {
       return oprot_.Transport.BeginFlush(callback, state);
     }
 
-    public List<bool> recv_getGroupPermits()
+    public List<PermitBean> recv_getGroupPermits()
     {
       TMessage msg = iprot_.ReadMessageBegin();
       if (msg.Type == TMessageType.Exception) {
@@ -5095,15 +5095,15 @@ public partial class IFaceLog {
       return send_getPersonPermit(callback, state, deviceId, personId);
     }
 
-    public bool End_getPersonPermit(IAsyncResult asyncResult)
+    public PermitBean End_getPersonPermit(IAsyncResult asyncResult)
     {
       oprot_.Transport.EndFlush(asyncResult);
       return recv_getPersonPermit();
     }
 
-    public async Task<bool> getPersonPermitAsync(int deviceId, int personId)
+    public async Task<PermitBean> getPersonPermitAsync(int deviceId, int personId)
     {
-      bool retval;
+      PermitBean retval;
       retval = await Task.Run(() =>
       {
         return getPersonPermit(deviceId, personId);
@@ -5111,7 +5111,7 @@ public partial class IFaceLog {
       return retval;
     }
 
-    public bool getPersonPermit(int deviceId, int personId)
+    public PermitBean getPersonPermit(int deviceId, int personId)
     {
       var asyncResult = Begin_getPersonPermit(null, null, deviceId, personId);
       return End_getPersonPermit(asyncResult);
@@ -5128,7 +5128,7 @@ public partial class IFaceLog {
       return oprot_.Transport.BeginFlush(callback, state);
     }
 
-    public bool recv_getPersonPermit()
+    public PermitBean recv_getPersonPermit()
     {
       TMessage msg = iprot_.ReadMessageBegin();
       if (msg.Type == TMessageType.Exception) {
@@ -5139,8 +5139,8 @@ public partial class IFaceLog {
       getPersonPermit_result result = new getPersonPermit_result();
       result.Read(iprot_);
       iprot_.ReadMessageEnd();
-      if (result.Success.HasValue) {
-        return result.Success.Value;
+      if (result.Success != null) {
+        return result.Success;
       }
       if (result.Ex1 != null) {
         throw result.Ex1;
@@ -5154,15 +5154,15 @@ public partial class IFaceLog {
       return send_getPersonPermits(callback, state, deviceId, personIdList);
     }
 
-    public List<bool> End_getPersonPermits(IAsyncResult asyncResult)
+    public List<PermitBean> End_getPersonPermits(IAsyncResult asyncResult)
     {
       oprot_.Transport.EndFlush(asyncResult);
       return recv_getPersonPermits();
     }
 
-    public async Task<List<bool>> getPersonPermitsAsync(int deviceId, List<int> personIdList)
+    public async Task<List<PermitBean>> getPersonPermitsAsync(int deviceId, List<int> personIdList)
     {
-      List<bool> retval;
+      List<PermitBean> retval;
       retval = await Task.Run(() =>
       {
         return getPersonPermits(deviceId, personIdList);
@@ -5170,7 +5170,7 @@ public partial class IFaceLog {
       return retval;
     }
 
-    public List<bool> getPersonPermits(int deviceId, List<int> personIdList)
+    public List<PermitBean> getPersonPermits(int deviceId, List<int> personIdList)
     {
       var asyncResult = Begin_getPersonPermits(null, null, deviceId, personIdList);
       return End_getPersonPermits(asyncResult);
@@ -5187,7 +5187,7 @@ public partial class IFaceLog {
       return oprot_.Transport.BeginFlush(callback, state);
     }
 
-    public List<bool> recv_getPersonPermits()
+    public List<PermitBean> recv_getPersonPermits()
     {
       TMessage msg = iprot_.ReadMessageBegin();
       if (msg.Type == TMessageType.Exception) {
@@ -34960,7 +34960,7 @@ public partial class IFaceLog {
   public partial class getGroupPermit_result : TBase
   {
 
-    public bool? Success { get; set; }
+    public PermitBean Success { get; set; }
 
     public ServiceRuntimeException Ex1 { get; set; }
 
@@ -34983,8 +34983,9 @@ public partial class IFaceLog {
           switch (field.ID)
           {
             case 0:
-              if (field.Type == TType.Bool) {
-                Success = iprot.ReadBool();
+              if (field.Type == TType.Struct) {
+                Success = new PermitBean();
+                Success.Read(iprot);
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
@@ -35021,10 +35022,10 @@ public partial class IFaceLog {
 
         if (this.Success != null) {
           field.Name = "Success";
-          field.Type = TType.Bool;
+          field.Type = TType.Struct;
           field.ID = 0;
           oprot.WriteFieldBegin(field);
-          oprot.WriteBool(Success.Value);
+          Success.Write(oprot);
           oprot.WriteFieldEnd();
         } else if (this.Ex1 != null) {
           field.Name = "Ex1";
@@ -35050,7 +35051,7 @@ public partial class IFaceLog {
         if(!__first) { __sb.Append(", "); }
         __first = false;
         __sb.Append("Success: ");
-        __sb.Append(Success);
+        __sb.Append(Success== null ? "<null>" : Success.ToString());
       }
       if (Ex1 != null) {
         if(!__first) { __sb.Append(", "); }
@@ -35181,7 +35182,7 @@ public partial class IFaceLog {
   public partial class getGroupPermitOnDeviceGroup_result : TBase
   {
 
-    public bool? Success { get; set; }
+    public PermitBean Success { get; set; }
 
     public ServiceRuntimeException Ex1 { get; set; }
 
@@ -35204,8 +35205,9 @@ public partial class IFaceLog {
           switch (field.ID)
           {
             case 0:
-              if (field.Type == TType.Bool) {
-                Success = iprot.ReadBool();
+              if (field.Type == TType.Struct) {
+                Success = new PermitBean();
+                Success.Read(iprot);
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
@@ -35242,10 +35244,10 @@ public partial class IFaceLog {
 
         if (this.Success != null) {
           field.Name = "Success";
-          field.Type = TType.Bool;
+          field.Type = TType.Struct;
           field.ID = 0;
           oprot.WriteFieldBegin(field);
-          oprot.WriteBool(Success.Value);
+          Success.Write(oprot);
           oprot.WriteFieldEnd();
         } else if (this.Ex1 != null) {
           field.Name = "Ex1";
@@ -35271,7 +35273,7 @@ public partial class IFaceLog {
         if(!__first) { __sb.Append(", "); }
         __first = false;
         __sb.Append("Success: ");
-        __sb.Append(Success);
+        __sb.Append(Success== null ? "<null>" : Success.ToString());
       }
       if (Ex1 != null) {
         if(!__first) { __sb.Append(", "); }
@@ -35418,7 +35420,7 @@ public partial class IFaceLog {
   public partial class getGroupPermits_result : TBase
   {
 
-    public List<bool> Success { get; set; }
+    public List<PermitBean> Success { get; set; }
 
     public ServiceRuntimeException Ex1 { get; set; }
 
@@ -35443,12 +35445,13 @@ public partial class IFaceLog {
             case 0:
               if (field.Type == TType.List) {
                 {
-                  Success = new List<bool>();
+                  Success = new List<PermitBean>();
                   TList _list105 = iprot.ReadListBegin();
                   for( int _i106 = 0; _i106 < _list105.Count; ++_i106)
                   {
-                    bool _elem107;
-                    _elem107 = iprot.ReadBool();
+                    PermitBean _elem107;
+                    _elem107 = new PermitBean();
+                    _elem107.Read(iprot);
                     Success.Add(_elem107);
                   }
                   iprot.ReadListEnd();
@@ -35493,10 +35496,10 @@ public partial class IFaceLog {
           field.ID = 0;
           oprot.WriteFieldBegin(field);
           {
-            oprot.WriteListBegin(new TList(TType.Bool, Success.Count));
-            foreach (bool _iter108 in Success)
+            oprot.WriteListBegin(new TList(TType.Struct, Success.Count));
+            foreach (PermitBean _iter108 in Success)
             {
-              oprot.WriteBool(_iter108);
+              _iter108.Write(oprot);
             }
             oprot.WriteListEnd();
           }
@@ -37749,7 +37752,7 @@ public partial class IFaceLog {
   public partial class getPersonPermit_result : TBase
   {
 
-    public bool? Success { get; set; }
+    public PermitBean Success { get; set; }
 
     public ServiceRuntimeException Ex1 { get; set; }
 
@@ -37772,8 +37775,9 @@ public partial class IFaceLog {
           switch (field.ID)
           {
             case 0:
-              if (field.Type == TType.Bool) {
-                Success = iprot.ReadBool();
+              if (field.Type == TType.Struct) {
+                Success = new PermitBean();
+                Success.Read(iprot);
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
@@ -37810,10 +37814,10 @@ public partial class IFaceLog {
 
         if (this.Success != null) {
           field.Name = "Success";
-          field.Type = TType.Bool;
+          field.Type = TType.Struct;
           field.ID = 0;
           oprot.WriteFieldBegin(field);
-          oprot.WriteBool(Success.Value);
+          Success.Write(oprot);
           oprot.WriteFieldEnd();
         } else if (this.Ex1 != null) {
           field.Name = "Ex1";
@@ -37839,7 +37843,7 @@ public partial class IFaceLog {
         if(!__first) { __sb.Append(", "); }
         __first = false;
         __sb.Append("Success: ");
-        __sb.Append(Success);
+        __sb.Append(Success== null ? "<null>" : Success.ToString());
       }
       if (Ex1 != null) {
         if(!__first) { __sb.Append(", "); }
@@ -37986,7 +37990,7 @@ public partial class IFaceLog {
   public partial class getPersonPermits_result : TBase
   {
 
-    public List<bool> Success { get; set; }
+    public List<PermitBean> Success { get; set; }
 
     public ServiceRuntimeException Ex1 { get; set; }
 
@@ -38011,12 +38015,13 @@ public partial class IFaceLog {
             case 0:
               if (field.Type == TType.List) {
                 {
-                  Success = new List<bool>();
+                  Success = new List<PermitBean>();
                   TList _list137 = iprot.ReadListBegin();
                   for( int _i138 = 0; _i138 < _list137.Count; ++_i138)
                   {
-                    bool _elem139;
-                    _elem139 = iprot.ReadBool();
+                    PermitBean _elem139;
+                    _elem139 = new PermitBean();
+                    _elem139.Read(iprot);
                     Success.Add(_elem139);
                   }
                   iprot.ReadListEnd();
@@ -38061,10 +38066,10 @@ public partial class IFaceLog {
           field.ID = 0;
           oprot.WriteFieldBegin(field);
           {
-            oprot.WriteListBegin(new TList(TType.Bool, Success.Count));
-            foreach (bool _iter140 in Success)
+            oprot.WriteListBegin(new TList(TType.Struct, Success.Count));
+            foreach (PermitBean _iter140 in Success)
             {
-              oprot.WriteBool(_iter140);
+              _iter140.Write(oprot);
             }
             oprot.WriteListEnd();
           }
