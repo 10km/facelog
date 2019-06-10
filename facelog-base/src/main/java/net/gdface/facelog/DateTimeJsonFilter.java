@@ -30,12 +30,12 @@ public class DateTimeJsonFilter implements IDateTimeFilter {
 	public static final String FIELD_HOUR = "hour";
 	/** 日期过滤器字段名 */
 	public static final String FIELD_DAY = "day";
-	/** 附加日期过滤器(周)字段名前缀 */
+	/** 附加日期过滤器(周)字段名前缀,格式:w1~w7 */
 	public static final String PREFIX_WKEY = "w";
-	/** 附加日期过滤器(月)字段名前缀 */
+	/** 附加日期过滤器(月)字段名前缀,格式:m1~m31 */
 	public static final String PREFIX_MKEY = "m";
-	/** 附加日期过滤器(月日)字段名前缀 */
-	public static final String PREFIX_DATEKEY = "date";
+	/** 附加日期过滤器(月日)字段名前缀,格式:d0101~d1231 */
+	public static final String PREFIX_DATEKEY = "d";
 	/** 字段名:boolean类型,对于日期过滤器超出当月最后一天的日期为1时，是否可以作为当月最后一天 */
 	public static final String AS_LASTDAY_IF_OVERFLOW = "asLastdayIfOverflow";
 	/** 时间过滤器缺省值(0~23分别代表一天的24小时) */
@@ -61,7 +61,7 @@ public class DateTimeJsonFilter implements IDateTimeFilter {
 
 		@Override
 		public boolean apply(String input) {
-			return input.matches("^(m|w|date)\\d+");
+			return input.matches("^(m|w|d)\\d+");
 		}};
 	public DateTimeJsonFilter() {
 		this(null);
@@ -88,15 +88,16 @@ public class DateTimeJsonFilter implements IDateTimeFilter {
 
 	private void init (){
 		try {
-			normalized.putAll(MoreObjects.firstNonNull(encoder.fromJson(filter,JSONObject.class),defaultJsonFilterDefine));
-			hour = MoreObjects.firstNonNull(getIntegerOrNull(FIELD_HOUR), DEFAULT_HOUR);
-			day = MoreObjects.firstNonNull(getIntegerOrNull(FIELD_DAY), DEFAULT_DAY);
 			alwaysTrue = false;
+			normalized.clear();
+			normalized.putAll(MoreObjects.firstNonNull(encoder.fromJson(filter,JSONObject.class),defaultJsonFilterDefine));
+			hour = MoreObjects.firstNonNull(getIntegerOrNull(FIELD_HOUR), hour);
+			day = MoreObjects.firstNonNull(getIntegerOrNull(FIELD_DAY), day);
 			if(Strings.isNullOrEmpty(filter)){
 				alwaysTrue = true;
 				return;
 			}
-			if((hour & 0xffffff) == 0xffffff && ((day & 0xff) == 0xff || (day & 0xfffffffe) == 0xfffffffe)){
+			if((hour & 0x00ffffff) == 0x00ffffff && ((day & 0xff) == 0xff || (day & 0xfffffffe) == 0xfffffffe)){
 				if(!Iterables.tryFind(normalized.keySet(), additionalRuleFilter).isPresent()){
 					alwaysTrue = true;
 					return;	
@@ -104,6 +105,9 @@ public class DateTimeJsonFilter implements IDateTimeFilter {
 			}
 		} catch (JSONException e) {
 			logger.debug(e.getMessage());
+			hour = DEFAULT_HOUR;
+			day = DEFAULT_DAY;
+			normalized.fluentPutAll(defaultJsonFilterDefine);
 		}
 	}
 	private Integer getIntegerOrNull(String key){

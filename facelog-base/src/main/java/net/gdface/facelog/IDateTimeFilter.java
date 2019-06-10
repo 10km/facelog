@@ -20,7 +20,7 @@ public interface IDateTimeFilter extends Predicate<Date>{
 	boolean apply(Date date);
 	/**
 	 * @param date {@code yyyy-MM-dd}或{@code yyyy-MM-dd HH:mm:ss}或{@code yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}(ISO8601)格式日期字符串
-	 * @return 日期可以通过指定的过滤器返回{@code true},否则返回{@code false}
+	 * @return 日期可以通过指定的过滤器返回{@code true},否则返回{@code false},日期格式不正确返回{@code false}
 	 */
 	boolean apply(String date);
 	/**
@@ -31,9 +31,10 @@ public interface IDateTimeFilter extends Predicate<Date>{
 	 */
 	public boolean apply( Date date,String filter);
 	/**
+	 * 使用指定的过滤器过滤日期
 	 * @param date {@code yyyy-MM-dd}或{@code yyyy-MM-dd HH:mm:ss}或{@code yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}(ISO8601)格式日期字符串
 	 * @param filter json格式的过滤器字符串
-	 * @return
+	 * @return 日期可以通过指定的过滤器返回{@code true},否则返回{@code false},日期格式不正确返回{@code false}
 	 */
 	boolean apply(String date, String filter);
 	/**
