@@ -53,6 +53,11 @@ public interface CommonConstant {
     /** 特征参数配置LIMIT前缀 */
     public static final String FEATURE_PERSON_LIMIT_PREFIX = "feature.person.limit.";
     
+    /** 特征提取任务队列名 */
+    public static final String TASK_FEATURE_BASE = "FEATURE_";
+    
+    /** 用户注册任务队列名 */
+    public static final String TASK_REGISTER_BASE = "REGISTER_";
     /**
      * 服务异常类型定义
      */

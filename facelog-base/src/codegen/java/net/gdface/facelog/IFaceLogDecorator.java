@@ -1036,6 +1036,11 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
+    public String sdkTaskQueueOf (String task,String sdkVersion,Token token) {
+        return delegate().sdkTaskQueueOf(task,sdkVersion,token);
+    }
+
+    @Override
     public void setPersonExpiryDate (int personId,String expiryDate,Token token) {
          delegate().setPersonExpiryDate(personId,expiryDate,token);
     }
@@ -1063,11 +1068,6 @@ public class IFaceLogDecorator implements IFaceLog{
     @Override
     public String taskQueueOf (String task,Token token) {
         return delegate().taskQueueOf(task,token);
-    }
-
-    @Override
-    public String taskRegister (String task,Token token) {
-        return delegate().taskRegister(task,token);
     }
 
     @Override

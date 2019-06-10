@@ -3381,6 +3381,29 @@ public class IFaceLogSpringController {
     }
     // port-140
     /**
+     * 返回sdk任务队列名
+     * @param task 任务名,可选值:{@link CommonConstant#TASK_FEATURE_BASE},{@link CommonConstant#TASK_REGISTER_BASE}
+     * @param sdkVersion sdk版本号
+     * @param token 访问令牌
+     * @return 返回sdk任务队列名，参数错误返回{@code null}
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/sdkTaskQueueOf", method = RequestMethod.POST)
+    @ApiOperation(value = "返回sdk任务队列名",httpMethod="POST")
+    public Response sdkTaskQueueOf( @RequestBody SdkTaskQueueOfArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().sdkTaskQueueOf(args.task,args.sdkVersion,args.token));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // port-141
+    /**
      * 修改 personId 指定的人员记录的有效期
      * <br>{@code PERSON_ONLY}
      * @param personId
@@ -3404,7 +3427,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-141
+    // port-142
     /**
      * 修改 personId 指定的人员记录的有效期
      * <br>{@code PERSON_ONLY}
@@ -3429,7 +3452,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-142
+    // port-143
     /**
      * 修改 personIdList 指定的人员记录的有效期
      * <br>{@code PERSON_ONLY}
@@ -3455,7 +3478,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-143
+    // port-144
     /**
      * 修改一组配置参数
      * <br>{@code ROOT_ONLY}
@@ -3479,7 +3502,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-144
+    // port-145
     /**
      * 修改/增加指定的配置参数
      * <br>{@code ROOT_ONLY}
@@ -3504,51 +3527,21 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-145
+    // port-146
     /**
      * 根据任务名返回redis队列名
-     * <br>{@link TokenMangement.Enable#ALL}
      * @param task 任务名
      * @param token 访问令牌
      * @return 返回redis队列名,队列不存在则返回{@code null}
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/taskQueueOf", method = RequestMethod.POST)
-    @ApiOperation(value = "根据任务名返回redis队列名\n"
-+" <br>{@link TokenMangement.Enable#ALL}",httpMethod="POST")
+    @ApiOperation(value = "根据任务名返回redis队列名",httpMethod="POST")
     public Response taskQueueOf( @RequestBody TaskQueueOfArgs args) 
     {
             Response response = responseFactory.newIFaceLogResponse();
             try{
                 response.onComplete(delegate().taskQueueOf(args.task,args.token));
-            }
-            catch(Exception e){
-                logger.error(e.getMessage(),e);
-                response.onError(e);
-            }
-            return response;
-    }
-    // port-146
-    /**
-     * 注册一个任务名<br>
-     * 方法将会根据任务名在redis上生成一个对应的队列<br>
-     * 对同一个任务名多次调用本方法，不会产生不同的队列名字
-     * <br>{@code ROOT_ONLY}
-     * @param task 任务名
-     * @param token 访问令牌
-     * @return 返回保存队列名的key
-     */
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/taskRegister", method = RequestMethod.POST)
-    @ApiOperation(value = "注册一个任务名<br>\n"
-+" 方法将会根据任务名在redis上生成一个对应的队列<br>\n"
-+" 对同一个任务名多次调用本方法，不会产生不同的队列名字\n"
-+" <br>{@code ROOT_ONLY}",httpMethod="POST")
-    public Response taskRegister( @RequestBody TaskRegisterArgs args) 
-    {
-            Response response = responseFactory.newIFaceLogResponse();
-            try{
-                response.onComplete(delegate().taskRegister(args.task,args.token));
             }
             catch(Exception e){
                 logger.error(e.getMessage(),e);
@@ -5026,6 +5019,18 @@ public class IFaceLogSpringController {
     }
     /**
      * argClass-140<br>
+     * wrap arguments for method {@link #sdkTaskQueueOf(SdkTaskQueueOfArgs)}
+     */
+    public static class SdkTaskQueueOfArgs{
+        @ApiModelProperty(value ="任务名,可选值:{@link CommonConstant#TASK_FEATURE_BASE},{@link CommonConstant#TASK_REGISTER_BASE}" ,required=true ,dataType="String")
+        public String task;
+        @ApiModelProperty(value ="sdk版本号" ,required=true ,dataType="String")
+        public String sdkVersion;
+        @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
+        public Token token;
+    }
+    /**
+     * argClass-141<br>
      * wrap arguments for method {@link #setPersonExpiryDate(SetPersonExpiryDateTimeStrArgs)}
      */
     public static class SetPersonExpiryDateTimeStrArgs{
@@ -5037,7 +5042,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-141<br>
+     * argClass-142<br>
      * wrap arguments for method {@link #setPersonExpiryDate(SetPersonExpiryDateArgs)}
      */
     public static class SetPersonExpiryDateArgs{
@@ -5049,7 +5054,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-142<br>
+     * argClass-143<br>
      * wrap arguments for method {@link #setPersonExpiryDate(SetPersonExpiryDateListArgs)}
      */
     public static class SetPersonExpiryDateListArgs{
@@ -5061,7 +5066,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-143<br>
+     * argClass-144<br>
      * wrap arguments for method {@link #setProperties(SetPropertiesArgs)}
      */
     public static class SetPropertiesArgs{
@@ -5071,7 +5076,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-144<br>
+     * argClass-145<br>
      * wrap arguments for method {@link #setProperty(SetPropertyArgs)}
      */
     public static class SetPropertyArgs{
@@ -5083,20 +5088,10 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-145<br>
+     * argClass-146<br>
      * wrap arguments for method {@link #taskQueueOf(TaskQueueOfArgs)}
      */
     public static class TaskQueueOfArgs{
-        @ApiModelProperty(value ="任务名" ,required=true ,dataType="String")
-        public String task;
-        @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
-        public Token token;
-    }
-    /**
-     * argClass-146<br>
-     * wrap arguments for method {@link #taskRegister(TaskRegisterArgs)}
-     */
-    public static class TaskRegisterArgs{
         @ApiModelProperty(value ="任务名" ,required=true ,dataType="String")
         public String task;
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")

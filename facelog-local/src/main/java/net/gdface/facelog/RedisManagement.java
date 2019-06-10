@@ -74,6 +74,7 @@ class RedisManagement implements ServiceConstant{
 			.put(MQParam.HB_MONITOR_CHANNEL, createHeartbeatMonitorChannel())
 			.put(MQParam.HB_INTERVAL, CONFIG.getInteger(HEARTBEAT_INTERVAL, DEFAULT_HEARTBEAT_PERIOD).toString())
 			.put(MQParam.HB_EXPIRE, CONFIG.getInteger(HEARTBEAT_EXPIRE, DEFAULT_HEARTBEAT_EXPIRE).toString());
+		sdkTaskRegister();
 		if(!Strings.isNullOrEmpty(webredisURL)){
 			builder.put(MQParam.WEBREDIS_URL, webredisURL);
 		}
@@ -103,8 +104,8 @@ class RedisManagement implements ServiceConstant{
 	 */
 	private String createRandomConstOnRedis(String key,String prefix){
 		String timestamp = String.format("%06x", System.nanoTime());
-		String monitorChannel = prefix + timestamp.substring(timestamp.length()-6, timestamp.length());
-		return JedisUtils.setnx(key,monitorChannel);		
+		String v = prefix + timestamp.substring(timestamp.length()-6, timestamp.length());
+		return JedisUtils.setnx(key,v);
 	}
 	/** redis 连接初始化,并测试连接,如果连接异常,则尝试启动本地redis服务器或等待redis server启动 */
 	private void init(){
@@ -352,5 +353,19 @@ class RedisManagement implements ServiceConstant{
 	protected String taskQueueOf(String task) {	
 		checkArgument(Strings.isNullOrEmpty(task),"task is empty or null");
 		return JedisUtils.get(taskKeyOf(task));
+	}
+	/**
+	 * sdk任务注册 <br>
+	 */
+	private void sdkTaskRegister() {
+		for(String sdkVersion:FeatureConfig.FEATURE_CONFIG.getSdkVersionWhiteList()){
+			taskRegister(TASK_FEATURE_BASE + sdkVersion);
+			taskRegister(TASK_REGISTER_BASE + sdkVersion);
+		}
+	}
+	protected String sdkTaskQueueOf(String task,String sdkVersion) {	
+		checkArgument(Strings.isNullOrEmpty(task),"task is empty or null");
+		checkArgument(Strings.isNullOrEmpty(sdkVersion),"sdkVersion is empty or null");
+		return taskQueueOf(task + sdkVersion);
 	}
 }

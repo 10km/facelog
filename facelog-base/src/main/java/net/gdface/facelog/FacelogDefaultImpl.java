@@ -749,10 +749,10 @@ public class FacelogDefaultImpl implements IFaceLog {
 		return null;
 	}
 
-	public String taskRegister(String task, Token token) {
+	@Override
+	public String sdkTaskQueueOf(String task, String sdkVersion, Token token) {
 		return null;
 	}
-
 	@Override
 	public Integer rootGroupOfDevice(Integer deviceId) {
 		return null;

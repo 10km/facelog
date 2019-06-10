@@ -157,13 +157,13 @@ public partial class IFaceLog {
     void savePersons(List<PersonBean> persons, Token token);
     int savePersonsWithPhoto(Dictionary<byte[], PersonBean> persons, Token token);
     void saveServiceConfig(Token token);
+    string sdkTaskQueueOf(string task, string sdkVersion, Token token);
     void setPersonExpiryDate(int personId, long expiryDate, Token token);
     void setPersonExpiryDateList(List<int> personIdList, long expiryDate, Token token);
     void setPersonExpiryDateTimeStr(int personId, string expiryDate, Token token);
     void setProperties(Dictionary<string, string> config, Token token);
     void setProperty(string key, string @value, Token token);
     string taskQueueOf(string task, Token token);
-    string taskRegister(string task, Token token);
     void unbindBorder(int personGroupId, int deviceGroupId, Token token);
     void unregisterDevice(Token token);
     DeviceBean updateDevice(DeviceBean deviceBean, Token token);
@@ -311,13 +311,13 @@ public partial class IFaceLog {
     Task savePersonsAsync(List<PersonBean> persons, Token token);
     Task<int> savePersonsWithPhotoAsync(Dictionary<byte[], PersonBean> persons, Token token);
     Task saveServiceConfigAsync(Token token);
+    Task<string> sdkTaskQueueOfAsync(string task, string sdkVersion, Token token);
     Task setPersonExpiryDateAsync(int personId, long expiryDate, Token token);
     Task setPersonExpiryDateListAsync(List<int> personIdList, long expiryDate, Token token);
     Task setPersonExpiryDateTimeStrAsync(int personId, string expiryDate, Token token);
     Task setPropertiesAsync(Dictionary<string, string> config, Token token);
     Task setPropertyAsync(string key, string @value, Token token);
     Task<string> taskQueueOfAsync(string task, Token token);
-    Task<string> taskRegisterAsync(string task, Token token);
     Task unbindBorderAsync(int personGroupId, int deviceGroupId, Token token);
     Task unregisterDeviceAsync(Token token);
     Task<DeviceBean> updateDeviceAsync(DeviceBean deviceBean, Token token);
@@ -604,6 +604,8 @@ public partial class IFaceLog {
     int End_savePersonsWithPhoto(IAsyncResult asyncResult);
     IAsyncResult Begin_saveServiceConfig(AsyncCallback callback, object state, Token token);
     void End_saveServiceConfig(IAsyncResult asyncResult);
+    IAsyncResult Begin_sdkTaskQueueOf(AsyncCallback callback, object state, string task, string sdkVersion, Token token);
+    string End_sdkTaskQueueOf(IAsyncResult asyncResult);
     IAsyncResult Begin_setPersonExpiryDate(AsyncCallback callback, object state, int personId, long expiryDate, Token token);
     void End_setPersonExpiryDate(IAsyncResult asyncResult);
     IAsyncResult Begin_setPersonExpiryDateList(AsyncCallback callback, object state, List<int> personIdList, long expiryDate, Token token);
@@ -616,8 +618,6 @@ public partial class IFaceLog {
     void End_setProperty(IAsyncResult asyncResult);
     IAsyncResult Begin_taskQueueOf(AsyncCallback callback, object state, string task, Token token);
     string End_taskQueueOf(IAsyncResult asyncResult);
-    IAsyncResult Begin_taskRegister(AsyncCallback callback, object state, string task, Token token);
-    string End_taskRegister(IAsyncResult asyncResult);
     IAsyncResult Begin_unbindBorder(AsyncCallback callback, object state, int personGroupId, int deviceGroupId, Token token);
     void End_unbindBorder(IAsyncResult asyncResult);
     IAsyncResult Begin_unregisterDevice(AsyncCallback callback, object state, Token token);
@@ -8837,6 +8837,66 @@ public partial class IFaceLog {
     }
 
     
+    public IAsyncResult Begin_sdkTaskQueueOf(AsyncCallback callback, object state, string task, string sdkVersion, Token token)
+    {
+      return send_sdkTaskQueueOf(callback, state, task, sdkVersion, token);
+    }
+
+    public string End_sdkTaskQueueOf(IAsyncResult asyncResult)
+    {
+      oprot_.Transport.EndFlush(asyncResult);
+      return recv_sdkTaskQueueOf();
+    }
+
+    public async Task<string> sdkTaskQueueOfAsync(string task, string sdkVersion, Token token)
+    {
+      string retval;
+      retval = await Task.Run(() =>
+      {
+        return sdkTaskQueueOf(task, sdkVersion, token);
+      });
+      return retval;
+    }
+
+    public string sdkTaskQueueOf(string task, string sdkVersion, Token token)
+    {
+      var asyncResult = Begin_sdkTaskQueueOf(null, null, task, sdkVersion, token);
+      return End_sdkTaskQueueOf(asyncResult);
+
+    }
+    public IAsyncResult send_sdkTaskQueueOf(AsyncCallback callback, object state, string task, string sdkVersion, Token token)
+    {
+      oprot_.WriteMessageBegin(new TMessage("sdkTaskQueueOf", TMessageType.Call, seqid_));
+      sdkTaskQueueOf_args args = new sdkTaskQueueOf_args();
+      args.Task = task;
+      args.SdkVersion = sdkVersion;
+      args.Token = token;
+      args.Write(oprot_);
+      oprot_.WriteMessageEnd();
+      return oprot_.Transport.BeginFlush(callback, state);
+    }
+
+    public string recv_sdkTaskQueueOf()
+    {
+      TMessage msg = iprot_.ReadMessageBegin();
+      if (msg.Type == TMessageType.Exception) {
+        TApplicationException x = TApplicationException.Read(iprot_);
+        iprot_.ReadMessageEnd();
+        throw x;
+      }
+      sdkTaskQueueOf_result result = new sdkTaskQueueOf_result();
+      result.Read(iprot_);
+      iprot_.ReadMessageEnd();
+      if (result.Success != null) {
+        return result.Success;
+      }
+      if (result.Ex1 != null) {
+        throw result.Ex1;
+      }
+      throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "sdkTaskQueueOf failed: unknown result");
+    }
+
+    
     public IAsyncResult Begin_setPersonExpiryDate(AsyncCallback callback, object state, int personId, long expiryDate, Token token)
     {
       return send_setPersonExpiryDate(callback, state, personId, expiryDate, token);
@@ -9167,65 +9227,6 @@ public partial class IFaceLog {
         throw result.Ex1;
       }
       throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "taskQueueOf failed: unknown result");
-    }
-
-    
-    public IAsyncResult Begin_taskRegister(AsyncCallback callback, object state, string task, Token token)
-    {
-      return send_taskRegister(callback, state, task, token);
-    }
-
-    public string End_taskRegister(IAsyncResult asyncResult)
-    {
-      oprot_.Transport.EndFlush(asyncResult);
-      return recv_taskRegister();
-    }
-
-    public async Task<string> taskRegisterAsync(string task, Token token)
-    {
-      string retval;
-      retval = await Task.Run(() =>
-      {
-        return taskRegister(task, token);
-      });
-      return retval;
-    }
-
-    public string taskRegister(string task, Token token)
-    {
-      var asyncResult = Begin_taskRegister(null, null, task, token);
-      return End_taskRegister(asyncResult);
-
-    }
-    public IAsyncResult send_taskRegister(AsyncCallback callback, object state, string task, Token token)
-    {
-      oprot_.WriteMessageBegin(new TMessage("taskRegister", TMessageType.Call, seqid_));
-      taskRegister_args args = new taskRegister_args();
-      args.Task = task;
-      args.Token = token;
-      args.Write(oprot_);
-      oprot_.WriteMessageEnd();
-      return oprot_.Transport.BeginFlush(callback, state);
-    }
-
-    public string recv_taskRegister()
-    {
-      TMessage msg = iprot_.ReadMessageBegin();
-      if (msg.Type == TMessageType.Exception) {
-        TApplicationException x = TApplicationException.Read(iprot_);
-        iprot_.ReadMessageEnd();
-        throw x;
-      }
-      taskRegister_result result = new taskRegister_result();
-      result.Read(iprot_);
-      iprot_.ReadMessageEnd();
-      if (result.Success != null) {
-        return result.Success;
-      }
-      if (result.Ex1 != null) {
-        throw result.Ex1;
-      }
-      throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "taskRegister failed: unknown result");
     }
 
     
@@ -9656,13 +9657,13 @@ public partial class IFaceLog {
       processMap_["savePersons"] = savePersons_ProcessAsync;
       processMap_["savePersonsWithPhoto"] = savePersonsWithPhoto_ProcessAsync;
       processMap_["saveServiceConfig"] = saveServiceConfig_ProcessAsync;
+      processMap_["sdkTaskQueueOf"] = sdkTaskQueueOf_ProcessAsync;
       processMap_["setPersonExpiryDate"] = setPersonExpiryDate_ProcessAsync;
       processMap_["setPersonExpiryDateList"] = setPersonExpiryDateList_ProcessAsync;
       processMap_["setPersonExpiryDateTimeStr"] = setPersonExpiryDateTimeStr_ProcessAsync;
       processMap_["setProperties"] = setProperties_ProcessAsync;
       processMap_["setProperty"] = setProperty_ProcessAsync;
       processMap_["taskQueueOf"] = taskQueueOf_ProcessAsync;
-      processMap_["taskRegister"] = taskRegister_ProcessAsync;
       processMap_["unbindBorder"] = unbindBorder_ProcessAsync;
       processMap_["unregisterDevice"] = unregisterDevice_ProcessAsync;
       processMap_["updateDevice"] = updateDevice_ProcessAsync;
@@ -14633,6 +14634,41 @@ public partial class IFaceLog {
       oprot.Transport.Flush();
     }
 
+    public async Task sdkTaskQueueOf_ProcessAsync(int seqid, TProtocol iprot, TProtocol oprot)
+    {
+      sdkTaskQueueOf_args args = new sdkTaskQueueOf_args();
+      args.Read(iprot);
+      iprot.ReadMessageEnd();
+      sdkTaskQueueOf_result result = new sdkTaskQueueOf_result();
+      try
+      {
+        try
+        {
+          result.Success = await iface_.sdkTaskQueueOfAsync(args.Task, args.SdkVersion, args.Token);
+        }
+        catch (ServiceRuntimeException ex1)
+        {
+          result.Ex1 = ex1;
+        }
+        oprot.WriteMessageBegin(new TMessage("sdkTaskQueueOf", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+      }
+      catch (TTransportException)
+      {
+        throw;
+      }
+      catch (Exception ex)
+      {
+        Console.Error.WriteLine("Error occurred in processor:");
+        Console.Error.WriteLine(ex.ToString());
+        TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
+        oprot.WriteMessageBegin(new TMessage("sdkTaskQueueOf", TMessageType.Exception, seqid));
+        x.Write(oprot);
+      }
+      oprot.WriteMessageEnd();
+      oprot.Transport.Flush();
+    }
+
     public async Task setPersonExpiryDate_ProcessAsync(int seqid, TProtocol iprot, TProtocol oprot)
     {
       setPersonExpiryDate_args args = new setPersonExpiryDate_args();
@@ -14837,41 +14873,6 @@ public partial class IFaceLog {
         Console.Error.WriteLine(ex.ToString());
         TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
         oprot.WriteMessageBegin(new TMessage("taskQueueOf", TMessageType.Exception, seqid));
-        x.Write(oprot);
-      }
-      oprot.WriteMessageEnd();
-      oprot.Transport.Flush();
-    }
-
-    public async Task taskRegister_ProcessAsync(int seqid, TProtocol iprot, TProtocol oprot)
-    {
-      taskRegister_args args = new taskRegister_args();
-      args.Read(iprot);
-      iprot.ReadMessageEnd();
-      taskRegister_result result = new taskRegister_result();
-      try
-      {
-        try
-        {
-          result.Success = await iface_.taskRegisterAsync(args.Task, args.Token);
-        }
-        catch (ServiceRuntimeException ex1)
-        {
-          result.Ex1 = ex1;
-        }
-        oprot.WriteMessageBegin(new TMessage("taskRegister", TMessageType.Reply, seqid)); 
-        result.Write(oprot);
-      }
-      catch (TTransportException)
-      {
-        throw;
-      }
-      catch (Exception ex)
-      {
-        Console.Error.WriteLine("Error occurred in processor:");
-        Console.Error.WriteLine(ex.ToString());
-        TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
-        oprot.WriteMessageBegin(new TMessage("taskRegister", TMessageType.Exception, seqid));
         x.Write(oprot);
       }
       oprot.WriteMessageEnd();
@@ -15202,13 +15203,13 @@ public partial class IFaceLog {
       processMap_["savePersons"] = savePersons_Process;
       processMap_["savePersonsWithPhoto"] = savePersonsWithPhoto_Process;
       processMap_["saveServiceConfig"] = saveServiceConfig_Process;
+      processMap_["sdkTaskQueueOf"] = sdkTaskQueueOf_Process;
       processMap_["setPersonExpiryDate"] = setPersonExpiryDate_Process;
       processMap_["setPersonExpiryDateList"] = setPersonExpiryDateList_Process;
       processMap_["setPersonExpiryDateTimeStr"] = setPersonExpiryDateTimeStr_Process;
       processMap_["setProperties"] = setProperties_Process;
       processMap_["setProperty"] = setProperty_Process;
       processMap_["taskQueueOf"] = taskQueueOf_Process;
-      processMap_["taskRegister"] = taskRegister_Process;
       processMap_["unbindBorder"] = unbindBorder_Process;
       processMap_["unregisterDevice"] = unregisterDevice_Process;
       processMap_["updateDevice"] = updateDevice_Process;
@@ -20179,6 +20180,41 @@ public partial class IFaceLog {
       oprot.Transport.Flush();
     }
 
+    public void sdkTaskQueueOf_Process(int seqid, TProtocol iprot, TProtocol oprot)
+    {
+      sdkTaskQueueOf_args args = new sdkTaskQueueOf_args();
+      args.Read(iprot);
+      iprot.ReadMessageEnd();
+      sdkTaskQueueOf_result result = new sdkTaskQueueOf_result();
+      try
+      {
+        try
+        {
+          result.Success = iface_.sdkTaskQueueOf(args.Task, args.SdkVersion, args.Token);
+        }
+        catch (ServiceRuntimeException ex1)
+        {
+          result.Ex1 = ex1;
+        }
+        oprot.WriteMessageBegin(new TMessage("sdkTaskQueueOf", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+      }
+      catch (TTransportException)
+      {
+        throw;
+      }
+      catch (Exception ex)
+      {
+        Console.Error.WriteLine("Error occurred in processor:");
+        Console.Error.WriteLine(ex.ToString());
+        TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
+        oprot.WriteMessageBegin(new TMessage("sdkTaskQueueOf", TMessageType.Exception, seqid));
+        x.Write(oprot);
+      }
+      oprot.WriteMessageEnd();
+      oprot.Transport.Flush();
+    }
+
     public void setPersonExpiryDate_Process(int seqid, TProtocol iprot, TProtocol oprot)
     {
       setPersonExpiryDate_args args = new setPersonExpiryDate_args();
@@ -20383,41 +20419,6 @@ public partial class IFaceLog {
         Console.Error.WriteLine(ex.ToString());
         TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
         oprot.WriteMessageBegin(new TMessage("taskQueueOf", TMessageType.Exception, seqid));
-        x.Write(oprot);
-      }
-      oprot.WriteMessageEnd();
-      oprot.Transport.Flush();
-    }
-
-    public void taskRegister_Process(int seqid, TProtocol iprot, TProtocol oprot)
-    {
-      taskRegister_args args = new taskRegister_args();
-      args.Read(iprot);
-      iprot.ReadMessageEnd();
-      taskRegister_result result = new taskRegister_result();
-      try
-      {
-        try
-        {
-          result.Success = iface_.taskRegister(args.Task, args.Token);
-        }
-        catch (ServiceRuntimeException ex1)
-        {
-          result.Ex1 = ex1;
-        }
-        oprot.WriteMessageBegin(new TMessage("taskRegister", TMessageType.Reply, seqid)); 
-        result.Write(oprot);
-      }
-      catch (TTransportException)
-      {
-        throw;
-      }
-      catch (Exception ex)
-      {
-        Console.Error.WriteLine("Error occurred in processor:");
-        Console.Error.WriteLine(ex.ToString());
-        TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
-        oprot.WriteMessageBegin(new TMessage("taskRegister", TMessageType.Exception, seqid));
         x.Write(oprot);
       }
       oprot.WriteMessageEnd();
@@ -52205,6 +52206,251 @@ public partial class IFaceLog {
   #if !SILVERLIGHT
   [Serializable]
   #endif
+  public partial class sdkTaskQueueOf_args : TBase
+  {
+
+    public string Task { get; set; }
+
+    public string SdkVersion { get; set; }
+
+    public Token Token { get; set; }
+
+    public sdkTaskQueueOf_args() {
+    }
+
+    public void Read (TProtocol iprot)
+    {
+      iprot.IncrementRecursionDepth();
+      try
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 1:
+              if (field.Type == TType.String) {
+                Task = iprot.ReadString();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 2:
+              if (field.Type == TType.String) {
+                SdkVersion = iprot.ReadString();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 3:
+              if (field.Type == TType.Struct) {
+                Token = new Token();
+                Token.Read(iprot);
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+      finally
+      {
+        iprot.DecrementRecursionDepth();
+      }
+    }
+
+    public void Write(TProtocol oprot) {
+      oprot.IncrementRecursionDepth();
+      try
+      {
+        TStruct struc = new TStruct("sdkTaskQueueOf_args");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+        if (Task != null) {
+          field.Name = "task";
+          field.Type = TType.String;
+          field.ID = 1;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteString(Task);
+          oprot.WriteFieldEnd();
+        }
+        if (SdkVersion != null) {
+          field.Name = "sdkVersion";
+          field.Type = TType.String;
+          field.ID = 2;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteString(SdkVersion);
+          oprot.WriteFieldEnd();
+        }
+        if (Token != null) {
+          field.Name = "token";
+          field.Type = TType.Struct;
+          field.ID = 3;
+          oprot.WriteFieldBegin(field);
+          Token.Write(oprot);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+      finally
+      {
+        oprot.DecrementRecursionDepth();
+      }
+    }
+
+    public override string ToString() {
+      StringBuilder __sb = new StringBuilder("sdkTaskQueueOf_args(");
+      bool __first = true;
+      if (Task != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Task: ");
+        __sb.Append(Task);
+      }
+      if (SdkVersion != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("SdkVersion: ");
+        __sb.Append(SdkVersion);
+      }
+      if (Token != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Token: ");
+        __sb.Append(Token== null ? "<null>" : Token.ToString());
+      }
+      __sb.Append(")");
+      return __sb.ToString();
+    }
+
+  }
+
+
+  #if !SILVERLIGHT
+  [Serializable]
+  #endif
+  public partial class sdkTaskQueueOf_result : TBase
+  {
+
+    public string Success { get; set; }
+
+    public ServiceRuntimeException Ex1 { get; set; }
+
+    public sdkTaskQueueOf_result() {
+    }
+
+    public void Read (TProtocol iprot)
+    {
+      iprot.IncrementRecursionDepth();
+      try
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 0:
+              if (field.Type == TType.String) {
+                Success = iprot.ReadString();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 1:
+              if (field.Type == TType.Struct) {
+                Ex1 = new ServiceRuntimeException();
+                Ex1.Read(iprot);
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+      finally
+      {
+        iprot.DecrementRecursionDepth();
+      }
+    }
+
+    public void Write(TProtocol oprot) {
+      oprot.IncrementRecursionDepth();
+      try
+      {
+        TStruct struc = new TStruct("sdkTaskQueueOf_result");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+
+        if (this.Success != null) {
+          field.Name = "Success";
+          field.Type = TType.String;
+          field.ID = 0;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteString(Success);
+          oprot.WriteFieldEnd();
+        } else if (this.Ex1 != null) {
+          field.Name = "Ex1";
+          field.Type = TType.Struct;
+          field.ID = 1;
+          oprot.WriteFieldBegin(field);
+          Ex1.Write(oprot);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+      finally
+      {
+        oprot.DecrementRecursionDepth();
+      }
+    }
+
+    public override string ToString() {
+      StringBuilder __sb = new StringBuilder("sdkTaskQueueOf_result(");
+      bool __first = true;
+      if (Success != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Success: ");
+        __sb.Append(Success);
+      }
+      if (Ex1 != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Ex1: ");
+        __sb.Append(Ex1== null ? "<null>" : Ex1.ToString());
+      }
+      __sb.Append(")");
+      return __sb.ToString();
+    }
+
+  }
+
+
+  #if !SILVERLIGHT
+  [Serializable]
+  #endif
   public partial class setPersonExpiryDate_args : TBase
   {
 
@@ -53529,228 +53775,6 @@ public partial class IFaceLog {
 
     public override string ToString() {
       StringBuilder __sb = new StringBuilder("taskQueueOf_result(");
-      bool __first = true;
-      if (Success != null) {
-        if(!__first) { __sb.Append(", "); }
-        __first = false;
-        __sb.Append("Success: ");
-        __sb.Append(Success);
-      }
-      if (Ex1 != null) {
-        if(!__first) { __sb.Append(", "); }
-        __first = false;
-        __sb.Append("Ex1: ");
-        __sb.Append(Ex1== null ? "<null>" : Ex1.ToString());
-      }
-      __sb.Append(")");
-      return __sb.ToString();
-    }
-
-  }
-
-
-  #if !SILVERLIGHT
-  [Serializable]
-  #endif
-  public partial class taskRegister_args : TBase
-  {
-
-    public string Task { get; set; }
-
-    public Token Token { get; set; }
-
-    public taskRegister_args() {
-    }
-
-    public void Read (TProtocol iprot)
-    {
-      iprot.IncrementRecursionDepth();
-      try
-      {
-        TField field;
-        iprot.ReadStructBegin();
-        while (true)
-        {
-          field = iprot.ReadFieldBegin();
-          if (field.Type == TType.Stop) { 
-            break;
-          }
-          switch (field.ID)
-          {
-            case 1:
-              if (field.Type == TType.String) {
-                Task = iprot.ReadString();
-              } else { 
-                TProtocolUtil.Skip(iprot, field.Type);
-              }
-              break;
-            case 2:
-              if (field.Type == TType.Struct) {
-                Token = new Token();
-                Token.Read(iprot);
-              } else { 
-                TProtocolUtil.Skip(iprot, field.Type);
-              }
-              break;
-            default: 
-              TProtocolUtil.Skip(iprot, field.Type);
-              break;
-          }
-          iprot.ReadFieldEnd();
-        }
-        iprot.ReadStructEnd();
-      }
-      finally
-      {
-        iprot.DecrementRecursionDepth();
-      }
-    }
-
-    public void Write(TProtocol oprot) {
-      oprot.IncrementRecursionDepth();
-      try
-      {
-        TStruct struc = new TStruct("taskRegister_args");
-        oprot.WriteStructBegin(struc);
-        TField field = new TField();
-        if (Task != null) {
-          field.Name = "task";
-          field.Type = TType.String;
-          field.ID = 1;
-          oprot.WriteFieldBegin(field);
-          oprot.WriteString(Task);
-          oprot.WriteFieldEnd();
-        }
-        if (Token != null) {
-          field.Name = "token";
-          field.Type = TType.Struct;
-          field.ID = 2;
-          oprot.WriteFieldBegin(field);
-          Token.Write(oprot);
-          oprot.WriteFieldEnd();
-        }
-        oprot.WriteFieldStop();
-        oprot.WriteStructEnd();
-      }
-      finally
-      {
-        oprot.DecrementRecursionDepth();
-      }
-    }
-
-    public override string ToString() {
-      StringBuilder __sb = new StringBuilder("taskRegister_args(");
-      bool __first = true;
-      if (Task != null) {
-        if(!__first) { __sb.Append(", "); }
-        __first = false;
-        __sb.Append("Task: ");
-        __sb.Append(Task);
-      }
-      if (Token != null) {
-        if(!__first) { __sb.Append(", "); }
-        __first = false;
-        __sb.Append("Token: ");
-        __sb.Append(Token== null ? "<null>" : Token.ToString());
-      }
-      __sb.Append(")");
-      return __sb.ToString();
-    }
-
-  }
-
-
-  #if !SILVERLIGHT
-  [Serializable]
-  #endif
-  public partial class taskRegister_result : TBase
-  {
-
-    public string Success { get; set; }
-
-    public ServiceRuntimeException Ex1 { get; set; }
-
-    public taskRegister_result() {
-    }
-
-    public void Read (TProtocol iprot)
-    {
-      iprot.IncrementRecursionDepth();
-      try
-      {
-        TField field;
-        iprot.ReadStructBegin();
-        while (true)
-        {
-          field = iprot.ReadFieldBegin();
-          if (field.Type == TType.Stop) { 
-            break;
-          }
-          switch (field.ID)
-          {
-            case 0:
-              if (field.Type == TType.String) {
-                Success = iprot.ReadString();
-              } else { 
-                TProtocolUtil.Skip(iprot, field.Type);
-              }
-              break;
-            case 1:
-              if (field.Type == TType.Struct) {
-                Ex1 = new ServiceRuntimeException();
-                Ex1.Read(iprot);
-              } else { 
-                TProtocolUtil.Skip(iprot, field.Type);
-              }
-              break;
-            default: 
-              TProtocolUtil.Skip(iprot, field.Type);
-              break;
-          }
-          iprot.ReadFieldEnd();
-        }
-        iprot.ReadStructEnd();
-      }
-      finally
-      {
-        iprot.DecrementRecursionDepth();
-      }
-    }
-
-    public void Write(TProtocol oprot) {
-      oprot.IncrementRecursionDepth();
-      try
-      {
-        TStruct struc = new TStruct("taskRegister_result");
-        oprot.WriteStructBegin(struc);
-        TField field = new TField();
-
-        if (this.Success != null) {
-          field.Name = "Success";
-          field.Type = TType.String;
-          field.ID = 0;
-          oprot.WriteFieldBegin(field);
-          oprot.WriteString(Success);
-          oprot.WriteFieldEnd();
-        } else if (this.Ex1 != null) {
-          field.Name = "Ex1";
-          field.Type = TType.Struct;
-          field.ID = 1;
-          oprot.WriteFieldBegin(field);
-          Ex1.Write(oprot);
-          oprot.WriteFieldEnd();
-        }
-        oprot.WriteFieldStop();
-        oprot.WriteStructEnd();
-      }
-      finally
-      {
-        oprot.DecrementRecursionDepth();
-      }
-    }
-
-    public override string ToString() {
-      StringBuilder __sb = new StringBuilder("taskRegister_result(");
       bool __first = true;
       if (Success != null) {
         if(!__first) { __sb.Append(", "); }

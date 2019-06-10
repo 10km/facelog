@@ -3203,6 +3203,29 @@ public class IFaceLogThriftDecorator {
         }
     }
     /**
+     * @see {@link net.gdface.facelog.IFaceLog#sdkTaskQueueOf(java.lang.String,java.lang.String,net.gdface.facelog.Token)}
+     */
+    @ThriftMethod(value = "sdkTaskQueueOf" )
+    public String sdkTaskQueueOf(String task,
+        String sdkVersion,
+        Token token) 
+        throws ServiceRuntimeException{
+        try{
+            return delegate().sdkTaskQueueOf(task,
+                sdkVersion,
+                TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.Token.class));
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
      * @see {@link net.gdface.facelog.IFaceLog#setPersonExpiryDate(int,java.lang.String,net.gdface.facelog.Token)}
      */
     @ThriftMethod(value = "setPersonExpiryDateTimeStr" )
@@ -3332,27 +3355,6 @@ public class IFaceLogThriftDecorator {
         throws ServiceRuntimeException{
         try{
             return delegate().taskQueueOf(task,
-                TypeTransformer.getInstance().to(
-                    token,
-                    Token.class,
-                    net.gdface.facelog.Token.class));
-        }
-        catch(ServiceRuntimeException e){
-            throw e;
-        }
-        catch(RuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-    }
-    /**
-     * @see {@link net.gdface.facelog.IFaceLog#taskRegister(java.lang.String,net.gdface.facelog.Token)}
-     */
-    @ThriftMethod(value = "taskRegister" )
-    public String taskRegister(String task,
-        Token token) 
-        throws ServiceRuntimeException{
-        try{
-            return delegate().taskRegister(task,
                 TypeTransformer.getInstance().to(
                     token,
                     Token.class,

@@ -4129,6 +4129,34 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
+    public String sdkTaskQueueOf(final String task,
+        final String sdkVersion,
+        final Token token) 
+        {
+        try{
+            return syncCall(new Function<String,String>() {
+                @Override
+                public String apply(String input) {
+                    return input;
+                }},
+                new ServiceAsyncCall<String>(){
+                @Override
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<String> nativeCallback){
+                    service.sdkTaskQueueOf(task,sdkVersion,TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                }});
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);
+        }
+    }
+    @Override
     public void setPersonExpiryDate(final int personId,
         final String expiryDate,
         final Token token) 
@@ -4289,33 +4317,6 @@ public class IFaceLogThriftClient implements IFaceLog {
                 @Override
                 public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<String> nativeCallback){
                     service.taskQueueOf(task,TypeTransformer.getInstance().to(
-                    token,
-                    Token.class,
-                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
-                }});
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch (Throwable e) {
-            Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);
-        }
-    }
-    @Override
-    public String taskRegister(final String task,
-        final Token token) 
-        {
-        try{
-            return syncCall(new Function<String,String>() {
-                @Override
-                public String apply(String input) {
-                    return input;
-                }},
-                new ServiceAsyncCall<String>(){
-                @Override
-                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<String> nativeCallback){
-                    service.taskRegister(task,TypeTransformer.getInstance().to(
                     token,
                     Token.class,
                     net.gdface.facelog.client.thrift.Token.class),nativeCallback);

@@ -1637,20 +1637,19 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
     }
 
 	@Override
-	public String taskRegister(String task,Token token) {
-    	try {
-			Enable.ROOT_ONLY.check(tm, token);
-			return rm.taskRegister(task);
-		} catch (Exception e) {
-			throw wrapServiceRuntimeException(e);
-		} 
-	}
-
-	@Override
 	public String taskQueueOf(String task,Token token) {	
     	try {
 			Enable.ALL.check(tm, token);
 			return rm.taskQueueOf(task);
+		} catch (Exception e) {
+			throw wrapServiceRuntimeException(e);
+		} 
+	}
+	@Override
+	public String sdkTaskQueueOf(String task,String sdkVersion,Token token) {	
+    	try {
+			Enable.ALL.check(tm, token);
+			return rm.sdkTaskQueueOf(task,sdkVersion);
 		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
 		} 

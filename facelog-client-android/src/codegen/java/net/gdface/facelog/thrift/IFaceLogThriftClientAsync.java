@@ -3773,6 +3773,34 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(saveServiceConfig(token), callback);
     }
     /**
+     * see also {@link net.gdface.facelog.IFaceLog#sdkTaskQueueOf(java.lang.String,java.lang.String,net.gdface.facelog.Token)}
+     */
+    public ListenableFuture<String> sdkTaskQueueOf(String task,
+        String sdkVersion,
+        Token token){
+        MethodCallback<String,String> nativeCallback = 
+            new MethodCallback<String,String>(
+                new Function<String,String>() {
+                        @Override
+                        public String apply(String input) {
+                            return input;
+                }});
+        nativeCallback.service.sdkTaskQueueOf(
+                task,
+            sdkVersion,
+            TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
+    }
+    public void sdkTaskQueueOf(String task,
+        String sdkVersion,
+        Token token,
+        FutureCallback<String>callback){
+        factory.addCallback(sdkTaskQueueOf(task,sdkVersion,token), callback);
+    }
+    /**
      * see also {@link net.gdface.facelog.IFaceLog#setPersonExpiryDate(int,java.lang.String,net.gdface.facelog.Token)}
      */
     public ListenableFuture<Void> setPersonExpiryDate(int personId,
@@ -3956,31 +3984,6 @@ public class IFaceLogThriftClientAsync {
         Token token,
         FutureCallback<String>callback){
         factory.addCallback(taskQueueOf(task,token), callback);
-    }
-    /**
-     * see also {@link net.gdface.facelog.IFaceLog#taskRegister(java.lang.String,net.gdface.facelog.Token)}
-     */
-    public ListenableFuture<String> taskRegister(String task,
-        Token token){
-        MethodCallback<String,String> nativeCallback = 
-            new MethodCallback<String,String>(
-                new Function<String,String>() {
-                        @Override
-                        public String apply(String input) {
-                            return input;
-                }});
-        nativeCallback.service.taskRegister(
-                task,
-            TypeTransformer.getInstance().to(
-                    token,
-                    Token.class,
-                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
-        return nativeCallback.feature;
-    }
-    public void taskRegister(String task,
-        Token token,
-        FutureCallback<String>callback){
-        factory.addCallback(taskRegister(task,token), callback);
     }
     /**
      * see also {@link net.gdface.facelog.IFaceLog#unbindBorder(java.lang.Integer,java.lang.Integer,net.gdface.facelog.Token)}

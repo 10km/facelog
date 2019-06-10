@@ -1257,6 +1257,16 @@ public interface IFaceLog
             @ThriftField(value=1, name="token", requiredness=Requiredness.OPTIONAL) final Token token
         );
 
+        @ThriftMethod(value = "sdkTaskQueueOf",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1)
+                      })
+        ListenableFuture<String> sdkTaskQueueOf(
+            @ThriftField(value=1, name="task", requiredness=Requiredness.OPTIONAL) final String task,
+            @ThriftField(value=2, name="sdkVersion", requiredness=Requiredness.OPTIONAL) final String sdkVersion,
+            @ThriftField(value=3, name="token", requiredness=Requiredness.OPTIONAL) final Token token
+        );
+
         @ThriftMethod(value = "setPersonExpiryDate",
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
@@ -1311,15 +1321,6 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
         ListenableFuture<String> taskQueueOf(
-            @ThriftField(value=1, name="task", requiredness=Requiredness.OPTIONAL) final String task,
-            @ThriftField(value=2, name="token", requiredness=Requiredness.OPTIONAL) final Token token
-        );
-
-        @ThriftMethod(value = "taskRegister",
-                      exception = {
-                          @ThriftException(type=ServiceRuntimeException.class, id=1)
-                      })
-        ListenableFuture<String> taskRegister(
             @ThriftField(value=1, name="task", requiredness=Requiredness.OPTIONAL) final String task,
             @ThriftField(value=2, name="token", requiredness=Requiredness.OPTIONAL) final Token token
         );
@@ -2608,6 +2609,16 @@ public interface IFaceLog
         @ThriftField(value=1, name="token", requiredness=Requiredness.OPTIONAL) final Token token
     ) throws ServiceRuntimeException;
 
+    @ThriftMethod(value = "sdkTaskQueueOf",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1)
+                  })
+    String sdkTaskQueueOf(
+        @ThriftField(value=1, name="task", requiredness=Requiredness.OPTIONAL) final String task,
+        @ThriftField(value=2, name="sdkVersion", requiredness=Requiredness.OPTIONAL) final String sdkVersion,
+        @ThriftField(value=3, name="token", requiredness=Requiredness.OPTIONAL) final Token token
+    ) throws ServiceRuntimeException;
+
     @ThriftMethod(value = "setPersonExpiryDate",
                   exception = {
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
@@ -2662,15 +2673,6 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
     String taskQueueOf(
-        @ThriftField(value=1, name="task", requiredness=Requiredness.OPTIONAL) final String task,
-        @ThriftField(value=2, name="token", requiredness=Requiredness.OPTIONAL) final Token token
-    ) throws ServiceRuntimeException;
-
-    @ThriftMethod(value = "taskRegister",
-                  exception = {
-                      @ThriftException(type=ServiceRuntimeException.class, id=1)
-                  })
-    String taskRegister(
         @ThriftField(value=1, name="task", requiredness=Requiredness.OPTIONAL) final String task,
         @ThriftField(value=2, name="token", requiredness=Requiredness.OPTIONAL) final Token token
     ) throws ServiceRuntimeException;
