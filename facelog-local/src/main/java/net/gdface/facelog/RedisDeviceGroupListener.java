@@ -52,6 +52,7 @@ class RedisDeviceGroupListener extends TableListener.Adapter<DeviceGroupBean> im
 				beforeUpdatedBean, 
 				publisher)
 		.execute();
+		beforeUpdatedBean = null;
 	}
 
 	@Override

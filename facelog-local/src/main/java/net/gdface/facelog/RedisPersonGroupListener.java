@@ -51,6 +51,7 @@ class RedisPersonGroupListener extends TableListener.Adapter<PersonGroupBean> im
 				beforeUpdatedBean, 
 				publisher)
 		.execute();
+		beforeUpdatedBean = null;
 	}
 
 	@Override

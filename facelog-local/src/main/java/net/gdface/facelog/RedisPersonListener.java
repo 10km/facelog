@@ -51,6 +51,7 @@ class RedisPersonListener extends TableListener.Adapter<PersonBean> implements C
 				beforeUpdatedBean, 
 				publisher)
 		.execute();
+		beforeUpdatedBean = null;
 	}
 
 	@Override

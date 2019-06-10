@@ -51,6 +51,7 @@ class RedisDeviceListener extends TableListener.Adapter<DeviceBean> implements C
 				beforeUpdatedBean, 
 				publisher)
 		.execute();
+		beforeUpdatedBean = null;
 	}
 
 	@Override
