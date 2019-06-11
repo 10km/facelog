@@ -33,7 +33,6 @@ class FaceApiTask implements ServiceConstant{
 	public Object runTask(String sdkVersion,String method,Map<String, Object>parameters){
 		checkArgument(Strings.isNullOrEmpty(sdkVersion),"sdkVersion is null or empty");
 		checkArgument(methods.containsKey(method),"INVALID method name for FaceApi");		
-		JSONObject jsonParam = new JSONObject(parameters);
 		String queue = rm.taskQueueOf(TASK_FACEAPI_BASE + sdkVersion);
 		checkState(JedisUtils.pubsubNumSub(queue)>0,"not found onlined device for %s",sdkVersion);
 		String ackChannel = tm.applyAckChannel(SERVICE_ID, 0);
