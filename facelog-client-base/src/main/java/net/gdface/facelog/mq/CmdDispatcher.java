@@ -1,4 +1,4 @@
-package net.gdface.facelog.client;
+package net.gdface.facelog.mq;
 
 import static com.google.common.base.Preconditions.*;
 

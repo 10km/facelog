@@ -1,4 +1,4 @@
-package net.gdface.facelog.client;
+package net.gdface.facelog.mq;
 
 import java.util.List;
 import java.util.Map;
@@ -33,7 +33,7 @@ public class DeviceInstruction{
 	}
 	/**
 	 * 设置唯一的命令序列号,每一次设备命令执行都应该要求一个唯一的序列号,
-	 * 以便于命令响应端区分命令响应对象{@link net.gdface.facelog.client.Ack}来源
+	 * 以便于命令响应端区分命令响应对象{@link net.gdface.facelog.mq.Ack}来源
 	 * @param cmdSn
 	 * @return 
 	 * @see net.gdface.facelog.client.IFaceLogClient#applyCmdSn(net.gdface.facelog.client.thrift.Token)
@@ -85,7 +85,7 @@ public class DeviceInstruction{
 		return ackChannel;
 	}
 	/**
-	 * 设置用于接收设备命令响应{@link net.gdface.facelog.client.Ack}的通道,
+	 * 设置用于接收设备命令响应{@link net.gdface.facelog.mq.Ack}的通道,
 	 * 如果不指定命令响应通道,则命令发送方法无法知道命令执行状态,
 	 * 每一次设备命令发送都应该有一个唯一的命令响应接受通道,以便于命令发送方区命令响应来源
 	 * @param ackChannel

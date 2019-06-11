@@ -18,6 +18,8 @@ import net.gdface.facelog.hb.DeviceHeartbeatListener;
 import net.gdface.facelog.hb.DeviceHeartbeat;
 import net.gdface.facelog.hb.HeartbeatMonitor;
 import net.gdface.facelog.hb.ServiceHeartbeatListener;
+import net.gdface.facelog.mq.CmdDispatcher;
+import net.gdface.facelog.mq.CmdManager;
 
 public class IFaceLogClient extends IFaceLogDecorator {
 	public final ClientExtendTools clientTools;

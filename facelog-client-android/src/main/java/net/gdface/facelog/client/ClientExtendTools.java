@@ -38,6 +38,8 @@ import net.gdface.facelog.hb.DeviceHeartbeat;
 import net.gdface.facelog.hb.HeartbeatMonitor;
 import net.gdface.facelog.hb.ServiceHeartbeatAdapter;
 import net.gdface.facelog.hb.ServiceHeartbeatListener;
+import net.gdface.facelog.mq.CmdDispatcher;
+import net.gdface.facelog.mq.CmdManager;
 import net.gdface.facelog.thrift.IFaceLogThriftClient;
 import net.gdface.facelog.thrift.IFaceLogThriftClientAsync;
 import net.gdface.thrift.ClientFactory;

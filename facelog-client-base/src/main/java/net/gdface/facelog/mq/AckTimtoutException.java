@@ -1,4 +1,4 @@
-package net.gdface.facelog.client;
+package net.gdface.facelog.mq;
 
 /**
  * 设备命令响应超时异常

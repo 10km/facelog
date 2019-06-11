@@ -1,4 +1,4 @@
-package net.gdface.facelog.client;
+package net.gdface.facelog.mq;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -10,7 +10,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import gu.simplemq.IMessageAdapter;
 import gu.simplemq.exceptions.SmqUnsubscribeException;
-import net.gdface.facelog.client.Ack.Status;
+import net.gdface.facelog.mq.Ack.Status;
 
 /**
  * 命令响应{@link Ack}处理接口<br>

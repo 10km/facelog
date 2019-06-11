@@ -1,4 +1,4 @@
-package net.gdface.facelog.client;
+package net.gdface.facelog.mq;
 
 import net.gdface.facelog.MQParam;
 import net.gdface.facelog.Token;

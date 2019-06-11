@@ -1,8 +1,8 @@
 package net.gdface.facelog.client.dtalk;
 
 import gu.dtalk.TaskAdapter;
-import net.gdface.facelog.client.Ack;
-import net.gdface.facelog.client.Ack.Status;
+import net.gdface.facelog.mq.Ack;
+import net.gdface.facelog.mq.Ack.Status;
 
 /**
  * 重写{@link #makeAck(Object, Exception, String, Long)}方法,在响应消息中添加设备id
