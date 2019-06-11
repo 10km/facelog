@@ -5022,7 +5022,7 @@ public class IFaceLogSpringController {
      * wrap arguments for method {@link #sdkTaskQueueOf(SdkTaskQueueOfArgs)}
      */
     public static class SdkTaskQueueOfArgs{
-        @ApiModelProperty(value ="任务名,可选值:{@link CommonConstant#TASK_FEATURE_BASE},{@link CommonConstant#TASK_REGISTER_BASE}" ,required=true ,dataType="String")
+        @ApiModelProperty(value ="任务名,可选值:{@link CommonConstant#TASK_FACEAPI_BASE},{@link CommonConstant#TASK_REGISTER_BASE}" ,required=true ,dataType="String")
         public String task;
         @ApiModelProperty(value ="sdk版本号" ,required=true ,dataType="String")
         public String sdkVersion;

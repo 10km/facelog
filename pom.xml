@@ -28,7 +28,7 @@
 		<swagger-annotations>1.5.22</swagger-annotations>	
 		<spring.boot.version>1.5.9.RELEASE</spring.boot.version>
 		<springfox.swagger.version>2.7.0</springfox.swagger.version>
-		<faceapi.version>2.1.7-SNAPSHOT</faceapi.version>
+		<faceapi.version>2.1.6</faceapi.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -329,6 +329,7 @@
 		<module>db</module>
 		<module>facelog-local</module>
 		<module>facelog-base</module>
+		<module>facelog-mq</module>
 		<module>facelog-service</module>
 		<module>facelog-client-base</module>
 		<module>facelog-client</module>
