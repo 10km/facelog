@@ -359,7 +359,7 @@ class RedisManagement implements ServiceConstant{
 	 */
 	private void sdkTaskRegister() {
 		for(String sdkVersion:FeatureConfig.FEATURE_CONFIG.getSdkVersionWhiteList()){
-			taskRegister(TASK_FEATURE_BASE + sdkVersion);
+			taskRegister(TASK_FACEAPI_BASE + sdkVersion);
 			taskRegister(TASK_REGISTER_BASE + sdkVersion);
 		}
 	}

@@ -63,6 +63,11 @@
 			<artifactId>common-bean</artifactId>
 			<version>${common-java.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>faceapi-base</artifactId>
+			<version>${faceapi.version}</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

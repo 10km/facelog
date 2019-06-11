@@ -17,7 +17,7 @@ import net.gdface.facelog.CommonConstant;
  */
 public interface ServiceConstant extends CommonConstant{
     public static final Logger logger = LoggerFactory.getLogger(ServiceConstant.class);
-
+    
 	/** 设备访问令牌表,{@code 设备ID -> token}  */
     public static final Channel<Token> TABLE_DEVICE_TOKEN = new Channel<Token>("DeviceToken"){} ;
     /** 人员访问令牌表 {@code 人员ID -> token} */

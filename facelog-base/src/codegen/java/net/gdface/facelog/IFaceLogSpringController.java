@@ -3382,7 +3382,7 @@ public class IFaceLogSpringController {
     // port-140
     /**
      * 返回sdk任务队列名
-     * @param task 任务名,可选值:{@link CommonConstant#TASK_FEATURE_BASE},{@link CommonConstant#TASK_REGISTER_BASE}
+     * @param task 任务名,可选值:{@link CommonConstant#TASK_FACEAPI_BASE},{@link CommonConstant#TASK_REGISTER_BASE}
      * @param sdkVersion sdk版本号
      * @param token 访问令牌
      * @return 返回sdk任务队列名，参数错误返回{@code null}

@@ -1556,7 +1556,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
     @Override
     public String applyAckChannel(Token token, long duration) {
     	try {
-			return tm.applyAckChannel(token, duration);
+    		Enable.PERSON_ONLY.check(tm, token);
+			return tm.applyAckChannel(token.getId(), duration);
 		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
 		} 
@@ -1564,7 +1565,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
     @Override
     public long applyCmdSn(Token token) {
     	try {
-			return tm.applyCmdSn(token);
+    		Enable.PERSON_ONLY.check(tm, token);
+			return tm.applyCmdSn(token.getId());
 		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
 		} 
