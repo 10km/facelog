@@ -30,7 +30,7 @@ class FaceApiTask implements ServiceConstant{
 		this.tm = checkNotNull(tm,"tm is null");
 	}
 
-	public Object runTask(String sdkVersion,String method,Map<String, Object>parameters){
+	public Object runTask(String sdkVersion,String method,Object[]parameters){
 		checkArgument(Strings.isNullOrEmpty(sdkVersion),"sdkVersion is null or empty");
 		checkArgument(methods.containsKey(method),"INVALID method name for FaceApi");		
 		String queue = rm.taskQueueOf(TASK_FACEAPI_BASE + sdkVersion);

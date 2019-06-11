@@ -12,6 +12,7 @@ import gu.dtalk.event.ValueListener;
 import gu.dtalk.exception.CmdExecutionException;
 import net.gdface.facelog.client.location.ConnectConfigProvider;
 import net.gdface.facelog.hb.DeviceHeartbeat;
+import net.gdface.sdk.FaceApi;
 
 import static gu.dtalk.engine.DeviceUtils.DEVINFO_PROVIDER;
 import java.util.Map;
@@ -27,6 +28,7 @@ import gu.dtalk.BaseItem;
 import gu.dtalk.BaseOption;
 import gu.dtalk.CmdItem;
 import gu.dtalk.ICmdImmediateAdapter;
+import gu.dtalk.ICmdUnionAdapter;
 import gu.dtalk.IntOption;
 import static net.gdface.facelog.CommonConstant.*;
 /**
@@ -49,10 +51,16 @@ public class FacelogMenu extends RootMenu{
 	public static final String CMD_UPDATE = "update";
 	public static final String CMD_IDLE_MSG = "idleMessage";
 	public static final String CMD_PERSON_MSG = "personMessage";
-	/** 对图像检测人脸提取人脸特征 */
-	public static final String CMD_FEATURE = "feature";
 	/** 算法授权 */
 	public static final String CMD_LICENSE = "license";
+	/** 调用faceapi接口 */
+	public static final String CMD_FACEAPI = "faceapi";
+	/** 调用faceapi接口参数：sdk版本号 */
+	public static final String CMD_FACEAPI_SDKVERSION = "sdkVersion";
+	/** 调用faceapi接口参数：接口方法名 */
+	public static final String CMD_FACEAPI_METHOD = "method";
+	/** 调用faceapi接口参数：接口方法参数 */
+	public static final String CMD_FACEAPI_PARAMETERS = "parameters";
 	/** 基本命令所在菜单名 */
 	private static final String MENU_CMD = "cmd";
 	/* 扩展命令所在菜单名 */
@@ -61,6 +69,7 @@ public class FacelogMenu extends RootMenu{
 	
 	public static final String OPTION_FACELOG_HOST = "/facelog/host";
 	public static final String OPTION_FACELOG_PORT = "/facelog/port";
+	public static final String OPTION_SDK_VERSION = "/device/sdkVersion";
 	/* 单实例 */
 	private static volatile FacelogMenu activeInstance;
 	/* 连接配置参数 */
@@ -168,20 +177,23 @@ public class FacelogMenu extends RootMenu{
 								OptionType.BOOL.builder().name("onceOnly").uiName("只显示一次").description("为true时只在id指定的用户通过时显示一次").instance(),
 								OptionType.INTEGER.builder().name("duration").uiName("持续时间").description("持续时间[分钟],为null一直显示").instance()
 								).instance(),
-						ItemBuilder.builder(CmdItem.class).name(CMD_FEATURE).uiName("提取人脸特征").hide().addChilds(
-								OptionType.IMAGE.builder().name("image").uiName("人脸图像").required().instance()
-								).instance(),
 						ItemBuilder.builder(CmdItem.class).name(CMD_LICENSE).uiName("人脸识别算法授权").addChilds(
 								OptionType.STRING.builder().name("sdkVersion").uiName("算法类型").required().instance(),
 								OptionType.STRING.builder().name("licenseKey").uiName("授权关键字").required().instance(),
 								OptionType.STRING.builder().name("licenseCode").uiName("授权码").instance()
-								).instance()
+								).instance(),
+						ItemBuilder.builder(CmdItem.class).name(CMD_FACEAPI).uiName("调用FaceApi接口").hide().addChilds(
+								OptionType.STRING.builder().name(CMD_FACEAPI_SDKVERSION).uiName("算法类型").required().instance(),
+								OptionType.STRING.builder().name(CMD_FACEAPI_METHOD).uiName("接口方法名").required().instance(),
+								OptionType.STRING.builder().name(CMD_FACEAPI_PARAMETERS).uiName("参数列表(JSON array)").required().instance()
+								).instance().setImmediateCmdAdapter(new FaceApiCmdAdapter())
 						)
 				.instance();
 		cmdext = 
 				ItemBuilder.builder(MenuItem.class)
 					.name(MENU_CMD_EXT)
 					.uiName("扩展设备命令")
+					.addChilds()
 					.instance();
 		addChilds(device,facelog,commands,cmdext);
 		registerSetStatusAdapter(new CmdSetStatusAdapter(this));
@@ -207,6 +219,11 @@ public class FacelogMenu extends RootMenu{
 		return this;
 		
 	}
+	/**
+	 * only for test
+	 * @param listener
+	 * @return
+	 */
 	public FacelogMenu register(ValueListener<Object> listener){
 		listener.registerTo(this);
 		return this;
@@ -294,6 +311,13 @@ public class FacelogMenu extends RootMenu{
 		checkArgument(null != adapter,"adapter is null");
 		findIntOption(OPTION__DEVICE_STATUS).addListener(adapter);
 		findCmd(pathOfCmd(CMD_SET_STATUS)).setCmdAdapter(adapter);
+	}
+	public FacelogMenu bindFaceapi(String sdkVersion,FaceApi faceApi){
+		ICmdUnionAdapter adapter = findCmd(pathOfCmd(CMD_FACEAPI)).getCmdAdapter();
+		checkState(adapter instanceof FaceApiCmdAdapter,"MISMATCH ADAPTER TYPE, %s required",FaceApiCmdAdapter.class.getSimpleName());
+		FaceApiCmdAdapter faceApiCmdAdapter = (FaceApiCmdAdapter) findCmd(pathOfCmdExt(CMD_FACEAPI)).getCmdAdapter();
+		faceApiCmdAdapter.bindFaceApi(sdkVersion, faceApi);
+		return this;
 	}
 	/**
 	 * {@value #CMD_SET_PARAM}命令实现
