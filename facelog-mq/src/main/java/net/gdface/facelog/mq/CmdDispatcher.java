@@ -3,10 +3,6 @@ package net.gdface.facelog.mq;
 import static com.google.common.base.Preconditions.*;
 
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.slf4j.Logger;
@@ -17,9 +13,6 @@ import com.google.common.base.Predicates;
 import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
 import com.google.common.base.Supplier;
-import com.google.common.util.concurrent.MoreExecutors;
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
-
 import gu.dtalk.MenuItem;
 import gu.dtalk.RootMenu;
 import gu.dtalk.exception.CmdExecutionException;
@@ -50,12 +43,6 @@ public class CmdDispatcher implements IMessageAdapter<DeviceInstruction>,CommonC
 	private final IPublisher redisPublisher = RedisFactory.getPublisher();
 	/**  是否自动注销标志 */
 	private final AtomicBoolean autoUnregisterCmdChannel = new AtomicBoolean(false);
-	/** 固定为1的线程池，确保所有的命令按收到的顺序执行 */
-	private static final ExecutorService executor = MoreExecutors.getExitingExecutorService(
-			new ThreadPoolExecutor(1, 1,
-	                0L, TimeUnit.MILLISECONDS,
-	                new LinkedBlockingQueue<Runnable>(),
-	                new ThreadFactoryBuilder().setNameFormat("cmd-dispatcher-%d").build()));
 	/** 设备命令通道 */
 	private volatile Channel<DeviceInstruction> cmdChannel;
 	 /** 设备命令序列号验证器 */
@@ -98,42 +85,37 @@ public class CmdDispatcher implements IMessageAdapter<DeviceInstruction>,CommonC
 	 * 执行指定的设备命令并向命令响应频道返回命令结果
 	 */
 	@Override
-	public void onSubscribe(final DeviceInstruction t) {
+	public void onSubscribe(DeviceInstruction t) {
 		// 设备命令序列号有效才执行设备命令
 		if(null != t.getTarget() && selfIncluded(t.isGroup(),t.getTarget())){
 			final long cmdSn = t.getCmdSn();
 			if(cmdSnValidator.apply(cmdSn)){
-				// 设备命令提交线程池执行
-				executor.execute(new Runnable(){
-					@Override
-					public void run() {
-						Ack<Object> ack = new Ack<Object>().setStatus(Ack.Status.OK);
-						// 将设备命令交给命令类型对应的方法执行设备命令
-						try {
-							ack.setValue(getRootMenu().runCmd(t.getCmdpath(),t.getParameters()));
-						} catch(UnsupportCmdException e){
-		                    // 该命令设备端未实现
-		                    ack.setStatus(Ack.Status.UNSUPPORTED);
-		                }catch(CmdExecutionException e){
-		                    // 填入异常状态,设置错误信息
-		                    ack.setStatus(Ack.Status.ERROR).setStatusMessage(e.getMessage());
-		                } 
-						ack.setCmdSn(cmdSn);
-						// 如果指定了响应频道且频道名有效则向指定的频道发送响应消息
-						if(!Strings.isNullOrEmpty(t.getAckChannel())){
-							String ackChannel = t.getAckChannel();
-							if(ackChannelValidator.apply(ackChannel)){
-								Channel<Ack<?>> channel = new Channel<Ack<?>>(ackChannel){};
-								try{
-									redisPublisher.publish(channel, ack);
-								}catch(JedisException e){
-									logger.error(e.getMessage());
-								}
-							}else{
-								logger.warn("INVALID ack channel: {}",ackChannel);
-							}
+				Ack<Object> ack = new Ack<Object>().setStatus(Ack.Status.OK);
+				// 将设备命令交给命令类型对应的方法执行设备命令
+				try {
+					ack.setValue(getRootMenu().runCmd(t.getCmdpath(),t.getParameters()));
+				} catch(UnsupportCmdException e){
+                    // 该命令设备端未实现
+                    ack.setStatus(Ack.Status.UNSUPPORTED);
+                }catch(CmdExecutionException e){
+                    // 填入异常状态,设置错误信息
+                    ack.setStatus(Ack.Status.ERROR).setStatusMessage(e.getMessage());
+                } 
+				ack.setCmdSn(cmdSn);
+				// 如果指定了响应频道且频道名有效则向指定的频道发送响应消息
+				String ackChannel = t.getAckChannel();
+				if(!Strings.isNullOrEmpty(ackChannel)){					
+					if(ackChannelValidator.apply(ackChannel)){
+						Channel<Ack<?>> channel = new Channel<Ack<?>>(ackChannel){};
+						try{
+							redisPublisher.publish(channel, ack);
+						}catch(JedisException e){
+							logger.error(e.getMessage());
 						}
-					}});
+					}else{
+						logger.warn("INVALID ack channel: {}",ackChannel);
+					}
+				}			
 			}else{
 				logger.warn("INVALID cmd serial number: {}",cmdSn);
 			}
