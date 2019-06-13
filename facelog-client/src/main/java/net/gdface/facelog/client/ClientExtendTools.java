@@ -339,8 +339,8 @@ public class ClientExtendTools{
     		Map<MQParam, String> pameters = syncInstance != null 
     				? syncInstance.getRedisParameters(token) 
     				: asyncInstance.getRedisParameters(token).get();
-    				return new CmdDispatcher(deviceId,
-    						this.getDeviceGroupIdSupplier(deviceId))
+    				return new CmdDispatcher(deviceId)
+    						.setGroupIdSupplier(this.getDeviceGroupIdSupplier(deviceId))
     						.setCmdSnValidator(cmdSnValidator)
     						.setAckChannelValidator(ackChannelValidator)
     						.registerChannel(pameters.get(MQParam.CMD_CHANNEL));

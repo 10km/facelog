@@ -19,6 +19,7 @@ import com.google.common.base.Suppliers;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Maps;
 import gu.dtalk.MenuItem;
+import gu.dtalk.CommonConstant.ReqType;
 import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.RedisFactory;
 import gu.simplemq.redis.RedisSubscriber;
@@ -329,10 +330,11 @@ public class ClientExtendTools{
     		Map<MQParam, String> pameters = syncInstance != null 
     				? syncInstance.getRedisParameters(token) 
     				: asyncInstance.getRedisParameters(token).get();
-    				return new CmdDispatcher(deviceId,
-    						this.getDeviceGroupIdSupplier(deviceId))
+    				return new CmdDispatcher(deviceId)
+    						.setGroupIdSupplier(this.getDeviceGroupIdSupplier(deviceId))
     						.setCmdSnValidator(cmdSnValidator)
     						.setAckChannelValidator(ackChannelValidator)
+    						.setReqType(ReqType.MULTI)
     						.registerChannel(pameters.get(MQParam.CMD_CHANNEL));
     	} catch (ExecutionException e) {
     		Throwables.throwIfUnchecked(e.getCause());

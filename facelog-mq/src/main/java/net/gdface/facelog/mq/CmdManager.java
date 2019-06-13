@@ -94,7 +94,7 @@ public class CmdManager {
      * 设备命令参数构建工具类,用于设置{@link DeviceInstruction}对象除{@code cmd,parameters}字段之的其他字段,可以被不同的设备命令复用
      * @author guyadong
      */
-    public class CmdBuilder{       
+    public static class CmdBuilder{       
         private List<Integer> target;
         private boolean group;
         private Supplier<Long> cmdSnSupplier;
