@@ -351,7 +351,7 @@ class RedisManagement implements ServiceConstant{
 	 * @return 返回redis队列名,队列不存在则返回{@code null}
 	 */
 	protected String taskQueueOf(String task) {	
-		checkArgument(Strings.isNullOrEmpty(task),"task is empty or null");
+		checkArgument(!Strings.isNullOrEmpty(task),"task is empty or null");
 		return JedisUtils.get(taskKeyOf(task));
 	}
 	/**
