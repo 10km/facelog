@@ -339,7 +339,7 @@ class RedisManagement implements ServiceConstant{
 	 * @return 返回保存队列名的key
 	 */
 	protected String taskRegister(String task) {
-		checkArgument(Strings.isNullOrEmpty(task),"task is empty or null");
+		checkArgument(!Strings.isNullOrEmpty(task),"task is empty or null");
 		String key = taskKeyOf(task);
 		createRandomConstOnRedis(key,key);
 		taskKeys.add(key);
