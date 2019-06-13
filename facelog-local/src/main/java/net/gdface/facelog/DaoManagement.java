@@ -387,7 +387,7 @@ public class DaoManagement extends BaseDao implements ServiceConstant,Constant{
 			for(Entry<ByteBuffer, FaceBean> entry:faceInfo.entrySet()){
 				ByteBuffer imageBytes = entry.getKey();
 				FaceBean faceBean = entry.getValue();
-				daoAddImage(imageBytes, deviceBean, Arrays.asList(faceBean), Arrays.asList(personBean));
+				daoAddImage(imageBytes, deviceBean, Arrays.asList(faceBean), null);
 			}
 		}
 		return daoAddFeature(feature, featureVersion, personBean, null == faceInfo?null:faceInfo.values());
@@ -687,8 +687,7 @@ public class DaoManagement extends BaseDao implements ServiceConstant,Constant{
 		PersonBean personBean = daoGetReferencedByPersonIdOnLog(logBean);
 		DeviceBean deviceBean = daoGetReferencedByDeviceIdOnLog(logBean);
 		daoAddImage(featureImage, deviceBean, 
-				faceBean == null ? null : Arrays.asList(faceBean), 
-				personBean == null ? null : Arrays.asList(personBean));
+				faceBean == null ? null : Arrays.asList(faceBean), null);
 		return daoAddLog(logBean, deviceBean, faceBean, null, personBean);
 	}
 	/**

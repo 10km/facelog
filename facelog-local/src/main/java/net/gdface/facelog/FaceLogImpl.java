@@ -820,9 +820,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 					PersonBean personBean = dm.daoGetPerson(personId);
 					List<FaceBean> faceList = faceBean == null ? null : Arrays.asList(faceBean);
 					ImageBean imageBean = dm.daoAddImage(FaceUtilits.getByteBufferOrNull(featurePhoto), 
-							getDeviceOrNull(token), 
-							faceList, 
-							personBean == null ? null : Arrays.asList(personBean));
+							getDeviceOrNull(token),faceList, null);
 					if(personBean != null && imageBean != null 
 							&& personBean.getImageMd5() == null && asIdPhotoIfAbsent){
 						personBean.setImageMd5(imageBean.getMd5());
