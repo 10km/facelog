@@ -49,7 +49,6 @@ public class DateTimeJsonFilter implements IDateTimeFilter {
 				FIELD_HOUR, DEFAULT_HOUR,FIELD_DAY, 
 				DEFAULT_DAY,
 				AS_LASTDAY_IF_OVERFLOW, true);
-	public static final DateTimeJsonFilter DEFAULT_FILTER = new DateTimeJsonFilter();
 	private static final int MAX_DAY_OF_MONTH = 31;
 	private static final BaseJsonEncoder encoder = BaseJsonEncoder.getEncoder();
 	private String filter = null;
@@ -63,6 +62,8 @@ public class DateTimeJsonFilter implements IDateTimeFilter {
 		public boolean apply(String input) {
 			return input.matches("^(m|w|d)\\d+");
 		}};
+	public static final DateTimeJsonFilter DEFAULT_FILTER = new DateTimeJsonFilter();
+
 	public DateTimeJsonFilter() {
 		this(null);
 	}
