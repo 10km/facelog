@@ -19,11 +19,6 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>facelog-base</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>com.gitee.l0km</groupId>
 			<artifactId>simplemq</artifactId>
 		</dependency>

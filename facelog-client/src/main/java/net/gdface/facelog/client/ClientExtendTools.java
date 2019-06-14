@@ -314,15 +314,11 @@ public class ClientExtendTools{
             checkArgument(checkNotNull(token,"token is null").getType() == TokenType.PERSON 
                 || token.getType() == TokenType.ROOT,"person or root token required");
             checkArgument(tokenRank.apply(token)>=2,"person or root token required");
+            Map<MQParam, String> redisParameters = getRedisParameters(token);
             return new CmdManager(
                     gu.simplemq.redis.JedisPoolLazy.getDefaultInstance(),
-                    syncInstance != null 
-                    	? syncInstance.getRedisParameters(token) 
-                    	: asyncInstance.getRedisParameters(token).get());
-        } catch (ExecutionException e) {
-	        Throwables.throwIfUnchecked(e.getCause());
-	        throw new RuntimeException(e.getCause());
-		} catch(Exception e){
+                    redisParameters.get(MQParam.CMD_CHANNEL));
+        } catch(Exception e){
             Throwables.throwIfUnchecked(e);
             throw new RuntimeException(e);
         }

@@ -22,7 +22,6 @@ import net.gdface.facelog.mq.CmdManager;
 import net.gdface.facelog.mq.IAckAdapter;
 import net.gdface.facelog.thrift.IFaceLogThriftClient;
 import net.gdface.thrift.ClientFactory;
-import net.gdface.utils.DefaultExecutorProvider;
 import net.gdface.utils.NetworkUtil;
 import static net.gdface.facelog.client.dtalk.FacelogMenu.*;
 
@@ -105,9 +104,7 @@ public class DeviceCmdTest implements ChannelConstant{
 	@Test
 	public void test2SendCmd() throws InterruptedException{
 		// 创建命令发送管理实例 
-		CmdManager cmdManager = facelogClient.makeCmdManager(rootToken)
-				.setExecutor(DefaultExecutorProvider.getGlobalExceutor())
-				.setTimerExecutor(DefaultExecutorProvider.getTimerExecutor());
+		CmdManager cmdManager = facelogClient.makeCmdManager(rootToken);
 		
 		cmdManager.targetBuilder()
 			// 设置命令序列号
@@ -143,9 +140,7 @@ public class DeviceCmdTest implements ChannelConstant{
 	@Test
 	public void test3SendCmdSync() throws InterruptedException{
 		// 创建命令发送管理实例 
-		CmdManager cmdManager = facelogClient.makeCmdManager(rootToken)
-				.setExecutor(DefaultExecutorProvider.getGlobalExceutor())
-				.setTimerExecutor(DefaultExecutorProvider.getTimerExecutor());
+		CmdManager cmdManager = facelogClient.makeCmdManager(rootToken);
 		cmdManager.targetBuilder()
 			// 设置命令序列号
 			.setCmdSn(facelogClient.getCmdSnSupplier(rootToken))

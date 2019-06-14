@@ -22,7 +22,6 @@ import gu.dtalk.MenuItem;
 import gu.dtalk.engine.ItemAdapter;
 import gu.simplemq.Channel;
 import gu.simplemq.IMessageAdapter;
-import net.gdface.facelog.CommonConstant;
 import gu.simplemq.redis.RedisFactory;
 
 /**
@@ -33,7 +32,7 @@ import gu.simplemq.redis.RedisFactory;
  * @author guyadong
  *
  */
-public class CmdDispatcher implements IMessageAdapter<DeviceInstruction>,CommonConstant{
+public class CmdDispatcher implements IMessageAdapter<DeviceInstruction>{
     public static final Logger logger = LoggerFactory.getLogger(CmdDispatcher.class);
 
 	private final int deviceId;
