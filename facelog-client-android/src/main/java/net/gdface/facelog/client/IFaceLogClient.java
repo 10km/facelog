@@ -9,6 +9,8 @@ import java.util.Map;
 import com.google.common.base.Supplier;
 
 import gu.dtalk.MenuItem;
+import gu.dtalk.client.CmdManager;
+import gu.dtalk.engine.CmdDispatcher;
 import gu.simplemq.redis.JedisPoolLazy;
 import net.gdface.facelog.IFaceLog;
 import net.gdface.facelog.IFaceLogDecorator;
@@ -19,8 +21,6 @@ import net.gdface.facelog.hb.DeviceHeartbeatListener;
 import net.gdface.facelog.hb.DeviceHeartbeat;
 import net.gdface.facelog.hb.HeartbeatMonitor;
 import net.gdface.facelog.hb.ServiceHeartbeatListener;
-import net.gdface.facelog.mq.CmdDispatcher;
-import net.gdface.facelog.mq.CmdManager;
 import net.gdface.facelog.thrift.IFaceLogThriftClient;
 import net.gdface.utils.Delegator;
 

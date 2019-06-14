@@ -26,8 +26,13 @@
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>facelog-mq</artifactId>
-			<version>${project.version}</version>
+			<artifactId>dtalk-engine</artifactId>
+			<version>${dtalk.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>dtalk-cmd</artifactId>
+			<version>${dtalk.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>

@@ -329,7 +329,6 @@
 		<module>db</module>
 		<module>facelog-local</module>
 		<module>facelog-base</module>
-		<module>facelog-mq</module>
 		<module>facelog-service</module>
 		<module>facelog-client-base</module>
 		<module>facelog-client</module>
