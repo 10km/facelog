@@ -186,7 +186,7 @@ public class FacelogMenu extends RootMenu{
 								OptionType.STRING.builder().name(CMD_FACEAPI_SDKVERSION).uiName("算法类型").required().instance(),
 								OptionType.STRING.builder().name(CMD_FACEAPI_METHOD).uiName("接口方法名").required().instance(),
 								OptionType.STRING.builder().name(CMD_FACEAPI_PARAMETERS).uiName("参数列表(JSON array)").required().instance()
-								).instance().setImmediateCmdAdapter(new FaceApiCmdAdapter())
+								).instance().setImmediateCmdAdapter(FaceApiCmdAdapter.INSTANCE)
 						)
 				.instance();
 		cmdext = 
@@ -312,11 +312,43 @@ public class FacelogMenu extends RootMenu{
 		findIntOption(OPTION__DEVICE_STATUS).addListener(adapter);
 		findCmd(pathOfCmd(CMD_SET_STATUS)).setCmdAdapter(adapter);
 	}
-	public FacelogMenu bindFaceapi(String sdkVersion,FaceApi faceApi){
+	
+	/**
+	 * @return 返回'cmd/faceapi'设备命令绑定的命令执行器{@link FaceApiCmdAdapter}对象
+	 */
+	private FaceApiCmdAdapter getFaceApiCmdAdapter(){
 		ICmdUnionAdapter adapter = findCmd(pathOfCmd(CMD_FACEAPI)).getCmdAdapter();
-		checkState(adapter instanceof FaceApiCmdAdapter,"MISMATCH ADAPTER TYPE, %s required",FaceApiCmdAdapter.class.getSimpleName());
-		FaceApiCmdAdapter faceApiCmdAdapter = (FaceApiCmdAdapter) findCmd(pathOfCmdExt(CMD_FACEAPI)).getCmdAdapter();
-		faceApiCmdAdapter.bindFaceApi(sdkVersion, faceApi);
+		checkState(adapter instanceof FaceApiCmdAdapter,"MISMATCH ADAPTER TYPE, %s required",
+				FaceApiCmdAdapter.class.getSimpleName());
+		return (FaceApiCmdAdapter) adapter;
+	}
+	
+	/**
+	 * 为指定的sdk版本绑定{@link FaceApi}实例
+	 * @param sdkVersion
+	 * @param faceApi
+	 * @return 当前对象
+	 */
+	public FacelogMenu bindFaceapi(String sdkVersion,FaceApi faceApi){
+		getFaceApiCmdAdapter().bindFaceApi(sdkVersion, faceApi);
+		return this;
+	}
+	/**
+	 * 卸载指定sdk版本的{@link FaceApi}实例
+	 * @param sdkVersion
+	 * @return 当前对象
+	 */
+	public FacelogMenu unbindFaceapi(String sdkVersion){
+		getFaceApiCmdAdapter().unbindFaceApi(sdkVersion);
+		return this;
+	}
+	/**
+	 * 卸载{@link FaceApi}实例
+	 * @param faceApi
+	 * @return 当前对象
+	 */
+	public FacelogMenu unbindFaceapi(FaceApi faceApi){
+		getFaceApiCmdAdapter().unbindFaceApi(faceApi);
 		return this;
 	}
 	/**

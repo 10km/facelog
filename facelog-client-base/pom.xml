@@ -45,6 +45,10 @@
 			<artifactId>faceapi-base</artifactId>
 			<version>${faceapi.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>codegen-annotations</artifactId>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

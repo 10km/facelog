@@ -326,11 +326,11 @@ public class ClientExtendTools{
     		Map<MQParam, String> pameters = syncInstance != null 
     				? syncInstance.getRedisParameters(token) 
     				: asyncInstance.getRedisParameters(token).get();
-    				return new CmdDispatcher(deviceId)
+    				return new CmdDispatcher(null, deviceId)
     						.setGroupIdSupplier(this.getDeviceGroupIdSupplier(deviceId))
     						.setCmdSnValidator(cmdSnValidator)
-    						.setAckChannelValidator(ackChannelValidator)
     						.setReqType(ReqType.MULTI)
+    						.setAckChannelValidator(ackChannelValidator)
     						.registerChannel(pameters.get(MQParam.CMD_CHANNEL));
     	} catch (ExecutionException e) {
     		Throwables.throwIfUnchecked(e.getCause());

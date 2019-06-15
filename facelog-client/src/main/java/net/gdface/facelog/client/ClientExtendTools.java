@@ -19,6 +19,8 @@ import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Maps;
+
+import gu.dtalk.CommonConstant.ReqType;
 import gu.dtalk.MenuItem;
 import gu.dtalk.client.CmdManager;
 import gu.dtalk.engine.CmdDispatcher;
@@ -316,7 +318,7 @@ public class ClientExtendTools{
             checkArgument(tokenRank.apply(token)>=2,"person or root token required");
             Map<MQParam, String> redisParameters = getRedisParameters(token);
             return new CmdManager(
-                    gu.simplemq.redis.JedisPoolLazy.getDefaultInstance(),
+            		JedisPoolLazy.getInstanceByURI(redisParameters.get(MQParam.REDIS_URI)),
                     redisParameters.get(MQParam.CMD_CHANNEL));
         } catch(Exception e){
             Throwables.throwIfUnchecked(e);
@@ -332,14 +334,39 @@ public class ClientExtendTools{
     	try{
     		checkArgument(checkNotNull(token,"token is null").getType() == TokenType.DEVICE,"device token required");
     		int deviceId = token.getId();
-    		Map<MQParam, String> pameters = syncInstance != null 
+    		Map<MQParam, String> redisParameters = syncInstance != null 
+    				? syncInstance.getRedisParameters(token) 
+    				: asyncInstance.getRedisParameters(token).get();    		
+			return new CmdDispatcher(JedisPoolLazy.getInstanceByURI(redisParameters.get(MQParam.REDIS_URI)), deviceId)
+					.setGroupIdSupplier(this.getDeviceGroupIdSupplier(deviceId))
+					.setCmdSnValidator(cmdSnValidator)
+					.setReqType(ReqType.MULTI)
+					.registerChannel(redisParameters.get(MQParam.CMD_CHANNEL));
+    	} catch (ExecutionException e) {
+    		Throwables.throwIfUnchecked(e.getCause());
+    		throw new RuntimeException(e.getCause());
+    	} catch(Exception e){
+    		Throwables.throwIfUnchecked(e);
+    		throw new RuntimeException(e);
+    	}
+    }
+    /**
+     * (设备端)创建设备任务分发器<br>
+     * @param token 设备令牌
+     * @param taskQueue 任务队列名
+     * @return
+     */
+    public CmdDispatcher makeTaskDispatcher(Token token,String taskQueue){
+    	try{
+    		checkArgument(checkNotNull(token,"token is null").getType() == TokenType.DEVICE,"device token required");
+    		int deviceId = token.getId();
+    		Map<MQParam, String> redisParameters = syncInstance != null 
     				? syncInstance.getRedisParameters(token) 
     				: asyncInstance.getRedisParameters(token).get();
-    				return new CmdDispatcher(deviceId)
-    						.setGroupIdSupplier(this.getDeviceGroupIdSupplier(deviceId))
+    				return new CmdDispatcher(JedisPoolLazy.getInstanceByURI(redisParameters.get(MQParam.REDIS_URI)), deviceId)
     						.setCmdSnValidator(cmdSnValidator)
-    						.setAckChannelValidator(ackChannelValidator)
-    						.registerChannel(pameters.get(MQParam.CMD_CHANNEL));
+    						.setReqType(ReqType.TASKQUEUE)
+    						.registerChannel(taskQueue);
     	} catch (ExecutionException e) {
     		Throwables.throwIfUnchecked(e.getCause());
     		throw new RuntimeException(e.getCause());
@@ -640,8 +667,7 @@ public class ClientExtendTools{
 	 */
 	public void initRedisDefaultInstance(Token token){
 		Map<MQParam, String> redisParam = getRedisParameters(token);
-		URI uri = URI.create(redisParam.get(MQParam.REDIS_URI));
-		JedisPoolLazy.getInstance(uri).asDefaultInstance();
+		JedisPoolLazy.getInstanceByURI(redisParam.get(MQParam.REDIS_URI)).asDefaultInstance();
 	}
 	private Token online(DeviceBean deviceBean) throws ServiceSecurityException{
 		try{
@@ -769,8 +795,7 @@ public class ClientExtendTools{
 			subscriber = RedisFactory.getSubscriber();
 		}else{
 			Map<MQParam, String> redisParam = getRedisParameters(token);
-			URI uri = URI.create(redisParam.get(MQParam.REDIS_URI));
-			subscriber = RedisFactory.getSubscriber(JedisPoolLazy.getInstance(uri));
+			subscriber = RedisFactory.getSubscriber(JedisPoolLazy.getInstanceByURI(redisParam.get(MQParam.REDIS_URI)));
 		}
 		subscriber.register(ServiceHeartbeatAdapter.SERVICE_HB_CHANNEL);
 		addServiceEventListener(tokenRefreshListener);
