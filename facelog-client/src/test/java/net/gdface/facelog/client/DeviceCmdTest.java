@@ -89,7 +89,7 @@ public class DeviceCmdTest implements ChannelConstant{
 		facelogClient.makeCmdDispatcher(deviceToken)
 			.setItemAdapter(engine.getItemAdapter())
 			/** 程序退出时自动注销设备命令频道 */
-			.autoUnregisterChannel();
+			.autoUnregisterAll();
 	}
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
@@ -107,10 +107,6 @@ public class DeviceCmdTest implements ChannelConstant{
 		CmdManager cmdManager = facelogClient.makeCmdManager(rootToken);
 		
 		cmdManager.targetBuilder()
-			// 设置命令序列号
-			.setCmdSn(facelogClient.getCmdSnSupplier(rootToken))
-			// 设置命令响应通道
-			.setAckChannel(facelogClient.getAckChannelSupplier(rootToken))
 			// 指定设备命令执行接收目标为一组设备(id)
 			.setDeviceTarget(device.getId()).autoRemove(false);
 		logger.info("异步接收命令响应:");
@@ -124,8 +120,6 @@ public class DeviceCmdTest implements ChannelConstant{
 		 Thread.sleep(5*1000);
 		 logger.info("reset异步命令响应结束");
 		 
-		 // 复用CmdBuilder对象同步执行 isEnable 命令
-		 cmdManager.targetBuilder().resetApply();
 		 List<Ack<Object>> receivedAcks = cmdManager.runCmdSync(pathOfCmd(CMD_RESET),null,false);
 		 logger.info("同步接收命令响应:");
 		 for(Ack<Object> ack:receivedAcks){
@@ -142,10 +136,6 @@ public class DeviceCmdTest implements ChannelConstant{
 		// 创建命令发送管理实例 
 		CmdManager cmdManager = facelogClient.makeCmdManager(rootToken);
 		cmdManager.targetBuilder()
-			// 设置命令序列号
-			.setCmdSn(facelogClient.getCmdSnSupplier(rootToken))
-			// 设置命令响应通道
-			.setAckChannel(facelogClient.getAckChannelSupplier(rootToken))
 			// 指定设备命令执行接收目标为一组设备(id)
 			.setDeviceTarget(device.getId()) ;
 		List<Ack<Object>> receivedAcks = cmdManager.runCmdSync(pathOfCmd(CMD_RESET),null, false);

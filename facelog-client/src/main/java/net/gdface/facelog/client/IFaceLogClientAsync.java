@@ -12,7 +12,9 @@ import com.google.common.util.concurrent.ListenableFuture;
 
 import gu.dtalk.MenuItem;
 import gu.dtalk.client.CmdManager;
-import gu.dtalk.engine.CmdDispatcher;
+import gu.dtalk.client.TaskManager;
+import gu.dtalk.engine.BaseDispatcher;
+import gu.dtalk.engine.TaskDispatcher;
 import gu.simplemq.redis.JedisPoolLazy;
 import net.gdface.facelog.MQParam;
 import net.gdface.facelog.Token;
@@ -79,11 +81,29 @@ public class IFaceLogClientAsync extends IFaceLogThriftClientAsync {
 	}
 	/**
 	 * @param token
+	 * @param taskQueueSupplier
+	 * @return
+	 * @see net.gdface.facelog.client.ClientExtendTools#makeTaskManager(Token, Supplier)
+	 */
+	public TaskManager makeTaskManager(Token token, Supplier<String> taskQueueSupplier) {
+		return clientTools.makeTaskManager(token, taskQueueSupplier);
+	}
+	/**
+	 * @param token
 	 * @return
 	 * @see net.gdface.facelog.client.ClientExtendTools#makeCmdDispatcher(net.gdface.facelog.Token)
 	 */
-	public CmdDispatcher makeCmdDispatcher(Token token) {
+	public BaseDispatcher makeCmdDispatcher(Token token) {
 		return clientTools.makeCmdDispatcher(token);
+	}
+	/**
+	 * @param token
+	 * @param taskQueue
+	 * @return
+	 * @see net.gdface.facelog.client.ClientExtendTools#makeTaskDispatcher(Token, String)
+	 */
+	public TaskDispatcher makeTaskDispatcher(Token token, String taskQueue) {
+		return clientTools.makeTaskDispatcher(token, taskQueue);
 	}
 	/**
 	 * @param token

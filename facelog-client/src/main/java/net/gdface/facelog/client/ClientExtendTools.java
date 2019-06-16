@@ -20,10 +20,11 @@ import com.google.common.base.Suppliers;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Maps;
 
-import gu.dtalk.CommonConstant.ReqType;
 import gu.dtalk.MenuItem;
 import gu.dtalk.client.CmdManager;
+import gu.dtalk.client.TaskManager;
 import gu.dtalk.engine.CmdDispatcher;
+import gu.dtalk.engine.TaskDispatcher;
 import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.RedisFactory;
 import gu.simplemq.redis.RedisSubscriber;
@@ -258,8 +259,7 @@ public class ClientExtendTools{
      * 根据设备ID返回一个获取设备组ID的{@code Supplier}实例
      * @param deviceId
      * @return 对应的groupId,如果{@code deviceId}无效则返回{@code null}
-     * @see ${esc.hash}deviceGroupIdGetter
-     * @throws ServiceRuntimeException
+     * @see #deviceGroupIdGetter
      */
     public Supplier<Integer> getDeviceGroupIdSupplier(final int deviceId){
         return new Supplier<Integer>(){
@@ -293,8 +293,7 @@ public class ClientExtendTools{
      * 根据人员ID返回一个获取所属组ID列表的{@code Supplier}实例
      * @param personId
      * @return 人员组ID列表,如果{@code personId}无效则返回空表
-     * @see ${esc.hash}personGroupBelonsGetter
-     * @throws ServiceRuntimeException
+     * @see #personGroupBelonsGetter
      */
     public Supplier<List<Integer>> getPersonGroupBelonsSupplier(final int personId){
         return new Supplier<List<Integer>>(){
@@ -306,10 +305,8 @@ public class ClientExtendTools{
     }
     /**
      * (管理端)创建{@link CmdManager}实例<br>
-     * 使用默认REDIS连接池,参见 {@link gu.simplemq.redis.JedisPoolLazy${esc.hash}getDefaultInstance()}
      * @param token 访问令牌(person Token or root Token)
      * @return
-     * @throws ServiceRuntimeException
      */
     public CmdManager makeCmdManager(Token token){
         try{
@@ -319,14 +316,44 @@ public class ClientExtendTools{
             Map<MQParam, String> redisParameters = getRedisParameters(token);
             return new CmdManager(
             		JedisPoolLazy.getInstanceByURI(redisParameters.get(MQParam.REDIS_URI)),
-                    redisParameters.get(MQParam.CMD_CHANNEL));
+            		getCmdChannelSupplier(token))
+            		/** 设置命令序列号 */
+            		.setCmdSn(getCmdSnSupplier(token))
+            		/** 设置命令响应通道 */
+            		.setAckChannel(getAckChannelSupplier(token))
+            		.self();
         } catch(Exception e){
             Throwables.throwIfUnchecked(e);
             throw new RuntimeException(e);
         }
     }
     /**
-     * (设备端)创建设备命令分发器<br>
+     * (管理端)创建{@link TaskManager}实例<br>
+     * @param token 访问令牌(person Token or root Token)
+     * @param taskQueueSupplier 任务队列
+     * @return
+     */
+    public TaskManager makeTaskManager(Token token, Supplier<String> taskQueueSupplier){
+        try{
+            checkArgument(checkNotNull(token,"token is null").getType() == TokenType.PERSON 
+                || token.getType() == TokenType.ROOT,"person or root token required");
+            checkArgument(tokenRank.apply(token)>=2,"person or root token required");
+            Map<MQParam, String> redisParameters = getRedisParameters(token);
+            return new TaskManager(
+            		JedisPoolLazy.getInstanceByURI(redisParameters.get(MQParam.REDIS_URI)),
+            		taskQueueSupplier)
+            		/** 设置命令序列号 */
+            		.setCmdSn(getCmdSnSupplier(token))
+            		/** 设置命令响应通道 */
+            		.setAckChannel(getAckChannelSupplier(token))
+            		.self();
+        } catch(Exception e){
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);
+        }
+    }
+    /**
+     * (设备端)创建设备多目标命令分发器<br>
      * @param token 设备令牌
      * @return
      */
@@ -334,17 +361,13 @@ public class ClientExtendTools{
     	try{
     		checkArgument(checkNotNull(token,"token is null").getType() == TokenType.DEVICE,"device token required");
     		int deviceId = token.getId();
-    		Map<MQParam, String> redisParameters = syncInstance != null 
-    				? syncInstance.getRedisParameters(token) 
-    				: asyncInstance.getRedisParameters(token).get();    		
-			return new CmdDispatcher(JedisPoolLazy.getInstanceByURI(redisParameters.get(MQParam.REDIS_URI)), deviceId)
+    		Map<MQParam, String> redisParameters = getRedisParameters(token);    		
+			return new CmdDispatcher(deviceId, 
+					JedisPoolLazy.getInstanceByURI(redisParameters.get(MQParam.REDIS_URI)))
 					.setGroupIdSupplier(this.getDeviceGroupIdSupplier(deviceId))
 					.setCmdSnValidator(cmdSnValidator)
-					.setReqType(ReqType.MULTI)
-					.registerChannel(redisParameters.get(MQParam.CMD_CHANNEL));
-    	} catch (ExecutionException e) {
-    		Throwables.throwIfUnchecked(e.getCause());
-    		throw new RuntimeException(e.getCause());
+					.register(redisParameters.get(MQParam.CMD_CHANNEL))
+					.self();
     	} catch(Exception e){
     		Throwables.throwIfUnchecked(e);
     		throw new RuntimeException(e);
@@ -353,23 +376,18 @@ public class ClientExtendTools{
     /**
      * (设备端)创建设备任务分发器<br>
      * @param token 设备令牌
-     * @param taskQueue 任务队列名
+     * @param taskQueue 任务队列名,创建的分发器对象注册到任务队列，可为{@code null}
      * @return
      */
-    public CmdDispatcher makeTaskDispatcher(Token token,String taskQueue){
+    public TaskDispatcher makeTaskDispatcher(Token token,String taskQueue){
     	try{
     		checkArgument(checkNotNull(token,"token is null").getType() == TokenType.DEVICE,"device token required");
     		int deviceId = token.getId();
-    		Map<MQParam, String> redisParameters = syncInstance != null 
-    				? syncInstance.getRedisParameters(token) 
-    				: asyncInstance.getRedisParameters(token).get();
-    				return new CmdDispatcher(JedisPoolLazy.getInstanceByURI(redisParameters.get(MQParam.REDIS_URI)), deviceId)
-    						.setCmdSnValidator(cmdSnValidator)
-    						.setReqType(ReqType.TASKQUEUE)
-    						.registerChannel(taskQueue);
-    	} catch (ExecutionException e) {
-    		Throwables.throwIfUnchecked(e.getCause());
-    		throw new RuntimeException(e.getCause());
+    		Map<MQParam, String> redisParameters = getRedisParameters(token);
+    		return new TaskDispatcher(deviceId, 
+    				JedisPoolLazy.getInstanceByURI(redisParameters.get(MQParam.REDIS_URI)))
+    				.setCmdSnValidator(cmdSnValidator)
+					.register(taskQueue).self();
     	} catch(Exception e){
     		Throwables.throwIfUnchecked(e);
     		throw new RuntimeException(e);
@@ -427,6 +445,25 @@ public class ClientExtendTools{
         	        Throwables.throwIfUnchecked(e.getCause());
         	        throw new RuntimeException(e.getCause());
         		} catch(Exception e){
+                    Throwables.throwIfUnchecked(e);
+                    throw new RuntimeException(e);
+                }
+            }
+        }; 
+    }
+    /**
+     * 返回一个获取设备命令通道名的{@code Supplier}实例
+     * @param token
+     * @return 访问令牌
+     */
+    public Supplier<String> 
+    getCmdChannelSupplier(final Token token){
+        return new Supplier<String>(){
+            @Override
+            public String get() {
+                try{
+                    return getRedisParameters(token).get(MQParam.CMD_CHANNEL);
+                } catch(Exception e){
                     Throwables.throwIfUnchecked(e);
                     throw new RuntimeException(e);
                 }

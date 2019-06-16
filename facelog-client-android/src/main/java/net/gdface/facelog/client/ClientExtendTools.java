@@ -19,9 +19,9 @@ import com.google.common.base.Suppliers;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Maps;
 import gu.dtalk.MenuItem;
-import gu.dtalk.CommonConstant.ReqType;
+import gu.dtalk.CommonConstant.ReqCmdType;
 import gu.dtalk.client.CmdManager;
-import gu.dtalk.engine.CmdDispatcher;
+import gu.dtalk.engine.BaseDispatcher;
 import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.RedisFactory;
 import gu.simplemq.redis.RedisSubscriber;
@@ -319,19 +319,17 @@ public class ClientExtendTools{
      * @param token 设备令牌
      * @return
      */
-    public CmdDispatcher makeCmdDispatcher(Token token){
+    public BaseDispatcher makeCmdDispatcher(Token token){
     	try{
     		checkArgument(checkNotNull(token,"token is null").getType() == TokenType.DEVICE,"device token required");
     		int deviceId = token.getId();
     		Map<MQParam, String> pameters = syncInstance != null 
     				? syncInstance.getRedisParameters(token) 
     				: asyncInstance.getRedisParameters(token).get();
-    				return new CmdDispatcher(null, deviceId)
+    				return new BaseDispatcher(deviceId, ReqCmdType.TASKQUEUE, null)
     						.setGroupIdSupplier(this.getDeviceGroupIdSupplier(deviceId))
     						.setCmdSnValidator(cmdSnValidator)
-    						.setReqType(ReqType.MULTI)
-    						.setAckChannelValidator(ackChannelValidator)
-    						.registerChannel(pameters.get(MQParam.CMD_CHANNEL));
+    						.register(pameters.get(MQParam.CMD_CHANNEL));
     	} catch (ExecutionException e) {
     		Throwables.throwIfUnchecked(e.getCause());
     		throw new RuntimeException(e.getCause());
