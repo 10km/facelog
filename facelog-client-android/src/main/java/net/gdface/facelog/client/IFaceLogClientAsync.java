@@ -12,10 +12,13 @@ import com.google.common.util.concurrent.ListenableFuture;
 
 import gu.dtalk.MenuItem;
 import gu.dtalk.client.CmdManager;
+import gu.dtalk.client.TaskManager;
 import gu.dtalk.engine.BaseDispatcher;
+import gu.dtalk.engine.TaskDispatcher;
 import gu.simplemq.redis.JedisPoolLazy;
 import net.gdface.facelog.MQParam;
 import net.gdface.facelog.Token;
+import net.gdface.facelog.client.ClientExtendTools.ParameterSupplier;
 import net.gdface.facelog.client.dtalk.DtalkEngineForFacelog;
 import net.gdface.facelog.hb.DeviceHeartbeatListener;
 import net.gdface.facelog.hb.DeviceHeartbeat;
@@ -79,11 +82,30 @@ public class IFaceLogClientAsync extends IFaceLogThriftClientAsync {
 	}
 	/**
 	 * @param token
+	 * @param cmdpath 设备(菜单)命令路径
+	 * @param taskQueueSupplier
+	 * @return
+	 * @see net.gdface.facelog.client.ClientExtendTools#makeTaskManager(Token, String, Supplier)
+	 */
+	public TaskManager makeTaskManager(Token token, String cmdpath, Supplier<String> taskQueueSupplier) {
+		return clientTools.makeTaskManager(token, null, taskQueueSupplier);
+	}
+	/**
+	 * @param token
 	 * @return
 	 * @see net.gdface.facelog.client.ClientExtendTools#makeCmdDispatcher(net.gdface.facelog.Token)
 	 */
 	public BaseDispatcher makeCmdDispatcher(Token token) {
 		return clientTools.makeCmdDispatcher(token);
+	}
+	/**
+	 * @param token
+	 * @param taskQueueSupplier
+	 * @return
+	 * @see net.gdface.facelog.client.ClientExtendTools#makeTaskDispatcher(Token, Supplier)
+	 */
+	protected TaskDispatcher makeTaskDispatcher(Token token, Supplier<String> taskQueueSupplier) {
+		return clientTools.makeTaskDispatcher(token, taskQueueSupplier);
 	}
 	/**
 	 * @param token
@@ -213,5 +235,24 @@ public class IFaceLogClientAsync extends IFaceLogThriftClientAsync {
 	public IFaceLogClientAsync startServiceHeartbeatListener(Token token, boolean initJedisPoolLazyDefaultInstance) {
 		clientTools.startServiceHeartbeatListener(token, initJedisPoolLazyDefaultInstance);
 		return this;
+	}
+	/**
+	 * @param task
+	 * @param token
+	 * @return
+	 * @see net.gdface.facelog.client.ClientExtendTools#getTaskQueueSupplier(java.lang.String, net.gdface.facelog.Token)
+	 */
+	public ParameterSupplier<String> getTaskQueueSupplier(String task, Token token) {
+		return clientTools.getTaskQueueSupplier(task, token);
+	}
+	/**
+	 * @param task
+	 * @param sdkVersion
+	 * @param token
+	 * @return
+	 * @see net.gdface.facelog.client.ClientExtendTools#getSdkTaskQueueSupplier(java.lang.String, java.lang.String, net.gdface.facelog.Token)
+	 */
+	public ParameterSupplier<String> getSdkTaskQueueSupplier(String task, String sdkVersion, Token token) {
+		return clientTools.getSdkTaskQueueSupplier(task, sdkVersion, token);
 	}
 }

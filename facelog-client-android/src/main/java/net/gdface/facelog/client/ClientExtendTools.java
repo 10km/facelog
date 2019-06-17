@@ -2,6 +2,8 @@ package net.gdface.facelog.client;
 
 import static com.google.common.base.Preconditions.*;
 
+import java.io.Closeable;
+import java.lang.reflect.Proxy;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -9,6 +11,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import com.google.common.base.Function;
 import com.google.common.base.MoreObjects;
@@ -18,10 +21,14 @@ import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+
 import gu.dtalk.MenuItem;
-import gu.dtalk.CommonConstant.ReqCmdType;
 import gu.dtalk.client.CmdManager;
+import gu.dtalk.client.TaskManager;
 import gu.dtalk.engine.BaseDispatcher;
+import gu.dtalk.engine.CmdDispatcher;
+import gu.dtalk.engine.TaskDispatcher;
 import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.RedisFactory;
 import gu.simplemq.redis.RedisSubscriber;
@@ -44,6 +51,7 @@ import net.gdface.facelog.hb.ServiceHeartbeatListener;
 import net.gdface.facelog.thrift.IFaceLogThriftClient;
 import net.gdface.facelog.thrift.IFaceLogThriftClientAsync;
 import net.gdface.thrift.ClientFactory;
+import net.gdface.utils.Delegator;
 import net.gdface.utils.NetworkUtil;
 
 /**
@@ -56,6 +64,7 @@ public class ClientExtendTools{
 	private final IFaceLogThriftClientAsync asyncInstance;
 	private final ClientFactory factory;
 	private TokenHelper tokenHelper;
+	private Map<MQParam, String> redisParameters = null;
 	private final ServiceHeartbeatListener tokenRefreshListener = new BaseServiceHeartbeatListener(){
 		@Override
 		public boolean doServiceOnline(ServiceHeartbeatPackage heartbeatPackage){
@@ -63,6 +72,7 @@ public class ClientExtendTools{
 			return tokenRefresh !=null && tokenRefresh.refresh();
 		}};
 
+	private final DispatcherListener dispatcherListener = new DispatcherListener();
 	private TokenRefresh tokenRefresh;
 	private class TokenRefresh implements Supplier<Token>{
 		private Token token;
@@ -75,10 +85,11 @@ public class ClientExtendTools{
 		}
 		@Override
 		public Token get() {
+			// double check
 			if(relead){
 				synchronized (lock) {
 					if(relead){
-						Token t = refreshToken(helper, token);				
+						Token t = refreshToken(helper, token);
 						if(null != t){
 							relead = false;
 							token.assignFrom(t);
@@ -98,7 +109,8 @@ public class ClientExtendTools{
 			Token token = get();
 			if(null != token){
 				try {
-					getRedisParameters(token);
+					redisParameters = null;
+					getRedisParametersLazy(token);
 					return 	true;
 				} catch (Exception e) {
 					// DO NOTHING
@@ -107,11 +119,101 @@ public class ClientExtendTools{
 			return false;
 		}
 	}
-	ClientExtendTools(IFaceLogThriftClient syncInstance) {
+	private class DispatcherListener extends BaseServiceHeartbeatListener{
+		private final Set<BaseDispatcher> dispatchers = Sets.newLinkedHashSet();
+		@Override
+		protected boolean doServiceOnline(ServiceHeartbeatPackage heartbeatPackage) {
+			synchronized (dispatchers) {
+				for(BaseDispatcher dispatcher: dispatchers){
+					if(dispatcher.isEnable()){
+						dispatcher.unregister();
+						dispatcher.register();
+					}
+				}
+			}
+			return true;
+		}
+		boolean addDispatcher(BaseDispatcher dispatcher){
+			synchronized (dispatchers) {
+				return dispatchers.add(dispatcher);
+			}
+		}
+/*		boolean removeDispatcher(BaseDispatcher dispatcher){
+			synchronized (dispatchers) {
+				return dispatchers.remove(dispatcher);
+			}
+		}*/
+	}
+	public static interface ParameterSupplier<T> extends Supplier<T>,Closeable{
+		public Object key();
+	}
+	private class RedisParameterSupplier implements ParameterSupplier<String>{
+		private final MQParam mqParam;
+		private final Token token;
+		private RedisParameterSupplier(MQParam mqParam,Token token) {
+			this.mqParam = checkNotNull(mqParam,"mqParam is null");
+			this.token = checkNotNull(token,"token is null");
+		}
+		@Override
+		public String get() {
+			return getRedisParametersLazy(token).get(mqParam);
+		}
+		@Override
+		public Object key(){
+			return mqParam;
+		}
+		@Override
+		public void close() {
+		}
+	}
+	private class TaskQueueSupplier extends BaseServiceHeartbeatListener implements ParameterSupplier<String>{
+		private final String task;
+		private final Token token;
+		protected String taskQueue = null;
+		private TaskQueueSupplier(String task,Token token) {
+			this.task = checkNotNull(task,"task is null");
+			this.token = checkNotNull(token,"token is null");
+			addServiceEventListener(this);
+		}
+		@Override
+		public String get() {
+			if(taskQueue == null){
+				doServiceOnline(null);
+			}
+			return taskQueue;
+		}
+		@Override
+		public Object key(){
+			return task;
+		}
+
+		@Override
+		protected boolean doServiceOnline(ServiceHeartbeatPackage heartbeatPackage) {
+			taskQueue = taskQueueOf(task,token);
+			return true;
+		}
+		/**
+		 * 当对象不再被需要时，执行此方法将其从服务心跳侦听器列表中删除
+		 * @see java.io.Closeable#close()
+		 */
+		@Override
+		public void close() {
+			removeServiceEventListener(this);			
+		}
+	}
+	private static <T>T unwrap(Object value,Class<T> clazz){
+		if(Proxy.isProxyClass(value.getClass())){
+			return unwrap(Proxy.getInvocationHandler(value),clazz);
+		}else if(value instanceof Delegator){
+			return unwrap(((Delegator<?>)value).delegate(),clazz);
+		}
+		return clazz.cast(value);
+	}
+	ClientExtendTools(IFaceLog syncInstance) {
 		super();
 		this.syncInstance = checkNotNull(syncInstance,"syncInstance is null");
 		this.asyncInstance = null;
-		this.factory = syncInstance.getFactory();
+		this.factory = unwrap(syncInstance,IFaceLogThriftClient.class).getFactory();
 	}
 	ClientExtendTools(IFaceLogThriftClientAsync asyncInstance) {
 		super();
@@ -247,8 +349,7 @@ public class ClientExtendTools{
      * 根据设备ID返回一个获取设备组ID的{@code Supplier}实例
      * @param deviceId
      * @return 对应的groupId,如果{@code deviceId}无效则返回{@code null}
-     * @see ${esc.hash}deviceGroupIdGetter
-     * @throws ServiceRuntimeException
+     * @see #deviceGroupIdGetter
      */
     public Supplier<Integer> getDeviceGroupIdSupplier(final int deviceId){
         return new Supplier<Integer>(){
@@ -282,8 +383,7 @@ public class ClientExtendTools{
      * 根据人员ID返回一个获取所属组ID列表的{@code Supplier}实例
      * @param personId
      * @return 人员组ID列表,如果{@code personId}无效则返回空表
-     * @see ${esc.hash}personGroupBelonsGetter
-     * @throws ServiceRuntimeException
+     * @see #personGroupBelonsGetter
      */
     public Supplier<List<Integer>> getPersonGroupBelonsSupplier(final int personId){
         return new Supplier<List<Integer>>(){
@@ -295,44 +395,97 @@ public class ClientExtendTools{
     }
     /**
      * (管理端)创建{@link CmdManager}实例<br>
-     * 使用默认REDIS连接池,参见 {@link gu.simplemq.redis.JedisPoolLazy${esc.hash}getDefaultInstance()}
      * @param token 访问令牌(person Token or root Token)
      * @return
-     * @throws ServiceRuntimeException
      */
     public CmdManager makeCmdManager(Token token){
         try{
             checkArgument(checkNotNull(token,"token is null").getType() == TokenType.PERSON 
                 || token.getType() == TokenType.ROOT,"person or root token required");
             checkArgument(tokenRank.apply(token)>=2,"person or root token required");
-            Map<MQParam, String> redisParameters = getRedisParameters(token);
+            Map<MQParam, String> redisParameters = getRedisParametersLazy(token);
             return new CmdManager(
-                    gu.simplemq.redis.JedisPoolLazy.getDefaultInstance(),
-                    redisParameters.get(MQParam.CMD_CHANNEL));
+            		JedisPoolLazy.getInstanceByURI(redisParameters.get(MQParam.REDIS_URI)),
+            		getCmdChannelSupplier(token))
+            		/** 设置命令序列号 */
+            		.setCmdSn(getCmdSnSupplier(token))
+            		/** 设置命令响应通道 */
+            		.setAckChannel(getAckChannelSupplier(token))
+            		.self();
         } catch(Exception e){
             Throwables.throwIfUnchecked(e);
             throw new RuntimeException(e);
         }
     }
     /**
-     * (设备端)创建设备命令分发器<br>
+     * (管理端)创建{@link TaskManager}实例<br>
+     * @param token 访问令牌(person Token or root Token)
+     * @param cmdpath 设备(菜单)命令路径
+     * @param taskQueueSupplier 任务队列
+     * @return
+     */
+    public TaskManager makeTaskManager(Token token, String cmdpath, Supplier<String> taskQueueSupplier){
+        try{
+            checkArgument(checkNotNull(token,"token is null").getType() == TokenType.PERSON 
+                || token.getType() == TokenType.ROOT,"person or root token required");
+            checkArgument(tokenRank.apply(token)>=2,"person or root token required");
+            Map<MQParam, String> redisParameters = getRedisParametersLazy(token);
+            return new TaskManager(
+            		JedisPoolLazy.getInstanceByURI(redisParameters.get(MQParam.REDIS_URI)),
+            		cmdpath, taskQueueSupplier)
+            		/** 设置命令序列号 */
+            		.setCmdSn(getCmdSnSupplier(token))
+            		/** 设置命令响应通道 */
+            		.setAckChannel(getAckChannelSupplier(token))
+            		.self();
+        } catch(Exception e){
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);
+        }
+    }
+    /**
+     * (设备端)创建设备多目标命令分发器<br>
      * @param token 设备令牌
      * @return
      */
-    public BaseDispatcher makeCmdDispatcher(Token token){
+    public CmdDispatcher makeCmdDispatcher(Token token){
     	try{
     		checkArgument(checkNotNull(token,"token is null").getType() == TokenType.DEVICE,"device token required");
     		int deviceId = token.getId();
-    		Map<MQParam, String> pameters = syncInstance != null 
-    				? syncInstance.getRedisParameters(token) 
-    				: asyncInstance.getRedisParameters(token).get();
-    				return new BaseDispatcher(deviceId, ReqCmdType.TASKQUEUE, null)
-    						.setGroupIdSupplier(this.getDeviceGroupIdSupplier(deviceId))
-    						.setCmdSnValidator(cmdSnValidator)
-    						.register();
-    	} catch (ExecutionException e) {
-    		Throwables.throwIfUnchecked(e.getCause());
-    		throw new RuntimeException(e.getCause());
+    		Map<MQParam, String> redisParameters = getRedisParametersLazy(token);    		
+    		CmdDispatcher dispatcher = new CmdDispatcher(deviceId, 
+					JedisPoolLazy.getInstanceByURI(redisParameters.get(MQParam.REDIS_URI)))
+					.setGroupIdSupplier(this.getDeviceGroupIdSupplier(deviceId))
+					.setCmdSnValidator(cmdSnValidator)
+					.setChannelSupplier(new RedisParameterSupplier(MQParam.CMD_CHANNEL,token))
+					.register()
+					.self();
+    		dispatcherListener.addDispatcher(dispatcher);
+			return dispatcher;
+    	} catch(Exception e){
+    		Throwables.throwIfUnchecked(e);
+    		throw new RuntimeException(e);
+    	}
+    }
+    /**
+     * (设备端)创建设备任务分发器<br>
+     * @param token 设备令牌
+     * @param taskQueueSupplier 任务队列名,创建的分发器对象注册到任务队列，可为{@code null}
+     * @return
+     */
+    public TaskDispatcher makeTaskDispatcher(Token token,Supplier<String> taskQueueSupplier){
+    	try{
+    		checkArgument(checkNotNull(token,"token is null").getType() == TokenType.DEVICE,"device token required");
+    		int deviceId = token.getId();
+    		Map<MQParam, String> redisParameters = getRedisParametersLazy(token);
+    		TaskDispatcher dispatcher = new TaskDispatcher(deviceId, 
+    				JedisPoolLazy.getInstanceByURI(redisParameters.get(MQParam.REDIS_URI)))
+    				.setCmdSnValidator(cmdSnValidator)
+					.setChannelSupplier(taskQueueSupplier)
+					.register()
+					.self();
+    		dispatcherListener.addDispatcher(dispatcher);
+    		return dispatcher;
     	} catch(Exception e){
     		Throwables.throwIfUnchecked(e);
     		throw new RuntimeException(e);
@@ -390,6 +543,25 @@ public class ClientExtendTools{
         	        Throwables.throwIfUnchecked(e.getCause());
         	        throw new RuntimeException(e.getCause());
         		} catch(Exception e){
+                    Throwables.throwIfUnchecked(e);
+                    throw new RuntimeException(e);
+                }
+            }
+        }; 
+    }
+    /**
+     * 返回一个获取设备命令通道名的{@code Supplier}实例
+     * @param token
+     * @return 访问令牌
+     */
+    public Supplier<String> 
+    getCmdChannelSupplier(final Token token){
+        return new Supplier<String>(){
+            @Override
+            public String get() {
+                try{
+                    return getRedisParametersLazy(token).get(MQParam.CMD_CHANNEL);
+                } catch(Exception e){
                     Throwables.throwIfUnchecked(e);
                     throw new RuntimeException(e);
                 }
@@ -557,24 +729,27 @@ public class ClientExtendTools{
 	 * @param token
 	 * @return
 	 */
-	private Map<MQParam, String> getRedisParameters(Token token){
-		checkArgument(token != null,"token is null");
-		// 获取redis连接参数
-		try {
-			Map<MQParam, String> param = syncInstance != null 
-					? syncInstance.getRedisParameters(token)
-					: asyncInstance.getRedisParameters(token).get();
-			return insteadHostOfMQParamIfLocalhost(param);
-	    } catch (ExecutionException e) {
-	        Throwables.throwIfUnchecked(e.getCause());
-	        throw new RuntimeException(e.getCause());
-		} catch(Exception e){
-	        Throwables.throwIfUnchecked(e);
-	        throw new RuntimeException(e);
-	    }
+	private Map<MQParam, String> getRedisParametersLazy(Token token){
+		if(redisParameters == null){
+			checkArgument(token != null,"token is null");
+			// 获取redis连接参数
+			try {
+				Map<MQParam, String> param = syncInstance != null 
+						? syncInstance.getRedisParameters(token)
+						: asyncInstance.getRedisParameters(token).get();
+				redisParameters =  insteadHostOfMQParamIfLocalhost(param);
+			} catch (ExecutionException e) {
+				Throwables.throwIfUnchecked(e.getCause());
+				throw new RuntimeException(e.getCause());
+			} catch(Exception e){
+				Throwables.throwIfUnchecked(e);
+				throw new RuntimeException(e);
+			}
+		}
+		return redisParameters;
 	}
 	/**
-	 * @param token 调用 {@link #getRedisParameters(Token)}所需要的令牌
+	 * @param token 调用 {@link #getRedisParametersLazy(Token)}所需要的令牌
 	 * @return 返回一个获取redis参数的{@link Supplier}实例
 	 */
 	public Supplier<Map<MQParam, String>> getRedisParametersSupplier(final Token token){
@@ -583,11 +758,11 @@ public class ClientExtendTools{
 
 			@Override
 			public Map<MQParam, String> get() {
-				return getRedisParameters(token);
+				return getRedisParametersLazy(token);
 			}};
 	}
 	/**
-	 * @param token 调用 {@link #getRedisParameters(Token)}所需要的令牌
+	 * @param token 调用 {@link #getRedisParametersLazy(Token)}所需要的令牌
 	 * @return 返回一个获取设备心跳实时监控通道名的{@link Supplier}实例
 	 */
 	public Supplier<String> getMonitorChannelSupplier(Token token){
@@ -617,7 +792,7 @@ public class ClientExtendTools{
 	 * @see FacelogRedisConfigProvider#setRedisLocation(URI)
 	 */
 	public void initDtalkRedisLocation(Token token){
-		Map<MQParam, String> redisParam = getRedisParameters(token);
+		Map<MQParam, String> redisParam = getRedisParametersLazy(token);
 		URI uri = URI.create(redisParam.get(MQParam.REDIS_URI));
 		FacelogRedisConfigProvider.setRedisLocation(uri);
 	}
@@ -629,9 +804,8 @@ public class ClientExtendTools{
 	 * @see JedisPoolLazy#asDefaultInstance()
 	 */
 	public void initRedisDefaultInstance(Token token){
-		Map<MQParam, String> redisParam = getRedisParameters(token);
-		URI uri = URI.create(redisParam.get(MQParam.REDIS_URI));
-		JedisPoolLazy.getInstance(uri).asDefaultInstance();
+		Map<MQParam, String> redisParam = getRedisParametersLazy(token);
+		JedisPoolLazy.getInstanceByURI(redisParam.get(MQParam.REDIS_URI)).asDefaultInstance();
 	}
 	private Token online(DeviceBean deviceBean) throws ServiceSecurityException{
 		try{
@@ -758,12 +932,32 @@ public class ClientExtendTools{
 			initRedisDefaultInstance(token);
 			subscriber = RedisFactory.getSubscriber();
 		}else{
-			Map<MQParam, String> redisParam = getRedisParameters(token);
-			URI uri = URI.create(redisParam.get(MQParam.REDIS_URI));
-			subscriber = RedisFactory.getSubscriber(JedisPoolLazy.getInstance(uri));
+			Map<MQParam, String> redisParam = getRedisParametersLazy(token);
+			subscriber = RedisFactory.getSubscriber(JedisPoolLazy.getInstanceByURI(redisParam.get(MQParam.REDIS_URI)));
 		}
 		subscriber.register(ServiceHeartbeatAdapter.SERVICE_HB_CHANNEL);
 		addServiceEventListener(tokenRefreshListener);
+		addServiceEventListener(dispatcherListener);
 		return this;
+	}
+	private String taskQueueOf(String task,Token token) {	
+		checkArgument(token != null,"token is null");
+		try {
+			return syncInstance != null 
+					? syncInstance.taskQueueOf(task, token)
+					: asyncInstance.taskQueueOf(task,token).get();
+	    } catch (ExecutionException e) {
+	        Throwables.throwIfUnchecked(e.getCause());
+	        throw new RuntimeException(e.getCause());
+		} catch(Exception e){
+	        Throwables.throwIfUnchecked(e);
+	        throw new RuntimeException(e);
+	    }
+	}
+	public ParameterSupplier<String> getTaskQueueSupplier(String task,Token token){
+		return new TaskQueueSupplier(task,token);
+	}
+	public ParameterSupplier<String> getSdkTaskQueueSupplier(String task,String sdkVersion,Token token){
+		return new TaskQueueSupplier(checkNotNull(task,"task is null") + checkNotNull(sdkVersion,"sdkVersion is null"),token);
 	}
 }

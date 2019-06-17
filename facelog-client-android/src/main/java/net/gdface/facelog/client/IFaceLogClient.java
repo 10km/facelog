@@ -1,6 +1,5 @@
 package net.gdface.facelog.client;
 
-import java.lang.reflect.Proxy;
 import java.net.URI;
 import java.net.URL;
 import java.util.List;
@@ -10,33 +9,26 @@ import com.google.common.base.Supplier;
 
 import gu.dtalk.MenuItem;
 import gu.dtalk.client.CmdManager;
+import gu.dtalk.client.TaskManager;
 import gu.dtalk.engine.BaseDispatcher;
+import gu.dtalk.engine.TaskDispatcher;
 import gu.simplemq.redis.JedisPoolLazy;
 import net.gdface.facelog.IFaceLog;
 import net.gdface.facelog.IFaceLogDecorator;
 import net.gdface.facelog.MQParam;
 import net.gdface.facelog.Token;
+import net.gdface.facelog.client.ClientExtendTools.ParameterSupplier;
 import net.gdface.facelog.client.dtalk.DtalkEngineForFacelog;
 import net.gdface.facelog.hb.DeviceHeartbeatListener;
 import net.gdface.facelog.hb.DeviceHeartbeat;
 import net.gdface.facelog.hb.HeartbeatMonitor;
 import net.gdface.facelog.hb.ServiceHeartbeatListener;
-import net.gdface.facelog.thrift.IFaceLogThriftClient;
-import net.gdface.utils.Delegator;
 
 public class IFaceLogClient extends IFaceLogDecorator {
 	public final ClientExtendTools clientTools;
 	public IFaceLogClient(IFaceLog delegate) {
-		super(delegate);		
-		clientTools = new ClientExtendTools(unwrap(delegate,IFaceLogThriftClient.class));
-	}
-	private static <T>T unwrap(Object value,Class<T> clazz){
-		if(Proxy.isProxyClass(value.getClass())){
-			return unwrap(Proxy.getInvocationHandler(value),clazz);
-		}else if(value instanceof Delegator){
-			return unwrap(((Delegator<?>)value).delegate(),clazz);
-		}
-		return clazz.cast(value);
+		super(delegate);
+		clientTools = new ClientExtendTools(delegate);
 	}
 	/**
 	 * 如果{@code host}是本机地址则用facelog服务主机名替换
@@ -85,6 +77,16 @@ public class IFaceLogClient extends IFaceLogDecorator {
 	 */
 	public CmdManager makeCmdManager(Token token) {
 		return clientTools.makeCmdManager(token);
+	}	
+	/**
+	 * @param token
+	 * @param cmdpath 设备(菜单)命令路径
+	 * @param taskQueueSupplier
+	 * @return
+	 * @see net.gdface.facelog.client.ClientExtendTools#makeTaskManager(Token, String, Supplier)
+	 */
+	public TaskManager makeTaskManager(Token token, String cmdpath, Supplier<String> taskQueueSupplier) {
+		return clientTools.makeTaskManager(token, null, taskQueueSupplier);
 	}
 	/**
 	 * @param token
@@ -93,6 +95,15 @@ public class IFaceLogClient extends IFaceLogDecorator {
 	 */
 	public BaseDispatcher makeCmdDispatcher(Token token) {
 		return clientTools.makeCmdDispatcher(token);
+	}
+	/**
+	 * @param token
+	 * @param taskQueueSupplier
+	 * @return
+	 * @see net.gdface.facelog.client.ClientExtendTools#makeTaskDispatcher(Token, Supplier)
+	 */
+	public TaskDispatcher makeTaskDispatcher(Token token, Supplier<String> taskQueueSupplier) {
+		return clientTools.makeTaskDispatcher(token, taskQueueSupplier);
 	}
 	/**
 	 * @param token
@@ -233,5 +244,24 @@ public class IFaceLogClient extends IFaceLogDecorator {
 	public IFaceLogClient startServiceHeartbeatListener(Token token, boolean initJedisPoolLazyDefaultInstance) {
 		clientTools.startServiceHeartbeatListener(token, initJedisPoolLazyDefaultInstance);
 		return this;
+	}
+	/**
+	 * @param task
+	 * @param token
+	 * @return
+	 * @see net.gdface.facelog.client.ClientExtendTools#getTaskQueueSupplier(java.lang.String, net.gdface.facelog.Token)
+	 */
+	public ParameterSupplier<String> getTaskQueueSupplier(String task, Token token) {
+		return clientTools.getTaskQueueSupplier(task, token);
+	}
+	/**
+	 * @param task
+	 * @param sdkVersion
+	 * @param token
+	 * @return
+	 * @see net.gdface.facelog.client.ClientExtendTools#getSdkTaskQueueSupplier(java.lang.String, java.lang.String, net.gdface.facelog.Token)
+	 */
+	public ParameterSupplier<String> getSdkTaskQueueSupplier(String task, String sdkVersion, Token token) {
+		return clientTools.getSdkTaskQueueSupplier(task, sdkVersion, token);
 	}
 }
