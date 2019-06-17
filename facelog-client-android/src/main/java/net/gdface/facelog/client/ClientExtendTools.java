@@ -329,7 +329,7 @@ public class ClientExtendTools{
     				return new BaseDispatcher(deviceId, ReqCmdType.TASKQUEUE, null)
     						.setGroupIdSupplier(this.getDeviceGroupIdSupplier(deviceId))
     						.setCmdSnValidator(cmdSnValidator)
-    						.register(pameters.get(MQParam.CMD_CHANNEL));
+    						.register();
     	} catch (ExecutionException e) {
     		Throwables.throwIfUnchecked(e.getCause());
     		throw new RuntimeException(e.getCause());

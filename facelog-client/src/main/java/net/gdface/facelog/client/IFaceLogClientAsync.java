@@ -18,6 +18,7 @@ import gu.dtalk.engine.TaskDispatcher;
 import gu.simplemq.redis.JedisPoolLazy;
 import net.gdface.facelog.MQParam;
 import net.gdface.facelog.Token;
+import net.gdface.facelog.client.ClientExtendTools.ParameterSupplier;
 import net.gdface.facelog.client.dtalk.DtalkEngineForFacelog;
 import net.gdface.facelog.hb.DeviceHeartbeatListener;
 import net.gdface.facelog.hb.DeviceHeartbeat;
@@ -81,12 +82,13 @@ public class IFaceLogClientAsync extends IFaceLogThriftClientAsync {
 	}
 	/**
 	 * @param token
+	 * @param cmdpath 设备(菜单)命令路径
 	 * @param taskQueueSupplier
 	 * @return
-	 * @see net.gdface.facelog.client.ClientExtendTools#makeTaskManager(Token, Supplier)
+	 * @see net.gdface.facelog.client.ClientExtendTools#makeTaskManager(Token, String, Supplier)
 	 */
-	public TaskManager makeTaskManager(Token token, Supplier<String> taskQueueSupplier) {
-		return clientTools.makeTaskManager(token, taskQueueSupplier);
+	public TaskManager makeTaskManager(Token token, String cmdpath, Supplier<String> taskQueueSupplier) {
+		return clientTools.makeTaskManager(token, null, taskQueueSupplier);
 	}
 	/**
 	 * @param token
@@ -98,12 +100,12 @@ public class IFaceLogClientAsync extends IFaceLogThriftClientAsync {
 	}
 	/**
 	 * @param token
-	 * @param taskQueue
+	 * @param taskQueueSupplier
 	 * @return
-	 * @see net.gdface.facelog.client.ClientExtendTools#makeTaskDispatcher(Token, String)
+	 * @see net.gdface.facelog.client.ClientExtendTools#makeTaskDispatcher(Token, Supplier)
 	 */
-	public TaskDispatcher makeTaskDispatcher(Token token, String taskQueue) {
-		return clientTools.makeTaskDispatcher(token, taskQueue);
+	protected TaskDispatcher makeTaskDispatcher(Token token, Supplier<String> taskQueueSupplier) {
+		return clientTools.makeTaskDispatcher(token, taskQueueSupplier);
 	}
 	/**
 	 * @param token
@@ -233,5 +235,24 @@ public class IFaceLogClientAsync extends IFaceLogThriftClientAsync {
 	public IFaceLogClientAsync startServiceHeartbeatListener(Token token, boolean initJedisPoolLazyDefaultInstance) {
 		clientTools.startServiceHeartbeatListener(token, initJedisPoolLazyDefaultInstance);
 		return this;
+	}
+	/**
+	 * @param task
+	 * @param token
+	 * @return
+	 * @see net.gdface.facelog.client.ClientExtendTools#getTaskQueueSupplier(java.lang.String, net.gdface.facelog.Token)
+	 */
+	public ParameterSupplier<String> getTaskQueueSupplier(String task, Token token) {
+		return clientTools.getTaskQueueSupplier(task, token);
+	}
+	/**
+	 * @param task
+	 * @param sdkVersion
+	 * @param token
+	 * @return
+	 * @see net.gdface.facelog.client.ClientExtendTools#getSdkTaskQueueSupplier(java.lang.String, java.lang.String, net.gdface.facelog.Token)
+	 */
+	public ParameterSupplier<String> getSdkTaskQueueSupplier(String task, String sdkVersion, Token token) {
+		return clientTools.getSdkTaskQueueSupplier(task, sdkVersion, token);
 	}
 }

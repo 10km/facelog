@@ -90,7 +90,7 @@ public class DeviceCmdTest implements ChannelConstant{
 		facelogClient.makeCmdDispatcher(deviceToken)
 			.setItemAdapter(engine.getItemAdapter())
 			/** 程序退出时自动注销设备命令频道 */
-			.autoUnregisterAll();
+			.autoUnregister();
 	}
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
