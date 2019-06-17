@@ -86,7 +86,7 @@ public class IFaceLogClient extends IFaceLogDecorator {
 	 * @see net.gdface.facelog.client.ClientExtendTools#makeTaskManager(Token, String, Supplier)
 	 */
 	public TaskManager makeTaskManager(Token token, String cmdpath, Supplier<String> taskQueueSupplier) {
-		return clientTools.makeTaskManager(token, null, taskQueueSupplier);
+		return clientTools.makeTaskManager(token, cmdpath, taskQueueSupplier);
 	}
 	/**
 	 * @param token

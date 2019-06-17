@@ -52,7 +52,6 @@ public class DeviceCmdTest implements ChannelConstant{
 		rootToken = facelogClient.applyRootToken("guyadong", false);
 		byte[] address = new byte[]{0x20,0x20,0x20,0x20,0x20,0x20};
 		device = DeviceBean.builder().mac(NetworkUtil.formatMac(address, null)).serialNo("12322333").usedSdks("MTFSDKARM512").build();
-
 		logger.info(device.toString(true,false));
 		// 注册设备 
 		device = facelogClient.registerDevice(device);
