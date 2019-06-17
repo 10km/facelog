@@ -2,6 +2,7 @@ package net.gdface.facelog.client;
 
 import static com.google.common.base.Preconditions.*;
 
+import java.io.Closeable;
 import java.lang.reflect.Proxy;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -143,7 +144,7 @@ public class ClientExtendTools{
 			}
 		}*/
 	}
-	public static interface ParameterSupplier<T> extends Supplier<T>{
+	public static interface ParameterSupplier<T> extends Supplier<T>,Closeable{
 		public Object key();
 	}
 	private class RedisParameterSupplier implements ParameterSupplier<String>{
@@ -161,14 +162,18 @@ public class ClientExtendTools{
 		public Object key(){
 			return mqParam;
 		}
+		@Override
+		public void close() {
+		}
 	}
 	private class TaskQueueSupplier extends BaseServiceHeartbeatListener implements ParameterSupplier<String>{
 		private final String task;
 		private final Token token;
-		private String taskQueue = null;
+		protected String taskQueue = null;
 		private TaskQueueSupplier(String task,Token token) {
 			this.task = checkNotNull(task,"task is null");
 			this.token = checkNotNull(token,"token is null");
+			addServiceEventListener(this);
 		}
 		@Override
 		public String get() {
@@ -187,33 +192,13 @@ public class ClientExtendTools{
 			taskQueue = taskQueueOf(task,token);
 			return true;
 		}
-	}
-	private class SdkTaskQueueSupplier extends BaseServiceHeartbeatListener implements ParameterSupplier<String>{
-		private final String task;
-		private final String sdkVersion;
-		private final Token token;
-		private String taskQueue;
-
-		private SdkTaskQueueSupplier(String task,String sdkVersion,Token token) {
-			this.task = checkNotNull(task,"task is null");
-			this.sdkVersion = checkNotNull(sdkVersion,"sdkVersion is null");
-			this.token = checkNotNull(token,"token is null");
-		}
+		/**
+		 * 当对象不再被需要时，执行此方法将其从服务心跳侦听器列表中删除
+		 * @see java.io.Closeable#close()
+		 */
 		@Override
-		public String get() {
-			if(taskQueue == null){
-				doServiceOnline(null);
-			}
-			return taskQueue;
-		}
-		@Override
-		public Object key(){
-			return sdkVersion;
-		}		
-		@Override
-		protected boolean doServiceOnline(ServiceHeartbeatPackage heartbeatPackage) {
-			taskQueue = sdkTaskQueueOf(task,sdkVersion,token);
-			return true;
+		public void close() {
+			removeServiceEventListener(this);			
 		}
 	}
 	private static <T>T unwrap(Object value,Class<T> clazz){
@@ -969,24 +954,10 @@ public class ClientExtendTools{
 	        throw new RuntimeException(e);
 	    }
 	}
-	private String sdkTaskQueueOf(String task,String sdkVersion,Token token) {	
-		checkArgument(token != null,"token is null");
-		try {
-			return syncInstance != null 
-					? syncInstance.sdkTaskQueueOf(task,sdkVersion, token)
-					: asyncInstance.sdkTaskQueueOf(task,sdkVersion,token).get();
-	    } catch (ExecutionException e) {
-	        Throwables.throwIfUnchecked(e.getCause());
-	        throw new RuntimeException(e.getCause());
-		} catch(Exception e){
-	        Throwables.throwIfUnchecked(e);
-	        throw new RuntimeException(e);
-	    }
-	}
 	public ParameterSupplier<String> getTaskQueueSupplier(String task,Token token){
 		return new TaskQueueSupplier(task,token);
 	}
 	public ParameterSupplier<String> getSdkTaskQueueSupplier(String task,String sdkVersion,Token token){
-		return new SdkTaskQueueSupplier(task,sdkVersion,token);
+		return new TaskQueueSupplier(checkNotNull(task,"task is null") + checkNotNull(sdkVersion,"sdkVersion is null"),token);
 	}
 }
