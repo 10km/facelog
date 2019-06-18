@@ -1176,12 +1176,12 @@ public interface IFaceLog{
 	/**
 	 * 申请一个唯一的命令响应通道<br>
 	 * <br>{@code PERSON_ONLY}
-	 * @param token 访问令牌
 	 * @param duration 通道有效时间(秒) 大于0有效,否则使用默认的有效期
+	 * @param token 访问令牌
 	 * @return
 	 */
 	@DeriveMethod(methodSuffix="WithDuration")
-	public String applyAckChannel(Token token, long duration);
+	public String applyAckChannel(int duration, Token token);
 	/**
 	 * 申请一个唯一的命令序列号
 	 * <br>{@code PERSON_ONLY}

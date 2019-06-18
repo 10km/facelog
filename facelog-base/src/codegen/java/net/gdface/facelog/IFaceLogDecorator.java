@@ -242,13 +242,13 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
-    public String applyAckChannel (Token token) {
-        return delegate().applyAckChannel(token);
+    public String applyAckChannel (int duration,Token token) {
+        return delegate().applyAckChannel(duration,token);
     }
 
     @Override
-    public String applyAckChannel (Token token,long duration) {
-        return delegate().applyAckChannel(token,duration);
+    public String applyAckChannel (Token token) {
+        return delegate().applyAckChannel(token);
     }
 
     @Override

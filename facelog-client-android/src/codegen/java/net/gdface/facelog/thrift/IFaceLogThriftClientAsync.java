@@ -548,6 +548,31 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(addPermit(deviceGroup,personGroup,token), callback);
     }
     /**
+     * see also {@link net.gdface.facelog.IFaceLog#applyAckChannel(int,net.gdface.facelog.Token)}
+     */
+    public ListenableFuture<String> applyAckChannel(int duration,
+        Token token){
+        MethodCallback<String,String> nativeCallback = 
+            new MethodCallback<String,String>(
+                new Function<String,String>() {
+                        @Override
+                        public String apply(String input) {
+                            return input;
+                }});
+        nativeCallback.service.applyAckChannelWithDuration(
+                duration,
+            TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
+    }
+    public void applyAckChannel(int duration,
+        Token token,
+        FutureCallback<String>callback){
+        factory.addCallback(applyAckChannel(duration,token), callback);
+    }
+    /**
      * see also {@link net.gdface.facelog.IFaceLog#applyAckChannel(net.gdface.facelog.Token)}
      */
     public ListenableFuture<String> applyAckChannel(Token token){
@@ -568,31 +593,6 @@ public class IFaceLogThriftClientAsync {
     public void applyAckChannel(Token token,
         FutureCallback<String>callback){
         factory.addCallback(applyAckChannel(token), callback);
-    }
-    /**
-     * see also {@link net.gdface.facelog.IFaceLog#applyAckChannel(net.gdface.facelog.Token,long)}
-     */
-    public ListenableFuture<String> applyAckChannel(Token token,
-        long duration){
-        MethodCallback<String,String> nativeCallback = 
-            new MethodCallback<String,String>(
-                new Function<String,String>() {
-                        @Override
-                        public String apply(String input) {
-                            return input;
-                }});
-        nativeCallback.service.applyAckChannelWithDuration(
-                TypeTransformer.getInstance().to(
-                    token,
-                    Token.class,
-                    net.gdface.facelog.client.thrift.Token.class),
-            duration,nativeCallback);
-        return nativeCallback.feature;
-    }
-    public void applyAckChannel(Token token,
-        long duration,
-        FutureCallback<String>callback){
-        factory.addCallback(applyAckChannel(token,duration), callback);
     }
     /**
      * see also {@link net.gdface.facelog.IFaceLog#applyCmdSn(net.gdface.facelog.Token)}

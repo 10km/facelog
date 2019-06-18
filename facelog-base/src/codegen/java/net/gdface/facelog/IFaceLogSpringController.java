@@ -376,6 +376,30 @@ public class IFaceLogSpringController {
     }
     // port-11
     /**
+     * 申请一个唯一的命令响应通道<br>
+     * <br>{@code PERSON_ONLY}
+     * @param duration 通道有效时间(秒) 大于0有效,否则使用默认的有效期
+     * @param token 访问令牌
+     * @return 
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/applyAckChannelWithDuration", method = RequestMethod.POST)
+    @ApiOperation(value = "申请一个唯一的命令响应通道<br>\n"
++" <br>{@code PERSON_ONLY}",httpMethod="POST")
+    public Response applyAckChannel( @RequestBody ApplyAckChannelWithDurationArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().applyAckChannel(args.duration,args.token));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // port-12
+    /**
      * 申请一个唯一的命令响应通道(默认有效期)<br>
      * <br>{@code PERSON_ONLY}
      * @param token 访问令牌
@@ -390,30 +414,6 @@ public class IFaceLogSpringController {
             Response response = responseFactory.newIFaceLogResponse();
             try{
                 response.onComplete(delegate().applyAckChannel(args.token));
-            }
-            catch(Exception e){
-                logger.error(e.getMessage(),e);
-                response.onError(e);
-            }
-            return response;
-    }
-    // port-12
-    /**
-     * 申请一个唯一的命令响应通道<br>
-     * <br>{@code PERSON_ONLY}
-     * @param token 访问令牌
-     * @param duration 通道有效时间(秒) 大于0有效,否则使用默认的有效期
-     * @return 
-     */
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/applyAckChannelWithDuration", method = RequestMethod.POST)
-    @ApiOperation(value = "申请一个唯一的命令响应通道<br>\n"
-+" <br>{@code PERSON_ONLY}",httpMethod="POST")
-    public Response applyAckChannel( @RequestBody ApplyAckChannelWithDurationArgs args) 
-    {
-            Response response = responseFactory.newIFaceLogResponse();
-            try{
-                response.onComplete(delegate().applyAckChannel(args.token,args.duration));
             }
             catch(Exception e){
                 logger.error(e.getMessage(),e);
@@ -3825,21 +3825,21 @@ public class IFaceLogSpringController {
     }
     /**
      * argClass-11<br>
-     * wrap arguments for method {@link #applyAckChannel(ApplyAckChannelArgs)}
+     * wrap arguments for method {@link #applyAckChannel(ApplyAckChannelWithDurationArgs)}
      */
-    public static class ApplyAckChannelArgs{
+    public static class ApplyAckChannelWithDurationArgs{
+        @ApiModelProperty(value ="通道有效时间(秒) 大于0有效,否则使用默认的有效期" ,required=true ,dataType="int")
+        public int duration;
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
     /**
      * argClass-12<br>
-     * wrap arguments for method {@link #applyAckChannel(ApplyAckChannelWithDurationArgs)}
+     * wrap arguments for method {@link #applyAckChannel(ApplyAckChannelArgs)}
      */
-    public static class ApplyAckChannelWithDurationArgs{
+    public static class ApplyAckChannelArgs{
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
-        @ApiModelProperty(value ="通道有效时间(秒) 大于0有效,否则使用默认的有效期" ,required=true ,dataType="long")
-        public long duration;
     }
     /**
      * argClass-13<br>

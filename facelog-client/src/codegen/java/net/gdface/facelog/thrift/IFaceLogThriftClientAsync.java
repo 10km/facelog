@@ -431,6 +431,24 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(addPermit(deviceGroup,personGroup,token), callback);
     }
     /**
+     * see also {@link net.gdface.facelog.IFaceLog#applyAckChannel(int,net.gdface.facelog.Token)}
+     */
+    public ListenableFuture<String> applyAckChannel(int duration,
+        Token token){        
+        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
+        ListenableFuture<String> future = async.applyAckChannelWithDuration(duration,
+            TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class));
+        return factory.wrap(async,future);
+    }
+    public void applyAckChannel(int duration,
+        Token token,
+        FutureCallback<String>callback){
+        factory.addCallback(applyAckChannel(duration,token), callback);
+    }
+    /**
      * see also {@link net.gdface.facelog.IFaceLog#applyAckChannel(net.gdface.facelog.Token)}
      */
     public ListenableFuture<String> applyAckChannel(Token token){        
@@ -444,24 +462,6 @@ public class IFaceLogThriftClientAsync {
     public void applyAckChannel(Token token,
         FutureCallback<String>callback){
         factory.addCallback(applyAckChannel(token), callback);
-    }
-    /**
-     * see also {@link net.gdface.facelog.IFaceLog#applyAckChannel(net.gdface.facelog.Token,long)}
-     */
-    public ListenableFuture<String> applyAckChannel(Token token,
-        long duration){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<String> future = async.applyAckChannelWithDuration(TypeTransformer.getInstance().to(
-                    token,
-                    Token.class,
-                    net.gdface.facelog.client.thrift.Token.class),
-            duration);
-        return factory.wrap(async,future);
-    }
-    public void applyAckChannel(Token token,
-        long duration,
-        FutureCallback<String>callback){
-        factory.addCallback(applyAckChannel(token,duration), callback);
     }
     /**
      * see also {@link net.gdface.facelog.IFaceLog#applyCmdSn(net.gdface.facelog.Token)}

@@ -144,8 +144,8 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
         ListenableFuture<String> applyAckChannelWithDuration(
-            @ThriftField(value=1, name="token", requiredness=Requiredness.OPTIONAL) final Token token,
-            @ThriftField(value=2, name="duration", requiredness=Requiredness.REQUIRED) final long duration
+            @ThriftField(value=1, name="duration", requiredness=Requiredness.REQUIRED) final int duration,
+            @ThriftField(value=2, name="token", requiredness=Requiredness.OPTIONAL) final Token token
         );
 
         @ThriftMethod(value = "applyCmdSn",
@@ -1496,8 +1496,8 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
     String applyAckChannelWithDuration(
-        @ThriftField(value=1, name="token", requiredness=Requiredness.OPTIONAL) final Token token,
-        @ThriftField(value=2, name="duration", requiredness=Requiredness.REQUIRED) final long duration
+        @ThriftField(value=1, name="duration", requiredness=Requiredness.REQUIRED) final int duration,
+        @ThriftField(value=2, name="token", requiredness=Requiredness.OPTIONAL) final Token token
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "applyCmdSn",

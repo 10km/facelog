@@ -410,11 +410,13 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
-    public String applyAckChannel(Token token) 
+    public String applyAckChannel(int duration,
+        Token token) 
         {
         net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
         try{
-            return instance.applyAckChannel(TypeTransformer.getInstance().to(
+            return instance.applyAckChannelWithDuration(duration,
+                TypeTransformer.getInstance().to(
                     token,
                     Token.class,
                     net.gdface.facelog.client.thrift.Token.class));
@@ -430,16 +432,14 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
-    public String applyAckChannel(Token token,
-        long duration) 
+    public String applyAckChannel(Token token) 
         {
         net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
         try{
-            return instance.applyAckChannelWithDuration(TypeTransformer.getInstance().to(
+            return instance.applyAckChannel(TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.client.thrift.Token.class),
-                duration);
+                    net.gdface.facelog.client.thrift.Token.class));
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);

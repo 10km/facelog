@@ -493,19 +493,19 @@ public class ClientExtendTools{
     }
     /**
      * 返回一个申请命令响应通道的{@link Supplier}实例
-     * @param token 访问令牌
      * @param duration 命令通道有效时间(秒) 大于0有效,否则使用默认的有效期
+     * @param token 访问令牌
      * @return
      */
     public Supplier<String> 
-    getAckChannelSupplier(final Token token,final long duration){
+    getAckChannelSupplier(final int duration,final Token token){
         return new Supplier<String>(){
             @Override
             public String get() {
                 try{
                     return syncInstance != null 
-                    		? syncInstance.applyAckChannel(token,duration) 
-                    		: asyncInstance.applyAckChannel(token, duration).get();
+                    		? syncInstance.applyAckChannel(duration,token) 
+                    		: asyncInstance.applyAckChannel(duration,token).get();
                 } catch (ExecutionException e) {
         	        Throwables.throwIfUnchecked(e.getCause());
         	        throw new RuntimeException(e.getCause());
@@ -523,7 +523,7 @@ public class ClientExtendTools{
      */
     public Supplier<String> 
     getAckChannelSupplier(final Token token){
-        return getAckChannelSupplier(token,0L);
+        return getAckChannelSupplier(0,token);
     }
     /**
      * 返回一个申请命令序号的{@code Supplier}实例

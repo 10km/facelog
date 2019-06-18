@@ -416,13 +416,15 @@ public class IFaceLogThriftDecorator {
         }
     }
     /**
-     * @see {@link net.gdface.facelog.IFaceLog#applyAckChannel(net.gdface.facelog.Token)}
+     * @see {@link net.gdface.facelog.IFaceLog#applyAckChannel(int,net.gdface.facelog.Token)}
      */
-    @ThriftMethod(value = "applyAckChannel" )
-    public String applyAckChannel(Token token) 
+    @ThriftMethod(value = "applyAckChannelWithDuration" )
+    public String applyAckChannelWithDuration(int duration,
+        Token token) 
         throws ServiceRuntimeException{
         try{
-            return delegate().applyAckChannel(TypeTransformer.getInstance().to(
+            return delegate().applyAckChannel(duration,
+                TypeTransformer.getInstance().to(
                     token,
                     Token.class,
                     net.gdface.facelog.Token.class));
@@ -435,18 +437,16 @@ public class IFaceLogThriftDecorator {
         }
     }
     /**
-     * @see {@link net.gdface.facelog.IFaceLog#applyAckChannel(net.gdface.facelog.Token,long)}
+     * @see {@link net.gdface.facelog.IFaceLog#applyAckChannel(net.gdface.facelog.Token)}
      */
-    @ThriftMethod(value = "applyAckChannelWithDuration" )
-    public String applyAckChannelWithDuration(Token token,
-        long duration) 
+    @ThriftMethod(value = "applyAckChannel" )
+    public String applyAckChannel(Token token) 
         throws ServiceRuntimeException{
         try{
             return delegate().applyAckChannel(TypeTransformer.getInstance().to(
                     token,
                     Token.class,
-                    net.gdface.facelog.Token.class),
-                duration);
+                    net.gdface.facelog.Token.class));
         }
         catch(ServiceRuntimeException e){
             throw e;

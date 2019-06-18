@@ -1549,10 +1549,10 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 	}
     @Override
     public String applyAckChannel(Token token) {
-    	return applyAckChannel(token,0L);
+    	return applyAckChannel(0,token);
 	}
     @Override
-    public String applyAckChannel(Token token, long duration) {
+    public String applyAckChannel(int duration, Token token) {
     	try {
     		Enable.PERSON_ONLY.check(tm, token);
 			return tm.applyAckChannel(token.getId(), duration);

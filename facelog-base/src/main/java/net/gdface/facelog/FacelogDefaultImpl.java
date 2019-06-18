@@ -656,7 +656,7 @@ public class FacelogDefaultImpl implements IFaceLog {
 	}
 
 	@Override
-	public String applyAckChannel(Token token, long duration) {
+	public String applyAckChannel(int duration, Token token) {
 		return null;
 	}
 

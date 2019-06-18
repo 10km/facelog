@@ -108,13 +108,13 @@ public class IFaceLogClientAsync extends IFaceLogThriftClientAsync {
 		return clientTools.makeTaskDispatcher(token, taskQueueSupplier);
 	}
 	/**
-	 * @param token
 	 * @param duration
+	 * @param token
 	 * @return
-	 * @see net.gdface.facelog.client.ClientExtendTools#getAckChannelSupplier(net.gdface.facelog.Token, long)
+	 * @see net.gdface.facelog.client.ClientExtendTools#getAckChannelSupplier(int, net.gdface.facelog.Token)
 	 */
-	public Supplier<String> getAckChannelSupplier(Token token, long duration) {
-		return clientTools.getAckChannelSupplier(token, duration);
+	public Supplier<String> getAckChannelSupplier(int duration, Token token) {
+		return clientTools.getAckChannelSupplier(duration,token);
 	}
 	/**
 	 * @param token

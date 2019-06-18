@@ -2076,16 +2076,16 @@ IFaceLog_applyAckChannel_result.prototype.write = function(output) {
 };
 
 var IFaceLog_applyAckChannelWithDuration_args = function(args) {
-  this.token = null;
   this.duration = null;
+  this.token = null;
   if (args) {
-    if (args.token !== undefined && args.token !== null) {
-      this.token = new ttypes.Token(args.token);
-    }
     if (args.duration !== undefined && args.duration !== null) {
       this.duration = args.duration;
     } else {
       throw new Thrift.TProtocolException(Thrift.TProtocolExceptionType.UNKNOWN, 'Required field duration is unset!');
+    }
+    if (args.token !== undefined && args.token !== null) {
+      this.token = new ttypes.Token(args.token);
     }
   }
 };
@@ -2104,16 +2104,16 @@ IFaceLog_applyAckChannelWithDuration_args.prototype.read = function(input) {
     switch (fid)
     {
       case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.token = new ttypes.Token();
-        this.token.read(input);
+      if (ftype == Thrift.Type.I32) {
+        this.duration = input.readI32();
       } else {
         input.skip(ftype);
       }
       break;
       case 2:
-      if (ftype == Thrift.Type.I64) {
-        this.duration = input.readI64();
+      if (ftype == Thrift.Type.STRUCT) {
+        this.token = new ttypes.Token();
+        this.token.read(input);
       } else {
         input.skip(ftype);
       }
@@ -2129,14 +2129,14 @@ IFaceLog_applyAckChannelWithDuration_args.prototype.read = function(input) {
 
 IFaceLog_applyAckChannelWithDuration_args.prototype.write = function(output) {
   output.writeStructBegin('IFaceLog_applyAckChannelWithDuration_args');
-  if (this.token !== null && this.token !== undefined) {
-    output.writeFieldBegin('token', Thrift.Type.STRUCT, 1);
-    this.token.write(output);
+  if (this.duration !== null && this.duration !== undefined) {
+    output.writeFieldBegin('duration', Thrift.Type.I32, 1);
+    output.writeI32(this.duration);
     output.writeFieldEnd();
   }
-  if (this.duration !== null && this.duration !== undefined) {
-    output.writeFieldBegin('duration', Thrift.Type.I64, 2);
-    output.writeI64(this.duration);
+  if (this.token !== null && this.token !== undefined) {
+    output.writeFieldBegin('token', Thrift.Type.STRUCT, 2);
+    this.token.write(output);
     output.writeFieldEnd();
   }
   output.writeFieldStop();
@@ -20889,6 +20889,160 @@ IFaceLog_saveServiceConfig_result.prototype.write = function(output) {
   return;
 };
 
+var IFaceLog_sdkTaskQueueOf_args = function(args) {
+  this.task = null;
+  this.sdkVersion = null;
+  this.token = null;
+  if (args) {
+    if (args.task !== undefined && args.task !== null) {
+      this.task = args.task;
+    }
+    if (args.sdkVersion !== undefined && args.sdkVersion !== null) {
+      this.sdkVersion = args.sdkVersion;
+    }
+    if (args.token !== undefined && args.token !== null) {
+      this.token = new ttypes.Token(args.token);
+    }
+  }
+};
+IFaceLog_sdkTaskQueueOf_args.prototype = {};
+IFaceLog_sdkTaskQueueOf_args.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+      if (ftype == Thrift.Type.STRING) {
+        this.task = input.readString();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 2:
+      if (ftype == Thrift.Type.STRING) {
+        this.sdkVersion = input.readString();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 3:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.token = new ttypes.Token();
+        this.token.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+IFaceLog_sdkTaskQueueOf_args.prototype.write = function(output) {
+  output.writeStructBegin('IFaceLog_sdkTaskQueueOf_args');
+  if (this.task !== null && this.task !== undefined) {
+    output.writeFieldBegin('task', Thrift.Type.STRING, 1);
+    output.writeString(this.task);
+    output.writeFieldEnd();
+  }
+  if (this.sdkVersion !== null && this.sdkVersion !== undefined) {
+    output.writeFieldBegin('sdkVersion', Thrift.Type.STRING, 2);
+    output.writeString(this.sdkVersion);
+    output.writeFieldEnd();
+  }
+  if (this.token !== null && this.token !== undefined) {
+    output.writeFieldBegin('token', Thrift.Type.STRUCT, 3);
+    this.token.write(output);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+var IFaceLog_sdkTaskQueueOf_result = function(args) {
+  this.success = null;
+  this.ex1 = null;
+  if (args instanceof ttypes.ServiceRuntimeException) {
+    this.ex1 = args;
+    return;
+  }
+  if (args) {
+    if (args.success !== undefined && args.success !== null) {
+      this.success = args.success;
+    }
+    if (args.ex1 !== undefined && args.ex1 !== null) {
+      this.ex1 = args.ex1;
+    }
+  }
+};
+IFaceLog_sdkTaskQueueOf_result.prototype = {};
+IFaceLog_sdkTaskQueueOf_result.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+      if (ftype == Thrift.Type.STRING) {
+        this.success = input.readString();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 1:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.ex1 = new ttypes.ServiceRuntimeException();
+        this.ex1.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+IFaceLog_sdkTaskQueueOf_result.prototype.write = function(output) {
+  output.writeStructBegin('IFaceLog_sdkTaskQueueOf_result');
+  if (this.success !== null && this.success !== undefined) {
+    output.writeFieldBegin('success', Thrift.Type.STRING, 0);
+    output.writeString(this.success);
+    output.writeFieldEnd();
+  }
+  if (this.ex1 !== null && this.ex1 !== undefined) {
+    output.writeFieldBegin('ex1', Thrift.Type.STRUCT, 1);
+    this.ex1.write(output);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
 var IFaceLog_setPersonExpiryDate_args = function(args) {
   this.personId = null;
   this.expiryDate = null;
@@ -21758,144 +21912,6 @@ IFaceLog_taskQueueOf_result.prototype.read = function(input) {
 
 IFaceLog_taskQueueOf_result.prototype.write = function(output) {
   output.writeStructBegin('IFaceLog_taskQueueOf_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRING, 0);
-    output.writeString(this.success);
-    output.writeFieldEnd();
-  }
-  if (this.ex1 !== null && this.ex1 !== undefined) {
-    output.writeFieldBegin('ex1', Thrift.Type.STRUCT, 1);
-    this.ex1.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-var IFaceLog_taskRegister_args = function(args) {
-  this.task = null;
-  this.token = null;
-  if (args) {
-    if (args.task !== undefined && args.task !== null) {
-      this.task = args.task;
-    }
-    if (args.token !== undefined && args.token !== null) {
-      this.token = new ttypes.Token(args.token);
-    }
-  }
-};
-IFaceLog_taskRegister_args.prototype = {};
-IFaceLog_taskRegister_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.task = input.readString();
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.token = new ttypes.Token();
-        this.token.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-IFaceLog_taskRegister_args.prototype.write = function(output) {
-  output.writeStructBegin('IFaceLog_taskRegister_args');
-  if (this.task !== null && this.task !== undefined) {
-    output.writeFieldBegin('task', Thrift.Type.STRING, 1);
-    output.writeString(this.task);
-    output.writeFieldEnd();
-  }
-  if (this.token !== null && this.token !== undefined) {
-    output.writeFieldBegin('token', Thrift.Type.STRUCT, 2);
-    this.token.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-var IFaceLog_taskRegister_result = function(args) {
-  this.success = null;
-  this.ex1 = null;
-  if (args instanceof ttypes.ServiceRuntimeException) {
-    this.ex1 = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined && args.success !== null) {
-      this.success = args.success;
-    }
-    if (args.ex1 !== undefined && args.ex1 !== null) {
-      this.ex1 = args.ex1;
-    }
-  }
-};
-IFaceLog_taskRegister_result.prototype = {};
-IFaceLog_taskRegister_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRING) {
-        this.success = input.readString();
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.ex1 = new ttypes.ServiceRuntimeException();
-        this.ex1.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-IFaceLog_taskRegister_result.prototype.write = function(output) {
-  output.writeStructBegin('IFaceLog_taskRegister_result');
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.STRING, 0);
     output.writeString(this.success);
@@ -23164,7 +23180,7 @@ IFaceLogClient.prototype.recv_applyAckChannel = function(input,mtype,rseqid) {
   }
   return callback('applyAckChannel failed: unknown result');
 };
-IFaceLogClient.prototype.applyAckChannelWithDuration = function(token, duration, callback) {
+IFaceLogClient.prototype.applyAckChannelWithDuration = function(duration, token, callback) {
   this._seqid = this.new_seqid();
   if (callback === undefined) {
     var _defer = Q.defer();
@@ -23175,20 +23191,20 @@ IFaceLogClient.prototype.applyAckChannelWithDuration = function(token, duration,
         _defer.resolve(result);
       }
     };
-    this.send_applyAckChannelWithDuration(token, duration);
+    this.send_applyAckChannelWithDuration(duration, token);
     return _defer.promise;
   } else {
     this._reqs[this.seqid()] = callback;
-    this.send_applyAckChannelWithDuration(token, duration);
+    this.send_applyAckChannelWithDuration(duration, token);
   }
 };
 
-IFaceLogClient.prototype.send_applyAckChannelWithDuration = function(token, duration) {
+IFaceLogClient.prototype.send_applyAckChannelWithDuration = function(duration, token) {
   var output = new this.pClass(this.output);
   output.writeMessageBegin('applyAckChannelWithDuration', Thrift.MessageType.CALL, this.seqid());
   var params = {
-    token: token,
-    duration: duration
+    duration: duration,
+    token: token
   };
   var args = new IFaceLog_applyAckChannelWithDuration_args(params);
   args.write(output);
@@ -29900,6 +29916,60 @@ IFaceLogClient.prototype.recv_saveServiceConfig = function(input,mtype,rseqid) {
   }
   callback(null);
 };
+IFaceLogClient.prototype.sdkTaskQueueOf = function(task, sdkVersion, token, callback) {
+  this._seqid = this.new_seqid();
+  if (callback === undefined) {
+    var _defer = Q.defer();
+    this._reqs[this.seqid()] = function(error, result) {
+      if (error) {
+        _defer.reject(error);
+      } else {
+        _defer.resolve(result);
+      }
+    };
+    this.send_sdkTaskQueueOf(task, sdkVersion, token);
+    return _defer.promise;
+  } else {
+    this._reqs[this.seqid()] = callback;
+    this.send_sdkTaskQueueOf(task, sdkVersion, token);
+  }
+};
+
+IFaceLogClient.prototype.send_sdkTaskQueueOf = function(task, sdkVersion, token) {
+  var output = new this.pClass(this.output);
+  output.writeMessageBegin('sdkTaskQueueOf', Thrift.MessageType.CALL, this.seqid());
+  var params = {
+    task: task,
+    sdkVersion: sdkVersion,
+    token: token
+  };
+  var args = new IFaceLog_sdkTaskQueueOf_args(params);
+  args.write(output);
+  output.writeMessageEnd();
+  return this.output.flush();
+};
+
+IFaceLogClient.prototype.recv_sdkTaskQueueOf = function(input,mtype,rseqid) {
+  var callback = this._reqs[rseqid] || function() {};
+  delete this._reqs[rseqid];
+  if (mtype == Thrift.MessageType.EXCEPTION) {
+    var x = new Thrift.TApplicationException();
+    x.read(input);
+    input.readMessageEnd();
+    return callback(x);
+  }
+  var result = new IFaceLog_sdkTaskQueueOf_result();
+  result.read(input);
+  input.readMessageEnd();
+
+  if (null !== result.ex1) {
+    return callback(result.ex1);
+  }
+  if (null !== result.success) {
+    return callback(null, result.success);
+  }
+  return callback('sdkTaskQueueOf failed: unknown result');
+};
 IFaceLogClient.prototype.setPersonExpiryDate = function(personId, expiryDate, token, callback) {
   this._seqid = this.new_seqid();
   if (callback === undefined) {
@@ -30206,59 +30276,6 @@ IFaceLogClient.prototype.recv_taskQueueOf = function(input,mtype,rseqid) {
     return callback(null, result.success);
   }
   return callback('taskQueueOf failed: unknown result');
-};
-IFaceLogClient.prototype.taskRegister = function(task, token, callback) {
-  this._seqid = this.new_seqid();
-  if (callback === undefined) {
-    var _defer = Q.defer();
-    this._reqs[this.seqid()] = function(error, result) {
-      if (error) {
-        _defer.reject(error);
-      } else {
-        _defer.resolve(result);
-      }
-    };
-    this.send_taskRegister(task, token);
-    return _defer.promise;
-  } else {
-    this._reqs[this.seqid()] = callback;
-    this.send_taskRegister(task, token);
-  }
-};
-
-IFaceLogClient.prototype.send_taskRegister = function(task, token) {
-  var output = new this.pClass(this.output);
-  output.writeMessageBegin('taskRegister', Thrift.MessageType.CALL, this.seqid());
-  var params = {
-    task: task,
-    token: token
-  };
-  var args = new IFaceLog_taskRegister_args(params);
-  args.write(output);
-  output.writeMessageEnd();
-  return this.output.flush();
-};
-
-IFaceLogClient.prototype.recv_taskRegister = function(input,mtype,rseqid) {
-  var callback = this._reqs[rseqid] || function() {};
-  delete this._reqs[rseqid];
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(input);
-    input.readMessageEnd();
-    return callback(x);
-  }
-  var result = new IFaceLog_taskRegister_result();
-  result.read(input);
-  input.readMessageEnd();
-
-  if (null !== result.ex1) {
-    return callback(result.ex1);
-  }
-  if (null !== result.success) {
-    return callback(null, result.success);
-  }
-  return callback('taskRegister failed: unknown result');
 };
 IFaceLogClient.prototype.unbindBorder = function(personGroupId, deviceGroupId, token, callback) {
   this._seqid = this.new_seqid();
@@ -30989,7 +31006,7 @@ IFaceLogProcessor.prototype.process_applyAckChannelWithDuration = function(seqid
   args.read(input);
   input.readMessageEnd();
   if (this._handler.applyAckChannelWithDuration.length === 2) {
-    Q.fcall(this._handler.applyAckChannelWithDuration.bind(this._handler), args.token, args.duration)
+    Q.fcall(this._handler.applyAckChannelWithDuration.bind(this._handler), args.duration, args.token)
       .then(function(result) {
         var result_obj = new IFaceLog_applyAckChannelWithDuration_result({success: result});
         output.writeMessageBegin("applyAckChannelWithDuration", Thrift.MessageType.REPLY, seqid);
@@ -31010,7 +31027,7 @@ IFaceLogProcessor.prototype.process_applyAckChannelWithDuration = function(seqid
         output.flush();
       });
   } else {
-    this._handler.applyAckChannelWithDuration(args.token, args.duration, function (err, result) {
+    this._handler.applyAckChannelWithDuration(args.duration, args.token, function (err, result) {
       var result_obj;
       if ((err === null || typeof err === 'undefined') || err instanceof ttypes.ServiceRuntimeException) {
         result_obj = new IFaceLog_applyAckChannelWithDuration_result((err !== null || typeof err === 'undefined') ? err : {success: result});
@@ -36232,6 +36249,47 @@ IFaceLogProcessor.prototype.process_saveServiceConfig = function(seqid, input, o
     });
   }
 };
+IFaceLogProcessor.prototype.process_sdkTaskQueueOf = function(seqid, input, output) {
+  var args = new IFaceLog_sdkTaskQueueOf_args();
+  args.read(input);
+  input.readMessageEnd();
+  if (this._handler.sdkTaskQueueOf.length === 3) {
+    Q.fcall(this._handler.sdkTaskQueueOf.bind(this._handler), args.task, args.sdkVersion, args.token)
+      .then(function(result) {
+        var result_obj = new IFaceLog_sdkTaskQueueOf_result({success: result});
+        output.writeMessageBegin("sdkTaskQueueOf", Thrift.MessageType.REPLY, seqid);
+        result_obj.write(output);
+        output.writeMessageEnd();
+        output.flush();
+      }, function (err) {
+        var result;
+        if (err instanceof ttypes.ServiceRuntimeException) {
+          result = new IFaceLog_sdkTaskQueueOf_result(err);
+          output.writeMessageBegin("sdkTaskQueueOf", Thrift.MessageType.REPLY, seqid);
+        } else {
+          result = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
+          output.writeMessageBegin("sdkTaskQueueOf", Thrift.MessageType.EXCEPTION, seqid);
+        }
+        result.write(output);
+        output.writeMessageEnd();
+        output.flush();
+      });
+  } else {
+    this._handler.sdkTaskQueueOf(args.task, args.sdkVersion, args.token, function (err, result) {
+      var result_obj;
+      if ((err === null || typeof err === 'undefined') || err instanceof ttypes.ServiceRuntimeException) {
+        result_obj = new IFaceLog_sdkTaskQueueOf_result((err !== null || typeof err === 'undefined') ? err : {success: result});
+        output.writeMessageBegin("sdkTaskQueueOf", Thrift.MessageType.REPLY, seqid);
+      } else {
+        result_obj = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
+        output.writeMessageBegin("sdkTaskQueueOf", Thrift.MessageType.EXCEPTION, seqid);
+      }
+      result_obj.write(output);
+      output.writeMessageEnd();
+      output.flush();
+    });
+  }
+};
 IFaceLogProcessor.prototype.process_setPersonExpiryDate = function(seqid, input, output) {
   var args = new IFaceLog_setPersonExpiryDate_args();
   args.read(input);
@@ -36471,47 +36529,6 @@ IFaceLogProcessor.prototype.process_taskQueueOf = function(seqid, input, output)
       } else {
         result_obj = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
         output.writeMessageBegin("taskQueueOf", Thrift.MessageType.EXCEPTION, seqid);
-      }
-      result_obj.write(output);
-      output.writeMessageEnd();
-      output.flush();
-    });
-  }
-};
-IFaceLogProcessor.prototype.process_taskRegister = function(seqid, input, output) {
-  var args = new IFaceLog_taskRegister_args();
-  args.read(input);
-  input.readMessageEnd();
-  if (this._handler.taskRegister.length === 2) {
-    Q.fcall(this._handler.taskRegister.bind(this._handler), args.task, args.token)
-      .then(function(result) {
-        var result_obj = new IFaceLog_taskRegister_result({success: result});
-        output.writeMessageBegin("taskRegister", Thrift.MessageType.REPLY, seqid);
-        result_obj.write(output);
-        output.writeMessageEnd();
-        output.flush();
-      }, function (err) {
-        var result;
-        if (err instanceof ttypes.ServiceRuntimeException) {
-          result = new IFaceLog_taskRegister_result(err);
-          output.writeMessageBegin("taskRegister", Thrift.MessageType.REPLY, seqid);
-        } else {
-          result = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
-          output.writeMessageBegin("taskRegister", Thrift.MessageType.EXCEPTION, seqid);
-        }
-        result.write(output);
-        output.writeMessageEnd();
-        output.flush();
-      });
-  } else {
-    this._handler.taskRegister(args.task, args.token, function (err, result) {
-      var result_obj;
-      if ((err === null || typeof err === 'undefined') || err instanceof ttypes.ServiceRuntimeException) {
-        result_obj = new IFaceLog_taskRegister_result((err !== null || typeof err === 'undefined') ? err : {success: result});
-        output.writeMessageBegin("taskRegister", Thrift.MessageType.REPLY, seqid);
-      } else {
-        result_obj = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
-        output.writeMessageBegin("taskRegister", Thrift.MessageType.EXCEPTION, seqid);
       }
       result_obj.write(output);
       output.writeMessageEnd();

@@ -2075,16 +2075,16 @@ IFaceLog_applyAckChannel_result.prototype.write = function(output) {
 };
 
 IFaceLog_applyAckChannelWithDuration_args = function(args) {
-  this.token = null;
   this.duration = null;
+  this.token = null;
   if (args) {
-    if (args.token !== undefined && args.token !== null) {
-      this.token = new Token(args.token);
-    }
     if (args.duration !== undefined && args.duration !== null) {
       this.duration = args.duration;
     } else {
       throw new Thrift.TProtocolException(Thrift.TProtocolExceptionType.UNKNOWN, 'Required field duration is unset!');
+    }
+    if (args.token !== undefined && args.token !== null) {
+      this.token = new Token(args.token);
     }
   }
 };
@@ -2103,16 +2103,16 @@ IFaceLog_applyAckChannelWithDuration_args.prototype.read = function(input) {
     switch (fid)
     {
       case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.token = new Token();
-        this.token.read(input);
+      if (ftype == Thrift.Type.I32) {
+        this.duration = input.readI32().value;
       } else {
         input.skip(ftype);
       }
       break;
       case 2:
-      if (ftype == Thrift.Type.I64) {
-        this.duration = input.readI64().value;
+      if (ftype == Thrift.Type.STRUCT) {
+        this.token = new Token();
+        this.token.read(input);
       } else {
         input.skip(ftype);
       }
@@ -2128,14 +2128,14 @@ IFaceLog_applyAckChannelWithDuration_args.prototype.read = function(input) {
 
 IFaceLog_applyAckChannelWithDuration_args.prototype.write = function(output) {
   output.writeStructBegin('IFaceLog_applyAckChannelWithDuration_args');
-  if (this.token !== null && this.token !== undefined) {
-    output.writeFieldBegin('token', Thrift.Type.STRUCT, 1);
-    this.token.write(output);
+  if (this.duration !== null && this.duration !== undefined) {
+    output.writeFieldBegin('duration', Thrift.Type.I32, 1);
+    output.writeI32(this.duration);
     output.writeFieldEnd();
   }
-  if (this.duration !== null && this.duration !== undefined) {
-    output.writeFieldBegin('duration', Thrift.Type.I64, 2);
-    output.writeI64(this.duration);
+  if (this.token !== null && this.token !== undefined) {
+    output.writeFieldBegin('token', Thrift.Type.STRUCT, 2);
+    this.token.write(output);
     output.writeFieldEnd();
   }
   output.writeFieldStop();
@@ -23129,22 +23129,22 @@ IFaceLogClient.prototype.recv_applyAckChannel = function() {
   }
   throw 'applyAckChannel failed: unknown result';
 };
-IFaceLogClient.prototype.applyAckChannelWithDuration = function(token, duration, callback) {
+IFaceLogClient.prototype.applyAckChannelWithDuration = function(duration, token, callback) {
   if (callback === undefined) {
-    this.send_applyAckChannelWithDuration(token, duration);
+    this.send_applyAckChannelWithDuration(duration, token);
     return this.recv_applyAckChannelWithDuration();
   } else {
-    var postData = this.send_applyAckChannelWithDuration(token, duration, true);
+    var postData = this.send_applyAckChannelWithDuration(duration, token, true);
     return this.output.getTransport()
       .jqRequest(this, postData, arguments, this.recv_applyAckChannelWithDuration);
   }
 };
 
-IFaceLogClient.prototype.send_applyAckChannelWithDuration = function(token, duration, callback) {
+IFaceLogClient.prototype.send_applyAckChannelWithDuration = function(duration, token, callback) {
   this.output.writeMessageBegin('applyAckChannelWithDuration', Thrift.MessageType.CALL, this.seqid);
   var params = {
-    token: token,
-    duration: duration
+    duration: duration,
+    token: token
   };
   var args = new IFaceLog_applyAckChannelWithDuration_args(params);
   args.write(this.output);

@@ -29,7 +29,7 @@ public partial class IFaceLog {
     void addPermit(DeviceGroupBean deviceGroup, PersonGroupBean personGroup, Token token);
     void addPermitById(int deviceGroupId, int personGroupId, Token token);
     string applyAckChannel(Token token);
-    string applyAckChannelWithDuration(Token token, long duration);
+    string applyAckChannelWithDuration(int duration, Token token);
     long applyCmdSn(Token token);
     Token applyPersonToken(int personId, string password, bool isMd5);
     Token applyRootToken(string password, bool isMd5);
@@ -183,7 +183,7 @@ public partial class IFaceLog {
     Task addPermitAsync(DeviceGroupBean deviceGroup, PersonGroupBean personGroup, Token token);
     Task addPermitByIdAsync(int deviceGroupId, int personGroupId, Token token);
     Task<string> applyAckChannelAsync(Token token);
-    Task<string> applyAckChannelWithDurationAsync(Token token, long duration);
+    Task<string> applyAckChannelWithDurationAsync(int duration, Token token);
     Task<long> applyCmdSnAsync(Token token);
     Task<Token> applyPersonTokenAsync(int personId, string password, bool isMd5);
     Task<Token> applyRootTokenAsync(string password, bool isMd5);
@@ -348,7 +348,7 @@ public partial class IFaceLog {
     void End_addPermitById(IAsyncResult asyncResult);
     IAsyncResult Begin_applyAckChannel(AsyncCallback callback, object state, Token token);
     string End_applyAckChannel(IAsyncResult asyncResult);
-    IAsyncResult Begin_applyAckChannelWithDuration(AsyncCallback callback, object state, Token token, long duration);
+    IAsyncResult Begin_applyAckChannelWithDuration(AsyncCallback callback, object state, int duration, Token token);
     string End_applyAckChannelWithDuration(IAsyncResult asyncResult);
     IAsyncResult Begin_applyCmdSn(AsyncCallback callback, object state, Token token);
     long End_applyCmdSn(IAsyncResult asyncResult);
@@ -1349,9 +1349,9 @@ public partial class IFaceLog {
     }
 
     
-    public IAsyncResult Begin_applyAckChannelWithDuration(AsyncCallback callback, object state, Token token, long duration)
+    public IAsyncResult Begin_applyAckChannelWithDuration(AsyncCallback callback, object state, int duration, Token token)
     {
-      return send_applyAckChannelWithDuration(callback, state, token, duration);
+      return send_applyAckChannelWithDuration(callback, state, duration, token);
     }
 
     public string End_applyAckChannelWithDuration(IAsyncResult asyncResult)
@@ -1360,28 +1360,28 @@ public partial class IFaceLog {
       return recv_applyAckChannelWithDuration();
     }
 
-    public async Task<string> applyAckChannelWithDurationAsync(Token token, long duration)
+    public async Task<string> applyAckChannelWithDurationAsync(int duration, Token token)
     {
       string retval;
       retval = await Task.Run(() =>
       {
-        return applyAckChannelWithDuration(token, duration);
+        return applyAckChannelWithDuration(duration, token);
       });
       return retval;
     }
 
-    public string applyAckChannelWithDuration(Token token, long duration)
+    public string applyAckChannelWithDuration(int duration, Token token)
     {
-      var asyncResult = Begin_applyAckChannelWithDuration(null, null, token, duration);
+      var asyncResult = Begin_applyAckChannelWithDuration(null, null, duration, token);
       return End_applyAckChannelWithDuration(asyncResult);
 
     }
-    public IAsyncResult send_applyAckChannelWithDuration(AsyncCallback callback, object state, Token token, long duration)
+    public IAsyncResult send_applyAckChannelWithDuration(AsyncCallback callback, object state, int duration, Token token)
     {
       oprot_.WriteMessageBegin(new TMessage("applyAckChannelWithDuration", TMessageType.Call, seqid_));
       applyAckChannelWithDuration_args args = new applyAckChannelWithDuration_args();
-      args.Token = token;
       args.Duration = duration;
+      args.Token = token;
       args.Write(oprot_);
       oprot_.WriteMessageEnd();
       return oprot_.Transport.BeginFlush(callback, state);
@@ -10128,7 +10128,7 @@ public partial class IFaceLog {
       {
         try
         {
-          result.Success = await iface_.applyAckChannelWithDurationAsync(args.Token, args.Duration.Value);
+          result.Success = await iface_.applyAckChannelWithDurationAsync(args.Duration.Value, args.Token);
         }
         catch (ServiceRuntimeException ex1)
         {
@@ -15674,7 +15674,7 @@ public partial class IFaceLog {
       {
         try
         {
-          result.Success = iface_.applyAckChannelWithDuration(args.Token, args.Duration.Value);
+          result.Success = iface_.applyAckChannelWithDuration(args.Duration.Value, args.Token);
         }
         catch (ServiceRuntimeException ex1)
         {
@@ -23660,14 +23660,14 @@ public partial class IFaceLog {
   public partial class applyAckChannelWithDuration_args : TBase
   {
 
-    public Token Token { get; set; }
+    public int Duration { get; set; }
 
-    public long Duration { get; set; }
+    public Token Token { get; set; }
 
     public applyAckChannelWithDuration_args() {
     }
 
-    public applyAckChannelWithDuration_args(long duration) : this() {
+    public applyAckChannelWithDuration_args(int duration) : this() {
       this.Duration = duration;
     }
 
@@ -23688,17 +23688,17 @@ public partial class IFaceLog {
           switch (field.ID)
           {
             case 1:
-              if (field.Type == TType.Struct) {
-                Token = new Token();
-                Token.Read(iprot);
+              if (field.Type == TType.I32) {
+                Duration = iprot.ReadI32();
+                isset_duration = true;
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
               break;
             case 2:
-              if (field.Type == TType.I64) {
-                Duration = iprot.ReadI64();
-                isset_duration = true;
+              if (field.Type == TType.Struct) {
+                Token = new Token();
+                Token.Read(iprot);
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
@@ -23726,20 +23726,20 @@ public partial class IFaceLog {
         TStruct struc = new TStruct("applyAckChannelWithDuration_args");
         oprot.WriteStructBegin(struc);
         TField field = new TField();
+        field.Name = "duration";
+        field.Type = TType.I32;
+        field.ID = 1;
+        oprot.WriteFieldBegin(field);
+        oprot.WriteI32(Duration);
+        oprot.WriteFieldEnd();
         if (Token != null) {
           field.Name = "token";
           field.Type = TType.Struct;
-          field.ID = 1;
+          field.ID = 2;
           oprot.WriteFieldBegin(field);
           Token.Write(oprot);
           oprot.WriteFieldEnd();
         }
-        field.Name = "duration";
-        field.Type = TType.I64;
-        field.ID = 2;
-        oprot.WriteFieldBegin(field);
-        oprot.WriteI64(Duration);
-        oprot.WriteFieldEnd();
         oprot.WriteFieldStop();
         oprot.WriteStructEnd();
       }
@@ -23751,16 +23751,12 @@ public partial class IFaceLog {
 
     public override string ToString() {
       StringBuilder __sb = new StringBuilder("applyAckChannelWithDuration_args(");
-      bool __first = true;
+      __sb.Append(", Duration: ");
+      __sb.Append(Duration);
       if (Token != null) {
-        if(!__first) { __sb.Append(", "); }
-        __first = false;
-        __sb.Append("Token: ");
+        __sb.Append(", Token: ");
         __sb.Append(Token== null ? "<null>" : Token.ToString());
       }
-      if(!__first) { __sb.Append(", "); }
-      __sb.Append("Duration: ");
-      __sb.Append(Duration);
       __sb.Append(")");
       return __sb.ToString();
     }
