@@ -26,8 +26,6 @@ public partial class IFaceLog {
     void addLogFull(LogBean logBean, FaceBean faceBean, byte[] featureImage, Token token);
     void addLogs(List<LogBean> beans, Token token);
     void addLogsFull(List<LogBean> logBeans, List<FaceBean> faceBeans, List<byte[]> featureImages, Token token);
-    void addPermit(DeviceGroupBean deviceGroup, PersonGroupBean personGroup, Token token);
-    void addPermitById(int deviceGroupId, int personGroupId, Token token);
     string applyAckChannel(Token token);
     string applyAckChannelWithDuration(int duration, Token token);
     int applyCmdSn(Token token);
@@ -50,7 +48,6 @@ public partial class IFaceLog {
     List<string> deleteFeature(string featureMd5, bool deleteImage, Token token);
     int deleteGroupPermitOnDeviceGroup(int deviceGroupId, Token token);
     int deleteImage(string imageMd5, Token token);
-    int deletePermit(DeviceGroupBean deviceGroup, PersonGroupBean personGroup, Token token);
     int deletePermitById(int deviceGroupId, int personGroupId, Token token);
     int deletePerson(int personId, Token token);
     int deletePersonByPapersNum(string papersNum, Token token);
@@ -146,6 +143,8 @@ public partial class IFaceLog {
     int rootGroupOfPerson(int personId);
     DeviceBean saveDevice(DeviceBean deviceBean, Token token);
     DeviceGroupBean saveDeviceGroup(DeviceGroupBean deviceGroupBean, Token token);
+    PermitBean savePermit(PermitBean permitBean, Token token);
+    PermitBean savePermitWithSchedule(int deviceGroupId, int personGroupId, string schedule, Token token);
     PersonBean savePerson(PersonBean personBean, Token token);
     PersonBean savePersonFull(PersonBean personBean, byte[] idPhoto, byte[] feature, string featureVersion, byte[] featureImage, FaceBean featureFaceBean, Token token);
     PersonGroupBean savePersonGroup(PersonGroupBean personGroupBean, Token token);
@@ -180,8 +179,6 @@ public partial class IFaceLog {
     Task addLogFullAsync(LogBean logBean, FaceBean faceBean, byte[] featureImage, Token token);
     Task addLogsAsync(List<LogBean> beans, Token token);
     Task addLogsFullAsync(List<LogBean> logBeans, List<FaceBean> faceBeans, List<byte[]> featureImages, Token token);
-    Task addPermitAsync(DeviceGroupBean deviceGroup, PersonGroupBean personGroup, Token token);
-    Task addPermitByIdAsync(int deviceGroupId, int personGroupId, Token token);
     Task<string> applyAckChannelAsync(Token token);
     Task<string> applyAckChannelWithDurationAsync(int duration, Token token);
     Task<int> applyCmdSnAsync(Token token);
@@ -204,7 +201,6 @@ public partial class IFaceLog {
     Task<List<string>> deleteFeatureAsync(string featureMd5, bool deleteImage, Token token);
     Task<int> deleteGroupPermitOnDeviceGroupAsync(int deviceGroupId, Token token);
     Task<int> deleteImageAsync(string imageMd5, Token token);
-    Task<int> deletePermitAsync(DeviceGroupBean deviceGroup, PersonGroupBean personGroup, Token token);
     Task<int> deletePermitByIdAsync(int deviceGroupId, int personGroupId, Token token);
     Task<int> deletePersonAsync(int personId, Token token);
     Task<int> deletePersonByPapersNumAsync(string papersNum, Token token);
@@ -300,6 +296,8 @@ public partial class IFaceLog {
     Task<int> rootGroupOfPersonAsync(int personId);
     Task<DeviceBean> saveDeviceAsync(DeviceBean deviceBean, Token token);
     Task<DeviceGroupBean> saveDeviceGroupAsync(DeviceGroupBean deviceGroupBean, Token token);
+    Task<PermitBean> savePermitAsync(PermitBean permitBean, Token token);
+    Task<PermitBean> savePermitWithScheduleAsync(int deviceGroupId, int personGroupId, string schedule, Token token);
     Task<PersonBean> savePersonAsync(PersonBean personBean, Token token);
     Task<PersonBean> savePersonFullAsync(PersonBean personBean, byte[] idPhoto, byte[] feature, string featureVersion, byte[] featureImage, FaceBean featureFaceBean, Token token);
     Task<PersonGroupBean> savePersonGroupAsync(PersonGroupBean personGroupBean, Token token);
@@ -342,10 +340,6 @@ public partial class IFaceLog {
     void End_addLogs(IAsyncResult asyncResult);
     IAsyncResult Begin_addLogsFull(AsyncCallback callback, object state, List<LogBean> logBeans, List<FaceBean> faceBeans, List<byte[]> featureImages, Token token);
     void End_addLogsFull(IAsyncResult asyncResult);
-    IAsyncResult Begin_addPermit(AsyncCallback callback, object state, DeviceGroupBean deviceGroup, PersonGroupBean personGroup, Token token);
-    void End_addPermit(IAsyncResult asyncResult);
-    IAsyncResult Begin_addPermitById(AsyncCallback callback, object state, int deviceGroupId, int personGroupId, Token token);
-    void End_addPermitById(IAsyncResult asyncResult);
     IAsyncResult Begin_applyAckChannel(AsyncCallback callback, object state, Token token);
     string End_applyAckChannel(IAsyncResult asyncResult);
     IAsyncResult Begin_applyAckChannelWithDuration(AsyncCallback callback, object state, int duration, Token token);
@@ -390,8 +384,6 @@ public partial class IFaceLog {
     int End_deleteGroupPermitOnDeviceGroup(IAsyncResult asyncResult);
     IAsyncResult Begin_deleteImage(AsyncCallback callback, object state, string imageMd5, Token token);
     int End_deleteImage(IAsyncResult asyncResult);
-    IAsyncResult Begin_deletePermit(AsyncCallback callback, object state, DeviceGroupBean deviceGroup, PersonGroupBean personGroup, Token token);
-    int End_deletePermit(IAsyncResult asyncResult);
     IAsyncResult Begin_deletePermitById(AsyncCallback callback, object state, int deviceGroupId, int personGroupId, Token token);
     int End_deletePermitById(IAsyncResult asyncResult);
     IAsyncResult Begin_deletePerson(AsyncCallback callback, object state, int personId, Token token);
@@ -582,6 +574,10 @@ public partial class IFaceLog {
     DeviceBean End_saveDevice(IAsyncResult asyncResult);
     IAsyncResult Begin_saveDeviceGroup(AsyncCallback callback, object state, DeviceGroupBean deviceGroupBean, Token token);
     DeviceGroupBean End_saveDeviceGroup(IAsyncResult asyncResult);
+    IAsyncResult Begin_savePermit(AsyncCallback callback, object state, PermitBean permitBean, Token token);
+    PermitBean End_savePermit(IAsyncResult asyncResult);
+    IAsyncResult Begin_savePermitWithSchedule(AsyncCallback callback, object state, int deviceGroupId, int personGroupId, string schedule, Token token);
+    PermitBean End_savePermitWithSchedule(IAsyncResult asyncResult);
     IAsyncResult Begin_savePerson(AsyncCallback callback, object state, PersonBean personBean, Token token);
     PersonBean End_savePerson(IAsyncResult asyncResult);
     IAsyncResult Begin_savePersonFull(AsyncCallback callback, object state, PersonBean personBean, byte[] idPhoto, byte[] feature, string featureVersion, byte[] featureImage, FaceBean featureFaceBean, Token token);
@@ -1176,116 +1172,6 @@ public partial class IFaceLog {
       }
       if (result.Ex2 != null) {
         throw result.Ex2;
-      }
-      return;
-    }
-
-    
-    public IAsyncResult Begin_addPermit(AsyncCallback callback, object state, DeviceGroupBean deviceGroup, PersonGroupBean personGroup, Token token)
-    {
-      return send_addPermit(callback, state, deviceGroup, personGroup, token);
-    }
-
-    public void End_addPermit(IAsyncResult asyncResult)
-    {
-      oprot_.Transport.EndFlush(asyncResult);
-      recv_addPermit();
-    }
-
-    public async Task addPermitAsync(DeviceGroupBean deviceGroup, PersonGroupBean personGroup, Token token)
-    {
-      await Task.Run(() =>
-      {
-        addPermit(deviceGroup, personGroup, token);
-      });
-    }
-
-    public void addPermit(DeviceGroupBean deviceGroup, PersonGroupBean personGroup, Token token)
-    {
-      var asyncResult = Begin_addPermit(null, null, deviceGroup, personGroup, token);
-      End_addPermit(asyncResult);
-
-    }
-    public IAsyncResult send_addPermit(AsyncCallback callback, object state, DeviceGroupBean deviceGroup, PersonGroupBean personGroup, Token token)
-    {
-      oprot_.WriteMessageBegin(new TMessage("addPermit", TMessageType.Call, seqid_));
-      addPermit_args args = new addPermit_args();
-      args.DeviceGroup = deviceGroup;
-      args.PersonGroup = personGroup;
-      args.Token = token;
-      args.Write(oprot_);
-      oprot_.WriteMessageEnd();
-      return oprot_.Transport.BeginFlush(callback, state);
-    }
-
-    public void recv_addPermit()
-    {
-      TMessage msg = iprot_.ReadMessageBegin();
-      if (msg.Type == TMessageType.Exception) {
-        TApplicationException x = TApplicationException.Read(iprot_);
-        iprot_.ReadMessageEnd();
-        throw x;
-      }
-      addPermit_result result = new addPermit_result();
-      result.Read(iprot_);
-      iprot_.ReadMessageEnd();
-      if (result.Ex1 != null) {
-        throw result.Ex1;
-      }
-      return;
-    }
-
-    
-    public IAsyncResult Begin_addPermitById(AsyncCallback callback, object state, int deviceGroupId, int personGroupId, Token token)
-    {
-      return send_addPermitById(callback, state, deviceGroupId, personGroupId, token);
-    }
-
-    public void End_addPermitById(IAsyncResult asyncResult)
-    {
-      oprot_.Transport.EndFlush(asyncResult);
-      recv_addPermitById();
-    }
-
-    public async Task addPermitByIdAsync(int deviceGroupId, int personGroupId, Token token)
-    {
-      await Task.Run(() =>
-      {
-        addPermitById(deviceGroupId, personGroupId, token);
-      });
-    }
-
-    public void addPermitById(int deviceGroupId, int personGroupId, Token token)
-    {
-      var asyncResult = Begin_addPermitById(null, null, deviceGroupId, personGroupId, token);
-      End_addPermitById(asyncResult);
-
-    }
-    public IAsyncResult send_addPermitById(AsyncCallback callback, object state, int deviceGroupId, int personGroupId, Token token)
-    {
-      oprot_.WriteMessageBegin(new TMessage("addPermitById", TMessageType.Call, seqid_));
-      addPermitById_args args = new addPermitById_args();
-      args.DeviceGroupId = deviceGroupId;
-      args.PersonGroupId = personGroupId;
-      args.Token = token;
-      args.Write(oprot_);
-      oprot_.WriteMessageEnd();
-      return oprot_.Transport.BeginFlush(callback, state);
-    }
-
-    public void recv_addPermitById()
-    {
-      TMessage msg = iprot_.ReadMessageBegin();
-      if (msg.Type == TMessageType.Exception) {
-        TApplicationException x = TApplicationException.Read(iprot_);
-        iprot_.ReadMessageEnd();
-        throw x;
-      }
-      addPermitById_result result = new addPermitById_result();
-      result.Read(iprot_);
-      iprot_.ReadMessageEnd();
-      if (result.Ex1 != null) {
-        throw result.Ex1;
       }
       return;
     }
@@ -2583,66 +2469,6 @@ public partial class IFaceLog {
         throw result.Ex1;
       }
       throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "deleteImage failed: unknown result");
-    }
-
-    
-    public IAsyncResult Begin_deletePermit(AsyncCallback callback, object state, DeviceGroupBean deviceGroup, PersonGroupBean personGroup, Token token)
-    {
-      return send_deletePermit(callback, state, deviceGroup, personGroup, token);
-    }
-
-    public int End_deletePermit(IAsyncResult asyncResult)
-    {
-      oprot_.Transport.EndFlush(asyncResult);
-      return recv_deletePermit();
-    }
-
-    public async Task<int> deletePermitAsync(DeviceGroupBean deviceGroup, PersonGroupBean personGroup, Token token)
-    {
-      int retval;
-      retval = await Task.Run(() =>
-      {
-        return deletePermit(deviceGroup, personGroup, token);
-      });
-      return retval;
-    }
-
-    public int deletePermit(DeviceGroupBean deviceGroup, PersonGroupBean personGroup, Token token)
-    {
-      var asyncResult = Begin_deletePermit(null, null, deviceGroup, personGroup, token);
-      return End_deletePermit(asyncResult);
-
-    }
-    public IAsyncResult send_deletePermit(AsyncCallback callback, object state, DeviceGroupBean deviceGroup, PersonGroupBean personGroup, Token token)
-    {
-      oprot_.WriteMessageBegin(new TMessage("deletePermit", TMessageType.Call, seqid_));
-      deletePermit_args args = new deletePermit_args();
-      args.DeviceGroup = deviceGroup;
-      args.PersonGroup = personGroup;
-      args.Token = token;
-      args.Write(oprot_);
-      oprot_.WriteMessageEnd();
-      return oprot_.Transport.BeginFlush(callback, state);
-    }
-
-    public int recv_deletePermit()
-    {
-      TMessage msg = iprot_.ReadMessageBegin();
-      if (msg.Type == TMessageType.Exception) {
-        TApplicationException x = TApplicationException.Read(iprot_);
-        iprot_.ReadMessageEnd();
-        throw x;
-      }
-      deletePermit_result result = new deletePermit_result();
-      result.Read(iprot_);
-      iprot_.ReadMessageEnd();
-      if (result.Success.HasValue) {
-        return result.Success.Value;
-      }
-      if (result.Ex1 != null) {
-        throw result.Ex1;
-      }
-      throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "deletePermit failed: unknown result");
     }
 
     
@@ -8181,6 +8007,126 @@ public partial class IFaceLog {
     }
 
     
+    public IAsyncResult Begin_savePermit(AsyncCallback callback, object state, PermitBean permitBean, Token token)
+    {
+      return send_savePermit(callback, state, permitBean, token);
+    }
+
+    public PermitBean End_savePermit(IAsyncResult asyncResult)
+    {
+      oprot_.Transport.EndFlush(asyncResult);
+      return recv_savePermit();
+    }
+
+    public async Task<PermitBean> savePermitAsync(PermitBean permitBean, Token token)
+    {
+      PermitBean retval;
+      retval = await Task.Run(() =>
+      {
+        return savePermit(permitBean, token);
+      });
+      return retval;
+    }
+
+    public PermitBean savePermit(PermitBean permitBean, Token token)
+    {
+      var asyncResult = Begin_savePermit(null, null, permitBean, token);
+      return End_savePermit(asyncResult);
+
+    }
+    public IAsyncResult send_savePermit(AsyncCallback callback, object state, PermitBean permitBean, Token token)
+    {
+      oprot_.WriteMessageBegin(new TMessage("savePermit", TMessageType.Call, seqid_));
+      savePermit_args args = new savePermit_args();
+      args.PermitBean = permitBean;
+      args.Token = token;
+      args.Write(oprot_);
+      oprot_.WriteMessageEnd();
+      return oprot_.Transport.BeginFlush(callback, state);
+    }
+
+    public PermitBean recv_savePermit()
+    {
+      TMessage msg = iprot_.ReadMessageBegin();
+      if (msg.Type == TMessageType.Exception) {
+        TApplicationException x = TApplicationException.Read(iprot_);
+        iprot_.ReadMessageEnd();
+        throw x;
+      }
+      savePermit_result result = new savePermit_result();
+      result.Read(iprot_);
+      iprot_.ReadMessageEnd();
+      if (result.Success != null) {
+        return result.Success;
+      }
+      if (result.Ex1 != null) {
+        throw result.Ex1;
+      }
+      throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "savePermit failed: unknown result");
+    }
+
+    
+    public IAsyncResult Begin_savePermitWithSchedule(AsyncCallback callback, object state, int deviceGroupId, int personGroupId, string schedule, Token token)
+    {
+      return send_savePermitWithSchedule(callback, state, deviceGroupId, personGroupId, schedule, token);
+    }
+
+    public PermitBean End_savePermitWithSchedule(IAsyncResult asyncResult)
+    {
+      oprot_.Transport.EndFlush(asyncResult);
+      return recv_savePermitWithSchedule();
+    }
+
+    public async Task<PermitBean> savePermitWithScheduleAsync(int deviceGroupId, int personGroupId, string schedule, Token token)
+    {
+      PermitBean retval;
+      retval = await Task.Run(() =>
+      {
+        return savePermitWithSchedule(deviceGroupId, personGroupId, schedule, token);
+      });
+      return retval;
+    }
+
+    public PermitBean savePermitWithSchedule(int deviceGroupId, int personGroupId, string schedule, Token token)
+    {
+      var asyncResult = Begin_savePermitWithSchedule(null, null, deviceGroupId, personGroupId, schedule, token);
+      return End_savePermitWithSchedule(asyncResult);
+
+    }
+    public IAsyncResult send_savePermitWithSchedule(AsyncCallback callback, object state, int deviceGroupId, int personGroupId, string schedule, Token token)
+    {
+      oprot_.WriteMessageBegin(new TMessage("savePermitWithSchedule", TMessageType.Call, seqid_));
+      savePermitWithSchedule_args args = new savePermitWithSchedule_args();
+      args.DeviceGroupId = deviceGroupId;
+      args.PersonGroupId = personGroupId;
+      args.Schedule = schedule;
+      args.Token = token;
+      args.Write(oprot_);
+      oprot_.WriteMessageEnd();
+      return oprot_.Transport.BeginFlush(callback, state);
+    }
+
+    public PermitBean recv_savePermitWithSchedule()
+    {
+      TMessage msg = iprot_.ReadMessageBegin();
+      if (msg.Type == TMessageType.Exception) {
+        TApplicationException x = TApplicationException.Read(iprot_);
+        iprot_.ReadMessageEnd();
+        throw x;
+      }
+      savePermitWithSchedule_result result = new savePermitWithSchedule_result();
+      result.Read(iprot_);
+      iprot_.ReadMessageEnd();
+      if (result.Success != null) {
+        return result.Success;
+      }
+      if (result.Ex1 != null) {
+        throw result.Ex1;
+      }
+      throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "savePermitWithSchedule failed: unknown result");
+    }
+
+    
     public IAsyncResult Begin_savePerson(AsyncCallback callback, object state, PersonBean personBean, Token token)
     {
       return send_savePerson(callback, state, personBean, token);
@@ -9526,8 +9472,6 @@ public partial class IFaceLog {
       processMap_["addLogFull"] = addLogFull_ProcessAsync;
       processMap_["addLogs"] = addLogs_ProcessAsync;
       processMap_["addLogsFull"] = addLogsFull_ProcessAsync;
-      processMap_["addPermit"] = addPermit_ProcessAsync;
-      processMap_["addPermitById"] = addPermitById_ProcessAsync;
       processMap_["applyAckChannel"] = applyAckChannel_ProcessAsync;
       processMap_["applyAckChannelWithDuration"] = applyAckChannelWithDuration_ProcessAsync;
       processMap_["applyCmdSn"] = applyCmdSn_ProcessAsync;
@@ -9550,7 +9494,6 @@ public partial class IFaceLog {
       processMap_["deleteFeature"] = deleteFeature_ProcessAsync;
       processMap_["deleteGroupPermitOnDeviceGroup"] = deleteGroupPermitOnDeviceGroup_ProcessAsync;
       processMap_["deleteImage"] = deleteImage_ProcessAsync;
-      processMap_["deletePermit"] = deletePermit_ProcessAsync;
       processMap_["deletePermitById"] = deletePermitById_ProcessAsync;
       processMap_["deletePerson"] = deletePerson_ProcessAsync;
       processMap_["deletePersonByPapersNum"] = deletePersonByPapersNum_ProcessAsync;
@@ -9646,6 +9589,8 @@ public partial class IFaceLog {
       processMap_["rootGroupOfPerson"] = rootGroupOfPerson_ProcessAsync;
       processMap_["saveDevice"] = saveDevice_ProcessAsync;
       processMap_["saveDeviceGroup"] = saveDeviceGroup_ProcessAsync;
+      processMap_["savePermit"] = savePermit_ProcessAsync;
+      processMap_["savePermitWithSchedule"] = savePermitWithSchedule_ProcessAsync;
       processMap_["savePerson"] = savePerson_ProcessAsync;
       processMap_["savePersonFull"] = savePersonFull_ProcessAsync;
       processMap_["savePersonGroup"] = savePersonGroup_ProcessAsync;
@@ -10007,76 +9952,6 @@ public partial class IFaceLog {
         Console.Error.WriteLine(ex.ToString());
         TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
         oprot.WriteMessageBegin(new TMessage("addLogsFull", TMessageType.Exception, seqid));
-        x.Write(oprot);
-      }
-      oprot.WriteMessageEnd();
-      oprot.Transport.Flush();
-    }
-
-    public async Task addPermit_ProcessAsync(int seqid, TProtocol iprot, TProtocol oprot)
-    {
-      addPermit_args args = new addPermit_args();
-      args.Read(iprot);
-      iprot.ReadMessageEnd();
-      addPermit_result result = new addPermit_result();
-      try
-      {
-        try
-        {
-          await iface_.addPermitAsync(args.DeviceGroup, args.PersonGroup, args.Token);
-        }
-        catch (ServiceRuntimeException ex1)
-        {
-          result.Ex1 = ex1;
-        }
-        oprot.WriteMessageBegin(new TMessage("addPermit", TMessageType.Reply, seqid)); 
-        result.Write(oprot);
-      }
-      catch (TTransportException)
-      {
-        throw;
-      }
-      catch (Exception ex)
-      {
-        Console.Error.WriteLine("Error occurred in processor:");
-        Console.Error.WriteLine(ex.ToString());
-        TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
-        oprot.WriteMessageBegin(new TMessage("addPermit", TMessageType.Exception, seqid));
-        x.Write(oprot);
-      }
-      oprot.WriteMessageEnd();
-      oprot.Transport.Flush();
-    }
-
-    public async Task addPermitById_ProcessAsync(int seqid, TProtocol iprot, TProtocol oprot)
-    {
-      addPermitById_args args = new addPermitById_args();
-      args.Read(iprot);
-      iprot.ReadMessageEnd();
-      addPermitById_result result = new addPermitById_result();
-      try
-      {
-        try
-        {
-          await iface_.addPermitByIdAsync(args.DeviceGroupId.Value, args.PersonGroupId.Value, args.Token);
-        }
-        catch (ServiceRuntimeException ex1)
-        {
-          result.Ex1 = ex1;
-        }
-        oprot.WriteMessageBegin(new TMessage("addPermitById", TMessageType.Reply, seqid)); 
-        result.Write(oprot);
-      }
-      catch (TTransportException)
-      {
-        throw;
-      }
-      catch (Exception ex)
-      {
-        Console.Error.WriteLine("Error occurred in processor:");
-        Console.Error.WriteLine(ex.ToString());
-        TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
-        oprot.WriteMessageBegin(new TMessage("addPermitById", TMessageType.Exception, seqid));
         x.Write(oprot);
       }
       oprot.WriteMessageEnd();
@@ -10859,41 +10734,6 @@ public partial class IFaceLog {
         Console.Error.WriteLine(ex.ToString());
         TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
         oprot.WriteMessageBegin(new TMessage("deleteImage", TMessageType.Exception, seqid));
-        x.Write(oprot);
-      }
-      oprot.WriteMessageEnd();
-      oprot.Transport.Flush();
-    }
-
-    public async Task deletePermit_ProcessAsync(int seqid, TProtocol iprot, TProtocol oprot)
-    {
-      deletePermit_args args = new deletePermit_args();
-      args.Read(iprot);
-      iprot.ReadMessageEnd();
-      deletePermit_result result = new deletePermit_result();
-      try
-      {
-        try
-        {
-          result.Success = await iface_.deletePermitAsync(args.DeviceGroup, args.PersonGroup, args.Token);
-        }
-        catch (ServiceRuntimeException ex1)
-        {
-          result.Ex1 = ex1;
-        }
-        oprot.WriteMessageBegin(new TMessage("deletePermit", TMessageType.Reply, seqid)); 
-        result.Write(oprot);
-      }
-      catch (TTransportException)
-      {
-        throw;
-      }
-      catch (Exception ex)
-      {
-        Console.Error.WriteLine("Error occurred in processor:");
-        Console.Error.WriteLine(ex.ToString());
-        TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
-        oprot.WriteMessageBegin(new TMessage("deletePermit", TMessageType.Exception, seqid));
         x.Write(oprot);
       }
       oprot.WriteMessageEnd();
@@ -14249,6 +14089,76 @@ public partial class IFaceLog {
       oprot.Transport.Flush();
     }
 
+    public async Task savePermit_ProcessAsync(int seqid, TProtocol iprot, TProtocol oprot)
+    {
+      savePermit_args args = new savePermit_args();
+      args.Read(iprot);
+      iprot.ReadMessageEnd();
+      savePermit_result result = new savePermit_result();
+      try
+      {
+        try
+        {
+          result.Success = await iface_.savePermitAsync(args.PermitBean, args.Token);
+        }
+        catch (ServiceRuntimeException ex1)
+        {
+          result.Ex1 = ex1;
+        }
+        oprot.WriteMessageBegin(new TMessage("savePermit", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+      }
+      catch (TTransportException)
+      {
+        throw;
+      }
+      catch (Exception ex)
+      {
+        Console.Error.WriteLine("Error occurred in processor:");
+        Console.Error.WriteLine(ex.ToString());
+        TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
+        oprot.WriteMessageBegin(new TMessage("savePermit", TMessageType.Exception, seqid));
+        x.Write(oprot);
+      }
+      oprot.WriteMessageEnd();
+      oprot.Transport.Flush();
+    }
+
+    public async Task savePermitWithSchedule_ProcessAsync(int seqid, TProtocol iprot, TProtocol oprot)
+    {
+      savePermitWithSchedule_args args = new savePermitWithSchedule_args();
+      args.Read(iprot);
+      iprot.ReadMessageEnd();
+      savePermitWithSchedule_result result = new savePermitWithSchedule_result();
+      try
+      {
+        try
+        {
+          result.Success = await iface_.savePermitWithScheduleAsync(args.DeviceGroupId.Value, args.PersonGroupId.Value, args.Schedule, args.Token);
+        }
+        catch (ServiceRuntimeException ex1)
+        {
+          result.Ex1 = ex1;
+        }
+        oprot.WriteMessageBegin(new TMessage("savePermitWithSchedule", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+      }
+      catch (TTransportException)
+      {
+        throw;
+      }
+      catch (Exception ex)
+      {
+        Console.Error.WriteLine("Error occurred in processor:");
+        Console.Error.WriteLine(ex.ToString());
+        TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
+        oprot.WriteMessageBegin(new TMessage("savePermitWithSchedule", TMessageType.Exception, seqid));
+        x.Write(oprot);
+      }
+      oprot.WriteMessageEnd();
+      oprot.Transport.Flush();
+    }
+
     public async Task savePerson_ProcessAsync(int seqid, TProtocol iprot, TProtocol oprot)
     {
       savePerson_args args = new savePerson_args();
@@ -15072,8 +14982,6 @@ public partial class IFaceLog {
       processMap_["addLogFull"] = addLogFull_Process;
       processMap_["addLogs"] = addLogs_Process;
       processMap_["addLogsFull"] = addLogsFull_Process;
-      processMap_["addPermit"] = addPermit_Process;
-      processMap_["addPermitById"] = addPermitById_Process;
       processMap_["applyAckChannel"] = applyAckChannel_Process;
       processMap_["applyAckChannelWithDuration"] = applyAckChannelWithDuration_Process;
       processMap_["applyCmdSn"] = applyCmdSn_Process;
@@ -15096,7 +15004,6 @@ public partial class IFaceLog {
       processMap_["deleteFeature"] = deleteFeature_Process;
       processMap_["deleteGroupPermitOnDeviceGroup"] = deleteGroupPermitOnDeviceGroup_Process;
       processMap_["deleteImage"] = deleteImage_Process;
-      processMap_["deletePermit"] = deletePermit_Process;
       processMap_["deletePermitById"] = deletePermitById_Process;
       processMap_["deletePerson"] = deletePerson_Process;
       processMap_["deletePersonByPapersNum"] = deletePersonByPapersNum_Process;
@@ -15192,6 +15099,8 @@ public partial class IFaceLog {
       processMap_["rootGroupOfPerson"] = rootGroupOfPerson_Process;
       processMap_["saveDevice"] = saveDevice_Process;
       processMap_["saveDeviceGroup"] = saveDeviceGroup_Process;
+      processMap_["savePermit"] = savePermit_Process;
+      processMap_["savePermitWithSchedule"] = savePermitWithSchedule_Process;
       processMap_["savePerson"] = savePerson_Process;
       processMap_["savePersonFull"] = savePersonFull_Process;
       processMap_["savePersonGroup"] = savePersonGroup_Process;
@@ -15553,76 +15462,6 @@ public partial class IFaceLog {
         Console.Error.WriteLine(ex.ToString());
         TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
         oprot.WriteMessageBegin(new TMessage("addLogsFull", TMessageType.Exception, seqid));
-        x.Write(oprot);
-      }
-      oprot.WriteMessageEnd();
-      oprot.Transport.Flush();
-    }
-
-    public void addPermit_Process(int seqid, TProtocol iprot, TProtocol oprot)
-    {
-      addPermit_args args = new addPermit_args();
-      args.Read(iprot);
-      iprot.ReadMessageEnd();
-      addPermit_result result = new addPermit_result();
-      try
-      {
-        try
-        {
-          iface_.addPermit(args.DeviceGroup, args.PersonGroup, args.Token);
-        }
-        catch (ServiceRuntimeException ex1)
-        {
-          result.Ex1 = ex1;
-        }
-        oprot.WriteMessageBegin(new TMessage("addPermit", TMessageType.Reply, seqid)); 
-        result.Write(oprot);
-      }
-      catch (TTransportException)
-      {
-        throw;
-      }
-      catch (Exception ex)
-      {
-        Console.Error.WriteLine("Error occurred in processor:");
-        Console.Error.WriteLine(ex.ToString());
-        TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
-        oprot.WriteMessageBegin(new TMessage("addPermit", TMessageType.Exception, seqid));
-        x.Write(oprot);
-      }
-      oprot.WriteMessageEnd();
-      oprot.Transport.Flush();
-    }
-
-    public void addPermitById_Process(int seqid, TProtocol iprot, TProtocol oprot)
-    {
-      addPermitById_args args = new addPermitById_args();
-      args.Read(iprot);
-      iprot.ReadMessageEnd();
-      addPermitById_result result = new addPermitById_result();
-      try
-      {
-        try
-        {
-          iface_.addPermitById(args.DeviceGroupId.Value, args.PersonGroupId.Value, args.Token);
-        }
-        catch (ServiceRuntimeException ex1)
-        {
-          result.Ex1 = ex1;
-        }
-        oprot.WriteMessageBegin(new TMessage("addPermitById", TMessageType.Reply, seqid)); 
-        result.Write(oprot);
-      }
-      catch (TTransportException)
-      {
-        throw;
-      }
-      catch (Exception ex)
-      {
-        Console.Error.WriteLine("Error occurred in processor:");
-        Console.Error.WriteLine(ex.ToString());
-        TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
-        oprot.WriteMessageBegin(new TMessage("addPermitById", TMessageType.Exception, seqid));
         x.Write(oprot);
       }
       oprot.WriteMessageEnd();
@@ -16405,41 +16244,6 @@ public partial class IFaceLog {
         Console.Error.WriteLine(ex.ToString());
         TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
         oprot.WriteMessageBegin(new TMessage("deleteImage", TMessageType.Exception, seqid));
-        x.Write(oprot);
-      }
-      oprot.WriteMessageEnd();
-      oprot.Transport.Flush();
-    }
-
-    public void deletePermit_Process(int seqid, TProtocol iprot, TProtocol oprot)
-    {
-      deletePermit_args args = new deletePermit_args();
-      args.Read(iprot);
-      iprot.ReadMessageEnd();
-      deletePermit_result result = new deletePermit_result();
-      try
-      {
-        try
-        {
-          result.Success = iface_.deletePermit(args.DeviceGroup, args.PersonGroup, args.Token);
-        }
-        catch (ServiceRuntimeException ex1)
-        {
-          result.Ex1 = ex1;
-        }
-        oprot.WriteMessageBegin(new TMessage("deletePermit", TMessageType.Reply, seqid)); 
-        result.Write(oprot);
-      }
-      catch (TTransportException)
-      {
-        throw;
-      }
-      catch (Exception ex)
-      {
-        Console.Error.WriteLine("Error occurred in processor:");
-        Console.Error.WriteLine(ex.ToString());
-        TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
-        oprot.WriteMessageBegin(new TMessage("deletePermit", TMessageType.Exception, seqid));
         x.Write(oprot);
       }
       oprot.WriteMessageEnd();
@@ -19795,6 +19599,76 @@ public partial class IFaceLog {
       oprot.Transport.Flush();
     }
 
+    public void savePermit_Process(int seqid, TProtocol iprot, TProtocol oprot)
+    {
+      savePermit_args args = new savePermit_args();
+      args.Read(iprot);
+      iprot.ReadMessageEnd();
+      savePermit_result result = new savePermit_result();
+      try
+      {
+        try
+        {
+          result.Success = iface_.savePermit(args.PermitBean, args.Token);
+        }
+        catch (ServiceRuntimeException ex1)
+        {
+          result.Ex1 = ex1;
+        }
+        oprot.WriteMessageBegin(new TMessage("savePermit", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+      }
+      catch (TTransportException)
+      {
+        throw;
+      }
+      catch (Exception ex)
+      {
+        Console.Error.WriteLine("Error occurred in processor:");
+        Console.Error.WriteLine(ex.ToString());
+        TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
+        oprot.WriteMessageBegin(new TMessage("savePermit", TMessageType.Exception, seqid));
+        x.Write(oprot);
+      }
+      oprot.WriteMessageEnd();
+      oprot.Transport.Flush();
+    }
+
+    public void savePermitWithSchedule_Process(int seqid, TProtocol iprot, TProtocol oprot)
+    {
+      savePermitWithSchedule_args args = new savePermitWithSchedule_args();
+      args.Read(iprot);
+      iprot.ReadMessageEnd();
+      savePermitWithSchedule_result result = new savePermitWithSchedule_result();
+      try
+      {
+        try
+        {
+          result.Success = iface_.savePermitWithSchedule(args.DeviceGroupId.Value, args.PersonGroupId.Value, args.Schedule, args.Token);
+        }
+        catch (ServiceRuntimeException ex1)
+        {
+          result.Ex1 = ex1;
+        }
+        oprot.WriteMessageBegin(new TMessage("savePermitWithSchedule", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+      }
+      catch (TTransportException)
+      {
+        throw;
+      }
+      catch (Exception ex)
+      {
+        Console.Error.WriteLine("Error occurred in processor:");
+        Console.Error.WriteLine(ex.ToString());
+        TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
+        oprot.WriteMessageBegin(new TMessage("savePermitWithSchedule", TMessageType.Exception, seqid));
+        x.Write(oprot);
+      }
+      oprot.WriteMessageEnd();
+      oprot.Transport.Flush();
+    }
+
     public void savePerson_Process(int seqid, TProtocol iprot, TProtocol oprot)
     {
       savePerson_args args = new savePerson_args();
@@ -23001,452 +22875,6 @@ public partial class IFaceLog {
         __first = false;
         __sb.Append("Ex2: ");
         __sb.Append(Ex2== null ? "<null>" : Ex2.ToString());
-      }
-      __sb.Append(")");
-      return __sb.ToString();
-    }
-
-  }
-
-
-  #if !SILVERLIGHT
-  [Serializable]
-  #endif
-  public partial class addPermit_args : TBase
-  {
-
-    public DeviceGroupBean DeviceGroup { get; set; }
-
-    public PersonGroupBean PersonGroup { get; set; }
-
-    public Token Token { get; set; }
-
-    public addPermit_args() {
-    }
-
-    public void Read (TProtocol iprot)
-    {
-      iprot.IncrementRecursionDepth();
-      try
-      {
-        TField field;
-        iprot.ReadStructBegin();
-        while (true)
-        {
-          field = iprot.ReadFieldBegin();
-          if (field.Type == TType.Stop) { 
-            break;
-          }
-          switch (field.ID)
-          {
-            case 1:
-              if (field.Type == TType.Struct) {
-                DeviceGroup = new DeviceGroupBean();
-                DeviceGroup.Read(iprot);
-              } else { 
-                TProtocolUtil.Skip(iprot, field.Type);
-              }
-              break;
-            case 2:
-              if (field.Type == TType.Struct) {
-                PersonGroup = new PersonGroupBean();
-                PersonGroup.Read(iprot);
-              } else { 
-                TProtocolUtil.Skip(iprot, field.Type);
-              }
-              break;
-            case 3:
-              if (field.Type == TType.Struct) {
-                Token = new Token();
-                Token.Read(iprot);
-              } else { 
-                TProtocolUtil.Skip(iprot, field.Type);
-              }
-              break;
-            default: 
-              TProtocolUtil.Skip(iprot, field.Type);
-              break;
-          }
-          iprot.ReadFieldEnd();
-        }
-        iprot.ReadStructEnd();
-      }
-      finally
-      {
-        iprot.DecrementRecursionDepth();
-      }
-    }
-
-    public void Write(TProtocol oprot) {
-      oprot.IncrementRecursionDepth();
-      try
-      {
-        TStruct struc = new TStruct("addPermit_args");
-        oprot.WriteStructBegin(struc);
-        TField field = new TField();
-        if (DeviceGroup != null) {
-          field.Name = "deviceGroup";
-          field.Type = TType.Struct;
-          field.ID = 1;
-          oprot.WriteFieldBegin(field);
-          DeviceGroup.Write(oprot);
-          oprot.WriteFieldEnd();
-        }
-        if (PersonGroup != null) {
-          field.Name = "personGroup";
-          field.Type = TType.Struct;
-          field.ID = 2;
-          oprot.WriteFieldBegin(field);
-          PersonGroup.Write(oprot);
-          oprot.WriteFieldEnd();
-        }
-        if (Token != null) {
-          field.Name = "token";
-          field.Type = TType.Struct;
-          field.ID = 3;
-          oprot.WriteFieldBegin(field);
-          Token.Write(oprot);
-          oprot.WriteFieldEnd();
-        }
-        oprot.WriteFieldStop();
-        oprot.WriteStructEnd();
-      }
-      finally
-      {
-        oprot.DecrementRecursionDepth();
-      }
-    }
-
-    public override string ToString() {
-      StringBuilder __sb = new StringBuilder("addPermit_args(");
-      bool __first = true;
-      if (DeviceGroup != null) {
-        if(!__first) { __sb.Append(", "); }
-        __first = false;
-        __sb.Append("DeviceGroup: ");
-        __sb.Append(DeviceGroup== null ? "<null>" : DeviceGroup.ToString());
-      }
-      if (PersonGroup != null) {
-        if(!__first) { __sb.Append(", "); }
-        __first = false;
-        __sb.Append("PersonGroup: ");
-        __sb.Append(PersonGroup== null ? "<null>" : PersonGroup.ToString());
-      }
-      if (Token != null) {
-        if(!__first) { __sb.Append(", "); }
-        __first = false;
-        __sb.Append("Token: ");
-        __sb.Append(Token== null ? "<null>" : Token.ToString());
-      }
-      __sb.Append(")");
-      return __sb.ToString();
-    }
-
-  }
-
-
-  #if !SILVERLIGHT
-  [Serializable]
-  #endif
-  public partial class addPermit_result : TBase
-  {
-
-    public ServiceRuntimeException Ex1 { get; set; }
-
-    public addPermit_result() {
-    }
-
-    public void Read (TProtocol iprot)
-    {
-      iprot.IncrementRecursionDepth();
-      try
-      {
-        TField field;
-        iprot.ReadStructBegin();
-        while (true)
-        {
-          field = iprot.ReadFieldBegin();
-          if (field.Type == TType.Stop) { 
-            break;
-          }
-          switch (field.ID)
-          {
-            case 1:
-              if (field.Type == TType.Struct) {
-                Ex1 = new ServiceRuntimeException();
-                Ex1.Read(iprot);
-              } else { 
-                TProtocolUtil.Skip(iprot, field.Type);
-              }
-              break;
-            default: 
-              TProtocolUtil.Skip(iprot, field.Type);
-              break;
-          }
-          iprot.ReadFieldEnd();
-        }
-        iprot.ReadStructEnd();
-      }
-      finally
-      {
-        iprot.DecrementRecursionDepth();
-      }
-    }
-
-    public void Write(TProtocol oprot) {
-      oprot.IncrementRecursionDepth();
-      try
-      {
-        TStruct struc = new TStruct("addPermit_result");
-        oprot.WriteStructBegin(struc);
-        TField field = new TField();
-
-        if (this.Ex1 != null) {
-          field.Name = "Ex1";
-          field.Type = TType.Struct;
-          field.ID = 1;
-          oprot.WriteFieldBegin(field);
-          Ex1.Write(oprot);
-          oprot.WriteFieldEnd();
-        }
-        oprot.WriteFieldStop();
-        oprot.WriteStructEnd();
-      }
-      finally
-      {
-        oprot.DecrementRecursionDepth();
-      }
-    }
-
-    public override string ToString() {
-      StringBuilder __sb = new StringBuilder("addPermit_result(");
-      bool __first = true;
-      if (Ex1 != null) {
-        if(!__first) { __sb.Append(", "); }
-        __first = false;
-        __sb.Append("Ex1: ");
-        __sb.Append(Ex1== null ? "<null>" : Ex1.ToString());
-      }
-      __sb.Append(")");
-      return __sb.ToString();
-    }
-
-  }
-
-
-  #if !SILVERLIGHT
-  [Serializable]
-  #endif
-  public partial class addPermitById_args : TBase
-  {
-
-    public int DeviceGroupId { get; set; }
-
-    public int PersonGroupId { get; set; }
-
-    public Token Token { get; set; }
-
-    public addPermitById_args() {
-    }
-
-    public addPermitById_args(int deviceGroupId, int personGroupId) : this() {
-      this.DeviceGroupId = deviceGroupId;
-      this.PersonGroupId = personGroupId;
-    }
-
-    public void Read (TProtocol iprot)
-    {
-      iprot.IncrementRecursionDepth();
-      try
-      {
-        bool isset_deviceGroupId = false;
-        bool isset_personGroupId = false;
-        TField field;
-        iprot.ReadStructBegin();
-        while (true)
-        {
-          field = iprot.ReadFieldBegin();
-          if (field.Type == TType.Stop) { 
-            break;
-          }
-          switch (field.ID)
-          {
-            case 1:
-              if (field.Type == TType.I32) {
-                DeviceGroupId = iprot.ReadI32();
-                isset_deviceGroupId = true;
-              } else { 
-                TProtocolUtil.Skip(iprot, field.Type);
-              }
-              break;
-            case 2:
-              if (field.Type == TType.I32) {
-                PersonGroupId = iprot.ReadI32();
-                isset_personGroupId = true;
-              } else { 
-                TProtocolUtil.Skip(iprot, field.Type);
-              }
-              break;
-            case 3:
-              if (field.Type == TType.Struct) {
-                Token = new Token();
-                Token.Read(iprot);
-              } else { 
-                TProtocolUtil.Skip(iprot, field.Type);
-              }
-              break;
-            default: 
-              TProtocolUtil.Skip(iprot, field.Type);
-              break;
-          }
-          iprot.ReadFieldEnd();
-        }
-        iprot.ReadStructEnd();
-        if (!isset_deviceGroupId)
-          throw new TProtocolException(TProtocolException.INVALID_DATA, "required field DeviceGroupId not set");
-        if (!isset_personGroupId)
-          throw new TProtocolException(TProtocolException.INVALID_DATA, "required field PersonGroupId not set");
-      }
-      finally
-      {
-        iprot.DecrementRecursionDepth();
-      }
-    }
-
-    public void Write(TProtocol oprot) {
-      oprot.IncrementRecursionDepth();
-      try
-      {
-        TStruct struc = new TStruct("addPermitById_args");
-        oprot.WriteStructBegin(struc);
-        TField field = new TField();
-        field.Name = "deviceGroupId";
-        field.Type = TType.I32;
-        field.ID = 1;
-        oprot.WriteFieldBegin(field);
-        oprot.WriteI32(DeviceGroupId);
-        oprot.WriteFieldEnd();
-        field.Name = "personGroupId";
-        field.Type = TType.I32;
-        field.ID = 2;
-        oprot.WriteFieldBegin(field);
-        oprot.WriteI32(PersonGroupId);
-        oprot.WriteFieldEnd();
-        if (Token != null) {
-          field.Name = "token";
-          field.Type = TType.Struct;
-          field.ID = 3;
-          oprot.WriteFieldBegin(field);
-          Token.Write(oprot);
-          oprot.WriteFieldEnd();
-        }
-        oprot.WriteFieldStop();
-        oprot.WriteStructEnd();
-      }
-      finally
-      {
-        oprot.DecrementRecursionDepth();
-      }
-    }
-
-    public override string ToString() {
-      StringBuilder __sb = new StringBuilder("addPermitById_args(");
-      __sb.Append(", DeviceGroupId: ");
-      __sb.Append(DeviceGroupId);
-      __sb.Append(", PersonGroupId: ");
-      __sb.Append(PersonGroupId);
-      if (Token != null) {
-        __sb.Append(", Token: ");
-        __sb.Append(Token== null ? "<null>" : Token.ToString());
-      }
-      __sb.Append(")");
-      return __sb.ToString();
-    }
-
-  }
-
-
-  #if !SILVERLIGHT
-  [Serializable]
-  #endif
-  public partial class addPermitById_result : TBase
-  {
-
-    public ServiceRuntimeException Ex1 { get; set; }
-
-    public addPermitById_result() {
-    }
-
-    public void Read (TProtocol iprot)
-    {
-      iprot.IncrementRecursionDepth();
-      try
-      {
-        TField field;
-        iprot.ReadStructBegin();
-        while (true)
-        {
-          field = iprot.ReadFieldBegin();
-          if (field.Type == TType.Stop) { 
-            break;
-          }
-          switch (field.ID)
-          {
-            case 1:
-              if (field.Type == TType.Struct) {
-                Ex1 = new ServiceRuntimeException();
-                Ex1.Read(iprot);
-              } else { 
-                TProtocolUtil.Skip(iprot, field.Type);
-              }
-              break;
-            default: 
-              TProtocolUtil.Skip(iprot, field.Type);
-              break;
-          }
-          iprot.ReadFieldEnd();
-        }
-        iprot.ReadStructEnd();
-      }
-      finally
-      {
-        iprot.DecrementRecursionDepth();
-      }
-    }
-
-    public void Write(TProtocol oprot) {
-      oprot.IncrementRecursionDepth();
-      try
-      {
-        TStruct struc = new TStruct("addPermitById_result");
-        oprot.WriteStructBegin(struc);
-        TField field = new TField();
-
-        if (this.Ex1 != null) {
-          field.Name = "Ex1";
-          field.Type = TType.Struct;
-          field.ID = 1;
-          oprot.WriteFieldBegin(field);
-          Ex1.Write(oprot);
-          oprot.WriteFieldEnd();
-        }
-        oprot.WriteFieldStop();
-        oprot.WriteStructEnd();
-      }
-      finally
-      {
-        oprot.DecrementRecursionDepth();
-      }
-    }
-
-    public override string ToString() {
-      StringBuilder __sb = new StringBuilder("addPermitById_result(");
-      bool __first = true;
-      if (Ex1 != null) {
-        if(!__first) { __sb.Append(", "); }
-        __first = false;
-        __sb.Append("Ex1: ");
-        __sb.Append(Ex1== null ? "<null>" : Ex1.ToString());
       }
       __sb.Append(")");
       return __sb.ToString();
@@ -28244,253 +27672,6 @@ public partial class IFaceLog {
 
     public override string ToString() {
       StringBuilder __sb = new StringBuilder("deleteImage_result(");
-      bool __first = true;
-      if (Success != null) {
-        if(!__first) { __sb.Append(", "); }
-        __first = false;
-        __sb.Append("Success: ");
-        __sb.Append(Success);
-      }
-      if (Ex1 != null) {
-        if(!__first) { __sb.Append(", "); }
-        __first = false;
-        __sb.Append("Ex1: ");
-        __sb.Append(Ex1== null ? "<null>" : Ex1.ToString());
-      }
-      __sb.Append(")");
-      return __sb.ToString();
-    }
-
-  }
-
-
-  #if !SILVERLIGHT
-  [Serializable]
-  #endif
-  public partial class deletePermit_args : TBase
-  {
-
-    public DeviceGroupBean DeviceGroup { get; set; }
-
-    public PersonGroupBean PersonGroup { get; set; }
-
-    public Token Token { get; set; }
-
-    public deletePermit_args() {
-    }
-
-    public void Read (TProtocol iprot)
-    {
-      iprot.IncrementRecursionDepth();
-      try
-      {
-        TField field;
-        iprot.ReadStructBegin();
-        while (true)
-        {
-          field = iprot.ReadFieldBegin();
-          if (field.Type == TType.Stop) { 
-            break;
-          }
-          switch (field.ID)
-          {
-            case 1:
-              if (field.Type == TType.Struct) {
-                DeviceGroup = new DeviceGroupBean();
-                DeviceGroup.Read(iprot);
-              } else { 
-                TProtocolUtil.Skip(iprot, field.Type);
-              }
-              break;
-            case 2:
-              if (field.Type == TType.Struct) {
-                PersonGroup = new PersonGroupBean();
-                PersonGroup.Read(iprot);
-              } else { 
-                TProtocolUtil.Skip(iprot, field.Type);
-              }
-              break;
-            case 3:
-              if (field.Type == TType.Struct) {
-                Token = new Token();
-                Token.Read(iprot);
-              } else { 
-                TProtocolUtil.Skip(iprot, field.Type);
-              }
-              break;
-            default: 
-              TProtocolUtil.Skip(iprot, field.Type);
-              break;
-          }
-          iprot.ReadFieldEnd();
-        }
-        iprot.ReadStructEnd();
-      }
-      finally
-      {
-        iprot.DecrementRecursionDepth();
-      }
-    }
-
-    public void Write(TProtocol oprot) {
-      oprot.IncrementRecursionDepth();
-      try
-      {
-        TStruct struc = new TStruct("deletePermit_args");
-        oprot.WriteStructBegin(struc);
-        TField field = new TField();
-        if (DeviceGroup != null) {
-          field.Name = "deviceGroup";
-          field.Type = TType.Struct;
-          field.ID = 1;
-          oprot.WriteFieldBegin(field);
-          DeviceGroup.Write(oprot);
-          oprot.WriteFieldEnd();
-        }
-        if (PersonGroup != null) {
-          field.Name = "personGroup";
-          field.Type = TType.Struct;
-          field.ID = 2;
-          oprot.WriteFieldBegin(field);
-          PersonGroup.Write(oprot);
-          oprot.WriteFieldEnd();
-        }
-        if (Token != null) {
-          field.Name = "token";
-          field.Type = TType.Struct;
-          field.ID = 3;
-          oprot.WriteFieldBegin(field);
-          Token.Write(oprot);
-          oprot.WriteFieldEnd();
-        }
-        oprot.WriteFieldStop();
-        oprot.WriteStructEnd();
-      }
-      finally
-      {
-        oprot.DecrementRecursionDepth();
-      }
-    }
-
-    public override string ToString() {
-      StringBuilder __sb = new StringBuilder("deletePermit_args(");
-      bool __first = true;
-      if (DeviceGroup != null) {
-        if(!__first) { __sb.Append(", "); }
-        __first = false;
-        __sb.Append("DeviceGroup: ");
-        __sb.Append(DeviceGroup== null ? "<null>" : DeviceGroup.ToString());
-      }
-      if (PersonGroup != null) {
-        if(!__first) { __sb.Append(", "); }
-        __first = false;
-        __sb.Append("PersonGroup: ");
-        __sb.Append(PersonGroup== null ? "<null>" : PersonGroup.ToString());
-      }
-      if (Token != null) {
-        if(!__first) { __sb.Append(", "); }
-        __first = false;
-        __sb.Append("Token: ");
-        __sb.Append(Token== null ? "<null>" : Token.ToString());
-      }
-      __sb.Append(")");
-      return __sb.ToString();
-    }
-
-  }
-
-
-  #if !SILVERLIGHT
-  [Serializable]
-  #endif
-  public partial class deletePermit_result : TBase
-  {
-
-    public int? Success { get; set; }
-
-    public ServiceRuntimeException Ex1 { get; set; }
-
-    public deletePermit_result() {
-    }
-
-    public void Read (TProtocol iprot)
-    {
-      iprot.IncrementRecursionDepth();
-      try
-      {
-        TField field;
-        iprot.ReadStructBegin();
-        while (true)
-        {
-          field = iprot.ReadFieldBegin();
-          if (field.Type == TType.Stop) { 
-            break;
-          }
-          switch (field.ID)
-          {
-            case 0:
-              if (field.Type == TType.I32) {
-                Success = iprot.ReadI32();
-              } else { 
-                TProtocolUtil.Skip(iprot, field.Type);
-              }
-              break;
-            case 1:
-              if (field.Type == TType.Struct) {
-                Ex1 = new ServiceRuntimeException();
-                Ex1.Read(iprot);
-              } else { 
-                TProtocolUtil.Skip(iprot, field.Type);
-              }
-              break;
-            default: 
-              TProtocolUtil.Skip(iprot, field.Type);
-              break;
-          }
-          iprot.ReadFieldEnd();
-        }
-        iprot.ReadStructEnd();
-      }
-      finally
-      {
-        iprot.DecrementRecursionDepth();
-      }
-    }
-
-    public void Write(TProtocol oprot) {
-      oprot.IncrementRecursionDepth();
-      try
-      {
-        TStruct struc = new TStruct("deletePermit_result");
-        oprot.WriteStructBegin(struc);
-        TField field = new TField();
-
-        if (this.Success != null) {
-          field.Name = "Success";
-          field.Type = TType.I32;
-          field.ID = 0;
-          oprot.WriteFieldBegin(field);
-          oprot.WriteI32(Success.Value);
-          oprot.WriteFieldEnd();
-        } else if (this.Ex1 != null) {
-          field.Name = "Ex1";
-          field.Type = TType.Struct;
-          field.ID = 1;
-          oprot.WriteFieldBegin(field);
-          Ex1.Write(oprot);
-          oprot.WriteFieldEnd();
-        }
-        oprot.WriteFieldStop();
-        oprot.WriteStructEnd();
-      }
-      finally
-      {
-        oprot.DecrementRecursionDepth();
-      }
-    }
-
-    public override string ToString() {
-      StringBuilder __sb = new StringBuilder("deletePermit_result(");
       bool __first = true;
       if (Success != null) {
         if(!__first) { __sb.Append(", "); }
@@ -49294,6 +48475,495 @@ public partial class IFaceLog {
 
     public override string ToString() {
       StringBuilder __sb = new StringBuilder("saveDeviceGroup_result(");
+      bool __first = true;
+      if (Success != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Success: ");
+        __sb.Append(Success== null ? "<null>" : Success.ToString());
+      }
+      if (Ex1 != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Ex1: ");
+        __sb.Append(Ex1== null ? "<null>" : Ex1.ToString());
+      }
+      __sb.Append(")");
+      return __sb.ToString();
+    }
+
+  }
+
+
+  #if !SILVERLIGHT
+  [Serializable]
+  #endif
+  public partial class savePermit_args : TBase
+  {
+
+    public PermitBean PermitBean { get; set; }
+
+    public Token Token { get; set; }
+
+    public savePermit_args() {
+    }
+
+    public void Read (TProtocol iprot)
+    {
+      iprot.IncrementRecursionDepth();
+      try
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 1:
+              if (field.Type == TType.Struct) {
+                PermitBean = new PermitBean();
+                PermitBean.Read(iprot);
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 2:
+              if (field.Type == TType.Struct) {
+                Token = new Token();
+                Token.Read(iprot);
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+      finally
+      {
+        iprot.DecrementRecursionDepth();
+      }
+    }
+
+    public void Write(TProtocol oprot) {
+      oprot.IncrementRecursionDepth();
+      try
+      {
+        TStruct struc = new TStruct("savePermit_args");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+        if (PermitBean != null) {
+          field.Name = "permitBean";
+          field.Type = TType.Struct;
+          field.ID = 1;
+          oprot.WriteFieldBegin(field);
+          PermitBean.Write(oprot);
+          oprot.WriteFieldEnd();
+        }
+        if (Token != null) {
+          field.Name = "token";
+          field.Type = TType.Struct;
+          field.ID = 2;
+          oprot.WriteFieldBegin(field);
+          Token.Write(oprot);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+      finally
+      {
+        oprot.DecrementRecursionDepth();
+      }
+    }
+
+    public override string ToString() {
+      StringBuilder __sb = new StringBuilder("savePermit_args(");
+      bool __first = true;
+      if (PermitBean != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("PermitBean: ");
+        __sb.Append(PermitBean== null ? "<null>" : PermitBean.ToString());
+      }
+      if (Token != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Token: ");
+        __sb.Append(Token== null ? "<null>" : Token.ToString());
+      }
+      __sb.Append(")");
+      return __sb.ToString();
+    }
+
+  }
+
+
+  #if !SILVERLIGHT
+  [Serializable]
+  #endif
+  public partial class savePermit_result : TBase
+  {
+
+    public PermitBean Success { get; set; }
+
+    public ServiceRuntimeException Ex1 { get; set; }
+
+    public savePermit_result() {
+    }
+
+    public void Read (TProtocol iprot)
+    {
+      iprot.IncrementRecursionDepth();
+      try
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 0:
+              if (field.Type == TType.Struct) {
+                Success = new PermitBean();
+                Success.Read(iprot);
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 1:
+              if (field.Type == TType.Struct) {
+                Ex1 = new ServiceRuntimeException();
+                Ex1.Read(iprot);
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+      finally
+      {
+        iprot.DecrementRecursionDepth();
+      }
+    }
+
+    public void Write(TProtocol oprot) {
+      oprot.IncrementRecursionDepth();
+      try
+      {
+        TStruct struc = new TStruct("savePermit_result");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+
+        if (this.Success != null) {
+          field.Name = "Success";
+          field.Type = TType.Struct;
+          field.ID = 0;
+          oprot.WriteFieldBegin(field);
+          Success.Write(oprot);
+          oprot.WriteFieldEnd();
+        } else if (this.Ex1 != null) {
+          field.Name = "Ex1";
+          field.Type = TType.Struct;
+          field.ID = 1;
+          oprot.WriteFieldBegin(field);
+          Ex1.Write(oprot);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+      finally
+      {
+        oprot.DecrementRecursionDepth();
+      }
+    }
+
+    public override string ToString() {
+      StringBuilder __sb = new StringBuilder("savePermit_result(");
+      bool __first = true;
+      if (Success != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Success: ");
+        __sb.Append(Success== null ? "<null>" : Success.ToString());
+      }
+      if (Ex1 != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Ex1: ");
+        __sb.Append(Ex1== null ? "<null>" : Ex1.ToString());
+      }
+      __sb.Append(")");
+      return __sb.ToString();
+    }
+
+  }
+
+
+  #if !SILVERLIGHT
+  [Serializable]
+  #endif
+  public partial class savePermitWithSchedule_args : TBase
+  {
+
+    public int DeviceGroupId { get; set; }
+
+    public int PersonGroupId { get; set; }
+
+    public string Schedule { get; set; }
+
+    public Token Token { get; set; }
+
+    public savePermitWithSchedule_args() {
+    }
+
+    public savePermitWithSchedule_args(int deviceGroupId, int personGroupId) : this() {
+      this.DeviceGroupId = deviceGroupId;
+      this.PersonGroupId = personGroupId;
+    }
+
+    public void Read (TProtocol iprot)
+    {
+      iprot.IncrementRecursionDepth();
+      try
+      {
+        bool isset_deviceGroupId = false;
+        bool isset_personGroupId = false;
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 1:
+              if (field.Type == TType.I32) {
+                DeviceGroupId = iprot.ReadI32();
+                isset_deviceGroupId = true;
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 2:
+              if (field.Type == TType.I32) {
+                PersonGroupId = iprot.ReadI32();
+                isset_personGroupId = true;
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 3:
+              if (field.Type == TType.String) {
+                Schedule = iprot.ReadString();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 4:
+              if (field.Type == TType.Struct) {
+                Token = new Token();
+                Token.Read(iprot);
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+        if (!isset_deviceGroupId)
+          throw new TProtocolException(TProtocolException.INVALID_DATA, "required field DeviceGroupId not set");
+        if (!isset_personGroupId)
+          throw new TProtocolException(TProtocolException.INVALID_DATA, "required field PersonGroupId not set");
+      }
+      finally
+      {
+        iprot.DecrementRecursionDepth();
+      }
+    }
+
+    public void Write(TProtocol oprot) {
+      oprot.IncrementRecursionDepth();
+      try
+      {
+        TStruct struc = new TStruct("savePermitWithSchedule_args");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+        field.Name = "deviceGroupId";
+        field.Type = TType.I32;
+        field.ID = 1;
+        oprot.WriteFieldBegin(field);
+        oprot.WriteI32(DeviceGroupId);
+        oprot.WriteFieldEnd();
+        field.Name = "personGroupId";
+        field.Type = TType.I32;
+        field.ID = 2;
+        oprot.WriteFieldBegin(field);
+        oprot.WriteI32(PersonGroupId);
+        oprot.WriteFieldEnd();
+        if (Schedule != null) {
+          field.Name = "schedule";
+          field.Type = TType.String;
+          field.ID = 3;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteString(Schedule);
+          oprot.WriteFieldEnd();
+        }
+        if (Token != null) {
+          field.Name = "token";
+          field.Type = TType.Struct;
+          field.ID = 4;
+          oprot.WriteFieldBegin(field);
+          Token.Write(oprot);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+      finally
+      {
+        oprot.DecrementRecursionDepth();
+      }
+    }
+
+    public override string ToString() {
+      StringBuilder __sb = new StringBuilder("savePermitWithSchedule_args(");
+      __sb.Append(", DeviceGroupId: ");
+      __sb.Append(DeviceGroupId);
+      __sb.Append(", PersonGroupId: ");
+      __sb.Append(PersonGroupId);
+      if (Schedule != null) {
+        __sb.Append(", Schedule: ");
+        __sb.Append(Schedule);
+      }
+      if (Token != null) {
+        __sb.Append(", Token: ");
+        __sb.Append(Token== null ? "<null>" : Token.ToString());
+      }
+      __sb.Append(")");
+      return __sb.ToString();
+    }
+
+  }
+
+
+  #if !SILVERLIGHT
+  [Serializable]
+  #endif
+  public partial class savePermitWithSchedule_result : TBase
+  {
+
+    public PermitBean Success { get; set; }
+
+    public ServiceRuntimeException Ex1 { get; set; }
+
+    public savePermitWithSchedule_result() {
+    }
+
+    public void Read (TProtocol iprot)
+    {
+      iprot.IncrementRecursionDepth();
+      try
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 0:
+              if (field.Type == TType.Struct) {
+                Success = new PermitBean();
+                Success.Read(iprot);
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 1:
+              if (field.Type == TType.Struct) {
+                Ex1 = new ServiceRuntimeException();
+                Ex1.Read(iprot);
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+      finally
+      {
+        iprot.DecrementRecursionDepth();
+      }
+    }
+
+    public void Write(TProtocol oprot) {
+      oprot.IncrementRecursionDepth();
+      try
+      {
+        TStruct struc = new TStruct("savePermitWithSchedule_result");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+
+        if (this.Success != null) {
+          field.Name = "Success";
+          field.Type = TType.Struct;
+          field.ID = 0;
+          oprot.WriteFieldBegin(field);
+          Success.Write(oprot);
+          oprot.WriteFieldEnd();
+        } else if (this.Ex1 != null) {
+          field.Name = "Ex1";
+          field.Type = TType.Struct;
+          field.ID = 1;
+          oprot.WriteFieldBegin(field);
+          Ex1.Write(oprot);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+      finally
+      {
+        oprot.DecrementRecursionDepth();
+      }
+    }
+
+    public override string ToString() {
+      StringBuilder __sb = new StringBuilder("savePermitWithSchedule_result(");
       bool __first = true;
       if (Success != null) {
         if(!__first) { __sb.Append(", "); }

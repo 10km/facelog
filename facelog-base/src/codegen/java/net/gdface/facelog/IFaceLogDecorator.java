@@ -232,16 +232,6 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
-    public void addPermit (int deviceGroupId,int personGroupId,Token token) {
-         delegate().addPermit(deviceGroupId,personGroupId,token);
-    }
-
-    @Override
-    public void addPermit (DeviceGroupBean deviceGroup,PersonGroupBean personGroup,Token token) {
-         delegate().addPermit(deviceGroup,personGroup,token);
-    }
-
-    @Override
     public String applyAckChannel (int duration,Token token) {
         return delegate().applyAckChannel(duration,token);
     }
@@ -407,11 +397,6 @@ public class IFaceLogDecorator implements IFaceLog{
     @Override
     public int deletePermit (int deviceGroupId,int personGroupId,Token token) {
         return delegate().deletePermit(deviceGroupId,personGroupId,token);
-    }
-
-    @Override
-    public int deletePermit (DeviceGroupBean deviceGroup,PersonGroupBean personGroup,Token token) {
-        return delegate().deletePermit(deviceGroup,personGroup,token);
     }
 
     @Override
@@ -978,6 +963,16 @@ public class IFaceLogDecorator implements IFaceLog{
     @Override
     public DeviceGroupBean saveDeviceGroup (DeviceGroupBean deviceGroupBean,Token token) {
         return delegate().saveDeviceGroup(deviceGroupBean,token);
+    }
+
+    @Override
+    public PermitBean savePermit (int deviceGroupId,int personGroupId,String schedule,Token token) {
+        return delegate().savePermit(deviceGroupId,personGroupId,schedule,token);
+    }
+
+    @Override
+    public PermitBean savePermit (PermitBean permitBean,Token token) {
+        return delegate().savePermit(permitBean,token);
     }
 
     @Override

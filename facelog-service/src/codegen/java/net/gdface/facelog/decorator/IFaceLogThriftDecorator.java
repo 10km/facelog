@@ -364,58 +364,6 @@ public class IFaceLogThriftDecorator {
         }
     }
     /**
-     * @see {@link net.gdface.facelog.IFaceLog#addPermit(int,int,net.gdface.facelog.Token)}
-     */
-    @ThriftMethod(value = "addPermitById" )
-    public void addPermitById(int deviceGroupId,
-        int personGroupId,
-        Token token) 
-        throws ServiceRuntimeException{
-        try{
-             delegate().addPermit(deviceGroupId,
-                personGroupId,
-                TypeTransformer.getInstance().to(
-                    token,
-                    Token.class,
-                    net.gdface.facelog.Token.class));
-        }
-        catch(ServiceRuntimeException e){
-            throw e;
-        }
-        catch(RuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-    }
-    /**
-     * @see {@link net.gdface.facelog.IFaceLog#addPermit(net.gdface.facelog.db.DeviceGroupBean,net.gdface.facelog.db.PersonGroupBean,net.gdface.facelog.Token)}
-     */
-    @ThriftMethod(value = "addPermit" )
-    public void addPermit(DeviceGroupBean deviceGroup,
-        PersonGroupBean personGroup,
-        Token token) 
-        throws ServiceRuntimeException{
-        try{
-             delegate().addPermit(TypeTransformer.getInstance().to(
-                    deviceGroup,
-                    DeviceGroupBean.class,
-                    DeviceGroupBean.class),
-                TypeTransformer.getInstance().to(
-                    personGroup,
-                    PersonGroupBean.class,
-                    PersonGroupBean.class),
-                TypeTransformer.getInstance().to(
-                    token,
-                    Token.class,
-                    net.gdface.facelog.Token.class));
-        }
-        catch(ServiceRuntimeException e){
-            throw e;
-        }
-        catch(RuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-    }
-    /**
      * @see {@link net.gdface.facelog.IFaceLog#applyAckChannel(int,net.gdface.facelog.Token)}
      */
     @ThriftMethod(value = "applyAckChannelWithDuration" )
@@ -871,35 +819,6 @@ public class IFaceLogThriftDecorator {
         try{
             return delegate().deletePermit(deviceGroupId,
                 personGroupId,
-                TypeTransformer.getInstance().to(
-                    token,
-                    Token.class,
-                    net.gdface.facelog.Token.class));
-        }
-        catch(ServiceRuntimeException e){
-            throw e;
-        }
-        catch(RuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-    }
-    /**
-     * @see {@link net.gdface.facelog.IFaceLog#deletePermit(net.gdface.facelog.db.DeviceGroupBean,net.gdface.facelog.db.PersonGroupBean,net.gdface.facelog.Token)}
-     */
-    @ThriftMethod(value = "deletePermit" )
-    public int deletePermit(DeviceGroupBean deviceGroup,
-        PersonGroupBean personGroup,
-        Token token) 
-        throws ServiceRuntimeException{
-        try{
-            return delegate().deletePermit(TypeTransformer.getInstance().to(
-                    deviceGroup,
-                    DeviceGroupBean.class,
-                    DeviceGroupBean.class),
-                TypeTransformer.getInstance().to(
-                    personGroup,
-                    PersonGroupBean.class,
-                    PersonGroupBean.class),
                 TypeTransformer.getInstance().to(
                     token,
                     Token.class,
@@ -2832,6 +2751,61 @@ public class IFaceLogThriftDecorator {
                     net.gdface.facelog.Token.class)),
                     DeviceGroupBean.class,
                     DeviceGroupBean.class);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
+     * @see {@link net.gdface.facelog.IFaceLog#savePermit(int,int,java.lang.String,net.gdface.facelog.Token)}
+     */
+    @ThriftMethod(value = "savePermitWithSchedule" )
+    public PermitBean savePermitWithSchedule(int deviceGroupId,
+        int personGroupId,
+        String schedule,
+        Token token) 
+        throws ServiceRuntimeException{
+        try{
+            return TypeTransformer.getInstance().to(
+                    delegate().savePermit(deviceGroupId,
+                personGroupId,
+                schedule,
+                TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.Token.class)),
+                    PermitBean.class,
+                    PermitBean.class);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
+     * @see {@link net.gdface.facelog.IFaceLog#savePermit(net.gdface.facelog.db.PermitBean,net.gdface.facelog.Token)}
+     */
+    @ThriftMethod(value = "savePermit" )
+    public PermitBean savePermit(PermitBean permitBean,
+        Token token) 
+        throws ServiceRuntimeException{
+        try{
+            return TypeTransformer.getInstance().to(
+                    delegate().savePermit(TypeTransformer.getInstance().to(
+                    permitBean,
+                    PermitBean.class,
+                    PermitBean.class),
+                TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.Token.class)),
+                    PermitBean.class,
+                    PermitBean.class);
         }
         catch(ServiceRuntimeException e){
             throw e;

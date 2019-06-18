@@ -1259,518 +1259,6 @@ LogBean.prototype.write = function(output) {
   return;
 };
 
-DeviceGroupBean = function(args) {
-  this._new = null;
-  this.modified = null;
-  this.initialized = null;
-  this.id = null;
-  this.name = null;
-  this.leaf = null;
-  this.parent = null;
-  this.rootGroup = null;
-  this.schedule = null;
-  this.remark = null;
-  this.extBin = null;
-  this.extTxt = null;
-  this.createTime = null;
-  this.updateTime = null;
-  if (args) {
-    if (args._new !== undefined && args._new !== null) {
-      this._new = args._new;
-    } else {
-      throw new Thrift.TProtocolException(Thrift.TProtocolExceptionType.UNKNOWN, 'Required field _new is unset!');
-    }
-    if (args.modified !== undefined && args.modified !== null) {
-      this.modified = args.modified;
-    } else {
-      throw new Thrift.TProtocolException(Thrift.TProtocolExceptionType.UNKNOWN, 'Required field modified is unset!');
-    }
-    if (args.initialized !== undefined && args.initialized !== null) {
-      this.initialized = args.initialized;
-    } else {
-      throw new Thrift.TProtocolException(Thrift.TProtocolExceptionType.UNKNOWN, 'Required field initialized is unset!');
-    }
-    if (args.id !== undefined && args.id !== null) {
-      this.id = args.id;
-    }
-    if (args.name !== undefined && args.name !== null) {
-      this.name = args.name;
-    }
-    if (args.leaf !== undefined && args.leaf !== null) {
-      this.leaf = args.leaf;
-    }
-    if (args.parent !== undefined && args.parent !== null) {
-      this.parent = args.parent;
-    }
-    if (args.rootGroup !== undefined && args.rootGroup !== null) {
-      this.rootGroup = args.rootGroup;
-    }
-    if (args.schedule !== undefined && args.schedule !== null) {
-      this.schedule = args.schedule;
-    }
-    if (args.remark !== undefined && args.remark !== null) {
-      this.remark = args.remark;
-    }
-    if (args.extBin !== undefined && args.extBin !== null) {
-      this.extBin = args.extBin;
-    }
-    if (args.extTxt !== undefined && args.extTxt !== null) {
-      this.extTxt = args.extTxt;
-    }
-    if (args.createTime !== undefined && args.createTime !== null) {
-      this.createTime = args.createTime;
-    }
-    if (args.updateTime !== undefined && args.updateTime !== null) {
-      this.updateTime = args.updateTime;
-    }
-  }
-};
-DeviceGroupBean.prototype = {};
-DeviceGroupBean.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.BOOL) {
-        this._new = input.readBool().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.I32) {
-        this.modified = input.readI32().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.I32) {
-        this.initialized = input.readI32().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 4:
-      if (ftype == Thrift.Type.I32) {
-        this.id = input.readI32().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 5:
-      if (ftype == Thrift.Type.STRING) {
-        this.name = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 6:
-      if (ftype == Thrift.Type.I32) {
-        this.leaf = input.readI32().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 7:
-      if (ftype == Thrift.Type.I32) {
-        this.parent = input.readI32().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 8:
-      if (ftype == Thrift.Type.I32) {
-        this.rootGroup = input.readI32().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 9:
-      if (ftype == Thrift.Type.STRING) {
-        this.schedule = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 10:
-      if (ftype == Thrift.Type.STRING) {
-        this.remark = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 11:
-      if (ftype == Thrift.Type.STRING) {
-        this.extBin = input.readBinary().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 12:
-      if (ftype == Thrift.Type.STRING) {
-        this.extTxt = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 13:
-      if (ftype == Thrift.Type.I64) {
-        this.createTime = input.readI64().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 14:
-      if (ftype == Thrift.Type.I64) {
-        this.updateTime = input.readI64().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-DeviceGroupBean.prototype.write = function(output) {
-  output.writeStructBegin('DeviceGroupBean');
-  if (this._new !== null && this._new !== undefined) {
-    output.writeFieldBegin('_new', Thrift.Type.BOOL, 1);
-    output.writeBool(this._new);
-    output.writeFieldEnd();
-  }
-  if (this.modified !== null && this.modified !== undefined) {
-    output.writeFieldBegin('modified', Thrift.Type.I32, 2);
-    output.writeI32(this.modified);
-    output.writeFieldEnd();
-  }
-  if (this.initialized !== null && this.initialized !== undefined) {
-    output.writeFieldBegin('initialized', Thrift.Type.I32, 3);
-    output.writeI32(this.initialized);
-    output.writeFieldEnd();
-  }
-  if (this.id !== null && this.id !== undefined) {
-    output.writeFieldBegin('id', Thrift.Type.I32, 4);
-    output.writeI32(this.id);
-    output.writeFieldEnd();
-  }
-  if (this.name !== null && this.name !== undefined) {
-    output.writeFieldBegin('name', Thrift.Type.STRING, 5);
-    output.writeString(this.name);
-    output.writeFieldEnd();
-  }
-  if (this.leaf !== null && this.leaf !== undefined) {
-    output.writeFieldBegin('leaf', Thrift.Type.I32, 6);
-    output.writeI32(this.leaf);
-    output.writeFieldEnd();
-  }
-  if (this.parent !== null && this.parent !== undefined) {
-    output.writeFieldBegin('parent', Thrift.Type.I32, 7);
-    output.writeI32(this.parent);
-    output.writeFieldEnd();
-  }
-  if (this.rootGroup !== null && this.rootGroup !== undefined) {
-    output.writeFieldBegin('rootGroup', Thrift.Type.I32, 8);
-    output.writeI32(this.rootGroup);
-    output.writeFieldEnd();
-  }
-  if (this.schedule !== null && this.schedule !== undefined) {
-    output.writeFieldBegin('schedule', Thrift.Type.STRING, 9);
-    output.writeString(this.schedule);
-    output.writeFieldEnd();
-  }
-  if (this.remark !== null && this.remark !== undefined) {
-    output.writeFieldBegin('remark', Thrift.Type.STRING, 10);
-    output.writeString(this.remark);
-    output.writeFieldEnd();
-  }
-  if (this.extBin !== null && this.extBin !== undefined) {
-    output.writeFieldBegin('extBin', Thrift.Type.STRING, 11);
-    output.writeBinary(this.extBin);
-    output.writeFieldEnd();
-  }
-  if (this.extTxt !== null && this.extTxt !== undefined) {
-    output.writeFieldBegin('extTxt', Thrift.Type.STRING, 12);
-    output.writeString(this.extTxt);
-    output.writeFieldEnd();
-  }
-  if (this.createTime !== null && this.createTime !== undefined) {
-    output.writeFieldBegin('createTime', Thrift.Type.I64, 13);
-    output.writeI64(this.createTime);
-    output.writeFieldEnd();
-  }
-  if (this.updateTime !== null && this.updateTime !== undefined) {
-    output.writeFieldBegin('updateTime', Thrift.Type.I64, 14);
-    output.writeI64(this.updateTime);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-PersonGroupBean = function(args) {
-  this._new = null;
-  this.modified = null;
-  this.initialized = null;
-  this.id = null;
-  this.name = null;
-  this.leaf = null;
-  this.parent = null;
-  this.rootGroup = null;
-  this.remark = null;
-  this.extBin = null;
-  this.extTxt = null;
-  this.createTime = null;
-  this.updateTime = null;
-  if (args) {
-    if (args._new !== undefined && args._new !== null) {
-      this._new = args._new;
-    } else {
-      throw new Thrift.TProtocolException(Thrift.TProtocolExceptionType.UNKNOWN, 'Required field _new is unset!');
-    }
-    if (args.modified !== undefined && args.modified !== null) {
-      this.modified = args.modified;
-    } else {
-      throw new Thrift.TProtocolException(Thrift.TProtocolExceptionType.UNKNOWN, 'Required field modified is unset!');
-    }
-    if (args.initialized !== undefined && args.initialized !== null) {
-      this.initialized = args.initialized;
-    } else {
-      throw new Thrift.TProtocolException(Thrift.TProtocolExceptionType.UNKNOWN, 'Required field initialized is unset!');
-    }
-    if (args.id !== undefined && args.id !== null) {
-      this.id = args.id;
-    }
-    if (args.name !== undefined && args.name !== null) {
-      this.name = args.name;
-    }
-    if (args.leaf !== undefined && args.leaf !== null) {
-      this.leaf = args.leaf;
-    }
-    if (args.parent !== undefined && args.parent !== null) {
-      this.parent = args.parent;
-    }
-    if (args.rootGroup !== undefined && args.rootGroup !== null) {
-      this.rootGroup = args.rootGroup;
-    }
-    if (args.remark !== undefined && args.remark !== null) {
-      this.remark = args.remark;
-    }
-    if (args.extBin !== undefined && args.extBin !== null) {
-      this.extBin = args.extBin;
-    }
-    if (args.extTxt !== undefined && args.extTxt !== null) {
-      this.extTxt = args.extTxt;
-    }
-    if (args.createTime !== undefined && args.createTime !== null) {
-      this.createTime = args.createTime;
-    }
-    if (args.updateTime !== undefined && args.updateTime !== null) {
-      this.updateTime = args.updateTime;
-    }
-  }
-};
-PersonGroupBean.prototype = {};
-PersonGroupBean.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.BOOL) {
-        this._new = input.readBool().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.I32) {
-        this.modified = input.readI32().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.I32) {
-        this.initialized = input.readI32().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 4:
-      if (ftype == Thrift.Type.I32) {
-        this.id = input.readI32().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 5:
-      if (ftype == Thrift.Type.STRING) {
-        this.name = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 6:
-      if (ftype == Thrift.Type.I32) {
-        this.leaf = input.readI32().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 7:
-      if (ftype == Thrift.Type.I32) {
-        this.parent = input.readI32().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 8:
-      if (ftype == Thrift.Type.I32) {
-        this.rootGroup = input.readI32().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 9:
-      if (ftype == Thrift.Type.STRING) {
-        this.remark = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 10:
-      if (ftype == Thrift.Type.STRING) {
-        this.extBin = input.readBinary().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 11:
-      if (ftype == Thrift.Type.STRING) {
-        this.extTxt = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 12:
-      if (ftype == Thrift.Type.I64) {
-        this.createTime = input.readI64().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 13:
-      if (ftype == Thrift.Type.I64) {
-        this.updateTime = input.readI64().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-PersonGroupBean.prototype.write = function(output) {
-  output.writeStructBegin('PersonGroupBean');
-  if (this._new !== null && this._new !== undefined) {
-    output.writeFieldBegin('_new', Thrift.Type.BOOL, 1);
-    output.writeBool(this._new);
-    output.writeFieldEnd();
-  }
-  if (this.modified !== null && this.modified !== undefined) {
-    output.writeFieldBegin('modified', Thrift.Type.I32, 2);
-    output.writeI32(this.modified);
-    output.writeFieldEnd();
-  }
-  if (this.initialized !== null && this.initialized !== undefined) {
-    output.writeFieldBegin('initialized', Thrift.Type.I32, 3);
-    output.writeI32(this.initialized);
-    output.writeFieldEnd();
-  }
-  if (this.id !== null && this.id !== undefined) {
-    output.writeFieldBegin('id', Thrift.Type.I32, 4);
-    output.writeI32(this.id);
-    output.writeFieldEnd();
-  }
-  if (this.name !== null && this.name !== undefined) {
-    output.writeFieldBegin('name', Thrift.Type.STRING, 5);
-    output.writeString(this.name);
-    output.writeFieldEnd();
-  }
-  if (this.leaf !== null && this.leaf !== undefined) {
-    output.writeFieldBegin('leaf', Thrift.Type.I32, 6);
-    output.writeI32(this.leaf);
-    output.writeFieldEnd();
-  }
-  if (this.parent !== null && this.parent !== undefined) {
-    output.writeFieldBegin('parent', Thrift.Type.I32, 7);
-    output.writeI32(this.parent);
-    output.writeFieldEnd();
-  }
-  if (this.rootGroup !== null && this.rootGroup !== undefined) {
-    output.writeFieldBegin('rootGroup', Thrift.Type.I32, 8);
-    output.writeI32(this.rootGroup);
-    output.writeFieldEnd();
-  }
-  if (this.remark !== null && this.remark !== undefined) {
-    output.writeFieldBegin('remark', Thrift.Type.STRING, 9);
-    output.writeString(this.remark);
-    output.writeFieldEnd();
-  }
-  if (this.extBin !== null && this.extBin !== undefined) {
-    output.writeFieldBegin('extBin', Thrift.Type.STRING, 10);
-    output.writeBinary(this.extBin);
-    output.writeFieldEnd();
-  }
-  if (this.extTxt !== null && this.extTxt !== undefined) {
-    output.writeFieldBegin('extTxt', Thrift.Type.STRING, 11);
-    output.writeString(this.extTxt);
-    output.writeFieldEnd();
-  }
-  if (this.createTime !== null && this.createTime !== undefined) {
-    output.writeFieldBegin('createTime', Thrift.Type.I64, 12);
-    output.writeI64(this.createTime);
-    output.writeFieldEnd();
-  }
-  if (this.updateTime !== null && this.updateTime !== undefined) {
-    output.writeFieldBegin('updateTime', Thrift.Type.I64, 13);
-    output.writeI64(this.updateTime);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
 DeviceBean = function(args) {
   this._new = null;
   this.modified = null;
@@ -2123,6 +1611,270 @@ DeviceBean.prototype.write = function(output) {
   }
   if (this.updateTime !== null && this.updateTime !== undefined) {
     output.writeFieldBegin('updateTime', Thrift.Type.I64, 20);
+    output.writeI64(this.updateTime);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+DeviceGroupBean = function(args) {
+  this._new = null;
+  this.modified = null;
+  this.initialized = null;
+  this.id = null;
+  this.name = null;
+  this.leaf = null;
+  this.parent = null;
+  this.rootGroup = null;
+  this.schedule = null;
+  this.remark = null;
+  this.extBin = null;
+  this.extTxt = null;
+  this.createTime = null;
+  this.updateTime = null;
+  if (args) {
+    if (args._new !== undefined && args._new !== null) {
+      this._new = args._new;
+    } else {
+      throw new Thrift.TProtocolException(Thrift.TProtocolExceptionType.UNKNOWN, 'Required field _new is unset!');
+    }
+    if (args.modified !== undefined && args.modified !== null) {
+      this.modified = args.modified;
+    } else {
+      throw new Thrift.TProtocolException(Thrift.TProtocolExceptionType.UNKNOWN, 'Required field modified is unset!');
+    }
+    if (args.initialized !== undefined && args.initialized !== null) {
+      this.initialized = args.initialized;
+    } else {
+      throw new Thrift.TProtocolException(Thrift.TProtocolExceptionType.UNKNOWN, 'Required field initialized is unset!');
+    }
+    if (args.id !== undefined && args.id !== null) {
+      this.id = args.id;
+    }
+    if (args.name !== undefined && args.name !== null) {
+      this.name = args.name;
+    }
+    if (args.leaf !== undefined && args.leaf !== null) {
+      this.leaf = args.leaf;
+    }
+    if (args.parent !== undefined && args.parent !== null) {
+      this.parent = args.parent;
+    }
+    if (args.rootGroup !== undefined && args.rootGroup !== null) {
+      this.rootGroup = args.rootGroup;
+    }
+    if (args.schedule !== undefined && args.schedule !== null) {
+      this.schedule = args.schedule;
+    }
+    if (args.remark !== undefined && args.remark !== null) {
+      this.remark = args.remark;
+    }
+    if (args.extBin !== undefined && args.extBin !== null) {
+      this.extBin = args.extBin;
+    }
+    if (args.extTxt !== undefined && args.extTxt !== null) {
+      this.extTxt = args.extTxt;
+    }
+    if (args.createTime !== undefined && args.createTime !== null) {
+      this.createTime = args.createTime;
+    }
+    if (args.updateTime !== undefined && args.updateTime !== null) {
+      this.updateTime = args.updateTime;
+    }
+  }
+};
+DeviceGroupBean.prototype = {};
+DeviceGroupBean.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+      if (ftype == Thrift.Type.BOOL) {
+        this._new = input.readBool().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 2:
+      if (ftype == Thrift.Type.I32) {
+        this.modified = input.readI32().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 3:
+      if (ftype == Thrift.Type.I32) {
+        this.initialized = input.readI32().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 4:
+      if (ftype == Thrift.Type.I32) {
+        this.id = input.readI32().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 5:
+      if (ftype == Thrift.Type.STRING) {
+        this.name = input.readString().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 6:
+      if (ftype == Thrift.Type.I32) {
+        this.leaf = input.readI32().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 7:
+      if (ftype == Thrift.Type.I32) {
+        this.parent = input.readI32().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 8:
+      if (ftype == Thrift.Type.I32) {
+        this.rootGroup = input.readI32().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 9:
+      if (ftype == Thrift.Type.STRING) {
+        this.schedule = input.readString().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 10:
+      if (ftype == Thrift.Type.STRING) {
+        this.remark = input.readString().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 11:
+      if (ftype == Thrift.Type.STRING) {
+        this.extBin = input.readBinary().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 12:
+      if (ftype == Thrift.Type.STRING) {
+        this.extTxt = input.readString().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 13:
+      if (ftype == Thrift.Type.I64) {
+        this.createTime = input.readI64().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 14:
+      if (ftype == Thrift.Type.I64) {
+        this.updateTime = input.readI64().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+DeviceGroupBean.prototype.write = function(output) {
+  output.writeStructBegin('DeviceGroupBean');
+  if (this._new !== null && this._new !== undefined) {
+    output.writeFieldBegin('_new', Thrift.Type.BOOL, 1);
+    output.writeBool(this._new);
+    output.writeFieldEnd();
+  }
+  if (this.modified !== null && this.modified !== undefined) {
+    output.writeFieldBegin('modified', Thrift.Type.I32, 2);
+    output.writeI32(this.modified);
+    output.writeFieldEnd();
+  }
+  if (this.initialized !== null && this.initialized !== undefined) {
+    output.writeFieldBegin('initialized', Thrift.Type.I32, 3);
+    output.writeI32(this.initialized);
+    output.writeFieldEnd();
+  }
+  if (this.id !== null && this.id !== undefined) {
+    output.writeFieldBegin('id', Thrift.Type.I32, 4);
+    output.writeI32(this.id);
+    output.writeFieldEnd();
+  }
+  if (this.name !== null && this.name !== undefined) {
+    output.writeFieldBegin('name', Thrift.Type.STRING, 5);
+    output.writeString(this.name);
+    output.writeFieldEnd();
+  }
+  if (this.leaf !== null && this.leaf !== undefined) {
+    output.writeFieldBegin('leaf', Thrift.Type.I32, 6);
+    output.writeI32(this.leaf);
+    output.writeFieldEnd();
+  }
+  if (this.parent !== null && this.parent !== undefined) {
+    output.writeFieldBegin('parent', Thrift.Type.I32, 7);
+    output.writeI32(this.parent);
+    output.writeFieldEnd();
+  }
+  if (this.rootGroup !== null && this.rootGroup !== undefined) {
+    output.writeFieldBegin('rootGroup', Thrift.Type.I32, 8);
+    output.writeI32(this.rootGroup);
+    output.writeFieldEnd();
+  }
+  if (this.schedule !== null && this.schedule !== undefined) {
+    output.writeFieldBegin('schedule', Thrift.Type.STRING, 9);
+    output.writeString(this.schedule);
+    output.writeFieldEnd();
+  }
+  if (this.remark !== null && this.remark !== undefined) {
+    output.writeFieldBegin('remark', Thrift.Type.STRING, 10);
+    output.writeString(this.remark);
+    output.writeFieldEnd();
+  }
+  if (this.extBin !== null && this.extBin !== undefined) {
+    output.writeFieldBegin('extBin', Thrift.Type.STRING, 11);
+    output.writeBinary(this.extBin);
+    output.writeFieldEnd();
+  }
+  if (this.extTxt !== null && this.extTxt !== undefined) {
+    output.writeFieldBegin('extTxt', Thrift.Type.STRING, 12);
+    output.writeString(this.extTxt);
+    output.writeFieldEnd();
+  }
+  if (this.createTime !== null && this.createTime !== undefined) {
+    output.writeFieldBegin('createTime', Thrift.Type.I64, 13);
+    output.writeI64(this.createTime);
+    output.writeFieldEnd();
+  }
+  if (this.updateTime !== null && this.updateTime !== undefined) {
+    output.writeFieldBegin('updateTime', Thrift.Type.I64, 14);
     output.writeI64(this.updateTime);
     output.writeFieldEnd();
   }
@@ -2683,6 +2435,254 @@ PersonBean.prototype.write = function(output) {
   }
   if (this.updateTime !== null && this.updateTime !== undefined) {
     output.writeFieldBegin('updateTime', Thrift.Type.I64, 20);
+    output.writeI64(this.updateTime);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+PersonGroupBean = function(args) {
+  this._new = null;
+  this.modified = null;
+  this.initialized = null;
+  this.id = null;
+  this.name = null;
+  this.leaf = null;
+  this.parent = null;
+  this.rootGroup = null;
+  this.remark = null;
+  this.extBin = null;
+  this.extTxt = null;
+  this.createTime = null;
+  this.updateTime = null;
+  if (args) {
+    if (args._new !== undefined && args._new !== null) {
+      this._new = args._new;
+    } else {
+      throw new Thrift.TProtocolException(Thrift.TProtocolExceptionType.UNKNOWN, 'Required field _new is unset!');
+    }
+    if (args.modified !== undefined && args.modified !== null) {
+      this.modified = args.modified;
+    } else {
+      throw new Thrift.TProtocolException(Thrift.TProtocolExceptionType.UNKNOWN, 'Required field modified is unset!');
+    }
+    if (args.initialized !== undefined && args.initialized !== null) {
+      this.initialized = args.initialized;
+    } else {
+      throw new Thrift.TProtocolException(Thrift.TProtocolExceptionType.UNKNOWN, 'Required field initialized is unset!');
+    }
+    if (args.id !== undefined && args.id !== null) {
+      this.id = args.id;
+    }
+    if (args.name !== undefined && args.name !== null) {
+      this.name = args.name;
+    }
+    if (args.leaf !== undefined && args.leaf !== null) {
+      this.leaf = args.leaf;
+    }
+    if (args.parent !== undefined && args.parent !== null) {
+      this.parent = args.parent;
+    }
+    if (args.rootGroup !== undefined && args.rootGroup !== null) {
+      this.rootGroup = args.rootGroup;
+    }
+    if (args.remark !== undefined && args.remark !== null) {
+      this.remark = args.remark;
+    }
+    if (args.extBin !== undefined && args.extBin !== null) {
+      this.extBin = args.extBin;
+    }
+    if (args.extTxt !== undefined && args.extTxt !== null) {
+      this.extTxt = args.extTxt;
+    }
+    if (args.createTime !== undefined && args.createTime !== null) {
+      this.createTime = args.createTime;
+    }
+    if (args.updateTime !== undefined && args.updateTime !== null) {
+      this.updateTime = args.updateTime;
+    }
+  }
+};
+PersonGroupBean.prototype = {};
+PersonGroupBean.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+      if (ftype == Thrift.Type.BOOL) {
+        this._new = input.readBool().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 2:
+      if (ftype == Thrift.Type.I32) {
+        this.modified = input.readI32().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 3:
+      if (ftype == Thrift.Type.I32) {
+        this.initialized = input.readI32().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 4:
+      if (ftype == Thrift.Type.I32) {
+        this.id = input.readI32().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 5:
+      if (ftype == Thrift.Type.STRING) {
+        this.name = input.readString().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 6:
+      if (ftype == Thrift.Type.I32) {
+        this.leaf = input.readI32().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 7:
+      if (ftype == Thrift.Type.I32) {
+        this.parent = input.readI32().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 8:
+      if (ftype == Thrift.Type.I32) {
+        this.rootGroup = input.readI32().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 9:
+      if (ftype == Thrift.Type.STRING) {
+        this.remark = input.readString().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 10:
+      if (ftype == Thrift.Type.STRING) {
+        this.extBin = input.readBinary().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 11:
+      if (ftype == Thrift.Type.STRING) {
+        this.extTxt = input.readString().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 12:
+      if (ftype == Thrift.Type.I64) {
+        this.createTime = input.readI64().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 13:
+      if (ftype == Thrift.Type.I64) {
+        this.updateTime = input.readI64().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+PersonGroupBean.prototype.write = function(output) {
+  output.writeStructBegin('PersonGroupBean');
+  if (this._new !== null && this._new !== undefined) {
+    output.writeFieldBegin('_new', Thrift.Type.BOOL, 1);
+    output.writeBool(this._new);
+    output.writeFieldEnd();
+  }
+  if (this.modified !== null && this.modified !== undefined) {
+    output.writeFieldBegin('modified', Thrift.Type.I32, 2);
+    output.writeI32(this.modified);
+    output.writeFieldEnd();
+  }
+  if (this.initialized !== null && this.initialized !== undefined) {
+    output.writeFieldBegin('initialized', Thrift.Type.I32, 3);
+    output.writeI32(this.initialized);
+    output.writeFieldEnd();
+  }
+  if (this.id !== null && this.id !== undefined) {
+    output.writeFieldBegin('id', Thrift.Type.I32, 4);
+    output.writeI32(this.id);
+    output.writeFieldEnd();
+  }
+  if (this.name !== null && this.name !== undefined) {
+    output.writeFieldBegin('name', Thrift.Type.STRING, 5);
+    output.writeString(this.name);
+    output.writeFieldEnd();
+  }
+  if (this.leaf !== null && this.leaf !== undefined) {
+    output.writeFieldBegin('leaf', Thrift.Type.I32, 6);
+    output.writeI32(this.leaf);
+    output.writeFieldEnd();
+  }
+  if (this.parent !== null && this.parent !== undefined) {
+    output.writeFieldBegin('parent', Thrift.Type.I32, 7);
+    output.writeI32(this.parent);
+    output.writeFieldEnd();
+  }
+  if (this.rootGroup !== null && this.rootGroup !== undefined) {
+    output.writeFieldBegin('rootGroup', Thrift.Type.I32, 8);
+    output.writeI32(this.rootGroup);
+    output.writeFieldEnd();
+  }
+  if (this.remark !== null && this.remark !== undefined) {
+    output.writeFieldBegin('remark', Thrift.Type.STRING, 9);
+    output.writeString(this.remark);
+    output.writeFieldEnd();
+  }
+  if (this.extBin !== null && this.extBin !== undefined) {
+    output.writeFieldBegin('extBin', Thrift.Type.STRING, 10);
+    output.writeBinary(this.extBin);
+    output.writeFieldEnd();
+  }
+  if (this.extTxt !== null && this.extTxt !== undefined) {
+    output.writeFieldBegin('extTxt', Thrift.Type.STRING, 11);
+    output.writeString(this.extTxt);
+    output.writeFieldEnd();
+  }
+  if (this.createTime !== null && this.createTime !== undefined) {
+    output.writeFieldBegin('createTime', Thrift.Type.I64, 12);
+    output.writeI64(this.createTime);
+    output.writeFieldEnd();
+  }
+  if (this.updateTime !== null && this.updateTime !== undefined) {
+    output.writeFieldBegin('updateTime', Thrift.Type.I64, 13);
     output.writeI64(this.updateTime);
     output.writeFieldEnd();
   }

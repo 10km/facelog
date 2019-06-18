@@ -485,68 +485,6 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
-    public void addPermit(final int deviceGroupId,
-        final int personGroupId,
-        final Token token) 
-        {
-        try{
-             syncCall(new Function<Void,Void>() {
-                @Override
-                public Void apply(Void input) {
-                    return input;
-                }},
-                new ServiceAsyncCall<Void>(){
-                @Override
-                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<Void> nativeCallback){
-                    service.addPermitById(deviceGroupId,personGroupId,TypeTransformer.getInstance().to(
-                    token,
-                    Token.class,
-                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
-                }});
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch (Throwable e) {
-            Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);
-        }
-    }
-    @Override
-    public void addPermit(final DeviceGroupBean deviceGroup,
-        final PersonGroupBean personGroup,
-        final Token token) 
-        {
-        try{
-             syncCall(new Function<Void,Void>() {
-                @Override
-                public Void apply(Void input) {
-                    return input;
-                }},
-                new ServiceAsyncCall<Void>(){
-                @Override
-                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<Void> nativeCallback){
-                    service.addPermit(TypeTransformer.getInstance().to(
-                    deviceGroup,
-                    DeviceGroupBean.class,
-                    net.gdface.facelog.client.thrift.DeviceGroupBean.class),TypeTransformer.getInstance().to(
-                    personGroup,
-                    PersonGroupBean.class,
-                    net.gdface.facelog.client.thrift.PersonGroupBean.class),TypeTransformer.getInstance().to(
-                    token,
-                    Token.class,
-                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
-                }});
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch (Throwable e) {
-            Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);
-        }
-    }
-    @Override
     public String applyAckChannel(final int duration,
         final Token token) 
         {
@@ -1145,40 +1083,6 @@ public class IFaceLogThriftClient implements IFaceLog {
                 @Override
                 public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<Integer> nativeCallback){
                     service.deletePermitById(deviceGroupId,personGroupId,TypeTransformer.getInstance().to(
-                    token,
-                    Token.class,
-                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
-                }});
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch (Throwable e) {
-            Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);
-        }
-    }
-    @Override
-    public int deletePermit(final DeviceGroupBean deviceGroup,
-        final PersonGroupBean personGroup,
-        final Token token) 
-        {
-        try{
-            return syncCall(new Function<Integer,Integer>() {
-                @Override
-                public Integer apply(Integer input) {
-                    return input;
-                }},
-                new ServiceAsyncCall<Integer>(){
-                @Override
-                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<Integer> nativeCallback){
-                    service.deletePermit(TypeTransformer.getInstance().to(
-                    deviceGroup,
-                    DeviceGroupBean.class,
-                    net.gdface.facelog.client.thrift.DeviceGroupBean.class),TypeTransformer.getInstance().to(
-                    personGroup,
-                    PersonGroupBean.class,
-                    net.gdface.facelog.client.thrift.PersonGroupBean.class),TypeTransformer.getInstance().to(
                     token,
                     Token.class,
                     net.gdface.facelog.client.thrift.Token.class),nativeCallback);
@@ -3704,6 +3608,71 @@ public class IFaceLogThriftClient implements IFaceLog {
                     deviceGroupBean,
                     DeviceGroupBean.class,
                     net.gdface.facelog.client.thrift.DeviceGroupBean.class),TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                }});
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);
+        }
+    }
+    @Override
+    public PermitBean savePermit(final int deviceGroupId,
+        final int personGroupId,
+        final String schedule,
+        final Token token) 
+        {
+        try{
+            return syncCall(new Function<net.gdface.facelog.client.thrift.PermitBean,PermitBean>() {
+                @Override
+                public PermitBean apply(net.gdface.facelog.client.thrift.PermitBean input) {
+                    return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.PermitBean.class,
+                    PermitBean.class);
+                }},
+                new ServiceAsyncCall<net.gdface.facelog.client.thrift.PermitBean>(){
+                @Override
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<net.gdface.facelog.client.thrift.PermitBean> nativeCallback){
+                    service.savePermitWithSchedule(deviceGroupId,personGroupId,schedule,TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                }});
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);
+        }
+    }
+    @Override
+    public PermitBean savePermit(final PermitBean permitBean,
+        final Token token) 
+        {
+        try{
+            return syncCall(new Function<net.gdface.facelog.client.thrift.PermitBean,PermitBean>() {
+                @Override
+                public PermitBean apply(net.gdface.facelog.client.thrift.PermitBean input) {
+                    return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.PermitBean.class,
+                    PermitBean.class);
+                }},
+                new ServiceAsyncCall<net.gdface.facelog.client.thrift.PermitBean>(){
+                @Override
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<net.gdface.facelog.client.thrift.PermitBean> nativeCallback){
+                    service.savePermit(TypeTransformer.getInstance().to(
+                    permitBean,
+                    PermitBean.class,
+                    net.gdface.facelog.client.thrift.PermitBean.class),TypeTransformer.getInstance().to(
                     token,
                     Token.class,
                     net.gdface.facelog.client.thrift.Token.class),nativeCallback);
