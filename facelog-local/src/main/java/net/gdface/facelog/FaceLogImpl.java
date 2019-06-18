@@ -1561,7 +1561,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		} 
 	}
     @Override
-    public long applyCmdSn(Token token) {
+    public int applyCmdSn(Token token) {
     	try {
     		Enable.PERSON_ONLY.check(tm, token);
 			return tm.applyCmdSn(token.getId());
@@ -1570,7 +1570,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		} 
 	}
     @Override
-    public boolean isValidCmdSn(long cmdSn) {
+    public boolean isValidCmdSn(int cmdSn) {
     	try {
 			return tm.isValidCmdSn(cmdSn);
 		} catch (RuntimeException e) {

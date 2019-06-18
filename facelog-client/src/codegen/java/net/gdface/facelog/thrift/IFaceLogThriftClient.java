@@ -452,7 +452,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
-    public long applyCmdSn(Token token) 
+    public int applyCmdSn(Token token) 
         {
         net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
         try{
@@ -1936,7 +1936,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
-    public boolean isValidCmdSn(long cmdSn) 
+    public boolean isValidCmdSn(int cmdSn) 
         {
         net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
         try{

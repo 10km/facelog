@@ -252,7 +252,7 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
-    public long applyCmdSn (Token token) {
+    public int applyCmdSn (Token token) {
         return delegate().applyCmdSn(token);
     }
 
@@ -680,7 +680,7 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
-    public boolean isValidCmdSn (long cmdSn) {
+    public boolean isValidCmdSn (int cmdSn) {
         return delegate().isValidCmdSn(cmdSn);
     }
 

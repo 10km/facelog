@@ -30,7 +30,7 @@ public partial class IFaceLog {
     void addPermitById(int deviceGroupId, int personGroupId, Token token);
     string applyAckChannel(Token token);
     string applyAckChannelWithDuration(int duration, Token token);
-    long applyCmdSn(Token token);
+    int applyCmdSn(Token token);
     Token applyPersonToken(int personId, string password, bool isMd5);
     Token applyRootToken(string password, bool isMd5);
     Token applyUserToken(int userid, string password, bool isMd5);
@@ -105,7 +105,7 @@ public partial class IFaceLog {
     bool isDisable(int personId);
     bool isLocal();
     bool isValidAckChannel(string ackChannel);
-    bool isValidCmdSn(long cmdSn);
+    bool isValidCmdSn(int cmdSn);
     bool isValidDeviceToken(Token token);
     bool isValidPassword(string userId, string password, bool isMd5);
     bool isValidPersonToken(Token token);
@@ -184,7 +184,7 @@ public partial class IFaceLog {
     Task addPermitByIdAsync(int deviceGroupId, int personGroupId, Token token);
     Task<string> applyAckChannelAsync(Token token);
     Task<string> applyAckChannelWithDurationAsync(int duration, Token token);
-    Task<long> applyCmdSnAsync(Token token);
+    Task<int> applyCmdSnAsync(Token token);
     Task<Token> applyPersonTokenAsync(int personId, string password, bool isMd5);
     Task<Token> applyRootTokenAsync(string password, bool isMd5);
     Task<Token> applyUserTokenAsync(int userid, string password, bool isMd5);
@@ -259,7 +259,7 @@ public partial class IFaceLog {
     Task<bool> isDisableAsync(int personId);
     Task<bool> isLocalAsync();
     Task<bool> isValidAckChannelAsync(string ackChannel);
-    Task<bool> isValidCmdSnAsync(long cmdSn);
+    Task<bool> isValidCmdSnAsync(int cmdSn);
     Task<bool> isValidDeviceTokenAsync(Token token);
     Task<bool> isValidPasswordAsync(string userId, string password, bool isMd5);
     Task<bool> isValidPersonTokenAsync(Token token);
@@ -351,7 +351,7 @@ public partial class IFaceLog {
     IAsyncResult Begin_applyAckChannelWithDuration(AsyncCallback callback, object state, int duration, Token token);
     string End_applyAckChannelWithDuration(IAsyncResult asyncResult);
     IAsyncResult Begin_applyCmdSn(AsyncCallback callback, object state, Token token);
-    long End_applyCmdSn(IAsyncResult asyncResult);
+    int End_applyCmdSn(IAsyncResult asyncResult);
     IAsyncResult Begin_applyPersonToken(AsyncCallback callback, object state, int personId, string password, bool isMd5);
     Token End_applyPersonToken(IAsyncResult asyncResult);
     IAsyncResult Begin_applyRootToken(AsyncCallback callback, object state, string password, bool isMd5);
@@ -500,7 +500,7 @@ public partial class IFaceLog {
     bool End_isLocal(IAsyncResult asyncResult);
     IAsyncResult Begin_isValidAckChannel(AsyncCallback callback, object state, string ackChannel);
     bool End_isValidAckChannel(IAsyncResult asyncResult);
-    IAsyncResult Begin_isValidCmdSn(AsyncCallback callback, object state, long cmdSn);
+    IAsyncResult Begin_isValidCmdSn(AsyncCallback callback, object state, int cmdSn);
     bool End_isValidCmdSn(IAsyncResult asyncResult);
     IAsyncResult Begin_isValidDeviceToken(AsyncCallback callback, object state, Token token);
     bool End_isValidDeviceToken(IAsyncResult asyncResult);
@@ -1413,15 +1413,15 @@ public partial class IFaceLog {
       return send_applyCmdSn(callback, state, token);
     }
 
-    public long End_applyCmdSn(IAsyncResult asyncResult)
+    public int End_applyCmdSn(IAsyncResult asyncResult)
     {
       oprot_.Transport.EndFlush(asyncResult);
       return recv_applyCmdSn();
     }
 
-    public async Task<long> applyCmdSnAsync(Token token)
+    public async Task<int> applyCmdSnAsync(Token token)
     {
-      long retval;
+      int retval;
       retval = await Task.Run(() =>
       {
         return applyCmdSn(token);
@@ -1429,7 +1429,7 @@ public partial class IFaceLog {
       return retval;
     }
 
-    public long applyCmdSn(Token token)
+    public int applyCmdSn(Token token)
     {
       var asyncResult = Begin_applyCmdSn(null, null, token);
       return End_applyCmdSn(asyncResult);
@@ -1445,7 +1445,7 @@ public partial class IFaceLog {
       return oprot_.Transport.BeginFlush(callback, state);
     }
 
-    public long recv_applyCmdSn()
+    public int recv_applyCmdSn()
     {
       TMessage msg = iprot_.ReadMessageBegin();
       if (msg.Type == TMessageType.Exception) {
@@ -5788,7 +5788,7 @@ public partial class IFaceLog {
     }
 
     
-    public IAsyncResult Begin_isValidCmdSn(AsyncCallback callback, object state, long cmdSn)
+    public IAsyncResult Begin_isValidCmdSn(AsyncCallback callback, object state, int cmdSn)
     {
       return send_isValidCmdSn(callback, state, cmdSn);
     }
@@ -5799,7 +5799,7 @@ public partial class IFaceLog {
       return recv_isValidCmdSn();
     }
 
-    public async Task<bool> isValidCmdSnAsync(long cmdSn)
+    public async Task<bool> isValidCmdSnAsync(int cmdSn)
     {
       bool retval;
       retval = await Task.Run(() =>
@@ -5809,13 +5809,13 @@ public partial class IFaceLog {
       return retval;
     }
 
-    public bool isValidCmdSn(long cmdSn)
+    public bool isValidCmdSn(int cmdSn)
     {
       var asyncResult = Begin_isValidCmdSn(null, null, cmdSn);
       return End_isValidCmdSn(asyncResult);
 
     }
-    public IAsyncResult send_isValidCmdSn(AsyncCallback callback, object state, long cmdSn)
+    public IAsyncResult send_isValidCmdSn(AsyncCallback callback, object state, int cmdSn)
     {
       oprot_.WriteMessageBegin(new TMessage("isValidCmdSn", TMessageType.Call, seqid_));
       isValidCmdSn_args args = new isValidCmdSn_args();
@@ -23969,7 +23969,7 @@ public partial class IFaceLog {
   public partial class applyCmdSn_result : TBase
   {
 
-    public long? Success { get; set; }
+    public int? Success { get; set; }
 
     public ServiceRuntimeException Ex1 { get; set; }
 
@@ -23992,8 +23992,8 @@ public partial class IFaceLog {
           switch (field.ID)
           {
             case 0:
-              if (field.Type == TType.I64) {
-                Success = iprot.ReadI64();
+              if (field.Type == TType.I32) {
+                Success = iprot.ReadI32();
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
@@ -24030,10 +24030,10 @@ public partial class IFaceLog {
 
         if (this.Success != null) {
           field.Name = "Success";
-          field.Type = TType.I64;
+          field.Type = TType.I32;
           field.ID = 0;
           oprot.WriteFieldBegin(field);
-          oprot.WriteI64(Success.Value);
+          oprot.WriteI32(Success.Value);
           oprot.WriteFieldEnd();
         } else if (this.Ex1 != null) {
           field.Name = "Ex1";
@@ -40227,12 +40227,12 @@ public partial class IFaceLog {
   public partial class isValidCmdSn_args : TBase
   {
 
-    public long CmdSn { get; set; }
+    public int CmdSn { get; set; }
 
     public isValidCmdSn_args() {
     }
 
-    public isValidCmdSn_args(long cmdSn) : this() {
+    public isValidCmdSn_args(int cmdSn) : this() {
       this.CmdSn = cmdSn;
     }
 
@@ -40253,8 +40253,8 @@ public partial class IFaceLog {
           switch (field.ID)
           {
             case 1:
-              if (field.Type == TType.I64) {
-                CmdSn = iprot.ReadI64();
+              if (field.Type == TType.I32) {
+                CmdSn = iprot.ReadI32();
                 isset_cmdSn = true;
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
@@ -40284,10 +40284,10 @@ public partial class IFaceLog {
         oprot.WriteStructBegin(struc);
         TField field = new TField();
         field.Name = "cmdSn";
-        field.Type = TType.I64;
+        field.Type = TType.I32;
         field.ID = 1;
         oprot.WriteFieldBegin(field);
-        oprot.WriteI64(CmdSn);
+        oprot.WriteI32(CmdSn);
         oprot.WriteFieldEnd();
         oprot.WriteFieldStop();
         oprot.WriteStructEnd();

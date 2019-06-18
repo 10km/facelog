@@ -466,16 +466,16 @@ public class IFaceLogThriftClientAsync {
     /**
      * see also {@link net.gdface.facelog.IFaceLog#applyCmdSn(net.gdface.facelog.Token)}
      */
-    public ListenableFuture<Long> applyCmdSn(Token token){        
+    public ListenableFuture<Integer> applyCmdSn(Token token){        
         net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Long> future = async.applyCmdSn(TypeTransformer.getInstance().to(
+        ListenableFuture<Integer> future = async.applyCmdSn(TypeTransformer.getInstance().to(
                     token,
                     Token.class,
                     net.gdface.facelog.client.thrift.Token.class));
         return factory.wrap(async,future);
     }
     public void applyCmdSn(Token token,
-        FutureCallback<Long>callback){
+        FutureCallback<Integer>callback){
         factory.addCallback(applyCmdSn(token), callback);
     }
     /**
@@ -1797,14 +1797,14 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(isValidAckChannel(ackChannel), callback);
     }
     /**
-     * see also {@link net.gdface.facelog.IFaceLog#isValidCmdSn(long)}
+     * see also {@link net.gdface.facelog.IFaceLog#isValidCmdSn(int)}
      */
-    public ListenableFuture<Boolean> isValidCmdSn(long cmdSn){        
+    public ListenableFuture<Boolean> isValidCmdSn(int cmdSn){        
         net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
         ListenableFuture<Boolean> future = async.isValidCmdSn(cmdSn);
         return factory.wrap(async,future);
     }
-    public void isValidCmdSn(long cmdSn,
+    public void isValidCmdSn(int cmdSn,
         FutureCallback<Boolean>callback){
         factory.addCallback(isValidCmdSn(cmdSn), callback);
     }

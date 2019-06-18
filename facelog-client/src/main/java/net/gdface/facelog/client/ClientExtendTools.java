@@ -530,11 +530,11 @@ public class ClientExtendTools{
      * @param token
      * @return 访问令牌
      */
-    public Supplier<Long> 
+    public Supplier<Integer> 
     getCmdSnSupplier(final Token token){
-        return new Supplier<Long>(){
+        return new Supplier<Integer>(){
             @Override
-            public Long get() {
+            public Integer get() {
                 try{
                     return syncInstance != null 
                     		? syncInstance.applyCmdSn(token) 
@@ -569,10 +569,10 @@ public class ClientExtendTools{
         }; 
     }
     /** 设备命令序列号验证器 */
-    public final Predicate<Long> cmdSnValidator = 
-        new Predicate<Long>(){
+    public final Predicate<Integer> cmdSnValidator = 
+        new Predicate<Integer>(){
             @Override
-            public boolean apply(Long input) {
+            public boolean apply(Integer input) {
                 try{
                     return null == input ? false 
                     		: (syncInstance != null 

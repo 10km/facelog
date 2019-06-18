@@ -661,12 +661,12 @@ public class FacelogDefaultImpl implements IFaceLog {
 	}
 
 	@Override
-	public long applyCmdSn(Token token) {
+	public int applyCmdSn(Token token) {
 		return 0;
 	}
 
 	@Override
-	public boolean isValidCmdSn(long cmdSn) {
+	public boolean isValidCmdSn(int cmdSn) {
 		return false;
 	}
 

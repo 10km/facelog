@@ -129,7 +129,7 @@ public class IFaceLogClientAsync extends IFaceLogThriftClientAsync {
 	 * @return
 	 * @see net.gdface.facelog.client.ClientExtendTools#getCmdSnSupplier(net.gdface.facelog.Token)
 	 */
-	public Supplier<Long> getCmdSnSupplier(Token token) {
+	public Supplier<Integer> getCmdSnSupplier(Token token) {
 		return clientTools.getCmdSnSupplier(token);
 	}
 

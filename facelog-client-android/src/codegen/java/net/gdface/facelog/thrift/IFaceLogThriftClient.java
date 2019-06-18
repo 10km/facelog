@@ -600,17 +600,17 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
-    public long applyCmdSn(final Token token) 
+    public int applyCmdSn(final Token token) 
         {
         try{
-            return syncCall(new Function<Long,Long>() {
+            return syncCall(new Function<Integer,Integer>() {
                 @Override
-                public Long apply(Long input) {
+                public Integer apply(Integer input) {
                     return input;
                 }},
-                new ServiceAsyncCall<Long>(){
+                new ServiceAsyncCall<Integer>(){
                 @Override
-                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<Long> nativeCallback){
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<Integer> nativeCallback){
                     service.applyCmdSn(TypeTransformer.getInstance().to(
                     token,
                     Token.class,
@@ -2587,7 +2587,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
-    public boolean isValidCmdSn(final long cmdSn) 
+    public boolean isValidCmdSn(final int cmdSn) 
         {
         try{
             return syncCall(new Function<Boolean,Boolean>() {

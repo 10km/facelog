@@ -2299,8 +2299,8 @@ IFaceLog_applyCmdSn_result.prototype.read = function(input) {
     switch (fid)
     {
       case 0:
-      if (ftype == Thrift.Type.I64) {
-        this.success = input.readI64().value;
+      if (ftype == Thrift.Type.I32) {
+        this.success = input.readI32().value;
       } else {
         input.skip(ftype);
       }
@@ -2325,8 +2325,8 @@ IFaceLog_applyCmdSn_result.prototype.read = function(input) {
 IFaceLog_applyCmdSn_result.prototype.write = function(output) {
   output.writeStructBegin('IFaceLog_applyCmdSn_result');
   if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.I64, 0);
-    output.writeI64(this.success);
+    output.writeFieldBegin('success', Thrift.Type.I32, 0);
+    output.writeI32(this.success);
     output.writeFieldEnd();
   }
   if (this.ex1 !== null && this.ex1 !== undefined) {
@@ -13010,8 +13010,8 @@ IFaceLog_isValidCmdSn_args.prototype.read = function(input) {
     switch (fid)
     {
       case 1:
-      if (ftype == Thrift.Type.I64) {
-        this.cmdSn = input.readI64().value;
+      if (ftype == Thrift.Type.I32) {
+        this.cmdSn = input.readI32().value;
       } else {
         input.skip(ftype);
       }
@@ -13031,8 +13031,8 @@ IFaceLog_isValidCmdSn_args.prototype.read = function(input) {
 IFaceLog_isValidCmdSn_args.prototype.write = function(output) {
   output.writeStructBegin('IFaceLog_isValidCmdSn_args');
   if (this.cmdSn !== null && this.cmdSn !== undefined) {
-    output.writeFieldBegin('cmdSn', Thrift.Type.I64, 1);
-    output.writeI64(this.cmdSn);
+    output.writeFieldBegin('cmdSn', Thrift.Type.I32, 1);
+    output.writeI32(this.cmdSn);
     output.writeFieldEnd();
   }
   output.writeFieldStop();

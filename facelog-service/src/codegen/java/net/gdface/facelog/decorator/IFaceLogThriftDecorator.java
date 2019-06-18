@@ -459,7 +459,7 @@ public class IFaceLogThriftDecorator {
      * @see {@link net.gdface.facelog.IFaceLog#applyCmdSn(net.gdface.facelog.Token)}
      */
     @ThriftMethod(value = "applyCmdSn" )
-    public long applyCmdSn(Token token) 
+    public int applyCmdSn(Token token) 
         throws ServiceRuntimeException{
         try{
             return delegate().applyCmdSn(TypeTransformer.getInstance().to(
@@ -1974,10 +1974,10 @@ public class IFaceLogThriftDecorator {
         }
     }
     /**
-     * @see {@link net.gdface.facelog.IFaceLog#isValidCmdSn(long)}
+     * @see {@link net.gdface.facelog.IFaceLog#isValidCmdSn(int)}
      */
     @ThriftMethod(value = "isValidCmdSn" )
-    public boolean isValidCmdSn(long cmdSn) 
+    public boolean isValidCmdSn(int cmdSn) 
         throws ServiceRuntimeException{
         try{
             return delegate().isValidCmdSn(cmdSn);

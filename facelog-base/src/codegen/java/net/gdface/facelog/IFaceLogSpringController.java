@@ -4512,8 +4512,8 @@ public class IFaceLogSpringController {
      * wrap arguments for method {@link #isValidCmdSn(IsValidCmdSnArgs)}
      */
     public static class IsValidCmdSnArgs{
-        @ApiModelProperty(value ="" ,required=true ,dataType="long")
-        public long cmdSn;
+        @ApiModelProperty(value ="" ,required=true ,dataType="int")
+        public int cmdSn;
     }
     /**
      * argClass-89<br>

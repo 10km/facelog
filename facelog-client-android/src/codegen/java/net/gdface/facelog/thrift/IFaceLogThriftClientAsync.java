@@ -597,12 +597,12 @@ public class IFaceLogThriftClientAsync {
     /**
      * see also {@link net.gdface.facelog.IFaceLog#applyCmdSn(net.gdface.facelog.Token)}
      */
-    public ListenableFuture<Long> applyCmdSn(Token token){
-        MethodCallback<Long,Long> nativeCallback = 
-            new MethodCallback<Long,Long>(
-                new Function<Long,Long>() {
+    public ListenableFuture<Integer> applyCmdSn(Token token){
+        MethodCallback<Integer,Integer> nativeCallback = 
+            new MethodCallback<Integer,Integer>(
+                new Function<Integer,Integer>() {
                         @Override
-                        public Long apply(Long input) {
+                        public Integer apply(Integer input) {
                             return input;
                 }});
         nativeCallback.service.applyCmdSn(
@@ -613,7 +613,7 @@ public class IFaceLogThriftClientAsync {
         return nativeCallback.feature;
     }
     public void applyCmdSn(Token token,
-        FutureCallback<Long>callback){
+        FutureCallback<Integer>callback){
         factory.addCallback(applyCmdSn(token), callback);
     }
     /**
@@ -2353,9 +2353,9 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(isValidAckChannel(ackChannel), callback);
     }
     /**
-     * see also {@link net.gdface.facelog.IFaceLog#isValidCmdSn(long)}
+     * see also {@link net.gdface.facelog.IFaceLog#isValidCmdSn(int)}
      */
-    public ListenableFuture<Boolean> isValidCmdSn(long cmdSn){
+    public ListenableFuture<Boolean> isValidCmdSn(int cmdSn){
         MethodCallback<Boolean,Boolean> nativeCallback = 
             new MethodCallback<Boolean,Boolean>(
                 new Function<Boolean,Boolean>() {
@@ -2367,7 +2367,7 @@ public class IFaceLogThriftClientAsync {
                 cmdSn,nativeCallback);
         return nativeCallback.feature;
     }
-    public void isValidCmdSn(long cmdSn,
+    public void isValidCmdSn(int cmdSn,
         FutureCallback<Boolean>callback){
         factory.addCallback(isValidCmdSn(cmdSn), callback);
     }

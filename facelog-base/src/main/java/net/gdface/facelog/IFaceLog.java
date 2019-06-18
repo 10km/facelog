@@ -1188,14 +1188,14 @@ public interface IFaceLog{
 	 * @param token 访问令牌
 	 * @return
 	 */
-	public long applyCmdSn(Token token);
+	public int applyCmdSn(Token token);
 	/**
 	 * 判断命令序列号是否有效<br>
 	 * 序列号过期或不存在都返回{@code false}
 	 * @param cmdSn
 	 * @return
 	 */
-	public boolean isValidCmdSn(long cmdSn);
+	public boolean isValidCmdSn(int cmdSn);
 	/**
 	 * 判断命令响应通道是否有效<br>
 	 * 通道过期或不存在都返回{@code false}

@@ -231,7 +231,7 @@ service IFaceLog {
   void addPermitById(1: required i32 deviceGroupId, 2: required i32 personGroupId, 3: optional Token token) throws (1: ServiceRuntimeException ex1);
   string applyAckChannel(1: optional Token token) throws (1: ServiceRuntimeException ex1);
   string applyAckChannelWithDuration(1: required i32 duration, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
-  i64 applyCmdSn(1: optional Token token) throws (1: ServiceRuntimeException ex1);
+  i32 applyCmdSn(1: optional Token token) throws (1: ServiceRuntimeException ex1);
   Token applyPersonToken(1: required i32 personId, 2: optional string password, 3: required bool isMd5) throws (1: ServiceSecurityException ex1, 2: ServiceRuntimeException ex2);
   Token applyRootToken(1: optional string password, 2: required bool isMd5) throws (1: ServiceSecurityException ex1, 2: ServiceRuntimeException ex2);
   Token applyUserToken(1: required i32 userid, 2: optional string password, 3: required bool isMd5) throws (1: ServiceSecurityException ex1, 2: ServiceRuntimeException ex2);
@@ -306,7 +306,7 @@ service IFaceLog {
   bool isDisable(1: required i32 personId) throws (1: ServiceRuntimeException ex1);
   bool isLocal() throws (1: ServiceRuntimeException ex1);
   bool isValidAckChannel(1: optional string ackChannel) throws (1: ServiceRuntimeException ex1);
-  bool isValidCmdSn(1: required i64 cmdSn) throws (1: ServiceRuntimeException ex1);
+  bool isValidCmdSn(1: required i32 cmdSn) throws (1: ServiceRuntimeException ex1);
   bool isValidDeviceToken(1: optional Token token) throws (1: ServiceRuntimeException ex1);
   bool isValidPassword(1: optional string userId, 2: optional string password, 3: required bool isMd5) throws (1: ServiceRuntimeException ex1);
   bool isValidPersonToken(1: optional Token token) throws (1: ServiceRuntimeException ex1);

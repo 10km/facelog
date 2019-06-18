@@ -36,7 +36,7 @@ class FaceApiTask implements ServiceConstant{
 		String queue = rm.taskQueueOf(TASK_FACEAPI_BASE + sdkVersion);
 		checkState(JedisUtils.pubsubNumSub(queue)>0,"not found onlined device for %s",sdkVersion);
 		String ackChannel = tm.applyAckChannel(SERVICE_ID, 0);
-		long cmdSn = tm.applyCmdSn(SERVICE_ID);
+		int cmdSn = tm.applyCmdSn(SERVICE_ID);
 		return null;
 	}
 }

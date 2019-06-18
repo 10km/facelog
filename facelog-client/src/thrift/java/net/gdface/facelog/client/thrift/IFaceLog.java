@@ -152,7 +152,7 @@ public interface IFaceLog
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
-        ListenableFuture<Long> applyCmdSn(
+        ListenableFuture<Integer> applyCmdSn(
             @ThriftField(value=1, name="token", requiredness=Requiredness.OPTIONAL) final Token token
         );
 
@@ -791,7 +791,7 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
         ListenableFuture<Boolean> isValidCmdSn(
-            @ThriftField(value=1, name="cmdSn", requiredness=Requiredness.REQUIRED) final long cmdSn
+            @ThriftField(value=1, name="cmdSn", requiredness=Requiredness.REQUIRED) final int cmdSn
         );
 
         @ThriftMethod(value = "isValidDeviceToken",
@@ -1504,7 +1504,7 @@ public interface IFaceLog
                   exception = {
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
-    long applyCmdSn(
+    int applyCmdSn(
         @ThriftField(value=1, name="token", requiredness=Requiredness.OPTIONAL) final Token token
     ) throws ServiceRuntimeException;
 
@@ -2143,7 +2143,7 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
     boolean isValidCmdSn(
-        @ThriftField(value=1, name="cmdSn", requiredness=Requiredness.REQUIRED) final long cmdSn
+        @ThriftField(value=1, name="cmdSn", requiredness=Requiredness.REQUIRED) final int cmdSn
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "isValidDeviceToken",
