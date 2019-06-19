@@ -11,7 +11,7 @@ public class DefaultCloudConnectConfigProvider implements ConnectConfigProvider,
 
 	@Override
 	public String getHost() {
-		return "facelog.gdface.online";
+		return "facelog.facelib.net";
 	}
 
 	@Override
