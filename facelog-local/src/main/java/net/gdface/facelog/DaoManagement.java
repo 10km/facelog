@@ -737,6 +737,8 @@ public class DaoManagement extends BaseDao implements ServiceConstant,Constant{
 				.deviceGroupId(deviceGroupId)
 				.personGroupId(personGroupId)
 				.schedule(schedule).build();
+		}else{
+			permitBean.setSchedule(schedule);
 		}
 		return daoSavePermit(permitBean);
 	}
