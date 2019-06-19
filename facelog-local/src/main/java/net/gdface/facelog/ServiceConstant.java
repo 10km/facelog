@@ -17,7 +17,7 @@ import net.gdface.facelog.CommonConstant;
  */
 public interface ServiceConstant extends CommonConstant{
     public static final Logger logger = LoggerFactory.getLogger(ServiceConstant.class);
-
+    
 	/** 设备访问令牌表,{@code 设备ID -> token}  */
     public static final Channel<Token> TABLE_DEVICE_TOKEN = new Channel<Token>("DeviceToken"){} ;
     /** 人员访问令牌表 {@code 人员ID -> token} */
@@ -30,7 +30,7 @@ public interface ServiceConstant extends CommonConstant{
     /////////////  REDIS KEYS ////////////////////////////
 	/** redis 全局变量 : 设备命令序列号, 调用{@link TokenMangement#applyCmdSn(Token)}时每次加1,保证序列号在全网络唯一 */
 	String KEY_CMD_SN = "CMD_SN";
-	/** redis 全局变量 : 设备响应通道序列号, 调用{@link TokenMangement#applyAckChannel(Token, long)}时每次加1,保证序列号在全网络唯一 */
+	/** redis 全局变量 : 设备响应通道序列号, 调用{@link TokenMangement#applyAckChannel(Token, int)}时每次加1,保证序列号在全网络唯一 */
 	String KEY_ACK_SN = "ACK_CHANNEL";
 	/** redis 全局常量 : 设备命令通道 */
 	String KEY_CMD_CHANNEL = "CMD_CHANNEL";

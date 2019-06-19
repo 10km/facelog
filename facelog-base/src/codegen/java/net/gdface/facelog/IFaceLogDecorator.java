@@ -232,13 +232,8 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
-    public void addPermit (int deviceGroupId,int personGroupId,Token token) {
-         delegate().addPermit(deviceGroupId,personGroupId,token);
-    }
-
-    @Override
-    public void addPermit (DeviceGroupBean deviceGroup,PersonGroupBean personGroup,Token token) {
-         delegate().addPermit(deviceGroup,personGroup,token);
+    public String applyAckChannel (int duration,Token token) {
+        return delegate().applyAckChannel(duration,token);
     }
 
     @Override
@@ -247,12 +242,7 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
-    public String applyAckChannel (Token token,long duration) {
-        return delegate().applyAckChannel(token,duration);
-    }
-
-    @Override
-    public long applyCmdSn (Token token) {
+    public int applyCmdSn (Token token) {
         return delegate().applyCmdSn(token);
     }
 
@@ -407,11 +397,6 @@ public class IFaceLogDecorator implements IFaceLog{
     @Override
     public int deletePermit (int deviceGroupId,int personGroupId,Token token) {
         return delegate().deletePermit(deviceGroupId,personGroupId,token);
-    }
-
-    @Override
-    public int deletePermit (DeviceGroupBean deviceGroup,PersonGroupBean personGroup,Token token) {
-        return delegate().deletePermit(deviceGroup,personGroup,token);
     }
 
     @Override
@@ -680,7 +665,7 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
-    public boolean isValidCmdSn (long cmdSn) {
+    public boolean isValidCmdSn (int cmdSn) {
         return delegate().isValidCmdSn(cmdSn);
     }
 
@@ -978,6 +963,16 @@ public class IFaceLogDecorator implements IFaceLog{
     @Override
     public DeviceGroupBean saveDeviceGroup (DeviceGroupBean deviceGroupBean,Token token) {
         return delegate().saveDeviceGroup(deviceGroupBean,token);
+    }
+
+    @Override
+    public PermitBean savePermit (int deviceGroupId,int personGroupId,String schedule,Token token) {
+        return delegate().savePermit(deviceGroupId,personGroupId,schedule,token);
+    }
+
+    @Override
+    public PermitBean savePermit (PermitBean permitBean,Token token) {
+        return delegate().savePermit(permitBean,token);
     }
 
     @Override

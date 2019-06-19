@@ -1661,294 +1661,6 @@ IFaceLog_addLogsFull_result.prototype.write = function(output) {
   return;
 };
 
-IFaceLog_addPermit_args = function(args) {
-  this.deviceGroup = null;
-  this.personGroup = null;
-  this.token = null;
-  if (args) {
-    if (args.deviceGroup !== undefined && args.deviceGroup !== null) {
-      this.deviceGroup = new DeviceGroupBean(args.deviceGroup);
-    }
-    if (args.personGroup !== undefined && args.personGroup !== null) {
-      this.personGroup = new PersonGroupBean(args.personGroup);
-    }
-    if (args.token !== undefined && args.token !== null) {
-      this.token = new Token(args.token);
-    }
-  }
-};
-IFaceLog_addPermit_args.prototype = {};
-IFaceLog_addPermit_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.deviceGroup = new DeviceGroupBean();
-        this.deviceGroup.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.personGroup = new PersonGroupBean();
-        this.personGroup.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.token = new Token();
-        this.token.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-IFaceLog_addPermit_args.prototype.write = function(output) {
-  output.writeStructBegin('IFaceLog_addPermit_args');
-  if (this.deviceGroup !== null && this.deviceGroup !== undefined) {
-    output.writeFieldBegin('deviceGroup', Thrift.Type.STRUCT, 1);
-    this.deviceGroup.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.personGroup !== null && this.personGroup !== undefined) {
-    output.writeFieldBegin('personGroup', Thrift.Type.STRUCT, 2);
-    this.personGroup.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.token !== null && this.token !== undefined) {
-    output.writeFieldBegin('token', Thrift.Type.STRUCT, 3);
-    this.token.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-IFaceLog_addPermit_result = function(args) {
-  this.ex1 = null;
-  if (args instanceof ServiceRuntimeException) {
-    this.ex1 = args;
-    return;
-  }
-  if (args) {
-    if (args.ex1 !== undefined && args.ex1 !== null) {
-      this.ex1 = args.ex1;
-    }
-  }
-};
-IFaceLog_addPermit_result.prototype = {};
-IFaceLog_addPermit_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.ex1 = new ServiceRuntimeException();
-        this.ex1.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 0:
-        input.skip(ftype);
-        break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-IFaceLog_addPermit_result.prototype.write = function(output) {
-  output.writeStructBegin('IFaceLog_addPermit_result');
-  if (this.ex1 !== null && this.ex1 !== undefined) {
-    output.writeFieldBegin('ex1', Thrift.Type.STRUCT, 1);
-    this.ex1.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-IFaceLog_addPermitById_args = function(args) {
-  this.deviceGroupId = null;
-  this.personGroupId = null;
-  this.token = null;
-  if (args) {
-    if (args.deviceGroupId !== undefined && args.deviceGroupId !== null) {
-      this.deviceGroupId = args.deviceGroupId;
-    } else {
-      throw new Thrift.TProtocolException(Thrift.TProtocolExceptionType.UNKNOWN, 'Required field deviceGroupId is unset!');
-    }
-    if (args.personGroupId !== undefined && args.personGroupId !== null) {
-      this.personGroupId = args.personGroupId;
-    } else {
-      throw new Thrift.TProtocolException(Thrift.TProtocolExceptionType.UNKNOWN, 'Required field personGroupId is unset!');
-    }
-    if (args.token !== undefined && args.token !== null) {
-      this.token = new Token(args.token);
-    }
-  }
-};
-IFaceLog_addPermitById_args.prototype = {};
-IFaceLog_addPermitById_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.I32) {
-        this.deviceGroupId = input.readI32().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.I32) {
-        this.personGroupId = input.readI32().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.token = new Token();
-        this.token.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-IFaceLog_addPermitById_args.prototype.write = function(output) {
-  output.writeStructBegin('IFaceLog_addPermitById_args');
-  if (this.deviceGroupId !== null && this.deviceGroupId !== undefined) {
-    output.writeFieldBegin('deviceGroupId', Thrift.Type.I32, 1);
-    output.writeI32(this.deviceGroupId);
-    output.writeFieldEnd();
-  }
-  if (this.personGroupId !== null && this.personGroupId !== undefined) {
-    output.writeFieldBegin('personGroupId', Thrift.Type.I32, 2);
-    output.writeI32(this.personGroupId);
-    output.writeFieldEnd();
-  }
-  if (this.token !== null && this.token !== undefined) {
-    output.writeFieldBegin('token', Thrift.Type.STRUCT, 3);
-    this.token.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-IFaceLog_addPermitById_result = function(args) {
-  this.ex1 = null;
-  if (args instanceof ServiceRuntimeException) {
-    this.ex1 = args;
-    return;
-  }
-  if (args) {
-    if (args.ex1 !== undefined && args.ex1 !== null) {
-      this.ex1 = args.ex1;
-    }
-  }
-};
-IFaceLog_addPermitById_result.prototype = {};
-IFaceLog_addPermitById_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.ex1 = new ServiceRuntimeException();
-        this.ex1.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 0:
-        input.skip(ftype);
-        break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-IFaceLog_addPermitById_result.prototype.write = function(output) {
-  output.writeStructBegin('IFaceLog_addPermitById_result');
-  if (this.ex1 !== null && this.ex1 !== undefined) {
-    output.writeFieldBegin('ex1', Thrift.Type.STRUCT, 1);
-    this.ex1.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
 IFaceLog_applyAckChannel_args = function(args) {
   this.token = null;
   if (args) {
@@ -2075,16 +1787,16 @@ IFaceLog_applyAckChannel_result.prototype.write = function(output) {
 };
 
 IFaceLog_applyAckChannelWithDuration_args = function(args) {
-  this.token = null;
   this.duration = null;
+  this.token = null;
   if (args) {
-    if (args.token !== undefined && args.token !== null) {
-      this.token = new Token(args.token);
-    }
     if (args.duration !== undefined && args.duration !== null) {
       this.duration = args.duration;
     } else {
       throw new Thrift.TProtocolException(Thrift.TProtocolExceptionType.UNKNOWN, 'Required field duration is unset!');
+    }
+    if (args.token !== undefined && args.token !== null) {
+      this.token = new Token(args.token);
     }
   }
 };
@@ -2103,16 +1815,16 @@ IFaceLog_applyAckChannelWithDuration_args.prototype.read = function(input) {
     switch (fid)
     {
       case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.token = new Token();
-        this.token.read(input);
+      if (ftype == Thrift.Type.I32) {
+        this.duration = input.readI32().value;
       } else {
         input.skip(ftype);
       }
       break;
       case 2:
-      if (ftype == Thrift.Type.I64) {
-        this.duration = input.readI64().value;
+      if (ftype == Thrift.Type.STRUCT) {
+        this.token = new Token();
+        this.token.read(input);
       } else {
         input.skip(ftype);
       }
@@ -2128,14 +1840,14 @@ IFaceLog_applyAckChannelWithDuration_args.prototype.read = function(input) {
 
 IFaceLog_applyAckChannelWithDuration_args.prototype.write = function(output) {
   output.writeStructBegin('IFaceLog_applyAckChannelWithDuration_args');
-  if (this.token !== null && this.token !== undefined) {
-    output.writeFieldBegin('token', Thrift.Type.STRUCT, 1);
-    this.token.write(output);
+  if (this.duration !== null && this.duration !== undefined) {
+    output.writeFieldBegin('duration', Thrift.Type.I32, 1);
+    output.writeI32(this.duration);
     output.writeFieldEnd();
   }
-  if (this.duration !== null && this.duration !== undefined) {
-    output.writeFieldBegin('duration', Thrift.Type.I64, 2);
-    output.writeI64(this.duration);
+  if (this.token !== null && this.token !== undefined) {
+    output.writeFieldBegin('token', Thrift.Type.STRUCT, 2);
+    this.token.write(output);
     output.writeFieldEnd();
   }
   output.writeFieldStop();
@@ -2299,8 +2011,8 @@ IFaceLog_applyCmdSn_result.prototype.read = function(input) {
     switch (fid)
     {
       case 0:
-      if (ftype == Thrift.Type.I64) {
-        this.success = input.readI64().value;
+      if (ftype == Thrift.Type.I32) {
+        this.success = input.readI32().value;
       } else {
         input.skip(ftype);
       }
@@ -2325,8 +2037,8 @@ IFaceLog_applyCmdSn_result.prototype.read = function(input) {
 IFaceLog_applyCmdSn_result.prototype.write = function(output) {
   output.writeStructBegin('IFaceLog_applyCmdSn_result');
   if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.I64, 0);
-    output.writeI64(this.success);
+    output.writeFieldBegin('success', Thrift.Type.I32, 0);
+    output.writeI32(this.success);
     output.writeFieldEnd();
   }
   if (this.ex1 !== null && this.ex1 !== undefined) {
@@ -5028,162 +4740,6 @@ IFaceLog_deleteImage_result.prototype.read = function(input) {
 
 IFaceLog_deleteImage_result.prototype.write = function(output) {
   output.writeStructBegin('IFaceLog_deleteImage_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.I32, 0);
-    output.writeI32(this.success);
-    output.writeFieldEnd();
-  }
-  if (this.ex1 !== null && this.ex1 !== undefined) {
-    output.writeFieldBegin('ex1', Thrift.Type.STRUCT, 1);
-    this.ex1.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-IFaceLog_deletePermit_args = function(args) {
-  this.deviceGroup = null;
-  this.personGroup = null;
-  this.token = null;
-  if (args) {
-    if (args.deviceGroup !== undefined && args.deviceGroup !== null) {
-      this.deviceGroup = new DeviceGroupBean(args.deviceGroup);
-    }
-    if (args.personGroup !== undefined && args.personGroup !== null) {
-      this.personGroup = new PersonGroupBean(args.personGroup);
-    }
-    if (args.token !== undefined && args.token !== null) {
-      this.token = new Token(args.token);
-    }
-  }
-};
-IFaceLog_deletePermit_args.prototype = {};
-IFaceLog_deletePermit_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.deviceGroup = new DeviceGroupBean();
-        this.deviceGroup.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.personGroup = new PersonGroupBean();
-        this.personGroup.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.token = new Token();
-        this.token.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-IFaceLog_deletePermit_args.prototype.write = function(output) {
-  output.writeStructBegin('IFaceLog_deletePermit_args');
-  if (this.deviceGroup !== null && this.deviceGroup !== undefined) {
-    output.writeFieldBegin('deviceGroup', Thrift.Type.STRUCT, 1);
-    this.deviceGroup.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.personGroup !== null && this.personGroup !== undefined) {
-    output.writeFieldBegin('personGroup', Thrift.Type.STRUCT, 2);
-    this.personGroup.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.token !== null && this.token !== undefined) {
-    output.writeFieldBegin('token', Thrift.Type.STRUCT, 3);
-    this.token.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-IFaceLog_deletePermit_result = function(args) {
-  this.success = null;
-  this.ex1 = null;
-  if (args instanceof ServiceRuntimeException) {
-    this.ex1 = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined && args.success !== null) {
-      this.success = args.success;
-    }
-    if (args.ex1 !== undefined && args.ex1 !== null) {
-      this.ex1 = args.ex1;
-    }
-  }
-};
-IFaceLog_deletePermit_result.prototype = {};
-IFaceLog_deletePermit_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.I32) {
-        this.success = input.readI32().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.ex1 = new ServiceRuntimeException();
-        this.ex1.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-IFaceLog_deletePermit_result.prototype.write = function(output) {
-  output.writeStructBegin('IFaceLog_deletePermit_result');
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.I32, 0);
     output.writeI32(this.success);
@@ -13010,8 +12566,8 @@ IFaceLog_isValidCmdSn_args.prototype.read = function(input) {
     switch (fid)
     {
       case 1:
-      if (ftype == Thrift.Type.I64) {
-        this.cmdSn = input.readI64().value;
+      if (ftype == Thrift.Type.I32) {
+        this.cmdSn = input.readI32().value;
       } else {
         input.skip(ftype);
       }
@@ -13031,8 +12587,8 @@ IFaceLog_isValidCmdSn_args.prototype.read = function(input) {
 IFaceLog_isValidCmdSn_args.prototype.write = function(output) {
   output.writeStructBegin('IFaceLog_isValidCmdSn_args');
   if (this.cmdSn !== null && this.cmdSn !== undefined) {
-    output.writeFieldBegin('cmdSn', Thrift.Type.I64, 1);
-    output.writeI64(this.cmdSn);
+    output.writeFieldBegin('cmdSn', Thrift.Type.I32, 1);
+    output.writeI32(this.cmdSn);
     output.writeFieldEnd();
   }
   output.writeFieldStop();
@@ -19011,6 +18567,321 @@ IFaceLog_saveDeviceGroup_result.prototype.write = function(output) {
   return;
 };
 
+IFaceLog_savePermit_args = function(args) {
+  this.permitBean = null;
+  this.token = null;
+  if (args) {
+    if (args.permitBean !== undefined && args.permitBean !== null) {
+      this.permitBean = new PermitBean(args.permitBean);
+    }
+    if (args.token !== undefined && args.token !== null) {
+      this.token = new Token(args.token);
+    }
+  }
+};
+IFaceLog_savePermit_args.prototype = {};
+IFaceLog_savePermit_args.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.permitBean = new PermitBean();
+        this.permitBean.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 2:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.token = new Token();
+        this.token.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+IFaceLog_savePermit_args.prototype.write = function(output) {
+  output.writeStructBegin('IFaceLog_savePermit_args');
+  if (this.permitBean !== null && this.permitBean !== undefined) {
+    output.writeFieldBegin('permitBean', Thrift.Type.STRUCT, 1);
+    this.permitBean.write(output);
+    output.writeFieldEnd();
+  }
+  if (this.token !== null && this.token !== undefined) {
+    output.writeFieldBegin('token', Thrift.Type.STRUCT, 2);
+    this.token.write(output);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+IFaceLog_savePermit_result = function(args) {
+  this.success = null;
+  this.ex1 = null;
+  if (args instanceof ServiceRuntimeException) {
+    this.ex1 = args;
+    return;
+  }
+  if (args) {
+    if (args.success !== undefined && args.success !== null) {
+      this.success = new PermitBean(args.success);
+    }
+    if (args.ex1 !== undefined && args.ex1 !== null) {
+      this.ex1 = args.ex1;
+    }
+  }
+};
+IFaceLog_savePermit_result.prototype = {};
+IFaceLog_savePermit_result.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.success = new PermitBean();
+        this.success.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 1:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.ex1 = new ServiceRuntimeException();
+        this.ex1.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+IFaceLog_savePermit_result.prototype.write = function(output) {
+  output.writeStructBegin('IFaceLog_savePermit_result');
+  if (this.success !== null && this.success !== undefined) {
+    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
+    this.success.write(output);
+    output.writeFieldEnd();
+  }
+  if (this.ex1 !== null && this.ex1 !== undefined) {
+    output.writeFieldBegin('ex1', Thrift.Type.STRUCT, 1);
+    this.ex1.write(output);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+IFaceLog_savePermitWithSchedule_args = function(args) {
+  this.deviceGroupId = null;
+  this.personGroupId = null;
+  this.schedule = null;
+  this.token = null;
+  if (args) {
+    if (args.deviceGroupId !== undefined && args.deviceGroupId !== null) {
+      this.deviceGroupId = args.deviceGroupId;
+    } else {
+      throw new Thrift.TProtocolException(Thrift.TProtocolExceptionType.UNKNOWN, 'Required field deviceGroupId is unset!');
+    }
+    if (args.personGroupId !== undefined && args.personGroupId !== null) {
+      this.personGroupId = args.personGroupId;
+    } else {
+      throw new Thrift.TProtocolException(Thrift.TProtocolExceptionType.UNKNOWN, 'Required field personGroupId is unset!');
+    }
+    if (args.schedule !== undefined && args.schedule !== null) {
+      this.schedule = args.schedule;
+    }
+    if (args.token !== undefined && args.token !== null) {
+      this.token = new Token(args.token);
+    }
+  }
+};
+IFaceLog_savePermitWithSchedule_args.prototype = {};
+IFaceLog_savePermitWithSchedule_args.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+      if (ftype == Thrift.Type.I32) {
+        this.deviceGroupId = input.readI32().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 2:
+      if (ftype == Thrift.Type.I32) {
+        this.personGroupId = input.readI32().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 3:
+      if (ftype == Thrift.Type.STRING) {
+        this.schedule = input.readString().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 4:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.token = new Token();
+        this.token.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+IFaceLog_savePermitWithSchedule_args.prototype.write = function(output) {
+  output.writeStructBegin('IFaceLog_savePermitWithSchedule_args');
+  if (this.deviceGroupId !== null && this.deviceGroupId !== undefined) {
+    output.writeFieldBegin('deviceGroupId', Thrift.Type.I32, 1);
+    output.writeI32(this.deviceGroupId);
+    output.writeFieldEnd();
+  }
+  if (this.personGroupId !== null && this.personGroupId !== undefined) {
+    output.writeFieldBegin('personGroupId', Thrift.Type.I32, 2);
+    output.writeI32(this.personGroupId);
+    output.writeFieldEnd();
+  }
+  if (this.schedule !== null && this.schedule !== undefined) {
+    output.writeFieldBegin('schedule', Thrift.Type.STRING, 3);
+    output.writeString(this.schedule);
+    output.writeFieldEnd();
+  }
+  if (this.token !== null && this.token !== undefined) {
+    output.writeFieldBegin('token', Thrift.Type.STRUCT, 4);
+    this.token.write(output);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+IFaceLog_savePermitWithSchedule_result = function(args) {
+  this.success = null;
+  this.ex1 = null;
+  if (args instanceof ServiceRuntimeException) {
+    this.ex1 = args;
+    return;
+  }
+  if (args) {
+    if (args.success !== undefined && args.success !== null) {
+      this.success = new PermitBean(args.success);
+    }
+    if (args.ex1 !== undefined && args.ex1 !== null) {
+      this.ex1 = args.ex1;
+    }
+  }
+};
+IFaceLog_savePermitWithSchedule_result.prototype = {};
+IFaceLog_savePermitWithSchedule_result.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.success = new PermitBean();
+        this.success.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 1:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.ex1 = new ServiceRuntimeException();
+        this.ex1.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+IFaceLog_savePermitWithSchedule_result.prototype.write = function(output) {
+  output.writeStructBegin('IFaceLog_savePermitWithSchedule_result');
+  if (this.success !== null && this.success !== undefined) {
+    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
+    this.success.write(output);
+    output.writeFieldEnd();
+  }
+  if (this.ex1 !== null && this.ex1 !== undefined) {
+    output.writeFieldBegin('ex1', Thrift.Type.STRUCT, 1);
+    this.ex1.write(output);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
 IFaceLog_savePerson_args = function(args) {
   this.personBean = null;
   this.token = null;
@@ -22996,94 +22867,6 @@ IFaceLogClient.prototype.recv_addLogsFull = function() {
   }
   return;
 };
-IFaceLogClient.prototype.addPermit = function(deviceGroup, personGroup, token, callback) {
-  if (callback === undefined) {
-    this.send_addPermit(deviceGroup, personGroup, token);
-    this.recv_addPermit();
-  } else {
-    var postData = this.send_addPermit(deviceGroup, personGroup, token, true);
-    return this.output.getTransport()
-      .jqRequest(this, postData, arguments, this.recv_addPermit);
-  }
-};
-
-IFaceLogClient.prototype.send_addPermit = function(deviceGroup, personGroup, token, callback) {
-  this.output.writeMessageBegin('addPermit', Thrift.MessageType.CALL, this.seqid);
-  var params = {
-    deviceGroup: deviceGroup,
-    personGroup: personGroup,
-    token: token
-  };
-  var args = new IFaceLog_addPermit_args(params);
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-IFaceLogClient.prototype.recv_addPermit = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new IFaceLog_addPermit_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.ex1) {
-    throw result.ex1;
-  }
-  return;
-};
-IFaceLogClient.prototype.addPermitById = function(deviceGroupId, personGroupId, token, callback) {
-  if (callback === undefined) {
-    this.send_addPermitById(deviceGroupId, personGroupId, token);
-    this.recv_addPermitById();
-  } else {
-    var postData = this.send_addPermitById(deviceGroupId, personGroupId, token, true);
-    return this.output.getTransport()
-      .jqRequest(this, postData, arguments, this.recv_addPermitById);
-  }
-};
-
-IFaceLogClient.prototype.send_addPermitById = function(deviceGroupId, personGroupId, token, callback) {
-  this.output.writeMessageBegin('addPermitById', Thrift.MessageType.CALL, this.seqid);
-  var params = {
-    deviceGroupId: deviceGroupId,
-    personGroupId: personGroupId,
-    token: token
-  };
-  var args = new IFaceLog_addPermitById_args(params);
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-IFaceLogClient.prototype.recv_addPermitById = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new IFaceLog_addPermitById_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.ex1) {
-    throw result.ex1;
-  }
-  return;
-};
 IFaceLogClient.prototype.applyAckChannel = function(token, callback) {
   if (callback === undefined) {
     this.send_applyAckChannel(token);
@@ -23129,22 +22912,22 @@ IFaceLogClient.prototype.recv_applyAckChannel = function() {
   }
   throw 'applyAckChannel failed: unknown result';
 };
-IFaceLogClient.prototype.applyAckChannelWithDuration = function(token, duration, callback) {
+IFaceLogClient.prototype.applyAckChannelWithDuration = function(duration, token, callback) {
   if (callback === undefined) {
-    this.send_applyAckChannelWithDuration(token, duration);
+    this.send_applyAckChannelWithDuration(duration, token);
     return this.recv_applyAckChannelWithDuration();
   } else {
-    var postData = this.send_applyAckChannelWithDuration(token, duration, true);
+    var postData = this.send_applyAckChannelWithDuration(duration, token, true);
     return this.output.getTransport()
       .jqRequest(this, postData, arguments, this.recv_applyAckChannelWithDuration);
   }
 };
 
-IFaceLogClient.prototype.send_applyAckChannelWithDuration = function(token, duration, callback) {
+IFaceLogClient.prototype.send_applyAckChannelWithDuration = function(duration, token, callback) {
   this.output.writeMessageBegin('applyAckChannelWithDuration', Thrift.MessageType.CALL, this.seqid);
   var params = {
-    token: token,
-    duration: duration
+    duration: duration,
+    token: token
   };
   var args = new IFaceLog_applyAckChannelWithDuration_args(params);
   args.write(this.output);
@@ -24094,53 +23877,6 @@ IFaceLogClient.prototype.recv_deleteImage = function() {
     return result.success;
   }
   throw 'deleteImage failed: unknown result';
-};
-IFaceLogClient.prototype.deletePermit = function(deviceGroup, personGroup, token, callback) {
-  if (callback === undefined) {
-    this.send_deletePermit(deviceGroup, personGroup, token);
-    return this.recv_deletePermit();
-  } else {
-    var postData = this.send_deletePermit(deviceGroup, personGroup, token, true);
-    return this.output.getTransport()
-      .jqRequest(this, postData, arguments, this.recv_deletePermit);
-  }
-};
-
-IFaceLogClient.prototype.send_deletePermit = function(deviceGroup, personGroup, token, callback) {
-  this.output.writeMessageBegin('deletePermit', Thrift.MessageType.CALL, this.seqid);
-  var params = {
-    deviceGroup: deviceGroup,
-    personGroup: personGroup,
-    token: token
-  };
-  var args = new IFaceLog_deletePermit_args(params);
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-IFaceLogClient.prototype.recv_deletePermit = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new IFaceLog_deletePermit_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.ex1) {
-    throw result.ex1;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'deletePermit failed: unknown result';
 };
 IFaceLogClient.prototype.deletePermitById = function(deviceGroupId, personGroupId, token, callback) {
   if (callback === undefined) {
@@ -28451,6 +28187,100 @@ IFaceLogClient.prototype.recv_saveDeviceGroup = function() {
     return result.success;
   }
   throw 'saveDeviceGroup failed: unknown result';
+};
+IFaceLogClient.prototype.savePermit = function(permitBean, token, callback) {
+  if (callback === undefined) {
+    this.send_savePermit(permitBean, token);
+    return this.recv_savePermit();
+  } else {
+    var postData = this.send_savePermit(permitBean, token, true);
+    return this.output.getTransport()
+      .jqRequest(this, postData, arguments, this.recv_savePermit);
+  }
+};
+
+IFaceLogClient.prototype.send_savePermit = function(permitBean, token, callback) {
+  this.output.writeMessageBegin('savePermit', Thrift.MessageType.CALL, this.seqid);
+  var params = {
+    permitBean: permitBean,
+    token: token
+  };
+  var args = new IFaceLog_savePermit_args(params);
+  args.write(this.output);
+  this.output.writeMessageEnd();
+  return this.output.getTransport().flush(callback);
+};
+
+IFaceLogClient.prototype.recv_savePermit = function() {
+  var ret = this.input.readMessageBegin();
+  var fname = ret.fname;
+  var mtype = ret.mtype;
+  var rseqid = ret.rseqid;
+  if (mtype == Thrift.MessageType.EXCEPTION) {
+    var x = new Thrift.TApplicationException();
+    x.read(this.input);
+    this.input.readMessageEnd();
+    throw x;
+  }
+  var result = new IFaceLog_savePermit_result();
+  result.read(this.input);
+  this.input.readMessageEnd();
+
+  if (null !== result.ex1) {
+    throw result.ex1;
+  }
+  if (null !== result.success) {
+    return result.success;
+  }
+  throw 'savePermit failed: unknown result';
+};
+IFaceLogClient.prototype.savePermitWithSchedule = function(deviceGroupId, personGroupId, schedule, token, callback) {
+  if (callback === undefined) {
+    this.send_savePermitWithSchedule(deviceGroupId, personGroupId, schedule, token);
+    return this.recv_savePermitWithSchedule();
+  } else {
+    var postData = this.send_savePermitWithSchedule(deviceGroupId, personGroupId, schedule, token, true);
+    return this.output.getTransport()
+      .jqRequest(this, postData, arguments, this.recv_savePermitWithSchedule);
+  }
+};
+
+IFaceLogClient.prototype.send_savePermitWithSchedule = function(deviceGroupId, personGroupId, schedule, token, callback) {
+  this.output.writeMessageBegin('savePermitWithSchedule', Thrift.MessageType.CALL, this.seqid);
+  var params = {
+    deviceGroupId: deviceGroupId,
+    personGroupId: personGroupId,
+    schedule: schedule,
+    token: token
+  };
+  var args = new IFaceLog_savePermitWithSchedule_args(params);
+  args.write(this.output);
+  this.output.writeMessageEnd();
+  return this.output.getTransport().flush(callback);
+};
+
+IFaceLogClient.prototype.recv_savePermitWithSchedule = function() {
+  var ret = this.input.readMessageBegin();
+  var fname = ret.fname;
+  var mtype = ret.mtype;
+  var rseqid = ret.rseqid;
+  if (mtype == Thrift.MessageType.EXCEPTION) {
+    var x = new Thrift.TApplicationException();
+    x.read(this.input);
+    this.input.readMessageEnd();
+    throw x;
+  }
+  var result = new IFaceLog_savePermitWithSchedule_result();
+  result.read(this.input);
+  this.input.readMessageEnd();
+
+  if (null !== result.ex1) {
+    throw result.ex1;
+  }
+  if (null !== result.success) {
+    return result.success;
+  }
+  throw 'savePermitWithSchedule failed: unknown result';
 };
 IFaceLogClient.prototype.savePerson = function(personBean, token, callback) {
   if (callback === undefined) {

@@ -505,20 +505,16 @@ public class FacelogDefaultImpl implements IFaceLog {
 	}
 
 	@Override
-	public void addPermit(DeviceGroupBean deviceGroup, PersonGroupBean personGroup, Token token) {
-		
-	}
-
-	@Override
-	public void addPermit(int deviceGroupId, int personGroupId, Token token) {
-		
-	}
-
-	@Override
-	public int deletePermit(DeviceGroupBean deviceGroup, PersonGroupBean personGroup, Token token) {
-		return 0;
+	public PermitBean savePermit(PermitBean permitBean, Token token) {
+		return null;
 	}
 	
+	@Override
+	public PermitBean savePermit(int deviceGroupId, int personGroupId, String schedule, Token token) {
+		return null;
+		
+	}
+
 	@Override
 	public int deletePermit(int deviceGroupId, int personGroupId, Token token) {
 		return 0;
@@ -656,17 +652,17 @@ public class FacelogDefaultImpl implements IFaceLog {
 	}
 
 	@Override
-	public String applyAckChannel(Token token, long duration) {
+	public String applyAckChannel(int duration, Token token) {
 		return null;
 	}
 
 	@Override
-	public long applyCmdSn(Token token) {
+	public int applyCmdSn(Token token) {
 		return 0;
 	}
 
 	@Override
-	public boolean isValidCmdSn(long cmdSn) {
+	public boolean isValidCmdSn(int cmdSn) {
 		return false;
 	}
 

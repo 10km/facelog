@@ -722,4 +722,22 @@ public class DaoManagement extends BaseDao implements ServiceConstant,Constant{
 			daoDeleteLogBeansByPersonIdOnPerson(personId);
 		}
 	}
+	/**
+	 * 如果记录不存在则创建deviceGroupId和personGroupId之间的MANY TO MANY 联接表(fl_permit)记录,
+	 * 否则修改指定记录的通行时间安排表<br>
+     * @param deviceGroupId 设备组id
+     * @param personGroupId 人员组id
+     * @param schedule 通行时间安排表,为{@code null}则不限制通行时间
+     * @return (fl_permit)记录
+     */
+	protected PermitBean daoSavePermit(int deviceGroupId,int personGroupId,String schedule){
+		PermitBean permitBean = daoGetPermit(deviceGroupId, personGroupId);
+		if(permitBean == null){
+			permitBean = PermitBean.builder()
+				.deviceGroupId(deviceGroupId)
+				.personGroupId(personGroupId)
+				.schedule(schedule).build();
+		}
+		return daoSavePermit(permitBean);
+	}
 }

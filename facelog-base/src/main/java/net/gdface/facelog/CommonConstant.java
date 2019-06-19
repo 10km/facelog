@@ -32,6 +32,8 @@ public interface CommonConstant {
     /** 超级管理员用户名 */
     public static final String ROOT_NAME = "root";
     
+    /** 服务端id名 */
+    public static final int SERVICE_ID = -2;
     /** ISO8601时间格式 */
     public static final String ISO8601_FORMATTER_STR = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
     
@@ -53,8 +55,8 @@ public interface CommonConstant {
     /** 特征参数配置LIMIT前缀 */
     public static final String FEATURE_PERSON_LIMIT_PREFIX = "feature.person.limit.";
     
-    /** 特征提取任务队列名 */
-    public static final String TASK_FEATURE_BASE = "FEATURE_";
+    /** faceapi任务队列名 */
+    public static final String TASK_FACEAPI_BASE = "FACEAPI_";
     
     /** 用户注册任务队列名 */
     public static final String TASK_REGISTER_BASE = "REGISTER_";

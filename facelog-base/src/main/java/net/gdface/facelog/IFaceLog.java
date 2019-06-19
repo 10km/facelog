@@ -908,36 +908,27 @@ public interface IFaceLog{
 	public Integer rootGroupOfDevice(Integer deviceId);
 
 	/////////////////////PERMIT/////
-	/**
-	 * 添加一个(允许)通行关联记录:允许{@code personGroup}指定的人员组在
-	 * {@code deviceGroup}指定的设备组下属的所有设备通行
-	 * <br>{@code PERSON_ONLY}
-	 * @param deviceGroup
-	 * @param personGroup
-	 * @param token 访问令牌
-	 * @throws RuntimeDaoException
-	 */
-	public void addPermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup, Token token) ;
+
     /**
-     * 创建fl_device_group和fl_person_group之间的MANY TO MANY 联接表(fl_permit)记录<br>
-     * 如果记录已经存在则返回已有记录,如果输入的参数为{@code null}或记录不存在则返回{@code null}
+     * 保存通行权限(permit)记录
+     * <br>{@code PERSON_ONLY}
+	 * @param permitBean 要修改或增加的fl_permit记录
+	 * @param token 访问令牌
+	 * @return 保存的{@link PermitBean}
+	 */
+	public PermitBean savePermit(PermitBean permitBean, Token token);
+	/**
+	 * 如果记录不存在则创建deviceGroupId和personGroupId之间的MANY TO MANY 联接表(fl_permit)记录,
+	 * 否则修改指定记录的通行时间安排表<br>
 	 * <br>{@code PERSON_ONLY}
      * @param deviceGroupId 设备组id
      * @param personGroupId 人员组id
+     * @param schedule 通行时间安排表,为{@code null}则不限制通行时间
      * @param token 访问令牌
-     * @see #addPermit(DeviceGroupBean,PersonGroupBean, Token)
+     * @return (fl_permit)记录
      */
-	@DeriveMethod(methodSuffix="ById")
-	public void addPermit(int deviceGroupId,int personGroupId, Token token);
-	/**
-	 * 删除fl_device_group和fl_person_group之间的MANY TO MANY 联接表(fl_permit)记录<br>
-	 * <br>{@code PERSON_ONLY}
-	 * @param deviceGroup 设备组记录
-	 * @param personGroup 人员组记录
-	 * @param token 访问令牌
-	 * @return 删除成功返回1,否则返回0
-	 */
-	public int deletePermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup, Token token);
+	@DeriveMethod(methodSuffix="WithSchedule")
+	public PermitBean savePermit(int deviceGroupId,int personGroupId, String schedule, Token token);
 	/**
 	 * 删除fl_device_group和fl_person_group之间的MANY TO MANY 联接表(fl_permit)记录<br>
 	 * @param deviceGroupId 设备组id
@@ -1176,26 +1167,26 @@ public interface IFaceLog{
 	/**
 	 * 申请一个唯一的命令响应通道<br>
 	 * <br>{@code PERSON_ONLY}
-	 * @param token 访问令牌
 	 * @param duration 通道有效时间(秒) 大于0有效,否则使用默认的有效期
+	 * @param token 访问令牌
 	 * @return
 	 */
 	@DeriveMethod(methodSuffix="WithDuration")
-	public String applyAckChannel(Token token, long duration);
+	public String applyAckChannel(int duration, Token token);
 	/**
 	 * 申请一个唯一的命令序列号
 	 * <br>{@code PERSON_ONLY}
 	 * @param token 访问令牌
 	 * @return
 	 */
-	public long applyCmdSn(Token token);
+	public int applyCmdSn(Token token);
 	/**
 	 * 判断命令序列号是否有效<br>
 	 * 序列号过期或不存在都返回{@code false}
 	 * @param cmdSn
 	 * @return
 	 */
-	public boolean isValidCmdSn(long cmdSn);
+	public boolean isValidCmdSn(int cmdSn);
 	/**
 	 * 判断命令响应通道是否有效<br>
 	 * 通道过期或不存在都返回{@code false}
@@ -1265,7 +1256,7 @@ public interface IFaceLog{
 	
 	/**
 	 * 返回sdk任务队列名
-	 * @param task 任务名,可选值:{@link CommonConstant#TASK_FEATURE_BASE},{@link CommonConstant#TASK_REGISTER_BASE}
+	 * @param task 任务名,可选值:{@link CommonConstant#TASK_FACEAPI_BASE},{@link CommonConstant#TASK_REGISTER_BASE}
 	 * @param sdkVersion sdk版本号
 	 * @param token 访问令牌
 	 * @return  返回sdk任务队列名，参数错误返回{@code null}
@@ -1332,7 +1323,5 @@ public interface IFaceLog{
 	 * @return
 	 */
 	public boolean isLocal();
-
-
 
 }

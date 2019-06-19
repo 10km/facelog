@@ -617,6 +617,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 			checkArgument(logBean != null,"logBean is null");
 			dm.daoAddLog(logBean);
 		} catch (Exception e) {
+			Throwables.throwIfInstanceOf(e, DuplicateRecordException.class);
 			throw wrapServiceRuntimeException(e);
 		}
 	}
@@ -1272,30 +1273,21 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		}
 	}
 	/////////////////////PERMIT/////
-    
 	@Override
-	public void addPermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup, Token token) {
+	public PermitBean savePermit(PermitBean permitBean, Token token){
 		try{
 			Enable.PERSON_ONLY.check(tm, token);
-			dm.daoAddPermit(deviceGroup, personGroup);
+			return dm.daoSavePermit(permitBean);
 		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
 		}
 	}
+	
 	@Override
-	public void addPermit(int deviceGroupId,int personGroupId, Token token){
+	public PermitBean savePermit(int deviceGroupId,int personGroupId, String schedule, Token token){
 		try{
 			Enable.PERSON_ONLY.check(tm, token);
-			dm.daoAddPermit(deviceGroupId, personGroupId);
-		} catch (Exception e) {
-			throw wrapServiceRuntimeException(e);
-		}
-	}
-	@Override
-	public int deletePermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup, Token token) {
-		try{
-			Enable.PERSON_ONLY.check(tm, token);
-			return dm.daoDeletePermit(deviceGroup, personGroup);
+			return dm.daoSavePermit(deviceGroupId, personGroupId,schedule);
 		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
 		}
@@ -1549,26 +1541,28 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 	}
     @Override
     public String applyAckChannel(Token token) {
-    	return applyAckChannel(token,0L);
+    	return applyAckChannel(0,token);
 	}
     @Override
-    public String applyAckChannel(Token token, long duration) {
+    public String applyAckChannel(int duration, Token token) {
     	try {
-			return tm.applyAckChannel(token, duration);
+    		Enable.PERSON_ONLY.check(tm, token);
+			return tm.applyAckChannel(token.getId(), duration);
 		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
 		} 
 	}
     @Override
-    public long applyCmdSn(Token token) {
+    public int applyCmdSn(Token token) {
     	try {
-			return tm.applyCmdSn(token);
+    		Enable.PERSON_ONLY.check(tm, token);
+			return tm.applyCmdSn(token.getId());
 		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
 		} 
 	}
     @Override
-    public boolean isValidCmdSn(long cmdSn) {
+    public boolean isValidCmdSn(int cmdSn) {
     	try {
 			return tm.isValidCmdSn(cmdSn);
 		} catch (RuntimeException e) {

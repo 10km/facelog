@@ -10,15 +10,18 @@ import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import gu.dtalk.Ack;
+import gu.dtalk.IAckAdapter;
 import gu.dtalk.ICmdImmediateAdapter;
+import gu.dtalk.client.CmdManager;
 import gu.dtalk.exception.CmdExecutionException;
 import net.gdface.facelog.Token;
+import net.gdface.facelog.client.dtalk.DtalkEngineForFacelog;
 import net.gdface.facelog.client.dtalk.FacelogMenu;
 import net.gdface.facelog.client.location.ConnectConfigType;
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.thrift.IFaceLogThriftClient;
 import net.gdface.thrift.ClientFactory;
-import net.gdface.utils.DefaultExecutorProvider;
 import net.gdface.utils.NetworkUtil;
 import static net.gdface.facelog.client.dtalk.FacelogMenu.*;
 
@@ -48,7 +51,7 @@ public class DeviceCmdTest implements ChannelConstant{
 		// 申请root令牌
 		rootToken = facelogClient.applyRootToken("guyadong", false);
 		byte[] address = new byte[]{0x20,0x20,0x20,0x20,0x20,0x20};
-		device = DeviceBean.builder().mac(NetworkUtil.formatMac(address, null)).serialNo("12322333").version("MTFSDKARM512").build();
+		device = DeviceBean.builder().mac(NetworkUtil.formatMac(address, null)).serialNo("12322333").usedSdks("MTFSDKARM512").build();
 		logger.info(device.toString(true,false));
 		// 注册设备 
 		device = facelogClient.registerDevice(device);
@@ -79,13 +82,14 @@ public class DeviceCmdTest implements ChannelConstant{
 		});
 		// 初始化 JedisPoolLazy的默认实例
 		facelogClient.initRedisDefaultInstance(deviceToken);
+		// 启动dtalk引擎(点对点命令由此执行)
+		DtalkEngineForFacelog engine = facelogClient.initDtalkEngine(deviceToken, root).start();
+
 		// 启动设备命令分发器(广播命令由此执行)
 		facelogClient.makeCmdDispatcher(deviceToken)
-			.setRootSupplier(FacelogMenu.ROOT_SUPPLIER)
+			.setItemAdapter(engine.getItemAdapter())
 			/** 程序退出时自动注销设备命令频道 */
-			.autoUnregisterChannel();
-		// 启动dtalk引擎(点对点命令由此执行)
-		facelogClient.initDtalkEngine(deviceToken, root).start();
+			.autoUnregister();
 	}
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
@@ -100,15 +104,9 @@ public class DeviceCmdTest implements ChannelConstant{
 	@Test
 	public void test2SendCmd() throws InterruptedException{
 		// 创建命令发送管理实例 
-		CmdManager cmdManager = facelogClient.makeCmdManager(rootToken)
-				.setExecutor(DefaultExecutorProvider.getGlobalExceutor())
-				.setTimerExecutor(DefaultExecutorProvider.getTimerExecutor());
+		CmdManager cmdManager = facelogClient.makeCmdManager(rootToken);
 		
 		cmdManager.targetBuilder()
-			// 设置命令序列号
-			.setCmdSn(facelogClient.getCmdSnSupplier(rootToken))
-			// 设置命令响应通道
-			.setAckChannel(facelogClient.getAckChannelSupplier(rootToken))
 			// 指定设备命令执行接收目标为一组设备(id)
 			.setDeviceTarget(device.getId()).autoRemove(false);
 		logger.info("异步接收命令响应:");
@@ -122,8 +120,6 @@ public class DeviceCmdTest implements ChannelConstant{
 		 Thread.sleep(5*1000);
 		 logger.info("reset异步命令响应结束");
 		 
-		 // 复用CmdBuilder对象同步执行 isEnable 命令
-		 cmdManager.targetBuilder().resetApply();
 		 List<Ack<Object>> receivedAcks = cmdManager.runCmdSync(pathOfCmd(CMD_RESET),null,false);
 		 logger.info("同步接收命令响应:");
 		 for(Ack<Object> ack:receivedAcks){
@@ -138,14 +134,8 @@ public class DeviceCmdTest implements ChannelConstant{
 	@Test
 	public void test3SendCmdSync() throws InterruptedException{
 		// 创建命令发送管理实例 
-		CmdManager cmdManager = facelogClient.makeCmdManager(rootToken)
-				.setExecutor(DefaultExecutorProvider.getGlobalExceutor())
-				.setTimerExecutor(DefaultExecutorProvider.getTimerExecutor());
+		CmdManager cmdManager = facelogClient.makeCmdManager(rootToken);
 		cmdManager.targetBuilder()
-			// 设置命令序列号
-			.setCmdSn(facelogClient.getCmdSnSupplier(rootToken))
-			// 设置命令响应通道
-			.setAckChannel(facelogClient.getAckChannelSupplier(rootToken))
 			// 指定设备命令执行接收目标为一组设备(id)
 			.setDeviceTarget(device.getId()) ;
 		List<Ack<Object>> receivedAcks = cmdManager.runCmdSync(pathOfCmd(CMD_RESET),null, false);

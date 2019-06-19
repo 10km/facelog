@@ -25,9 +25,14 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.gitee.l0km</groupId>
-			<artifactId>common-base2</artifactId>
-			<version>${common-java.version}</version>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>dtalk-engine</artifactId>
+			<version>${dtalk.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>dtalk-cmd</artifactId>
+			<version>${dtalk.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
@@ -36,13 +41,13 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.gitee.l0km</groupId>
-			<artifactId>simplemq</artifactId>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>faceapi-base</artifactId>
+			<version>${faceapi.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>dtalk-engine</artifactId>
-			<version>${dtalk.version}</version>
+			<artifactId>codegen-annotations</artifactId>
 		</dependency>
 	</dependencies>
 	<build>

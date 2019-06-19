@@ -96,39 +96,6 @@ struct LogBean {
   12: optional i64 createTime;
 }
 
-struct DeviceGroupBean {
-  1: required bool _new;
-  2: required i32 modified;
-  3: required i32 initialized;
-  4: optional i32 id;
-  5: optional string name;
-  6: optional i32 leaf;
-  7: optional i32 parent;
-  8: optional i32 rootGroup;
-  9: optional string schedule;
-  10: optional string remark;
-  11: optional binary extBin;
-  12: optional string extTxt;
-  13: optional i64 createTime;
-  14: optional i64 updateTime;
-}
-
-struct PersonGroupBean {
-  1: required bool _new;
-  2: required i32 modified;
-  3: required i32 initialized;
-  4: optional i32 id;
-  5: optional string name;
-  6: optional i32 leaf;
-  7: optional i32 parent;
-  8: optional i32 rootGroup;
-  9: optional string remark;
-  10: optional binary extBin;
-  11: optional string extTxt;
-  12: optional i64 createTime;
-  13: optional i64 updateTime;
-}
-
 struct DeviceBean {
   1: required bool _new;
   2: required i32 modified;
@@ -150,6 +117,23 @@ struct DeviceBean {
   18: optional string extTxt;
   19: optional i64 createTime;
   20: optional i64 updateTime;
+}
+
+struct DeviceGroupBean {
+  1: required bool _new;
+  2: required i32 modified;
+  3: required i32 initialized;
+  4: optional i32 id;
+  5: optional string name;
+  6: optional i32 leaf;
+  7: optional i32 parent;
+  8: optional i32 rootGroup;
+  9: optional string schedule;
+  10: optional string remark;
+  11: optional binary extBin;
+  12: optional string extTxt;
+  13: optional i64 createTime;
+  14: optional i64 updateTime;
 }
 
 struct PermitBean {
@@ -186,6 +170,22 @@ struct PersonBean {
   18: optional string extTxt;
   19: optional i64 createTime;
   20: optional i64 updateTime;
+}
+
+struct PersonGroupBean {
+  1: required bool _new;
+  2: required i32 modified;
+  3: required i32 initialized;
+  4: optional i32 id;
+  5: optional string name;
+  6: optional i32 leaf;
+  7: optional i32 parent;
+  8: optional i32 rootGroup;
+  9: optional string remark;
+  10: optional binary extBin;
+  11: optional string extTxt;
+  12: optional i64 createTime;
+  13: optional i64 updateTime;
 }
 
 struct LogLightBean {
@@ -227,11 +227,9 @@ service IFaceLog {
   void addLogFull(1: optional LogBean logBean, 2: optional FaceBean faceBean, 3: optional binary featureImage, 4: optional Token token) throws (1: DuplicateRecordException ex1, 2: ServiceRuntimeException ex2);
   void addLogs(1: optional list<LogBean> beans, 2: optional Token token) throws (1: DuplicateRecordException ex1, 2: ServiceRuntimeException ex2);
   void addLogsFull(1: optional list<LogBean> logBeans, 2: optional list<FaceBean> faceBeans, 3: optional list<binary> featureImages, 4: optional Token token) throws (1: DuplicateRecordException ex1, 2: ServiceRuntimeException ex2);
-  void addPermit(1: optional DeviceGroupBean deviceGroup, 2: optional PersonGroupBean personGroup, 3: optional Token token) throws (1: ServiceRuntimeException ex1);
-  void addPermitById(1: required i32 deviceGroupId, 2: required i32 personGroupId, 3: optional Token token) throws (1: ServiceRuntimeException ex1);
   string applyAckChannel(1: optional Token token) throws (1: ServiceRuntimeException ex1);
-  string applyAckChannelWithDuration(1: optional Token token, 2: required i64 duration) throws (1: ServiceRuntimeException ex1);
-  i64 applyCmdSn(1: optional Token token) throws (1: ServiceRuntimeException ex1);
+  string applyAckChannelWithDuration(1: required i32 duration, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
+  i32 applyCmdSn(1: optional Token token) throws (1: ServiceRuntimeException ex1);
   Token applyPersonToken(1: required i32 personId, 2: optional string password, 3: required bool isMd5) throws (1: ServiceSecurityException ex1, 2: ServiceRuntimeException ex2);
   Token applyRootToken(1: optional string password, 2: required bool isMd5) throws (1: ServiceSecurityException ex1, 2: ServiceRuntimeException ex2);
   Token applyUserToken(1: required i32 userid, 2: optional string password, 3: required bool isMd5) throws (1: ServiceSecurityException ex1, 2: ServiceRuntimeException ex2);
@@ -251,7 +249,6 @@ service IFaceLog {
   list<string> deleteFeature(1: optional string featureMd5, 2: required bool deleteImage, 3: optional Token token) throws (1: ServiceRuntimeException ex1);
   i32 deleteGroupPermitOnDeviceGroup(1: required i32 deviceGroupId, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
   i32 deleteImage(1: optional string imageMd5, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
-  i32 deletePermit(1: optional DeviceGroupBean deviceGroup, 2: optional PersonGroupBean personGroup, 3: optional Token token) throws (1: ServiceRuntimeException ex1);
   i32 deletePermitById(1: required i32 deviceGroupId, 2: required i32 personGroupId, 3: optional Token token) throws (1: ServiceRuntimeException ex1);
   i32 deletePerson(1: required i32 personId, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
   i32 deletePersonByPapersNum(1: optional string papersNum, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
@@ -306,7 +303,7 @@ service IFaceLog {
   bool isDisable(1: required i32 personId) throws (1: ServiceRuntimeException ex1);
   bool isLocal() throws (1: ServiceRuntimeException ex1);
   bool isValidAckChannel(1: optional string ackChannel) throws (1: ServiceRuntimeException ex1);
-  bool isValidCmdSn(1: required i64 cmdSn) throws (1: ServiceRuntimeException ex1);
+  bool isValidCmdSn(1: required i32 cmdSn) throws (1: ServiceRuntimeException ex1);
   bool isValidDeviceToken(1: optional Token token) throws (1: ServiceRuntimeException ex1);
   bool isValidPassword(1: optional string userId, 2: optional string password, 3: required bool isMd5) throws (1: ServiceRuntimeException ex1);
   bool isValidPersonToken(1: optional Token token) throws (1: ServiceRuntimeException ex1);
@@ -347,6 +344,8 @@ service IFaceLog {
   i32 rootGroupOfPerson(1: optional i32 personId) throws (1: ServiceRuntimeException ex1);
   DeviceBean saveDevice(1: optional DeviceBean deviceBean, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
   DeviceGroupBean saveDeviceGroup(1: optional DeviceGroupBean deviceGroupBean, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
+  PermitBean savePermit(1: optional PermitBean permitBean, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
+  PermitBean savePermitWithSchedule(1: required i32 deviceGroupId, 2: required i32 personGroupId, 3: optional string schedule, 4: optional Token token) throws (1: ServiceRuntimeException ex1);
   PersonBean savePerson(1: optional PersonBean personBean, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
   PersonBean savePersonFull(1: optional PersonBean personBean, 2: optional binary idPhoto, 3: optional binary feature, 4: optional string featureVersion, 5: optional binary featureImage, 6: optional FaceBean featureFaceBean, 7: optional Token token) throws (1: ServiceRuntimeException ex1);
   PersonGroupBean savePersonGroup(1: optional PersonGroupBean personGroupBean, 2: optional Token token) throws (1: ServiceRuntimeException ex1);

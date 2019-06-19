@@ -383,52 +383,22 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(addLogs(beans,token), callback);
     }
     /**
-     * see also {@link net.gdface.facelog.IFaceLog#addPermit(int,int,net.gdface.facelog.Token)}
+     * see also {@link net.gdface.facelog.IFaceLog#applyAckChannel(int,net.gdface.facelog.Token)}
      */
-    public ListenableFuture<Void> addPermit(int deviceGroupId,
-        int personGroupId,
+    public ListenableFuture<String> applyAckChannel(int duration,
         Token token){        
         net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Void> future = async.addPermitById(deviceGroupId,
-            personGroupId,
+        ListenableFuture<String> future = async.applyAckChannelWithDuration(duration,
             TypeTransformer.getInstance().to(
                     token,
                     Token.class,
                     net.gdface.facelog.client.thrift.Token.class));
         return factory.wrap(async,future);
     }
-    public void addPermit(int deviceGroupId,
-        int personGroupId,
+    public void applyAckChannel(int duration,
         Token token,
-        FutureCallback<Void>callback){
-        factory.addCallback(addPermit(deviceGroupId,personGroupId,token), callback);
-    }
-    /**
-     * see also {@link net.gdface.facelog.IFaceLog#addPermit(net.gdface.facelog.db.DeviceGroupBean,net.gdface.facelog.db.PersonGroupBean,net.gdface.facelog.Token)}
-     */
-    public ListenableFuture<Void> addPermit(DeviceGroupBean deviceGroup,
-        PersonGroupBean personGroup,
-        Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Void> future = async.addPermit(TypeTransformer.getInstance().to(
-                    deviceGroup,
-                    DeviceGroupBean.class,
-                    net.gdface.facelog.client.thrift.DeviceGroupBean.class),
-            TypeTransformer.getInstance().to(
-                    personGroup,
-                    PersonGroupBean.class,
-                    net.gdface.facelog.client.thrift.PersonGroupBean.class),
-            TypeTransformer.getInstance().to(
-                    token,
-                    Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        return factory.wrap(async,future);
-    }
-    public void addPermit(DeviceGroupBean deviceGroup,
-        PersonGroupBean personGroup,
-        Token token,
-        FutureCallback<Void>callback){
-        factory.addCallback(addPermit(deviceGroup,personGroup,token), callback);
+        FutureCallback<String>callback){
+        factory.addCallback(applyAckChannel(duration,token), callback);
     }
     /**
      * see also {@link net.gdface.facelog.IFaceLog#applyAckChannel(net.gdface.facelog.Token)}
@@ -446,36 +416,18 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(applyAckChannel(token), callback);
     }
     /**
-     * see also {@link net.gdface.facelog.IFaceLog#applyAckChannel(net.gdface.facelog.Token,long)}
-     */
-    public ListenableFuture<String> applyAckChannel(Token token,
-        long duration){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<String> future = async.applyAckChannelWithDuration(TypeTransformer.getInstance().to(
-                    token,
-                    Token.class,
-                    net.gdface.facelog.client.thrift.Token.class),
-            duration);
-        return factory.wrap(async,future);
-    }
-    public void applyAckChannel(Token token,
-        long duration,
-        FutureCallback<String>callback){
-        factory.addCallback(applyAckChannel(token,duration), callback);
-    }
-    /**
      * see also {@link net.gdface.facelog.IFaceLog#applyCmdSn(net.gdface.facelog.Token)}
      */
-    public ListenableFuture<Long> applyCmdSn(Token token){        
+    public ListenableFuture<Integer> applyCmdSn(Token token){        
         net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Long> future = async.applyCmdSn(TypeTransformer.getInstance().to(
+        ListenableFuture<Integer> future = async.applyCmdSn(TypeTransformer.getInstance().to(
                     token,
                     Token.class,
                     net.gdface.facelog.client.thrift.Token.class));
         return factory.wrap(async,future);
     }
     public void applyCmdSn(Token token,
-        FutureCallback<Long>callback){
+        FutureCallback<Integer>callback){
         factory.addCallback(applyCmdSn(token), callback);
     }
     /**
@@ -816,33 +768,6 @@ public class IFaceLogThriftClientAsync {
         Token token,
         FutureCallback<Integer>callback){
         factory.addCallback(deletePermit(deviceGroupId,personGroupId,token), callback);
-    }
-    /**
-     * see also {@link net.gdface.facelog.IFaceLog#deletePermit(net.gdface.facelog.db.DeviceGroupBean,net.gdface.facelog.db.PersonGroupBean,net.gdface.facelog.Token)}
-     */
-    public ListenableFuture<Integer> deletePermit(DeviceGroupBean deviceGroup,
-        PersonGroupBean personGroup,
-        Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Integer> future = async.deletePermit(TypeTransformer.getInstance().to(
-                    deviceGroup,
-                    DeviceGroupBean.class,
-                    net.gdface.facelog.client.thrift.DeviceGroupBean.class),
-            TypeTransformer.getInstance().to(
-                    personGroup,
-                    PersonGroupBean.class,
-                    net.gdface.facelog.client.thrift.PersonGroupBean.class),
-            TypeTransformer.getInstance().to(
-                    token,
-                    Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        return factory.wrap(async,future);
-    }
-    public void deletePermit(DeviceGroupBean deviceGroup,
-        PersonGroupBean personGroup,
-        Token token,
-        FutureCallback<Integer>callback){
-        factory.addCallback(deletePermit(deviceGroup,personGroup,token), callback);
     }
     /**
      * see also {@link net.gdface.facelog.IFaceLog#deletePerson(int,net.gdface.facelog.Token)}
@@ -1797,14 +1722,14 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(isValidAckChannel(ackChannel), callback);
     }
     /**
-     * see also {@link net.gdface.facelog.IFaceLog#isValidCmdSn(long)}
+     * see also {@link net.gdface.facelog.IFaceLog#isValidCmdSn(int)}
      */
-    public ListenableFuture<Boolean> isValidCmdSn(long cmdSn){        
+    public ListenableFuture<Boolean> isValidCmdSn(int cmdSn){        
         net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
         ListenableFuture<Boolean> future = async.isValidCmdSn(cmdSn);
         return factory.wrap(async,future);
     }
-    public void isValidCmdSn(long cmdSn,
+    public void isValidCmdSn(int cmdSn,
         FutureCallback<Boolean>callback){
         factory.addCallback(isValidCmdSn(cmdSn), callback);
     }
@@ -2523,6 +2448,71 @@ public class IFaceLogThriftClientAsync {
         Token token,
         FutureCallback<DeviceGroupBean>callback){
         factory.addCallback(saveDeviceGroup(deviceGroupBean,token), callback);
+    }
+    /**
+     * see also {@link net.gdface.facelog.IFaceLog#savePermit(int,int,java.lang.String,net.gdface.facelog.Token)}
+     */
+    public ListenableFuture<PermitBean> savePermit(int deviceGroupId,
+        int personGroupId,
+        String schedule,
+        Token token){        
+        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
+        ListenableFuture<PermitBean> future = Futures.transform(
+            async.savePermitWithSchedule(deviceGroupId,
+            personGroupId,
+            schedule,
+            TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class)),
+            new Function<net.gdface.facelog.client.thrift.PermitBean,PermitBean>(){
+                @Override
+                public PermitBean apply(net.gdface.facelog.client.thrift.PermitBean input) {
+                    return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.PermitBean.class,
+                    PermitBean.class);
+                }
+            });
+        return factory.wrap(async,future);
+    }
+    public void savePermit(int deviceGroupId,
+        int personGroupId,
+        String schedule,
+        Token token,
+        FutureCallback<PermitBean>callback){
+        factory.addCallback(savePermit(deviceGroupId,personGroupId,schedule,token), callback);
+    }
+    /**
+     * see also {@link net.gdface.facelog.IFaceLog#savePermit(net.gdface.facelog.db.PermitBean,net.gdface.facelog.Token)}
+     */
+    public ListenableFuture<PermitBean> savePermit(PermitBean permitBean,
+        Token token){        
+        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
+        ListenableFuture<PermitBean> future = Futures.transform(
+            async.savePermit(TypeTransformer.getInstance().to(
+                    permitBean,
+                    PermitBean.class,
+                    net.gdface.facelog.client.thrift.PermitBean.class),
+            TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class)),
+            new Function<net.gdface.facelog.client.thrift.PermitBean,PermitBean>(){
+                @Override
+                public PermitBean apply(net.gdface.facelog.client.thrift.PermitBean input) {
+                    return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.PermitBean.class,
+                    PermitBean.class);
+                }
+            });
+        return factory.wrap(async,future);
+    }
+    public void savePermit(PermitBean permitBean,
+        Token token,
+        FutureCallback<PermitBean>callback){
+        factory.addCallback(savePermit(permitBean,token), callback);
     }
     /**
      * see also {@link net.gdface.facelog.IFaceLog#savePerson(net.gdface.facelog.db.PersonBean,byte[],byte[],java.lang.String,byte[],net.gdface.facelog.db.FaceBean,net.gdface.facelog.Token)}

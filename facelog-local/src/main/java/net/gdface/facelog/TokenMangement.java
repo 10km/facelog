@@ -477,28 +477,25 @@ class TokenMangement implements ServiceConstant {
 				.setType(SecurityExceptionType.INVALID_PASSWORD);
 		}
 	}
-	/** 申请一个唯一的命令序列号 
-	 * @throws ServiceSecurityException */
-	protected long applyCmdSn(Token token) throws ServiceSecurityException{
-		Enable.PERSON_ONLY.check(this, token);
-
-		long sn = JedisUtils.incr(KEY_CMD_SN);
+	/** 
+	 * 申请一个唯一的命令序列号 
+	 * @param id
+	 */
+	protected int applyCmdSn(int id){
+		int sn = JedisUtils.incr(KEY_CMD_SN);
 		String key = Long.toString(sn);
-		this.cmdSnTable.set(key, token.getId(), false);
+		this.cmdSnTable.set(key, id, false);
 		this.cmdSnTable.expire(key);
 		return sn;
 	}
 	/** 申请一个唯一的命令响应通道 
-	 * @param token
-	 * @param duration 通道有效时间 大于0有效,否则使用默认的有效期
-	 * @throws ServiceSecurityException */
-	protected String applyAckChannel(Token token, long duration) throws ServiceSecurityException{
-		Enable.PERSON_ONLY.check(this, token);
-
+	 * @param id
+	 * @param duration 通道有效时间 大于0有效,否则使用默认的有效期*/
+	protected String applyAckChannel(int id, int duration){
 		String channel = new StringBuffer(ACK_PREFIX)
 				.append(JedisUtils.incr(KEY_ACK_SN))
 				.toString();
-		this.ackChannelTable.set(channel, token.getId(), false);
+		this.ackChannelTable.set(channel, id, false);
 		if(duration>0){
 			this.ackChannelTable.expire(channel,duration,TimeUnit.SECONDS);
 		}else{
@@ -512,8 +509,8 @@ class TokenMangement implements ServiceConstant {
 	 * @param cmdSn
 	 * @return
 	 */
-	protected boolean isValidCmdSn(long cmdSn){
-		return this.cmdSnTable.containsKey(Long.toString(cmdSn));
+	protected boolean isValidCmdSn(int cmdSn){
+		return this.cmdSnTable.containsKey(Integer.toString(cmdSn));
 	}
 	/**
 	 * 判断命令响应通道是否有效

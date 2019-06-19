@@ -2426,6 +2426,332 @@ class BaseDao implements CommonConstant {
     }
 
 
+    //////////// FL_PERMIT /////////
+    //1
+    /** 
+     * 根据主键从数据库读取记录,没有找到记录返回{@code null}<br>
+     * 
+     * @param deviceGroupId 外键,设备组id 
+     * @param personGroupId 外键,人员组id 
+     * @return 
+     * @see IPermitManager#loadByPrimaryKey(Integer,Integer)
+     * @throws RuntimeDaoException
+     */
+    protected PermitBean daoGetPermit(Integer deviceGroupId,Integer personGroupId)throws RuntimeDaoException{
+        return getPermitManager().loadByPrimaryKey(deviceGroupId,personGroupId);
+    }
+    //1-2
+    /** 
+     * 根据主键从数据库读取记录,没有找到记录抛出异常<br>
+     * 
+     * @param deviceGroupId 外键,设备组id 
+     * @param personGroupId 外键,人员组id 
+     * @return 
+     * @see IPermitManager#loadByPrimaryKeyChecked(Integer,Integer)
+     * @throws RuntimeDaoException
+     * @throws ObjectRetrievalException 没有找到记录
+     */
+    protected PermitBean daoGetPermitChecked(Integer deviceGroupId,Integer personGroupId)throws RuntimeDaoException,ObjectRetrievalException{
+        return getPermitManager().loadByPrimaryKeyChecked(deviceGroupId,personGroupId);
+    }
+    //4
+    /** 
+     *　判断主键指定的记录是否存在
+     * 
+     * @param deviceGroupId 外键,设备组id 
+     * @param personGroupId 外键,人员组id 
+     * @see IPermitManager#existsPrimaryKey(Integer,Integer)
+     * @throws RuntimeDaoException
+     */
+    protected boolean daoExistsPermit(Integer deviceGroupId,Integer personGroupId)
+                    throws RuntimeDaoException{
+        return getPermitManager().existsPrimaryKey(deviceGroupId,personGroupId);
+    }
+    //4-2
+    /** 
+     *　判断指定的记录是否存在
+     * @see IPermitManager#existsByPrimaryKey(Object)
+     * @throws RuntimeDaoException
+     */
+    protected boolean daoExistsPermit(PermitBean bean)
+                    throws RuntimeDaoException{
+        return getPermitManager().existsByPrimaryKey(bean);
+    }
+    //5
+    /**
+     * 删除主键指定的记录
+     * 
+     * @param deviceGroupId 外键,设备组id 
+     * @param personGroupId 外键,人员组id  
+     * @return 返回删除的记录条数(1),如果记录不存在返回0
+     * @see IPermitManager#deleteByPrimaryKey(Integer,Integer)
+     * @throws RuntimeDaoException
+     */
+    protected int daoDeletePermit(Integer deviceGroupId,Integer personGroupId)
+                    throws RuntimeDaoException{
+        return getPermitManager().deleteByPrimaryKey(deviceGroupId,personGroupId);
+    }
+    //5-2
+    /**
+     * 删除指定的记录
+     * @param bean 要删除的记录
+     * @return 返回删除的记录条数(1),如果{@code bean}为{@code null}或记录不存在返回0
+     * @see #daoDeletePermit(Integer,Integer)
+     * @throws RuntimeDaoException
+     */
+    protected int daoDeletePermit(PermitBean bean)
+                    throws RuntimeDaoException{
+        return null == bean ? 0 : daoDeletePermit(bean.getDeviceGroupId(),bean.getPersonGroupId());
+    }
+    //6
+    /**
+     * 删除{@code permitBeanCollection}列表指定的记录
+     * @return 返回删除的记录条数
+     * @see #daoDeletePermit(Integer,Integer)
+     * @throws RuntimeDaoException
+     */
+    protected int daoDeletePermits(Collection<PermitBean> beans)
+                    throws RuntimeDaoException{
+        int count =0;
+        if(null != beans){        
+            for(PermitBean bean:beans){
+                count += daoDeletePermit(bean);
+            }
+        }
+        return count;
+    }
+    //7
+    /** 
+     * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
+     * @see TableManager#checkDuplicate(BaseBean)
+     * @throws RuntimeDaoException
+     * @throws DuplicateRecordException if exists duplicated row
+     */
+    protected PermitBean daoCheckDuplicate(PermitBean permitBean)
+                    throws RuntimeDaoException,DuplicateRecordException{
+        try{
+            return getPermitManager().checkDuplicate(permitBean);
+        }catch(ObjectRetrievalException e){
+            throw new DuplicateRecordException();
+        }
+    }
+    //7-3
+    /** 
+     * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
+     * 
+     * @param deviceGroupId 外键,设备组id 
+     * @param personGroupId 外键,人员组id 
+     * @see TableManager#checkDuplicate(BaseBean)
+     * @throws DuplicateRecordException if exists duplicated row
+     * 
+     * @throws RuntimeDaoException
+     * @throws DuplicateRecordException
+     */
+    protected void daoCheckDuplicatePermit(Integer deviceGroupId,Integer personGroupId)
+                    throws RuntimeDaoException,DuplicateRecordException{
+        if(getPermitManager().existsPrimaryKey(deviceGroupId,personGroupId)){
+            throw new DuplicateRecordException();
+        }
+    }
+    //8-3
+    /**
+     * 返回外键(fl_permit.device_group_id)引用的 fl_device_group 记录
+     * @param bean
+     * @see IPermitManager#getReferencedByDeviceGroupId(PermitBean)
+     * @throws RuntimeDaoException
+     */
+    protected DeviceGroupBean daoGetReferencedByDeviceGroupIdOnPermit(PermitBean bean)
+                    throws RuntimeDaoException{
+        return getPermitManager().getReferencedByDeviceGroupId(bean);
+    }
+    //8-4
+    /**
+     * 设置外键fl_permit(device_group_id)引用为{@code beanToSet}指定的记录,
+     * 如果{@code beanToSet}没有保存则先save
+     * @param bean
+     * @param beanToSet 被引用的记录
+     * @see IPermitManager#setReferencedByDeviceGroupId(PermitBean,DeviceGroupBean)
+     * @throws RuntimeDaoException
+     */
+    protected DeviceGroupBean daoSetReferencedByDeviceGroupIdOnPermit(PermitBean bean,DeviceGroupBean beanToSet)
+                    throws RuntimeDaoException{
+        return getPermitManager().setReferencedByDeviceGroupId(bean,beanToSet);
+    }
+    //8-6
+    /** transformer : PermitBean to fl_permit.device_group_id */
+    protected final Function<PermitBean,Integer> daoCastPermitToDeviceGroupId = new Function<PermitBean,Integer>(){
+            @Override
+            public Integer apply(PermitBean input) {
+                return null == input ? null : input.getDeviceGroupId();
+            }};
+    //8-3
+    /**
+     * 返回外键(fl_permit.person_group_id)引用的 fl_person_group 记录
+     * @param bean
+     * @see IPermitManager#getReferencedByPersonGroupId(PermitBean)
+     * @throws RuntimeDaoException
+     */
+    protected PersonGroupBean daoGetReferencedByPersonGroupIdOnPermit(PermitBean bean)
+                    throws RuntimeDaoException{
+        return getPermitManager().getReferencedByPersonGroupId(bean);
+    }
+    //8-4
+    /**
+     * 设置外键fl_permit(person_group_id)引用为{@code beanToSet}指定的记录,
+     * 如果{@code beanToSet}没有保存则先save
+     * @param bean
+     * @param beanToSet 被引用的记录
+     * @see IPermitManager#setReferencedByPersonGroupId(PermitBean,PersonGroupBean)
+     * @throws RuntimeDaoException
+     */
+    protected PersonGroupBean daoSetReferencedByPersonGroupIdOnPermit(PermitBean bean,PersonGroupBean beanToSet)
+                    throws RuntimeDaoException{
+        return getPermitManager().setReferencedByPersonGroupId(bean,beanToSet);
+    }
+    //8-6
+    /** transformer : PermitBean to fl_permit.person_group_id */
+    protected final Function<PermitBean,Integer> daoCastPermitToPersonGroupId = new Function<PermitBean,Integer>(){
+            @Override
+            public Integer apply(PermitBean input) {
+                return null == input ? null : input.getPersonGroupId();
+            }};
+    //14
+    /** 
+     * 参见 {@link TableManager#save(BaseBean)}
+     * @throws RuntimeDaoException
+     */
+    protected PermitBean daoSavePermit(PermitBean permitBean)
+                    throws RuntimeDaoException{
+        return getPermitManager().save(permitBean);
+    }
+    //15
+    /** 同步保存<br> 
+     * see also {@link IPermitManager#save(PermitBean , DeviceGroupBean, PersonGroupBean  )}
+     * @throws RuntimeDaoException
+     */
+    protected PermitBean daoSavePermit(PermitBean permitBean
+        , DeviceGroupBean refDevicegroupByDeviceGroupId 
+        , PersonGroupBean refPersongroupByPersonGroupId 
+        )throws RuntimeDaoException{
+        return getPermitManager().save(permitBean
+            , refDevicegroupByDeviceGroupId 
+            , refPersongroupByPersonGroupId 
+            );
+    }
+    //12-3-3
+    /** 
+     * 添加新记录<br>
+     * @param beans 要添加的新记录集合
+     * @return always {@code beans}
+     * @see #daoSavePermit(PermitBean)
+     * @throws RuntimeDaoException
+     */
+    protected Collection<PermitBean> daoSavePermits(Collection<PermitBean> beans)
+                    throws RuntimeDaoException {
+        if(null != beans){
+            for(PermitBean bean : beans){
+                daoSavePermit(bean);
+            }
+        }
+        return beans;
+    }
+    //12-3-5
+    /** 
+     * {@link #daoSavePermits(Collection)}的事务化版本
+     * @throws RuntimeDaoException
+     */
+    protected Collection<PermitBean> daoSavePermitsAsTransaction(final Collection<PermitBean> beans)
+                    throws RuntimeDaoException {
+        try{
+            return daoRunAsTransaction(new Callable<Collection<PermitBean>>(){      
+                @Override
+                public Collection<PermitBean> call() throws Exception {
+                    return daoSavePermits(beans);
+                }});
+        }catch(RuntimeException e){
+            throw e;
+        }
+    }
+    //16
+    /**
+     * 查询{@code where} SQL条件语句指定的 fl_permit 记录
+     * @param where SQL 条件语句,为{@code null}或空时加载所有记录
+     * @param startRow 返回记录的起始行(首行=1,尾行=-1)
+     * @param numRows 返回记录条数(小于0时返回所有记录)
+     * @see IPermitManager#loadByWhereAsList(String,int[],int,int)
+     * @throws RuntimeDaoException
+     */
+    protected List<PermitBean> daoLoadPermitByWhere(String where,int startRow, int numRows)
+                    throws RuntimeDaoException{
+        return getPermitManager().loadByWhereAsList(where,null,startRow,numRows);
+    }
+    //16-2
+    /**
+     * 以{@code bean} 为模板查询 fl_permit 记录
+     * @param bean 模板对象
+     * @param startRow 返回记录的起始行(首行=1,尾行=-1)
+     * @param numRows 返回记录条数(小于0时返回所有记录)
+     * @see IPermitManager#loadUsingTemplate(PermitBean,int,int)
+     * @throws RuntimeDaoException
+     */
+    protected List<PermitBean> daoLoadPermitUsingTemplate(PermitBean bean,int startRow, int numRows)
+                    throws RuntimeDaoException{
+        return getPermitManager().loadUsingTemplateAsList(bean,startRow,numRows);
+    }
+    //17
+    /**
+     * 返回 fl_permit 表的所有记录
+     * @see IPermitManager#loadAllAsList()
+     * @throws RuntimeDaoException
+     */
+    protected List<PermitBean> daoLoadPermitAll()
+                    throws RuntimeDaoException{
+        return getPermitManager().loadAllAsList();
+    }
+    //17-2
+    /**
+     * 返回满足{@code where} SQL条件语句的 fl_permit 记录总数
+     * @see TableManager#countWhere(String)
+     * @throws RuntimeDaoException
+     */
+    protected int daoCountPermitByWhere(String where)
+                    throws RuntimeDaoException{
+        return getPermitManager().countWhere(where);
+    }
+    //19
+    /**
+     * (主动更新机制实现)<br>
+     * 返回 fl_permit.create_time 字段大于指定时间戳({@code timestamp})的所有记录
+     * @see #daoLoadPermitByWhere(String,int,int)
+     * @throws RuntimeDaoException
+     * @throws IllegalArgumentException {@code timestamp}为{@code null}时
+     */
+    protected List<PermitBean> daoLoadPermitByCreateTime(Date timestamp,int startRow, int numRows)
+                    throws RuntimeDaoException{
+        return daoLoadPermitByWhere(makeWhere(timestamp,"create_time"),startRow,numRows);
+    }
+    //20
+    /** 
+     * 参见 {@link #daoLoadPermitByCreateTime(Date,int,int)} 
+     * @throws RuntimeDaoException
+     */
+    protected List<PermitBean> daoLoadPermitByCreateTime(Date timestamp)
+                    throws RuntimeDaoException{
+        return daoLoadPermitByCreateTime(timestamp,1,-1);
+    }
+    //20-5
+    /**
+     * 返回fl_permit.create_time 字段大于指定时间戳({@code timestamp})的记录总数
+     * @see #daoCountPermitByWhere(String)
+     * @throws RuntimeDaoException
+     */
+    protected int daoCountPermitByCreateTime(Date timestamp)
+                    throws RuntimeDaoException{
+        return daoCountPermitByWhere(makeWhere(timestamp,"create_time"));
+    }
+
+
+
     //////////// FL_FACE /////////
     //1
     /** 
@@ -4330,397 +4656,6 @@ class BaseDao implements CommonConstant {
                     throws RuntimeDaoException{
         return daoLoadLogIdByWhere(makeWhere(timestamp,"verify_time"));
     }
-
-    //////////// FL_PERMIT /////////
-    //1
-    /** 
-     * 根据主键从数据库读取记录,没有找到记录返回{@code null}<br>
-     * 
-     * @param deviceGroupId 外键,设备组id 
-     * @param personGroupId 外键,人员组id 
-     * @return 
-     * @see IPermitManager#loadByPrimaryKey(Integer,Integer)
-     * @throws RuntimeDaoException
-     */
-    protected PermitBean daoGetPermit(Integer deviceGroupId,Integer personGroupId)throws RuntimeDaoException{
-        return getPermitManager().loadByPrimaryKey(deviceGroupId,personGroupId);
-    }
-    //1-2
-    /** 
-     * 根据主键从数据库读取记录,没有找到记录抛出异常<br>
-     * 
-     * @param deviceGroupId 外键,设备组id 
-     * @param personGroupId 外键,人员组id 
-     * @return 
-     * @see IPermitManager#loadByPrimaryKeyChecked(Integer,Integer)
-     * @throws RuntimeDaoException
-     * @throws ObjectRetrievalException 没有找到记录
-     */
-    protected PermitBean daoGetPermitChecked(Integer deviceGroupId,Integer personGroupId)throws RuntimeDaoException,ObjectRetrievalException{
-        return getPermitManager().loadByPrimaryKeyChecked(deviceGroupId,personGroupId);
-    }
-    //4
-    /** 
-     *　判断主键指定的记录是否存在
-     * 
-     * @param deviceGroupId 外键,设备组id 
-     * @param personGroupId 外键,人员组id 
-     * @see IPermitManager#existsPrimaryKey(Integer,Integer)
-     * @throws RuntimeDaoException
-     */
-    protected boolean daoExistsPermit(Integer deviceGroupId,Integer personGroupId)
-                    throws RuntimeDaoException{
-        return getPermitManager().existsPrimaryKey(deviceGroupId,personGroupId);
-    }
-    //4-2
-    /** 
-     *　判断指定的记录是否存在
-     * @see IPermitManager#existsByPrimaryKey(Object)
-     * @throws RuntimeDaoException
-     */
-    protected boolean daoExistsPermit(PermitBean bean)
-                    throws RuntimeDaoException{
-        return getPermitManager().existsByPrimaryKey(bean);
-    }
-    //5
-    /**
-     * 删除主键指定的记录
-     * 
-     * @param deviceGroupId 外键,设备组id 
-     * @param personGroupId 外键,人员组id  
-     * @return 返回删除的记录条数(1),如果记录不存在返回0
-     * @see IPermitManager#deleteByPrimaryKey(Integer,Integer)
-     * @throws RuntimeDaoException
-     */
-    protected int daoDeletePermit(Integer deviceGroupId,Integer personGroupId)
-                    throws RuntimeDaoException{
-        return getPermitManager().deleteByPrimaryKey(deviceGroupId,personGroupId);
-    }
-    //5-2
-    /**
-     * 删除指定的记录
-     * @param bean 要删除的记录
-     * @return 返回删除的记录条数(1),如果{@code bean}为{@code null}或记录不存在返回0
-     * @see #daoDeletePermit(Integer,Integer)
-     * @throws RuntimeDaoException
-     */
-    protected int daoDeletePermit(PermitBean bean)
-                    throws RuntimeDaoException{
-        return null == bean ? 0 : daoDeletePermit(bean.getDeviceGroupId(),bean.getPersonGroupId());
-    }
-    //6
-    /**
-     * 删除{@code permitBeanCollection}列表指定的记录
-     * @return 返回删除的记录条数
-     * @see #daoDeletePermit(Integer,Integer)
-     * @throws RuntimeDaoException
-     */
-    protected int daoDeletePermits(Collection<PermitBean> beans)
-                    throws RuntimeDaoException{
-        int count =0;
-        if(null != beans){        
-            for(PermitBean bean:beans){
-                count += daoDeletePermit(bean);
-            }
-        }
-        return count;
-    }
-    //7
-    /** 
-     * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
-     * @see TableManager#checkDuplicate(BaseBean)
-     * @throws RuntimeDaoException
-     * @throws DuplicateRecordException if exists duplicated row
-     */
-    protected PermitBean daoCheckDuplicate(PermitBean permitBean)
-                    throws RuntimeDaoException,DuplicateRecordException{
-        try{
-            return getPermitManager().checkDuplicate(permitBean);
-        }catch(ObjectRetrievalException e){
-            throw new DuplicateRecordException();
-        }
-    }
-    //7-3
-    /** 
-     * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
-     * 
-     * @param deviceGroupId 外键,设备组id 
-     * @param personGroupId 外键,人员组id 
-     * @see TableManager#checkDuplicate(BaseBean)
-     * @throws DuplicateRecordException if exists duplicated row
-     * 
-     * @throws RuntimeDaoException
-     * @throws DuplicateRecordException
-     */
-    protected void daoCheckDuplicatePermit(Integer deviceGroupId,Integer personGroupId)
-                    throws RuntimeDaoException,DuplicateRecordException{
-        if(getPermitManager().existsPrimaryKey(deviceGroupId,personGroupId)){
-            throw new DuplicateRecordException();
-        }
-    }
-    //8-3
-    /**
-     * 返回外键(fl_permit.device_group_id)引用的 fl_device_group 记录
-     * @param bean
-     * @see IPermitManager#getReferencedByDeviceGroupId(PermitBean)
-     * @throws RuntimeDaoException
-     */
-    protected DeviceGroupBean daoGetReferencedByDeviceGroupIdOnPermit(PermitBean bean)
-                    throws RuntimeDaoException{
-        return getPermitManager().getReferencedByDeviceGroupId(bean);
-    }
-    //8-4
-    /**
-     * 设置外键fl_permit(device_group_id)引用为{@code beanToSet}指定的记录,
-     * 如果{@code beanToSet}没有保存则先save
-     * @param bean
-     * @param beanToSet 被引用的记录
-     * @see IPermitManager#setReferencedByDeviceGroupId(PermitBean,DeviceGroupBean)
-     * @throws RuntimeDaoException
-     */
-    protected DeviceGroupBean daoSetReferencedByDeviceGroupIdOnPermit(PermitBean bean,DeviceGroupBean beanToSet)
-                    throws RuntimeDaoException{
-        return getPermitManager().setReferencedByDeviceGroupId(bean,beanToSet);
-    }
-    //8-6
-    /** transformer : PermitBean to fl_permit.device_group_id */
-    protected final Function<PermitBean,Integer> daoCastPermitToDeviceGroupId = new Function<PermitBean,Integer>(){
-            @Override
-            public Integer apply(PermitBean input) {
-                return null == input ? null : input.getDeviceGroupId();
-            }};
-    //8-3
-    /**
-     * 返回外键(fl_permit.person_group_id)引用的 fl_person_group 记录
-     * @param bean
-     * @see IPermitManager#getReferencedByPersonGroupId(PermitBean)
-     * @throws RuntimeDaoException
-     */
-    protected PersonGroupBean daoGetReferencedByPersonGroupIdOnPermit(PermitBean bean)
-                    throws RuntimeDaoException{
-        return getPermitManager().getReferencedByPersonGroupId(bean);
-    }
-    //8-4
-    /**
-     * 设置外键fl_permit(person_group_id)引用为{@code beanToSet}指定的记录,
-     * 如果{@code beanToSet}没有保存则先save
-     * @param bean
-     * @param beanToSet 被引用的记录
-     * @see IPermitManager#setReferencedByPersonGroupId(PermitBean,PersonGroupBean)
-     * @throws RuntimeDaoException
-     */
-    protected PersonGroupBean daoSetReferencedByPersonGroupIdOnPermit(PermitBean bean,PersonGroupBean beanToSet)
-                    throws RuntimeDaoException{
-        return getPermitManager().setReferencedByPersonGroupId(bean,beanToSet);
-    }
-    //8-6
-    /** transformer : PermitBean to fl_permit.person_group_id */
-    protected final Function<PermitBean,Integer> daoCastPermitToPersonGroupId = new Function<PermitBean,Integer>(){
-            @Override
-            public Integer apply(PermitBean input) {
-                return null == input ? null : input.getPersonGroupId();
-            }};
-    //12
-    /** 
-     * 添加新记录<br>
-     * fl_permit 表只支持添加删除,不支持修改,所以如果数据库中已经存在相同记录或{@link PermitBean#isNew()}返回{@code false},则抛出异常
-     * @param permitBean 要添加的新记录
-     * @see TableManager#save(BaseBean)
-     * @see TableManager#checkDuplicate(BaseBean)
-     * @throws RuntimeDaoException
-     * @throws DuplicateRecordException if exists duplicated row
-     * @throws IllegalArgumentException if {@code permitBean.isNew()} is {@code false}
-     */
-    protected PermitBean daoAddPermit(PermitBean permitBean)
-                    throws RuntimeDaoException,DuplicateRecordException{
-        checkArgument(null == permitBean || permitBean.isNew(),"can be add,delete,but modify record for fl_permit,so the _isNew field must be true");
-        return getPermitManager().save(daoCheckDuplicate(permitBean));
-    }
-    //12-5
-    /**
-     * 创建fl_device_group和fl_person_group之间的MANY TO MANY 联接表(fl_permit)记录<br>
-     * 如果记录已经存在则返回已有记录,如果输入的参数为{@code null}或记录不存在则返回{@code null}
-     * @param deviceGroupId 外键,设备组id
-     * @param personGroupId 外键,人员组id
-     * @see #daoAddPermit(DeviceGroupBean,PersonGroupBean)
-     * @throws RuntimeDaoException
-     */
-    protected PermitBean daoAddPermit(Integer deviceGroupId,Integer personGroupId)
-                    throws RuntimeDaoException{
-        return daoAddPermit(
-                    daoGetDeviceGroup(deviceGroupId),
-                    daoGetPersonGroup(personGroupId));
-    }
-    //12-6
-    /**
-     * 创建fl_device_group和fl_person_group之间的MANY TO MANY 联接表(fl_permit)记录<br>
-     * 如果记录已经存在则返回已有记录,如果输入的参数为{@code null}或记录不存在则返回{@code null}
-     * @param deviceGroupBean
-     * @param personGroupBean
-     * @throws RuntimeDaoException
-     */
-    protected PermitBean daoAddPermit(DeviceGroupBean deviceGroupBean,PersonGroupBean personGroupBean)
-                    throws RuntimeDaoException{
-        if(daoExistsDeviceGroup(deviceGroupBean) && daoExistsPersonGroup(personGroupBean)){
-            try{
-                return daoAddPermit(
-                            new PermitBean(deviceGroupBean.getId(),personGroupBean.getId()),
-                            deviceGroupBean,personGroupBean);
-            }catch(DuplicateRecordException e){
-                return daoGetPermit(deviceGroupBean.getId(),personGroupBean.getId());
-            }
-        }
-        return null; 
-    }
-    //12-7
-    /**
-     * 删除fl_device_group和fl_person_group之间的MANY TO MANY 联接表(fl_permit)记录<br>
-     * @return 删除成功返回0,如果记录不存在或输入的参数为{@code null}则返回0
-     * @param deviceGroupBean
-     * @param personGroupBean
-     * @throws RuntimeDaoException
-     */
-    protected int daoDeletePermit(DeviceGroupBean deviceGroupBean,PersonGroupBean personGroupBean)
-                    throws RuntimeDaoException{
-        return (null == deviceGroupBean || null == personGroupBean)
-            ? 0
-            : daoDeletePermit(deviceGroupBean.getId(),personGroupBean.getId());
-    }
-    //13
-    /** 
-     * 添加新记录(同步保存)<br>
-     * fl_permit 表只允许添加删除,不允许修改,所以如果数据库中已经存在相同记录或{@link PermitBean#isNew()}返回{@code false},则抛出异常
-     * see also {@link IPermitManager#save(PermitBean , DeviceGroupBean, PersonGroupBean  )}<br>
-     * @see TableManager#checkDuplicate(BaseBean)
-     * @throws RuntimeDaoException
-     * @throws DuplicateRecordException if exists duplicated row
-     * @throws IllegalArgumentException if {@code permitBean.isNew()} is {@code false}
-     */
-    protected PermitBean daoAddPermit(PermitBean permitBean
-        , DeviceGroupBean refDevicegroupByDeviceGroupId 
-        , PersonGroupBean refPersongroupByPersonGroupId 
-        )throws RuntimeDaoException,DuplicateRecordException{
-        checkArgument(null == permitBean || permitBean.isNew(),"can be add,delete,but modify record for fl_permit,so the _isNew field must be true");
-        daoCheckDuplicate(permitBean);
-        return getPermitManager().save(permitBean
-            , refDevicegroupByDeviceGroupId 
-            , refPersongroupByPersonGroupId 
-            );
-    }
-    //12-3-3
-    /** 
-     * 添加新记录<br>
-     * @param beans 要添加的新记录集合
-     * @return always {@code beans}
-     * @see #daoAddPermit(PermitBean)
-     * @throws RuntimeDaoException
-     */
-    protected Collection<PermitBean> daoAddPermits(Collection<PermitBean> beans)
-                    throws RuntimeDaoException ,DuplicateRecordException{
-        if(null != beans){
-            for(PermitBean bean : beans){
-                daoAddPermit(bean);
-            }
-        }
-        return beans;
-    }
-    //12-3-5
-    /** 
-     * {@link #daoAddPermits(Collection)}的事务化版本
-     * @throws RuntimeDaoException
-     */
-    protected Collection<PermitBean> daoAddPermitsAsTransaction(final Collection<PermitBean> beans)
-                    throws RuntimeDaoException ,DuplicateRecordException{
-        try{
-            return daoRunAsTransaction(new Callable<Collection<PermitBean>>(){      
-                @Override
-                public Collection<PermitBean> call() throws Exception {
-                    return daoAddPermits(beans);
-                }});
-        }catch(RuntimeException e){
-            throwCauseIfInstanceOf(e,DuplicateRecordException.class);
-            throw e;
-        }
-    }
-    //16
-    /**
-     * 查询{@code where} SQL条件语句指定的 fl_permit 记录
-     * @param where SQL 条件语句,为{@code null}或空时加载所有记录
-     * @param startRow 返回记录的起始行(首行=1,尾行=-1)
-     * @param numRows 返回记录条数(小于0时返回所有记录)
-     * @see IPermitManager#loadByWhereAsList(String,int[],int,int)
-     * @throws RuntimeDaoException
-     */
-    protected List<PermitBean> daoLoadPermitByWhere(String where,int startRow, int numRows)
-                    throws RuntimeDaoException{
-        return getPermitManager().loadByWhereAsList(where,null,startRow,numRows);
-    }
-    //16-2
-    /**
-     * 以{@code bean} 为模板查询 fl_permit 记录
-     * @param bean 模板对象
-     * @param startRow 返回记录的起始行(首行=1,尾行=-1)
-     * @param numRows 返回记录条数(小于0时返回所有记录)
-     * @see IPermitManager#loadUsingTemplate(PermitBean,int,int)
-     * @throws RuntimeDaoException
-     */
-    protected List<PermitBean> daoLoadPermitUsingTemplate(PermitBean bean,int startRow, int numRows)
-                    throws RuntimeDaoException{
-        return getPermitManager().loadUsingTemplateAsList(bean,startRow,numRows);
-    }
-    //17
-    /**
-     * 返回 fl_permit 表的所有记录
-     * @see IPermitManager#loadAllAsList()
-     * @throws RuntimeDaoException
-     */
-    protected List<PermitBean> daoLoadPermitAll()
-                    throws RuntimeDaoException{
-        return getPermitManager().loadAllAsList();
-    }
-    //17-2
-    /**
-     * 返回满足{@code where} SQL条件语句的 fl_permit 记录总数
-     * @see TableManager#countWhere(String)
-     * @throws RuntimeDaoException
-     */
-    protected int daoCountPermitByWhere(String where)
-                    throws RuntimeDaoException{
-        return getPermitManager().countWhere(where);
-    }
-    //19
-    /**
-     * (主动更新机制实现)<br>
-     * 返回 fl_permit.create_time 字段大于指定时间戳({@code timestamp})的所有记录
-     * @see #daoLoadPermitByWhere(String,int,int)
-     * @throws RuntimeDaoException
-     * @throws IllegalArgumentException {@code timestamp}为{@code null}时
-     */
-    protected List<PermitBean> daoLoadPermitByCreateTime(Date timestamp,int startRow, int numRows)
-                    throws RuntimeDaoException{
-        return daoLoadPermitByWhere(makeWhere(timestamp,"create_time"),startRow,numRows);
-    }
-    //20
-    /** 
-     * 参见 {@link #daoLoadPermitByCreateTime(Date,int,int)} 
-     * @throws RuntimeDaoException
-     */
-    protected List<PermitBean> daoLoadPermitByCreateTime(Date timestamp)
-                    throws RuntimeDaoException{
-        return daoLoadPermitByCreateTime(timestamp,1,-1);
-    }
-    //20-5
-    /**
-     * 返回fl_permit.create_time 字段大于指定时间戳({@code timestamp})的记录总数
-     * @see #daoCountPermitByWhere(String)
-     * @throws RuntimeDaoException
-     */
-    protected int daoCountPermitByCreateTime(Date timestamp)
-                    throws RuntimeDaoException{
-        return daoCountPermitByWhere(makeWhere(timestamp,"create_time"));
-    }
-
-
 
     //////////// FL_STORE /////////
     //1

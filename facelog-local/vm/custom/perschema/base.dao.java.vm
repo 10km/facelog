@@ -851,11 +851,11 @@ $defineLoadByTimestamp
         /** 删除记录 */delete
     }
 ##join($tables '#defineMethod($e false)' '')
-#foreach($tname in ['fl_device','fl_device_group','fl_person','fl_person_group'])
+#foreach($tname in ['fl_device','fl_device_group','fl_person','fl_person_group','fl_permit'])
 #set($table = $db.getTable($tname))
 #defineMethod($table false)
 #end
-#foreach($tname in ['fl_face','fl_feature','fl_image','fl_log','fl_permit','fl_store','fl_log_light'])
+#foreach($tname in ['fl_face','fl_feature','fl_image','fl_log','fl_store','fl_log_light'])
 #set($table = $db.getTable($tname))
 #defineMethod($table true)
 #end
