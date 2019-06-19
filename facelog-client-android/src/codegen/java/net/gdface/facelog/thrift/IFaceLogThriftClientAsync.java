@@ -3180,6 +3180,90 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(rootGroupOfPerson(personId), callback);
     }
     /**
+     * see also {@link net.gdface.facelog.IFaceLog#runCmd(java.util.List,boolean,java.lang.String,java.util.Map,java.lang.String,net.gdface.facelog.Token)}
+     */
+    public ListenableFuture<Integer> runCmd(List<Integer> target,
+        boolean group,
+        String cmdpath,
+        Map<String, String> jsonArgs,
+        String ackChannel,
+        Token token){
+        MethodCallback<Integer,Integer> nativeCallback = 
+            new MethodCallback<Integer,Integer>(
+                new Function<Integer,Integer>() {
+                        @Override
+                        public Integer apply(Integer input) {
+                            return input;
+                }});
+        nativeCallback.service.runCmd(
+                TypeTransformer.getInstance().to(
+                    target,
+                    Integer.class,
+                    Integer.class),
+            group,
+            cmdpath,
+            TypeTransformer.getInstance().to(
+                    jsonArgs,
+                    String.class,
+                    String.class,
+                    String.class,
+                    String.class),
+            ackChannel,
+            TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
+    }
+    public void runCmd(List<Integer> target,
+        boolean group,
+        String cmdpath,
+        Map<String, String> jsonArgs,
+        String ackChannel,
+        Token token,
+        FutureCallback<Integer>callback){
+        factory.addCallback(runCmd(target,group,cmdpath,jsonArgs,ackChannel,token), callback);
+    }
+    /**
+     * see also {@link net.gdface.facelog.IFaceLog#runTask(java.lang.String,java.lang.String,java.util.Map,java.lang.String,net.gdface.facelog.Token)}
+     */
+    public ListenableFuture<Boolean> runTask(String taskQueue,
+        String cmdpath,
+        Map<String, String> jsonArgs,
+        String ackChannel,
+        Token token){
+        MethodCallback<Boolean,Boolean> nativeCallback = 
+            new MethodCallback<Boolean,Boolean>(
+                new Function<Boolean,Boolean>() {
+                        @Override
+                        public Boolean apply(Boolean input) {
+                            return input;
+                }});
+        nativeCallback.service.runTask(
+                taskQueue,
+            cmdpath,
+            TypeTransformer.getInstance().to(
+                    jsonArgs,
+                    String.class,
+                    String.class,
+                    String.class,
+                    String.class),
+            ackChannel,
+            TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
+    }
+    public void runTask(String taskQueue,
+        String cmdpath,
+        Map<String, String> jsonArgs,
+        String ackChannel,
+        Token token,
+        FutureCallback<Boolean>callback){
+        factory.addCallback(runTask(taskQueue,cmdpath,jsonArgs,ackChannel,token), callback);
+    }
+    /**
      * see also {@link net.gdface.facelog.IFaceLog#saveDevice(net.gdface.facelog.db.DeviceBean,net.gdface.facelog.Token)}
      */
     public ListenableFuture<DeviceBean> saveDevice(DeviceBean deviceBean,

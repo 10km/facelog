@@ -2973,6 +2973,61 @@ public class IFaceLogSpringController {
     }
     // port-124
     /**
+     * (异步)执行cmdpath指定的设备命令<br>
+     * <br>{@code PERSON_ONLY}
+     * @param target 命令目标设备/设备组id
+     * @param group target中的元素是否为设备组id
+     * @param cmdpath 设备命令的dtalk路径
+     * @param jsonArgs 设备命令参数(JSON)
+     * @param ackChannel 设备命令响应频道,可为{@code null}
+     * @param token 访问令牌
+     * @return 收到命令的客户端数目
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/runCmd", method = RequestMethod.POST)
+    @ApiOperation(value = "(异步)执行cmdpath指定的设备命令<br>\n"
++" <br>{@code PERSON_ONLY}",httpMethod="POST")
+    public Response runCmd( @RequestBody RunCmdArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().runCmd(args.target,args.group,args.cmdpath,args.jsonArgs,args.ackChannel,args.token));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // port-125
+    /**
+     * (异步)执行cmdpath指定的任务<br>
+     * <br>{@code PERSON_ONLY}
+     * @param taskQueue 任务队列名称
+     * @param cmdpath 设备命令的dtalk路径
+     * @param jsonArgs 设备命令参数(JSON)
+     * @param ackChannel 设备命令响应频道,可为{@code null}
+     * @param token 访问令牌
+     * @return 成功提交任务返回{@code true},否则返回{@code false}
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/runTask", method = RequestMethod.POST)
+    @ApiOperation(value = "(异步)执行cmdpath指定的任务<br>\n"
++" <br>{@code PERSON_ONLY}",httpMethod="POST")
+    public Response runTask( @RequestBody RunTaskArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().runTask(args.taskQueue,args.cmdpath,args.jsonArgs,args.ackChannel,args.token));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // port-126
+    /**
      * 保存设备记录
      * <br>{@code PERSON_ONLY}
      * @param deviceBean
@@ -2995,7 +3050,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-125
+    // port-127
     /**
      * 保存设备组记录
      * <br>{@code PERSON_ONLY}
@@ -3020,7 +3075,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-126
+    // port-128
     /**
      * 如果记录不存在则创建deviceGroupId和personGroupId之间的MANY TO MANY 联接表(fl_permit)记录,
      * 否则修改指定记录的通行时间安排表<br>
@@ -3048,7 +3103,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-127
+    // port-129
     /**
      * 保存通行权限(permit)记录
      * <br>{@code PERSON_ONLY}
@@ -3072,7 +3127,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-128
+    // port-130
     /**
      * 保存人员信息记录<br>
      * {@code DEVICE_ONLY}
@@ -3101,7 +3156,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-129
+    // port-131
     /**
      * 保存人员信息记录
      * <br>{@code DEVICE_ONLY}
@@ -3129,7 +3184,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-130
+    // port-132
     /**
      * 保存人员信息记录
      * <br>{@code DEVICE_ONLY}
@@ -3157,7 +3212,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-131
+    // port-133
     /**
      * 保存人员信息记录
      * @param personBean {@code fl_person}表记录
@@ -3180,7 +3235,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-132
+    // port-134
     /**
      * 保存人员信息记录
      * <br>{@code DEVICE_ONLY}
@@ -3206,7 +3261,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-133
+    // port-135
     /**
      * 保存人员信息记录
      * @param personBean {@code fl_person}表记录
@@ -3230,7 +3285,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-134
+    // port-136
     /**
      * 保存人员(person)记录
      * @param personBean {@code fl_person}表记录
@@ -3252,7 +3307,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-135
+    // port-137
     /**
      * 保存人员组记录
      * <br>{@code PERSON_ONLY}
@@ -3277,7 +3332,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-136
+    // port-138
     /**
      * 保存人员(person)记录
      * <br>{@code PERSON_ONLY}
@@ -3301,7 +3356,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-137
+    // port-139
     /**
      * 保存人员信息记录(包含标准照)<br>
      * {@code PERSON_ONLY}
@@ -3325,7 +3380,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-138
+    // port-140
     /**
      * 配置参数持久化<br>
      * 保存修改的配置到自定义配置文件
@@ -3350,7 +3405,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-139
+    // port-141
     /**
      * 返回sdk任务队列名
      * @param task 任务名,可选值:{@link CommonConstant#TASK_FACEAPI_BASE},{@link CommonConstant#TASK_REGISTER_BASE}
@@ -3373,7 +3428,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-140
+    // port-142
     /**
      * 修改 personId 指定的人员记录的有效期
      * <br>{@code PERSON_ONLY}
@@ -3398,7 +3453,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-141
+    // port-143
     /**
      * 修改 personId 指定的人员记录的有效期
      * <br>{@code PERSON_ONLY}
@@ -3423,7 +3478,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-142
+    // port-144
     /**
      * 修改 personIdList 指定的人员记录的有效期
      * <br>{@code PERSON_ONLY}
@@ -3449,7 +3504,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-143
+    // port-145
     /**
      * 修改一组配置参数
      * <br>{@code ROOT_ONLY}
@@ -3473,7 +3528,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-144
+    // port-146
     /**
      * 修改/增加指定的配置参数
      * <br>{@code ROOT_ONLY}
@@ -3498,7 +3553,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-145
+    // port-147
     /**
      * 根据任务名返回redis队列名
      * @param task 任务名
@@ -3520,7 +3575,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-146
+    // port-148
     /**
      * 删除管理边界<br>
      * 删除fl_person_group.root_group和fl_device_group.root_group字段的互相指向,设置为{@code null},
@@ -3553,7 +3608,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-147
+    // port-149
     /**
      * (设备端)删除当前设备<br>
      * 从fl_device表中删除当前设备记录
@@ -3579,7 +3634,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-148
+    // port-150
     /**
      * 更新设备记录(必须是已经存在的设备记录，否则抛出异常)
      * @param deviceBean
@@ -3601,7 +3656,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-149
+    // port-151
     /**
      * 返回服务版本号
      * @return 
@@ -3621,7 +3676,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-150
+    // port-152
     /**
      * 返回服务版本的详细信息<br>
      * <ul>
@@ -4790,6 +4845,40 @@ public class IFaceLogSpringController {
     }
     /**
      * argClass-124<br>
+     * wrap arguments for method {@link #runCmd(RunCmdArgs)}
+     */
+    public static class RunCmdArgs{
+        @ApiModelProperty(value ="命令目标设备/设备组id" ,required=true ,dataType="List")
+        public List<Integer> target;
+        @ApiModelProperty(value ="target中的元素是否为设备组id" ,required=true ,dataType="boolean")
+        public boolean group;
+        @ApiModelProperty(value ="设备命令的dtalk路径" ,required=true ,dataType="String")
+        public String cmdpath;
+        @ApiModelProperty(value ="设备命令参数(JSON)" ,required=true ,dataType="Map")
+        public Map<String, String> jsonArgs;
+        @ApiModelProperty(value ="设备命令响应频道,可为{@code null}" ,required=true ,dataType="String")
+        public String ackChannel;
+        @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
+        public Token token;
+    }
+    /**
+     * argClass-125<br>
+     * wrap arguments for method {@link #runTask(RunTaskArgs)}
+     */
+    public static class RunTaskArgs{
+        @ApiModelProperty(value ="任务队列名称" ,required=true ,dataType="String")
+        public String taskQueue;
+        @ApiModelProperty(value ="设备命令的dtalk路径" ,required=true ,dataType="String")
+        public String cmdpath;
+        @ApiModelProperty(value ="设备命令参数(JSON)" ,required=true ,dataType="Map")
+        public Map<String, String> jsonArgs;
+        @ApiModelProperty(value ="设备命令响应频道,可为{@code null}" ,required=true ,dataType="String")
+        public String ackChannel;
+        @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
+        public Token token;
+    }
+    /**
+     * argClass-126<br>
      * wrap arguments for method {@link #saveDevice(SaveDeviceArgs)}
      */
     public static class SaveDeviceArgs{
@@ -4799,7 +4888,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-125<br>
+     * argClass-127<br>
      * wrap arguments for method {@link #saveDeviceGroup(SaveDeviceGroupArgs)}
      */
     public static class SaveDeviceGroupArgs{
@@ -4809,7 +4898,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-126<br>
+     * argClass-128<br>
      * wrap arguments for method {@link #savePermit(SavePermitWithScheduleArgs)}
      */
     public static class SavePermitWithScheduleArgs{
@@ -4823,7 +4912,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-127<br>
+     * argClass-129<br>
      * wrap arguments for method {@link #savePermit(SavePermitArgs)}
      */
     public static class SavePermitArgs{
@@ -4833,7 +4922,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-128<br>
+     * argClass-130<br>
      * wrap arguments for method {@link #savePerson(SavePersonFullArgs)}
      */
     public static class SavePersonFullArgs{
@@ -4853,7 +4942,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-129<br>
+     * argClass-131<br>
      * wrap arguments for method {@link #savePerson(SavePersonWithPhotoAndFeatureMultiFacesArgs)}
      */
     public static class SavePersonWithPhotoAndFeatureMultiFacesArgs{
@@ -4871,7 +4960,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-130<br>
+     * argClass-132<br>
      * wrap arguments for method {@link #savePerson(SavePersonWithPhotoAndFeatureMultiImageArgs)}
      */
     public static class SavePersonWithPhotoAndFeatureMultiImageArgs{
@@ -4889,7 +4978,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-131<br>
+     * argClass-133<br>
      * wrap arguments for method {@link #savePerson(SavePersonWithPhotoArgs)}
      */
     public static class SavePersonWithPhotoArgs{
@@ -4901,7 +4990,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-132<br>
+     * argClass-134<br>
      * wrap arguments for method {@link #savePerson(SavePersonWithPhotoAndFeatureArgs)}
      */
     public static class SavePersonWithPhotoAndFeatureArgs{
@@ -4915,7 +5004,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-133<br>
+     * argClass-135<br>
      * wrap arguments for method {@link #savePerson(SavePersonWithPhotoAndFeatureSavedArgs)}
      */
     public static class SavePersonWithPhotoAndFeatureSavedArgs{
@@ -4929,7 +5018,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-134<br>
+     * argClass-136<br>
      * wrap arguments for method {@link #savePerson(SavePersonArgs)}
      */
     public static class SavePersonArgs{
@@ -4939,7 +5028,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-135<br>
+     * argClass-137<br>
      * wrap arguments for method {@link #savePersonGroup(SavePersonGroupArgs)}
      */
     public static class SavePersonGroupArgs{
@@ -4949,7 +5038,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-136<br>
+     * argClass-138<br>
      * wrap arguments for method {@link #savePersons(SavePersonsArgs)}
      */
     public static class SavePersonsArgs{
@@ -4959,7 +5048,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-137<br>
+     * argClass-139<br>
      * wrap arguments for method {@link #savePersons(SavePersonsWithPhotoArgs)}
      */
     public static class SavePersonsWithPhotoArgs{
@@ -4969,7 +5058,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-138<br>
+     * argClass-140<br>
      * wrap arguments for method {@link #saveServiceConfig(SaveServiceConfigArgs)}
      */
     public static class SaveServiceConfigArgs{
@@ -4977,7 +5066,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-139<br>
+     * argClass-141<br>
      * wrap arguments for method {@link #sdkTaskQueueOf(SdkTaskQueueOfArgs)}
      */
     public static class SdkTaskQueueOfArgs{
@@ -4989,7 +5078,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-140<br>
+     * argClass-142<br>
      * wrap arguments for method {@link #setPersonExpiryDate(SetPersonExpiryDateTimeStrArgs)}
      */
     public static class SetPersonExpiryDateTimeStrArgs{
@@ -5001,7 +5090,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-141<br>
+     * argClass-143<br>
      * wrap arguments for method {@link #setPersonExpiryDate(SetPersonExpiryDateArgs)}
      */
     public static class SetPersonExpiryDateArgs{
@@ -5013,7 +5102,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-142<br>
+     * argClass-144<br>
      * wrap arguments for method {@link #setPersonExpiryDate(SetPersonExpiryDateListArgs)}
      */
     public static class SetPersonExpiryDateListArgs{
@@ -5025,7 +5114,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-143<br>
+     * argClass-145<br>
      * wrap arguments for method {@link #setProperties(SetPropertiesArgs)}
      */
     public static class SetPropertiesArgs{
@@ -5035,7 +5124,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-144<br>
+     * argClass-146<br>
      * wrap arguments for method {@link #setProperty(SetPropertyArgs)}
      */
     public static class SetPropertyArgs{
@@ -5047,7 +5136,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-145<br>
+     * argClass-147<br>
      * wrap arguments for method {@link #taskQueueOf(TaskQueueOfArgs)}
      */
     public static class TaskQueueOfArgs{
@@ -5057,7 +5146,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-146<br>
+     * argClass-148<br>
      * wrap arguments for method {@link #unbindBorder(UnbindBorderArgs)}
      */
     public static class UnbindBorderArgs{
@@ -5069,7 +5158,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-147<br>
+     * argClass-149<br>
      * wrap arguments for method {@link #unregisterDevice(UnregisterDeviceArgs)}
      */
     public static class UnregisterDeviceArgs{
@@ -5077,7 +5166,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-148<br>
+     * argClass-150<br>
      * wrap arguments for method {@link #updateDevice(UpdateDeviceArgs)}
      */
     public static class UpdateDeviceArgs{

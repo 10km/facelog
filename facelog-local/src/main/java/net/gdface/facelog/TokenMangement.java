@@ -153,6 +153,18 @@ class TokenMangement implements ServiceConstant {
 								.setType(SecurityExceptionType.INVALID_TOKEN);
 		}
 	}
+	boolean isUserToken(Token token){
+		return token != null && (TokenType.PERSON.equals(token.getType()) || TokenType.ROOT.equals(token.getType()));
+	}
+	boolean isDeviceToken(Token token){
+		return token != null && TokenType.DEVICE.equals(token.getType()) ;
+	}
+	boolean isRootToken(Token token){
+		return token != null && TokenType.ROOT.equals(token.getType()) ;
+	}
+	boolean isPersonToken(Token token){
+		return token != null && TokenType.PERSON.equals(token.getType()) ;
+	}
 	/** 验证设备令牌是否有效 */
 	boolean isValidDeviceToken(Token token){
 		if(validateDeviceToken){

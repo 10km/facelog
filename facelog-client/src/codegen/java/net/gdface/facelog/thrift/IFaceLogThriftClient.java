@@ -2677,6 +2677,71 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
+    public int runCmd(List<Integer> target,
+        boolean group,
+        String cmdpath,
+        Map<String, String> jsonArgs,
+        String ackChannel,
+        Token token) 
+        {
+        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        try{
+            return instance.runCmd(TypeTransformer.getInstance().to(
+                    target,
+                    Integer.class,
+                    Integer.class),
+                group,
+                cmdpath,
+                TypeTransformer.getInstance().to(
+                    jsonArgs,
+                    String.class,
+                    String.class,
+                    String.class,
+                    String.class),
+                ackChannel,
+                TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class));
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        finally{
+            factory.releaseInstance(instance);
+        }
+    }
+    @Override
+    public boolean runTask(String taskQueue,
+        String cmdpath,
+        Map<String, String> jsonArgs,
+        String ackChannel,
+        Token token) 
+        {
+        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        try{
+            return instance.runTask(taskQueue,
+                cmdpath,
+                TypeTransformer.getInstance().to(
+                    jsonArgs,
+                    String.class,
+                    String.class,
+                    String.class,
+                    String.class),
+                ackChannel,
+                TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class));
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        finally{
+            factory.releaseInstance(instance);
+        }
+    }
+    @Override
     public DeviceBean saveDevice(DeviceBean deviceBean,
         Token token) 
         {

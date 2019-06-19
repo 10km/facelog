@@ -3556,6 +3556,80 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
+    public int runCmd(final List<Integer> target,
+        final boolean group,
+        final String cmdpath,
+        final Map<String, String> jsonArgs,
+        final String ackChannel,
+        final Token token) 
+        {
+        try{
+            return syncCall(new Function<Integer,Integer>() {
+                @Override
+                public Integer apply(Integer input) {
+                    return input;
+                }},
+                new ServiceAsyncCall<Integer>(){
+                @Override
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<Integer> nativeCallback){
+                    service.runCmd(TypeTransformer.getInstance().to(
+                    target,
+                    Integer.class,
+                    Integer.class),group,cmdpath,TypeTransformer.getInstance().to(
+                    jsonArgs,
+                    String.class,
+                    String.class,
+                    String.class,
+                    String.class),ackChannel,TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                }});
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);
+        }
+    }
+    @Override
+    public boolean runTask(final String taskQueue,
+        final String cmdpath,
+        final Map<String, String> jsonArgs,
+        final String ackChannel,
+        final Token token) 
+        {
+        try{
+            return syncCall(new Function<Boolean,Boolean>() {
+                @Override
+                public Boolean apply(Boolean input) {
+                    return input;
+                }},
+                new ServiceAsyncCall<Boolean>(){
+                @Override
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<Boolean> nativeCallback){
+                    service.runTask(taskQueue,cmdpath,TypeTransformer.getInstance().to(
+                    jsonArgs,
+                    String.class,
+                    String.class,
+                    String.class,
+                    String.class),ackChannel,TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                }});
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);
+        }
+    }
+    @Override
     public DeviceBean saveDevice(final DeviceBean deviceBean,
         final Token token) 
         {

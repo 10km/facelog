@@ -749,6 +749,16 @@ public class FacelogDefaultImpl implements IFaceLog {
 	public String sdkTaskQueueOf(String task, String sdkVersion, Token token) {
 		return null;
 	}
+
+	@Override
+	public boolean runTask(String taskQueue, String cmdpath, Map<String, String> jsonArgs, String ackChannel, Token token) {
+		return false;
+	}
+
+	@Override
+	public int runCmd(List<Integer>target, boolean group, String cmdpath, Map<String, String> jsonArgs, String ackChannel, Token token) {
+		return 0;
+	}
 	@Override
 	public Integer rootGroupOfDevice(Integer deviceId) {
 		return null;

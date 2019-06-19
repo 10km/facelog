@@ -2706,6 +2706,75 @@ public class IFaceLogThriftDecorator {
         }
     }
     /**
+     * @see {@link net.gdface.facelog.IFaceLog#runCmd(java.util.List,boolean,java.lang.String,java.util.Map,java.lang.String,net.gdface.facelog.Token)}
+     */
+    @ThriftMethod(value = "runCmd" )
+    public int runCmd(List<Integer> target,
+        boolean group,
+        String cmdpath,
+        Map<String,String> jsonArgs,
+        String ackChannel,
+        Token token) 
+        throws ServiceRuntimeException{
+        try{
+            return delegate().runCmd(TypeTransformer.getInstance().to(
+                    target,
+                    Integer.class,
+                    Integer.class),
+                group,
+                cmdpath,
+                TypeTransformer.getInstance().to(
+                    jsonArgs,
+                    String.class,
+                    String.class,
+                    String.class,
+                    String.class),
+                ackChannel,
+                TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.Token.class));
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
+     * @see {@link net.gdface.facelog.IFaceLog#runTask(java.lang.String,java.lang.String,java.util.Map,java.lang.String,net.gdface.facelog.Token)}
+     */
+    @ThriftMethod(value = "runTask" )
+    public boolean runTask(String taskQueue,
+        String cmdpath,
+        Map<String,String> jsonArgs,
+        String ackChannel,
+        Token token) 
+        throws ServiceRuntimeException{
+        try{
+            return delegate().runTask(taskQueue,
+                cmdpath,
+                TypeTransformer.getInstance().to(
+                    jsonArgs,
+                    String.class,
+                    String.class,
+                    String.class,
+                    String.class),
+                ackChannel,
+                TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.Token.class));
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
      * @see {@link net.gdface.facelog.IFaceLog#saveDevice(net.gdface.facelog.db.DeviceBean,net.gdface.facelog.Token)}
      */
     @ThriftMethod(value = "saveDevice" )

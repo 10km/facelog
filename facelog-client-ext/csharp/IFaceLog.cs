@@ -141,6 +141,8 @@ public partial class IFaceLog {
     void replaceFeature(int personId, string featureMd5, bool deleteOldFeatureImage, Token token);
     int rootGroupOfDevice(int deviceId);
     int rootGroupOfPerson(int personId);
+    int runCmd(List<int> target, bool @group, string cmdpath, Dictionary<string, string> jsonArgs, string ackChannel, Token token);
+    bool runTask(string taskQueue, string cmdpath, Dictionary<string, string> jsonArgs, string ackChannel, Token token);
     DeviceBean saveDevice(DeviceBean deviceBean, Token token);
     DeviceGroupBean saveDeviceGroup(DeviceGroupBean deviceGroupBean, Token token);
     PermitBean savePermit(PermitBean permitBean, Token token);
@@ -294,6 +296,8 @@ public partial class IFaceLog {
     Task replaceFeatureAsync(int personId, string featureMd5, bool deleteOldFeatureImage, Token token);
     Task<int> rootGroupOfDeviceAsync(int deviceId);
     Task<int> rootGroupOfPersonAsync(int personId);
+    Task<int> runCmdAsync(List<int> target, bool @group, string cmdpath, Dictionary<string, string> jsonArgs, string ackChannel, Token token);
+    Task<bool> runTaskAsync(string taskQueue, string cmdpath, Dictionary<string, string> jsonArgs, string ackChannel, Token token);
     Task<DeviceBean> saveDeviceAsync(DeviceBean deviceBean, Token token);
     Task<DeviceGroupBean> saveDeviceGroupAsync(DeviceGroupBean deviceGroupBean, Token token);
     Task<PermitBean> savePermitAsync(PermitBean permitBean, Token token);
@@ -570,6 +574,10 @@ public partial class IFaceLog {
     int End_rootGroupOfDevice(IAsyncResult asyncResult);
     IAsyncResult Begin_rootGroupOfPerson(AsyncCallback callback, object state, int personId);
     int End_rootGroupOfPerson(IAsyncResult asyncResult);
+    IAsyncResult Begin_runCmd(AsyncCallback callback, object state, List<int> target, bool @group, string cmdpath, Dictionary<string, string> jsonArgs, string ackChannel, Token token);
+    int End_runCmd(IAsyncResult asyncResult);
+    IAsyncResult Begin_runTask(AsyncCallback callback, object state, string taskQueue, string cmdpath, Dictionary<string, string> jsonArgs, string ackChannel, Token token);
+    bool End_runTask(IAsyncResult asyncResult);
     IAsyncResult Begin_saveDevice(AsyncCallback callback, object state, DeviceBean deviceBean, Token token);
     DeviceBean End_saveDevice(IAsyncResult asyncResult);
     IAsyncResult Begin_saveDeviceGroup(AsyncCallback callback, object state, DeviceGroupBean deviceGroupBean, Token token);
@@ -7889,6 +7897,131 @@ public partial class IFaceLog {
     }
 
     
+    public IAsyncResult Begin_runCmd(AsyncCallback callback, object state, List<int> target, bool @group, string cmdpath, Dictionary<string, string> jsonArgs, string ackChannel, Token token)
+    {
+      return send_runCmd(callback, state, target, @group, cmdpath, jsonArgs, ackChannel, token);
+    }
+
+    public int End_runCmd(IAsyncResult asyncResult)
+    {
+      oprot_.Transport.EndFlush(asyncResult);
+      return recv_runCmd();
+    }
+
+    public async Task<int> runCmdAsync(List<int> target, bool @group, string cmdpath, Dictionary<string, string> jsonArgs, string ackChannel, Token token)
+    {
+      int retval;
+      retval = await Task.Run(() =>
+      {
+        return runCmd(target, group, cmdpath, jsonArgs, ackChannel, token);
+      });
+      return retval;
+    }
+
+    public int runCmd(List<int> target, bool @group, string cmdpath, Dictionary<string, string> jsonArgs, string ackChannel, Token token)
+    {
+      var asyncResult = Begin_runCmd(null, null, target, @group, cmdpath, jsonArgs, ackChannel, token);
+      return End_runCmd(asyncResult);
+
+    }
+    public IAsyncResult send_runCmd(AsyncCallback callback, object state, List<int> target, bool @group, string cmdpath, Dictionary<string, string> jsonArgs, string ackChannel, Token token)
+    {
+      oprot_.WriteMessageBegin(new TMessage("runCmd", TMessageType.Call, seqid_));
+      runCmd_args args = new runCmd_args();
+      args.Target = target;
+      args.Group = @group;
+      args.Cmdpath = cmdpath;
+      args.JsonArgs = jsonArgs;
+      args.AckChannel = ackChannel;
+      args.Token = token;
+      args.Write(oprot_);
+      oprot_.WriteMessageEnd();
+      return oprot_.Transport.BeginFlush(callback, state);
+    }
+
+    public int recv_runCmd()
+    {
+      TMessage msg = iprot_.ReadMessageBegin();
+      if (msg.Type == TMessageType.Exception) {
+        TApplicationException x = TApplicationException.Read(iprot_);
+        iprot_.ReadMessageEnd();
+        throw x;
+      }
+      runCmd_result result = new runCmd_result();
+      result.Read(iprot_);
+      iprot_.ReadMessageEnd();
+      if (result.Success.HasValue) {
+        return result.Success.Value;
+      }
+      if (result.Ex1 != null) {
+        throw result.Ex1;
+      }
+      throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "runCmd failed: unknown result");
+    }
+
+    
+    public IAsyncResult Begin_runTask(AsyncCallback callback, object state, string taskQueue, string cmdpath, Dictionary<string, string> jsonArgs, string ackChannel, Token token)
+    {
+      return send_runTask(callback, state, taskQueue, cmdpath, jsonArgs, ackChannel, token);
+    }
+
+    public bool End_runTask(IAsyncResult asyncResult)
+    {
+      oprot_.Transport.EndFlush(asyncResult);
+      return recv_runTask();
+    }
+
+    public async Task<bool> runTaskAsync(string taskQueue, string cmdpath, Dictionary<string, string> jsonArgs, string ackChannel, Token token)
+    {
+      bool retval;
+      retval = await Task.Run(() =>
+      {
+        return runTask(taskQueue, cmdpath, jsonArgs, ackChannel, token);
+      });
+      return retval;
+    }
+
+    public bool runTask(string taskQueue, string cmdpath, Dictionary<string, string> jsonArgs, string ackChannel, Token token)
+    {
+      var asyncResult = Begin_runTask(null, null, taskQueue, cmdpath, jsonArgs, ackChannel, token);
+      return End_runTask(asyncResult);
+
+    }
+    public IAsyncResult send_runTask(AsyncCallback callback, object state, string taskQueue, string cmdpath, Dictionary<string, string> jsonArgs, string ackChannel, Token token)
+    {
+      oprot_.WriteMessageBegin(new TMessage("runTask", TMessageType.Call, seqid_));
+      runTask_args args = new runTask_args();
+      args.TaskQueue = taskQueue;
+      args.Cmdpath = cmdpath;
+      args.JsonArgs = jsonArgs;
+      args.AckChannel = ackChannel;
+      args.Token = token;
+      args.Write(oprot_);
+      oprot_.WriteMessageEnd();
+      return oprot_.Transport.BeginFlush(callback, state);
+    }
+
+    public bool recv_runTask()
+    {
+      TMessage msg = iprot_.ReadMessageBegin();
+      if (msg.Type == TMessageType.Exception) {
+        TApplicationException x = TApplicationException.Read(iprot_);
+        iprot_.ReadMessageEnd();
+        throw x;
+      }
+      runTask_result result = new runTask_result();
+      result.Read(iprot_);
+      iprot_.ReadMessageEnd();
+      if (result.Success.HasValue) {
+        return result.Success.Value;
+      }
+      if (result.Ex1 != null) {
+        throw result.Ex1;
+      }
+      throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "runTask failed: unknown result");
+    }
+
+    
     public IAsyncResult Begin_saveDevice(AsyncCallback callback, object state, DeviceBean deviceBean, Token token)
     {
       return send_saveDevice(callback, state, deviceBean, token);
@@ -9587,6 +9720,8 @@ public partial class IFaceLog {
       processMap_["replaceFeature"] = replaceFeature_ProcessAsync;
       processMap_["rootGroupOfDevice"] = rootGroupOfDevice_ProcessAsync;
       processMap_["rootGroupOfPerson"] = rootGroupOfPerson_ProcessAsync;
+      processMap_["runCmd"] = runCmd_ProcessAsync;
+      processMap_["runTask"] = runTask_ProcessAsync;
       processMap_["saveDevice"] = saveDevice_ProcessAsync;
       processMap_["saveDeviceGroup"] = saveDeviceGroup_ProcessAsync;
       processMap_["savePermit"] = savePermit_ProcessAsync;
@@ -14019,6 +14154,76 @@ public partial class IFaceLog {
       oprot.Transport.Flush();
     }
 
+    public async Task runCmd_ProcessAsync(int seqid, TProtocol iprot, TProtocol oprot)
+    {
+      runCmd_args args = new runCmd_args();
+      args.Read(iprot);
+      iprot.ReadMessageEnd();
+      runCmd_result result = new runCmd_result();
+      try
+      {
+        try
+        {
+          result.Success = await iface_.runCmdAsync(args.Target, args.Group.Value, args.Cmdpath, args.JsonArgs, args.AckChannel, args.Token);
+        }
+        catch (ServiceRuntimeException ex1)
+        {
+          result.Ex1 = ex1;
+        }
+        oprot.WriteMessageBegin(new TMessage("runCmd", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+      }
+      catch (TTransportException)
+      {
+        throw;
+      }
+      catch (Exception ex)
+      {
+        Console.Error.WriteLine("Error occurred in processor:");
+        Console.Error.WriteLine(ex.ToString());
+        TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
+        oprot.WriteMessageBegin(new TMessage("runCmd", TMessageType.Exception, seqid));
+        x.Write(oprot);
+      }
+      oprot.WriteMessageEnd();
+      oprot.Transport.Flush();
+    }
+
+    public async Task runTask_ProcessAsync(int seqid, TProtocol iprot, TProtocol oprot)
+    {
+      runTask_args args = new runTask_args();
+      args.Read(iprot);
+      iprot.ReadMessageEnd();
+      runTask_result result = new runTask_result();
+      try
+      {
+        try
+        {
+          result.Success = await iface_.runTaskAsync(args.TaskQueue, args.Cmdpath, args.JsonArgs, args.AckChannel, args.Token);
+        }
+        catch (ServiceRuntimeException ex1)
+        {
+          result.Ex1 = ex1;
+        }
+        oprot.WriteMessageBegin(new TMessage("runTask", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+      }
+      catch (TTransportException)
+      {
+        throw;
+      }
+      catch (Exception ex)
+      {
+        Console.Error.WriteLine("Error occurred in processor:");
+        Console.Error.WriteLine(ex.ToString());
+        TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
+        oprot.WriteMessageBegin(new TMessage("runTask", TMessageType.Exception, seqid));
+        x.Write(oprot);
+      }
+      oprot.WriteMessageEnd();
+      oprot.Transport.Flush();
+    }
+
     public async Task saveDevice_ProcessAsync(int seqid, TProtocol iprot, TProtocol oprot)
     {
       saveDevice_args args = new saveDevice_args();
@@ -15097,6 +15302,8 @@ public partial class IFaceLog {
       processMap_["replaceFeature"] = replaceFeature_Process;
       processMap_["rootGroupOfDevice"] = rootGroupOfDevice_Process;
       processMap_["rootGroupOfPerson"] = rootGroupOfPerson_Process;
+      processMap_["runCmd"] = runCmd_Process;
+      processMap_["runTask"] = runTask_Process;
       processMap_["saveDevice"] = saveDevice_Process;
       processMap_["saveDeviceGroup"] = saveDeviceGroup_Process;
       processMap_["savePermit"] = savePermit_Process;
@@ -19523,6 +19730,76 @@ public partial class IFaceLog {
         Console.Error.WriteLine(ex.ToString());
         TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
         oprot.WriteMessageBegin(new TMessage("rootGroupOfPerson", TMessageType.Exception, seqid));
+        x.Write(oprot);
+      }
+      oprot.WriteMessageEnd();
+      oprot.Transport.Flush();
+    }
+
+    public void runCmd_Process(int seqid, TProtocol iprot, TProtocol oprot)
+    {
+      runCmd_args args = new runCmd_args();
+      args.Read(iprot);
+      iprot.ReadMessageEnd();
+      runCmd_result result = new runCmd_result();
+      try
+      {
+        try
+        {
+          result.Success = iface_.runCmd(args.Target, args.Group.Value, args.Cmdpath, args.JsonArgs, args.AckChannel, args.Token);
+        }
+        catch (ServiceRuntimeException ex1)
+        {
+          result.Ex1 = ex1;
+        }
+        oprot.WriteMessageBegin(new TMessage("runCmd", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+      }
+      catch (TTransportException)
+      {
+        throw;
+      }
+      catch (Exception ex)
+      {
+        Console.Error.WriteLine("Error occurred in processor:");
+        Console.Error.WriteLine(ex.ToString());
+        TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
+        oprot.WriteMessageBegin(new TMessage("runCmd", TMessageType.Exception, seqid));
+        x.Write(oprot);
+      }
+      oprot.WriteMessageEnd();
+      oprot.Transport.Flush();
+    }
+
+    public void runTask_Process(int seqid, TProtocol iprot, TProtocol oprot)
+    {
+      runTask_args args = new runTask_args();
+      args.Read(iprot);
+      iprot.ReadMessageEnd();
+      runTask_result result = new runTask_result();
+      try
+      {
+        try
+        {
+          result.Success = iface_.runTask(args.TaskQueue, args.Cmdpath, args.JsonArgs, args.AckChannel, args.Token);
+        }
+        catch (ServiceRuntimeException ex1)
+        {
+          result.Ex1 = ex1;
+        }
+        oprot.WriteMessageBegin(new TMessage("runTask", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+      }
+      catch (TTransportException)
+      {
+        throw;
+      }
+      catch (Exception ex)
+      {
+        Console.Error.WriteLine("Error occurred in processor:");
+        Console.Error.WriteLine(ex.ToString());
+        TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
+        oprot.WriteMessageBegin(new TMessage("runTask", TMessageType.Exception, seqid));
         x.Write(oprot);
       }
       oprot.WriteMessageEnd();
@@ -48050,6 +48327,663 @@ public partial class IFaceLog {
   #if !SILVERLIGHT
   [Serializable]
   #endif
+  public partial class runCmd_args : TBase
+  {
+
+    public List<int> Target { get; set; }
+
+    public bool Group { get; set; }
+
+    public string Cmdpath { get; set; }
+
+    public Dictionary<string, string> JsonArgs { get; set; }
+
+    public string AckChannel { get; set; }
+
+    public Token Token { get; set; }
+
+    public runCmd_args() {
+    }
+
+    public runCmd_args(bool group) : this() {
+      this.Group = group;
+    }
+
+    public void Read (TProtocol iprot)
+    {
+      iprot.IncrementRecursionDepth();
+      try
+      {
+        bool isset_group = false;
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 1:
+              if (field.Type == TType.List) {
+                {
+                  Target = new List<int>();
+                  TList _list263 = iprot.ReadListBegin();
+                  for( int _i264 = 0; _i264 < _list263.Count; ++_i264)
+                  {
+                    int _elem265;
+                    _elem265 = iprot.ReadI32();
+                    Target.Add(_elem265);
+                  }
+                  iprot.ReadListEnd();
+                }
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 2:
+              if (field.Type == TType.Bool) {
+                Group = iprot.ReadBool();
+                isset_group = true;
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 3:
+              if (field.Type == TType.String) {
+                Cmdpath = iprot.ReadString();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 4:
+              if (field.Type == TType.Map) {
+                {
+                  JsonArgs = new Dictionary<string, string>();
+                  TMap _map266 = iprot.ReadMapBegin();
+                  for( int _i267 = 0; _i267 < _map266.Count; ++_i267)
+                  {
+                    string _key268;
+                    string _val269;
+                    _key268 = iprot.ReadString();
+                    _val269 = iprot.ReadString();
+                    JsonArgs[_key268] = _val269;
+                  }
+                  iprot.ReadMapEnd();
+                }
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 5:
+              if (field.Type == TType.String) {
+                AckChannel = iprot.ReadString();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 6:
+              if (field.Type == TType.Struct) {
+                Token = new Token();
+                Token.Read(iprot);
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+        if (!isset_group)
+          throw new TProtocolException(TProtocolException.INVALID_DATA, "required field Group not set");
+      }
+      finally
+      {
+        iprot.DecrementRecursionDepth();
+      }
+    }
+
+    public void Write(TProtocol oprot) {
+      oprot.IncrementRecursionDepth();
+      try
+      {
+        TStruct struc = new TStruct("runCmd_args");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+        if (Target != null) {
+          field.Name = "target";
+          field.Type = TType.List;
+          field.ID = 1;
+          oprot.WriteFieldBegin(field);
+          {
+            oprot.WriteListBegin(new TList(TType.I32, Target.Count));
+            foreach (int _iter270 in Target)
+            {
+              oprot.WriteI32(_iter270);
+            }
+            oprot.WriteListEnd();
+          }
+          oprot.WriteFieldEnd();
+        }
+        field.Name = "group";
+        field.Type = TType.Bool;
+        field.ID = 2;
+        oprot.WriteFieldBegin(field);
+        oprot.WriteBool(Group);
+        oprot.WriteFieldEnd();
+        if (Cmdpath != null) {
+          field.Name = "cmdpath";
+          field.Type = TType.String;
+          field.ID = 3;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteString(Cmdpath);
+          oprot.WriteFieldEnd();
+        }
+        if (JsonArgs != null) {
+          field.Name = "jsonArgs";
+          field.Type = TType.Map;
+          field.ID = 4;
+          oprot.WriteFieldBegin(field);
+          {
+            oprot.WriteMapBegin(new TMap(TType.String, TType.String, JsonArgs.Count));
+            foreach (string _iter271 in JsonArgs.Keys)
+            {
+              oprot.WriteString(_iter271);
+              oprot.WriteString(JsonArgs[_iter271]);
+            }
+            oprot.WriteMapEnd();
+          }
+          oprot.WriteFieldEnd();
+        }
+        if (AckChannel != null) {
+          field.Name = "ackChannel";
+          field.Type = TType.String;
+          field.ID = 5;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteString(AckChannel);
+          oprot.WriteFieldEnd();
+        }
+        if (Token != null) {
+          field.Name = "token";
+          field.Type = TType.Struct;
+          field.ID = 6;
+          oprot.WriteFieldBegin(field);
+          Token.Write(oprot);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+      finally
+      {
+        oprot.DecrementRecursionDepth();
+      }
+    }
+
+    public override string ToString() {
+      StringBuilder __sb = new StringBuilder("runCmd_args(");
+      bool __first = true;
+      if (Target != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Target: ");
+        __sb.Append(Target);
+      }
+      if(!__first) { __sb.Append(", "); }
+      __sb.Append("Group: ");
+      __sb.Append(Group);
+      if (Cmdpath != null) {
+        __sb.Append(", Cmdpath: ");
+        __sb.Append(Cmdpath);
+      }
+      if (JsonArgs != null) {
+        __sb.Append(", JsonArgs: ");
+        __sb.Append(JsonArgs);
+      }
+      if (AckChannel != null) {
+        __sb.Append(", AckChannel: ");
+        __sb.Append(AckChannel);
+      }
+      if (Token != null) {
+        __sb.Append(", Token: ");
+        __sb.Append(Token== null ? "<null>" : Token.ToString());
+      }
+      __sb.Append(")");
+      return __sb.ToString();
+    }
+
+  }
+
+
+  #if !SILVERLIGHT
+  [Serializable]
+  #endif
+  public partial class runCmd_result : TBase
+  {
+
+    public int? Success { get; set; }
+
+    public ServiceRuntimeException Ex1 { get; set; }
+
+    public runCmd_result() {
+    }
+
+    public void Read (TProtocol iprot)
+    {
+      iprot.IncrementRecursionDepth();
+      try
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 0:
+              if (field.Type == TType.I32) {
+                Success = iprot.ReadI32();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 1:
+              if (field.Type == TType.Struct) {
+                Ex1 = new ServiceRuntimeException();
+                Ex1.Read(iprot);
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+      finally
+      {
+        iprot.DecrementRecursionDepth();
+      }
+    }
+
+    public void Write(TProtocol oprot) {
+      oprot.IncrementRecursionDepth();
+      try
+      {
+        TStruct struc = new TStruct("runCmd_result");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+
+        if (this.Success != null) {
+          field.Name = "Success";
+          field.Type = TType.I32;
+          field.ID = 0;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteI32(Success.Value);
+          oprot.WriteFieldEnd();
+        } else if (this.Ex1 != null) {
+          field.Name = "Ex1";
+          field.Type = TType.Struct;
+          field.ID = 1;
+          oprot.WriteFieldBegin(field);
+          Ex1.Write(oprot);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+      finally
+      {
+        oprot.DecrementRecursionDepth();
+      }
+    }
+
+    public override string ToString() {
+      StringBuilder __sb = new StringBuilder("runCmd_result(");
+      bool __first = true;
+      if (Success != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Success: ");
+        __sb.Append(Success);
+      }
+      if (Ex1 != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Ex1: ");
+        __sb.Append(Ex1== null ? "<null>" : Ex1.ToString());
+      }
+      __sb.Append(")");
+      return __sb.ToString();
+    }
+
+  }
+
+
+  #if !SILVERLIGHT
+  [Serializable]
+  #endif
+  public partial class runTask_args : TBase
+  {
+
+    public string TaskQueue { get; set; }
+
+    public string Cmdpath { get; set; }
+
+    public Dictionary<string, string> JsonArgs { get; set; }
+
+    public string AckChannel { get; set; }
+
+    public Token Token { get; set; }
+
+    public runTask_args() {
+    }
+
+    public void Read (TProtocol iprot)
+    {
+      iprot.IncrementRecursionDepth();
+      try
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 1:
+              if (field.Type == TType.String) {
+                TaskQueue = iprot.ReadString();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 2:
+              if (field.Type == TType.String) {
+                Cmdpath = iprot.ReadString();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 3:
+              if (field.Type == TType.Map) {
+                {
+                  JsonArgs = new Dictionary<string, string>();
+                  TMap _map272 = iprot.ReadMapBegin();
+                  for( int _i273 = 0; _i273 < _map272.Count; ++_i273)
+                  {
+                    string _key274;
+                    string _val275;
+                    _key274 = iprot.ReadString();
+                    _val275 = iprot.ReadString();
+                    JsonArgs[_key274] = _val275;
+                  }
+                  iprot.ReadMapEnd();
+                }
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 4:
+              if (field.Type == TType.String) {
+                AckChannel = iprot.ReadString();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 5:
+              if (field.Type == TType.Struct) {
+                Token = new Token();
+                Token.Read(iprot);
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+      finally
+      {
+        iprot.DecrementRecursionDepth();
+      }
+    }
+
+    public void Write(TProtocol oprot) {
+      oprot.IncrementRecursionDepth();
+      try
+      {
+        TStruct struc = new TStruct("runTask_args");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+        if (TaskQueue != null) {
+          field.Name = "taskQueue";
+          field.Type = TType.String;
+          field.ID = 1;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteString(TaskQueue);
+          oprot.WriteFieldEnd();
+        }
+        if (Cmdpath != null) {
+          field.Name = "cmdpath";
+          field.Type = TType.String;
+          field.ID = 2;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteString(Cmdpath);
+          oprot.WriteFieldEnd();
+        }
+        if (JsonArgs != null) {
+          field.Name = "jsonArgs";
+          field.Type = TType.Map;
+          field.ID = 3;
+          oprot.WriteFieldBegin(field);
+          {
+            oprot.WriteMapBegin(new TMap(TType.String, TType.String, JsonArgs.Count));
+            foreach (string _iter276 in JsonArgs.Keys)
+            {
+              oprot.WriteString(_iter276);
+              oprot.WriteString(JsonArgs[_iter276]);
+            }
+            oprot.WriteMapEnd();
+          }
+          oprot.WriteFieldEnd();
+        }
+        if (AckChannel != null) {
+          field.Name = "ackChannel";
+          field.Type = TType.String;
+          field.ID = 4;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteString(AckChannel);
+          oprot.WriteFieldEnd();
+        }
+        if (Token != null) {
+          field.Name = "token";
+          field.Type = TType.Struct;
+          field.ID = 5;
+          oprot.WriteFieldBegin(field);
+          Token.Write(oprot);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+      finally
+      {
+        oprot.DecrementRecursionDepth();
+      }
+    }
+
+    public override string ToString() {
+      StringBuilder __sb = new StringBuilder("runTask_args(");
+      bool __first = true;
+      if (TaskQueue != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("TaskQueue: ");
+        __sb.Append(TaskQueue);
+      }
+      if (Cmdpath != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Cmdpath: ");
+        __sb.Append(Cmdpath);
+      }
+      if (JsonArgs != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("JsonArgs: ");
+        __sb.Append(JsonArgs);
+      }
+      if (AckChannel != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("AckChannel: ");
+        __sb.Append(AckChannel);
+      }
+      if (Token != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Token: ");
+        __sb.Append(Token== null ? "<null>" : Token.ToString());
+      }
+      __sb.Append(")");
+      return __sb.ToString();
+    }
+
+  }
+
+
+  #if !SILVERLIGHT
+  [Serializable]
+  #endif
+  public partial class runTask_result : TBase
+  {
+
+    public bool? Success { get; set; }
+
+    public ServiceRuntimeException Ex1 { get; set; }
+
+    public runTask_result() {
+    }
+
+    public void Read (TProtocol iprot)
+    {
+      iprot.IncrementRecursionDepth();
+      try
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 0:
+              if (field.Type == TType.Bool) {
+                Success = iprot.ReadBool();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 1:
+              if (field.Type == TType.Struct) {
+                Ex1 = new ServiceRuntimeException();
+                Ex1.Read(iprot);
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+      finally
+      {
+        iprot.DecrementRecursionDepth();
+      }
+    }
+
+    public void Write(TProtocol oprot) {
+      oprot.IncrementRecursionDepth();
+      try
+      {
+        TStruct struc = new TStruct("runTask_result");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+
+        if (this.Success != null) {
+          field.Name = "Success";
+          field.Type = TType.Bool;
+          field.ID = 0;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteBool(Success.Value);
+          oprot.WriteFieldEnd();
+        } else if (this.Ex1 != null) {
+          field.Name = "Ex1";
+          field.Type = TType.Struct;
+          field.ID = 1;
+          oprot.WriteFieldBegin(field);
+          Ex1.Write(oprot);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+      finally
+      {
+        oprot.DecrementRecursionDepth();
+      }
+    }
+
+    public override string ToString() {
+      StringBuilder __sb = new StringBuilder("runTask_result(");
+      bool __first = true;
+      if (Success != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Success: ");
+        __sb.Append(Success);
+      }
+      if (Ex1 != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Ex1: ");
+        __sb.Append(Ex1== null ? "<null>" : Ex1.ToString());
+      }
+      __sb.Append(")");
+      return __sb.ToString();
+    }
+
+  }
+
+
+  #if !SILVERLIGHT
+  [Serializable]
+  #endif
   public partial class saveDevice_args : TBase
   {
 
@@ -50359,13 +51293,13 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   FaceBeans = new List<FaceBean>();
-                  TList _list263 = iprot.ReadListBegin();
-                  for( int _i264 = 0; _i264 < _list263.Count; ++_i264)
+                  TList _list277 = iprot.ReadListBegin();
+                  for( int _i278 = 0; _i278 < _list277.Count; ++_i278)
                   {
-                    FaceBean _elem265;
-                    _elem265 = new FaceBean();
-                    _elem265.Read(iprot);
-                    FaceBeans.Add(_elem265);
+                    FaceBean _elem279;
+                    _elem279 = new FaceBean();
+                    _elem279.Read(iprot);
+                    FaceBeans.Add(_elem279);
                   }
                   iprot.ReadListEnd();
                 }
@@ -50441,9 +51375,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.Struct, FaceBeans.Count));
-            foreach (FaceBean _iter266 in FaceBeans)
+            foreach (FaceBean _iter280 in FaceBeans)
             {
-              _iter266.Write(oprot);
+              _iter280.Write(oprot);
             }
             oprot.WriteListEnd();
           }
@@ -50693,15 +51627,15 @@ public partial class IFaceLog {
               if (field.Type == TType.Map) {
                 {
                   FaceInfo = new Dictionary<byte[], FaceBean>();
-                  TMap _map267 = iprot.ReadMapBegin();
-                  for( int _i268 = 0; _i268 < _map267.Count; ++_i268)
+                  TMap _map281 = iprot.ReadMapBegin();
+                  for( int _i282 = 0; _i282 < _map281.Count; ++_i282)
                   {
-                    byte[] _key269;
-                    FaceBean _val270;
-                    _key269 = iprot.ReadBinary();
-                    _val270 = new FaceBean();
-                    _val270.Read(iprot);
-                    FaceInfo[_key269] = _val270;
+                    byte[] _key283;
+                    FaceBean _val284;
+                    _key283 = iprot.ReadBinary();
+                    _val284 = new FaceBean();
+                    _val284.Read(iprot);
+                    FaceInfo[_key283] = _val284;
                   }
                   iprot.ReadMapEnd();
                 }
@@ -50777,10 +51711,10 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteMapBegin(new TMap(TType.String, TType.Struct, FaceInfo.Count));
-            foreach (byte[] _iter271 in FaceInfo.Keys)
+            foreach (byte[] _iter285 in FaceInfo.Keys)
             {
-              oprot.WriteBinary(_iter271);
-              FaceInfo[_iter271].Write(oprot);
+              oprot.WriteBinary(_iter285);
+              FaceInfo[_iter285].Write(oprot);
             }
             oprot.WriteMapEnd();
           }
@@ -51263,13 +52197,13 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   Persons = new List<PersonBean>();
-                  TList _list272 = iprot.ReadListBegin();
-                  for( int _i273 = 0; _i273 < _list272.Count; ++_i273)
+                  TList _list286 = iprot.ReadListBegin();
+                  for( int _i287 = 0; _i287 < _list286.Count; ++_i287)
                   {
-                    PersonBean _elem274;
-                    _elem274 = new PersonBean();
-                    _elem274.Read(iprot);
-                    Persons.Add(_elem274);
+                    PersonBean _elem288;
+                    _elem288 = new PersonBean();
+                    _elem288.Read(iprot);
+                    Persons.Add(_elem288);
                   }
                   iprot.ReadListEnd();
                 }
@@ -51313,9 +52247,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.Struct, Persons.Count));
-            foreach (PersonBean _iter275 in Persons)
+            foreach (PersonBean _iter289 in Persons)
             {
-              _iter275.Write(oprot);
+              _iter289.Write(oprot);
             }
             oprot.WriteListEnd();
           }
@@ -51481,15 +52415,15 @@ public partial class IFaceLog {
               if (field.Type == TType.Map) {
                 {
                   Persons = new Dictionary<byte[], PersonBean>();
-                  TMap _map276 = iprot.ReadMapBegin();
-                  for( int _i277 = 0; _i277 < _map276.Count; ++_i277)
+                  TMap _map290 = iprot.ReadMapBegin();
+                  for( int _i291 = 0; _i291 < _map290.Count; ++_i291)
                   {
-                    byte[] _key278;
-                    PersonBean _val279;
-                    _key278 = iprot.ReadBinary();
-                    _val279 = new PersonBean();
-                    _val279.Read(iprot);
-                    Persons[_key278] = _val279;
+                    byte[] _key292;
+                    PersonBean _val293;
+                    _key292 = iprot.ReadBinary();
+                    _val293 = new PersonBean();
+                    _val293.Read(iprot);
+                    Persons[_key292] = _val293;
                   }
                   iprot.ReadMapEnd();
                 }
@@ -51533,10 +52467,10 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteMapBegin(new TMap(TType.String, TType.Struct, Persons.Count));
-            foreach (byte[] _iter280 in Persons.Keys)
+            foreach (byte[] _iter294 in Persons.Keys)
             {
-              oprot.WriteBinary(_iter280);
-              Persons[_iter280].Write(oprot);
+              oprot.WriteBinary(_iter294);
+              Persons[_iter294].Write(oprot);
             }
             oprot.WriteMapEnd();
           }
@@ -52374,12 +53308,12 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   PersonIdList = new List<int>();
-                  TList _list281 = iprot.ReadListBegin();
-                  for( int _i282 = 0; _i282 < _list281.Count; ++_i282)
+                  TList _list295 = iprot.ReadListBegin();
+                  for( int _i296 = 0; _i296 < _list295.Count; ++_i296)
                   {
-                    int _elem283;
-                    _elem283 = iprot.ReadI32();
-                    PersonIdList.Add(_elem283);
+                    int _elem297;
+                    _elem297 = iprot.ReadI32();
+                    PersonIdList.Add(_elem297);
                   }
                   iprot.ReadListEnd();
                 }
@@ -52433,9 +53367,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.I32, PersonIdList.Count));
-            foreach (int _iter284 in PersonIdList)
+            foreach (int _iter298 in PersonIdList)
             {
-              oprot.WriteI32(_iter284);
+              oprot.WriteI32(_iter298);
             }
             oprot.WriteListEnd();
           }
@@ -52828,14 +53762,14 @@ public partial class IFaceLog {
               if (field.Type == TType.Map) {
                 {
                   Config = new Dictionary<string, string>();
-                  TMap _map285 = iprot.ReadMapBegin();
-                  for( int _i286 = 0; _i286 < _map285.Count; ++_i286)
+                  TMap _map299 = iprot.ReadMapBegin();
+                  for( int _i300 = 0; _i300 < _map299.Count; ++_i300)
                   {
-                    string _key287;
-                    string _val288;
-                    _key287 = iprot.ReadString();
-                    _val288 = iprot.ReadString();
-                    Config[_key287] = _val288;
+                    string _key301;
+                    string _val302;
+                    _key301 = iprot.ReadString();
+                    _val302 = iprot.ReadString();
+                    Config[_key301] = _val302;
                   }
                   iprot.ReadMapEnd();
                 }
@@ -52879,10 +53813,10 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteMapBegin(new TMap(TType.String, TType.String, Config.Count));
-            foreach (string _iter289 in Config.Keys)
+            foreach (string _iter303 in Config.Keys)
             {
-              oprot.WriteString(_iter289);
-              oprot.WriteString(Config[_iter289]);
+              oprot.WriteString(_iter303);
+              oprot.WriteString(Config[_iter303]);
             }
             oprot.WriteMapEnd();
           }
@@ -54375,14 +55309,14 @@ public partial class IFaceLog {
               if (field.Type == TType.Map) {
                 {
                   Success = new Dictionary<string, string>();
-                  TMap _map290 = iprot.ReadMapBegin();
-                  for( int _i291 = 0; _i291 < _map290.Count; ++_i291)
+                  TMap _map304 = iprot.ReadMapBegin();
+                  for( int _i305 = 0; _i305 < _map304.Count; ++_i305)
                   {
-                    string _key292;
-                    string _val293;
-                    _key292 = iprot.ReadString();
-                    _val293 = iprot.ReadString();
-                    Success[_key292] = _val293;
+                    string _key306;
+                    string _val307;
+                    _key306 = iprot.ReadString();
+                    _val307 = iprot.ReadString();
+                    Success[_key306] = _val307;
                   }
                   iprot.ReadMapEnd();
                 }
@@ -54427,10 +55361,10 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteMapBegin(new TMap(TType.String, TType.String, Success.Count));
-            foreach (string _iter294 in Success.Keys)
+            foreach (string _iter308 in Success.Keys)
             {
-              oprot.WriteString(_iter294);
-              oprot.WriteString(Success[_iter294]);
+              oprot.WriteString(_iter308);
+              oprot.WriteString(Success[_iter308]);
             }
             oprot.WriteMapEnd();
           }

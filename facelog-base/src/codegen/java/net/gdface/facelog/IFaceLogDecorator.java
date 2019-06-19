@@ -956,6 +956,16 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
+    public int runCmd (List<Integer> target,boolean group,String cmdpath,Map<String, String> jsonArgs,String ackChannel,Token token) {
+        return delegate().runCmd(target,group,cmdpath,jsonArgs,ackChannel,token);
+    }
+
+    @Override
+    public boolean runTask (String taskQueue,String cmdpath,Map<String, String> jsonArgs,String ackChannel,Token token) {
+        return delegate().runTask(taskQueue,cmdpath,jsonArgs,ackChannel,token);
+    }
+
+    @Override
     public DeviceBean saveDevice (DeviceBean deviceBean,Token token) {
         return delegate().saveDevice(deviceBean,token);
     }

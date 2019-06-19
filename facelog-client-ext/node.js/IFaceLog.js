@@ -18278,6 +18278,472 @@ IFaceLog_rootGroupOfPerson_result.prototype.write = function(output) {
   return;
 };
 
+var IFaceLog_runCmd_args = function(args) {
+  this.target = null;
+  this.group = null;
+  this.cmdpath = null;
+  this.jsonArgs = null;
+  this.ackChannel = null;
+  this.token = null;
+  if (args) {
+    if (args.target !== undefined && args.target !== null) {
+      this.target = Thrift.copyList(args.target, [null]);
+    }
+    if (args.group !== undefined && args.group !== null) {
+      this.group = args.group;
+    } else {
+      throw new Thrift.TProtocolException(Thrift.TProtocolExceptionType.UNKNOWN, 'Required field group is unset!');
+    }
+    if (args.cmdpath !== undefined && args.cmdpath !== null) {
+      this.cmdpath = args.cmdpath;
+    }
+    if (args.jsonArgs !== undefined && args.jsonArgs !== null) {
+      this.jsonArgs = Thrift.copyMap(args.jsonArgs, [null]);
+    }
+    if (args.ackChannel !== undefined && args.ackChannel !== null) {
+      this.ackChannel = args.ackChannel;
+    }
+    if (args.token !== undefined && args.token !== null) {
+      this.token = new ttypes.Token(args.token);
+    }
+  }
+};
+IFaceLog_runCmd_args.prototype = {};
+IFaceLog_runCmd_args.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+      if (ftype == Thrift.Type.LIST) {
+        var _size526 = 0;
+        var _rtmp3530;
+        this.target = [];
+        var _etype529 = 0;
+        _rtmp3530 = input.readListBegin();
+        _etype529 = _rtmp3530.etype;
+        _size526 = _rtmp3530.size;
+        for (var _i531 = 0; _i531 < _size526; ++_i531)
+        {
+          var elem532 = null;
+          elem532 = input.readI32();
+          this.target.push(elem532);
+        }
+        input.readListEnd();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 2:
+      if (ftype == Thrift.Type.BOOL) {
+        this.group = input.readBool();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 3:
+      if (ftype == Thrift.Type.STRING) {
+        this.cmdpath = input.readString();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 4:
+      if (ftype == Thrift.Type.MAP) {
+        var _size533 = 0;
+        var _rtmp3537;
+        this.jsonArgs = {};
+        var _ktype534 = 0;
+        var _vtype535 = 0;
+        _rtmp3537 = input.readMapBegin();
+        _ktype534 = _rtmp3537.ktype;
+        _vtype535 = _rtmp3537.vtype;
+        _size533 = _rtmp3537.size;
+        for (var _i538 = 0; _i538 < _size533; ++_i538)
+        {
+          var key539 = null;
+          var val540 = null;
+          key539 = input.readString();
+          val540 = input.readString();
+          this.jsonArgs[key539] = val540;
+        }
+        input.readMapEnd();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 5:
+      if (ftype == Thrift.Type.STRING) {
+        this.ackChannel = input.readString();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 6:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.token = new ttypes.Token();
+        this.token.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+IFaceLog_runCmd_args.prototype.write = function(output) {
+  output.writeStructBegin('IFaceLog_runCmd_args');
+  if (this.target !== null && this.target !== undefined) {
+    output.writeFieldBegin('target', Thrift.Type.LIST, 1);
+    output.writeListBegin(Thrift.Type.I32, this.target.length);
+    for (var iter541 in this.target)
+    {
+      if (this.target.hasOwnProperty(iter541))
+      {
+        iter541 = this.target[iter541];
+        output.writeI32(iter541);
+      }
+    }
+    output.writeListEnd();
+    output.writeFieldEnd();
+  }
+  if (this.group !== null && this.group !== undefined) {
+    output.writeFieldBegin('group', Thrift.Type.BOOL, 2);
+    output.writeBool(this.group);
+    output.writeFieldEnd();
+  }
+  if (this.cmdpath !== null && this.cmdpath !== undefined) {
+    output.writeFieldBegin('cmdpath', Thrift.Type.STRING, 3);
+    output.writeString(this.cmdpath);
+    output.writeFieldEnd();
+  }
+  if (this.jsonArgs !== null && this.jsonArgs !== undefined) {
+    output.writeFieldBegin('jsonArgs', Thrift.Type.MAP, 4);
+    output.writeMapBegin(Thrift.Type.STRING, Thrift.Type.STRING, Thrift.objectLength(this.jsonArgs));
+    for (var kiter542 in this.jsonArgs)
+    {
+      if (this.jsonArgs.hasOwnProperty(kiter542))
+      {
+        var viter543 = this.jsonArgs[kiter542];
+        output.writeString(kiter542);
+        output.writeString(viter543);
+      }
+    }
+    output.writeMapEnd();
+    output.writeFieldEnd();
+  }
+  if (this.ackChannel !== null && this.ackChannel !== undefined) {
+    output.writeFieldBegin('ackChannel', Thrift.Type.STRING, 5);
+    output.writeString(this.ackChannel);
+    output.writeFieldEnd();
+  }
+  if (this.token !== null && this.token !== undefined) {
+    output.writeFieldBegin('token', Thrift.Type.STRUCT, 6);
+    this.token.write(output);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+var IFaceLog_runCmd_result = function(args) {
+  this.success = null;
+  this.ex1 = null;
+  if (args instanceof ttypes.ServiceRuntimeException) {
+    this.ex1 = args;
+    return;
+  }
+  if (args) {
+    if (args.success !== undefined && args.success !== null) {
+      this.success = args.success;
+    }
+    if (args.ex1 !== undefined && args.ex1 !== null) {
+      this.ex1 = args.ex1;
+    }
+  }
+};
+IFaceLog_runCmd_result.prototype = {};
+IFaceLog_runCmd_result.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+      if (ftype == Thrift.Type.I32) {
+        this.success = input.readI32();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 1:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.ex1 = new ttypes.ServiceRuntimeException();
+        this.ex1.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+IFaceLog_runCmd_result.prototype.write = function(output) {
+  output.writeStructBegin('IFaceLog_runCmd_result');
+  if (this.success !== null && this.success !== undefined) {
+    output.writeFieldBegin('success', Thrift.Type.I32, 0);
+    output.writeI32(this.success);
+    output.writeFieldEnd();
+  }
+  if (this.ex1 !== null && this.ex1 !== undefined) {
+    output.writeFieldBegin('ex1', Thrift.Type.STRUCT, 1);
+    this.ex1.write(output);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+var IFaceLog_runTask_args = function(args) {
+  this.taskQueue = null;
+  this.cmdpath = null;
+  this.jsonArgs = null;
+  this.ackChannel = null;
+  this.token = null;
+  if (args) {
+    if (args.taskQueue !== undefined && args.taskQueue !== null) {
+      this.taskQueue = args.taskQueue;
+    }
+    if (args.cmdpath !== undefined && args.cmdpath !== null) {
+      this.cmdpath = args.cmdpath;
+    }
+    if (args.jsonArgs !== undefined && args.jsonArgs !== null) {
+      this.jsonArgs = Thrift.copyMap(args.jsonArgs, [null]);
+    }
+    if (args.ackChannel !== undefined && args.ackChannel !== null) {
+      this.ackChannel = args.ackChannel;
+    }
+    if (args.token !== undefined && args.token !== null) {
+      this.token = new ttypes.Token(args.token);
+    }
+  }
+};
+IFaceLog_runTask_args.prototype = {};
+IFaceLog_runTask_args.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+      if (ftype == Thrift.Type.STRING) {
+        this.taskQueue = input.readString();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 2:
+      if (ftype == Thrift.Type.STRING) {
+        this.cmdpath = input.readString();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 3:
+      if (ftype == Thrift.Type.MAP) {
+        var _size544 = 0;
+        var _rtmp3548;
+        this.jsonArgs = {};
+        var _ktype545 = 0;
+        var _vtype546 = 0;
+        _rtmp3548 = input.readMapBegin();
+        _ktype545 = _rtmp3548.ktype;
+        _vtype546 = _rtmp3548.vtype;
+        _size544 = _rtmp3548.size;
+        for (var _i549 = 0; _i549 < _size544; ++_i549)
+        {
+          var key550 = null;
+          var val551 = null;
+          key550 = input.readString();
+          val551 = input.readString();
+          this.jsonArgs[key550] = val551;
+        }
+        input.readMapEnd();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 4:
+      if (ftype == Thrift.Type.STRING) {
+        this.ackChannel = input.readString();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 5:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.token = new ttypes.Token();
+        this.token.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+IFaceLog_runTask_args.prototype.write = function(output) {
+  output.writeStructBegin('IFaceLog_runTask_args');
+  if (this.taskQueue !== null && this.taskQueue !== undefined) {
+    output.writeFieldBegin('taskQueue', Thrift.Type.STRING, 1);
+    output.writeString(this.taskQueue);
+    output.writeFieldEnd();
+  }
+  if (this.cmdpath !== null && this.cmdpath !== undefined) {
+    output.writeFieldBegin('cmdpath', Thrift.Type.STRING, 2);
+    output.writeString(this.cmdpath);
+    output.writeFieldEnd();
+  }
+  if (this.jsonArgs !== null && this.jsonArgs !== undefined) {
+    output.writeFieldBegin('jsonArgs', Thrift.Type.MAP, 3);
+    output.writeMapBegin(Thrift.Type.STRING, Thrift.Type.STRING, Thrift.objectLength(this.jsonArgs));
+    for (var kiter552 in this.jsonArgs)
+    {
+      if (this.jsonArgs.hasOwnProperty(kiter552))
+      {
+        var viter553 = this.jsonArgs[kiter552];
+        output.writeString(kiter552);
+        output.writeString(viter553);
+      }
+    }
+    output.writeMapEnd();
+    output.writeFieldEnd();
+  }
+  if (this.ackChannel !== null && this.ackChannel !== undefined) {
+    output.writeFieldBegin('ackChannel', Thrift.Type.STRING, 4);
+    output.writeString(this.ackChannel);
+    output.writeFieldEnd();
+  }
+  if (this.token !== null && this.token !== undefined) {
+    output.writeFieldBegin('token', Thrift.Type.STRUCT, 5);
+    this.token.write(output);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+var IFaceLog_runTask_result = function(args) {
+  this.success = null;
+  this.ex1 = null;
+  if (args instanceof ttypes.ServiceRuntimeException) {
+    this.ex1 = args;
+    return;
+  }
+  if (args) {
+    if (args.success !== undefined && args.success !== null) {
+      this.success = args.success;
+    }
+    if (args.ex1 !== undefined && args.ex1 !== null) {
+      this.ex1 = args.ex1;
+    }
+  }
+};
+IFaceLog_runTask_result.prototype = {};
+IFaceLog_runTask_result.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+      if (ftype == Thrift.Type.BOOL) {
+        this.success = input.readBool();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 1:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.ex1 = new ttypes.ServiceRuntimeException();
+        this.ex1.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+IFaceLog_runTask_result.prototype.write = function(output) {
+  output.writeStructBegin('IFaceLog_runTask_result');
+  if (this.success !== null && this.success !== undefined) {
+    output.writeFieldBegin('success', Thrift.Type.BOOL, 0);
+    output.writeBool(this.success);
+    output.writeFieldEnd();
+  }
+  if (this.ex1 !== null && this.ex1 !== undefined) {
+    output.writeFieldBegin('ex1', Thrift.Type.STRUCT, 1);
+    this.ex1.write(output);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
 var IFaceLog_saveDevice_args = function(args) {
   this.deviceBean = null;
   this.token = null;
@@ -19776,19 +20242,19 @@ IFaceLog_savePersonWithPhotoAndFeatureMultiFaces_args.prototype.read = function(
       break;
       case 5:
       if (ftype == Thrift.Type.LIST) {
-        var _size526 = 0;
-        var _rtmp3530;
+        var _size554 = 0;
+        var _rtmp3558;
         this.faceBeans = [];
-        var _etype529 = 0;
-        _rtmp3530 = input.readListBegin();
-        _etype529 = _rtmp3530.etype;
-        _size526 = _rtmp3530.size;
-        for (var _i531 = 0; _i531 < _size526; ++_i531)
+        var _etype557 = 0;
+        _rtmp3558 = input.readListBegin();
+        _etype557 = _rtmp3558.etype;
+        _size554 = _rtmp3558.size;
+        for (var _i559 = 0; _i559 < _size554; ++_i559)
         {
-          var elem532 = null;
-          elem532 = new ttypes.FaceBean();
-          elem532.read(input);
-          this.faceBeans.push(elem532);
+          var elem560 = null;
+          elem560 = new ttypes.FaceBean();
+          elem560.read(input);
+          this.faceBeans.push(elem560);
         }
         input.readListEnd();
       } else {
@@ -19837,12 +20303,12 @@ IFaceLog_savePersonWithPhotoAndFeatureMultiFaces_args.prototype.write = function
   if (this.faceBeans !== null && this.faceBeans !== undefined) {
     output.writeFieldBegin('faceBeans', Thrift.Type.LIST, 5);
     output.writeListBegin(Thrift.Type.STRUCT, this.faceBeans.length);
-    for (var iter533 in this.faceBeans)
+    for (var iter561 in this.faceBeans)
     {
-      if (this.faceBeans.hasOwnProperty(iter533))
+      if (this.faceBeans.hasOwnProperty(iter561))
       {
-        iter533 = this.faceBeans[iter533];
-        iter533.write(output);
+        iter561 = this.faceBeans[iter561];
+        iter561.write(output);
       }
     }
     output.writeListEnd();
@@ -20003,23 +20469,23 @@ IFaceLog_savePersonWithPhotoAndFeatureMultiImage_args.prototype.read = function(
       break;
       case 5:
       if (ftype == Thrift.Type.MAP) {
-        var _size534 = 0;
-        var _rtmp3538;
+        var _size562 = 0;
+        var _rtmp3566;
         this.faceInfo = {};
-        var _ktype535 = 0;
-        var _vtype536 = 0;
-        _rtmp3538 = input.readMapBegin();
-        _ktype535 = _rtmp3538.ktype;
-        _vtype536 = _rtmp3538.vtype;
-        _size534 = _rtmp3538.size;
-        for (var _i539 = 0; _i539 < _size534; ++_i539)
+        var _ktype563 = 0;
+        var _vtype564 = 0;
+        _rtmp3566 = input.readMapBegin();
+        _ktype563 = _rtmp3566.ktype;
+        _vtype564 = _rtmp3566.vtype;
+        _size562 = _rtmp3566.size;
+        for (var _i567 = 0; _i567 < _size562; ++_i567)
         {
-          var key540 = null;
-          var val541 = null;
-          key540 = input.readBinary();
-          val541 = new ttypes.FaceBean();
-          val541.read(input);
-          this.faceInfo[key540] = val541;
+          var key568 = null;
+          var val569 = null;
+          key568 = input.readBinary();
+          val569 = new ttypes.FaceBean();
+          val569.read(input);
+          this.faceInfo[key568] = val569;
         }
         input.readMapEnd();
       } else {
@@ -20068,13 +20534,13 @@ IFaceLog_savePersonWithPhotoAndFeatureMultiImage_args.prototype.write = function
   if (this.faceInfo !== null && this.faceInfo !== undefined) {
     output.writeFieldBegin('faceInfo', Thrift.Type.MAP, 5);
     output.writeMapBegin(Thrift.Type.STRING, Thrift.Type.STRUCT, Thrift.objectLength(this.faceInfo));
-    for (var kiter542 in this.faceInfo)
+    for (var kiter570 in this.faceInfo)
     {
-      if (this.faceInfo.hasOwnProperty(kiter542))
+      if (this.faceInfo.hasOwnProperty(kiter570))
       {
-        var viter543 = this.faceInfo[kiter542];
-        output.writeBinary(kiter542);
-        viter543.write(output);
+        var viter571 = this.faceInfo[kiter570];
+        output.writeBinary(kiter570);
+        viter571.write(output);
       }
     }
     output.writeMapEnd();
@@ -20362,19 +20828,19 @@ IFaceLog_savePersons_args.prototype.read = function(input) {
     {
       case 1:
       if (ftype == Thrift.Type.LIST) {
-        var _size544 = 0;
-        var _rtmp3548;
+        var _size572 = 0;
+        var _rtmp3576;
         this.persons = [];
-        var _etype547 = 0;
-        _rtmp3548 = input.readListBegin();
-        _etype547 = _rtmp3548.etype;
-        _size544 = _rtmp3548.size;
-        for (var _i549 = 0; _i549 < _size544; ++_i549)
+        var _etype575 = 0;
+        _rtmp3576 = input.readListBegin();
+        _etype575 = _rtmp3576.etype;
+        _size572 = _rtmp3576.size;
+        for (var _i577 = 0; _i577 < _size572; ++_i577)
         {
-          var elem550 = null;
-          elem550 = new ttypes.PersonBean();
-          elem550.read(input);
-          this.persons.push(elem550);
+          var elem578 = null;
+          elem578 = new ttypes.PersonBean();
+          elem578.read(input);
+          this.persons.push(elem578);
         }
         input.readListEnd();
       } else {
@@ -20403,12 +20869,12 @@ IFaceLog_savePersons_args.prototype.write = function(output) {
   if (this.persons !== null && this.persons !== undefined) {
     output.writeFieldBegin('persons', Thrift.Type.LIST, 1);
     output.writeListBegin(Thrift.Type.STRUCT, this.persons.length);
-    for (var iter551 in this.persons)
+    for (var iter579 in this.persons)
     {
-      if (this.persons.hasOwnProperty(iter551))
+      if (this.persons.hasOwnProperty(iter579))
       {
-        iter551 = this.persons[iter551];
-        iter551.write(output);
+        iter579 = this.persons[iter579];
+        iter579.write(output);
       }
     }
     output.writeListEnd();
@@ -20510,23 +20976,23 @@ IFaceLog_savePersonsWithPhoto_args.prototype.read = function(input) {
     {
       case 1:
       if (ftype == Thrift.Type.MAP) {
-        var _size552 = 0;
-        var _rtmp3556;
+        var _size580 = 0;
+        var _rtmp3584;
         this.persons = {};
-        var _ktype553 = 0;
-        var _vtype554 = 0;
-        _rtmp3556 = input.readMapBegin();
-        _ktype553 = _rtmp3556.ktype;
-        _vtype554 = _rtmp3556.vtype;
-        _size552 = _rtmp3556.size;
-        for (var _i557 = 0; _i557 < _size552; ++_i557)
+        var _ktype581 = 0;
+        var _vtype582 = 0;
+        _rtmp3584 = input.readMapBegin();
+        _ktype581 = _rtmp3584.ktype;
+        _vtype582 = _rtmp3584.vtype;
+        _size580 = _rtmp3584.size;
+        for (var _i585 = 0; _i585 < _size580; ++_i585)
         {
-          var key558 = null;
-          var val559 = null;
-          key558 = input.readBinary();
-          val559 = new ttypes.PersonBean();
-          val559.read(input);
-          this.persons[key558] = val559;
+          var key586 = null;
+          var val587 = null;
+          key586 = input.readBinary();
+          val587 = new ttypes.PersonBean();
+          val587.read(input);
+          this.persons[key586] = val587;
         }
         input.readMapEnd();
       } else {
@@ -20555,13 +21021,13 @@ IFaceLog_savePersonsWithPhoto_args.prototype.write = function(output) {
   if (this.persons !== null && this.persons !== undefined) {
     output.writeFieldBegin('persons', Thrift.Type.MAP, 1);
     output.writeMapBegin(Thrift.Type.STRING, Thrift.Type.STRUCT, Thrift.objectLength(this.persons));
-    for (var kiter560 in this.persons)
+    for (var kiter588 in this.persons)
     {
-      if (this.persons.hasOwnProperty(kiter560))
+      if (this.persons.hasOwnProperty(kiter588))
       {
-        var viter561 = this.persons[kiter560];
-        output.writeBinary(kiter560);
-        viter561.write(output);
+        var viter589 = this.persons[kiter588];
+        output.writeBinary(kiter588);
+        viter589.write(output);
       }
     }
     output.writeMapEnd();
@@ -21093,18 +21559,18 @@ IFaceLog_setPersonExpiryDateList_args.prototype.read = function(input) {
     {
       case 1:
       if (ftype == Thrift.Type.LIST) {
-        var _size562 = 0;
-        var _rtmp3566;
+        var _size590 = 0;
+        var _rtmp3594;
         this.personIdList = [];
-        var _etype565 = 0;
-        _rtmp3566 = input.readListBegin();
-        _etype565 = _rtmp3566.etype;
-        _size562 = _rtmp3566.size;
-        for (var _i567 = 0; _i567 < _size562; ++_i567)
+        var _etype593 = 0;
+        _rtmp3594 = input.readListBegin();
+        _etype593 = _rtmp3594.etype;
+        _size590 = _rtmp3594.size;
+        for (var _i595 = 0; _i595 < _size590; ++_i595)
         {
-          var elem568 = null;
-          elem568 = input.readI32();
-          this.personIdList.push(elem568);
+          var elem596 = null;
+          elem596 = input.readI32();
+          this.personIdList.push(elem596);
         }
         input.readListEnd();
       } else {
@@ -21140,12 +21606,12 @@ IFaceLog_setPersonExpiryDateList_args.prototype.write = function(output) {
   if (this.personIdList !== null && this.personIdList !== undefined) {
     output.writeFieldBegin('personIdList', Thrift.Type.LIST, 1);
     output.writeListBegin(Thrift.Type.I32, this.personIdList.length);
-    for (var iter569 in this.personIdList)
+    for (var iter597 in this.personIdList)
     {
-      if (this.personIdList.hasOwnProperty(iter569))
+      if (this.personIdList.hasOwnProperty(iter597))
       {
-        iter569 = this.personIdList[iter569];
-        output.writeI32(iter569);
+        iter597 = this.personIdList[iter597];
+        output.writeI32(iter597);
       }
     }
     output.writeListEnd();
@@ -21395,22 +21861,22 @@ IFaceLog_setProperties_args.prototype.read = function(input) {
     {
       case 1:
       if (ftype == Thrift.Type.MAP) {
-        var _size570 = 0;
-        var _rtmp3574;
+        var _size598 = 0;
+        var _rtmp3602;
         this.config = {};
-        var _ktype571 = 0;
-        var _vtype572 = 0;
-        _rtmp3574 = input.readMapBegin();
-        _ktype571 = _rtmp3574.ktype;
-        _vtype572 = _rtmp3574.vtype;
-        _size570 = _rtmp3574.size;
-        for (var _i575 = 0; _i575 < _size570; ++_i575)
+        var _ktype599 = 0;
+        var _vtype600 = 0;
+        _rtmp3602 = input.readMapBegin();
+        _ktype599 = _rtmp3602.ktype;
+        _vtype600 = _rtmp3602.vtype;
+        _size598 = _rtmp3602.size;
+        for (var _i603 = 0; _i603 < _size598; ++_i603)
         {
-          var key576 = null;
-          var val577 = null;
-          key576 = input.readString();
-          val577 = input.readString();
-          this.config[key576] = val577;
+          var key604 = null;
+          var val605 = null;
+          key604 = input.readString();
+          val605 = input.readString();
+          this.config[key604] = val605;
         }
         input.readMapEnd();
       } else {
@@ -21439,13 +21905,13 @@ IFaceLog_setProperties_args.prototype.write = function(output) {
   if (this.config !== null && this.config !== undefined) {
     output.writeFieldBegin('config', Thrift.Type.MAP, 1);
     output.writeMapBegin(Thrift.Type.STRING, Thrift.Type.STRING, Thrift.objectLength(this.config));
-    for (var kiter578 in this.config)
+    for (var kiter606 in this.config)
     {
-      if (this.config.hasOwnProperty(kiter578))
+      if (this.config.hasOwnProperty(kiter606))
       {
-        var viter579 = this.config[kiter578];
-        output.writeString(kiter578);
-        output.writeString(viter579);
+        var viter607 = this.config[kiter606];
+        output.writeString(kiter606);
+        output.writeString(viter607);
       }
     }
     output.writeMapEnd();
@@ -22368,22 +22834,22 @@ IFaceLog_versionInfo_result.prototype.read = function(input) {
     {
       case 0:
       if (ftype == Thrift.Type.MAP) {
-        var _size580 = 0;
-        var _rtmp3584;
+        var _size608 = 0;
+        var _rtmp3612;
         this.success = {};
-        var _ktype581 = 0;
-        var _vtype582 = 0;
-        _rtmp3584 = input.readMapBegin();
-        _ktype581 = _rtmp3584.ktype;
-        _vtype582 = _rtmp3584.vtype;
-        _size580 = _rtmp3584.size;
-        for (var _i585 = 0; _i585 < _size580; ++_i585)
+        var _ktype609 = 0;
+        var _vtype610 = 0;
+        _rtmp3612 = input.readMapBegin();
+        _ktype609 = _rtmp3612.ktype;
+        _vtype610 = _rtmp3612.vtype;
+        _size608 = _rtmp3612.size;
+        for (var _i613 = 0; _i613 < _size608; ++_i613)
         {
-          var key586 = null;
-          var val587 = null;
-          key586 = input.readString();
-          val587 = input.readString();
-          this.success[key586] = val587;
+          var key614 = null;
+          var val615 = null;
+          key614 = input.readString();
+          val615 = input.readString();
+          this.success[key614] = val615;
         }
         input.readMapEnd();
       } else {
@@ -22412,13 +22878,13 @@ IFaceLog_versionInfo_result.prototype.write = function(output) {
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.MAP, 0);
     output.writeMapBegin(Thrift.Type.STRING, Thrift.Type.STRING, Thrift.objectLength(this.success));
-    for (var kiter588 in this.success)
+    for (var kiter616 in this.success)
     {
-      if (this.success.hasOwnProperty(kiter588))
+      if (this.success.hasOwnProperty(kiter616))
       {
-        var viter589 = this.success[kiter588];
-        output.writeString(kiter588);
-        output.writeString(viter589);
+        var viter617 = this.success[kiter616];
+        output.writeString(kiter616);
+        output.writeString(viter617);
       }
     }
     output.writeMapEnd();
@@ -28931,6 +29397,119 @@ IFaceLogClient.prototype.recv_rootGroupOfPerson = function(input,mtype,rseqid) {
   }
   return callback('rootGroupOfPerson failed: unknown result');
 };
+IFaceLogClient.prototype.runCmd = function(target, group, cmdpath, jsonArgs, ackChannel, token, callback) {
+  this._seqid = this.new_seqid();
+  if (callback === undefined) {
+    var _defer = Q.defer();
+    this._reqs[this.seqid()] = function(error, result) {
+      if (error) {
+        _defer.reject(error);
+      } else {
+        _defer.resolve(result);
+      }
+    };
+    this.send_runCmd(target, group, cmdpath, jsonArgs, ackChannel, token);
+    return _defer.promise;
+  } else {
+    this._reqs[this.seqid()] = callback;
+    this.send_runCmd(target, group, cmdpath, jsonArgs, ackChannel, token);
+  }
+};
+
+IFaceLogClient.prototype.send_runCmd = function(target, group, cmdpath, jsonArgs, ackChannel, token) {
+  var output = new this.pClass(this.output);
+  output.writeMessageBegin('runCmd', Thrift.MessageType.CALL, this.seqid());
+  var params = {
+    target: target,
+    group: group,
+    cmdpath: cmdpath,
+    jsonArgs: jsonArgs,
+    ackChannel: ackChannel,
+    token: token
+  };
+  var args = new IFaceLog_runCmd_args(params);
+  args.write(output);
+  output.writeMessageEnd();
+  return this.output.flush();
+};
+
+IFaceLogClient.prototype.recv_runCmd = function(input,mtype,rseqid) {
+  var callback = this._reqs[rseqid] || function() {};
+  delete this._reqs[rseqid];
+  if (mtype == Thrift.MessageType.EXCEPTION) {
+    var x = new Thrift.TApplicationException();
+    x.read(input);
+    input.readMessageEnd();
+    return callback(x);
+  }
+  var result = new IFaceLog_runCmd_result();
+  result.read(input);
+  input.readMessageEnd();
+
+  if (null !== result.ex1) {
+    return callback(result.ex1);
+  }
+  if (null !== result.success) {
+    return callback(null, result.success);
+  }
+  return callback('runCmd failed: unknown result');
+};
+IFaceLogClient.prototype.runTask = function(taskQueue, cmdpath, jsonArgs, ackChannel, token, callback) {
+  this._seqid = this.new_seqid();
+  if (callback === undefined) {
+    var _defer = Q.defer();
+    this._reqs[this.seqid()] = function(error, result) {
+      if (error) {
+        _defer.reject(error);
+      } else {
+        _defer.resolve(result);
+      }
+    };
+    this.send_runTask(taskQueue, cmdpath, jsonArgs, ackChannel, token);
+    return _defer.promise;
+  } else {
+    this._reqs[this.seqid()] = callback;
+    this.send_runTask(taskQueue, cmdpath, jsonArgs, ackChannel, token);
+  }
+};
+
+IFaceLogClient.prototype.send_runTask = function(taskQueue, cmdpath, jsonArgs, ackChannel, token) {
+  var output = new this.pClass(this.output);
+  output.writeMessageBegin('runTask', Thrift.MessageType.CALL, this.seqid());
+  var params = {
+    taskQueue: taskQueue,
+    cmdpath: cmdpath,
+    jsonArgs: jsonArgs,
+    ackChannel: ackChannel,
+    token: token
+  };
+  var args = new IFaceLog_runTask_args(params);
+  args.write(output);
+  output.writeMessageEnd();
+  return this.output.flush();
+};
+
+IFaceLogClient.prototype.recv_runTask = function(input,mtype,rseqid) {
+  var callback = this._reqs[rseqid] || function() {};
+  delete this._reqs[rseqid];
+  if (mtype == Thrift.MessageType.EXCEPTION) {
+    var x = new Thrift.TApplicationException();
+    x.read(input);
+    input.readMessageEnd();
+    return callback(x);
+  }
+  var result = new IFaceLog_runTask_result();
+  result.read(input);
+  input.readMessageEnd();
+
+  if (null !== result.ex1) {
+    return callback(result.ex1);
+  }
+  if (null !== result.success) {
+    return callback(null, result.success);
+  }
+  return callback('runTask failed: unknown result');
+};
 IFaceLogClient.prototype.saveDevice = function(deviceBean, token, callback) {
   this._seqid = this.new_seqid();
   if (callback === undefined) {
@@ -35409,6 +35988,88 @@ IFaceLogProcessor.prototype.process_rootGroupOfPerson = function(seqid, input, o
       } else {
         result_obj = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
         output.writeMessageBegin("rootGroupOfPerson", Thrift.MessageType.EXCEPTION, seqid);
+      }
+      result_obj.write(output);
+      output.writeMessageEnd();
+      output.flush();
+    });
+  }
+};
+IFaceLogProcessor.prototype.process_runCmd = function(seqid, input, output) {
+  var args = new IFaceLog_runCmd_args();
+  args.read(input);
+  input.readMessageEnd();
+  if (this._handler.runCmd.length === 6) {
+    Q.fcall(this._handler.runCmd.bind(this._handler), args.target, args.group, args.cmdpath, args.jsonArgs, args.ackChannel, args.token)
+      .then(function(result) {
+        var result_obj = new IFaceLog_runCmd_result({success: result});
+        output.writeMessageBegin("runCmd", Thrift.MessageType.REPLY, seqid);
+        result_obj.write(output);
+        output.writeMessageEnd();
+        output.flush();
+      }, function (err) {
+        var result;
+        if (err instanceof ttypes.ServiceRuntimeException) {
+          result = new IFaceLog_runCmd_result(err);
+          output.writeMessageBegin("runCmd", Thrift.MessageType.REPLY, seqid);
+        } else {
+          result = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
+          output.writeMessageBegin("runCmd", Thrift.MessageType.EXCEPTION, seqid);
+        }
+        result.write(output);
+        output.writeMessageEnd();
+        output.flush();
+      });
+  } else {
+    this._handler.runCmd(args.target, args.group, args.cmdpath, args.jsonArgs, args.ackChannel, args.token, function (err, result) {
+      var result_obj;
+      if ((err === null || typeof err === 'undefined') || err instanceof ttypes.ServiceRuntimeException) {
+        result_obj = new IFaceLog_runCmd_result((err !== null || typeof err === 'undefined') ? err : {success: result});
+        output.writeMessageBegin("runCmd", Thrift.MessageType.REPLY, seqid);
+      } else {
+        result_obj = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
+        output.writeMessageBegin("runCmd", Thrift.MessageType.EXCEPTION, seqid);
+      }
+      result_obj.write(output);
+      output.writeMessageEnd();
+      output.flush();
+    });
+  }
+};
+IFaceLogProcessor.prototype.process_runTask = function(seqid, input, output) {
+  var args = new IFaceLog_runTask_args();
+  args.read(input);
+  input.readMessageEnd();
+  if (this._handler.runTask.length === 5) {
+    Q.fcall(this._handler.runTask.bind(this._handler), args.taskQueue, args.cmdpath, args.jsonArgs, args.ackChannel, args.token)
+      .then(function(result) {
+        var result_obj = new IFaceLog_runTask_result({success: result});
+        output.writeMessageBegin("runTask", Thrift.MessageType.REPLY, seqid);
+        result_obj.write(output);
+        output.writeMessageEnd();
+        output.flush();
+      }, function (err) {
+        var result;
+        if (err instanceof ttypes.ServiceRuntimeException) {
+          result = new IFaceLog_runTask_result(err);
+          output.writeMessageBegin("runTask", Thrift.MessageType.REPLY, seqid);
+        } else {
+          result = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
+          output.writeMessageBegin("runTask", Thrift.MessageType.EXCEPTION, seqid);
+        }
+        result.write(output);
+        output.writeMessageEnd();
+        output.flush();
+      });
+  } else {
+    this._handler.runTask(args.taskQueue, args.cmdpath, args.jsonArgs, args.ackChannel, args.token, function (err, result) {
+      var result_obj;
+      if ((err === null || typeof err === 'undefined') || err instanceof ttypes.ServiceRuntimeException) {
+        result_obj = new IFaceLog_runTask_result((err !== null || typeof err === 'undefined') ? err : {success: result});
+        output.writeMessageBegin("runTask", Thrift.MessageType.REPLY, seqid);
+      } else {
+        result_obj = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
+        output.writeMessageBegin("runTask", Thrift.MessageType.EXCEPTION, seqid);
       }
       result_obj.write(output);
       output.writeMessageEnd();

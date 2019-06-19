@@ -47,6 +47,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 	private final DaoManagement dm = new DaoManagement();
 	/** 令牌管理模块对象 */
 	private final TokenMangement tm = new TokenMangement(dm);
+	private final DtalkCmd dc = new DtalkCmd(rm.getRedisParameters(), tm);
 	private final TokenValidatorPersonListener tokenValidatorPersonListener = new TokenValidatorPersonListener(dm);
 	private final TokenValidatorPersonGroupListener tokenValidatorPersonGroupListener = new TokenValidatorPersonGroupListener(dm);
 	private final TokenValidatorDeviceListener tokenValidatorDeviceListener = new TokenValidatorDeviceListener(dm);
@@ -1642,6 +1643,27 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
     	try {
 			Enable.ALL.check(tm, token);
 			return rm.sdkTaskQueueOf(task,sdkVersion);
+		} catch (Exception e) {
+			throw wrapServiceRuntimeException(e);
+		} 
+	}
+	
+	@Override
+	public int runCmd(List<Integer>target,boolean group,String cmdpath,Map<String, String> jsonArgs,String ackChannel,Token token){
+		try {
+			Enable.PERSON_ONLY.check(tm, token);
+			checkArgument(tm.isUserToken(token),"type of token must be PERSON or ROOT");
+			return dc.doRunCmd(target, group, cmdpath, jsonArgs, ackChannel, token.getId()); 
+		} catch (Exception e) {
+			throw wrapServiceRuntimeException(e);
+		} 
+	}
+	@Override
+	public boolean runTask(String taskQueue,String cmdpath,Map<String, String> jsonArgs,String ackChannel,Token token){
+		try {
+			Enable.PERSON_ONLY.check(tm, token);
+			checkArgument(tm.isUserToken(token),"type of token must be PERSON or ROOT");
+			return dc.doRunTask(taskQueue, cmdpath, jsonArgs, ackChannel, token.getId()); 
 		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
 		} 

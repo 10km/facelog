@@ -55,6 +55,11 @@
 			<artifactId>faceapi-base</artifactId>
 			<version>${faceapi.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>dtalk-cmd</artifactId>
+			<version>${dtalk.version}</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

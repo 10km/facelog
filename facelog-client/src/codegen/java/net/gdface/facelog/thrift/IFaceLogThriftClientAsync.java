@@ -2388,6 +2388,76 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(rootGroupOfPerson(personId), callback);
     }
     /**
+     * see also {@link net.gdface.facelog.IFaceLog#runCmd(java.util.List,boolean,java.lang.String,java.util.Map,java.lang.String,net.gdface.facelog.Token)}
+     */
+    public ListenableFuture<Integer> runCmd(List<Integer> target,
+        boolean group,
+        String cmdpath,
+        Map<String, String> jsonArgs,
+        String ackChannel,
+        Token token){        
+        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
+        ListenableFuture<Integer> future = async.runCmd(TypeTransformer.getInstance().to(
+                    target,
+                    Integer.class,
+                    Integer.class),
+            group,
+            cmdpath,
+            TypeTransformer.getInstance().to(
+                    jsonArgs,
+                    String.class,
+                    String.class,
+                    String.class,
+                    String.class),
+            ackChannel,
+            TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class));
+        return factory.wrap(async,future);
+    }
+    public void runCmd(List<Integer> target,
+        boolean group,
+        String cmdpath,
+        Map<String, String> jsonArgs,
+        String ackChannel,
+        Token token,
+        FutureCallback<Integer>callback){
+        factory.addCallback(runCmd(target,group,cmdpath,jsonArgs,ackChannel,token), callback);
+    }
+    /**
+     * see also {@link net.gdface.facelog.IFaceLog#runTask(java.lang.String,java.lang.String,java.util.Map,java.lang.String,net.gdface.facelog.Token)}
+     */
+    public ListenableFuture<Boolean> runTask(String taskQueue,
+        String cmdpath,
+        Map<String, String> jsonArgs,
+        String ackChannel,
+        Token token){        
+        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
+        ListenableFuture<Boolean> future = async.runTask(taskQueue,
+            cmdpath,
+            TypeTransformer.getInstance().to(
+                    jsonArgs,
+                    String.class,
+                    String.class,
+                    String.class,
+                    String.class),
+            ackChannel,
+            TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class));
+        return factory.wrap(async,future);
+    }
+    public void runTask(String taskQueue,
+        String cmdpath,
+        Map<String, String> jsonArgs,
+        String ackChannel,
+        Token token,
+        FutureCallback<Boolean>callback){
+        factory.addCallback(runTask(taskQueue,cmdpath,jsonArgs,ackChannel,token), callback);
+    }
+    /**
      * see also {@link net.gdface.facelog.IFaceLog#saveDevice(net.gdface.facelog.db.DeviceBean,net.gdface.facelog.Token)}
      */
     public ListenableFuture<DeviceBean> saveDevice(DeviceBean deviceBean,
