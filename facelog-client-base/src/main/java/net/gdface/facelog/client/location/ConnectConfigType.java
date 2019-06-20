@@ -71,7 +71,7 @@ public enum ConnectConfigType implements ConnectConfigProvider {
 	/**
 	 * 测试thrift服务连接<br>
 	 * {@code timeoutMills}>0时设置连接超时参数
-	 * @param timeoutMills 指定连接超时(毫秒)
+	 * @param timeoutMills 指定连接超时(毫秒),<=0使用默认值
 	 * @return 连接成功返回{@code true},否则返回{@code false}
 	 */
 	public synchronized boolean testConnect(long timeoutMills){
@@ -99,10 +99,11 @@ public enum ConnectConfigType implements ConnectConfigProvider {
 	 * <li>{@link ConnectConfigType#LAN}</li>
 	 * <li>{@link ConnectConfigType#CLOUD}</li>
 	 * <li>{@link ConnectConfigType#LOCALHOST}</li>
+	 * @param timeout 指定连接超时(毫秒),<=0使用默认值
 	 * @return {@link ConnectConfigType}实例
 	 * @throws FaceLogConnectException 没有找到有效redis连接
 	 */
-	public static ConnectConfigType lookupFacelogConnect() throws FaceLogConnectException{
+	public static ConnectConfigType lookupFacelogConnect(final long timeoutMills) throws FaceLogConnectException{
 		// double check
 		if(activeConnectType == null){
 			synchronized (ConnectConfigType.class) {
@@ -115,7 +116,7 @@ public enum ConnectConfigType implements ConnectConfigProvider {
 
 							@Override
 							public void run() {
-								type.testConnect();
+								type.testConnect(timeoutMills);
 							}
 
 						};
@@ -141,18 +142,32 @@ public enum ConnectConfigType implements ConnectConfigProvider {
 		}
 		return activeConnectType;
 	}
-
 	/**
-	 * 与{@link #lookupFacelogConnect()}功能相似,不同的时当没有找到有效redis连接时,不抛出异常,返回{@code null}
-	 * @param logger
-	 * @return 返回第一个能建立有效连接的配置,否则返回{@code null}
+	 * @return {@link ConnectConfigType}实例
+	 * @throws FaceLogConnectException 没有找到有效redis连接
+	 * @see #lookupFacelogConnect(long)
 	 */
-	public static ConnectConfigType lookupFacelogConnectUnchecked() {
+	public static ConnectConfigType lookupFacelogConnect() throws FaceLogConnectException{
+		return lookupFacelogConnect(0);
+	}
+	/**
+	 * 与{@link #lookupFacelogConnect(long)}功能相似,不同的时当没有找到有效redis连接时,不抛出异常,返回{@code null}
+	 * @param timeoutMills 指定连接超时(毫秒),<=0使用默认值
+	 * @return 返回第一个能建立有效连接的配置,否则返回{@code null}
+	 * @see #lookupFacelogConnect(long)
+	 */
+	public static ConnectConfigType lookupFacelogConnectUnchecked(long timeoutMills) {
 		try {
-			return lookupFacelogConnect();
+			return lookupFacelogConnect(timeoutMills);
 		} catch (FaceLogConnectException e) {
 			return null;
 		}
+	}
+	/**
+	 * @see #lookupFacelogConnectUnchecked(long)
+	 */
+	public static ConnectConfigType lookupFacelogConnectUnchecked() {
+		return lookupFacelogConnectUnchecked(0);
 	}
 	private ConnectConfigProvider checkInstance(){
 		if(null == instance){
