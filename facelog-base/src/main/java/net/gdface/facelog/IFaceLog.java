@@ -1269,7 +1269,7 @@ public interface IFaceLog{
 	 * @param group target中的元素是否为设备组id
 	 * @param cmdpath 设备命令的dtalk路径
 	 * @param jsonArgs 设备命令参数(JSON)
-	 * @param ackChannel 设备命令响应频道,可为{@code null}
+	 * @param ackChannel 设备命令响应频道,不需要接收命令响应时设置为{@code null}
 	 * @param token 访问令牌
 	 * @return 收到命令的客户端数目
 	 */
@@ -1280,7 +1280,7 @@ public interface IFaceLog{
 	 * @param taskQueue 任务队列名称
 	 * @param cmdpath 设备命令的dtalk路径
 	 * @param jsonArgs 设备命令参数(JSON)
-	 * @param ackChannel 设备命令响应频道,可为{@code null}
+	 * @param ackChannel 设备命令响应频道,不需要接收命令响应时设置为{@code null}
 	 * @param token 访问令牌
 	 * @return 成功提交任务返回{@code true},否则返回{@code false}
 	 */
