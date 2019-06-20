@@ -198,7 +198,7 @@ class RedisManagement implements ServiceConstant{
 	private static void  shutdownLocalServer(){
 		if(redisProcess != null){
 			logger.info("shutdown redis server(关闭redis服务器)");
-			HashMap<PropName, Object> param = JedisPoolLazy.initParameters(parameters);
+			HashMap<PropName, Object> param = JedisUtils.initParameters(parameters);
 			Jedis jedis = new Jedis(JedisUtils.getCanonicalURI(param));
 			try{
 				// shutdown前清除全局变量避免持久化
