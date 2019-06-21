@@ -92,8 +92,8 @@ public class DateTimeJsonFilter implements IDateTimeFilter {
 			alwaysTrue = false;
 			normalized.clear();
 			normalized.putAll(MoreObjects.firstNonNull(encoder.fromJson(filter,JSONObject.class),defaultJsonFilterDefine));
-			hour = MoreObjects.firstNonNull(getIntegerOrNull(FIELD_HOUR), hour);
-			day = MoreObjects.firstNonNull(getIntegerOrNull(FIELD_DAY), day);
+			hour = MoreObjects.firstNonNull(getIntegerOrNull(FIELD_HOUR), DEFAULT_HOUR);
+			day = MoreObjects.firstNonNull(getIntegerOrNull(FIELD_DAY), DEFAULT_DAY);
 			if(Strings.isNullOrEmpty(filter)){
 				alwaysTrue = true;
 				return;
