@@ -15,3 +15,4 @@ log/
 *.iml
 .idea/
 /dump.rdb
+/facelog-service/src/codegen/java/net/gdface/facelog/decorator/mini

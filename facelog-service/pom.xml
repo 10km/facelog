@@ -12,7 +12,9 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<codegen.dir>${project.basedir}/src/codegen/java</codegen.dir>
-		<jetty.version>9.2.28.v20190418</jetty.version>
+		<thrift.service.decorator.package>net.gdface.facelog.decorator</thrift.service.decorator.package>
+		<thrift.service.decorator.config></thrift.service.decorator.config>
+		<swift2thrift.out>IFaceLog.thrift</swift2thrift.out>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -69,19 +71,6 @@
 			<artifactId>common-base2</artifactId>
 			<version>${common-java.version}</version>
 		</dependency>
-<!-- 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-		</dependency> -->
-
-<!-- 	    <dependency>
-	        <groupId>org.eclipse.jetty</groupId>
-	        <artifactId>jetty-servlet</artifactId>
-	        <version>${jetty.version}</version>
-	        <scope>provided</scope>
-	    </dependency> -->
-
-
 	</dependencies>
 	<build>
 		<!-- properties 配置文件打入jar包 -->
@@ -131,9 +120,10 @@
 					<configuration>
 						<interfaceClass>net.gdface.facelog.IFaceLog</interfaceClass>
 						<refClass>net.gdface.facelog.FacelogDefaultImpl</refClass>
-						<package>net.gdface.facelog.decorator</package>
+						<package>${thrift.service.decorator.package}</package>
 						<outputDir>${codegen.dir}</outputDir>
 						<taskType>SERVICE</taskType>
+						<config>${thrift.service.decorator.config}</config>
 					</configuration>
 					<dependencies>
 						<dependency>
@@ -149,7 +139,7 @@
 					<artifactId>swift2thrift-maven-plugin</artifactId>
 					<version>${idl.generator.version}</version>
 					<configuration>
-						<defaultPackage>net.gdface.facelog.decorator</defaultPackage>
+						<defaultPackage>${thrift.service.decorator.package}</defaultPackage>
 						<swiftClassNames>
 							<swiftClassName>IFaceLogThriftDecorator</swiftClassName>
 						</swiftClassNames>
@@ -160,7 +150,7 @@
 						</namespace>
 						<recursive>true</recursive>
 						<objectOptional>true</objectOptional>
-						<out>IFaceLog.thrift</out>
+						<out>${swift2thrift.out}</out>
 					</configuration>
 					<dependencies>
 						<!-- 添加当前项目依赖 -->
