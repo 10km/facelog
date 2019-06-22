@@ -1,13 +1,13 @@
 echo off
-rem 生成 FaceApi cpp client代码脚本(c)
+rem 鐢熸垚 FaceApi cpp client浠ｇ爜鑴氭湰(c)
 set sh_folder=%~dp0
-rem 删除最后的 '\'
+rem 鍒犻櫎鏈�鍚庣殑 '\'
 set sh_folder=%sh_folder:~0,-1%
 pushd "%sh_folder%"
 set IDL=%sh_folder%\IFaceLog.mini.thrift
 if NOT "%1"=="" ( set IDL=%1 )
 set OUT_FOLDER=%sh_folder%\..\facelog-client-ext\c.mini
-:: 指定thrift compiler位置
+:: 鎸囧畾thrift compiler浣嶇疆
 where thrift >nul 2>nul
 if errorlevel 1 (
 	echo thrift NOT FOUND.
