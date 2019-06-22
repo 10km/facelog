@@ -105,6 +105,15 @@ public class DtalkDemo {
 	 * 启动连接
 	 */
 	private void start() {
+		if(facelogClient !=null){
+			// 启动设备心跳
+			facelogClient.setTokenHelper(DeviceTokenHelper.HELPER)
+			.startServiceHeartbeatListener(deviceToken, true)
+			.makeHeartbeat(device.getId(), deviceToken, null)
+			/** 间隔2秒发送心跳，重新启动定时任务 */
+			.setInterval(2, TimeUnit.SECONDS)
+			.start();
+		}
 		FacelogMenu root = FacelogMenu.makeActiveInstance(config).init().register(DemoListener.INSTANCE);
 		if(facelogClient != null){
 			// 联网运行
@@ -116,15 +125,6 @@ public class DtalkDemo {
 			engine = new DtalkEngineForFacelog(root,redisConfigType);
 		}
 		engine.start();
-		if(facelogClient !=null){
-			// 启动设备心跳
-			facelogClient.setTokenHelper(DeviceTokenHelper.HELPER)
-			.startServiceHeartbeatListener(deviceToken, true)
-			.makeHeartbeat(device.getId(), deviceToken, null)
-			/** 间隔2秒发送心跳，重新启动定时任务 */
-			.setInterval(2, TimeUnit.SECONDS)
-			.start();
-		}
 	}
 	/**
 	 * 等待程序结束
