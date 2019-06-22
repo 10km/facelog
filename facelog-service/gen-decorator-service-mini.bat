@@ -10,7 +10,7 @@
 @rem 生成接口的基于facebook/swift的service端实现代码(decorator)
 @set sh_folder=%~dp0
 @pushd %sh_folder%
-@set OUT_FOLDER=src\codegen\java
+rem @set OUT_FOLDER=src\codegen\java
 rem @if exist "%OUT_FOLDER%" rmdir  %OUT_FOLDER% /s/q
 @set config=%sh_folder%thrift.service.config.mini.properties
 @if NOT "%1"=="" ( set config=%1 )
