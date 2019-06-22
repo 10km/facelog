@@ -2,7 +2,7 @@
 
 facelog是基于thrift RPC框架开发的,thrift框架支持广泛的开发语言，对于嵌入式平台可以生成C(c_glib)语言的stub代码，通过调用stub代码就可以访问facelog服务。
 
-facelog目前接口已经定义了150个方法，如果将接口中所有方法全部生成C语言代码，则代码非常庞大，对于存储和运行空间都非常有限制的嵌入式平台，这就是个致命的问题。
+facelog目前接口定义的方法数量已经达到150个左右，如果将接口中所有方法全部生成C语言代码，则代码非常庞大，对于存储和运行空间都非常有限的嵌入式平台，这可能就是个致命的问题。
 
 为了适应嵌入式平台，可以根据实际应用需要对facelog接口进行剪裁，只生成应用程序所需要的接口方法的代码。这样就可以大大减小程序的体积。本文说明如何对facelog接口裁剪并生成相应的stub代码(c_glib)。
 
@@ -20,9 +20,8 @@ facelog目前接口已经定义了150个方法，如果将接口中所有方法�
 1. net.gdface.facelog.IFaceLog.include用于定义正向白名单，在此名单中的接口方法才会被生成代码
 2. net.gdface.facelog.IFaceLog.exclude用于定义负向黑名单，不在此名单中的接口方法才会被生成代码
 3. 如果同时定义了include和exclude，则使用include,忽略exclude
-4. 方法名单中定义的方法以空格,逗号,分号分隔,如果要分多行定义，则行尾使用‘\’分隔
-5. 接口方法会有重载方法，即函数名相同参数不同，为了区分重载方法，facelog接口使用`@DeriveMethod`注释的`methodSuffix`属性来定义方法后缀名
-6. 所以如果接口方法有`@DeriveMethod`注释且定义了methodSuffix属性，则需要在方法名后用‘.’分隔加上`methodSuffix`的值，如上`setPersonExpiryDate`方法的定义
+4. 方法名单中定义的方法以空格/逗号/分号分隔,如果要分多行定义，则行尾使用‘\’分隔
+5. 接口方法会有重载方法，即函数名相同参数不同，为了区分重载方法，facelog接口使用`@DeriveMethod`注释的`methodSuffix`属性来定义方法后缀名,所以如果接口方法有`@DeriveMethod`注释且定义了methodSuffix属性，则需要在方法名后用‘.’分隔加上`methodSuffix`的值，如上`setPersonExpiryDate`方法的定义
 
 ## 生成裁剪的thrift服务代码
 
