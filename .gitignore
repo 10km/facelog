@@ -16,3 +16,5 @@ log/
 .idea/
 /dump.rdb
 /facelog-service/src/codegen/java/net/gdface/facelog/decorator/mini
+/facelog-client-ext/c.mini
+/facelog-client-ext/cpp.mini
