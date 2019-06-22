@@ -1,6 +1,6 @@
 #!/bin/bash
-# Éú³É½Ó¿ÚµÄ»ùÓÚfacebook/swiftµÄservice¶ËÊµÏÖ´úÂë(decorator)
-# ¸ù¾İconfigÅäÖÃÎÄ¼ş¶ÔÉú³ÉµÄ´úÂë½øĞĞ¼ô²Ã
+# ç”Ÿæˆæ¥å£çš„åŸºäºfacebook/swiftçš„serviceç«¯å®ç°ä»£ç (decorator)
+# æ ¹æ®configé…ç½®æ–‡ä»¶å¯¹ç”Ÿæˆçš„ä»£ç è¿›è¡Œå‰ªè£
 sh_folder=$(dirname $(readlink -f $0))
 pushd $sh_folder
 #OUT_FOLDER=src/codegen/java
