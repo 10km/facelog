@@ -1,5 +1,5 @@
 echo off
-rem 生成 FaceApi cpp client代码脚本(cpp)
+rem 生成 facelog cpp client代码脚本
 set sh_folder=%~dp0
 rem 删除最后的 '\'
 set sh_folder=%sh_folder:~0,-1%
