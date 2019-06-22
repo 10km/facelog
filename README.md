@@ -60,3 +60,6 @@ facelog服务正常启动后，就可以执行[facelog-client/src/test/java/net/
 
 参见 [README-RESTful.md](README-RESTful.md)
 
+## 接口裁剪
+
+参见 [README-cut.md](README-cut.md)
