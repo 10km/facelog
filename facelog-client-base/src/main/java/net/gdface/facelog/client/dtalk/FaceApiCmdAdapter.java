@@ -106,10 +106,26 @@ class FaceApiCmdAdapter implements ICmdImmediateAdapter {
 			throw new CmdExecutionException(e);
 		}
 	}
+	/**
+	 * 绑定{@link FaceApi}实例到指定的sdk版本号
+	 * @param sdkVersion sdk版本号
+	 * @param faceApi {@link FaceApi}实例
+	 */
 	void bindFaceApi(String sdkVersion,FaceApi faceApi){
 		checkArgument(faceApi != null,"faceApi is null");
 		checkArgument(faceApi.isLocal(),"faceApi must be local implemention");
 		faceapis.put(checkNotNull(sdkVersion,"sdkVersion is null"),faceApi);			
+	}
+	/**
+	 * 绑定{@link FaceApi}实例到指定的sdk版本号,
+	 * sdk版本号由{@link FaceApi#sdkVersion()}方法提供,sdkVersion方法在faceapi 2.1.7版本以后才定义，
+	 * 所以依赖于之前版本的算法不可使用此方法
+	 * @param faceApi
+	 * @see #bindFaceApi(String, FaceApi)
+	 */
+	void bindFaceApi(FaceApi faceApi){
+		checkArgument(faceApi != null,"faceApi is null");
+		bindFaceApi(faceApi.sdkVersion(), faceApi);;			
 	}
 	void unbindFaceApi(String sdkVersion){
 		faceapis.remove(checkNotNull(sdkVersion,"sdkVersion is null"));
