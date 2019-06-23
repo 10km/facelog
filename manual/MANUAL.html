@@ -1046,8 +1046,8 @@ public class HeartbeatTest implements ChannelConstant{
 </li>
 </ul>
 <blockquote>
-<p>参见设备命令参数定义：<a href="../facelog-client/src/main/java/net/gdface/facelog/client/DeviceInstruction.java"><code>net.gdface.facelog.client.DeviceInstruction</code></a></p>
-<p>参见设备命令参数构建工具类： <code>net.gdface.facelog.client.CmdManager.CmdBuilder</code></p>
+<p>参见设备命令参数定义：<code>gu.dtalk.DeviceInstruction</code></p>
+<p>参见设备命令参数构建工具类： <code>gu.dtalk.client.BaseCmdManager.CmdBuilder</code></p>
 <p>关于设备命令序列号和命令响应通道的有效期参数，参见 <code>CommonConstant.TOKEN_CMD_SERIALNO_EXPIRE</code>和<code>CommonConstant.TOKEN_CMD_ACKCHANNEL_EXPIRE</code>定义</p>
 </blockquote>
 <h4>发送设备命令示例</h4>
@@ -1548,7 +1548,14 @@ facelog 服务端也提供<code>version,versionInfo</code>接口方法用于获�
 </code></pre>
 
 <p><strong>注意：</strong></p>
+<ol>
+<li>
 <p>facelog服务启动前请确保mysql,redis已经启动</p>
+</li>
+<li>
+<p>上述的xxx-standalone.jar是fat-jar,默认编译是不会生成的，需要执行<code>mvn package -Pshade-package</code>生成.(参见<a href="../shade-package.bat">shade-package.bat</a>或<a href="../shade-package.sh">shade-package.sh</a>)</p>
+</li>
+</ol>
 <h2>docker 部署</h2>
 <p>从 1.0.8版本以后facelog支持docker部署，提供了docker镜像生成脚本，方便应用项目快速部署facelog 服务。</p>
 <p>执行下面的maven命令下载指定版本<code>${facelog_version}</code>的docker部署zip包到<code>/you/path</code></p>

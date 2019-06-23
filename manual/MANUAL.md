@@ -646,9 +646,9 @@ facelog 基于[dtalk](https://gitee.com/l0km/dtalk)框架实现设备命令定�
 - 命令参数
 :	每一种设备命令都可以定义命令参数，命令参数以`Key->Value`键值对形式定义。
 
->参见设备命令参数定义：[`net.gdface.facelog.client.DeviceInstruction`](../facelog-client/src/main/java/net/gdface/facelog/client/DeviceInstruction.java)
+>参见设备命令参数定义：`gu.dtalk.DeviceInstruction`
 >
->参见设备命令参数构建工具类： `net.gdface.facelog.client.CmdManager.CmdBuilder`
+>参见设备命令参数构建工具类： `gu.dtalk.client.BaseCmdManager.CmdBuilder`
 >
 >关于设备命令序列号和命令响应通道的有效期参数，参见 `CommonConstant.TOKEN_CMD_SERIALNO_EXPIRE`和`CommonConstant.TOKEN_CMD_ACKCHANNEL_EXPIRE`定义
 
@@ -1062,7 +1062,7 @@ maven 插件启动 (since version 1.0.8)
 	mvn com.gitee.l0km:facelogservice-maven-plugin:${facelog_version}:run
 
 命令行启动服务
-
+	
     java -jar facelog-service-${facelog_version}-standalone.jar
 
 命令行启动远程调试
@@ -1071,7 +1071,9 @@ maven 插件启动 (since version 1.0.8)
 
 **注意：**
 
-facelog服务启动前请确保mysql,redis已经启动
+1. facelog服务启动前请确保mysql,redis已经启动
+
+2. 上述的xxx-standalone.jar是fat-jar,默认编译是不会生成的，需要执行`mvn package -Pshade-package`生成.(参见[shade-package.bat](../shade-package.bat)或[shade-package.sh](../shade-package.sh))
 
 ## docker 部署
 
