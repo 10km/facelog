@@ -75,7 +75,7 @@ function start(){
 
 	if [ $code -ne 0 ]
 	then
-		nohup ./start_facelog_server.sh  > facelog.out 2>&1 & 
+		nohup target/start_facelog_server.sh  > facelog.out 2>&1 & 
 		# 延迟等待faelog服务启动
 		sleep 5
 	fi	
