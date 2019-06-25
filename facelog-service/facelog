@@ -1,5 +1,5 @@
 #!/bin/bash
-# 启动webredis
+# 启动facelog服务(后台运行)
 
 # 指定运行脚本的帐户名
 service_user=gyd
