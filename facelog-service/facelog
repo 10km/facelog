@@ -1,0 +1,103 @@
+#!/bin/bash
+# 启动webredis
+
+# 指定运行脚本的帐户名
+service_user=gyd
+[ $(whoami) != $service_user ] && su - $service_user
+config="/home/$service_user/.facelog/config.properties"
+## 读取properties中的参数，并创建参数名命名的变量，如果参数名中包含'.'则替换为'-'
+if [ -f "$config" ]
+then
+	echo "load property from $config"
+	while IFS='=' read -r key value
+	do
+		# '.'替换为'-'
+		key=$(echo $key | tr '.' '_')
+		## 不处理＃起始的key
+		[[ -z $(echo "$key" | grep -P '\s*#+.*' ) ]] \
+			&& eval "${key}='${value}'"  
+	done < "$config"
+else
+	echo "$config not found."
+fi
+
+[ -z "$server_port" ] && server_port=26411
+
+# 通过端口号获取当前运行的facelog进程id,没有返回空
+function facelog_pid(){
+	local facelotcp=$(netstat -nap 2>/dev/null | grep ":::$server_port")	
+	echo $facelotcp | grep -P '\d+/java' -o | grep -P '\d+' -o
+}
+# 判断指定的PID是否为facelog进程,是返回0,否则返回-1
+function is_facelog_pid(){
+	local w=$(ps -ef | grep $1 | grep -P 'java\s+.*-jar\s+facelog-service-.+\.jar')
+	[ -n "$w" ] && echo 0 && return
+	echo -1
+}
+## 返回facelog服务状态　0在线，-1不在线
+function status_code(){
+	local pid=$(facelog_pid)
+	
+	# 检测facelog是否正常运行
+	[ -n "$pid" ] \
+		&& [ $(is_facelog_pid $pid) -eq 0 ] \
+		&& echo 0 && return 
+	echo -1
+}
+## 显示facelog服务状态
+function status(){
+	local pid=$(facelog_pid)
+	
+	# 检测facelog是否正常运行
+	[ $(status_code) -eq 0 ] && echo "facelog    [ON] PID $pid PORT $server_port" && return
+	echo "facelog    [OFF]" 
+}
+## 停止facelog
+function stop(){	
+	if [ $(status_code) -eq 0 ] 
+	then
+		local pid=$(facelog_pid)
+		kill -9 $pid && echo "facelog $pid killed" 
+	fi
+}
+## 启动facelog
+function start(){
+	# 检测facelog是否正常运行
+	local code=$(status_code)
+	local pid=$(facelog_pid)
+	[ $code -ne 0 ] \
+		&& [ -n "$pid" ] \
+		&& [ $(is_facelog_pid $pid) -ne 0 ] \
+		&& echo "ERROR:facelog port $server_port occupied by PID $pid " && return -1
+
+	if [ $code -ne 0 ]
+	then
+		nohup ./start_facelog_server.sh  > facelog.out 2>&1 & 
+		# 延迟等待faelog服务启动
+		sleep 5
+	fi	
+	status
+}
+
+sh_folder=$(dirname $(readlink -f $0))
+pushd $sh_folder > /dev/null 2>&1
+case $1 in
+	start)
+		start
+		;;
+	stop)
+		stop
+		;;
+	status)
+		status				
+		;;
+	restart|force-reload)
+		stop
+		start
+		;;
+	*)
+		echo "Usage: /etc/init.d/facelog {start|stop|restart|force-reload|status}"
+		exit 1
+		;;
+esac
+popd > /dev/null 2>&1
