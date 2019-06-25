@@ -82,7 +82,7 @@ function start(){
 	status
 }
 
-[ -z "$sh_folder"] && sh_folder=$(dirname $(readlink -f $0))
+[ -z "$sh_folder" ] && sh_folder=$(dirname $(readlink -f $0))
 pushd $sh_folder > /dev/null 2>&1
 case $1 in
 	start)
