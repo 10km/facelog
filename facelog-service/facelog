@@ -2,9 +2,12 @@
 # 启动facelog服务(后台运行)
 
 # 指定运行脚本的帐户名
-service_user=gyd
-[ $(whoami) != $service_user ] && su - $service_user
-config="/home/$service_user/.facelog/config.properties"
+#service_user=gyd
+#[ $(whoami) != $service_user ] && su - $service_user
+#config="/home/$service_user/.facelog/config.properties"
+config="$HOME/.facelog/config.properties"
+# 设置脚本执行路径
+#sh_folder=
 ## 读取properties中的参数，并创建参数名命名的变量，如果参数名中包含'.'则替换为'-'
 if [ -f "$config" ]
 then
@@ -79,7 +82,7 @@ function start(){
 	status
 }
 
-sh_folder=$(dirname $(readlink -f $0))
+[ -z "$sh_folder"] && sh_folder=$(dirname $(readlink -f $0))
 pushd $sh_folder > /dev/null 2>&1
 case $1 in
 	start)
