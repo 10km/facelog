@@ -8,13 +8,17 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.Callable;
+
 import static com.google.common.base.Preconditions.*;
 
 import com.google.common.base.Strings;
 import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.DeviceGroupBean;
 import net.gdface.facelog.db.FaceBean;
@@ -222,6 +226,27 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		}
 	}
 
+	public List<String> GetFeaturesPermittedByDevice(int deviceId,String sdkVersion) {
+		try{
+			checkArgument(!Strings.isNullOrEmpty(sdkVersion),"sdkVersion is null or empty");
+			DeviceBean deviceBean = dm.daoGetDeviceChecked(deviceId);
+			Set<PersonGroupBean> permittedGroups = Sets.newHashSet();
+			for(Integer groupId:dm.daoGetPersonGroupsPermittedBy(deviceBean.getGroupId())){
+				permittedGroups.addAll(dm.childListByParentForPersonGroup(groupId));
+			}
+			Set<PersonBean> persons = Sets.newHashSet();
+			for(PersonGroupBean group:permittedGroups){
+				persons.addAll(dm.daoGetPersonsOfGroup(group.getId()));
+			}
+			Set<FeatureBean> features = Sets.newHashSet();
+			for(PersonBean person:persons){
+				features.addAll(dm.daoGetFeaturesByPersonIdAndSdkVersion(person.getId(),sdkVersion));
+			}
+			return dm.daoToPrimaryKeyListFromFeatures(features);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
+	}
 	@Override
 	public int deletePerson(final int personId, Token token) {
 		try{

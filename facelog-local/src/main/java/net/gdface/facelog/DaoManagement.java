@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -183,6 +184,7 @@ public class DaoManagement extends BaseDao implements ServiceConstant,Constant{
 				return daoGetPersonPermit(deviceId,input);
 			}}));
 	}
+
 	/**
 	 * 从permit表返回允许在{@code deviceGroupId}指定的设备组通过的所有人员组({@link PersonGroupBean})对象的id
 	 * @param deviceGroupId 为{@code null}返回空表
@@ -192,9 +194,7 @@ public class DaoManagement extends BaseDao implements ServiceConstant,Constant{
 		if(deviceGroupId == null){
 			return Collections.emptyList();
 		}
-		PermitBean template = PermitBean.builder().deviceGroupId(deviceGroupId).build();
-		List<PermitBean> permits = daoLoadPermitUsingTemplate(template, 1, -1);
-		
+		List<PermitBean> permits = daoGetPermitBeansByDeviceGroupIdOnDeviceGroup(deviceGroupId);		
 		return Lists.transform(permits, daoCastPermitToPersonGroupId);
 	}
 	/**
@@ -206,9 +206,7 @@ public class DaoManagement extends BaseDao implements ServiceConstant,Constant{
 		if(personGroupId == null){
 			return Collections.emptyList();
 		}
-		PermitBean template = PermitBean.builder().personGroupId(personGroupId).build();
-		List<PermitBean> permits = daoLoadPermitUsingTemplate(template, 1, -1);
-		
+		List<PermitBean> permits = daoGetPermitBeansByPersonGroupIdOnPersonGroup(personGroupId);
 		return Lists.transform(permits, daoCastPermitToDeviceGroupId);
 	}
 	/**
@@ -339,7 +337,43 @@ public class DaoManagement extends BaseDao implements ServiceConstant,Constant{
 		FeatureBean tmpl = FeatureBean.builder().personId(personId).version(featureVersion).build();
 		return daoLoadFeatureUsingTemplate(tmpl, 1, -1);
 	}
-	
+	/**
+	 * 返回在指定设备上允许通行的所有人员记录
+	 * @param deviceId 设备ID
+	 * @param ignoreSchedule 是否忽略时间过滤器(fl_permit.schedule字段)的限制
+	 * @return
+	 */
+	public Set<PersonBean> daoGetPersonsPermittedByDevice(int deviceId, boolean ignoreSchedule) {
+			DeviceBean deviceBean = daoGetDeviceChecked(deviceId);
+			Set<PersonGroupBean> permittedGroups = Sets.newHashSet();
+			DateTimeJsonFilter shedule = new DateTimeJsonFilter();
+			Date date = new Date();
+			for(PermitBean permit:daoGetPermitBeansByDeviceGroupIdOnDeviceGroup(deviceBean.getGroupId())){
+				if(ignoreSchedule || shedule.apply(date,permit.getSchedule())){
+					permittedGroups.addAll(childListByParentForPersonGroup(permit.getPersonGroupId()));
+				}
+			}
+			Set<PersonBean> persons = Sets.newHashSet();
+			for(PersonGroupBean group:permittedGroups){
+				persons.addAll(daoGetPersonsOfGroup(group.getId()));
+			}
+			return persons;
+	}
+	/**
+	 * 返回在指定设备上允许通行的所有特征记录
+	 * @param deviceId 设备ID
+	 * @param ignoreSchedule 是否忽略时间过滤器(fl_permit.schedule字段)的限制
+	 * @param sdkVersion 特征版本号
+	 * @return
+	 */
+	public Set<FeatureBean> daoGetFeaturesPermittedByDevice(int deviceId,boolean ignoreSchedule, String sdkVersion) {
+			checkArgument(!Strings.isNullOrEmpty(sdkVersion),"sdkVersion is null or empty");
+			Set<FeatureBean> features = Sets.newHashSet();
+			for(PersonBean person:daoGetPersonsPermittedByDevice(deviceId, false)){
+				features.addAll(daoGetFeaturesByPersonIdAndSdkVersion(person.getId(),sdkVersion));
+			}
+			return features;
+	}
 	/**
 	 * 添加人脸特征数据到数据库<br>
 	 * 如果用户的特征记录数量超过限制，且没有开启自动更新机制则抛出异常,
