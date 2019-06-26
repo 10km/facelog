@@ -8,9 +8,9 @@
 # 设置脚本执行路径
 #sh_folder=
 ##-->
-##<--命令行执行
+#<--命令行执行
 config="$HOME/.facelog/config.properties"
-##-->
+#-->
 ## 读取properties中的参数，并创建参数名命名的变量，如果参数名中包含'.'则替换为'-'
 if [ -f "$config" ]
 then
