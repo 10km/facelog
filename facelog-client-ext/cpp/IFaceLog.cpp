@@ -954,6 +954,22 @@ IFaceLog_getFeaturesOfPerson_presult::~IFaceLog_getFeaturesOfPerson_presult() th
 }
 
 
+IFaceLog_getFeaturesPermittedOnDevice_args::~IFaceLog_getFeaturesPermittedOnDevice_args() throw() {
+}
+
+
+IFaceLog_getFeaturesPermittedOnDevice_pargs::~IFaceLog_getFeaturesPermittedOnDevice_pargs() throw() {
+}
+
+
+IFaceLog_getFeaturesPermittedOnDevice_result::~IFaceLog_getFeaturesPermittedOnDevice_result() throw() {
+}
+
+
+IFaceLog_getFeaturesPermittedOnDevice_presult::~IFaceLog_getFeaturesPermittedOnDevice_presult() throw() {
+}
+
+
 IFaceLog_getGroupPermit_args::~IFaceLog_getGroupPermit_args() throw() {
 }
 

@@ -17,7 +17,6 @@ import com.google.common.base.Strings;
 import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.DeviceGroupBean;
@@ -226,23 +225,11 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		}
 	}
 
-	public List<String> GetFeaturesPermittedByDevice(int deviceId,String sdkVersion) {
+	@Override
+	public List<FeatureBean> getFeaturesPermittedOnDevice(int deviceId,boolean ignoreSchedule, String sdkVersion,List<String> excludeFeatureIds) {
 		try{
-			checkArgument(!Strings.isNullOrEmpty(sdkVersion),"sdkVersion is null or empty");
-			DeviceBean deviceBean = dm.daoGetDeviceChecked(deviceId);
-			Set<PersonGroupBean> permittedGroups = Sets.newHashSet();
-			for(Integer groupId:dm.daoGetPersonGroupsPermittedBy(deviceBean.getGroupId())){
-				permittedGroups.addAll(dm.childListByParentForPersonGroup(groupId));
-			}
-			Set<PersonBean> persons = Sets.newHashSet();
-			for(PersonGroupBean group:permittedGroups){
-				persons.addAll(dm.daoGetPersonsOfGroup(group.getId()));
-			}
-			Set<FeatureBean> features = Sets.newHashSet();
-			for(PersonBean person:persons){
-				features.addAll(dm.daoGetFeaturesByPersonIdAndSdkVersion(person.getId(),sdkVersion));
-			}
-			return dm.daoToPrimaryKeyListFromFeatures(features);
+			Set<FeatureBean> features = dm.daoGetFeaturesPermittedOnDevice(deviceId, ignoreSchedule, sdkVersion, excludeFeatureIds);
+			return Lists.newArrayList(features);
 		} catch (RuntimeException e) {
 			throw wrapServiceRuntimeException(e);
 		}
@@ -641,6 +628,15 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		try{
 			Enable.DEVICE_ONLY.check(tm, token);
 			checkArgument(logBean != null,"logBean is null");
+			// 允许 personId字段为null,当为null时尝试从verifyFeature字段指向的feature记录中获取personId
+	        if(logBean.getPersonId()==null){
+	        	String featureId = checkNotNull(Strings.emptyToNull(logBean.getVerifyFeature()),
+	        			"NOT FOUND valid person id caused by fl_log.verify_feature is null");
+        		FeatureBean featureBean = checkNotNull(dm.daoGetFeature(featureId),
+        				"NOT FOUND valid person id caused by invalid feature id %s",featureId);
+        		logBean.setPersonId(checkNotNull(featureBean.getPersonId(),
+        				"NOT FOUND valid person id caused by fl_feature.person_id is null"));
+	        }
 			dm.daoAddLog(logBean);
 		} catch (Exception e) {
 			Throwables.throwIfInstanceOf(e, DuplicateRecordException.class);
@@ -1141,7 +1137,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 	@Override
 	public List<Integer> childListForDeviceGroup(int deviceGroupId){
 		try{
-			return dm.daoToPrimaryKeyListFromDeviceGroups(dm.childListByParentForDeviceGroup(deviceGroupId));
+			return dm.daoToPrimaryKeyListFromDeviceGroups(dm.daoChildListByParentForDeviceGroup(deviceGroupId));
 		} catch (RuntimeException e) {
 			throw wrapServiceRuntimeException(e);
 		}
@@ -1221,7 +1217,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 	@Override
 	public List<Integer> childListForPersonGroup(int personGroupId){
 		try{
-			return dm.daoToPrimaryKeyListFromPersonGroups(dm.childListByParentForPersonGroup(personGroupId));
+			return dm.daoToPrimaryKeyListFromPersonGroups(dm.daoChildListByParentForPersonGroup(personGroupId));
 		} catch (RuntimeException e) {
 			throw wrapServiceRuntimeException(e);
 		}

@@ -1841,6 +1841,38 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
+    public List<FeatureBean> getFeaturesPermittedOnDevice(final int deviceId,
+        final boolean ignoreSchedule,
+        final String sdkVersion,
+        final List<String> excludeFeatureIds) 
+        {
+        try{
+            return syncCall(new Function<List<net.gdface.facelog.client.thrift.FeatureBean>,List<FeatureBean>>() {
+                @Override
+                public List<FeatureBean> apply(List<net.gdface.facelog.client.thrift.FeatureBean> input) {
+                    return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.FeatureBean.class,
+                    FeatureBean.class);
+                }},
+                new ServiceAsyncCall<List<net.gdface.facelog.client.thrift.FeatureBean>>(){
+                @Override
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<List<net.gdface.facelog.client.thrift.FeatureBean>> nativeCallback){
+                    service.getFeaturesPermittedOnDevice(deviceId,ignoreSchedule,sdkVersion,TypeTransformer.getInstance().to(
+                    excludeFeatureIds,
+                    String.class,
+                    String.class),nativeCallback);
+                }});
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);
+        }
+    }
+    @Override
     public PermitBean getGroupPermit(final int deviceId,
         final int personGroupId) 
         {

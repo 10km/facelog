@@ -540,6 +540,11 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
+    public List<FeatureBean> getFeaturesPermittedOnDevice (int deviceId,boolean ignoreSchedule,String sdkVersion,List<String> excludeFeatureIds) {
+        return delegate().getFeaturesPermittedOnDevice(deviceId,ignoreSchedule,sdkVersion,excludeFeatureIds);
+    }
+
+    @Override
     public PermitBean getGroupPermit (int deviceId,int personGroupId) {
         return delegate().getGroupPermit(deviceId,personGroupId);
     }

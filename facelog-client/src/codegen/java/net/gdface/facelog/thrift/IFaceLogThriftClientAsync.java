@@ -1257,6 +1257,40 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(getFeaturesOfPerson(personId), callback);
     }
     /**
+     * see also {@link net.gdface.facelog.IFaceLog#getFeaturesPermittedOnDevice(int,boolean,java.lang.String,java.util.List)}
+     */
+    public ListenableFuture<List<FeatureBean>> getFeaturesPermittedOnDevice(int deviceId,
+        boolean ignoreSchedule,
+        String sdkVersion,
+        List<String> excludeFeatureIds){        
+        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
+        ListenableFuture<List<FeatureBean>> future = Futures.transform(
+            async.getFeaturesPermittedOnDevice(deviceId,
+            ignoreSchedule,
+            sdkVersion,
+            TypeTransformer.getInstance().to(
+                    excludeFeatureIds,
+                    String.class,
+                    String.class)),
+            new Function<List<net.gdface.facelog.client.thrift.FeatureBean>,List<FeatureBean>>(){
+                @Override
+                public List<FeatureBean> apply(List<net.gdface.facelog.client.thrift.FeatureBean> input) {
+                    return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.FeatureBean.class,
+                    FeatureBean.class);
+                }
+            });
+        return factory.wrap(async,future);
+    }
+    public void getFeaturesPermittedOnDevice(int deviceId,
+        boolean ignoreSchedule,
+        String sdkVersion,
+        List<String> excludeFeatureIds,
+        FutureCallback<List<FeatureBean>>callback){
+        factory.addCallback(getFeaturesPermittedOnDevice(deviceId,ignoreSchedule,sdkVersion,excludeFeatureIds), callback);
+    }
+    /**
      * see also {@link net.gdface.facelog.IFaceLog#getGroupPermit(int,int)}
      */
     public ListenableFuture<PermitBean> getGroupPermit(int deviceId,

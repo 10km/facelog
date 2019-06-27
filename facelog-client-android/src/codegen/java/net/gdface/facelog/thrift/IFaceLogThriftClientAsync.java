@@ -1683,6 +1683,40 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(getFeaturesOfPerson(personId), callback);
     }
     /**
+     * see also {@link net.gdface.facelog.IFaceLog#getFeaturesPermittedOnDevice(int,boolean,java.lang.String,java.util.List)}
+     */
+    public ListenableFuture<List<FeatureBean>> getFeaturesPermittedOnDevice(int deviceId,
+        boolean ignoreSchedule,
+        String sdkVersion,
+        List<String> excludeFeatureIds){
+        MethodCallback<List<FeatureBean>,List<net.gdface.facelog.client.thrift.FeatureBean>> nativeCallback = 
+            new MethodCallback<List<FeatureBean>,List<net.gdface.facelog.client.thrift.FeatureBean>>(
+                new Function<List<net.gdface.facelog.client.thrift.FeatureBean>,List<FeatureBean>>() {
+                        @Override
+                        public List<FeatureBean> apply(List<net.gdface.facelog.client.thrift.FeatureBean> input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.FeatureBean.class,
+                    FeatureBean.class);
+                }});
+        nativeCallback.service.getFeaturesPermittedOnDevice(
+                deviceId,
+            ignoreSchedule,
+            sdkVersion,
+            TypeTransformer.getInstance().to(
+                    excludeFeatureIds,
+                    String.class,
+                    String.class),nativeCallback);
+        return nativeCallback.feature;
+    }
+    public void getFeaturesPermittedOnDevice(int deviceId,
+        boolean ignoreSchedule,
+        String sdkVersion,
+        List<String> excludeFeatureIds,
+        FutureCallback<List<FeatureBean>>callback){
+        factory.addCallback(getFeaturesPermittedOnDevice(deviceId,ignoreSchedule,sdkVersion,excludeFeatureIds), callback);
+    }
+    /**
      * see also {@link net.gdface.facelog.IFaceLog#getGroupPermit(int,int)}
      */
     public ListenableFuture<PermitBean> getGroupPermit(int deviceId,

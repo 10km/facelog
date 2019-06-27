@@ -407,7 +407,7 @@ class BaseDao implements CommonConstant {
      * @see $table.asManagerInterfaceNSP()${esc.hash}$table.getChildListMethod($selfFk)($varTypes)
      * @throws RuntimeDaoException
      */
-    $!{modifier}java.util.List<$beanClass> $table.getChildListMethod($selfFk).replaceFirst('list','daoList')For${coreClass}($fullParams)
+    $!{modifier}java.util.List<$beanClass> $table.getChildListMethod($selfFk).replaceFirst('child','daoChild')For${coreClass}($fullParams)
                     throws RuntimeDaoException{
         return ${table.getGetManagerMethod()}().$table.getChildListMethod($selfFk)($fullVarNames);
     }
@@ -418,7 +418,7 @@ class BaseDao implements CommonConstant {
      * @see $table.asManagerInterfaceNSP()${esc.hash}$table.getListMethod($selfFk)($selfFk.foreignTable.asBeanClassNSP())
      * @throws RuntimeDaoException
      */
-    $!{modifier}java.util.List<$beanClass> $table.getChildListMethod($selfFk).replaceFirst('list','daoList')For${coreClass}($selfFk.foreignTable.asBeanClassNSP() $selfFk.foreignTable.asVarBean())
+    $!{modifier}java.util.List<$beanClass> $table.getChildListMethod($selfFk).replaceFirst('child','daoChild')For${coreClass}($selfFk.foreignTable.asBeanClassNSP() $selfFk.foreignTable.asVarBean())
                     throws RuntimeDaoException{
         return ${table.getGetManagerMethod()}().$table.getChildListMethod($selfFk)($selfFk.foreignTable.asVarBean());
     }

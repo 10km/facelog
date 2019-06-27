@@ -3851,6 +3851,62 @@ GType i_face_log_get_features_of_person_result_get_type (void);
 #define IS_I_FACE_LOG_GET_FEATURES_OF_PERSON_RESULT_CLASS(c) (G_TYPE_CHECK_CLASS_TYPE ((c), TYPE_I_FACE_LOG_GET_FEATURES_OF_PERSON_RESULT))
 #define I_FACE_LOG_GET_FEATURES_OF_PERSON_RESULT_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_I_FACE_LOG_GET_FEATURES_OF_PERSON_RESULT, IFaceLogGetFeaturesOfPersonResultClass))
 
+/* struct IFaceLogGetFeaturesPermittedOnDeviceArgs */
+struct _IFaceLogGetFeaturesPermittedOnDeviceArgs
+{ 
+  ThriftStruct parent; 
+
+  /* public */
+  gint32 deviceId;
+  gboolean ignoreSchedule;
+  gchar * sdkVersion;
+  gboolean __isset_sdkVersion;
+  GPtrArray * excludeFeatureIds;
+  gboolean __isset_excludeFeatureIds;
+};
+typedef struct _IFaceLogGetFeaturesPermittedOnDeviceArgs IFaceLogGetFeaturesPermittedOnDeviceArgs;
+
+struct _IFaceLogGetFeaturesPermittedOnDeviceArgsClass
+{
+  ThriftStructClass parent;
+};
+typedef struct _IFaceLogGetFeaturesPermittedOnDeviceArgsClass IFaceLogGetFeaturesPermittedOnDeviceArgsClass;
+
+GType i_face_log_get_features_permitted_on_device_args_get_type (void);
+#define TYPE_I_FACE_LOG_GET_FEATURES_PERMITTED_ON_DEVICE_ARGS (i_face_log_get_features_permitted_on_device_args_get_type())
+#define I_FACE_LOG_GET_FEATURES_PERMITTED_ON_DEVICE_ARGS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_I_FACE_LOG_GET_FEATURES_PERMITTED_ON_DEVICE_ARGS, IFaceLogGetFeaturesPermittedOnDeviceArgs))
+#define I_FACE_LOG_GET_FEATURES_PERMITTED_ON_DEVICE_ARGS_CLASS(c) (G_TYPE_CHECK_CLASS_CAST ((c), _TYPE_I_FACE_LOG_GET_FEATURES_PERMITTED_ON_DEVICE_ARGS, IFaceLogGetFeaturesPermittedOnDeviceArgsClass))
+#define IS_I_FACE_LOG_GET_FEATURES_PERMITTED_ON_DEVICE_ARGS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_I_FACE_LOG_GET_FEATURES_PERMITTED_ON_DEVICE_ARGS))
+#define IS_I_FACE_LOG_GET_FEATURES_PERMITTED_ON_DEVICE_ARGS_CLASS(c) (G_TYPE_CHECK_CLASS_TYPE ((c), TYPE_I_FACE_LOG_GET_FEATURES_PERMITTED_ON_DEVICE_ARGS))
+#define I_FACE_LOG_GET_FEATURES_PERMITTED_ON_DEVICE_ARGS_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_I_FACE_LOG_GET_FEATURES_PERMITTED_ON_DEVICE_ARGS, IFaceLogGetFeaturesPermittedOnDeviceArgsClass))
+
+/* struct IFaceLogGetFeaturesPermittedOnDeviceResult */
+struct _IFaceLogGetFeaturesPermittedOnDeviceResult
+{ 
+  ThriftStruct parent; 
+
+  /* public */
+  GPtrArray * success;
+  gboolean __isset_success;
+  ServiceRuntimeException * ex1;
+  gboolean __isset_ex1;
+};
+typedef struct _IFaceLogGetFeaturesPermittedOnDeviceResult IFaceLogGetFeaturesPermittedOnDeviceResult;
+
+struct _IFaceLogGetFeaturesPermittedOnDeviceResultClass
+{
+  ThriftStructClass parent;
+};
+typedef struct _IFaceLogGetFeaturesPermittedOnDeviceResultClass IFaceLogGetFeaturesPermittedOnDeviceResultClass;
+
+GType i_face_log_get_features_permitted_on_device_result_get_type (void);
+#define TYPE_I_FACE_LOG_GET_FEATURES_PERMITTED_ON_DEVICE_RESULT (i_face_log_get_features_permitted_on_device_result_get_type())
+#define I_FACE_LOG_GET_FEATURES_PERMITTED_ON_DEVICE_RESULT(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_I_FACE_LOG_GET_FEATURES_PERMITTED_ON_DEVICE_RESULT, IFaceLogGetFeaturesPermittedOnDeviceResult))
+#define I_FACE_LOG_GET_FEATURES_PERMITTED_ON_DEVICE_RESULT_CLASS(c) (G_TYPE_CHECK_CLASS_CAST ((c), _TYPE_I_FACE_LOG_GET_FEATURES_PERMITTED_ON_DEVICE_RESULT, IFaceLogGetFeaturesPermittedOnDeviceResultClass))
+#define IS_I_FACE_LOG_GET_FEATURES_PERMITTED_ON_DEVICE_RESULT(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_I_FACE_LOG_GET_FEATURES_PERMITTED_ON_DEVICE_RESULT))
+#define IS_I_FACE_LOG_GET_FEATURES_PERMITTED_ON_DEVICE_RESULT_CLASS(c) (G_TYPE_CHECK_CLASS_TYPE ((c), TYPE_I_FACE_LOG_GET_FEATURES_PERMITTED_ON_DEVICE_RESULT))
+#define I_FACE_LOG_GET_FEATURES_PERMITTED_ON_DEVICE_RESULT_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_I_FACE_LOG_GET_FEATURES_PERMITTED_ON_DEVICE_RESULT, IFaceLogGetFeaturesPermittedOnDeviceResultClass))
+
 /* struct IFaceLogGetGroupPermitArgs */
 struct _IFaceLogGetGroupPermitArgs
 { 

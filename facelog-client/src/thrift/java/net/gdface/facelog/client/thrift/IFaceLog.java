@@ -552,6 +552,17 @@ public interface IFaceLog
             @ThriftField(value=1, name="personId", requiredness=Requiredness.REQUIRED) final int personId
         );
 
+        @ThriftMethod(value = "getFeaturesPermittedOnDevice",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1)
+                      })
+        ListenableFuture<List<FeatureBean>> getFeaturesPermittedOnDevice(
+            @ThriftField(value=1, name="deviceId", requiredness=Requiredness.REQUIRED) final int deviceId,
+            @ThriftField(value=2, name="ignoreSchedule", requiredness=Requiredness.REQUIRED) final boolean ignoreSchedule,
+            @ThriftField(value=3, name="sdkVersion", requiredness=Requiredness.OPTIONAL) final String sdkVersion,
+            @ThriftField(value=4, name="excludeFeatureIds", requiredness=Requiredness.OPTIONAL) final List<String> excludeFeatureIds
+        );
+
         @ThriftMethod(value = "getGroupPermit",
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
@@ -1917,6 +1928,17 @@ public interface IFaceLog
                   })
     List<String> getFeaturesOfPerson(
         @ThriftField(value=1, name="personId", requiredness=Requiredness.REQUIRED) final int personId
+    ) throws ServiceRuntimeException;
+
+    @ThriftMethod(value = "getFeaturesPermittedOnDevice",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1)
+                  })
+    List<FeatureBean> getFeaturesPermittedOnDevice(
+        @ThriftField(value=1, name="deviceId", requiredness=Requiredness.REQUIRED) final int deviceId,
+        @ThriftField(value=2, name="ignoreSchedule", requiredness=Requiredness.REQUIRED) final boolean ignoreSchedule,
+        @ThriftField(value=3, name="sdkVersion", requiredness=Requiredness.OPTIONAL) final String sdkVersion,
+        @ThriftField(value=4, name="excludeFeatureIds", requiredness=Requiredness.OPTIONAL) final List<String> excludeFeatureIds
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "getGroupPermit",

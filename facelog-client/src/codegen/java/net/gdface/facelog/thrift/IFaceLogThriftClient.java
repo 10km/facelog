@@ -1358,6 +1358,35 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
+    public List<FeatureBean> getFeaturesPermittedOnDevice(int deviceId,
+        boolean ignoreSchedule,
+        String sdkVersion,
+        List<String> excludeFeatureIds) 
+        {
+        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        try{
+            return TypeTransformer.getInstance().to(
+                    instance.getFeaturesPermittedOnDevice(deviceId,
+                ignoreSchedule,
+                sdkVersion,
+                TypeTransformer.getInstance().to(
+                    excludeFeatureIds,
+                    String.class,
+                    String.class)),
+                    net.gdface.facelog.client.thrift.FeatureBean.class,
+                    FeatureBean.class);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch(RuntimeTApplicationException e){
+            return net.gdface.thrift.ThriftUtils.returnNull(e);
+        }
+        finally{
+            factory.releaseInstance(instance);
+        }
+    }
+    @Override
     public PermitBean getGroupPermit(int deviceId,
         int personGroupId) 
         {

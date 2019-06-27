@@ -278,6 +278,7 @@ service IFaceLog {
   list<string> getFeaturesByPersonId(1: required i32 personId) throws (1: ServiceRuntimeException ex1);
   list<string> getFeaturesByPersonIdAndSdkVersion(1: required i32 personId, 2: optional string sdkVersion) throws (1: ServiceRuntimeException ex1);
   list<string> getFeaturesOfPerson(1: required i32 personId) throws (1: ServiceRuntimeException ex1);
+  list<FeatureBean> getFeaturesPermittedOnDevice(1: required i32 deviceId, 2: required bool ignoreSchedule, 3: optional string sdkVersion, 4: optional list<string> excludeFeatureIds) throws (1: ServiceRuntimeException ex1);
   PermitBean getGroupPermit(1: required i32 deviceId, 2: required i32 personGroupId) throws (1: ServiceRuntimeException ex1);
   PermitBean getGroupPermitOnDeviceGroup(1: required i32 deviceGroupId, 2: required i32 personGroupId) throws (1: ServiceRuntimeException ex1);
   list<PermitBean> getGroupPermits(1: required i32 deviceId, 2: optional list<i32> personGroupIdList) throws (1: ServiceRuntimeException ex1);

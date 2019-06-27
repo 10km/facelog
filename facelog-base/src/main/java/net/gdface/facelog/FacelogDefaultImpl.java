@@ -46,6 +46,10 @@ public class FacelogDefaultImpl implements IFaceLog {
 	}
 	
 	@Override
+	public List<FeatureBean> getFeaturesPermittedOnDevice(int deviceId, boolean ignoreSchedule, String sdkVersion, List<String> excludeFeatureIds) {
+		return null;
+	}
+	@Override
 	public int deletePerson(int personId, Token token) {
 		return 0;
 	}

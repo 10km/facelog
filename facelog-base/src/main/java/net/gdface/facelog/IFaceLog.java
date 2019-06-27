@@ -77,6 +77,16 @@ public interface IFaceLog{
 	 * @return 返回 fl_feature.md5  列表
 	 */
 	public List<String> getFeaturesByPersonIdAndSdkVersion(int personId, String sdkVersion);
+	/**
+	 * 返回在指定设备上允许通行的所有特征记录<br>
+	 * 此方法主要设计用于不能通过长连接侦听redis频道的设备(如人脸锁)。
+	 * @param deviceId 设备ID
+	 * @param ignoreSchedule 是否忽略时间过滤器(fl_permit.schedule字段)的限制
+	 * @param sdkVersion 特征版本号
+	 * @param excludeFeatureIds 要排除的特征记录id(MD5) ,可为{@code null}
+	 * @return 返回 fl_feature.md5  列表
+	 */
+	public List<FeatureBean> getFeaturesPermittedOnDevice(int deviceId, boolean ignoreSchedule, String sdkVersion, List<String> excludeFeatureIds);
 
 	/**
 	 * 删除personId指定的人员(person)记录及关联的所有记录

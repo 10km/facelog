@@ -1393,6 +1393,34 @@ public class IFaceLogThriftDecorator {
         }
     }
     /**
+     * @see {@link net.gdface.facelog.IFaceLog#getFeaturesPermittedOnDevice(int,boolean,java.lang.String,java.util.List)}
+     */
+    @ThriftMethod(value = "getFeaturesPermittedOnDevice" )
+    public List<FeatureBean> getFeaturesPermittedOnDevice(int deviceId,
+        boolean ignoreSchedule,
+        String sdkVersion,
+        List<String> excludeFeatureIds) 
+        throws ServiceRuntimeException{
+        try{
+            return TypeTransformer.getInstance().to(
+                    delegate().getFeaturesPermittedOnDevice(deviceId,
+                ignoreSchedule,
+                sdkVersion,
+                TypeTransformer.getInstance().to(
+                    excludeFeatureIds,
+                    String.class,
+                    String.class)),
+                    FeatureBean.class,
+                    FeatureBean.class);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
      * @see {@link net.gdface.facelog.IFaceLog#getGroupPermit(int,int)}
      */
     @ThriftMethod(value = "getGroupPermit" )

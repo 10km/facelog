@@ -19,6 +19,7 @@ import java.util.Map.Entry;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.common.base.Function;
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
@@ -338,41 +339,59 @@ public class DaoManagement extends BaseDao implements ServiceConstant,Constant{
 		return daoLoadFeatureUsingTemplate(tmpl, 1, -1);
 	}
 	/**
-	 * 返回在指定设备上允许通行的所有人员记录
+	 * 返回在指定设备上允许通行的所有人员记录<br>
 	 * @param deviceId 设备ID
 	 * @param ignoreSchedule 是否忽略时间过滤器(fl_permit.schedule字段)的限制
-	 * @return
+	 * @return 返回的用户对象列表中，过滤所有有效期失效的用户<br>
 	 */
-	public Set<PersonBean> daoGetPersonsPermittedByDevice(int deviceId, boolean ignoreSchedule) {
+	protected Set<PersonBean> 
+	daoGetPersonsPermittedOnDevice(int deviceId, boolean ignoreSchedule) {
 			DeviceBean deviceBean = daoGetDeviceChecked(deviceId);
 			Set<PersonGroupBean> permittedGroups = Sets.newHashSet();
 			DateTimeJsonFilter shedule = new DateTimeJsonFilter();
-			Date date = new Date();
-			for(PermitBean permit:daoGetPermitBeansByDeviceGroupIdOnDeviceGroup(deviceBean.getGroupId())){
+			final Date date = new Date();
+			for(PermitBean permit : daoGetPermitBeansByDeviceGroupIdOnDeviceGroup(deviceBean.getGroupId())){
 				if(ignoreSchedule || shedule.apply(date,permit.getSchedule())){
-					permittedGroups.addAll(childListByParentForPersonGroup(permit.getPersonGroupId()));
+					permittedGroups.addAll(daoChildListByParentForPersonGroup(permit.getPersonGroupId()));
 				}
 			}
 			Set<PersonBean> persons = Sets.newHashSet();
-			for(PersonGroupBean group:permittedGroups){
+			for(PersonGroupBean group : permittedGroups){
 				persons.addAll(daoGetPersonsOfGroup(group.getId()));
 			}
-			return persons;
+			// 过滤所有有效期失效的用户
+			return Sets.filter(persons, 
+					new Predicate<PersonBean>() {		
+						@Override
+						public boolean apply(PersonBean input) {
+							Date expiryDate = input.getExpiryDate();
+							return null== expiryDate ? true : expiryDate.after(date);
+						}
+			});
 	}
 	/**
 	 * 返回在指定设备上允许通行的所有特征记录
 	 * @param deviceId 设备ID
 	 * @param ignoreSchedule 是否忽略时间过滤器(fl_permit.schedule字段)的限制
 	 * @param sdkVersion 特征版本号
+	 * @param excludeFeatureIds 要排除的特征记录id(MD5),可为{@code null}
 	 * @return
 	 */
-	public Set<FeatureBean> daoGetFeaturesPermittedByDevice(int deviceId,boolean ignoreSchedule, String sdkVersion) {
+	protected Set<FeatureBean> 
+	daoGetFeaturesPermittedOnDevice(int deviceId,boolean ignoreSchedule, String sdkVersion,final Collection<String> excludeFeatureIds) {
 			checkArgument(!Strings.isNullOrEmpty(sdkVersion),"sdkVersion is null or empty");
+			
 			Set<FeatureBean> features = Sets.newHashSet();
-			for(PersonBean person:daoGetPersonsPermittedByDevice(deviceId, false)){
+			for(PersonBean person:daoGetPersonsPermittedOnDevice(deviceId, ignoreSchedule)){
 				features.addAll(daoGetFeaturesByPersonIdAndSdkVersion(person.getId(),sdkVersion));
 			}
-			return features;
+			return Sets.filter(features,new Predicate<FeatureBean>() {
+				Set<String> excludeIds = Sets.newHashSet(MoreObjects.firstNonNull(excludeFeatureIds, Collections.<String>emptySet()));
+				@Override
+				public boolean apply(FeatureBean input) {
+					return ! excludeIds.contains(input.getMd5());
+				}
+			});
 	}
 	/**
 	 * 添加人脸特征数据到数据库<br>

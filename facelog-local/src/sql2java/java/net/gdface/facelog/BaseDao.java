@@ -1000,7 +1000,7 @@ class BaseDao implements CommonConstant {
      * @see IDeviceGroupManager#childListByParent(Integer)
      * @throws RuntimeDaoException
      */
-    protected java.util.List<DeviceGroupBean> childListByParentForDeviceGroup(Integer idOfDeviceGroup)
+    protected java.util.List<DeviceGroupBean> daoChildListByParentForDeviceGroup(Integer idOfDeviceGroup)
                     throws RuntimeDaoException{
         return getDeviceGroupManager().childListByParent(idOfDeviceGroup);
     }
@@ -1011,7 +1011,7 @@ class BaseDao implements CommonConstant {
      * @see IDeviceGroupManager#listOfParent(DeviceGroupBean)
      * @throws RuntimeDaoException
      */
-    protected java.util.List<DeviceGroupBean> childListByParentForDeviceGroup(DeviceGroupBean deviceGroupBean)
+    protected java.util.List<DeviceGroupBean> daoChildListByParentForDeviceGroup(DeviceGroupBean deviceGroupBean)
                     throws RuntimeDaoException{
         return getDeviceGroupManager().childListByParent(deviceGroupBean);
     }
@@ -2169,7 +2169,7 @@ class BaseDao implements CommonConstant {
      * @see IPersonGroupManager#childListByParent(Integer)
      * @throws RuntimeDaoException
      */
-    protected java.util.List<PersonGroupBean> childListByParentForPersonGroup(Integer idOfPersonGroup)
+    protected java.util.List<PersonGroupBean> daoChildListByParentForPersonGroup(Integer idOfPersonGroup)
                     throws RuntimeDaoException{
         return getPersonGroupManager().childListByParent(idOfPersonGroup);
     }
@@ -2180,7 +2180,7 @@ class BaseDao implements CommonConstant {
      * @see IPersonGroupManager#listOfParent(PersonGroupBean)
      * @throws RuntimeDaoException
      */
-    protected java.util.List<PersonGroupBean> childListByParentForPersonGroup(PersonGroupBean personGroupBean)
+    protected java.util.List<PersonGroupBean> daoChildListByParentForPersonGroup(PersonGroupBean personGroupBean)
                     throws RuntimeDaoException{
         return getPersonGroupManager().childListByParent(personGroupBean);
     }
