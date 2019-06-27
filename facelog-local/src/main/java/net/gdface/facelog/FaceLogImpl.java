@@ -628,15 +628,6 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		try{
 			Enable.DEVICE_ONLY.check(tm, token);
 			checkArgument(logBean != null,"logBean is null");
-			// 允许 personId字段为null,当为null时尝试从verifyFeature字段指向的feature记录中获取personId
-	        if(logBean.getPersonId()==null){
-	        	String featureId = checkNotNull(Strings.emptyToNull(logBean.getVerifyFeature()),
-	        			"NOT FOUND valid person id caused by fl_log.verify_feature is null");
-        		FeatureBean featureBean = checkNotNull(dm.daoGetFeature(featureId),
-        				"NOT FOUND valid person id caused by invalid feature id %s",featureId);
-        		logBean.setPersonId(checkNotNull(featureBean.getPersonId(),
-        				"NOT FOUND valid person id caused by fl_feature.person_id is null"));
-	        }
 			dm.daoAddLog(logBean);
 		} catch (Exception e) {
 			Throwables.throwIfInstanceOf(e, DuplicateRecordException.class);

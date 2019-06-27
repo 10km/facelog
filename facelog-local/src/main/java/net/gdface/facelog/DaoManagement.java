@@ -725,6 +725,37 @@ public class DaoManagement extends BaseDao implements ServiceConstant,Constant{
 		return top.isPresent() ? top.get().getId() : null;
 	}
 	
+	private LogBean checkLogBean(LogBean logBean){
+        if(logBean.getPersonId()==null){
+        	String featureId = checkNotNull(Strings.emptyToNull(logBean.getVerifyFeature()),
+        			"NOT FOUND valid person id caused by fl_log.verify_feature is null");
+    		FeatureBean featureBean = checkNotNull(daoGetFeature(featureId),
+    				"NOT FOUND valid person id caused by invalid feature id %s",featureId);
+    		logBean.setPersonId(checkNotNull(featureBean.getPersonId(),
+    				"NOT FOUND valid person id caused by fl_feature.person_id is null"));
+        } /*else {
+        	// 检查verifyFeature记录所属的person_id是否与log的person_id相等
+        	String featureId = logBean.getVerifyFeature();
+        	if(!Strings.isNullOrEmpty(featureId)){
+        		FeatureBean featureBean = checkNotNull(dm.daoGetFeature(featureId),
+        				"INVALID feature id %s",featureId);
+        		checkArgument(logBean.getPersonId().equals(featureBean.getPersonId()),
+        				"MISMATCH person id for VerifyFeature");
+        	}
+        }*/
+        return logBean;
+	}
+	@Override
+	protected LogBean daoAddLog(LogBean logBean) throws RuntimeDaoException, DuplicateRecordException {
+        return super.daoAddLog(checkLogBean(logBean));
+	}
+	@Override
+	protected LogBean daoAddLog(LogBean logBean, DeviceBean refDeviceByDeviceId, FaceBean refFaceByCompareFace,
+			FeatureBean refFeatureByVerifyFeature, PersonBean refPersonByPersonId)
+			throws RuntimeDaoException, DuplicateRecordException {
+		return super.daoAddLog(checkLogBean(logBean), refDeviceByDeviceId, refFaceByCompareFace, refFeatureByVerifyFeature,
+				refPersonByPersonId);
+	}
 	/**
 	 * 添加一条验证日志记录
 	 * <br>{@code DEVICE_ONLY}
