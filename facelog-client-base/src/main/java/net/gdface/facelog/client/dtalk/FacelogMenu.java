@@ -203,20 +203,27 @@ public class FacelogMenu extends RootMenu{
 	}
 	
 	/**
-	 * 设置facelog服务器位置
+	 * 
 	 * @param host 主机名
 	 * @param port 端口号
 	 * @return 当前{@link FacelogMenu}对象
 	 */
 	public FacelogMenu setFacelogLocation(String host,Integer port){
-		if(Strings.isNullOrEmpty(host)){
+		if(!Strings.isNullOrEmpty(host)){
+			if(port != null){
+				host = host.concat(":" + port);
+			}
 			findStringOption(OPTION_FACELOG_HOST).setValue(host);
 		}
-		if(port != null && port > 0 ){
-			findIntOption(OPTION_FACELOG_PORT).setValue(port);
-		}
-		return this;
-		
+		return this;		
+	}
+	/**
+	 * 设置facelog服务器位置
+	 * @param hostAndPort 主机名[:端口号]
+	 * @return
+	 */
+	public FacelogMenu setFacelogLocation(String hostAndPort){		
+		return setFacelogLocation(hostAndPort, null);
 	}
 	/**
 	 * only for test
