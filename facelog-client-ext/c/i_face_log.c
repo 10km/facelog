@@ -16,9 +16,9 @@ i_face_log_if_add_feature (IFaceLogIf *iface, FeatureBean ** _return, const GByt
 }
 
 gboolean
-i_face_log_if_add_feature_multi (IFaceLogIf *iface, FeatureBean ** _return, const GByteArray * feature, const gchar * featureVersion, const gint32 personId, const GHashTable * faceInfo, const Token * token, DuplicateRecordException ** ex1, ServiceRuntimeException ** ex2, GError **error)
+i_face_log_if_add_feature_multi (IFaceLogIf *iface, FeatureBean ** _return, const GByteArray * feature, const gchar * featureVersion, const gint32 personId, const GPtrArray * photos, const GPtrArray * faces, const Token * token, DuplicateRecordException ** ex1, ServiceRuntimeException ** ex2, GError **error)
 {
-  return I_FACE_LOG_IF_GET_INTERFACE (iface)->add_feature_multi (iface, _return, feature, featureVersion, personId, faceInfo, token, ex1, ex2, error);
+  return I_FACE_LOG_IF_GET_INTERFACE (iface)->add_feature_multi (iface, _return, feature, featureVersion, personId, photos, faces, token, ex1, ex2, error);
 }
 
 gboolean
@@ -826,9 +826,9 @@ i_face_log_if_save_person_with_photo_and_feature_multi_faces (IFaceLogIf *iface,
 }
 
 gboolean
-i_face_log_if_save_person_with_photo_and_feature_multi_image (IFaceLogIf *iface, PersonBean ** _return, const PersonBean * personBean, const GByteArray * idPhoto, const GByteArray * feature, const gchar * featureVersion, const GHashTable * faceInfo, const Token * token, ServiceRuntimeException ** ex1, GError **error)
+i_face_log_if_save_person_with_photo_and_feature_multi_image (IFaceLogIf *iface, PersonBean ** _return, const PersonBean * personBean, const GByteArray * idPhoto, const GByteArray * feature, const gchar * featureVersion, const GPtrArray * photos, const GPtrArray * faces, const Token * token, ServiceRuntimeException ** ex1, GError **error)
 {
-  return I_FACE_LOG_IF_GET_INTERFACE (iface)->save_person_with_photo_and_feature_multi_image (iface, _return, personBean, idPhoto, feature, featureVersion, faceInfo, token, ex1, error);
+  return I_FACE_LOG_IF_GET_INTERFACE (iface)->save_person_with_photo_and_feature_multi_image (iface, _return, personBean, idPhoto, feature, featureVersion, photos, faces, token, ex1, error);
 }
 
 gboolean
@@ -844,9 +844,9 @@ i_face_log_if_save_persons (IFaceLogIf *iface, const GPtrArray * persons, const 
 }
 
 gboolean
-i_face_log_if_save_persons_with_photo (IFaceLogIf *iface, gint32* _return, const GHashTable * persons, const Token * token, ServiceRuntimeException ** ex1, GError **error)
+i_face_log_if_save_persons_with_photo (IFaceLogIf *iface, gint32* _return, const GPtrArray * photos, const GPtrArray * persons, const Token * token, ServiceRuntimeException ** ex1, GError **error)
 {
-  return I_FACE_LOG_IF_GET_INTERFACE (iface)->save_persons_with_photo (iface, _return, persons, token, ex1, error);
+  return I_FACE_LOG_IF_GET_INTERFACE (iface)->save_persons_with_photo (iface, _return, photos, persons, token, ex1, error);
 }
 
 gboolean
@@ -1289,7 +1289,7 @@ gboolean i_face_log_client_add_feature (IFaceLogIf * iface, FeatureBean ** _retu
   return TRUE;
 }
 
-gboolean i_face_log_client_send_add_feature_multi (IFaceLogIf * iface, const GByteArray * feature, const gchar * featureVersion, const gint32 personId, const GHashTable * faceInfo, const Token * token, GError ** error)
+gboolean i_face_log_client_send_add_feature_multi (IFaceLogIf * iface, const GByteArray * feature, const gchar * featureVersion, const gint32 personId, const GPtrArray * photos, const GPtrArray * faces, const Token * token, GError ** error)
 {
   gint32 cseqid = 0;
   ThriftProtocol * protocol = I_FACE_LOG_CLIENT (iface)->output_protocol;
@@ -1335,49 +1335,53 @@ gboolean i_face_log_client_send_add_feature_multi (IFaceLogIf * iface, const GBy
     if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
       return 0;
     xfer += ret;
-    if ((ret = thrift_protocol_write_field_begin (protocol, "faceInfo", T_MAP, 4, error)) < 0)
+    if ((ret = thrift_protocol_write_field_begin (protocol, "photos", T_LIST, 4, error)) < 0)
       return 0;
     xfer += ret;
     {
-      GByteArray * key176 = NULL;
-      FaceBean * val177 = NULL;
-      GList *key_list = NULL, *iter = NULL;
-      GByteArray ** keys;
-      int i = 0, key_count;
+      guint i176;
 
-      if ((ret = thrift_protocol_write_map_begin (protocol, T_STRING, T_STRUCT, faceInfo ? (gint32) g_hash_table_size ((GHashTable *) faceInfo) : 0, error)) < 0)
+      if ((ret = thrift_protocol_write_list_begin (protocol, T_STRING, (gint32) (photos ? photos->len : 0), error)) < 0)
         return 0;
       xfer += ret;
-      if (faceInfo)
-        g_hash_table_foreach ((GHashTable *) faceInfo, thrift_hash_table_get_keys, &key_list);
-      key_count = g_list_length (key_list);
-      keys = g_newa (GByteArray *, key_count);
-      for (iter = g_list_first (key_list); iter; iter = iter->next)
-        keys[i++] = (GByteArray *) iter->data;
-      g_list_free (key_list);
-
-      for (i = 0; i < key_count; ++i)
+      for (i176 = 0; i176 < (photos ? photos->len : 0); i176++)
       {
-        key176 = keys[i];
-        val177 = (FaceBean *) g_hash_table_lookup (((GHashTable *) faceInfo), (gpointer) key176);
-
-        if ((ret = thrift_protocol_write_binary (protocol,  key176 ? ((GByteArray *)  key176)->data : NULL,  key176 ? ((GByteArray *)  key176)->len : 0, error)) < 0)
-          return 0;
-        xfer += ret;
-
-        if ((ret = thrift_struct_write (THRIFT_STRUCT ( val177), protocol, error)) < 0)
+        if ((ret = thrift_protocol_write_binary (protocol, ((gchar*)g_ptr_array_index ((GPtrArray *) photos, i176)) ? ((GByteArray *) ((gchar*)g_ptr_array_index ((GPtrArray *) photos, i176)))->data : NULL, ((gchar*)g_ptr_array_index ((GPtrArray *) photos, i176)) ? ((GByteArray *) ((gchar*)g_ptr_array_index ((GPtrArray *) photos, i176)))->len : 0, error)) < 0)
           return 0;
         xfer += ret;
 
       }
-      if ((ret = thrift_protocol_write_map_end (protocol, error)) < 0)
+      if ((ret = thrift_protocol_write_list_end (protocol, error)) < 0)
         return 0;
       xfer += ret;
     }
     if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
       return 0;
     xfer += ret;
-    if ((ret = thrift_protocol_write_field_begin (protocol, "token", T_STRUCT, 5, error)) < 0)
+    if ((ret = thrift_protocol_write_field_begin (protocol, "faces", T_LIST, 5, error)) < 0)
+      return 0;
+    xfer += ret;
+    {
+      guint i177;
+
+      if ((ret = thrift_protocol_write_list_begin (protocol, T_STRUCT, (gint32) (faces ? faces->len : 0), error)) < 0)
+        return 0;
+      xfer += ret;
+      for (i177 = 0; i177 < (faces ? faces->len : 0); i177++)
+      {
+        if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) faces, i177))), protocol, error)) < 0)
+          return 0;
+        xfer += ret;
+
+      }
+      if ((ret = thrift_protocol_write_list_end (protocol, error)) < 0)
+        return 0;
+      xfer += ret;
+    }
+    if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
+      return 0;
+    xfer += ret;
+    if ((ret = thrift_protocol_write_field_begin (protocol, "token", T_STRUCT, 6, error)) < 0)
       return 0;
     xfer += ret;
     if ((ret = thrift_struct_write (THRIFT_STRUCT (token), protocol, error)) < 0)
@@ -1584,9 +1588,9 @@ gboolean i_face_log_client_recv_add_feature_multi (IFaceLogIf * iface, FeatureBe
   return TRUE;
 }
 
-gboolean i_face_log_client_add_feature_multi (IFaceLogIf * iface, FeatureBean ** _return, const GByteArray * feature, const gchar * featureVersion, const gint32 personId, const GHashTable * faceInfo, const Token * token, DuplicateRecordException ** ex1, ServiceRuntimeException ** ex2, GError ** error)
+gboolean i_face_log_client_add_feature_multi (IFaceLogIf * iface, FeatureBean ** _return, const GByteArray * feature, const gchar * featureVersion, const gint32 personId, const GPtrArray * photos, const GPtrArray * faces, const Token * token, DuplicateRecordException ** ex1, ServiceRuntimeException ** ex2, GError ** error)
 {
-  if (!i_face_log_client_send_add_feature_multi (iface, feature, featureVersion, personId, faceInfo, token, error))
+  if (!i_face_log_client_send_add_feature_multi (iface, feature, featureVersion, personId, photos, faces, token, error))
     return FALSE;
   if (!i_face_log_client_recv_add_feature_multi (iface, _return, ex1, ex2, error))
     return FALSE;
@@ -31689,7 +31693,7 @@ gboolean i_face_log_client_save_person_with_photo_and_feature_multi_faces (IFace
   return TRUE;
 }
 
-gboolean i_face_log_client_send_save_person_with_photo_and_feature_multi_image (IFaceLogIf * iface, const PersonBean * personBean, const GByteArray * idPhoto, const GByteArray * feature, const gchar * featureVersion, const GHashTable * faceInfo, const Token * token, GError ** error)
+gboolean i_face_log_client_send_save_person_with_photo_and_feature_multi_image (IFaceLogIf * iface, const PersonBean * personBean, const GByteArray * idPhoto, const GByteArray * feature, const gchar * featureVersion, const GPtrArray * photos, const GPtrArray * faces, const Token * token, GError ** error)
 {
   gint32 cseqid = 0;
   ThriftProtocol * protocol = I_FACE_LOG_CLIENT (iface)->output_protocol;
@@ -31745,49 +31749,53 @@ gboolean i_face_log_client_send_save_person_with_photo_and_feature_multi_image (
     if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
       return 0;
     xfer += ret;
-    if ((ret = thrift_protocol_write_field_begin (protocol, "faceInfo", T_MAP, 5, error)) < 0)
+    if ((ret = thrift_protocol_write_field_begin (protocol, "photos", T_LIST, 5, error)) < 0)
       return 0;
     xfer += ret;
     {
-      GByteArray * key252 = NULL;
-      FaceBean * val253 = NULL;
-      GList *key_list = NULL, *iter = NULL;
-      GByteArray ** keys;
-      int i = 0, key_count;
+      guint i252;
 
-      if ((ret = thrift_protocol_write_map_begin (protocol, T_STRING, T_STRUCT, faceInfo ? (gint32) g_hash_table_size ((GHashTable *) faceInfo) : 0, error)) < 0)
+      if ((ret = thrift_protocol_write_list_begin (protocol, T_STRING, (gint32) (photos ? photos->len : 0), error)) < 0)
         return 0;
       xfer += ret;
-      if (faceInfo)
-        g_hash_table_foreach ((GHashTable *) faceInfo, thrift_hash_table_get_keys, &key_list);
-      key_count = g_list_length (key_list);
-      keys = g_newa (GByteArray *, key_count);
-      for (iter = g_list_first (key_list); iter; iter = iter->next)
-        keys[i++] = (GByteArray *) iter->data;
-      g_list_free (key_list);
-
-      for (i = 0; i < key_count; ++i)
+      for (i252 = 0; i252 < (photos ? photos->len : 0); i252++)
       {
-        key252 = keys[i];
-        val253 = (FaceBean *) g_hash_table_lookup (((GHashTable *) faceInfo), (gpointer) key252);
-
-        if ((ret = thrift_protocol_write_binary (protocol,  key252 ? ((GByteArray *)  key252)->data : NULL,  key252 ? ((GByteArray *)  key252)->len : 0, error)) < 0)
-          return 0;
-        xfer += ret;
-
-        if ((ret = thrift_struct_write (THRIFT_STRUCT ( val253), protocol, error)) < 0)
+        if ((ret = thrift_protocol_write_binary (protocol, ((gchar*)g_ptr_array_index ((GPtrArray *) photos, i252)) ? ((GByteArray *) ((gchar*)g_ptr_array_index ((GPtrArray *) photos, i252)))->data : NULL, ((gchar*)g_ptr_array_index ((GPtrArray *) photos, i252)) ? ((GByteArray *) ((gchar*)g_ptr_array_index ((GPtrArray *) photos, i252)))->len : 0, error)) < 0)
           return 0;
         xfer += ret;
 
       }
-      if ((ret = thrift_protocol_write_map_end (protocol, error)) < 0)
+      if ((ret = thrift_protocol_write_list_end (protocol, error)) < 0)
         return 0;
       xfer += ret;
     }
     if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
       return 0;
     xfer += ret;
-    if ((ret = thrift_protocol_write_field_begin (protocol, "token", T_STRUCT, 6, error)) < 0)
+    if ((ret = thrift_protocol_write_field_begin (protocol, "faces", T_LIST, 6, error)) < 0)
+      return 0;
+    xfer += ret;
+    {
+      guint i253;
+
+      if ((ret = thrift_protocol_write_list_begin (protocol, T_STRUCT, (gint32) (faces ? faces->len : 0), error)) < 0)
+        return 0;
+      xfer += ret;
+      for (i253 = 0; i253 < (faces ? faces->len : 0); i253++)
+      {
+        if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) faces, i253))), protocol, error)) < 0)
+          return 0;
+        xfer += ret;
+
+      }
+      if ((ret = thrift_protocol_write_list_end (protocol, error)) < 0)
+        return 0;
+      xfer += ret;
+    }
+    if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
+      return 0;
+    xfer += ret;
+    if ((ret = thrift_protocol_write_field_begin (protocol, "token", T_STRUCT, 7, error)) < 0)
       return 0;
     xfer += ret;
     if ((ret = thrift_struct_write (THRIFT_STRUCT (token), protocol, error)) < 0)
@@ -31967,9 +31975,9 @@ gboolean i_face_log_client_recv_save_person_with_photo_and_feature_multi_image (
   return TRUE;
 }
 
-gboolean i_face_log_client_save_person_with_photo_and_feature_multi_image (IFaceLogIf * iface, PersonBean ** _return, const PersonBean * personBean, const GByteArray * idPhoto, const GByteArray * feature, const gchar * featureVersion, const GHashTable * faceInfo, const Token * token, ServiceRuntimeException ** ex1, GError ** error)
+gboolean i_face_log_client_save_person_with_photo_and_feature_multi_image (IFaceLogIf * iface, PersonBean ** _return, const PersonBean * personBean, const GByteArray * idPhoto, const GByteArray * feature, const gchar * featureVersion, const GPtrArray * photos, const GPtrArray * faces, const Token * token, ServiceRuntimeException ** ex1, GError ** error)
 {
-  if (!i_face_log_client_send_save_person_with_photo_and_feature_multi_image (iface, personBean, idPhoto, feature, featureVersion, faceInfo, token, error))
+  if (!i_face_log_client_send_save_person_with_photo_and_feature_multi_image (iface, personBean, idPhoto, feature, featureVersion, photos, faces, token, error))
     return FALSE;
   if (!i_face_log_client_recv_save_person_with_photo_and_feature_multi_image (iface, _return, ex1, error))
     return FALSE;
@@ -32425,7 +32433,7 @@ gboolean i_face_log_client_save_persons (IFaceLogIf * iface, const GPtrArray * p
   return TRUE;
 }
 
-gboolean i_face_log_client_send_save_persons_with_photo (IFaceLogIf * iface, const GHashTable * persons, const Token * token, GError ** error)
+gboolean i_face_log_client_send_save_persons_with_photo (IFaceLogIf * iface, const GPtrArray * photos, const GPtrArray * persons, const Token * token, GError ** error)
 {
   gint32 cseqid = 0;
   ThriftProtocol * protocol = I_FACE_LOG_CLIENT (iface)->output_protocol;
@@ -32441,49 +32449,53 @@ gboolean i_face_log_client_send_save_persons_with_photo (IFaceLogIf * iface, con
     if ((ret = thrift_protocol_write_struct_begin (protocol, "savePersonsWithPhoto_args", error)) < 0)
       return 0;
     xfer += ret;
-    if ((ret = thrift_protocol_write_field_begin (protocol, "persons", T_MAP, 1, error)) < 0)
+    if ((ret = thrift_protocol_write_field_begin (protocol, "photos", T_LIST, 1, error)) < 0)
       return 0;
     xfer += ret;
     {
-      GByteArray * key255 = NULL;
-      PersonBean * val256 = NULL;
-      GList *key_list = NULL, *iter = NULL;
-      GByteArray ** keys;
-      int i = 0, key_count;
+      guint i255;
 
-      if ((ret = thrift_protocol_write_map_begin (protocol, T_STRING, T_STRUCT, persons ? (gint32) g_hash_table_size ((GHashTable *) persons) : 0, error)) < 0)
+      if ((ret = thrift_protocol_write_list_begin (protocol, T_STRING, (gint32) (photos ? photos->len : 0), error)) < 0)
         return 0;
       xfer += ret;
-      if (persons)
-        g_hash_table_foreach ((GHashTable *) persons, thrift_hash_table_get_keys, &key_list);
-      key_count = g_list_length (key_list);
-      keys = g_newa (GByteArray *, key_count);
-      for (iter = g_list_first (key_list); iter; iter = iter->next)
-        keys[i++] = (GByteArray *) iter->data;
-      g_list_free (key_list);
-
-      for (i = 0; i < key_count; ++i)
+      for (i255 = 0; i255 < (photos ? photos->len : 0); i255++)
       {
-        key255 = keys[i];
-        val256 = (PersonBean *) g_hash_table_lookup (((GHashTable *) persons), (gpointer) key255);
-
-        if ((ret = thrift_protocol_write_binary (protocol,  key255 ? ((GByteArray *)  key255)->data : NULL,  key255 ? ((GByteArray *)  key255)->len : 0, error)) < 0)
-          return 0;
-        xfer += ret;
-
-        if ((ret = thrift_struct_write (THRIFT_STRUCT ( val256), protocol, error)) < 0)
+        if ((ret = thrift_protocol_write_binary (protocol, ((gchar*)g_ptr_array_index ((GPtrArray *) photos, i255)) ? ((GByteArray *) ((gchar*)g_ptr_array_index ((GPtrArray *) photos, i255)))->data : NULL, ((gchar*)g_ptr_array_index ((GPtrArray *) photos, i255)) ? ((GByteArray *) ((gchar*)g_ptr_array_index ((GPtrArray *) photos, i255)))->len : 0, error)) < 0)
           return 0;
         xfer += ret;
 
       }
-      if ((ret = thrift_protocol_write_map_end (protocol, error)) < 0)
+      if ((ret = thrift_protocol_write_list_end (protocol, error)) < 0)
         return 0;
       xfer += ret;
     }
     if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
       return 0;
     xfer += ret;
-    if ((ret = thrift_protocol_write_field_begin (protocol, "token", T_STRUCT, 2, error)) < 0)
+    if ((ret = thrift_protocol_write_field_begin (protocol, "persons", T_LIST, 2, error)) < 0)
+      return 0;
+    xfer += ret;
+    {
+      guint i256;
+
+      if ((ret = thrift_protocol_write_list_begin (protocol, T_STRUCT, (gint32) (persons ? persons->len : 0), error)) < 0)
+        return 0;
+      xfer += ret;
+      for (i256 = 0; i256 < (persons ? persons->len : 0); i256++)
+      {
+        if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) persons, i256))), protocol, error)) < 0)
+          return 0;
+        xfer += ret;
+
+      }
+      if ((ret = thrift_protocol_write_list_end (protocol, error)) < 0)
+        return 0;
+      xfer += ret;
+    }
+    if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
+      return 0;
+    xfer += ret;
+    if ((ret = thrift_protocol_write_field_begin (protocol, "token", T_STRUCT, 3, error)) < 0)
       return 0;
     xfer += ret;
     if ((ret = thrift_struct_write (THRIFT_STRUCT (token), protocol, error)) < 0)
@@ -32661,9 +32673,9 @@ gboolean i_face_log_client_recv_save_persons_with_photo (IFaceLogIf * iface, gin
   return TRUE;
 }
 
-gboolean i_face_log_client_save_persons_with_photo (IFaceLogIf * iface, gint32* _return, const GHashTable * persons, const Token * token, ServiceRuntimeException ** ex1, GError ** error)
+gboolean i_face_log_client_save_persons_with_photo (IFaceLogIf * iface, gint32* _return, const GPtrArray * photos, const GPtrArray * persons, const Token * token, ServiceRuntimeException ** ex1, GError ** error)
 {
-  if (!i_face_log_client_send_save_persons_with_photo (iface, persons, token, error))
+  if (!i_face_log_client_send_save_persons_with_photo (iface, photos, persons, token, error))
     return FALSE;
   if (!i_face_log_client_recv_save_persons_with_photo (iface, _return, ex1, error))
     return FALSE;
@@ -35682,11 +35694,11 @@ gboolean i_face_log_handler_add_feature (IFaceLogIf * iface, FeatureBean ** _ret
   return I_FACE_LOG_HANDLER_GET_CLASS (iface)->add_feature (iface, _return, feature, featureVersion, personId, faecBeans, token, ex1, ex2, error);
 }
 
-gboolean i_face_log_handler_add_feature_multi (IFaceLogIf * iface, FeatureBean ** _return, const GByteArray * feature, const gchar * featureVersion, const gint32 personId, const GHashTable * faceInfo, const Token * token, DuplicateRecordException ** ex1, ServiceRuntimeException ** ex2, GError ** error)
+gboolean i_face_log_handler_add_feature_multi (IFaceLogIf * iface, FeatureBean ** _return, const GByteArray * feature, const gchar * featureVersion, const gint32 personId, const GPtrArray * photos, const GPtrArray * faces, const Token * token, DuplicateRecordException ** ex1, ServiceRuntimeException ** ex2, GError ** error)
 {
   g_return_val_if_fail (IS_I_FACE_LOG_HANDLER (iface), FALSE);
 
-  return I_FACE_LOG_HANDLER_GET_CLASS (iface)->add_feature_multi (iface, _return, feature, featureVersion, personId, faceInfo, token, ex1, ex2, error);
+  return I_FACE_LOG_HANDLER_GET_CLASS (iface)->add_feature_multi (iface, _return, feature, featureVersion, personId, photos, faces, token, ex1, ex2, error);
 }
 
 gboolean i_face_log_handler_add_feature_with_image (IFaceLogIf * iface, FeatureBean ** _return, const GByteArray * feature, const gchar * featureVersion, const gint32 personId, const gboolean asIdPhotoIfAbsent, const GByteArray * featurePhoto, const FaceBean * faceBean, const Token * token, DuplicateRecordException ** ex1, ServiceRuntimeException ** ex2, GError ** error)
@@ -36627,11 +36639,11 @@ gboolean i_face_log_handler_save_person_with_photo_and_feature_multi_faces (IFac
   return I_FACE_LOG_HANDLER_GET_CLASS (iface)->save_person_with_photo_and_feature_multi_faces (iface, _return, personBean, idPhoto, feature, featureVersion, faceBeans, token, ex1, error);
 }
 
-gboolean i_face_log_handler_save_person_with_photo_and_feature_multi_image (IFaceLogIf * iface, PersonBean ** _return, const PersonBean * personBean, const GByteArray * idPhoto, const GByteArray * feature, const gchar * featureVersion, const GHashTable * faceInfo, const Token * token, ServiceRuntimeException ** ex1, GError ** error)
+gboolean i_face_log_handler_save_person_with_photo_and_feature_multi_image (IFaceLogIf * iface, PersonBean ** _return, const PersonBean * personBean, const GByteArray * idPhoto, const GByteArray * feature, const gchar * featureVersion, const GPtrArray * photos, const GPtrArray * faces, const Token * token, ServiceRuntimeException ** ex1, GError ** error)
 {
   g_return_val_if_fail (IS_I_FACE_LOG_HANDLER (iface), FALSE);
 
-  return I_FACE_LOG_HANDLER_GET_CLASS (iface)->save_person_with_photo_and_feature_multi_image (iface, _return, personBean, idPhoto, feature, featureVersion, faceInfo, token, ex1, error);
+  return I_FACE_LOG_HANDLER_GET_CLASS (iface)->save_person_with_photo_and_feature_multi_image (iface, _return, personBean, idPhoto, feature, featureVersion, photos, faces, token, ex1, error);
 }
 
 gboolean i_face_log_handler_save_person_with_photo_and_feature_saved (IFaceLogIf * iface, PersonBean ** _return, const PersonBean * personBean, const gchar * idPhotoMd5, const gchar * featureMd5, const Token * token, ServiceRuntimeException ** ex1, GError ** error)
@@ -36648,11 +36660,11 @@ gboolean i_face_log_handler_save_persons (IFaceLogIf * iface, const GPtrArray * 
   return I_FACE_LOG_HANDLER_GET_CLASS (iface)->save_persons (iface, persons, token, ex1, error);
 }
 
-gboolean i_face_log_handler_save_persons_with_photo (IFaceLogIf * iface, gint32* _return, const GHashTable * persons, const Token * token, ServiceRuntimeException ** ex1, GError ** error)
+gboolean i_face_log_handler_save_persons_with_photo (IFaceLogIf * iface, gint32* _return, const GPtrArray * photos, const GPtrArray * persons, const Token * token, ServiceRuntimeException ** ex1, GError ** error)
 {
   g_return_val_if_fail (IS_I_FACE_LOG_HANDLER (iface), FALSE);
 
-  return I_FACE_LOG_HANDLER_GET_CLASS (iface)->save_persons_with_photo (iface, _return, persons, token, ex1, error);
+  return I_FACE_LOG_HANDLER_GET_CLASS (iface)->save_persons_with_photo (iface, _return, photos, persons, token, ex1, error);
 }
 
 gboolean i_face_log_handler_save_service_config (IFaceLogIf * iface, const Token * token, ServiceRuntimeException ** ex1, GError ** error)
@@ -38803,7 +38815,8 @@ i_face_log_processor_process_add_feature_multi (IFaceLogProcessor *self,
     GByteArray * feature;
     gchar * featureVersion;
     gint personId;
-    GHashTable * faceInfo;
+    GPtrArray * photos;
+    GPtrArray * faces;
     Token * token;
     DuplicateRecordException * ex1 = NULL;
     ServiceRuntimeException * ex2 = NULL;
@@ -38814,7 +38827,8 @@ i_face_log_processor_process_add_feature_multi (IFaceLogProcessor *self,
                   "feature", &feature,
                   "featureVersion", &featureVersion,
                   "personId", &personId,
-                  "faceInfo", &faceInfo,
+                  "photos", &photos,
+                  "faces", &faces,
                   "token", &token,
                   NULL);
 
@@ -38829,7 +38843,8 @@ i_face_log_processor_process_add_feature_multi (IFaceLogProcessor *self,
                                               feature,
                                               featureVersion,
                                               personId,
-                                              faceInfo,
+                                              photos,
+                                              faces,
                                               token,
                                               &ex1,
                                               &ex2,
@@ -38916,8 +38931,10 @@ if (ex2 != NULL)
       g_byte_array_unref (feature);
     if (featureVersion != NULL)
       g_free (featureVersion);
-    if (faceInfo != NULL)
-      g_hash_table_unref (faceInfo);
+    if (photos != NULL)
+      g_ptr_array_unref (photos);
+    if (faces != NULL)
+      g_ptr_array_unref (faces);
     if (token != NULL)
       g_object_unref (token);
     g_object_unref (result_struct);
@@ -55382,7 +55399,8 @@ i_face_log_processor_process_save_person_with_photo_and_feature_multi_image (IFa
     GByteArray * idPhoto;
     GByteArray * feature;
     gchar * featureVersion;
-    GHashTable * faceInfo;
+    GPtrArray * photos;
+    GPtrArray * faces;
     Token * token;
     ServiceRuntimeException * ex1 = NULL;
     PersonBean * return_value;
@@ -55393,7 +55411,8 @@ i_face_log_processor_process_save_person_with_photo_and_feature_multi_image (IFa
                   "idPhoto", &idPhoto,
                   "feature", &feature,
                   "featureVersion", &featureVersion,
-                  "faceInfo", &faceInfo,
+                  "photos", &photos,
+                  "faces", &faces,
                   "token", &token,
                   NULL);
 
@@ -55409,7 +55428,8 @@ i_face_log_processor_process_save_person_with_photo_and_feature_multi_image (IFa
                                                                            idPhoto,
                                                                            feature,
                                                                            featureVersion,
-                                                                           faceInfo,
+                                                                           photos,
+                                                                           faces,
                                                                            token,
                                                                            &ex1,
                                                                            error) == TRUE)
@@ -55482,8 +55502,10 @@ i_face_log_processor_process_save_person_with_photo_and_feature_multi_image (IFa
       g_byte_array_unref (feature);
     if (featureVersion != NULL)
       g_free (featureVersion);
-    if (faceInfo != NULL)
-      g_hash_table_unref (faceInfo);
+    if (photos != NULL)
+      g_ptr_array_unref (photos);
+    if (faces != NULL)
+      g_ptr_array_unref (faces);
     if (token != NULL)
       g_object_unref (token);
     g_object_unref (result_struct);
@@ -55773,13 +55795,15 @@ i_face_log_processor_process_save_persons_with_photo (IFaceLogProcessor *self,
       (thrift_protocol_read_message_end (input_protocol, error) != -1) &&
       (thrift_transport_read_end (transport, error) != FALSE))
   {
-    GHashTable * persons;
+    GPtrArray * photos;
+    GPtrArray * persons;
     Token * token;
     ServiceRuntimeException * ex1 = NULL;
     gint return_value;
     IFaceLogSavePersonsWithPhotoResult * result_struct;
 
     g_object_get (args,
+                  "photos", &photos,
                   "persons", &persons,
                   "token", &token,
                   NULL);
@@ -55792,6 +55816,7 @@ i_face_log_processor_process_save_persons_with_photo (IFaceLogProcessor *self,
 
     if (i_face_log_handler_save_persons_with_photo (I_FACE_LOG_IF (self->handler),
                                                     (gint32 *)&return_value,
+                                                    photos,
                                                     persons,
                                                     token,
                                                     &ex1,
@@ -55855,8 +55880,10 @@ i_face_log_processor_process_save_persons_with_photo (IFaceLogProcessor *self,
       }
     }
 
+    if (photos != NULL)
+      g_ptr_array_unref (photos);
     if (persons != NULL)
-      g_hash_table_unref (persons);
+      g_ptr_array_unref (persons);
     if (token != NULL)
       g_object_unref (token);
     g_object_unref (result_struct);

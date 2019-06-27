@@ -1,6 +1,5 @@
 package net.gdface.facelog;
 
-import java.nio.ByteBuffer;
 import java.util.List;
 import java.util.Map;
 
@@ -144,7 +143,7 @@ public class FacelogDefaultImpl implements IFaceLog {
 	}
 
 	@Override
-	public int savePersons(Map<ByteBuffer, PersonBean> persons, Token token) {
+	public int savePersons(List<byte[]> photos, List<PersonBean> persons, Token token) {
 		return 0;
 	}
 
@@ -166,7 +165,7 @@ public class FacelogDefaultImpl implements IFaceLog {
 
 	@Override
 	public PersonBean savePerson(PersonBean personBean, byte[] idPhoto, byte[] feature,
-			String featureVersion, Map<ByteBuffer, FaceBean> faceInfo, Token token) {
+			String featureVersion, List<byte[]> photos, List<FaceBean> faces, Token token) {
 		return null;
 	}
 
@@ -299,7 +298,7 @@ public class FacelogDefaultImpl implements IFaceLog {
 
 	@Override
 	public FeatureBean addFeature(byte[] feature, String featureVersion, Integer personId,
-			Map<ByteBuffer, FaceBean> faceInfo, Token token) throws DuplicateRecordException {
+			List<byte[]> photos, List<FaceBean> faces, Token token) throws DuplicateRecordException {
 		return null;
 	}
 	

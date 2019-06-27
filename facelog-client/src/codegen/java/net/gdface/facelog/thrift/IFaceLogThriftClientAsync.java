@@ -156,6 +156,52 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(addFeature(feature,featureVersion,personId,asIdPhotoIfAbsent,featurePhoto,faceBean,token), callback);
     }
     /**
+     * see also {@link net.gdface.facelog.IFaceLog#addFeature(byte[],java.lang.String,java.lang.Integer,java.util.List,java.util.List,net.gdface.facelog.Token)}
+     */
+    public ListenableFuture<FeatureBean> addFeature(byte[] feature,
+        String featureVersion,
+        Integer personId,
+        List<byte[]> photos,
+        List<FaceBean> faces,
+        Token token){        
+        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
+        ListenableFuture<FeatureBean> future = Futures.transform(
+            async.addFeatureMulti(feature,
+            featureVersion,
+            personId,
+            TypeTransformer.getInstance().to(
+                    photos,
+                    byte[].class,
+                    byte[].class),
+            TypeTransformer.getInstance().to(
+                    faces,
+                    FaceBean.class,
+                    net.gdface.facelog.client.thrift.FaceBean.class),
+            TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class)),
+            new Function<net.gdface.facelog.client.thrift.FeatureBean,FeatureBean>(){
+                @Override
+                public FeatureBean apply(net.gdface.facelog.client.thrift.FeatureBean input) {
+                    return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.FeatureBean.class,
+                    FeatureBean.class);
+                }
+            });
+        return factory.wrap(async,future);
+    }
+    public void addFeature(byte[] feature,
+        String featureVersion,
+        Integer personId,
+        List<byte[]> photos,
+        List<FaceBean> faces,
+        Token token,
+        FutureCallback<FeatureBean>callback){
+        factory.addCallback(addFeature(feature,featureVersion,personId,photos,faces,token), callback);
+    }
+    /**
      * see also {@link net.gdface.facelog.IFaceLog#addFeature(byte[],java.lang.String,java.lang.Integer,java.util.List,net.gdface.facelog.Token)}
      */
     public ListenableFuture<FeatureBean> addFeature(byte[] feature,
@@ -194,48 +240,6 @@ public class IFaceLogThriftClientAsync {
         Token token,
         FutureCallback<FeatureBean>callback){
         factory.addCallback(addFeature(feature,featureVersion,personId,faecBeans,token), callback);
-    }
-    /**
-     * see also {@link net.gdface.facelog.IFaceLog#addFeature(byte[],java.lang.String,java.lang.Integer,java.util.Map,net.gdface.facelog.Token)}
-     */
-    public ListenableFuture<FeatureBean> addFeature(byte[] feature,
-        String featureVersion,
-        Integer personId,
-        Map<ByteBuffer, FaceBean> faceInfo,
-        Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<FeatureBean> future = Futures.transform(
-            async.addFeatureMulti(feature,
-            featureVersion,
-            personId,
-            TypeTransformer.getInstance().to(
-                    faceInfo,
-                    ByteBuffer.class,
-                    FaceBean.class,
-                    byte[].class,
-                    net.gdface.facelog.client.thrift.FaceBean.class),
-            TypeTransformer.getInstance().to(
-                    token,
-                    Token.class,
-                    net.gdface.facelog.client.thrift.Token.class)),
-            new Function<net.gdface.facelog.client.thrift.FeatureBean,FeatureBean>(){
-                @Override
-                public FeatureBean apply(net.gdface.facelog.client.thrift.FeatureBean input) {
-                    return TypeTransformer.getInstance().to(
-                    input,
-                    net.gdface.facelog.client.thrift.FeatureBean.class,
-                    FeatureBean.class);
-                }
-            });
-        return factory.wrap(async,future);
-    }
-    public void addFeature(byte[] feature,
-        String featureVersion,
-        Integer personId,
-        Map<ByteBuffer, FaceBean> faceInfo,
-        Token token,
-        FutureCallback<FeatureBean>callback){
-        factory.addCallback(addFeature(feature,featureVersion,personId,faceInfo,token), callback);
     }
     /**
      * see also {@link net.gdface.facelog.IFaceLog#addImage(byte[],java.lang.Integer,net.gdface.facelog.db.FaceBean,java.lang.Integer,net.gdface.facelog.Token)}
@@ -2668,6 +2672,58 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(savePerson(personBean,idPhoto,feature,featureVersion,featureImage,featureFaceBean,token), callback);
     }
     /**
+     * see also {@link net.gdface.facelog.IFaceLog#savePerson(net.gdface.facelog.db.PersonBean,byte[],byte[],java.lang.String,java.util.List,java.util.List,net.gdface.facelog.Token)}
+     */
+    public ListenableFuture<PersonBean> savePerson(PersonBean personBean,
+        byte[] idPhoto,
+        byte[] feature,
+        String featureVersion,
+        List<byte[]> photos,
+        List<FaceBean> faces,
+        Token token){        
+        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
+        ListenableFuture<PersonBean> future = Futures.transform(
+            async.savePersonWithPhotoAndFeatureMultiImage(TypeTransformer.getInstance().to(
+                    personBean,
+                    PersonBean.class,
+                    net.gdface.facelog.client.thrift.PersonBean.class),
+            idPhoto,
+            feature,
+            featureVersion,
+            TypeTransformer.getInstance().to(
+                    photos,
+                    byte[].class,
+                    byte[].class),
+            TypeTransformer.getInstance().to(
+                    faces,
+                    FaceBean.class,
+                    net.gdface.facelog.client.thrift.FaceBean.class),
+            TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class)),
+            new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
+                @Override
+                public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
+                    return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.PersonBean.class,
+                    PersonBean.class);
+                }
+            });
+        return factory.wrap(async,future);
+    }
+    public void savePerson(PersonBean personBean,
+        byte[] idPhoto,
+        byte[] feature,
+        String featureVersion,
+        List<byte[]> photos,
+        List<FaceBean> faces,
+        Token token,
+        FutureCallback<PersonBean>callback){
+        factory.addCallback(savePerson(personBean,idPhoto,feature,featureVersion,photos,faces,token), callback);
+    }
+    /**
      * see also {@link net.gdface.facelog.IFaceLog#savePerson(net.gdface.facelog.db.PersonBean,byte[],byte[],java.lang.String,java.util.List,net.gdface.facelog.Token)}
      */
     public ListenableFuture<PersonBean> savePerson(PersonBean personBean,
@@ -2712,54 +2768,6 @@ public class IFaceLogThriftClientAsync {
         Token token,
         FutureCallback<PersonBean>callback){
         factory.addCallback(savePerson(personBean,idPhoto,feature,featureVersion,faceBeans,token), callback);
-    }
-    /**
-     * see also {@link net.gdface.facelog.IFaceLog#savePerson(net.gdface.facelog.db.PersonBean,byte[],byte[],java.lang.String,java.util.Map,net.gdface.facelog.Token)}
-     */
-    public ListenableFuture<PersonBean> savePerson(PersonBean personBean,
-        byte[] idPhoto,
-        byte[] feature,
-        String featureVersion,
-        Map<ByteBuffer, FaceBean> faceInfo,
-        Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<PersonBean> future = Futures.transform(
-            async.savePersonWithPhotoAndFeatureMultiImage(TypeTransformer.getInstance().to(
-                    personBean,
-                    PersonBean.class,
-                    net.gdface.facelog.client.thrift.PersonBean.class),
-            idPhoto,
-            feature,
-            featureVersion,
-            TypeTransformer.getInstance().to(
-                    faceInfo,
-                    ByteBuffer.class,
-                    FaceBean.class,
-                    byte[].class,
-                    net.gdface.facelog.client.thrift.FaceBean.class),
-            TypeTransformer.getInstance().to(
-                    token,
-                    Token.class,
-                    net.gdface.facelog.client.thrift.Token.class)),
-            new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
-                @Override
-                public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
-                    return TypeTransformer.getInstance().to(
-                    input,
-                    net.gdface.facelog.client.thrift.PersonBean.class,
-                    PersonBean.class);
-                }
-            });
-        return factory.wrap(async,future);
-    }
-    public void savePerson(PersonBean personBean,
-        byte[] idPhoto,
-        byte[] feature,
-        String featureVersion,
-        Map<ByteBuffer, FaceBean> faceInfo,
-        Token token,
-        FutureCallback<PersonBean>callback){
-        factory.addCallback(savePerson(personBean,idPhoto,feature,featureVersion,faceInfo,token), callback);
     }
     /**
      * see also {@link net.gdface.facelog.IFaceLog#savePerson(net.gdface.facelog.db.PersonBean,byte[],net.gdface.facelog.Token)}
@@ -2935,6 +2943,33 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(savePersonGroup(personGroupBean,token), callback);
     }
     /**
+     * see also {@link net.gdface.facelog.IFaceLog#savePersons(java.util.List,java.util.List,net.gdface.facelog.Token)}
+     */
+    public ListenableFuture<Integer> savePersons(List<byte[]> photos,
+        List<PersonBean> persons,
+        Token token){        
+        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
+        ListenableFuture<Integer> future = async.savePersonsWithPhoto(TypeTransformer.getInstance().to(
+                    photos,
+                    byte[].class,
+                    byte[].class),
+            TypeTransformer.getInstance().to(
+                    persons,
+                    PersonBean.class,
+                    net.gdface.facelog.client.thrift.PersonBean.class),
+            TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class));
+        return factory.wrap(async,future);
+    }
+    public void savePersons(List<byte[]> photos,
+        List<PersonBean> persons,
+        Token token,
+        FutureCallback<Integer>callback){
+        factory.addCallback(savePersons(photos,persons,token), callback);
+    }
+    /**
      * see also {@link net.gdface.facelog.IFaceLog#savePersons(java.util.List,net.gdface.facelog.Token)}
      */
     public ListenableFuture<Void> savePersons(List<PersonBean> persons,
@@ -2953,29 +2988,6 @@ public class IFaceLogThriftClientAsync {
     public void savePersons(List<PersonBean> persons,
         Token token,
         FutureCallback<Void>callback){
-        factory.addCallback(savePersons(persons,token), callback);
-    }
-    /**
-     * see also {@link net.gdface.facelog.IFaceLog#savePersons(java.util.Map,net.gdface.facelog.Token)}
-     */
-    public ListenableFuture<Integer> savePersons(Map<ByteBuffer, PersonBean> persons,
-        Token token){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<Integer> future = async.savePersonsWithPhoto(TypeTransformer.getInstance().to(
-                    persons,
-                    ByteBuffer.class,
-                    PersonBean.class,
-                    byte[].class,
-                    net.gdface.facelog.client.thrift.PersonBean.class),
-            TypeTransformer.getInstance().to(
-                    token,
-                    Token.class,
-                    net.gdface.facelog.client.thrift.Token.class));
-        return factory.wrap(async,future);
-    }
-    public void savePersons(Map<ByteBuffer, PersonBean> persons,
-        Token token,
-        FutureCallback<Integer>callback){
         factory.addCallback(savePersons(persons,token), callback);
     }
     /**

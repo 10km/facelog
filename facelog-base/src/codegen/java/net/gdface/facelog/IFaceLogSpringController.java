@@ -132,6 +132,37 @@ public class IFaceLogSpringController {
     }
     // port-2
     /**
+     * 增加一个人脸特征记录,特征数据由faceInfo指定的多张图像合成，如果记录已经存在则抛出异常<br>
+     * {@code photos}与{@code faces}为提取特征{@code feature}的人脸照片对应的人脸位置对象，必须一一对应
+     * <br>{@code DEVICE_ONLY}
+     * @param feature 特征数据
+     * @param featureVersion 特征(SDk)版本号
+     * @param personId 关联的人员id(fl_person.id),可为null
+     * @param photos 检测到人脸的照片列表
+     * @param faces 检测人脸信息列表
+     * @param token (设备)访问令牌
+     * @return 保存的人脸特征记录{@link FeatureBean}
+     * @throws DuplicateRecordException
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/addFeatureMulti", method = RequestMethod.POST)
+    @ApiOperation(value = "增加一个人脸特征记录,特征数据由faceInfo指定的多张图像合成，如果记录已经存在则抛出异常<br>\n"
++" {@code photos}与{@code faces}为提取特征{@code feature}的人脸照片对应的人脸位置对象，必须一一对应\n"
++" <br>{@code DEVICE_ONLY}",httpMethod="POST")
+    public Response addFeature( @RequestBody AddFeatureMultiArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().addFeature(args.feature,args.featureVersion,args.personId,args.photos,args.faces,args.token));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // port-3
+    /**
      * 增加一个人脸特征记录，如果记录已经存在则抛出异常<br>
      * {@code DEVICE_ONLY}
      * @param feature 人脸特征数据
@@ -151,34 +182,6 @@ public class IFaceLogSpringController {
             Response response = responseFactory.newIFaceLogResponse();
             try{
                 response.onComplete(delegate().addFeature(args.feature,args.featureVersion,args.personId,args.faecBeans,args.token));
-            }
-            catch(Exception e){
-                logger.error(e.getMessage(),e);
-                response.onError(e);
-            }
-            return response;
-    }
-    // port-3
-    /**
-     * 增加一个人脸特征记录,特征数据由faceInfo指定的多张图像合成，如果记录已经存在则抛出异常
-     * <br>{@code DEVICE_ONLY}
-     * @param feature 特征数据
-     * @param featureVersion 特征(SDk)版本号
-     * @param personId 关联的人员id(fl_person.id),可为null
-     * @param faceInfo 生成特征数据的图像及人脸信息对象(每张图对应一张人脸),可为null
-     * @param token (设备)访问令牌
-     * @return 保存的人脸特征记录{@link FeatureBean}
-     * @throws DuplicateRecordException
-     */
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/addFeatureMulti", method = RequestMethod.POST)
-    @ApiOperation(value = "增加一个人脸特征记录,特征数据由faceInfo指定的多张图像合成，如果记录已经存在则抛出异常\n"
-+" <br>{@code DEVICE_ONLY}",httpMethod="POST")
-    public Response addFeature( @RequestBody AddFeatureMultiArgs args) 
-    {
-            Response response = responseFactory.newIFaceLogResponse();
-            try{
-                response.onComplete(delegate().addFeature(args.feature,args.featureVersion,args.personId,args.faceInfo,args.token));
             }
             catch(Exception e){
                 logger.error(e.getMessage(),e);
@@ -3184,6 +3187,39 @@ public class IFaceLogSpringController {
     }
     // port-132
     /**
+     * 保存人员信息记录<br>
+     * {@code photos}与{@code faces}为提取特征{@code feature}的人脸照片对应的人脸位置对象，必须一一对应,
+     * 该方法用于多张照片合成一个人脸特征的算法
+     * <br>{@code DEVICE_ONLY}
+     * @param personBean {@code fl_person}表记录
+     * @param idPhoto 标准照图像,可为null
+     * @param feature 用于验证的人脸特征数据
+     * @param featureVersion 特征(SDk)版本号
+     * @param photos 检测到人脸的照片列表
+     * @param faces 检测人脸信息列表
+     * @param token (设备)访问令牌
+     * @return 保存的{@link PersonBean}对象
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/savePersonWithPhotoAndFeatureMultiImage", method = RequestMethod.POST)
+    @ApiOperation(value = "保存人员信息记录<br>\n"
++" {@code photos}与{@code faces}为提取特征{@code feature}的人脸照片对应的人脸位置对象，必须一一对应,\n"
++" 该方法用于多张照片合成一个人脸特征的算法\n"
++" <br>{@code DEVICE_ONLY}",httpMethod="POST")
+    public Response savePerson( @RequestBody SavePersonWithPhotoAndFeatureMultiImageArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().savePerson(args.personBean,args.idPhoto,args.feature,args.featureVersion,args.photos,args.faces,args.token));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // port-133
+    /**
      * 保存人员信息记录
      * <br>{@code DEVICE_ONLY}
      * @param personBean {@code fl_person}表记录
@@ -3203,34 +3239,6 @@ public class IFaceLogSpringController {
             Response response = responseFactory.newIFaceLogResponse();
             try{
                 response.onComplete(delegate().savePerson(args.personBean,args.idPhoto,args.feature,args.featureVersion,args.faceBeans,args.token));
-            }
-            catch(Exception e){
-                logger.error(e.getMessage(),e);
-                response.onError(e);
-            }
-            return response;
-    }
-    // port-133
-    /**
-     * 保存人员信息记录
-     * <br>{@code DEVICE_ONLY}
-     * @param personBean {@code fl_person}表记录
-     * @param idPhoto 标准照图像,可为null
-     * @param feature 用于验证的人脸特征数据
-     * @param featureVersion 特征(SDk)版本号
-     * @param faceInfo 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null
-     * @param token (设备)访问令牌
-     * @return 保存的{@link PersonBean}对象
-     */
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/savePersonWithPhotoAndFeatureMultiImage", method = RequestMethod.POST)
-    @ApiOperation(value = "保存人员信息记录\n"
-+" <br>{@code DEVICE_ONLY}",httpMethod="POST")
-    public Response savePerson( @RequestBody SavePersonWithPhotoAndFeatureMultiImageArgs args) 
-    {
-            Response response = responseFactory.newIFaceLogResponse();
-            try{
-                response.onComplete(delegate().savePerson(args.personBean,args.idPhoto,args.feature,args.featureVersion,args.faceInfo,args.token));
             }
             catch(Exception e){
                 logger.error(e.getMessage(),e);
@@ -3360,6 +3368,35 @@ public class IFaceLogSpringController {
     }
     // port-139
     /**
+     * 保存人员信息记录(包含标准照)<br>
+     * 每一张照片对应一个{@code PersonBean}记录, {@code photos}元素不可重复
+     * {@code photos}与{@code persons}列表一一对应
+     * {@code PERSON_ONLY}
+     * @param photos 照片列表
+     * @param persons 人员记录对象列表
+     * @param token 访问令牌
+     * @return 保存的{@link PersonBean}记录条数
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/savePersonsWithPhoto", method = RequestMethod.POST)
+    @ApiOperation(value = "保存人员信息记录(包含标准照)<br>\n"
++" 每一张照片对应一个{@code PersonBean}记录, {@code photos}元素不可重复\n"
++" {@code photos}与{@code persons}列表一一对应\n"
++" {@code PERSON_ONLY}",httpMethod="POST")
+    public Response savePersons( @RequestBody SavePersonsWithPhotoArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().savePersons(args.photos,args.persons,args.token));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // port-140
+    /**
      * 保存人员(person)记录
      * <br>{@code PERSON_ONLY}
      * @param persons {@code fl_person}表记录
@@ -3375,30 +3412,6 @@ public class IFaceLogSpringController {
             try{
                 delegate().savePersons(args.persons,args.token);
                 response.onComplete();
-            }
-            catch(Exception e){
-                logger.error(e.getMessage(),e);
-                response.onError(e);
-            }
-            return response;
-    }
-    // port-140
-    /**
-     * 保存人员信息记录(包含标准照)<br>
-     * {@code PERSON_ONLY}
-     * @param persons {@code fl_person}表记录
-     * @param token 访问令牌
-     * @return 保存的{@link PersonBean}记录条数
-     */
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/savePersonsWithPhoto", method = RequestMethod.POST)
-    @ApiOperation(value = "保存人员信息记录(包含标准照)<br>\n"
-+" {@code PERSON_ONLY}",httpMethod="POST")
-    public Response savePersons( @RequestBody SavePersonsWithPhotoArgs args) 
-    {
-            Response response = responseFactory.newIFaceLogResponse();
-            try{
-                response.onComplete(delegate().savePersons(args.persons,args.token));
             }
             catch(Exception e){
                 logger.error(e.getMessage(),e);
@@ -3757,6 +3770,24 @@ public class IFaceLogSpringController {
     }
     /**
      * argClass-2<br>
+     * wrap arguments for method {@link #addFeature(AddFeatureMultiArgs)}
+     */
+    public static class AddFeatureMultiArgs{
+        @ApiModelProperty(value ="特征数据" ,required=true ,dataType="byte[]")
+        public byte[] feature;
+        @ApiModelProperty(value ="特征(SDk)版本号" ,required=true ,dataType="String")
+        public String featureVersion;
+        @ApiModelProperty(value ="关联的人员id(fl_person.id),可为null" ,required=true ,dataType="Integer")
+        public Integer personId;
+        @ApiModelProperty(value ="检测到人脸的照片列表" ,required=true ,dataType="List")
+        public List<byte[]> photos;
+        @ApiModelProperty(value ="检测人脸信息列表" ,required=true ,dataType="List")
+        public List<FaceBean> faces;
+        @ApiModelProperty(value ="(设备)访问令牌" ,required=true ,dataType="Token")
+        public Token token;
+    }
+    /**
+     * argClass-3<br>
      * wrap arguments for method {@link #addFeature(AddFeatureArgs)}
      */
     public static class AddFeatureArgs{
@@ -3768,22 +3799,6 @@ public class IFaceLogSpringController {
         public Integer personId;
         @ApiModelProperty(value ="生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null" ,required=true ,dataType="List")
         public List<FaceBean> faecBeans;
-        @ApiModelProperty(value ="(设备)访问令牌" ,required=true ,dataType="Token")
-        public Token token;
-    }
-    /**
-     * argClass-3<br>
-     * wrap arguments for method {@link #addFeature(AddFeatureMultiArgs)}
-     */
-    public static class AddFeatureMultiArgs{
-        @ApiModelProperty(value ="特征数据" ,required=true ,dataType="byte[]")
-        public byte[] feature;
-        @ApiModelProperty(value ="特征(SDk)版本号" ,required=true ,dataType="String")
-        public String featureVersion;
-        @ApiModelProperty(value ="关联的人员id(fl_person.id),可为null" ,required=true ,dataType="Integer")
-        public Integer personId;
-        @ApiModelProperty(value ="生成特征数据的图像及人脸信息对象(每张图对应一张人脸),可为null" ,required=true ,dataType="Map")
-        public Map<java.nio.ByteBuffer, FaceBean> faceInfo;
         @ApiModelProperty(value ="(设备)访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
@@ -4983,6 +4998,26 @@ public class IFaceLogSpringController {
     }
     /**
      * argClass-132<br>
+     * wrap arguments for method {@link #savePerson(SavePersonWithPhotoAndFeatureMultiImageArgs)}
+     */
+    public static class SavePersonWithPhotoAndFeatureMultiImageArgs{
+        @ApiModelProperty(value ="{@code fl_person}表记录" ,required=true ,dataType="PersonBean")
+        public PersonBean personBean;
+        @ApiModelProperty(value ="标准照图像,可为null" ,required=true ,dataType="byte[]")
+        public byte[] idPhoto;
+        @ApiModelProperty(value ="用于验证的人脸特征数据" ,required=true ,dataType="byte[]")
+        public byte[] feature;
+        @ApiModelProperty(value ="特征(SDk)版本号" ,required=true ,dataType="String")
+        public String featureVersion;
+        @ApiModelProperty(value ="检测到人脸的照片列表" ,required=true ,dataType="List")
+        public List<byte[]> photos;
+        @ApiModelProperty(value ="检测人脸信息列表" ,required=true ,dataType="List")
+        public List<FaceBean> faces;
+        @ApiModelProperty(value ="(设备)访问令牌" ,required=true ,dataType="Token")
+        public Token token;
+    }
+    /**
+     * argClass-133<br>
      * wrap arguments for method {@link #savePerson(SavePersonWithPhotoAndFeatureMultiFacesArgs)}
      */
     public static class SavePersonWithPhotoAndFeatureMultiFacesArgs{
@@ -4997,24 +5032,6 @@ public class IFaceLogSpringController {
         @ApiModelProperty(value ="可为{@code null},参见 {@link #addFeature(byte[], String, Integer, List, Token)}" ,required=true ,dataType="List")
         public List<FaceBean> faceBeans;
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
-        public Token token;
-    }
-    /**
-     * argClass-133<br>
-     * wrap arguments for method {@link #savePerson(SavePersonWithPhotoAndFeatureMultiImageArgs)}
-     */
-    public static class SavePersonWithPhotoAndFeatureMultiImageArgs{
-        @ApiModelProperty(value ="{@code fl_person}表记录" ,required=true ,dataType="PersonBean")
-        public PersonBean personBean;
-        @ApiModelProperty(value ="标准照图像,可为null" ,required=true ,dataType="byte[]")
-        public byte[] idPhoto;
-        @ApiModelProperty(value ="用于验证的人脸特征数据" ,required=true ,dataType="byte[]")
-        public byte[] feature;
-        @ApiModelProperty(value ="特征(SDk)版本号" ,required=true ,dataType="String")
-        public String featureVersion;
-        @ApiModelProperty(value ="生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null" ,required=true ,dataType="Map")
-        public Map<java.nio.ByteBuffer, FaceBean> faceInfo;
-        @ApiModelProperty(value ="(设备)访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
     /**
@@ -5079,21 +5096,23 @@ public class IFaceLogSpringController {
     }
     /**
      * argClass-139<br>
-     * wrap arguments for method {@link #savePersons(SavePersonsArgs)}
+     * wrap arguments for method {@link #savePersons(SavePersonsWithPhotoArgs)}
      */
-    public static class SavePersonsArgs{
-        @ApiModelProperty(value ="{@code fl_person}表记录" ,required=true ,dataType="List")
+    public static class SavePersonsWithPhotoArgs{
+        @ApiModelProperty(value ="照片列表" ,required=true ,dataType="List")
+        public List<byte[]> photos;
+        @ApiModelProperty(value ="人员记录对象列表" ,required=true ,dataType="List")
         public List<PersonBean> persons;
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
     /**
      * argClass-140<br>
-     * wrap arguments for method {@link #savePersons(SavePersonsWithPhotoArgs)}
+     * wrap arguments for method {@link #savePersons(SavePersonsArgs)}
      */
-    public static class SavePersonsWithPhotoArgs{
-        @ApiModelProperty(value ="{@code fl_person}表记录" ,required=true ,dataType="Map")
-        public Map<java.nio.ByteBuffer, PersonBean> persons;
+    public static class SavePersonsArgs{
+        @ApiModelProperty(value ="{@code fl_person}表记录" ,required=true ,dataType="List")
+        public List<PersonBean> persons;
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }

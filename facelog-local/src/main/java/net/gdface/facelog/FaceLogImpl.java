@@ -33,6 +33,8 @@ import net.gdface.facelog.db.exception.RuntimeDaoException;
 import net.gdface.facelog.ServiceSecurityException;
 import net.gdface.facelog.Token.TokenType;
 import net.gdface.thrift.exception.ServiceRuntimeException;
+import net.gdface.utils.BaseTypeTransformer;
+import net.gdface.utils.CollectionUtils;
 import net.gdface.utils.FaceUtilits;
 import net.gdface.facelog.DuplicateRecordException;
 import net.gdface.facelog.TokenMangement.Enable;
@@ -64,6 +66,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 	private final RedisPermitListener redisPermitListener = new RedisPermitListener(dm);
 	private final RedisLogListener redisLogListener = new RedisLogListener(rm.getRedisParameters().get(MQParam.LOG_MONITOR_CHANNEL));
 
+	private final BaseTypeTransformer typeTransformer = new BaseTypeTransformer();
 	//private final RedisLogConsumer redisLogConsumer  = new RedisLogConsumer(this);
 	static{
 		LocalTokenContextOp.initCurrentTokenContextOp();
@@ -438,13 +441,14 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 	}
 
 	@Override
-	public int savePersons(final Map<ByteBuffer,PersonBean> persons, Token token) {
+	public int savePersons(final List<byte[]> photos, final List<PersonBean> persons, Token token) {
 		try{
 			Enable.PERSON_ONLY.check(tm, token);
+			final List<ByteBuffer> buffers = Lists.transform(photos, typeTransformer.getTransformer(byte[].class, ByteBuffer.class));
 			return BaseDao.daoRunAsTransaction(new Callable<Integer>(){
 				@Override
 				public Integer call() throws Exception {
-					return dm.daoSavePerson(persons);
+					return dm.daoSavePerson(CollectionUtils.merge(buffers, persons));
 				}});
 		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
@@ -513,11 +517,12 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 
 	@Override
 	public PersonBean savePerson(final PersonBean personBean, final byte[] idPhoto, final byte[] feature,
-			final String featureVersion, final Map<ByteBuffer, FaceBean> faceInfo, final Token token)  {
+			final String featureVersion, List<byte[]> photos, final List<FaceBean> faces, final Token token)  {
 		try {
 			Enable.DEVICE_ONLY.check(tm, token);
 			checkArgument(null != personBean, "personBean is null");
 			checkArgument(null != feature, "feature is null");
+			final List<ByteBuffer> buffers = Lists.transform(photos, typeTransformer.getTransformer(byte[].class, ByteBuffer.class));
 			return BaseDao.daoRunAsTransaction(new Callable<PersonBean>() {
 				@Override
 				public PersonBean call() throws Exception {
@@ -525,7 +530,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 							FaceUtilits.getByteBufferOrNull(idPhoto), 
 							FaceUtilits.getByteBuffer(feature), 
 							featureVersion, 
-							faceInfo, 
+							CollectionUtils.merge(buffers, faces), 
 							getDeviceOrNull(token));
 				}
 			});
@@ -849,16 +854,18 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 	}
 	@Override
 	public FeatureBean addFeature(final byte[] feature, final String featureVersion, final Integer personId,
-			final Map<ByteBuffer, FaceBean> faceInfo, final Token token) throws DuplicateRecordException {
+			List<byte[]> photos, final List<FaceBean> faces, final Token token) throws DuplicateRecordException {
 		try {
 			Enable.DEVICE_ONLY.check(tm, token);
 			checkArgument(feature != null,"feature is null");
+			final List<ByteBuffer> buffers = Lists.transform(photos, typeTransformer.getTransformer(byte[].class, ByteBuffer.class));
 			return BaseDao.daoRunAsTransaction(new Callable<FeatureBean>() {
 
 				@Override
 				public FeatureBean call() throws Exception {
 					return dm.daoAddFeature(FaceUtilits.getByteBuffer(feature), 
-							featureVersion, dm.daoGetPerson(personId), faceInfo, 
+							featureVersion, dm.daoGetPerson(personId), 
+							CollectionUtils.merge(buffers, faces), 
 							getDeviceOrNull(token));
 				}
 			});

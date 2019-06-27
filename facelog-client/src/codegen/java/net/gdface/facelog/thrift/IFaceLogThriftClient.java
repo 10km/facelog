@@ -114,17 +114,22 @@ public class IFaceLogThriftClient implements IFaceLog {
     public FeatureBean addFeature(byte[] feature,
         String featureVersion,
         Integer personId,
-        List<FaceBean> faecBeans,
+        List<byte[]> photos,
+        List<FaceBean> faces,
         Token token) 
         throws DuplicateRecordException{
         net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
         try{
             return TypeTransformer.getInstance().to(
-                    instance.addFeature(feature,
+                    instance.addFeatureMulti(feature,
                 featureVersion,
                 personId,
                 TypeTransformer.getInstance().to(
-                    faecBeans,
+                    photos,
+                    byte[].class,
+                    byte[].class),
+                TypeTransformer.getInstance().to(
+                    faces,
                     FaceBean.class,
                     net.gdface.facelog.client.thrift.FaceBean.class),
                 TypeTransformer.getInstance().to(
@@ -154,20 +159,18 @@ public class IFaceLogThriftClient implements IFaceLog {
     public FeatureBean addFeature(byte[] feature,
         String featureVersion,
         Integer personId,
-        Map<ByteBuffer, FaceBean> faceInfo,
+        List<FaceBean> faecBeans,
         Token token) 
         throws DuplicateRecordException{
         net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
         try{
             return TypeTransformer.getInstance().to(
-                    instance.addFeatureMulti(feature,
+                    instance.addFeature(feature,
                 featureVersion,
                 personId,
                 TypeTransformer.getInstance().to(
-                    faceInfo,
-                    ByteBuffer.class,
+                    faecBeans,
                     FaceBean.class,
-                    byte[].class,
                     net.gdface.facelog.client.thrift.FaceBean.class),
                 TypeTransformer.getInstance().to(
                     token,
@@ -2929,13 +2932,14 @@ public class IFaceLogThriftClient implements IFaceLog {
         byte[] idPhoto,
         byte[] feature,
         String featureVersion,
-        List<FaceBean> faceBeans,
+        List<byte[]> photos,
+        List<FaceBean> faces,
         Token token) 
         {
         net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
         try{
             return TypeTransformer.getInstance().to(
-                    instance.savePersonWithPhotoAndFeatureMultiFaces(TypeTransformer.getInstance().to(
+                    instance.savePersonWithPhotoAndFeatureMultiImage(TypeTransformer.getInstance().to(
                     personBean,
                     PersonBean.class,
                     net.gdface.facelog.client.thrift.PersonBean.class),
@@ -2943,7 +2947,11 @@ public class IFaceLogThriftClient implements IFaceLog {
                 feature,
                 featureVersion,
                 TypeTransformer.getInstance().to(
-                    faceBeans,
+                    photos,
+                    byte[].class,
+                    byte[].class),
+                TypeTransformer.getInstance().to(
+                    faces,
                     FaceBean.class,
                     net.gdface.facelog.client.thrift.FaceBean.class),
                 TypeTransformer.getInstance().to(
@@ -2968,13 +2976,13 @@ public class IFaceLogThriftClient implements IFaceLog {
         byte[] idPhoto,
         byte[] feature,
         String featureVersion,
-        Map<ByteBuffer, FaceBean> faceInfo,
+        List<FaceBean> faceBeans,
         Token token) 
         {
         net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
         try{
             return TypeTransformer.getInstance().to(
-                    instance.savePersonWithPhotoAndFeatureMultiImage(TypeTransformer.getInstance().to(
+                    instance.savePersonWithPhotoAndFeatureMultiFaces(TypeTransformer.getInstance().to(
                     personBean,
                     PersonBean.class,
                     net.gdface.facelog.client.thrift.PersonBean.class),
@@ -2982,10 +2990,8 @@ public class IFaceLogThriftClient implements IFaceLog {
                 feature,
                 featureVersion,
                 TypeTransformer.getInstance().to(
-                    faceInfo,
-                    ByteBuffer.class,
+                    faceBeans,
                     FaceBean.class,
-                    byte[].class,
                     net.gdface.facelog.client.thrift.FaceBean.class),
                 TypeTransformer.getInstance().to(
                     token,
@@ -3158,12 +3164,17 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
-    public void savePersons(List<PersonBean> persons,
+    public int savePersons(List<byte[]> photos,
+        List<PersonBean> persons,
         Token token) 
         {
         net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
         try{
-             instance.savePersons(TypeTransformer.getInstance().to(
+            return instance.savePersonsWithPhoto(TypeTransformer.getInstance().to(
+                    photos,
+                    byte[].class,
+                    byte[].class),
+                TypeTransformer.getInstance().to(
                     persons,
                     PersonBean.class,
                     net.gdface.facelog.client.thrift.PersonBean.class),
@@ -3180,16 +3191,14 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
-    public int savePersons(Map<ByteBuffer, PersonBean> persons,
+    public void savePersons(List<PersonBean> persons,
         Token token) 
         {
         net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
         try{
-            return instance.savePersonsWithPhoto(TypeTransformer.getInstance().to(
+             instance.savePersons(TypeTransformer.getInstance().to(
                     persons,
-                    ByteBuffer.class,
                     PersonBean.class,
-                    byte[].class,
                     net.gdface.facelog.client.thrift.PersonBean.class),
                 TypeTransformer.getInstance().to(
                     token,

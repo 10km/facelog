@@ -773,8 +773,10 @@ struct _IFaceLogAddFeatureMultiArgs
   gboolean __isset_featureVersion;
   gint32 personId;
   gboolean __isset_personId;
-  GHashTable * faceInfo;
-  gboolean __isset_faceInfo;
+  GPtrArray * photos;
+  gboolean __isset_photos;
+  GPtrArray * faces;
+  gboolean __isset_faces;
   Token * token;
   gboolean __isset_token;
 };
@@ -7945,8 +7947,10 @@ struct _IFaceLogSavePersonWithPhotoAndFeatureMultiImageArgs
   gboolean __isset_feature;
   gchar * featureVersion;
   gboolean __isset_featureVersion;
-  GHashTable * faceInfo;
-  gboolean __isset_faceInfo;
+  GPtrArray * photos;
+  gboolean __isset_photos;
+  GPtrArray * faces;
+  gboolean __isset_faces;
   Token * token;
   gboolean __isset_token;
 };
@@ -8109,7 +8113,9 @@ struct _IFaceLogSavePersonsWithPhotoArgs
   ThriftStruct parent; 
 
   /* public */
-  GHashTable * persons;
+  GPtrArray * photos;
+  gboolean __isset_photos;
+  GPtrArray * persons;
   gboolean __isset_persons;
   Token * token;
   gboolean __isset_token;

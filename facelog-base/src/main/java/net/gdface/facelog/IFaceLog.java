@@ -1,6 +1,5 @@
 package net.gdface.facelog;
 
-import java.nio.ByteBuffer;
 import java.util.List;
 import java.util.Map;
 import net.gdface.annotation.DeriveMethod;
@@ -253,13 +252,16 @@ public interface IFaceLog{
 
 	/**
 	 * 保存人员信息记录(包含标准照)<br>
+	 * 每一张照片对应一个{@code PersonBean}记录, {@code photos}元素不可重复
+	 * {@code photos}与{@code persons}列表一一对应
 	 * {@code PERSON_ONLY}
-	 * @param persons {@code fl_person}表记录
+	 * @param photos 照片列表 
+	 * @param persons 人员记录对象列表
 	 * @param token 访问令牌
 	 * @return 保存的{@link PersonBean}记录条数
 	 */
 	@DeriveMethod(methodSuffix="WithPhoto")
-	public int savePersons(Map<ByteBuffer, PersonBean> persons, Token token);
+	public int savePersons(List<byte[]> photos, List<PersonBean> persons, Token token);
 
 	/**
 	 * 保存人员信息记录
@@ -299,19 +301,22 @@ public interface IFaceLog{
 	public PersonBean savePerson(PersonBean personBean, byte[] idPhoto, byte[] feature, String featureVersion, List<FaceBean> faceBeans, Token token);
 
 	/**
-	 * 保存人员信息记录
+	 * 保存人员信息记录<br>
+	 * {@code photos}与{@code faces}为提取特征{@code feature}的人脸照片对应的人脸位置对象，必须一一对应,
+	 * 该方法用于多张照片合成一个人脸特征的算法
 	 * <br>{@code DEVICE_ONLY}
 	 * @param personBean {@code fl_person}表记录
 	 * @param idPhoto 标准照图像,可为null
 	 * @param feature 用于验证的人脸特征数据 
 	 * @param featureVersion 特征(SDk)版本号
-	 * @param faceInfo 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null 
+	 * @param photos 检测到人脸的照片列表
+	 * @param faces 检测人脸信息列表
 	 * @param token (设备)访问令牌
 	 * @return 保存的{@link PersonBean}对象
 	 */
 	@DeriveMethod(methodSuffix="WithPhotoAndFeatureMultiImage")
 	public PersonBean savePerson(PersonBean personBean, byte[] idPhoto, byte[] feature, String featureVersion,
-			Map<ByteBuffer, FaceBean> faceInfo, Token token);
+			List<byte[]> photos, List<FaceBean> faces, Token token);
 
 	/**
 	 * 保存人员信息记录<br>
@@ -555,18 +560,20 @@ public interface IFaceLog{
 	FeatureBean addFeature(final byte[] feature, String featureVersion, final Integer personId, final boolean asIdPhotoIfAbsent, final byte[] featurePhoto, final FaceBean faceBean, Token token)throws DuplicateRecordException;
 
 	/**
-	 * 增加一个人脸特征记录,特征数据由faceInfo指定的多张图像合成，如果记录已经存在则抛出异常
+	 * 增加一个人脸特征记录,特征数据由faceInfo指定的多张图像合成，如果记录已经存在则抛出异常<br>
+	 * {@code photos}与{@code faces}为提取特征{@code feature}的人脸照片对应的人脸位置对象，必须一一对应
 	 * <br>{@code DEVICE_ONLY}
 	 * @param feature 特征数据
 	 * @param featureVersion 特征(SDk)版本号
 	 * @param personId 关联的人员id(fl_person.id),可为null
-	 * @param faceInfo 生成特征数据的图像及人脸信息对象(每张图对应一张人脸),可为null
+	 * @param photos 检测到人脸的照片列表
+	 * @param faces 检测人脸信息列表
 	 * @param token (设备)访问令牌
 	 * @return 保存的人脸特征记录{@link FeatureBean}
 	 * @throws DuplicateRecordException 
 	 */
 	@DeriveMethod(methodSuffix="Multi")
-	public FeatureBean addFeature(byte[] feature, String featureVersion, Integer personId, Map<ByteBuffer, FaceBean> faceInfo, Token token)
+	public FeatureBean addFeature(byte[] feature, String featureVersion, Integer personId, List<byte[]> photos, List<FaceBean> faces, Token token)
 			throws DuplicateRecordException;
 
 	/**

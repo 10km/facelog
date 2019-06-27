@@ -22,7 +22,7 @@ class IFaceLogIf {
  public:
   virtual ~IFaceLogIf() {}
   virtual void addFeature(FeatureBean& _return, const std::string& feature, const std::string& featureVersion, const int32_t personId, const std::vector<FaceBean> & faecBeans, const Token& token) = 0;
-  virtual void addFeatureMulti(FeatureBean& _return, const std::string& feature, const std::string& featureVersion, const int32_t personId, const std::map<std::string, FaceBean> & faceInfo, const Token& token) = 0;
+  virtual void addFeatureMulti(FeatureBean& _return, const std::string& feature, const std::string& featureVersion, const int32_t personId, const std::vector<std::string> & photos, const std::vector<FaceBean> & faces, const Token& token) = 0;
   virtual void addFeatureWithImage(FeatureBean& _return, const std::string& feature, const std::string& featureVersion, const int32_t personId, const bool asIdPhotoIfAbsent, const std::string& featurePhoto, const FaceBean& faceBean, const Token& token) = 0;
   virtual void addImage(ImageBean& _return, const std::string& imageData, const int32_t deviceId, const FaceBean& faceBean, const int32_t personId, const Token& token) = 0;
   virtual void addLog(const LogBean& logBean, const Token& token) = 0;
@@ -157,10 +157,10 @@ class IFaceLogIf {
   virtual void savePersonWithPhoto(PersonBean& _return, const PersonBean& personBean, const std::string& idPhoto, const Token& token) = 0;
   virtual void savePersonWithPhotoAndFeature(PersonBean& _return, const PersonBean& personBean, const std::string& idPhoto, const FeatureBean& featureBean, const Token& token) = 0;
   virtual void savePersonWithPhotoAndFeatureMultiFaces(PersonBean& _return, const PersonBean& personBean, const std::string& idPhoto, const std::string& feature, const std::string& featureVersion, const std::vector<FaceBean> & faceBeans, const Token& token) = 0;
-  virtual void savePersonWithPhotoAndFeatureMultiImage(PersonBean& _return, const PersonBean& personBean, const std::string& idPhoto, const std::string& feature, const std::string& featureVersion, const std::map<std::string, FaceBean> & faceInfo, const Token& token) = 0;
+  virtual void savePersonWithPhotoAndFeatureMultiImage(PersonBean& _return, const PersonBean& personBean, const std::string& idPhoto, const std::string& feature, const std::string& featureVersion, const std::vector<std::string> & photos, const std::vector<FaceBean> & faces, const Token& token) = 0;
   virtual void savePersonWithPhotoAndFeatureSaved(PersonBean& _return, const PersonBean& personBean, const std::string& idPhotoMd5, const std::string& featureMd5, const Token& token) = 0;
   virtual void savePersons(const std::vector<PersonBean> & persons, const Token& token) = 0;
-  virtual int32_t savePersonsWithPhoto(const std::map<std::string, PersonBean> & persons, const Token& token) = 0;
+  virtual int32_t savePersonsWithPhoto(const std::vector<std::string> & photos, const std::vector<PersonBean> & persons, const Token& token) = 0;
   virtual void saveServiceConfig(const Token& token) = 0;
   virtual void sdkTaskQueueOf(std::string& _return, const std::string& task, const std::string& sdkVersion, const Token& token) = 0;
   virtual void setPersonExpiryDate(const int32_t personId, const int64_t expiryDate, const Token& token) = 0;
@@ -206,7 +206,7 @@ class IFaceLogNull : virtual public IFaceLogIf {
   void addFeature(FeatureBean& /* _return */, const std::string& /* feature */, const std::string& /* featureVersion */, const int32_t /* personId */, const std::vector<FaceBean> & /* faecBeans */, const Token& /* token */) {
     return;
   }
-  void addFeatureMulti(FeatureBean& /* _return */, const std::string& /* feature */, const std::string& /* featureVersion */, const int32_t /* personId */, const std::map<std::string, FaceBean> & /* faceInfo */, const Token& /* token */) {
+  void addFeatureMulti(FeatureBean& /* _return */, const std::string& /* feature */, const std::string& /* featureVersion */, const int32_t /* personId */, const std::vector<std::string> & /* photos */, const std::vector<FaceBean> & /* faces */, const Token& /* token */) {
     return;
   }
   void addFeatureWithImage(FeatureBean& /* _return */, const std::string& /* feature */, const std::string& /* featureVersion */, const int32_t /* personId */, const bool /* asIdPhotoIfAbsent */, const std::string& /* featurePhoto */, const FaceBean& /* faceBean */, const Token& /* token */) {
@@ -650,7 +650,7 @@ class IFaceLogNull : virtual public IFaceLogIf {
   void savePersonWithPhotoAndFeatureMultiFaces(PersonBean& /* _return */, const PersonBean& /* personBean */, const std::string& /* idPhoto */, const std::string& /* feature */, const std::string& /* featureVersion */, const std::vector<FaceBean> & /* faceBeans */, const Token& /* token */) {
     return;
   }
-  void savePersonWithPhotoAndFeatureMultiImage(PersonBean& /* _return */, const PersonBean& /* personBean */, const std::string& /* idPhoto */, const std::string& /* feature */, const std::string& /* featureVersion */, const std::map<std::string, FaceBean> & /* faceInfo */, const Token& /* token */) {
+  void savePersonWithPhotoAndFeatureMultiImage(PersonBean& /* _return */, const PersonBean& /* personBean */, const std::string& /* idPhoto */, const std::string& /* feature */, const std::string& /* featureVersion */, const std::vector<std::string> & /* photos */, const std::vector<FaceBean> & /* faces */, const Token& /* token */) {
     return;
   }
   void savePersonWithPhotoAndFeatureSaved(PersonBean& /* _return */, const PersonBean& /* personBean */, const std::string& /* idPhotoMd5 */, const std::string& /* featureMd5 */, const Token& /* token */) {
@@ -659,7 +659,7 @@ class IFaceLogNull : virtual public IFaceLogIf {
   void savePersons(const std::vector<PersonBean> & /* persons */, const Token& /* token */) {
     return;
   }
-  int32_t savePersonsWithPhoto(const std::map<std::string, PersonBean> & /* persons */, const Token& /* token */) {
+  int32_t savePersonsWithPhoto(const std::vector<std::string> & /* photos */, const std::vector<PersonBean> & /* persons */, const Token& /* token */) {
     int32_t _return = 0;
     return _return;
   }
@@ -863,11 +863,12 @@ class IFaceLog_addFeature_presult {
 };
 
 typedef struct _IFaceLog_addFeatureMulti_args__isset {
-  _IFaceLog_addFeatureMulti_args__isset() : feature(false), featureVersion(false), personId(false), faceInfo(false), token(false) {}
+  _IFaceLog_addFeatureMulti_args__isset() : feature(false), featureVersion(false), personId(false), photos(false), faces(false), token(false) {}
   bool feature :1;
   bool featureVersion :1;
   bool personId :1;
-  bool faceInfo :1;
+  bool photos :1;
+  bool faces :1;
   bool token :1;
 } _IFaceLog_addFeatureMulti_args__isset;
 
@@ -885,7 +886,8 @@ class IFaceLog_addFeatureMulti_args {
   std::string feature;
   std::string featureVersion;
   int32_t personId;
-  std::map<std::string, FaceBean>  faceInfo;
+  std::vector<std::string>  photos;
+  std::vector<FaceBean>  faces;
   Token token;
 
   _IFaceLog_addFeatureMulti_args__isset __isset;
@@ -896,7 +898,9 @@ class IFaceLog_addFeatureMulti_args {
 
   void __set_personId(const int32_t val);
 
-  void __set_faceInfo(const std::map<std::string, FaceBean> & val);
+  void __set_photos(const std::vector<std::string> & val);
+
+  void __set_faces(const std::vector<FaceBean> & val);
 
   void __set_token(const Token& val);
 
@@ -908,7 +912,9 @@ class IFaceLog_addFeatureMulti_args {
       return false;
     if (!(personId == rhs.personId))
       return false;
-    if (!(faceInfo == rhs.faceInfo))
+    if (!(photos == rhs.photos))
+      return false;
+    if (!(faces == rhs.faces))
       return false;
     if (!(token == rhs.token))
       return false;
@@ -936,7 +942,8 @@ class IFaceLog_addFeatureMulti_pargs {
   const std::string* feature;
   const std::string* featureVersion;
   const int32_t* personId;
-  const std::map<std::string, FaceBean> * faceInfo;
+  const std::vector<std::string> * photos;
+  const std::vector<FaceBean> * faces;
   const Token* token;
 
   template <class Protocol_>
@@ -17892,12 +17899,13 @@ class IFaceLog_savePersonWithPhotoAndFeatureMultiFaces_presult {
 };
 
 typedef struct _IFaceLog_savePersonWithPhotoAndFeatureMultiImage_args__isset {
-  _IFaceLog_savePersonWithPhotoAndFeatureMultiImage_args__isset() : personBean(false), idPhoto(false), feature(false), featureVersion(false), faceInfo(false), token(false) {}
+  _IFaceLog_savePersonWithPhotoAndFeatureMultiImage_args__isset() : personBean(false), idPhoto(false), feature(false), featureVersion(false), photos(false), faces(false), token(false) {}
   bool personBean :1;
   bool idPhoto :1;
   bool feature :1;
   bool featureVersion :1;
-  bool faceInfo :1;
+  bool photos :1;
+  bool faces :1;
   bool token :1;
 } _IFaceLog_savePersonWithPhotoAndFeatureMultiImage_args__isset;
 
@@ -17916,7 +17924,8 @@ class IFaceLog_savePersonWithPhotoAndFeatureMultiImage_args {
   std::string idPhoto;
   std::string feature;
   std::string featureVersion;
-  std::map<std::string, FaceBean>  faceInfo;
+  std::vector<std::string>  photos;
+  std::vector<FaceBean>  faces;
   Token token;
 
   _IFaceLog_savePersonWithPhotoAndFeatureMultiImage_args__isset __isset;
@@ -17929,7 +17938,9 @@ class IFaceLog_savePersonWithPhotoAndFeatureMultiImage_args {
 
   void __set_featureVersion(const std::string& val);
 
-  void __set_faceInfo(const std::map<std::string, FaceBean> & val);
+  void __set_photos(const std::vector<std::string> & val);
+
+  void __set_faces(const std::vector<FaceBean> & val);
 
   void __set_token(const Token& val);
 
@@ -17943,7 +17954,9 @@ class IFaceLog_savePersonWithPhotoAndFeatureMultiImage_args {
       return false;
     if (!(featureVersion == rhs.featureVersion))
       return false;
-    if (!(faceInfo == rhs.faceInfo))
+    if (!(photos == rhs.photos))
+      return false;
+    if (!(faces == rhs.faces))
       return false;
     if (!(token == rhs.token))
       return false;
@@ -17972,7 +17985,8 @@ class IFaceLog_savePersonWithPhotoAndFeatureMultiImage_pargs {
   const std::string* idPhoto;
   const std::string* feature;
   const std::string* featureVersion;
-  const std::map<std::string, FaceBean> * faceInfo;
+  const std::vector<std::string> * photos;
+  const std::vector<FaceBean> * faces;
   const Token* token;
 
   template <class Protocol_>
@@ -18313,7 +18327,8 @@ class IFaceLog_savePersons_presult {
 };
 
 typedef struct _IFaceLog_savePersonsWithPhoto_args__isset {
-  _IFaceLog_savePersonsWithPhoto_args__isset() : persons(false), token(false) {}
+  _IFaceLog_savePersonsWithPhoto_args__isset() : photos(false), persons(false), token(false) {}
+  bool photos :1;
   bool persons :1;
   bool token :1;
 } _IFaceLog_savePersonsWithPhoto_args__isset;
@@ -18329,17 +18344,22 @@ class IFaceLog_savePersonsWithPhoto_args {
   }
 
   virtual ~IFaceLog_savePersonsWithPhoto_args() throw();
-  std::map<std::string, PersonBean>  persons;
+  std::vector<std::string>  photos;
+  std::vector<PersonBean>  persons;
   Token token;
 
   _IFaceLog_savePersonsWithPhoto_args__isset __isset;
 
-  void __set_persons(const std::map<std::string, PersonBean> & val);
+  void __set_photos(const std::vector<std::string> & val);
+
+  void __set_persons(const std::vector<PersonBean> & val);
 
   void __set_token(const Token& val);
 
   bool operator == (const IFaceLog_savePersonsWithPhoto_args & rhs) const
   {
+    if (!(photos == rhs.photos))
+      return false;
     if (!(persons == rhs.persons))
       return false;
     if (!(token == rhs.token))
@@ -18365,7 +18385,8 @@ class IFaceLog_savePersonsWithPhoto_pargs {
 
 
   virtual ~IFaceLog_savePersonsWithPhoto_pargs() throw();
-  const std::map<std::string, PersonBean> * persons;
+  const std::vector<std::string> * photos;
+  const std::vector<PersonBean> * persons;
   const Token* token;
 
   template <class Protocol_>
@@ -20077,8 +20098,8 @@ class IFaceLogClientT : virtual public IFaceLogIf {
   void addFeature(FeatureBean& _return, const std::string& feature, const std::string& featureVersion, const int32_t personId, const std::vector<FaceBean> & faecBeans, const Token& token);
   void send_addFeature(const std::string& feature, const std::string& featureVersion, const int32_t personId, const std::vector<FaceBean> & faecBeans, const Token& token);
   void recv_addFeature(FeatureBean& _return);
-  void addFeatureMulti(FeatureBean& _return, const std::string& feature, const std::string& featureVersion, const int32_t personId, const std::map<std::string, FaceBean> & faceInfo, const Token& token);
-  void send_addFeatureMulti(const std::string& feature, const std::string& featureVersion, const int32_t personId, const std::map<std::string, FaceBean> & faceInfo, const Token& token);
+  void addFeatureMulti(FeatureBean& _return, const std::string& feature, const std::string& featureVersion, const int32_t personId, const std::vector<std::string> & photos, const std::vector<FaceBean> & faces, const Token& token);
+  void send_addFeatureMulti(const std::string& feature, const std::string& featureVersion, const int32_t personId, const std::vector<std::string> & photos, const std::vector<FaceBean> & faces, const Token& token);
   void recv_addFeatureMulti(FeatureBean& _return);
   void addFeatureWithImage(FeatureBean& _return, const std::string& feature, const std::string& featureVersion, const int32_t personId, const bool asIdPhotoIfAbsent, const std::string& featurePhoto, const FaceBean& faceBean, const Token& token);
   void send_addFeatureWithImage(const std::string& feature, const std::string& featureVersion, const int32_t personId, const bool asIdPhotoIfAbsent, const std::string& featurePhoto, const FaceBean& faceBean, const Token& token);
@@ -20482,8 +20503,8 @@ class IFaceLogClientT : virtual public IFaceLogIf {
   void savePersonWithPhotoAndFeatureMultiFaces(PersonBean& _return, const PersonBean& personBean, const std::string& idPhoto, const std::string& feature, const std::string& featureVersion, const std::vector<FaceBean> & faceBeans, const Token& token);
   void send_savePersonWithPhotoAndFeatureMultiFaces(const PersonBean& personBean, const std::string& idPhoto, const std::string& feature, const std::string& featureVersion, const std::vector<FaceBean> & faceBeans, const Token& token);
   void recv_savePersonWithPhotoAndFeatureMultiFaces(PersonBean& _return);
-  void savePersonWithPhotoAndFeatureMultiImage(PersonBean& _return, const PersonBean& personBean, const std::string& idPhoto, const std::string& feature, const std::string& featureVersion, const std::map<std::string, FaceBean> & faceInfo, const Token& token);
-  void send_savePersonWithPhotoAndFeatureMultiImage(const PersonBean& personBean, const std::string& idPhoto, const std::string& feature, const std::string& featureVersion, const std::map<std::string, FaceBean> & faceInfo, const Token& token);
+  void savePersonWithPhotoAndFeatureMultiImage(PersonBean& _return, const PersonBean& personBean, const std::string& idPhoto, const std::string& feature, const std::string& featureVersion, const std::vector<std::string> & photos, const std::vector<FaceBean> & faces, const Token& token);
+  void send_savePersonWithPhotoAndFeatureMultiImage(const PersonBean& personBean, const std::string& idPhoto, const std::string& feature, const std::string& featureVersion, const std::vector<std::string> & photos, const std::vector<FaceBean> & faces, const Token& token);
   void recv_savePersonWithPhotoAndFeatureMultiImage(PersonBean& _return);
   void savePersonWithPhotoAndFeatureSaved(PersonBean& _return, const PersonBean& personBean, const std::string& idPhotoMd5, const std::string& featureMd5, const Token& token);
   void send_savePersonWithPhotoAndFeatureSaved(const PersonBean& personBean, const std::string& idPhotoMd5, const std::string& featureMd5, const Token& token);
@@ -20491,8 +20512,8 @@ class IFaceLogClientT : virtual public IFaceLogIf {
   void savePersons(const std::vector<PersonBean> & persons, const Token& token);
   void send_savePersons(const std::vector<PersonBean> & persons, const Token& token);
   void recv_savePersons();
-  int32_t savePersonsWithPhoto(const std::map<std::string, PersonBean> & persons, const Token& token);
-  void send_savePersonsWithPhoto(const std::map<std::string, PersonBean> & persons, const Token& token);
+  int32_t savePersonsWithPhoto(const std::vector<std::string> & photos, const std::vector<PersonBean> & persons, const Token& token);
+  void send_savePersonsWithPhoto(const std::vector<std::string> & photos, const std::vector<PersonBean> & persons, const Token& token);
   int32_t recv_savePersonsWithPhoto();
   void saveServiceConfig(const Token& token);
   void send_saveServiceConfig(const Token& token);
@@ -21372,13 +21393,13 @@ class IFaceLogMultiface : virtual public IFaceLogIf {
     return;
   }
 
-  void addFeatureMulti(FeatureBean& _return, const std::string& feature, const std::string& featureVersion, const int32_t personId, const std::map<std::string, FaceBean> & faceInfo, const Token& token) {
+  void addFeatureMulti(FeatureBean& _return, const std::string& feature, const std::string& featureVersion, const int32_t personId, const std::vector<std::string> & photos, const std::vector<FaceBean> & faces, const Token& token) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->addFeatureMulti(_return, feature, featureVersion, personId, faceInfo, token);
+      ifaces_[i]->addFeatureMulti(_return, feature, featureVersion, personId, photos, faces, token);
     }
-    ifaces_[i]->addFeatureMulti(_return, feature, featureVersion, personId, faceInfo, token);
+    ifaces_[i]->addFeatureMulti(_return, feature, featureVersion, personId, photos, faces, token);
     return;
   }
 
@@ -22671,13 +22692,13 @@ class IFaceLogMultiface : virtual public IFaceLogIf {
     return;
   }
 
-  void savePersonWithPhotoAndFeatureMultiImage(PersonBean& _return, const PersonBean& personBean, const std::string& idPhoto, const std::string& feature, const std::string& featureVersion, const std::map<std::string, FaceBean> & faceInfo, const Token& token) {
+  void savePersonWithPhotoAndFeatureMultiImage(PersonBean& _return, const PersonBean& personBean, const std::string& idPhoto, const std::string& feature, const std::string& featureVersion, const std::vector<std::string> & photos, const std::vector<FaceBean> & faces, const Token& token) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->savePersonWithPhotoAndFeatureMultiImage(_return, personBean, idPhoto, feature, featureVersion, faceInfo, token);
+      ifaces_[i]->savePersonWithPhotoAndFeatureMultiImage(_return, personBean, idPhoto, feature, featureVersion, photos, faces, token);
     }
-    ifaces_[i]->savePersonWithPhotoAndFeatureMultiImage(_return, personBean, idPhoto, feature, featureVersion, faceInfo, token);
+    ifaces_[i]->savePersonWithPhotoAndFeatureMultiImage(_return, personBean, idPhoto, feature, featureVersion, photos, faces, token);
     return;
   }
 
@@ -22700,13 +22721,13 @@ class IFaceLogMultiface : virtual public IFaceLogIf {
     ifaces_[i]->savePersons(persons, token);
   }
 
-  int32_t savePersonsWithPhoto(const std::map<std::string, PersonBean> & persons, const Token& token) {
+  int32_t savePersonsWithPhoto(const std::vector<std::string> & photos, const std::vector<PersonBean> & persons, const Token& token) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->savePersonsWithPhoto(persons, token);
+      ifaces_[i]->savePersonsWithPhoto(photos, persons, token);
     }
-    return ifaces_[i]->savePersonsWithPhoto(persons, token);
+    return ifaces_[i]->savePersonsWithPhoto(photos, persons, token);
   }
 
   void saveServiceConfig(const Token& token) {
@@ -22865,8 +22886,8 @@ class IFaceLogConcurrentClientT : virtual public IFaceLogIf {
   void addFeature(FeatureBean& _return, const std::string& feature, const std::string& featureVersion, const int32_t personId, const std::vector<FaceBean> & faecBeans, const Token& token);
   int32_t send_addFeature(const std::string& feature, const std::string& featureVersion, const int32_t personId, const std::vector<FaceBean> & faecBeans, const Token& token);
   void recv_addFeature(FeatureBean& _return, const int32_t seqid);
-  void addFeatureMulti(FeatureBean& _return, const std::string& feature, const std::string& featureVersion, const int32_t personId, const std::map<std::string, FaceBean> & faceInfo, const Token& token);
-  int32_t send_addFeatureMulti(const std::string& feature, const std::string& featureVersion, const int32_t personId, const std::map<std::string, FaceBean> & faceInfo, const Token& token);
+  void addFeatureMulti(FeatureBean& _return, const std::string& feature, const std::string& featureVersion, const int32_t personId, const std::vector<std::string> & photos, const std::vector<FaceBean> & faces, const Token& token);
+  int32_t send_addFeatureMulti(const std::string& feature, const std::string& featureVersion, const int32_t personId, const std::vector<std::string> & photos, const std::vector<FaceBean> & faces, const Token& token);
   void recv_addFeatureMulti(FeatureBean& _return, const int32_t seqid);
   void addFeatureWithImage(FeatureBean& _return, const std::string& feature, const std::string& featureVersion, const int32_t personId, const bool asIdPhotoIfAbsent, const std::string& featurePhoto, const FaceBean& faceBean, const Token& token);
   int32_t send_addFeatureWithImage(const std::string& feature, const std::string& featureVersion, const int32_t personId, const bool asIdPhotoIfAbsent, const std::string& featurePhoto, const FaceBean& faceBean, const Token& token);
@@ -23270,8 +23291,8 @@ class IFaceLogConcurrentClientT : virtual public IFaceLogIf {
   void savePersonWithPhotoAndFeatureMultiFaces(PersonBean& _return, const PersonBean& personBean, const std::string& idPhoto, const std::string& feature, const std::string& featureVersion, const std::vector<FaceBean> & faceBeans, const Token& token);
   int32_t send_savePersonWithPhotoAndFeatureMultiFaces(const PersonBean& personBean, const std::string& idPhoto, const std::string& feature, const std::string& featureVersion, const std::vector<FaceBean> & faceBeans, const Token& token);
   void recv_savePersonWithPhotoAndFeatureMultiFaces(PersonBean& _return, const int32_t seqid);
-  void savePersonWithPhotoAndFeatureMultiImage(PersonBean& _return, const PersonBean& personBean, const std::string& idPhoto, const std::string& feature, const std::string& featureVersion, const std::map<std::string, FaceBean> & faceInfo, const Token& token);
-  int32_t send_savePersonWithPhotoAndFeatureMultiImage(const PersonBean& personBean, const std::string& idPhoto, const std::string& feature, const std::string& featureVersion, const std::map<std::string, FaceBean> & faceInfo, const Token& token);
+  void savePersonWithPhotoAndFeatureMultiImage(PersonBean& _return, const PersonBean& personBean, const std::string& idPhoto, const std::string& feature, const std::string& featureVersion, const std::vector<std::string> & photos, const std::vector<FaceBean> & faces, const Token& token);
+  int32_t send_savePersonWithPhotoAndFeatureMultiImage(const PersonBean& personBean, const std::string& idPhoto, const std::string& feature, const std::string& featureVersion, const std::vector<std::string> & photos, const std::vector<FaceBean> & faces, const Token& token);
   void recv_savePersonWithPhotoAndFeatureMultiImage(PersonBean& _return, const int32_t seqid);
   void savePersonWithPhotoAndFeatureSaved(PersonBean& _return, const PersonBean& personBean, const std::string& idPhotoMd5, const std::string& featureMd5, const Token& token);
   int32_t send_savePersonWithPhotoAndFeatureSaved(const PersonBean& personBean, const std::string& idPhotoMd5, const std::string& featureMd5, const Token& token);
@@ -23279,8 +23300,8 @@ class IFaceLogConcurrentClientT : virtual public IFaceLogIf {
   void savePersons(const std::vector<PersonBean> & persons, const Token& token);
   int32_t send_savePersons(const std::vector<PersonBean> & persons, const Token& token);
   void recv_savePersons(const int32_t seqid);
-  int32_t savePersonsWithPhoto(const std::map<std::string, PersonBean> & persons, const Token& token);
-  int32_t send_savePersonsWithPhoto(const std::map<std::string, PersonBean> & persons, const Token& token);
+  int32_t savePersonsWithPhoto(const std::vector<std::string> & photos, const std::vector<PersonBean> & persons, const Token& token);
+  int32_t send_savePersonsWithPhoto(const std::vector<std::string> & photos, const std::vector<PersonBean> & persons, const Token& token);
   int32_t recv_savePersonsWithPhoto(const int32_t seqid);
   void saveServiceConfig(const Token& token);
   int32_t send_saveServiceConfig(const Token& token);

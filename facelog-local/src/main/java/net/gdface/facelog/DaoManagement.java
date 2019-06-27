@@ -508,7 +508,9 @@ public class DaoManagement extends BaseDao implements ServiceConstant,Constant{
 	}
 
 	protected int daoSavePerson(Map<ByteBuffer,PersonBean> persons) throws DuplicateRecordException {
-		if(null == persons ){return 0;}
+		if(null == persons ){
+			return 0;
+		}
 		int count = 0;
 		PersonBean personBean ;
 		for(Entry<ByteBuffer, PersonBean> entry:persons.entrySet()){
