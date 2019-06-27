@@ -364,8 +364,8 @@ class RedisManagement implements ServiceConstant{
 		}
 	}
 	protected String sdkTaskQueueOf(String task,String sdkVersion) {	
-		checkArgument(Strings.isNullOrEmpty(task),"task is empty or null");
-		checkArgument(Strings.isNullOrEmpty(sdkVersion),"sdkVersion is empty or null");
+		checkArgument(!Strings.isNullOrEmpty(task),"task is empty or null");
+		checkArgument(!Strings.isNullOrEmpty(sdkVersion),"sdkVersion is empty or null");
 		return taskQueueOf(task + sdkVersion);
 	}
 }
