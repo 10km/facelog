@@ -132,7 +132,7 @@ public class FacelogMenu extends RootMenu{
 				.name("facelog")
 				.uiName("facelog 服务器")
 				.addChilds(
-						OptionType.STRING.builder().name("host").uiName("主机[:端口]").description("不指定端口号或<=0使用默认值").instance())
+						OptionType.STRING.builder().name("host").uiName("主机[:端口]").description("不指定端口号或<=0使用默认值").needReset().instance())
 				.instance();
 
 		commands = 
@@ -156,7 +156,7 @@ public class FacelogMenu extends RootMenu{
 								.setCmdAdapter(new CmdGetStatusAdapter()),
 						ItemBuilder.builder(CmdItem.class).name("reset").uiName("设备重启").addChilds(
 								OptionType.INTEGER.builder().name("schedule").uiName("延迟执行时间").description("指定执行时间(unix time[秒]),为null立即执行").instance()
-								).instance(),
+								).needReset().instance(),
 						ItemBuilder.builder(CmdItem.class).name(CMD_TIME).uiName("时间同步").addChilds(
 								OptionType.INTEGER.builder().name("timestamp").uiName("服务器时间").required().description("服务器 unix 时间[秒]").instance()
 								).instance(),
@@ -164,7 +164,7 @@ public class FacelogMenu extends RootMenu{
 								OptionType.URL.builder().name("url").uiName("更新版本的位置").required().instance(),
 								OptionType.STRING.builder().name(CMD_VERSION).uiName("版本号").required().instance(),
 								OptionType.INTEGER.builder().name("schedule").uiName("延迟执行时间").description("指定执行时间(unix time[秒]),为null立即执行").instance()
-								).instance(),
+								).needReset().instance(),
 						ItemBuilder.builder(CmdItem.class).name(CMD_IDLE_MSG).uiName("空闲消息").description("设置空闲时显示的消息").addChilds(
 								OptionType.STRING.builder().name("message").uiName("显示的消息").required().instance(),
 								OptionType.INTEGER.builder().name("duration").uiName("持续时间").description("持续时间[分钟],为null一直显示").instance()
