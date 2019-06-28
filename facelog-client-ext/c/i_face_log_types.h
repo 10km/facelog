@@ -7257,7 +7257,7 @@ struct _IFaceLogRunCmdArgs
   gboolean group;
   gchar * cmdpath;
   gboolean __isset_cmdpath;
-  GHashTable * jsonArgs;
+  gchar * jsonArgs;
   gboolean __isset_jsonArgs;
   gchar * ackChannel;
   gboolean __isset_ackChannel;
@@ -7317,7 +7317,7 @@ struct _IFaceLogRunTaskArgs
   gboolean __isset_taskQueue;
   gchar * cmdpath;
   gboolean __isset_cmdpath;
-  GHashTable * jsonArgs;
+  gchar * jsonArgs;
   gboolean __isset_jsonArgs;
   gchar * ackChannel;
   gboolean __isset_ackChannel;

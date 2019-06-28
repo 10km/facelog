@@ -754,12 +754,12 @@ public class FacelogDefaultImpl implements IFaceLog {
 	}
 
 	@Override
-	public boolean runTask(String taskQueue, String cmdpath, Map<String, String> jsonArgs, String ackChannel, Token token) {
+	public boolean runTask(String taskQueue, String cmdpath, String jsonArgs, String ackChannel, Token token) {
 		return false;
 	}
 
 	@Override
-	public int runCmd(List<Integer>target, boolean group, String cmdpath, Map<String, String> jsonArgs, String ackChannel, Token token) {
+	public int runCmd(List<Integer>target, boolean group, String cmdpath, String jsonArgs, String ackChannel, Token token) {
 		return 0;
 	}
 	@Override

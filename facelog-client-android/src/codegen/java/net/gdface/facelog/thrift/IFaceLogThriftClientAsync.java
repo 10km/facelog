@@ -3218,12 +3218,12 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(rootGroupOfPerson(personId), callback);
     }
     /**
-     * see also {@link net.gdface.facelog.IFaceLog#runCmd(java.util.List,boolean,java.lang.String,java.util.Map,java.lang.String,net.gdface.facelog.Token)}
+     * see also {@link net.gdface.facelog.IFaceLog#runCmd(java.util.List,boolean,java.lang.String,java.lang.String,java.lang.String,net.gdface.facelog.Token)}
      */
     public ListenableFuture<Integer> runCmd(List<Integer> target,
         boolean group,
         String cmdpath,
-        Map<String, String> jsonArgs,
+        String jsonArgs,
         String ackChannel,
         Token token){
         MethodCallback<Integer,Integer> nativeCallback = 
@@ -3240,12 +3240,7 @@ public class IFaceLogThriftClientAsync {
                     Integer.class),
             group,
             cmdpath,
-            TypeTransformer.getInstance().to(
-                    jsonArgs,
-                    String.class,
-                    String.class,
-                    String.class,
-                    String.class),
+            jsonArgs,
             ackChannel,
             TypeTransformer.getInstance().to(
                     token,
@@ -3256,18 +3251,18 @@ public class IFaceLogThriftClientAsync {
     public void runCmd(List<Integer> target,
         boolean group,
         String cmdpath,
-        Map<String, String> jsonArgs,
+        String jsonArgs,
         String ackChannel,
         Token token,
         FutureCallback<Integer>callback){
         factory.addCallback(runCmd(target,group,cmdpath,jsonArgs,ackChannel,token), callback);
     }
     /**
-     * see also {@link net.gdface.facelog.IFaceLog#runTask(java.lang.String,java.lang.String,java.util.Map,java.lang.String,net.gdface.facelog.Token)}
+     * see also {@link net.gdface.facelog.IFaceLog#runTask(java.lang.String,java.lang.String,java.lang.String,java.lang.String,net.gdface.facelog.Token)}
      */
     public ListenableFuture<Boolean> runTask(String taskQueue,
         String cmdpath,
-        Map<String, String> jsonArgs,
+        String jsonArgs,
         String ackChannel,
         Token token){
         MethodCallback<Boolean,Boolean> nativeCallback = 
@@ -3280,12 +3275,7 @@ public class IFaceLogThriftClientAsync {
         nativeCallback.service.runTask(
                 taskQueue,
             cmdpath,
-            TypeTransformer.getInstance().to(
-                    jsonArgs,
-                    String.class,
-                    String.class,
-                    String.class,
-                    String.class),
+            jsonArgs,
             ackChannel,
             TypeTransformer.getInstance().to(
                     token,
@@ -3295,7 +3285,7 @@ public class IFaceLogThriftClientAsync {
     }
     public void runTask(String taskQueue,
         String cmdpath,
-        Map<String, String> jsonArgs,
+        String jsonArgs,
         String ackChannel,
         Token token,
         FutureCallback<Boolean>callback){

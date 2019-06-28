@@ -3593,7 +3593,7 @@ public class IFaceLogThriftClient implements IFaceLog {
     public int runCmd(final List<Integer> target,
         final boolean group,
         final String cmdpath,
-        final Map<String, String> jsonArgs,
+        final String jsonArgs,
         final String ackChannel,
         final Token token) 
         {
@@ -3609,12 +3609,7 @@ public class IFaceLogThriftClient implements IFaceLog {
                     service.runCmd(TypeTransformer.getInstance().to(
                     target,
                     Integer.class,
-                    Integer.class),group,cmdpath,TypeTransformer.getInstance().to(
-                    jsonArgs,
-                    String.class,
-                    String.class,
-                    String.class,
-                    String.class),ackChannel,TypeTransformer.getInstance().to(
+                    Integer.class),group,cmdpath,jsonArgs,ackChannel,TypeTransformer.getInstance().to(
                     token,
                     Token.class,
                     net.gdface.facelog.client.thrift.Token.class),nativeCallback);
@@ -3631,7 +3626,7 @@ public class IFaceLogThriftClient implements IFaceLog {
     @Override
     public boolean runTask(final String taskQueue,
         final String cmdpath,
-        final Map<String, String> jsonArgs,
+        final String jsonArgs,
         final String ackChannel,
         final Token token) 
         {
@@ -3644,12 +3639,7 @@ public class IFaceLogThriftClient implements IFaceLog {
                 new ServiceAsyncCall<Boolean>(){
                 @Override
                 public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<Boolean> nativeCallback){
-                    service.runTask(taskQueue,cmdpath,TypeTransformer.getInstance().to(
-                    jsonArgs,
-                    String.class,
-                    String.class,
-                    String.class,
-                    String.class),ackChannel,TypeTransformer.getInstance().to(
+                    service.runTask(taskQueue,cmdpath,jsonArgs,ackChannel,TypeTransformer.getInstance().to(
                     token,
                     Token.class,
                     net.gdface.facelog.client.thrift.Token.class),nativeCallback);

@@ -1113,7 +1113,7 @@ public interface IFaceLog
             @ThriftField(value=1, name="target", requiredness=Requiredness.OPTIONAL) final List<Integer> target,
             @ThriftField(value=2, name="group", requiredness=Requiredness.REQUIRED) final boolean group,
             @ThriftField(value=3, name="cmdpath", requiredness=Requiredness.OPTIONAL) final String cmdpath,
-            @ThriftField(value=4, name="jsonArgs", requiredness=Requiredness.OPTIONAL) final Map<String, String> jsonArgs,
+            @ThriftField(value=4, name="jsonArgs", requiredness=Requiredness.OPTIONAL) final String jsonArgs,
             @ThriftField(value=5, name="ackChannel", requiredness=Requiredness.OPTIONAL) final String ackChannel,
             @ThriftField(value=6, name="token", requiredness=Requiredness.OPTIONAL) final Token token
         );
@@ -1125,7 +1125,7 @@ public interface IFaceLog
         ListenableFuture<Boolean> runTask(
             @ThriftField(value=1, name="taskQueue", requiredness=Requiredness.OPTIONAL) final String taskQueue,
             @ThriftField(value=2, name="cmdpath", requiredness=Requiredness.OPTIONAL) final String cmdpath,
-            @ThriftField(value=3, name="jsonArgs", requiredness=Requiredness.OPTIONAL) final Map<String, String> jsonArgs,
+            @ThriftField(value=3, name="jsonArgs", requiredness=Requiredness.OPTIONAL) final String jsonArgs,
             @ThriftField(value=4, name="ackChannel", requiredness=Requiredness.OPTIONAL) final String ackChannel,
             @ThriftField(value=5, name="token", requiredness=Requiredness.OPTIONAL) final Token token
         );
@@ -2494,7 +2494,7 @@ public interface IFaceLog
         @ThriftField(value=1, name="target", requiredness=Requiredness.OPTIONAL) final List<Integer> target,
         @ThriftField(value=2, name="group", requiredness=Requiredness.REQUIRED) final boolean group,
         @ThriftField(value=3, name="cmdpath", requiredness=Requiredness.OPTIONAL) final String cmdpath,
-        @ThriftField(value=4, name="jsonArgs", requiredness=Requiredness.OPTIONAL) final Map<String, String> jsonArgs,
+        @ThriftField(value=4, name="jsonArgs", requiredness=Requiredness.OPTIONAL) final String jsonArgs,
         @ThriftField(value=5, name="ackChannel", requiredness=Requiredness.OPTIONAL) final String ackChannel,
         @ThriftField(value=6, name="token", requiredness=Requiredness.OPTIONAL) final Token token
     ) throws ServiceRuntimeException;
@@ -2506,7 +2506,7 @@ public interface IFaceLog
     boolean runTask(
         @ThriftField(value=1, name="taskQueue", requiredness=Requiredness.OPTIONAL) final String taskQueue,
         @ThriftField(value=2, name="cmdpath", requiredness=Requiredness.OPTIONAL) final String cmdpath,
-        @ThriftField(value=3, name="jsonArgs", requiredness=Requiredness.OPTIONAL) final Map<String, String> jsonArgs,
+        @ThriftField(value=3, name="jsonArgs", requiredness=Requiredness.OPTIONAL) final String jsonArgs,
         @ThriftField(value=4, name="ackChannel", requiredness=Requiredness.OPTIONAL) final String ackChannel,
         @ThriftField(value=5, name="token", requiredness=Requiredness.OPTIONAL) final Token token
     ) throws ServiceRuntimeException;

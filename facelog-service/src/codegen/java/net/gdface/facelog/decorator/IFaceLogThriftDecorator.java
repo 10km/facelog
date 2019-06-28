@@ -2737,13 +2737,13 @@ public class IFaceLogThriftDecorator {
         }
     }
     /**
-     * @see {@link net.gdface.facelog.IFaceLog#runCmd(java.util.List,boolean,java.lang.String,java.util.Map,java.lang.String,net.gdface.facelog.Token)}
+     * @see {@link net.gdface.facelog.IFaceLog#runCmd(java.util.List,boolean,java.lang.String,java.lang.String,java.lang.String,net.gdface.facelog.Token)}
      */
     @ThriftMethod(value = "runCmd" )
     public int runCmd(List<Integer> target,
         boolean group,
         String cmdpath,
-        Map<String,String> jsonArgs,
+        String jsonArgs,
         String ackChannel,
         Token token) 
         throws ServiceRuntimeException{
@@ -2754,12 +2754,7 @@ public class IFaceLogThriftDecorator {
                     Integer.class),
                 group,
                 cmdpath,
-                TypeTransformer.getInstance().to(
-                    jsonArgs,
-                    String.class,
-                    String.class,
-                    String.class,
-                    String.class),
+                jsonArgs,
                 ackChannel,
                 TypeTransformer.getInstance().to(
                     token,
@@ -2774,24 +2769,19 @@ public class IFaceLogThriftDecorator {
         }
     }
     /**
-     * @see {@link net.gdface.facelog.IFaceLog#runTask(java.lang.String,java.lang.String,java.util.Map,java.lang.String,net.gdface.facelog.Token)}
+     * @see {@link net.gdface.facelog.IFaceLog#runTask(java.lang.String,java.lang.String,java.lang.String,java.lang.String,net.gdface.facelog.Token)}
      */
     @ThriftMethod(value = "runTask" )
     public boolean runTask(String taskQueue,
         String cmdpath,
-        Map<String,String> jsonArgs,
+        String jsonArgs,
         String ackChannel,
         Token token) 
         throws ServiceRuntimeException{
         try{
             return delegate().runTask(taskQueue,
                 cmdpath,
-                TypeTransformer.getInstance().to(
-                    jsonArgs,
-                    String.class,
-                    String.class,
-                    String.class,
-                    String.class),
+                jsonArgs,
                 ackChannel,
                 TypeTransformer.getInstance().to(
                     token,

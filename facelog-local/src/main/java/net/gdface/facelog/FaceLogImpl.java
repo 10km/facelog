@@ -1668,17 +1668,17 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 	}
 	
 	@Override
-	public int runCmd(List<Integer>target,boolean group,String cmdpath,Map<String, String> jsonArgs,String ackChannel,Token token){
+	public int runCmd(List<Integer>target,boolean group,String cmdpath,String jsonArgs,String ackChannel,Token token){
 		try {
 			Enable.PERSON_ONLY.check(tm, token);
-			checkArgument(tm.isUserToken(token),"type of token must be PERSON or ROOT");
+			checkArgument(tm.isUserToken(token),"type of token must be PERSON or ROOT");			
 			return dc.doRunCmd(target, group, cmdpath, jsonArgs, ackChannel, token.getId()); 
 		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
 		} 
 	}
 	@Override
-	public boolean runTask(String taskQueue,String cmdpath,Map<String, String> jsonArgs,String ackChannel,Token token){
+	public boolean runTask(String taskQueue,String cmdpath,String jsonArgs,String ackChannel,Token token){
 		try {
 			Enable.PERSON_ONLY.check(tm, token);
 			checkArgument(tm.isUserToken(token),"type of token must be PERSON or ROOT");

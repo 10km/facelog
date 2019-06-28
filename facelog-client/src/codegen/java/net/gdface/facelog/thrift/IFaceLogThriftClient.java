@@ -2712,7 +2712,7 @@ public class IFaceLogThriftClient implements IFaceLog {
     public int runCmd(List<Integer> target,
         boolean group,
         String cmdpath,
-        Map<String, String> jsonArgs,
+        String jsonArgs,
         String ackChannel,
         Token token) 
         {
@@ -2724,12 +2724,7 @@ public class IFaceLogThriftClient implements IFaceLog {
                     Integer.class),
                 group,
                 cmdpath,
-                TypeTransformer.getInstance().to(
-                    jsonArgs,
-                    String.class,
-                    String.class,
-                    String.class,
-                    String.class),
+                jsonArgs,
                 ackChannel,
                 TypeTransformer.getInstance().to(
                     token,
@@ -2746,7 +2741,7 @@ public class IFaceLogThriftClient implements IFaceLog {
     @Override
     public boolean runTask(String taskQueue,
         String cmdpath,
-        Map<String, String> jsonArgs,
+        String jsonArgs,
         String ackChannel,
         Token token) 
         {
@@ -2754,12 +2749,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         try{
             return instance.runTask(taskQueue,
                 cmdpath,
-                TypeTransformer.getInstance().to(
-                    jsonArgs,
-                    String.class,
-                    String.class,
-                    String.class,
-                    String.class),
+                jsonArgs,
                 ackChannel,
                 TypeTransformer.getInstance().to(
                     token,

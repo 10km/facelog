@@ -4909,8 +4909,8 @@ public class IFaceLogSpringController {
         public boolean group;
         @ApiModelProperty(value ="设备命令的dtalk路径" ,required=true ,dataType="String")
         public String cmdpath;
-        @ApiModelProperty(value ="设备命令参数(JSON)" ,required=true ,dataType="Map")
-        public Map<String, String> jsonArgs;
+        @ApiModelProperty(value ="设备命令参数(JSON)" ,required=true ,dataType="String")
+        public String jsonArgs;
         @ApiModelProperty(value ="设备命令响应频道,不需要接收命令响应时设置为{@code null}" ,required=true ,dataType="String")
         public String ackChannel;
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
@@ -4925,8 +4925,8 @@ public class IFaceLogSpringController {
         public String taskQueue;
         @ApiModelProperty(value ="设备命令的dtalk路径" ,required=true ,dataType="String")
         public String cmdpath;
-        @ApiModelProperty(value ="设备命令参数(JSON)" ,required=true ,dataType="Map")
-        public Map<String, String> jsonArgs;
+        @ApiModelProperty(value ="设备命令参数(JSON)" ,required=true ,dataType="String")
+        public String jsonArgs;
         @ApiModelProperty(value ="设备命令响应频道,不需要接收命令响应时设置为{@code null}" ,required=true ,dataType="String")
         public String ackChannel;
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")

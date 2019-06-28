@@ -1290,7 +1290,7 @@ public interface IFaceLog{
 	 * @param token 访问令牌
 	 * @return 收到命令的客户端数目
 	 */
-	int runCmd(List<Integer>target, boolean group, String cmdpath, Map<String, String> jsonArgs, String ackChannel, Token token);
+	int runCmd(List<Integer>target, boolean group, String cmdpath, String jsonArgs, String ackChannel, Token token);
 	/**
 	 * (异步)执行cmdpath指定的任务<br>
 	 * <br>{@code PERSON_ONLY}
@@ -1301,7 +1301,7 @@ public interface IFaceLog{
 	 * @param token 访问令牌
 	 * @return 成功提交任务返回{@code true},否则返回{@code false}
 	 */
-	boolean runTask(String taskQueue, String cmdpath, Map<String, String> jsonArgs, String ackChannel, Token token);
+	boolean runTask(String taskQueue, String cmdpath, String jsonArgs, String ackChannel, Token token);
 	/**
 	 * 返回指定的参数,如果参数没有定义则返回{@code null}<br>
 	 * 非root令牌只能访问指定范围的参数,否则会抛出异常<br>

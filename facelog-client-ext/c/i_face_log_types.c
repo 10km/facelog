@@ -85194,51 +85194,17 @@ i_face_log_run_cmd_args_read (ThriftStruct *object, ThriftProtocol *protocol, GE
         }
         break;
       case 4:
-        if (ftype == T_MAP)
+        if (ftype == T_STRING)
         {
+          if (this_object->jsonArgs != NULL)
           {
-            guint32 size;
-            guint32 i;
-            ThriftType key_type;
-            ThriftType value_type;
-
-            /* read the map begin marker */
-            if ((ret = thrift_protocol_read_map_begin (protocol, &key_type, &value_type, &size, error)) < 0)
-              return -1;
-            xfer += ret;
-
-            /* iterate through each of the map's fields */
-            for (i = 0; i < size; i++)
-            {
-              gchar * key144 = NULL;
-              gchar * val145 = NULL;
-              if (key144 != NULL)
-              {
-                g_free(key144);
-                key144 = NULL;
-              }
-
-              if ((ret = thrift_protocol_read_string (protocol, &key144, error)) < 0)
-                return -1;
-              xfer += ret;
-              if (val145 != NULL)
-              {
-                g_free(val145);
-                val145 = NULL;
-              }
-
-              if ((ret = thrift_protocol_read_string (protocol, &val145, error)) < 0)
-                return -1;
-              xfer += ret;
-              if (this_object->jsonArgs && key144)
-                g_hash_table_insert ((GHashTable *)this_object->jsonArgs, (gpointer) key144, (gpointer) val145);
-            }
-
-            /* read the map end marker */
-            if ((ret = thrift_protocol_read_map_end (protocol, error)) < 0)
-              return -1;
-            xfer += ret;
+            g_free(this_object->jsonArgs);
+            this_object->jsonArgs = NULL;
           }
+
+          if ((ret = thrift_protocol_read_string (protocol, &this_object->jsonArgs, error)) < 0)
+            return -1;
+          xfer += ret;
           this_object->__isset_jsonArgs = TRUE;
         } else {
           if ((ret = thrift_protocol_skip (protocol, ftype, error)) < 0)
@@ -85321,14 +85287,14 @@ i_face_log_run_cmd_args_write (ThriftStruct *object, ThriftProtocol *protocol, G
     return -1;
   xfer += ret;
   {
-    guint i146;
+    guint i144;
 
     if ((ret = thrift_protocol_write_list_begin (protocol, T_I32, (gint32) (this_object->target ? this_object->target->len : 0), error)) < 0)
       return -1;
     xfer += ret;
-    for (i146 = 0; i146 < (this_object->target ? this_object->target->len : 0); i146++)
+    for (i144 = 0; i144 < (this_object->target ? this_object->target->len : 0); i144++)
     {
-      if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->target, gint32, i146)), error)) < 0)
+      if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->target, gint32, i144)), error)) < 0)
         return -1;
       xfer += ret;
 
@@ -85360,45 +85326,13 @@ i_face_log_run_cmd_args_write (ThriftStruct *object, ThriftProtocol *protocol, G
   if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
     return -1;
   xfer += ret;
-  if ((ret = thrift_protocol_write_field_begin (protocol, "jsonArgs", T_MAP, 4, error)) < 0)
+  if ((ret = thrift_protocol_write_field_begin (protocol, "jsonArgs", T_STRING, 4, error)) < 0)
     return -1;
   xfer += ret;
-  {
-    gchar * key147 = NULL;
-    gchar * val148 = NULL;
-    GList *key_list = NULL, *iter = NULL;
-    gchar ** keys;
-    int i = 0, key_count;
+  if ((ret = thrift_protocol_write_string (protocol, this_object->jsonArgs, error)) < 0)
+    return -1;
+  xfer += ret;
 
-    if ((ret = thrift_protocol_write_map_begin (protocol, T_STRING, T_STRING, this_object->jsonArgs ? (gint32) g_hash_table_size ((GHashTable *) this_object->jsonArgs) : 0, error)) < 0)
-      return -1;
-    xfer += ret;
-    if (this_object->jsonArgs)
-      g_hash_table_foreach ((GHashTable *) this_object->jsonArgs, thrift_hash_table_get_keys, &key_list);
-    key_count = g_list_length (key_list);
-    keys = g_newa (gchar *, key_count);
-    for (iter = g_list_first (key_list); iter; iter = iter->next)
-      keys[i++] = (gchar *) iter->data;
-    g_list_free (key_list);
-
-    for (i = 0; i < key_count; ++i)
-    {
-      key147 = keys[i];
-      val148 = (gchar *) g_hash_table_lookup (((GHashTable *) this_object->jsonArgs), (gpointer) key147);
-
-      if ((ret = thrift_protocol_write_string (protocol,  key147, error)) < 0)
-        return -1;
-      xfer += ret;
-
-      if ((ret = thrift_protocol_write_string (protocol,  val148, error)) < 0)
-        return -1;
-      xfer += ret;
-
-    }
-    if ((ret = thrift_protocol_write_map_end (protocol, error)) < 0)
-      return -1;
-    xfer += ret;
-  }
   if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
     return -1;
   xfer += ret;
@@ -85462,8 +85396,8 @@ i_face_log_run_cmd_args_set_property (GObject *object,
 
     case PROP_I_FACE_LOG_RUN_CMD_ARGS_JSON_ARGS:
       if (self->jsonArgs != NULL)
-        g_hash_table_unref (self->jsonArgs);
-      self->jsonArgs = g_value_dup_boxed (value);
+        g_free (self->jsonArgs);
+      self->jsonArgs = g_value_dup_string (value);
       self->__isset_jsonArgs = TRUE;
       break;
 
@@ -85510,7 +85444,7 @@ i_face_log_run_cmd_args_get_property (GObject *object,
       break;
 
     case PROP_I_FACE_LOG_RUN_CMD_ARGS_JSON_ARGS:
-      g_value_set_boxed (value, self->jsonArgs);
+      g_value_set_string (value, self->jsonArgs);
       break;
 
     case PROP_I_FACE_LOG_RUN_CMD_ARGS_ACK_CHANNEL:
@@ -85537,7 +85471,7 @@ i_face_log_run_cmd_args_instance_init (IFaceLogRunCmdArgs * object)
   object->group = 0;
   object->cmdpath = NULL;
   object->__isset_cmdpath = FALSE;
-  object->jsonArgs = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
+  object->jsonArgs = NULL;
   object->__isset_jsonArgs = FALSE;
   object->ackChannel = NULL;
   object->__isset_ackChannel = FALSE;
@@ -85564,7 +85498,7 @@ i_face_log_run_cmd_args_finalize (GObject *object)
   }
   if (tobject->jsonArgs != NULL)
   {
-    g_hash_table_destroy (tobject->jsonArgs);
+    g_free(tobject->jsonArgs);
     tobject->jsonArgs = NULL;
   }
   if (tobject->ackChannel != NULL)
@@ -85622,11 +85556,11 @@ i_face_log_run_cmd_args_class_init (IFaceLogRunCmdArgsClass * cls)
   g_object_class_install_property
     (gobject_class,
      PROP_I_FACE_LOG_RUN_CMD_ARGS_JSON_ARGS,
-     g_param_spec_boxed ("jsonArgs",
-                         NULL,
-                         NULL,
-                         G_TYPE_HASH_TABLE,
-                         G_PARAM_READWRITE));
+     g_param_spec_string ("jsonArgs",
+                          NULL,
+                          NULL,
+                          NULL,
+                          G_PARAM_READWRITE));
 
   g_object_class_install_property
     (gobject_class,
@@ -86069,51 +86003,17 @@ i_face_log_run_task_args_read (ThriftStruct *object, ThriftProtocol *protocol, G
         }
         break;
       case 3:
-        if (ftype == T_MAP)
+        if (ftype == T_STRING)
         {
+          if (this_object->jsonArgs != NULL)
           {
-            guint32 size;
-            guint32 i;
-            ThriftType key_type;
-            ThriftType value_type;
-
-            /* read the map begin marker */
-            if ((ret = thrift_protocol_read_map_begin (protocol, &key_type, &value_type, &size, error)) < 0)
-              return -1;
-            xfer += ret;
-
-            /* iterate through each of the map's fields */
-            for (i = 0; i < size; i++)
-            {
-              gchar * key149 = NULL;
-              gchar * val150 = NULL;
-              if (key149 != NULL)
-              {
-                g_free(key149);
-                key149 = NULL;
-              }
-
-              if ((ret = thrift_protocol_read_string (protocol, &key149, error)) < 0)
-                return -1;
-              xfer += ret;
-              if (val150 != NULL)
-              {
-                g_free(val150);
-                val150 = NULL;
-              }
-
-              if ((ret = thrift_protocol_read_string (protocol, &val150, error)) < 0)
-                return -1;
-              xfer += ret;
-              if (this_object->jsonArgs && key149)
-                g_hash_table_insert ((GHashTable *)this_object->jsonArgs, (gpointer) key149, (gpointer) val150);
-            }
-
-            /* read the map end marker */
-            if ((ret = thrift_protocol_read_map_end (protocol, error)) < 0)
-              return -1;
-            xfer += ret;
+            g_free(this_object->jsonArgs);
+            this_object->jsonArgs = NULL;
           }
+
+          if ((ret = thrift_protocol_read_string (protocol, &this_object->jsonArgs, error)) < 0)
+            return -1;
+          xfer += ret;
           this_object->__isset_jsonArgs = TRUE;
         } else {
           if ((ret = thrift_protocol_skip (protocol, ftype, error)) < 0)
@@ -86204,45 +86104,13 @@ i_face_log_run_task_args_write (ThriftStruct *object, ThriftProtocol *protocol, 
   if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
     return -1;
   xfer += ret;
-  if ((ret = thrift_protocol_write_field_begin (protocol, "jsonArgs", T_MAP, 3, error)) < 0)
+  if ((ret = thrift_protocol_write_field_begin (protocol, "jsonArgs", T_STRING, 3, error)) < 0)
     return -1;
   xfer += ret;
-  {
-    gchar * key151 = NULL;
-    gchar * val152 = NULL;
-    GList *key_list = NULL, *iter = NULL;
-    gchar ** keys;
-    int i = 0, key_count;
+  if ((ret = thrift_protocol_write_string (protocol, this_object->jsonArgs, error)) < 0)
+    return -1;
+  xfer += ret;
 
-    if ((ret = thrift_protocol_write_map_begin (protocol, T_STRING, T_STRING, this_object->jsonArgs ? (gint32) g_hash_table_size ((GHashTable *) this_object->jsonArgs) : 0, error)) < 0)
-      return -1;
-    xfer += ret;
-    if (this_object->jsonArgs)
-      g_hash_table_foreach ((GHashTable *) this_object->jsonArgs, thrift_hash_table_get_keys, &key_list);
-    key_count = g_list_length (key_list);
-    keys = g_newa (gchar *, key_count);
-    for (iter = g_list_first (key_list); iter; iter = iter->next)
-      keys[i++] = (gchar *) iter->data;
-    g_list_free (key_list);
-
-    for (i = 0; i < key_count; ++i)
-    {
-      key151 = keys[i];
-      val152 = (gchar *) g_hash_table_lookup (((GHashTable *) this_object->jsonArgs), (gpointer) key151);
-
-      if ((ret = thrift_protocol_write_string (protocol,  key151, error)) < 0)
-        return -1;
-      xfer += ret;
-
-      if ((ret = thrift_protocol_write_string (protocol,  val152, error)) < 0)
-        return -1;
-      xfer += ret;
-
-    }
-    if ((ret = thrift_protocol_write_map_end (protocol, error)) < 0)
-      return -1;
-    xfer += ret;
-  }
   if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
     return -1;
   xfer += ret;
@@ -86302,8 +86170,8 @@ i_face_log_run_task_args_set_property (GObject *object,
 
     case PROP_I_FACE_LOG_RUN_TASK_ARGS_JSON_ARGS:
       if (self->jsonArgs != NULL)
-        g_hash_table_unref (self->jsonArgs);
-      self->jsonArgs = g_value_dup_boxed (value);
+        g_free (self->jsonArgs);
+      self->jsonArgs = g_value_dup_string (value);
       self->__isset_jsonArgs = TRUE;
       break;
 
@@ -86346,7 +86214,7 @@ i_face_log_run_task_args_get_property (GObject *object,
       break;
 
     case PROP_I_FACE_LOG_RUN_TASK_ARGS_JSON_ARGS:
-      g_value_set_boxed (value, self->jsonArgs);
+      g_value_set_string (value, self->jsonArgs);
       break;
 
     case PROP_I_FACE_LOG_RUN_TASK_ARGS_ACK_CHANNEL:
@@ -86372,7 +86240,7 @@ i_face_log_run_task_args_instance_init (IFaceLogRunTaskArgs * object)
   object->__isset_taskQueue = FALSE;
   object->cmdpath = NULL;
   object->__isset_cmdpath = FALSE;
-  object->jsonArgs = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
+  object->jsonArgs = NULL;
   object->__isset_jsonArgs = FALSE;
   object->ackChannel = NULL;
   object->__isset_ackChannel = FALSE;
@@ -86399,7 +86267,7 @@ i_face_log_run_task_args_finalize (GObject *object)
   }
   if (tobject->jsonArgs != NULL)
   {
-    g_hash_table_destroy (tobject->jsonArgs);
+    g_free(tobject->jsonArgs);
     tobject->jsonArgs = NULL;
   }
   if (tobject->ackChannel != NULL)
@@ -86448,11 +86316,11 @@ i_face_log_run_task_args_class_init (IFaceLogRunTaskArgsClass * cls)
   g_object_class_install_property
     (gobject_class,
      PROP_I_FACE_LOG_RUN_TASK_ARGS_JSON_ARGS,
-     g_param_spec_boxed ("jsonArgs",
-                         NULL,
-                         NULL,
-                         G_TYPE_HASH_TABLE,
-                         G_PARAM_READWRITE));
+     g_param_spec_string ("jsonArgs",
+                          NULL,
+                          NULL,
+                          NULL,
+                          G_PARAM_READWRITE));
 
   g_object_class_install_property
     (gobject_class,
@@ -92849,19 +92717,19 @@ i_face_log_save_person_with_photo_and_feature_multi_faces_args_read (ThriftStruc
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              FaceBean * _elem153 = NULL;
-              if ( _elem153 != NULL)
+              FaceBean * _elem145 = NULL;
+              if ( _elem145 != NULL)
               {
-                g_object_unref (_elem153);
+                g_object_unref (_elem145);
               }
-              _elem153 = g_object_new (TYPE_FACE_BEAN, NULL);
-              if ((ret = thrift_struct_read (THRIFT_STRUCT (_elem153), protocol, error)) < 0)
+              _elem145 = g_object_new (TYPE_FACE_BEAN, NULL);
+              if ((ret = thrift_struct_read (THRIFT_STRUCT (_elem145), protocol, error)) < 0)
               {
-                g_object_unref (_elem153);
+                g_object_unref (_elem145);
                 return -1;
               }
               xfer += ret;
-              g_ptr_array_add (this_object->faceBeans, _elem153);
+              g_ptr_array_add (this_object->faceBeans, _elem145);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -92962,14 +92830,14 @@ i_face_log_save_person_with_photo_and_feature_multi_faces_args_write (ThriftStru
     return -1;
   xfer += ret;
   {
-    guint i154;
+    guint i146;
 
     if ((ret = thrift_protocol_write_list_begin (protocol, T_STRUCT, (gint32) (this_object->faceBeans ? this_object->faceBeans->len : 0), error)) < 0)
       return -1;
     xfer += ret;
-    for (i154 = 0; i154 < (this_object->faceBeans ? this_object->faceBeans->len : 0); i154++)
+    for (i146 = 0; i146 < (this_object->faceBeans ? this_object->faceBeans->len : 0); i146++)
     {
-      if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) this_object->faceBeans, i154))), protocol, error)) < 0)
+      if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) this_object->faceBeans, i146))), protocol, error)) < 0)
         return -1;
       xfer += ret;
 
@@ -93710,20 +93578,20 @@ i_face_log_save_person_with_photo_and_feature_multi_image_args_read (ThriftStruc
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              GByteArray * _elem155 = NULL;
-              if (_elem155 != NULL)
+              GByteArray * _elem147 = NULL;
+              if (_elem147 != NULL)
               {
-                g_free(_elem155);
-                _elem155 = NULL;
+                g_free(_elem147);
+                _elem147 = NULL;
               }
 
               if ((ret = thrift_protocol_read_binary (protocol, &data, &len, error)) < 0)
                 return -1;
               xfer += ret;
-              _elem155 = g_byte_array_new();
-              g_byte_array_append (_elem155, (guint8 *) data, (guint) len);
+              _elem147 = g_byte_array_new();
+              g_byte_array_append (_elem147, (guint8 *) data, (guint) len);
               g_free (data);
-              g_ptr_array_add (this_object->photos, _elem155);
+              g_ptr_array_add (this_object->photos, _elem147);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -93751,19 +93619,19 @@ i_face_log_save_person_with_photo_and_feature_multi_image_args_read (ThriftStruc
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              FaceBean * _elem156 = NULL;
-              if ( _elem156 != NULL)
+              FaceBean * _elem148 = NULL;
+              if ( _elem148 != NULL)
               {
-                g_object_unref (_elem156);
+                g_object_unref (_elem148);
               }
-              _elem156 = g_object_new (TYPE_FACE_BEAN, NULL);
-              if ((ret = thrift_struct_read (THRIFT_STRUCT (_elem156), protocol, error)) < 0)
+              _elem148 = g_object_new (TYPE_FACE_BEAN, NULL);
+              if ((ret = thrift_struct_read (THRIFT_STRUCT (_elem148), protocol, error)) < 0)
               {
-                g_object_unref (_elem156);
+                g_object_unref (_elem148);
                 return -1;
               }
               xfer += ret;
-              g_ptr_array_add (this_object->faces, _elem156);
+              g_ptr_array_add (this_object->faces, _elem148);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -93864,14 +93732,14 @@ i_face_log_save_person_with_photo_and_feature_multi_image_args_write (ThriftStru
     return -1;
   xfer += ret;
   {
-    guint i157;
+    guint i149;
 
     if ((ret = thrift_protocol_write_list_begin (protocol, T_STRING, (gint32) (this_object->photos ? this_object->photos->len : 0), error)) < 0)
       return -1;
     xfer += ret;
-    for (i157 = 0; i157 < (this_object->photos ? this_object->photos->len : 0); i157++)
+    for (i149 = 0; i149 < (this_object->photos ? this_object->photos->len : 0); i149++)
     {
-      if ((ret = thrift_protocol_write_binary (protocol, ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->photos, i157)) ? ((GByteArray *) ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->photos, i157)))->data : NULL, ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->photos, i157)) ? ((GByteArray *) ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->photos, i157)))->len : 0, error)) < 0)
+      if ((ret = thrift_protocol_write_binary (protocol, ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->photos, i149)) ? ((GByteArray *) ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->photos, i149)))->data : NULL, ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->photos, i149)) ? ((GByteArray *) ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->photos, i149)))->len : 0, error)) < 0)
         return -1;
       xfer += ret;
 
@@ -93887,14 +93755,14 @@ i_face_log_save_person_with_photo_and_feature_multi_image_args_write (ThriftStru
     return -1;
   xfer += ret;
   {
-    guint i158;
+    guint i150;
 
     if ((ret = thrift_protocol_write_list_begin (protocol, T_STRUCT, (gint32) (this_object->faces ? this_object->faces->len : 0), error)) < 0)
       return -1;
     xfer += ret;
-    for (i158 = 0; i158 < (this_object->faces ? this_object->faces->len : 0); i158++)
+    for (i150 = 0; i150 < (this_object->faces ? this_object->faces->len : 0); i150++)
     {
-      if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) this_object->faces, i158))), protocol, error)) < 0)
+      if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) this_object->faces, i150))), protocol, error)) < 0)
         return -1;
       xfer += ret;
 
@@ -95285,19 +95153,19 @@ i_face_log_save_persons_args_read (ThriftStruct *object, ThriftProtocol *protoco
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              PersonBean * _elem159 = NULL;
-              if ( _elem159 != NULL)
+              PersonBean * _elem151 = NULL;
+              if ( _elem151 != NULL)
               {
-                g_object_unref (_elem159);
+                g_object_unref (_elem151);
               }
-              _elem159 = g_object_new (TYPE_PERSON_BEAN, NULL);
-              if ((ret = thrift_struct_read (THRIFT_STRUCT (_elem159), protocol, error)) < 0)
+              _elem151 = g_object_new (TYPE_PERSON_BEAN, NULL);
+              if ((ret = thrift_struct_read (THRIFT_STRUCT (_elem151), protocol, error)) < 0)
               {
-                g_object_unref (_elem159);
+                g_object_unref (_elem151);
                 return -1;
               }
               xfer += ret;
-              g_ptr_array_add (this_object->persons, _elem159);
+              g_ptr_array_add (this_object->persons, _elem151);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -95358,14 +95226,14 @@ i_face_log_save_persons_args_write (ThriftStruct *object, ThriftProtocol *protoc
     return -1;
   xfer += ret;
   {
-    guint i160;
+    guint i152;
 
     if ((ret = thrift_protocol_write_list_begin (protocol, T_STRUCT, (gint32) (this_object->persons ? this_object->persons->len : 0), error)) < 0)
       return -1;
     xfer += ret;
-    for (i160 = 0; i160 < (this_object->persons ? this_object->persons->len : 0); i160++)
+    for (i152 = 0; i152 < (this_object->persons ? this_object->persons->len : 0); i152++)
     {
-      if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) this_object->persons, i160))), protocol, error)) < 0)
+      if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) this_object->persons, i152))), protocol, error)) < 0)
         return -1;
       xfer += ret;
 
@@ -95861,20 +95729,20 @@ i_face_log_save_persons_with_photo_args_read (ThriftStruct *object, ThriftProtoc
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              GByteArray * _elem161 = NULL;
-              if (_elem161 != NULL)
+              GByteArray * _elem153 = NULL;
+              if (_elem153 != NULL)
               {
-                g_free(_elem161);
-                _elem161 = NULL;
+                g_free(_elem153);
+                _elem153 = NULL;
               }
 
               if ((ret = thrift_protocol_read_binary (protocol, &data, &len, error)) < 0)
                 return -1;
               xfer += ret;
-              _elem161 = g_byte_array_new();
-              g_byte_array_append (_elem161, (guint8 *) data, (guint) len);
+              _elem153 = g_byte_array_new();
+              g_byte_array_append (_elem153, (guint8 *) data, (guint) len);
               g_free (data);
-              g_ptr_array_add (this_object->photos, _elem161);
+              g_ptr_array_add (this_object->photos, _elem153);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -95902,19 +95770,19 @@ i_face_log_save_persons_with_photo_args_read (ThriftStruct *object, ThriftProtoc
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              PersonBean * _elem162 = NULL;
-              if ( _elem162 != NULL)
+              PersonBean * _elem154 = NULL;
+              if ( _elem154 != NULL)
               {
-                g_object_unref (_elem162);
+                g_object_unref (_elem154);
               }
-              _elem162 = g_object_new (TYPE_PERSON_BEAN, NULL);
-              if ((ret = thrift_struct_read (THRIFT_STRUCT (_elem162), protocol, error)) < 0)
+              _elem154 = g_object_new (TYPE_PERSON_BEAN, NULL);
+              if ((ret = thrift_struct_read (THRIFT_STRUCT (_elem154), protocol, error)) < 0)
               {
-                g_object_unref (_elem162);
+                g_object_unref (_elem154);
                 return -1;
               }
               xfer += ret;
-              g_ptr_array_add (this_object->persons, _elem162);
+              g_ptr_array_add (this_object->persons, _elem154);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -95975,14 +95843,14 @@ i_face_log_save_persons_with_photo_args_write (ThriftStruct *object, ThriftProto
     return -1;
   xfer += ret;
   {
-    guint i163;
+    guint i155;
 
     if ((ret = thrift_protocol_write_list_begin (protocol, T_STRING, (gint32) (this_object->photos ? this_object->photos->len : 0), error)) < 0)
       return -1;
     xfer += ret;
-    for (i163 = 0; i163 < (this_object->photos ? this_object->photos->len : 0); i163++)
+    for (i155 = 0; i155 < (this_object->photos ? this_object->photos->len : 0); i155++)
     {
-      if ((ret = thrift_protocol_write_binary (protocol, ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->photos, i163)) ? ((GByteArray *) ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->photos, i163)))->data : NULL, ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->photos, i163)) ? ((GByteArray *) ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->photos, i163)))->len : 0, error)) < 0)
+      if ((ret = thrift_protocol_write_binary (protocol, ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->photos, i155)) ? ((GByteArray *) ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->photos, i155)))->data : NULL, ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->photos, i155)) ? ((GByteArray *) ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->photos, i155)))->len : 0, error)) < 0)
         return -1;
       xfer += ret;
 
@@ -95998,14 +95866,14 @@ i_face_log_save_persons_with_photo_args_write (ThriftStruct *object, ThriftProto
     return -1;
   xfer += ret;
   {
-    guint i164;
+    guint i156;
 
     if ((ret = thrift_protocol_write_list_begin (protocol, T_STRUCT, (gint32) (this_object->persons ? this_object->persons->len : 0), error)) < 0)
       return -1;
     xfer += ret;
-    for (i164 = 0; i164 < (this_object->persons ? this_object->persons->len : 0); i164++)
+    for (i156 = 0; i156 < (this_object->persons ? this_object->persons->len : 0); i156++)
     {
-      if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) this_object->persons, i164))), protocol, error)) < 0)
+      if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) this_object->persons, i156))), protocol, error)) < 0)
         return -1;
       xfer += ret;
 
@@ -98308,11 +98176,11 @@ i_face_log_set_person_expiry_date_list_args_read (ThriftStruct *object, ThriftPr
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              gint32* _elem165 = g_new (gint32, 1);
-              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem165, error)) < 0)
+              gint32* _elem157 = g_new (gint32, 1);
+              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem157, error)) < 0)
                 return -1;
               xfer += ret;
-              g_array_append_vals (this_object->personIdList, _elem165, 1);
+              g_array_append_vals (this_object->personIdList, _elem157, 1);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -98394,14 +98262,14 @@ i_face_log_set_person_expiry_date_list_args_write (ThriftStruct *object, ThriftP
     return -1;
   xfer += ret;
   {
-    guint i166;
+    guint i158;
 
     if ((ret = thrift_protocol_write_list_begin (protocol, T_I32, (gint32) (this_object->personIdList ? this_object->personIdList->len : 0), error)) < 0)
       return -1;
     xfer += ret;
-    for (i166 = 0; i166 < (this_object->personIdList ? this_object->personIdList->len : 0); i166++)
+    for (i158 = 0; i158 < (this_object->personIdList ? this_object->personIdList->len : 0); i158++)
     {
-      if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->personIdList, gint32, i166)), error)) < 0)
+      if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->personIdList, gint32, i158)), error)) < 0)
         return -1;
       xfer += ret;
 
@@ -99522,28 +99390,28 @@ i_face_log_set_properties_args_read (ThriftStruct *object, ThriftProtocol *proto
             /* iterate through each of the map's fields */
             for (i = 0; i < size; i++)
             {
-              gchar * key167 = NULL;
-              gchar * val168 = NULL;
-              if (key167 != NULL)
+              gchar * key159 = NULL;
+              gchar * val160 = NULL;
+              if (key159 != NULL)
               {
-                g_free(key167);
-                key167 = NULL;
+                g_free(key159);
+                key159 = NULL;
               }
 
-              if ((ret = thrift_protocol_read_string (protocol, &key167, error)) < 0)
+              if ((ret = thrift_protocol_read_string (protocol, &key159, error)) < 0)
                 return -1;
               xfer += ret;
-              if (val168 != NULL)
+              if (val160 != NULL)
               {
-                g_free(val168);
-                val168 = NULL;
+                g_free(val160);
+                val160 = NULL;
               }
 
-              if ((ret = thrift_protocol_read_string (protocol, &val168, error)) < 0)
+              if ((ret = thrift_protocol_read_string (protocol, &val160, error)) < 0)
                 return -1;
               xfer += ret;
-              if (this_object->config && key167)
-                g_hash_table_insert ((GHashTable *)this_object->config, (gpointer) key167, (gpointer) val168);
+              if (this_object->config && key159)
+                g_hash_table_insert ((GHashTable *)this_object->config, (gpointer) key159, (gpointer) val160);
             }
 
             /* read the map end marker */
@@ -99606,8 +99474,8 @@ i_face_log_set_properties_args_write (ThriftStruct *object, ThriftProtocol *prot
     return -1;
   xfer += ret;
   {
-    gchar * key169 = NULL;
-    gchar * val170 = NULL;
+    gchar * key161 = NULL;
+    gchar * val162 = NULL;
     GList *key_list = NULL, *iter = NULL;
     gchar ** keys;
     int i = 0, key_count;
@@ -99625,14 +99493,14 @@ i_face_log_set_properties_args_write (ThriftStruct *object, ThriftProtocol *prot
 
     for (i = 0; i < key_count; ++i)
     {
-      key169 = keys[i];
-      val170 = (gchar *) g_hash_table_lookup (((GHashTable *) this_object->config), (gpointer) key169);
+      key161 = keys[i];
+      val162 = (gchar *) g_hash_table_lookup (((GHashTable *) this_object->config), (gpointer) key161);
 
-      if ((ret = thrift_protocol_write_string (protocol,  key169, error)) < 0)
+      if ((ret = thrift_protocol_write_string (protocol,  key161, error)) < 0)
         return -1;
       xfer += ret;
 
-      if ((ret = thrift_protocol_write_string (protocol,  val170, error)) < 0)
+      if ((ret = thrift_protocol_write_string (protocol,  val162, error)) < 0)
         return -1;
       xfer += ret;
 
@@ -103638,28 +103506,28 @@ i_face_log_version_info_result_read (ThriftStruct *object, ThriftProtocol *proto
             /* iterate through each of the map's fields */
             for (i = 0; i < size; i++)
             {
-              gchar * key171 = NULL;
-              gchar * val172 = NULL;
-              if (key171 != NULL)
+              gchar * key163 = NULL;
+              gchar * val164 = NULL;
+              if (key163 != NULL)
               {
-                g_free(key171);
-                key171 = NULL;
+                g_free(key163);
+                key163 = NULL;
               }
 
-              if ((ret = thrift_protocol_read_string (protocol, &key171, error)) < 0)
+              if ((ret = thrift_protocol_read_string (protocol, &key163, error)) < 0)
                 return -1;
               xfer += ret;
-              if (val172 != NULL)
+              if (val164 != NULL)
               {
-                g_free(val172);
-                val172 = NULL;
+                g_free(val164);
+                val164 = NULL;
               }
 
-              if ((ret = thrift_protocol_read_string (protocol, &val172, error)) < 0)
+              if ((ret = thrift_protocol_read_string (protocol, &val164, error)) < 0)
                 return -1;
               xfer += ret;
-              if (this_object->success && key171)
-                g_hash_table_insert ((GHashTable *)this_object->success, (gpointer) key171, (gpointer) val172);
+              if (this_object->success && key163)
+                g_hash_table_insert ((GHashTable *)this_object->success, (gpointer) key163, (gpointer) val164);
             }
 
             /* read the map end marker */
@@ -103731,8 +103599,8 @@ i_face_log_version_info_result_write (ThriftStruct *object, ThriftProtocol *prot
       return -1;
     xfer += ret;
     {
-      gchar * key173 = NULL;
-      gchar * val174 = NULL;
+      gchar * key165 = NULL;
+      gchar * val166 = NULL;
       GList *key_list = NULL, *iter = NULL;
       gchar ** keys;
       int i = 0, key_count;
@@ -103750,14 +103618,14 @@ i_face_log_version_info_result_write (ThriftStruct *object, ThriftProtocol *prot
 
       for (i = 0; i < key_count; ++i)
       {
-        key173 = keys[i];
-        val174 = (gchar *) g_hash_table_lookup (((GHashTable *) this_object->success), (gpointer) key173);
+        key165 = keys[i];
+        val166 = (gchar *) g_hash_table_lookup (((GHashTable *) this_object->success), (gpointer) key165);
 
-        if ((ret = thrift_protocol_write_string (protocol,  key173, error)) < 0)
+        if ((ret = thrift_protocol_write_string (protocol,  key165, error)) < 0)
           return -1;
         xfer += ret;
 
-        if ((ret = thrift_protocol_write_string (protocol,  val174, error)) < 0)
+        if ((ret = thrift_protocol_write_string (protocol,  val166, error)) < 0)
           return -1;
         xfer += ret;
 
