@@ -1749,6 +1749,33 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
+    public Map<String, String> getProperties(String prefix,
+        Token token) 
+        {
+        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        try{
+            return TypeTransformer.getInstance().to(
+                    instance.getProperties(prefix,
+                TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class)),
+                    String.class,
+                    String.class,
+                    String.class,
+                    String.class);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch(RuntimeTApplicationException e){
+            return net.gdface.thrift.ThriftUtils.returnNull(e);
+        }
+        finally{
+            factory.releaseInstance(instance);
+        }
+    }
+    @Override
     public String getProperty(String key,
         Token token) 
         {

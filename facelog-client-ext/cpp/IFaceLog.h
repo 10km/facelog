@@ -98,6 +98,7 @@ class IFaceLogIf {
   virtual void getPersonPermits(std::vector<PermitBean> & _return, const int32_t deviceId, const std::vector<int32_t> & personIdList) = 0;
   virtual void getPersons(std::vector<PersonBean> & _return, const std::vector<int32_t> & idList) = 0;
   virtual void getPersonsOfGroup(std::vector<int32_t> & _return, const int32_t personGroupId) = 0;
+  virtual void getProperties(std::map<std::string, std::string> & _return, const std::string& prefix, const Token& token) = 0;
   virtual void getProperty(std::string& _return, const std::string& key, const Token& token) = 0;
   virtual void getRedisParameters(std::map<MQParam::type, std::string> & _return, const Token& token) = 0;
   virtual void getServiceConfig(std::map<std::string, std::string> & _return, const Token& token) = 0;
@@ -457,6 +458,9 @@ class IFaceLogNull : virtual public IFaceLogIf {
     return;
   }
   void getPersonsOfGroup(std::vector<int32_t> & /* _return */, const int32_t /* personGroupId */) {
+    return;
+  }
+  void getProperties(std::map<std::string, std::string> & /* _return */, const std::string& /* prefix */, const Token& /* token */) {
     return;
   }
   void getProperty(std::string& /* _return */, const std::string& /* key */, const Token& /* token */) {
@@ -10418,6 +10422,135 @@ class IFaceLog_getPersonsOfGroup_presult {
 
 };
 
+typedef struct _IFaceLog_getProperties_args__isset {
+  _IFaceLog_getProperties_args__isset() : prefix(false), token(false) {}
+  bool prefix :1;
+  bool token :1;
+} _IFaceLog_getProperties_args__isset;
+
+class IFaceLog_getProperties_args {
+ public:
+
+  IFaceLog_getProperties_args(const IFaceLog_getProperties_args&);
+  IFaceLog_getProperties_args(IFaceLog_getProperties_args&&);
+  IFaceLog_getProperties_args& operator=(const IFaceLog_getProperties_args&);
+  IFaceLog_getProperties_args& operator=(IFaceLog_getProperties_args&&);
+  IFaceLog_getProperties_args() : prefix() {
+  }
+
+  virtual ~IFaceLog_getProperties_args() throw();
+  std::string prefix;
+  Token token;
+
+  _IFaceLog_getProperties_args__isset __isset;
+
+  void __set_prefix(const std::string& val);
+
+  void __set_token(const Token& val);
+
+  bool operator == (const IFaceLog_getProperties_args & rhs) const
+  {
+    if (!(prefix == rhs.prefix))
+      return false;
+    if (!(token == rhs.token))
+      return false;
+    return true;
+  }
+  bool operator != (const IFaceLog_getProperties_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IFaceLog_getProperties_args & ) const;
+
+  template <class Protocol_>
+  uint32_t read(Protocol_* iprot);
+  template <class Protocol_>
+  uint32_t write(Protocol_* oprot) const;
+
+};
+
+
+class IFaceLog_getProperties_pargs {
+ public:
+
+
+  virtual ~IFaceLog_getProperties_pargs() throw();
+  const std::string* prefix;
+  const Token* token;
+
+  template <class Protocol_>
+  uint32_t write(Protocol_* oprot) const;
+
+};
+
+typedef struct _IFaceLog_getProperties_result__isset {
+  _IFaceLog_getProperties_result__isset() : success(false), ex1(false) {}
+  bool success :1;
+  bool ex1 :1;
+} _IFaceLog_getProperties_result__isset;
+
+class IFaceLog_getProperties_result {
+ public:
+
+  IFaceLog_getProperties_result(const IFaceLog_getProperties_result&);
+  IFaceLog_getProperties_result(IFaceLog_getProperties_result&&);
+  IFaceLog_getProperties_result& operator=(const IFaceLog_getProperties_result&);
+  IFaceLog_getProperties_result& operator=(IFaceLog_getProperties_result&&);
+  IFaceLog_getProperties_result() {
+  }
+
+  virtual ~IFaceLog_getProperties_result() throw();
+  std::map<std::string, std::string>  success;
+  ServiceRuntimeException ex1;
+
+  _IFaceLog_getProperties_result__isset __isset;
+
+  void __set_success(const std::map<std::string, std::string> & val);
+
+  void __set_ex1(const ServiceRuntimeException& val);
+
+  bool operator == (const IFaceLog_getProperties_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex1 == rhs.ex1))
+      return false;
+    return true;
+  }
+  bool operator != (const IFaceLog_getProperties_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IFaceLog_getProperties_result & ) const;
+
+  template <class Protocol_>
+  uint32_t read(Protocol_* iprot);
+  template <class Protocol_>
+  uint32_t write(Protocol_* oprot) const;
+
+};
+
+typedef struct _IFaceLog_getProperties_presult__isset {
+  _IFaceLog_getProperties_presult__isset() : success(false), ex1(false) {}
+  bool success :1;
+  bool ex1 :1;
+} _IFaceLog_getProperties_presult__isset;
+
+class IFaceLog_getProperties_presult {
+ public:
+
+
+  virtual ~IFaceLog_getProperties_presult() throw();
+  std::map<std::string, std::string> * success;
+  ServiceRuntimeException ex1;
+
+  _IFaceLog_getProperties_presult__isset __isset;
+
+  template <class Protocol_>
+  uint32_t read(Protocol_* iprot);
+
+};
+
 typedef struct _IFaceLog_getProperty_args__isset {
   _IFaceLog_getProperty_args__isset() : key(false), token(false) {}
   bool key :1;
@@ -20326,6 +20459,9 @@ class IFaceLogClientT : virtual public IFaceLogIf {
   void getPersonsOfGroup(std::vector<int32_t> & _return, const int32_t personGroupId);
   void send_getPersonsOfGroup(const int32_t personGroupId);
   void recv_getPersonsOfGroup(std::vector<int32_t> & _return);
+  void getProperties(std::map<std::string, std::string> & _return, const std::string& prefix, const Token& token);
+  void send_getProperties(const std::string& prefix, const Token& token);
+  void recv_getProperties(std::map<std::string, std::string> & _return);
   void getProperty(std::string& _return, const std::string& key, const Token& token);
   void send_getProperty(const std::string& key, const Token& token);
   void recv_getProperty(std::string& _return);
@@ -20736,6 +20872,8 @@ class IFaceLogProcessorT : public ::apache::thrift::TDispatchProcessorT<Protocol
   void process_getPersons(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext);
   void process_getPersonsOfGroup(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_getPersonsOfGroup(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext);
+  void process_getProperties(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_getProperties(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext);
   void process_getProperty(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_getProperty(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext);
   void process_getRedisParameters(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -21122,6 +21260,9 @@ class IFaceLogProcessorT : public ::apache::thrift::TDispatchProcessorT<Protocol
     processMap_["getPersonsOfGroup"] = ProcessFunctions(
       &IFaceLogProcessorT::process_getPersonsOfGroup,
       &IFaceLogProcessorT::process_getPersonsOfGroup);
+    processMap_["getProperties"] = ProcessFunctions(
+      &IFaceLogProcessorT::process_getProperties,
+      &IFaceLogProcessorT::process_getProperties);
     processMap_["getProperty"] = ProcessFunctions(
       &IFaceLogProcessorT::process_getProperty,
       &IFaceLogProcessorT::process_getProperty);
@@ -22121,6 +22262,16 @@ class IFaceLogMultiface : virtual public IFaceLogIf {
     return;
   }
 
+  void getProperties(std::map<std::string, std::string> & _return, const std::string& prefix, const Token& token) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->getProperties(_return, prefix, token);
+    }
+    ifaces_[i]->getProperties(_return, prefix, token);
+    return;
+  }
+
   void getProperty(std::string& _return, const std::string& key, const Token& token) {
     size_t sz = ifaces_.size();
     size_t i = 0;
@@ -23114,6 +23265,9 @@ class IFaceLogConcurrentClientT : virtual public IFaceLogIf {
   void getPersonsOfGroup(std::vector<int32_t> & _return, const int32_t personGroupId);
   int32_t send_getPersonsOfGroup(const int32_t personGroupId);
   void recv_getPersonsOfGroup(std::vector<int32_t> & _return, const int32_t seqid);
+  void getProperties(std::map<std::string, std::string> & _return, const std::string& prefix, const Token& token);
+  int32_t send_getProperties(const std::string& prefix, const Token& token);
+  void recv_getProperties(std::map<std::string, std::string> & _return, const int32_t seqid);
   void getProperty(std::string& _return, const std::string& key, const Token& token);
   int32_t send_getProperty(const std::string& key, const Token& token);
   void recv_getProperty(std::string& _return, const int32_t seqid);

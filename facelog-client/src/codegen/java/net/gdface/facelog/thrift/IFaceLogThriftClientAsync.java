@@ -1646,6 +1646,24 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(getPersonsOfGroup(personGroupId), callback);
     }
     /**
+     * see also {@link net.gdface.facelog.IFaceLog#getProperties(java.lang.String,net.gdface.facelog.Token)}
+     */
+    public ListenableFuture<Map<String, String>> getProperties(String prefix,
+        Token token){        
+        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
+        ListenableFuture<Map<String, String>> future = async.getProperties(prefix,
+            TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class));
+        return factory.wrap(async,future);
+    }
+    public void getProperties(String prefix,
+        Token token,
+        FutureCallback<Map<String, String>>callback){
+        factory.addCallback(getProperties(prefix,token), callback);
+    }
+    /**
      * see also {@link net.gdface.facelog.IFaceLog#getProperty(java.lang.String,net.gdface.facelog.Token)}
      */
     public ListenableFuture<String> getProperty(String key,

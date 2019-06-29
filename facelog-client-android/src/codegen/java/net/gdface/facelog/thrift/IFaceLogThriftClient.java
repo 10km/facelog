@@ -2334,6 +2334,38 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
+    public Map<String, String> getProperties(final String prefix,
+        final Token token) 
+        {
+        try{
+            return syncCall(new Function<Map<String,String>,Map<String, String>>() {
+                @Override
+                public Map<String, String> apply(Map<String,String> input) {
+                    return TypeTransformer.getInstance().to(
+                    input,
+                    String.class,
+                    String.class,
+                    String.class,
+                    String.class);
+                }},
+                new ServiceAsyncCall<Map<String,String>>(){
+                @Override
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<Map<String,String>> nativeCallback){
+                    service.getProperties(prefix,TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                }});
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);
+        }
+    }
+    @Override
     public String getProperty(final String key,
         final Token token) 
         {

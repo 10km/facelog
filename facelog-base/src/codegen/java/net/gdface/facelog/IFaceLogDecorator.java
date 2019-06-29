@@ -631,6 +631,11 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
+    public Map<String, String> getProperties (String prefix,Token token) {
+        return delegate().getProperties(prefix,token);
+    }
+
+    @Override
     public String getProperty (String key,Token token) {
         return delegate().getProperty(key,token);
     }

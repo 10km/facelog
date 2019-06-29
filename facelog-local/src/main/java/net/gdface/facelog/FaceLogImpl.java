@@ -1699,7 +1699,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 			throw wrapServiceRuntimeException(e);
 		} 	
     }
-    public Map<String, String> getProperties(String prefix,Token token){
+    @Override
+	public Map<String, String> getProperties(String prefix,Token token){
     	try {
 			Enable.ALL.check(tm, token);
 			if(!TokenType.ROOT.equals(token.getType())){

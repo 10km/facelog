@@ -1242,6 +1242,22 @@ IFaceLog_getPersonsOfGroup_presult::~IFaceLog_getPersonsOfGroup_presult() throw(
 }
 
 
+IFaceLog_getProperties_args::~IFaceLog_getProperties_args() throw() {
+}
+
+
+IFaceLog_getProperties_pargs::~IFaceLog_getProperties_pargs() throw() {
+}
+
+
+IFaceLog_getProperties_result::~IFaceLog_getProperties_result() throw() {
+}
+
+
+IFaceLog_getProperties_presult::~IFaceLog_getProperties_presult() throw() {
+}
+
+
 IFaceLog_getProperty_args::~IFaceLog_getProperty_args() throw() {
 }
 

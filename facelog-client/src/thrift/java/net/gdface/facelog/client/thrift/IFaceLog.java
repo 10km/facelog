@@ -705,6 +705,15 @@ public interface IFaceLog
             @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.REQUIRED) final int personGroupId
         );
 
+        @ThriftMethod(value = "getProperties",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1)
+                      })
+        ListenableFuture<Map<String, String>> getProperties(
+            @ThriftField(value=1, name="prefix", requiredness=Requiredness.OPTIONAL) final String prefix,
+            @ThriftField(value=2, name="token", requiredness=Requiredness.OPTIONAL) final Token token
+        );
+
         @ThriftMethod(value = "getProperty",
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
@@ -2084,6 +2093,15 @@ public interface IFaceLog
                   })
     List<Integer> getPersonsOfGroup(
         @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.REQUIRED) final int personGroupId
+    ) throws ServiceRuntimeException;
+
+    @ThriftMethod(value = "getProperties",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1)
+                  })
+    Map<String, String> getProperties(
+        @ThriftField(value=1, name="prefix", requiredness=Requiredness.OPTIONAL) final String prefix,
+        @ThriftField(value=2, name="token", requiredness=Requiredness.OPTIONAL) final Token token
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "getProperty",

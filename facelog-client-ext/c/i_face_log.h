@@ -95,6 +95,7 @@ struct _IFaceLogIfInterface
   gboolean (*get_person_permits) (IFaceLogIf *iface, GPtrArray ** _return, const gint32 deviceId, const GArray * personIdList, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*get_persons) (IFaceLogIf *iface, GPtrArray ** _return, const GArray * idList, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*get_persons_of_group) (IFaceLogIf *iface, GArray ** _return, const gint32 personGroupId, ServiceRuntimeException ** ex1, GError **error);
+  gboolean (*get_properties) (IFaceLogIf *iface, GHashTable ** _return, const gchar * prefix, const Token * token, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*get_property) (IFaceLogIf *iface, gchar ** _return, const gchar * key, const Token * token, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*get_redis_parameters) (IFaceLogIf *iface, GHashTable ** _return, const Token * token, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*get_service_config) (IFaceLogIf *iface, GHashTable ** _return, const Token * token, ServiceRuntimeException ** ex1, GError **error);
@@ -257,6 +258,7 @@ gboolean i_face_log_if_get_person_permit (IFaceLogIf *iface, PermitBean ** _retu
 gboolean i_face_log_if_get_person_permits (IFaceLogIf *iface, GPtrArray ** _return, const gint32 deviceId, const GArray * personIdList, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_if_get_persons (IFaceLogIf *iface, GPtrArray ** _return, const GArray * idList, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_if_get_persons_of_group (IFaceLogIf *iface, GArray ** _return, const gint32 personGroupId, ServiceRuntimeException ** ex1, GError **error);
+gboolean i_face_log_if_get_properties (IFaceLogIf *iface, GHashTable ** _return, const gchar * prefix, const Token * token, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_if_get_property (IFaceLogIf *iface, gchar ** _return, const gchar * key, const Token * token, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_if_get_redis_parameters (IFaceLogIf *iface, GHashTable ** _return, const Token * token, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_if_get_service_config (IFaceLogIf *iface, GHashTable ** _return, const Token * token, ServiceRuntimeException ** ex1, GError **error);
@@ -589,6 +591,9 @@ gboolean i_face_log_client_recv_get_persons (IFaceLogIf * iface, GPtrArray ** _r
 gboolean i_face_log_client_get_persons_of_group (IFaceLogIf * iface, GArray ** _return, const gint32 personGroupId, ServiceRuntimeException ** ex1, GError ** error);
 gboolean i_face_log_client_send_get_persons_of_group (IFaceLogIf * iface, const gint32 personGroupId, GError ** error);
 gboolean i_face_log_client_recv_get_persons_of_group (IFaceLogIf * iface, GArray ** _return, ServiceRuntimeException ** ex1, GError ** error);
+gboolean i_face_log_client_get_properties (IFaceLogIf * iface, GHashTable ** _return, const gchar * prefix, const Token * token, ServiceRuntimeException ** ex1, GError ** error);
+gboolean i_face_log_client_send_get_properties (IFaceLogIf * iface, const gchar * prefix, const Token * token, GError ** error);
+gboolean i_face_log_client_recv_get_properties (IFaceLogIf * iface, GHashTable ** _return, ServiceRuntimeException ** ex1, GError ** error);
 gboolean i_face_log_client_get_property (IFaceLogIf * iface, gchar ** _return, const gchar * key, const Token * token, ServiceRuntimeException ** ex1, GError ** error);
 gboolean i_face_log_client_send_get_property (IFaceLogIf * iface, const gchar * key, const Token * token, GError ** error);
 gboolean i_face_log_client_recv_get_property (IFaceLogIf * iface, gchar ** _return, ServiceRuntimeException ** ex1, GError ** error);
@@ -908,6 +913,7 @@ struct _IFaceLogHandlerClass
   gboolean (*get_person_permits) (IFaceLogIf *iface, GPtrArray ** _return, const gint32 deviceId, const GArray * personIdList, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*get_persons) (IFaceLogIf *iface, GPtrArray ** _return, const GArray * idList, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*get_persons_of_group) (IFaceLogIf *iface, GArray ** _return, const gint32 personGroupId, ServiceRuntimeException ** ex1, GError **error);
+  gboolean (*get_properties) (IFaceLogIf *iface, GHashTable ** _return, const gchar * prefix, const Token * token, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*get_property) (IFaceLogIf *iface, gchar ** _return, const gchar * key, const Token * token, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*get_redis_parameters) (IFaceLogIf *iface, GHashTable ** _return, const Token * token, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*get_service_config) (IFaceLogIf *iface, GHashTable ** _return, const Token * token, ServiceRuntimeException ** ex1, GError **error);
@@ -1072,6 +1078,7 @@ gboolean i_face_log_handler_get_person_permit (IFaceLogIf *iface, PermitBean ** 
 gboolean i_face_log_handler_get_person_permits (IFaceLogIf *iface, GPtrArray ** _return, const gint32 deviceId, const GArray * personIdList, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_handler_get_persons (IFaceLogIf *iface, GPtrArray ** _return, const GArray * idList, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_handler_get_persons_of_group (IFaceLogIf *iface, GArray ** _return, const gint32 personGroupId, ServiceRuntimeException ** ex1, GError **error);
+gboolean i_face_log_handler_get_properties (IFaceLogIf *iface, GHashTable ** _return, const gchar * prefix, const Token * token, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_handler_get_property (IFaceLogIf *iface, gchar ** _return, const gchar * key, const Token * token, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_handler_get_redis_parameters (IFaceLogIf *iface, GHashTable ** _return, const Token * token, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_handler_get_service_config (IFaceLogIf *iface, GHashTable ** _return, const Token * token, ServiceRuntimeException ** ex1, GError **error);

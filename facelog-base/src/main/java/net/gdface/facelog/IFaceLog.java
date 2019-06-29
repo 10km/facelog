@@ -1311,6 +1311,17 @@ public interface IFaceLog{
 	 * @return 返回{@code key}指定的参数值
 	 */
 	public String getProperty(String key,Token token);
+	
+	/**
+	 * 返回{@code prefix}为前缀的所有参数
+	 * 非root令牌只能访问指定范围的参数,否则会抛出异常<br>
+	 * root令牌不受限制<br>
+	 * @param prefix
+	 * @param token
+	 * @return
+	 */
+	public Map<String, String> getProperties(String prefix, Token token);
+
 	/**
 	 * 获取服务的所有配置参数
 	 * <br>{@code ROOT_ONLY}

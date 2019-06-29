@@ -1769,6 +1769,32 @@ public class IFaceLogThriftDecorator {
         }
     }
     /**
+     * @see {@link net.gdface.facelog.IFaceLog#getProperties(java.lang.String,net.gdface.facelog.Token)}
+     */
+    @ThriftMethod(value = "getProperties" )
+    public Map<String,String> getProperties(String prefix,
+        Token token) 
+        throws ServiceRuntimeException{
+        try{
+            return TypeTransformer.getInstance().to(
+                    delegate().getProperties(prefix,
+                TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.Token.class)),
+                    String.class,
+                    String.class,
+                    String.class,
+                    String.class);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
      * @see {@link net.gdface.facelog.IFaceLog#getProperty(java.lang.String,net.gdface.facelog.Token)}
      */
     @ThriftMethod(value = "getProperty" )

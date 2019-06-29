@@ -685,6 +685,11 @@ public class FacelogDefaultImpl implements IFaceLog {
 	}
 
 	@Override
+	public Map<String, String> getProperties(String prefix, Token token) {
+		return null;
+	}
+	
+	@Override
 	public Map<String, String> getServiceConfig(Token token) {
 		return null;
 	}
@@ -779,5 +784,6 @@ public class FacelogDefaultImpl implements IFaceLog {
 	@Override
 	public void bindBorder(Integer personGroupId, Integer deviceGroupId, Token token) {
 	}
+
 
 }
