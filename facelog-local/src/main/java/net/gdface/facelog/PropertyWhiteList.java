@@ -19,7 +19,8 @@ public class PropertyWhiteList implements Predicate<String> {
 	public static final PropertyWhiteList INSTANCE = new PropertyWhiteList();
 	private static final HashSet<String> whitelist = Sets.newHashSet(
 			HEARTBEAT_INTERVAL,
-			FEATURE_PREFIX + ".*"
+			FEATURE_PREFIX + ".*",
+			UPDATE_PREFIX + ".*"
 			);
 	private PropertyWhiteList() {
 	}

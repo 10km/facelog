@@ -270,6 +270,12 @@ public class GlobalConfig implements ServiceConstant{
 	public static String getProperty(String key){
 		return getConfig().getString(key,null);
 	}
+	
+	public static Map<String, String> getProperties(String prefix){
+		checkArgument(!Strings.isNullOrEmpty(prefix),"prefix is null or empty");
+		return toMap(getConfig().subset(prefix));
+	}
+	
 	/**
 	 * 修改指定的配置参数<br>
 	 * {@link #CONFIG}是组合配置对象,是一组配置文件的镜像视图,不具备持久化能力,对其进行参数修改无效,

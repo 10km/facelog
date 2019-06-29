@@ -49,6 +49,10 @@ public class FacelogMenu extends RootMenu{
 	public static final String CMD_RESET="reset";
 	public static final String CMD_TIME = "time";
 	public static final String CMD_UPDATE = "update";
+	public static final String CMD_UPDATE_URL = "url";
+	public static final String CMD_UPDATE_VERSION = "version";
+	public static final String CMD_UPDATE_FORCE = "force";
+	public static final String CMD_UPDATE_MD5 = "md5";
 	public static final String CMD_IDLE_MSG = "idleMessage";
 	public static final String CMD_PERSON_MSG = "personMessage";
 	/** 算法授权 */
@@ -161,8 +165,10 @@ public class FacelogMenu extends RootMenu{
 								OptionType.INTEGER.builder().name("timestamp").uiName("服务器时间").required().description("服务器 unix 时间[秒]").instance()
 								).instance(),
 						ItemBuilder.builder(CmdItem.class).name(CMD_UPDATE).uiName("更新版本").addChilds(
-								OptionType.URL.builder().name("url").uiName("更新版本的位置").required().instance(),
-								OptionType.STRING.builder().name(CMD_VERSION).uiName("版本号").required().instance(),
+								OptionType.URL.builder().name(CMD_UPDATE_URL).uiName("更新版本的位置").description("下载更新版本的url").required().instance(),
+								OptionType.STRING.builder().name(CMD_UPDATE_VERSION).uiName("版本号").required().instance(),
+								OptionType.STRING.builder().name(CMD_UPDATE_MD5).uiName("md5校验码").required().description("url下载版本的MD5校验码(32 char)").instance(),
+								OptionType.BOOL.builder().name(CMD_UPDATE_FORCE).uiName("强制更新").description("是否强制更新版本,不论当前版本是否高于url下载的版本号").instance(),
 								OptionType.INTEGER.builder().name("schedule").uiName("延迟执行时间").description("指定执行时间(unix time[秒]),为null立即执行").instance()
 								).needReset().instance(),
 						ItemBuilder.builder(CmdItem.class).name(CMD_IDLE_MSG).uiName("空闲消息").description("设置空闲时显示的消息").addChilds(

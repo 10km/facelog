@@ -52,6 +52,9 @@ public interface CommonConstant {
     /** 特征参数配置前缀 */
     public static final String FEATURE_PREFIX = "feature";
     
+    /** 更新参数配置前缀 */
+    public static final String UPDATE_PREFIX = "update";
+    
     /** 特征参数配置LIMIT前缀 */
     public static final String FEATURE_PERSON_LIMIT_PREFIX = "feature.person.limit.";
     

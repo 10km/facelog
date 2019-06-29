@@ -88,6 +88,16 @@
 			</limit>
 		</person>
 	</feature>
+	<update description="版本更新相关参数">
+		<!-- 示例
+		<MODEL1 description="设备型号">
+			<url description="下载更新版本的url"></url>
+			<version description="版本号"></version>
+			<md5 description="url下载版本的MD5校验码(32 char)"></md5>			
+			<force description="true/false,是否强制更新版本,不论当前版本是否高于url下载的版本号"></force>
+		</MODEL1>
+		 -->
+	</update>
 	<database description="数据库参数配置">
 		<isDebug description="是否为调试状态">false</isDebug>
 		<jdbc>
