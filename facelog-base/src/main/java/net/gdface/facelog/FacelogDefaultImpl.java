@@ -1,5 +1,6 @@
 package net.gdface.facelog;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -762,6 +763,21 @@ public class FacelogDefaultImpl implements IFaceLog {
 	public boolean runTask(String taskQueue, String cmdpath, String jsonArgs, String ackChannel, Token token) {
 		return false;
 	}
+	
+	@Override
+	public List<String> loadDistinctStringColumn(String table, String column, String where) {
+		return null;
+	}
+
+	@Override
+	public List<Integer> loadDistinctIntegerColumn(String table, String column, String where) {
+		return null;
+	}
+
+	@Override
+	public List<Date> loadDistinctDateColumn(String table, String column, String where) {
+		return null;
+	}
 
 	@Override
 	public int runCmd(List<Integer>target, boolean group, String cmdpath, String jsonArgs, String ackChannel, Token token) {
@@ -784,6 +800,4 @@ public class FacelogDefaultImpl implements IFaceLog {
 	@Override
 	public void bindBorder(Integer personGroupId, Integer deviceGroupId, Token token) {
 	}
-
-
 }

@@ -63,7 +63,14 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
     public String[] getPrimarykeyNames() {
         return PRIMARYKEY_NAMES;
     }
-
+    @Override
+    public int columnIDOf(String column){
+        return FlLogLightBean.columnIDOf(column);
+    }
+    @Override
+    public Class<?> typeOf(int columnId){
+        return FlLogLightBean.typeOf(columnId);
+    }
     private static FlLogLightManager singleton = new FlLogLightManager();
     protected FlLogLightManager(){}
     /**
@@ -90,6 +97,10 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
     @Override
     protected Class<FlLogLightBean> beanType(){
         return FlLogLightBean.class;
+    }
+    @Override
+    protected String columnNameOf(int columnId){
+        return FlLogLightBean.columnNameOf(columnId);
     }
     
  

@@ -81,8 +81,15 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
     @Override
     public String[] getPrimarykeyNames() {
         return this.nativeManager.getPrimarykeyNames();
+    }    
+    @Override
+    public int columnIDOf(String column){
+        return PersonBean.columnIDOf(column);
     }
-    
+    @Override
+    public Class<?> typeOf(int columnId){
+        return PersonBean.typeOf(columnId);
+    }
     /**
      * Get the {@link PersonManager} singleton.
      *
@@ -97,7 +104,11 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
     protected Class<PersonBean> beanType(){
         return PersonBean.class;
     }
-    
+
+    @Override
+    protected String columnNameOf(int columnId){
+        return PersonBean.columnNameOf(columnId);
+    }
     //////////////////////////////////////
     // PRIMARY KEY METHODS
     //////////////////////////////////////

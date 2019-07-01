@@ -68,7 +68,14 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
     public String[] getPrimarykeyNames() {
         return PRIMARYKEY_NAMES;
     }
-
+    @Override
+    public int columnIDOf(String column){
+        return FlDeviceBean.columnIDOf(column);
+    }
+    @Override
+    public Class<?> typeOf(int columnId){
+        return FlDeviceBean.typeOf(columnId);
+    }
     private static FlDeviceManager singleton = new FlDeviceManager();
     protected FlDeviceManager(){}
     /**
@@ -95,6 +102,10 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
     @Override
     protected Class<FlDeviceBean> beanType(){
         return FlDeviceBean.class;
+    }
+    @Override
+    protected String columnNameOf(int columnId){
+        return FlDeviceBean.columnNameOf(columnId);
     }
     
     protected FlImageManager instanceOfFlImageManager(){

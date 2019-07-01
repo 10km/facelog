@@ -1,5 +1,6 @@
 package net.gdface.facelog;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import net.gdface.annotation.DeriveMethod;
@@ -1302,6 +1303,32 @@ public interface IFaceLog{
 	 * @return 成功提交任务返回{@code true},否则返回{@code false}
 	 */
 	boolean runTask(String taskQueue, String cmdpath, String jsonArgs, String ackChannel, Token token);
+	
+	/**
+	 * 查询 {@code table}表的名为{@code column}类型为{@link String}类型的字段数据
+	 * @param table 数据库表名
+     * @param column 有效的table表字段名或{@link LogLightBean} 字段名
+     * @param where 'where'起始的SQL 查询条件语句,可为{@code null}
+	 * @return 返回不重复的字段值列表
+	 */
+	List<String> loadDistinctStringColumn(String table, String column, String where);
+	/**
+	 * 查询 {@code table}表的名为{@code column}类型为{@link Integer}类型的字段数据
+	 * @param table 数据库表名
+     * @param column 有效的table表字段名或{@link LogLightBean} 字段名
+     * @param where 'where'起始的SQL 查询条件语句,可为{@code null}
+	 * @return 返回不重复的字段值列表
+	 */
+	List<Integer> loadDistinctIntegerColumn(String table, String column, String where);
+	/**
+	 * 查询 {@code table}表的名为{@code column}类型为{@link Date}类型的字段数据
+	 * @param table 数据库表名
+     * @param column 有效的table表字段名或{@link LogLightBean} 字段名
+     * @param where 'where'起始的SQL 查询条件语句,可为{@code null}
+	 * @return 返回不重复的字段值列表
+	 */
+	List<Date> loadDistinctDateColumn(String table, String column, String where);
+
 	/**
 	 * 返回指定的参数,如果参数没有定义则返回{@code null}<br>
 	 * 非root令牌只能访问指定范围的参数,否则会抛出异常<br>
@@ -1373,5 +1400,6 @@ public interface IFaceLog{
 	 * @return
 	 */
 	public boolean isLocal();
+
 
 }

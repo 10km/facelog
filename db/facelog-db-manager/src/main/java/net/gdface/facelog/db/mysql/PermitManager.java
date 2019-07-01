@@ -73,8 +73,15 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
     @Override
     public String[] getPrimarykeyNames() {
         return this.nativeManager.getPrimarykeyNames();
+    }    
+    @Override
+    public int columnIDOf(String column){
+        return PermitBean.columnIDOf(column);
     }
-    
+    @Override
+    public Class<?> typeOf(int columnId){
+        return PermitBean.typeOf(columnId);
+    }
     /**
      * Get the {@link PermitManager} singleton.
      *
@@ -89,7 +96,11 @@ public class PermitManager extends TableManager.BaseAdapter<PermitBean> implemen
     protected Class<PermitBean> beanType(){
         return PermitBean.class;
     }
-    
+
+    @Override
+    protected String columnNameOf(int columnId){
+        return PermitBean.columnNameOf(columnId);
+    }
     //////////////////////////////////////
     // PRIMARY KEY METHODS
     //////////////////////////////////////

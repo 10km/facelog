@@ -77,8 +77,15 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
     @Override
     public String[] getPrimarykeyNames() {
         return this.nativeManager.getPrimarykeyNames();
+    }    
+    @Override
+    public int columnIDOf(String column){
+        return ImageBean.columnIDOf(column);
     }
-    
+    @Override
+    public Class<?> typeOf(int columnId){
+        return ImageBean.typeOf(columnId);
+    }
     /**
      * Get the {@link ImageManager} singleton.
      *
@@ -93,7 +100,11 @@ public class ImageManager extends TableManager.BaseAdapter<ImageBean> implements
     protected Class<ImageBean> beanType(){
         return ImageBean.class;
     }
-    
+
+    @Override
+    protected String columnNameOf(int columnId){
+        return ImageBean.columnNameOf(columnId);
+    }
     //////////////////////////////////////
     // PRIMARY KEY METHODS
     //////////////////////////////////////

@@ -2436,6 +2436,22 @@ public final class FaceBean
             : index;
     }
     
+    public static String columnNameOf(int columnId){
+        try{
+            return FL_FACE_FIELDS_LIST.get(columnId);
+        } catch(IndexOutOfBoundsException e){
+            return null;
+        }
+    }
+    
+    public static Class<?> typeOf(int columnId){
+        try{
+            return FL_FACE_FIELD_TYPES[columnId];
+        } catch(IndexOutOfBoundsException e){
+            return null;
+        }
+    }
+    
     public static final Builder builder(){
         return new Builder().reset();
     }

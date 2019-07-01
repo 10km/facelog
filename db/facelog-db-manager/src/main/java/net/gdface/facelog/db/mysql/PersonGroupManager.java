@@ -80,8 +80,15 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
     @Override
     public String[] getPrimarykeyNames() {
         return this.nativeManager.getPrimarykeyNames();
+    }    
+    @Override
+    public int columnIDOf(String column){
+        return PersonGroupBean.columnIDOf(column);
     }
-    
+    @Override
+    public Class<?> typeOf(int columnId){
+        return PersonGroupBean.typeOf(columnId);
+    }
     /**
      * Get the {@link PersonGroupManager} singleton.
      *
@@ -96,7 +103,11 @@ public class PersonGroupManager extends TableManager.BaseAdapter<PersonGroupBean
     protected Class<PersonGroupBean> beanType(){
         return PersonGroupBean.class;
     }
-    
+
+    @Override
+    protected String columnNameOf(int columnId){
+        return PersonGroupBean.columnNameOf(columnId);
+    }
     //////////////////////////////////////
     // PRIMARY KEY METHODS
     //////////////////////////////////////

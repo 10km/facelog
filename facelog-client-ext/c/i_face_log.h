@@ -118,6 +118,9 @@ struct _IFaceLogIfInterface
   gboolean (*load_device_group_by_where) (IFaceLogIf *iface, GArray ** _return, const gchar * where, const gint32 startRow, const gint32 numRows, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*load_device_group_id_by_where) (IFaceLogIf *iface, GArray ** _return, const gchar * where, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*load_device_id_by_where) (IFaceLogIf *iface, GArray ** _return, const gchar * where, ServiceRuntimeException ** ex1, GError **error);
+  gboolean (*load_distinct_date_column) (IFaceLogIf *iface, GArray ** _return, const gchar * table, const gchar * column, const gchar * where, ServiceRuntimeException ** ex1, GError **error);
+  gboolean (*load_distinct_integer_column) (IFaceLogIf *iface, GArray ** _return, const gchar * table, const gchar * column, const gchar * where, ServiceRuntimeException ** ex1, GError **error);
+  gboolean (*load_distinct_string_column) (IFaceLogIf *iface, GPtrArray ** _return, const gchar * table, const gchar * column, const gchar * where, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*load_feature_md5_by_update) (IFaceLogIf *iface, GPtrArray ** _return, const gint64 timestamp, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*load_feature_md5_by_update_time_str) (IFaceLogIf *iface, GPtrArray ** _return, const gchar * timestamp, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*load_log_by_where) (IFaceLogIf *iface, GPtrArray ** _return, const gchar * where, const gint32 startRow, const gint32 numRows, ServiceRuntimeException ** ex1, GError **error);
@@ -281,6 +284,9 @@ gboolean i_face_log_if_load_device_by_where (IFaceLogIf *iface, GPtrArray ** _re
 gboolean i_face_log_if_load_device_group_by_where (IFaceLogIf *iface, GArray ** _return, const gchar * where, const gint32 startRow, const gint32 numRows, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_if_load_device_group_id_by_where (IFaceLogIf *iface, GArray ** _return, const gchar * where, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_if_load_device_id_by_where (IFaceLogIf *iface, GArray ** _return, const gchar * where, ServiceRuntimeException ** ex1, GError **error);
+gboolean i_face_log_if_load_distinct_date_column (IFaceLogIf *iface, GArray ** _return, const gchar * table, const gchar * column, const gchar * where, ServiceRuntimeException ** ex1, GError **error);
+gboolean i_face_log_if_load_distinct_integer_column (IFaceLogIf *iface, GArray ** _return, const gchar * table, const gchar * column, const gchar * where, ServiceRuntimeException ** ex1, GError **error);
+gboolean i_face_log_if_load_distinct_string_column (IFaceLogIf *iface, GPtrArray ** _return, const gchar * table, const gchar * column, const gchar * where, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_if_load_feature_md5_by_update (IFaceLogIf *iface, GPtrArray ** _return, const gint64 timestamp, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_if_load_feature_md5_by_update_time_str (IFaceLogIf *iface, GPtrArray ** _return, const gchar * timestamp, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_if_load_log_by_where (IFaceLogIf *iface, GPtrArray ** _return, const gchar * where, const gint32 startRow, const gint32 numRows, ServiceRuntimeException ** ex1, GError **error);
@@ -660,6 +666,15 @@ gboolean i_face_log_client_recv_load_device_group_id_by_where (IFaceLogIf * ifac
 gboolean i_face_log_client_load_device_id_by_where (IFaceLogIf * iface, GArray ** _return, const gchar * where, ServiceRuntimeException ** ex1, GError ** error);
 gboolean i_face_log_client_send_load_device_id_by_where (IFaceLogIf * iface, const gchar * where, GError ** error);
 gboolean i_face_log_client_recv_load_device_id_by_where (IFaceLogIf * iface, GArray ** _return, ServiceRuntimeException ** ex1, GError ** error);
+gboolean i_face_log_client_load_distinct_date_column (IFaceLogIf * iface, GArray ** _return, const gchar * table, const gchar * column, const gchar * where, ServiceRuntimeException ** ex1, GError ** error);
+gboolean i_face_log_client_send_load_distinct_date_column (IFaceLogIf * iface, const gchar * table, const gchar * column, const gchar * where, GError ** error);
+gboolean i_face_log_client_recv_load_distinct_date_column (IFaceLogIf * iface, GArray ** _return, ServiceRuntimeException ** ex1, GError ** error);
+gboolean i_face_log_client_load_distinct_integer_column (IFaceLogIf * iface, GArray ** _return, const gchar * table, const gchar * column, const gchar * where, ServiceRuntimeException ** ex1, GError ** error);
+gboolean i_face_log_client_send_load_distinct_integer_column (IFaceLogIf * iface, const gchar * table, const gchar * column, const gchar * where, GError ** error);
+gboolean i_face_log_client_recv_load_distinct_integer_column (IFaceLogIf * iface, GArray ** _return, ServiceRuntimeException ** ex1, GError ** error);
+gboolean i_face_log_client_load_distinct_string_column (IFaceLogIf * iface, GPtrArray ** _return, const gchar * table, const gchar * column, const gchar * where, ServiceRuntimeException ** ex1, GError ** error);
+gboolean i_face_log_client_send_load_distinct_string_column (IFaceLogIf * iface, const gchar * table, const gchar * column, const gchar * where, GError ** error);
+gboolean i_face_log_client_recv_load_distinct_string_column (IFaceLogIf * iface, GPtrArray ** _return, ServiceRuntimeException ** ex1, GError ** error);
 gboolean i_face_log_client_load_feature_md5_by_update (IFaceLogIf * iface, GPtrArray ** _return, const gint64 timestamp, ServiceRuntimeException ** ex1, GError ** error);
 gboolean i_face_log_client_send_load_feature_md5_by_update (IFaceLogIf * iface, const gint64 timestamp, GError ** error);
 gboolean i_face_log_client_recv_load_feature_md5_by_update (IFaceLogIf * iface, GPtrArray ** _return, ServiceRuntimeException ** ex1, GError ** error);
@@ -936,6 +951,9 @@ struct _IFaceLogHandlerClass
   gboolean (*load_device_group_by_where) (IFaceLogIf *iface, GArray ** _return, const gchar * where, const gint32 startRow, const gint32 numRows, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*load_device_group_id_by_where) (IFaceLogIf *iface, GArray ** _return, const gchar * where, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*load_device_id_by_where) (IFaceLogIf *iface, GArray ** _return, const gchar * where, ServiceRuntimeException ** ex1, GError **error);
+  gboolean (*load_distinct_date_column) (IFaceLogIf *iface, GArray ** _return, const gchar * table, const gchar * column, const gchar * where, ServiceRuntimeException ** ex1, GError **error);
+  gboolean (*load_distinct_integer_column) (IFaceLogIf *iface, GArray ** _return, const gchar * table, const gchar * column, const gchar * where, ServiceRuntimeException ** ex1, GError **error);
+  gboolean (*load_distinct_string_column) (IFaceLogIf *iface, GPtrArray ** _return, const gchar * table, const gchar * column, const gchar * where, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*load_feature_md5_by_update) (IFaceLogIf *iface, GPtrArray ** _return, const gint64 timestamp, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*load_feature_md5_by_update_time_str) (IFaceLogIf *iface, GPtrArray ** _return, const gchar * timestamp, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*load_log_by_where) (IFaceLogIf *iface, GPtrArray ** _return, const gchar * where, const gint32 startRow, const gint32 numRows, ServiceRuntimeException ** ex1, GError **error);
@@ -1101,6 +1119,9 @@ gboolean i_face_log_handler_load_device_by_where (IFaceLogIf *iface, GPtrArray *
 gboolean i_face_log_handler_load_device_group_by_where (IFaceLogIf *iface, GArray ** _return, const gchar * where, const gint32 startRow, const gint32 numRows, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_handler_load_device_group_id_by_where (IFaceLogIf *iface, GArray ** _return, const gchar * where, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_handler_load_device_id_by_where (IFaceLogIf *iface, GArray ** _return, const gchar * where, ServiceRuntimeException ** ex1, GError **error);
+gboolean i_face_log_handler_load_distinct_date_column (IFaceLogIf *iface, GArray ** _return, const gchar * table, const gchar * column, const gchar * where, ServiceRuntimeException ** ex1, GError **error);
+gboolean i_face_log_handler_load_distinct_integer_column (IFaceLogIf *iface, GArray ** _return, const gchar * table, const gchar * column, const gchar * where, ServiceRuntimeException ** ex1, GError **error);
+gboolean i_face_log_handler_load_distinct_string_column (IFaceLogIf *iface, GPtrArray ** _return, const gchar * table, const gchar * column, const gchar * where, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_handler_load_feature_md5_by_update (IFaceLogIf *iface, GPtrArray ** _return, const gint64 timestamp, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_handler_load_feature_md5_by_update_time_str (IFaceLogIf *iface, GPtrArray ** _return, const gchar * timestamp, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_handler_load_log_by_where (IFaceLogIf *iface, GPtrArray ** _return, const gchar * where, const gint32 startRow, const gint32 numRows, ServiceRuntimeException ** ex1, GError **error);

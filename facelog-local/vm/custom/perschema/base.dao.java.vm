@@ -23,6 +23,8 @@ import com.google.common.collect.Lists;
 
 import ${schemaPkg}.TableManager;
 import ${schemaPkg}.BaseBean;
+import ${schemaPkg}.Constant;
+
 #join($tables '
 import ${schemaPkg}.${e.asManagerInterfaceNSP()};
 import ${schemaPkg}.${e.asBeanClassNSP()};' '')
@@ -35,12 +37,29 @@ import ${schemaPkg}.exception.RuntimeDaoException;
  * @author guyadong
  *
  */
-class BaseDao implements CommonConstant {
+class BaseDao implements CommonConstant,Constant {
     #join($tables '
     static final $e.asManagerInterfaceNSP() $e.getGetManagerMethod()(){
         return TableManagerInitializer.INSTANCE.${e.asVarManager()};
     }' '')
 
+    /**
+     * 返回{@code table}指定的数据库表对应的{@link TableManager}对象
+     * @param table 数据库表名,可用的值: #join($tables '$e.name' ','),
+     *              输入值无效则抛出异常
+     * @return {@link TableManager}对象
+     */
+    @SuppressWarnings("unchecked")
+    static final <B extends BaseBean<B>>TableManager<B> getManager(String table){
+        switch(table){
+        #join($tables 'case "$e.name":
+            return (TableManager<B>)$e.getGetManagerMethod()();' '
+        ')
+        
+        default:
+            throw new IllegalArgumentException(String.format("INVALID table name %s",table));
+        }
+    }
 #macro(defineMethod $table $onlyAdd)
     //////////// $table.name.toUpperCase() /////////
 #set ($beanClass = $table.asBeanClassNSP())
@@ -687,6 +706,23 @@ class BaseDao implements CommonConstant {
                     throws RuntimeDaoException{
         return ${table.getGetManagerMethod()}().loadUsingTemplateAsList(bean,startRow,numRows);
     }
+    //16-3
+    /**
+     * 查询 $table.name 的{@code column}字段的数据
+     * @param column 有效的$table.name表字段名或{@link $beanClass} 字段名
+     * @param distinct 只返回不重复记录
+     * @param where 'where'起始的SQL 查询条件语句,可为{@code null}
+     * @return {@code column}字段记录
+     * @param startRow 返回记录的起始行(首行=1,尾行=-1)
+     * @param numRows 返回记录条数(小于0时返回所有记录)
+     * @param columnType 字段类型
+     * @see $table.asManagerInterfaceNSP()${esc.hash}loadColumnAsList(String,boolean,String)
+     * @throws RuntimeDaoException
+     */
+    $!{modifier}<T>List<T> daoLoadColumnOf${coreClass}AsList(String column,boolean distinct,String where,int startRow, int numRows,Class<T> columnType)
+                    throws RuntimeDaoException{
+        return ${table.getGetManagerMethod()}().loadColumnAsList(column, distinct, where, startRow, numRows,columnType);
+    }
     //17
     /**
      * 返回 $table.name 表的所有记录
@@ -833,6 +869,39 @@ $defineLoadByTimestamp
     protected static void daoRunAsTransaction(Runnable fun)
                     throws RuntimeDaoException{
         getPersonManager().runAsTransaction(checkNotNull(fun));
+    }
+    /**
+     * 查询 {@code table}表的{@code column}字段的数据
+     * @param table 数据库表名
+     * @param column 有效的table表字段名或table对应java类的字段名
+     * @param distinct 为{@code true}只返回不重复记录
+     * @param where 'where'起始的SQL 查询条件语句,可为{@code null}
+     * @return {@code column}字段记录
+     * @param startRow 返回记录的起始行(首行=1,尾行=-1)
+     * @param numRows 返回记录条数(小于0时返回所有记录)
+     * @param columnType 字段类型
+     * @return {@code column}字段记录
+     * @see $table.asManagerInterfaceNSP()${esc.hash}loadColumnAsList(String,boolean,String,int,int,Class)
+     * @throws RuntimeDaoException
+     */
+    protected<T>List<T> daoLoadColumnAsList(String table,String column,boolean distinct,String where,int startRow, int numRows,Class<T> columnType)
+                    throws RuntimeDaoException{
+        return getManager(table).loadColumnAsList(column, distinct, where, startRow, numRows,columnType);
+    }
+    /**
+     * 查询 {@code table}表的{@code column}字段的数据
+     * @param table 数据库表名
+     * @param column 有效的table表字段名或table对应java类的字段名
+     * @param distinct 为{@code true}只返回不重复记录
+     * @param where 'where'起始的SQL 查询条件语句,可为{@code null}
+     * @param columnType 字段类型
+     * @return {@code column}字段记录
+     * @see $table.asManagerInterfaceNSP()${esc.hash}loadColumnAsList(String,boolean,String,int,int,Class)
+     * @throws RuntimeDaoException
+     */
+    protected<T>List<T> daoLoadColumnAsList(String table,String column,boolean distinct,String where,Class<T> columnType)
+                    throws RuntimeDaoException{
+        return getManager(table).loadColumnAsList(column, distinct, where, 1, -1,columnType);
     }
 
     protected static final <T extends Exception> void throwCauseIfInstanceOf(Exception error,Class<T> expType) throws T {

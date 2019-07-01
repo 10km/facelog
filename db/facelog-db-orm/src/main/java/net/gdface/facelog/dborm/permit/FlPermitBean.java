@@ -1060,6 +1060,22 @@ public  class FlPermitBean
             : index;
     }
     
+    public static String columnNameOf(int columnId){
+        try{
+            return FL_PERMIT_FIELDS_LIST.get(columnId);
+        } catch(IndexOutOfBoundsException e){
+            return null;
+        }
+    }
+    
+    public static Class<?> typeOf(int columnId){
+        try{
+            return FL_PERMIT_FIELD_TYPES[columnId];
+        } catch(IndexOutOfBoundsException e){
+            return null;
+        }
+    }
+    
     public static final Builder builder(){
         return new Builder().reset();
     }

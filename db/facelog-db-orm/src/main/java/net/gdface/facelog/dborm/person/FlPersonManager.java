@@ -70,7 +70,14 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
     public String[] getPrimarykeyNames() {
         return PRIMARYKEY_NAMES;
     }
-
+    @Override
+    public int columnIDOf(String column){
+        return FlPersonBean.columnIDOf(column);
+    }
+    @Override
+    public Class<?> typeOf(int columnId){
+        return FlPersonBean.typeOf(columnId);
+    }
     private static FlPersonManager singleton = new FlPersonManager();
     protected FlPersonManager(){}
     /**
@@ -97,6 +104,10 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
     @Override
     protected Class<FlPersonBean> beanType(){
         return FlPersonBean.class;
+    }
+    @Override
+    protected String columnNameOf(int columnId){
+        return FlPersonBean.columnNameOf(columnId);
     }
     
     protected FlFeatureManager instanceOfFlFeatureManager(){

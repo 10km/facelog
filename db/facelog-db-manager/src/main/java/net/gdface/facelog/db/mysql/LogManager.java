@@ -81,8 +81,15 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
     @Override
     public String[] getPrimarykeyNames() {
         return this.nativeManager.getPrimarykeyNames();
+    }    
+    @Override
+    public int columnIDOf(String column){
+        return LogBean.columnIDOf(column);
     }
-    
+    @Override
+    public Class<?> typeOf(int columnId){
+        return LogBean.typeOf(columnId);
+    }
     /**
      * Get the {@link LogManager} singleton.
      *
@@ -97,7 +104,11 @@ public class LogManager extends TableManager.BaseAdapter<LogBean> implements ILo
     protected Class<LogBean> beanType(){
         return LogBean.class;
     }
-    
+
+    @Override
+    protected String columnNameOf(int columnId){
+        return LogBean.columnNameOf(columnId);
+    }
     //////////////////////////////////////
     // PRIMARY KEY METHODS
     //////////////////////////////////////

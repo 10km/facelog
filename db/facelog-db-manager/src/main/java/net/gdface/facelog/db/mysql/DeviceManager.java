@@ -77,8 +77,15 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
     @Override
     public String[] getPrimarykeyNames() {
         return this.nativeManager.getPrimarykeyNames();
+    }    
+    @Override
+    public int columnIDOf(String column){
+        return DeviceBean.columnIDOf(column);
     }
-    
+    @Override
+    public Class<?> typeOf(int columnId){
+        return DeviceBean.typeOf(columnId);
+    }
     /**
      * Get the {@link DeviceManager} singleton.
      *
@@ -93,7 +100,11 @@ public class DeviceManager extends TableManager.BaseAdapter<DeviceBean> implemen
     protected Class<DeviceBean> beanType(){
         return DeviceBean.class;
     }
-    
+
+    @Override
+    protected String columnNameOf(int columnId){
+        return DeviceBean.columnNameOf(columnId);
+    }
     //////////////////////////////////////
     // PRIMARY KEY METHODS
     //////////////////////////////////////

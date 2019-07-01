@@ -121,6 +121,9 @@ class IFaceLogIf {
   virtual void loadDeviceGroupByWhere(std::vector<int32_t> & _return, const std::string& where, const int32_t startRow, const int32_t numRows) = 0;
   virtual void loadDeviceGroupIdByWhere(std::vector<int32_t> & _return, const std::string& where) = 0;
   virtual void loadDeviceIdByWhere(std::vector<int32_t> & _return, const std::string& where) = 0;
+  virtual void loadDistinctDateColumn(std::vector<int64_t> & _return, const std::string& table, const std::string& column, const std::string& where) = 0;
+  virtual void loadDistinctIntegerColumn(std::vector<int32_t> & _return, const std::string& table, const std::string& column, const std::string& where) = 0;
+  virtual void loadDistinctStringColumn(std::vector<std::string> & _return, const std::string& table, const std::string& column, const std::string& where) = 0;
   virtual void loadFeatureMd5ByUpdate(std::vector<std::string> & _return, const int64_t timestamp) = 0;
   virtual void loadFeatureMd5ByUpdateTimeStr(std::vector<std::string> & _return, const std::string& timestamp) = 0;
   virtual void loadLogByWhere(std::vector<LogBean> & _return, const std::string& where, const int32_t startRow, const int32_t numRows) = 0;
@@ -537,6 +540,15 @@ class IFaceLogNull : virtual public IFaceLogIf {
     return;
   }
   void loadDeviceIdByWhere(std::vector<int32_t> & /* _return */, const std::string& /* where */) {
+    return;
+  }
+  void loadDistinctDateColumn(std::vector<int64_t> & /* _return */, const std::string& /* table */, const std::string& /* column */, const std::string& /* where */) {
+    return;
+  }
+  void loadDistinctIntegerColumn(std::vector<int32_t> & /* _return */, const std::string& /* table */, const std::string& /* column */, const std::string& /* where */) {
+    return;
+  }
+  void loadDistinctStringColumn(std::vector<std::string> & /* _return */, const std::string& /* table */, const std::string& /* column */, const std::string& /* where */) {
     return;
   }
   void loadFeatureMd5ByUpdate(std::vector<std::string> & /* _return */, const int64_t /* timestamp */) {
@@ -13219,6 +13231,414 @@ class IFaceLog_loadDeviceIdByWhere_presult {
 
 };
 
+typedef struct _IFaceLog_loadDistinctDateColumn_args__isset {
+  _IFaceLog_loadDistinctDateColumn_args__isset() : table(false), column(false), where(false) {}
+  bool table :1;
+  bool column :1;
+  bool where :1;
+} _IFaceLog_loadDistinctDateColumn_args__isset;
+
+class IFaceLog_loadDistinctDateColumn_args {
+ public:
+
+  IFaceLog_loadDistinctDateColumn_args(const IFaceLog_loadDistinctDateColumn_args&);
+  IFaceLog_loadDistinctDateColumn_args(IFaceLog_loadDistinctDateColumn_args&&);
+  IFaceLog_loadDistinctDateColumn_args& operator=(const IFaceLog_loadDistinctDateColumn_args&);
+  IFaceLog_loadDistinctDateColumn_args& operator=(IFaceLog_loadDistinctDateColumn_args&&);
+  IFaceLog_loadDistinctDateColumn_args() : table(), column(), where() {
+  }
+
+  virtual ~IFaceLog_loadDistinctDateColumn_args() throw();
+  std::string table;
+  std::string column;
+  std::string where;
+
+  _IFaceLog_loadDistinctDateColumn_args__isset __isset;
+
+  void __set_table(const std::string& val);
+
+  void __set_column(const std::string& val);
+
+  void __set_where(const std::string& val);
+
+  bool operator == (const IFaceLog_loadDistinctDateColumn_args & rhs) const
+  {
+    if (!(table == rhs.table))
+      return false;
+    if (!(column == rhs.column))
+      return false;
+    if (!(where == rhs.where))
+      return false;
+    return true;
+  }
+  bool operator != (const IFaceLog_loadDistinctDateColumn_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IFaceLog_loadDistinctDateColumn_args & ) const;
+
+  template <class Protocol_>
+  uint32_t read(Protocol_* iprot);
+  template <class Protocol_>
+  uint32_t write(Protocol_* oprot) const;
+
+};
+
+
+class IFaceLog_loadDistinctDateColumn_pargs {
+ public:
+
+
+  virtual ~IFaceLog_loadDistinctDateColumn_pargs() throw();
+  const std::string* table;
+  const std::string* column;
+  const std::string* where;
+
+  template <class Protocol_>
+  uint32_t write(Protocol_* oprot) const;
+
+};
+
+typedef struct _IFaceLog_loadDistinctDateColumn_result__isset {
+  _IFaceLog_loadDistinctDateColumn_result__isset() : success(false), ex1(false) {}
+  bool success :1;
+  bool ex1 :1;
+} _IFaceLog_loadDistinctDateColumn_result__isset;
+
+class IFaceLog_loadDistinctDateColumn_result {
+ public:
+
+  IFaceLog_loadDistinctDateColumn_result(const IFaceLog_loadDistinctDateColumn_result&);
+  IFaceLog_loadDistinctDateColumn_result(IFaceLog_loadDistinctDateColumn_result&&);
+  IFaceLog_loadDistinctDateColumn_result& operator=(const IFaceLog_loadDistinctDateColumn_result&);
+  IFaceLog_loadDistinctDateColumn_result& operator=(IFaceLog_loadDistinctDateColumn_result&&);
+  IFaceLog_loadDistinctDateColumn_result() {
+  }
+
+  virtual ~IFaceLog_loadDistinctDateColumn_result() throw();
+  std::vector<int64_t>  success;
+  ServiceRuntimeException ex1;
+
+  _IFaceLog_loadDistinctDateColumn_result__isset __isset;
+
+  void __set_success(const std::vector<int64_t> & val);
+
+  void __set_ex1(const ServiceRuntimeException& val);
+
+  bool operator == (const IFaceLog_loadDistinctDateColumn_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex1 == rhs.ex1))
+      return false;
+    return true;
+  }
+  bool operator != (const IFaceLog_loadDistinctDateColumn_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IFaceLog_loadDistinctDateColumn_result & ) const;
+
+  template <class Protocol_>
+  uint32_t read(Protocol_* iprot);
+  template <class Protocol_>
+  uint32_t write(Protocol_* oprot) const;
+
+};
+
+typedef struct _IFaceLog_loadDistinctDateColumn_presult__isset {
+  _IFaceLog_loadDistinctDateColumn_presult__isset() : success(false), ex1(false) {}
+  bool success :1;
+  bool ex1 :1;
+} _IFaceLog_loadDistinctDateColumn_presult__isset;
+
+class IFaceLog_loadDistinctDateColumn_presult {
+ public:
+
+
+  virtual ~IFaceLog_loadDistinctDateColumn_presult() throw();
+  std::vector<int64_t> * success;
+  ServiceRuntimeException ex1;
+
+  _IFaceLog_loadDistinctDateColumn_presult__isset __isset;
+
+  template <class Protocol_>
+  uint32_t read(Protocol_* iprot);
+
+};
+
+typedef struct _IFaceLog_loadDistinctIntegerColumn_args__isset {
+  _IFaceLog_loadDistinctIntegerColumn_args__isset() : table(false), column(false), where(false) {}
+  bool table :1;
+  bool column :1;
+  bool where :1;
+} _IFaceLog_loadDistinctIntegerColumn_args__isset;
+
+class IFaceLog_loadDistinctIntegerColumn_args {
+ public:
+
+  IFaceLog_loadDistinctIntegerColumn_args(const IFaceLog_loadDistinctIntegerColumn_args&);
+  IFaceLog_loadDistinctIntegerColumn_args(IFaceLog_loadDistinctIntegerColumn_args&&);
+  IFaceLog_loadDistinctIntegerColumn_args& operator=(const IFaceLog_loadDistinctIntegerColumn_args&);
+  IFaceLog_loadDistinctIntegerColumn_args& operator=(IFaceLog_loadDistinctIntegerColumn_args&&);
+  IFaceLog_loadDistinctIntegerColumn_args() : table(), column(), where() {
+  }
+
+  virtual ~IFaceLog_loadDistinctIntegerColumn_args() throw();
+  std::string table;
+  std::string column;
+  std::string where;
+
+  _IFaceLog_loadDistinctIntegerColumn_args__isset __isset;
+
+  void __set_table(const std::string& val);
+
+  void __set_column(const std::string& val);
+
+  void __set_where(const std::string& val);
+
+  bool operator == (const IFaceLog_loadDistinctIntegerColumn_args & rhs) const
+  {
+    if (!(table == rhs.table))
+      return false;
+    if (!(column == rhs.column))
+      return false;
+    if (!(where == rhs.where))
+      return false;
+    return true;
+  }
+  bool operator != (const IFaceLog_loadDistinctIntegerColumn_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IFaceLog_loadDistinctIntegerColumn_args & ) const;
+
+  template <class Protocol_>
+  uint32_t read(Protocol_* iprot);
+  template <class Protocol_>
+  uint32_t write(Protocol_* oprot) const;
+
+};
+
+
+class IFaceLog_loadDistinctIntegerColumn_pargs {
+ public:
+
+
+  virtual ~IFaceLog_loadDistinctIntegerColumn_pargs() throw();
+  const std::string* table;
+  const std::string* column;
+  const std::string* where;
+
+  template <class Protocol_>
+  uint32_t write(Protocol_* oprot) const;
+
+};
+
+typedef struct _IFaceLog_loadDistinctIntegerColumn_result__isset {
+  _IFaceLog_loadDistinctIntegerColumn_result__isset() : success(false), ex1(false) {}
+  bool success :1;
+  bool ex1 :1;
+} _IFaceLog_loadDistinctIntegerColumn_result__isset;
+
+class IFaceLog_loadDistinctIntegerColumn_result {
+ public:
+
+  IFaceLog_loadDistinctIntegerColumn_result(const IFaceLog_loadDistinctIntegerColumn_result&);
+  IFaceLog_loadDistinctIntegerColumn_result(IFaceLog_loadDistinctIntegerColumn_result&&);
+  IFaceLog_loadDistinctIntegerColumn_result& operator=(const IFaceLog_loadDistinctIntegerColumn_result&);
+  IFaceLog_loadDistinctIntegerColumn_result& operator=(IFaceLog_loadDistinctIntegerColumn_result&&);
+  IFaceLog_loadDistinctIntegerColumn_result() {
+  }
+
+  virtual ~IFaceLog_loadDistinctIntegerColumn_result() throw();
+  std::vector<int32_t>  success;
+  ServiceRuntimeException ex1;
+
+  _IFaceLog_loadDistinctIntegerColumn_result__isset __isset;
+
+  void __set_success(const std::vector<int32_t> & val);
+
+  void __set_ex1(const ServiceRuntimeException& val);
+
+  bool operator == (const IFaceLog_loadDistinctIntegerColumn_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex1 == rhs.ex1))
+      return false;
+    return true;
+  }
+  bool operator != (const IFaceLog_loadDistinctIntegerColumn_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IFaceLog_loadDistinctIntegerColumn_result & ) const;
+
+  template <class Protocol_>
+  uint32_t read(Protocol_* iprot);
+  template <class Protocol_>
+  uint32_t write(Protocol_* oprot) const;
+
+};
+
+typedef struct _IFaceLog_loadDistinctIntegerColumn_presult__isset {
+  _IFaceLog_loadDistinctIntegerColumn_presult__isset() : success(false), ex1(false) {}
+  bool success :1;
+  bool ex1 :1;
+} _IFaceLog_loadDistinctIntegerColumn_presult__isset;
+
+class IFaceLog_loadDistinctIntegerColumn_presult {
+ public:
+
+
+  virtual ~IFaceLog_loadDistinctIntegerColumn_presult() throw();
+  std::vector<int32_t> * success;
+  ServiceRuntimeException ex1;
+
+  _IFaceLog_loadDistinctIntegerColumn_presult__isset __isset;
+
+  template <class Protocol_>
+  uint32_t read(Protocol_* iprot);
+
+};
+
+typedef struct _IFaceLog_loadDistinctStringColumn_args__isset {
+  _IFaceLog_loadDistinctStringColumn_args__isset() : table(false), column(false), where(false) {}
+  bool table :1;
+  bool column :1;
+  bool where :1;
+} _IFaceLog_loadDistinctStringColumn_args__isset;
+
+class IFaceLog_loadDistinctStringColumn_args {
+ public:
+
+  IFaceLog_loadDistinctStringColumn_args(const IFaceLog_loadDistinctStringColumn_args&);
+  IFaceLog_loadDistinctStringColumn_args(IFaceLog_loadDistinctStringColumn_args&&);
+  IFaceLog_loadDistinctStringColumn_args& operator=(const IFaceLog_loadDistinctStringColumn_args&);
+  IFaceLog_loadDistinctStringColumn_args& operator=(IFaceLog_loadDistinctStringColumn_args&&);
+  IFaceLog_loadDistinctStringColumn_args() : table(), column(), where() {
+  }
+
+  virtual ~IFaceLog_loadDistinctStringColumn_args() throw();
+  std::string table;
+  std::string column;
+  std::string where;
+
+  _IFaceLog_loadDistinctStringColumn_args__isset __isset;
+
+  void __set_table(const std::string& val);
+
+  void __set_column(const std::string& val);
+
+  void __set_where(const std::string& val);
+
+  bool operator == (const IFaceLog_loadDistinctStringColumn_args & rhs) const
+  {
+    if (!(table == rhs.table))
+      return false;
+    if (!(column == rhs.column))
+      return false;
+    if (!(where == rhs.where))
+      return false;
+    return true;
+  }
+  bool operator != (const IFaceLog_loadDistinctStringColumn_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IFaceLog_loadDistinctStringColumn_args & ) const;
+
+  template <class Protocol_>
+  uint32_t read(Protocol_* iprot);
+  template <class Protocol_>
+  uint32_t write(Protocol_* oprot) const;
+
+};
+
+
+class IFaceLog_loadDistinctStringColumn_pargs {
+ public:
+
+
+  virtual ~IFaceLog_loadDistinctStringColumn_pargs() throw();
+  const std::string* table;
+  const std::string* column;
+  const std::string* where;
+
+  template <class Protocol_>
+  uint32_t write(Protocol_* oprot) const;
+
+};
+
+typedef struct _IFaceLog_loadDistinctStringColumn_result__isset {
+  _IFaceLog_loadDistinctStringColumn_result__isset() : success(false), ex1(false) {}
+  bool success :1;
+  bool ex1 :1;
+} _IFaceLog_loadDistinctStringColumn_result__isset;
+
+class IFaceLog_loadDistinctStringColumn_result {
+ public:
+
+  IFaceLog_loadDistinctStringColumn_result(const IFaceLog_loadDistinctStringColumn_result&);
+  IFaceLog_loadDistinctStringColumn_result(IFaceLog_loadDistinctStringColumn_result&&);
+  IFaceLog_loadDistinctStringColumn_result& operator=(const IFaceLog_loadDistinctStringColumn_result&);
+  IFaceLog_loadDistinctStringColumn_result& operator=(IFaceLog_loadDistinctStringColumn_result&&);
+  IFaceLog_loadDistinctStringColumn_result() {
+  }
+
+  virtual ~IFaceLog_loadDistinctStringColumn_result() throw();
+  std::vector<std::string>  success;
+  ServiceRuntimeException ex1;
+
+  _IFaceLog_loadDistinctStringColumn_result__isset __isset;
+
+  void __set_success(const std::vector<std::string> & val);
+
+  void __set_ex1(const ServiceRuntimeException& val);
+
+  bool operator == (const IFaceLog_loadDistinctStringColumn_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex1 == rhs.ex1))
+      return false;
+    return true;
+  }
+  bool operator != (const IFaceLog_loadDistinctStringColumn_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IFaceLog_loadDistinctStringColumn_result & ) const;
+
+  template <class Protocol_>
+  uint32_t read(Protocol_* iprot);
+  template <class Protocol_>
+  uint32_t write(Protocol_* oprot) const;
+
+};
+
+typedef struct _IFaceLog_loadDistinctStringColumn_presult__isset {
+  _IFaceLog_loadDistinctStringColumn_presult__isset() : success(false), ex1(false) {}
+  bool success :1;
+  bool ex1 :1;
+} _IFaceLog_loadDistinctStringColumn_presult__isset;
+
+class IFaceLog_loadDistinctStringColumn_presult {
+ public:
+
+
+  virtual ~IFaceLog_loadDistinctStringColumn_presult() throw();
+  std::vector<std::string> * success;
+  ServiceRuntimeException ex1;
+
+  _IFaceLog_loadDistinctStringColumn_presult__isset __isset;
+
+  template <class Protocol_>
+  uint32_t read(Protocol_* iprot);
+
+};
+
 
 class IFaceLog_loadFeatureMd5ByUpdate_args {
  public:
@@ -20528,6 +20948,15 @@ class IFaceLogClientT : virtual public IFaceLogIf {
   void loadDeviceIdByWhere(std::vector<int32_t> & _return, const std::string& where);
   void send_loadDeviceIdByWhere(const std::string& where);
   void recv_loadDeviceIdByWhere(std::vector<int32_t> & _return);
+  void loadDistinctDateColumn(std::vector<int64_t> & _return, const std::string& table, const std::string& column, const std::string& where);
+  void send_loadDistinctDateColumn(const std::string& table, const std::string& column, const std::string& where);
+  void recv_loadDistinctDateColumn(std::vector<int64_t> & _return);
+  void loadDistinctIntegerColumn(std::vector<int32_t> & _return, const std::string& table, const std::string& column, const std::string& where);
+  void send_loadDistinctIntegerColumn(const std::string& table, const std::string& column, const std::string& where);
+  void recv_loadDistinctIntegerColumn(std::vector<int32_t> & _return);
+  void loadDistinctStringColumn(std::vector<std::string> & _return, const std::string& table, const std::string& column, const std::string& where);
+  void send_loadDistinctStringColumn(const std::string& table, const std::string& column, const std::string& where);
+  void recv_loadDistinctStringColumn(std::vector<std::string> & _return);
   void loadFeatureMd5ByUpdate(std::vector<std::string> & _return, const int64_t timestamp);
   void send_loadFeatureMd5ByUpdate(const int64_t timestamp);
   void recv_loadFeatureMd5ByUpdate(std::vector<std::string> & _return);
@@ -20918,6 +21347,12 @@ class IFaceLogProcessorT : public ::apache::thrift::TDispatchProcessorT<Protocol
   void process_loadDeviceGroupIdByWhere(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext);
   void process_loadDeviceIdByWhere(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_loadDeviceIdByWhere(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext);
+  void process_loadDistinctDateColumn(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_loadDistinctDateColumn(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext);
+  void process_loadDistinctIntegerColumn(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_loadDistinctIntegerColumn(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext);
+  void process_loadDistinctStringColumn(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_loadDistinctStringColumn(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext);
   void process_loadFeatureMd5ByUpdate(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_loadFeatureMd5ByUpdate(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext);
   void process_loadFeatureMd5ByUpdateTimeStr(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -21329,6 +21764,15 @@ class IFaceLogProcessorT : public ::apache::thrift::TDispatchProcessorT<Protocol
     processMap_["loadDeviceIdByWhere"] = ProcessFunctions(
       &IFaceLogProcessorT::process_loadDeviceIdByWhere,
       &IFaceLogProcessorT::process_loadDeviceIdByWhere);
+    processMap_["loadDistinctDateColumn"] = ProcessFunctions(
+      &IFaceLogProcessorT::process_loadDistinctDateColumn,
+      &IFaceLogProcessorT::process_loadDistinctDateColumn);
+    processMap_["loadDistinctIntegerColumn"] = ProcessFunctions(
+      &IFaceLogProcessorT::process_loadDistinctIntegerColumn,
+      &IFaceLogProcessorT::process_loadDistinctIntegerColumn);
+    processMap_["loadDistinctStringColumn"] = ProcessFunctions(
+      &IFaceLogProcessorT::process_loadDistinctStringColumn,
+      &IFaceLogProcessorT::process_loadDistinctStringColumn);
     processMap_["loadFeatureMd5ByUpdate"] = ProcessFunctions(
       &IFaceLogProcessorT::process_loadFeatureMd5ByUpdate,
       &IFaceLogProcessorT::process_loadFeatureMd5ByUpdate);
@@ -22482,6 +22926,36 @@ class IFaceLogMultiface : virtual public IFaceLogIf {
     return;
   }
 
+  void loadDistinctDateColumn(std::vector<int64_t> & _return, const std::string& table, const std::string& column, const std::string& where) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->loadDistinctDateColumn(_return, table, column, where);
+    }
+    ifaces_[i]->loadDistinctDateColumn(_return, table, column, where);
+    return;
+  }
+
+  void loadDistinctIntegerColumn(std::vector<int32_t> & _return, const std::string& table, const std::string& column, const std::string& where) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->loadDistinctIntegerColumn(_return, table, column, where);
+    }
+    ifaces_[i]->loadDistinctIntegerColumn(_return, table, column, where);
+    return;
+  }
+
+  void loadDistinctStringColumn(std::vector<std::string> & _return, const std::string& table, const std::string& column, const std::string& where) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->loadDistinctStringColumn(_return, table, column, where);
+    }
+    ifaces_[i]->loadDistinctStringColumn(_return, table, column, where);
+    return;
+  }
+
   void loadFeatureMd5ByUpdate(std::vector<std::string> & _return, const int64_t timestamp) {
     size_t sz = ifaces_.size();
     size_t i = 0;
@@ -23334,6 +23808,15 @@ class IFaceLogConcurrentClientT : virtual public IFaceLogIf {
   void loadDeviceIdByWhere(std::vector<int32_t> & _return, const std::string& where);
   int32_t send_loadDeviceIdByWhere(const std::string& where);
   void recv_loadDeviceIdByWhere(std::vector<int32_t> & _return, const int32_t seqid);
+  void loadDistinctDateColumn(std::vector<int64_t> & _return, const std::string& table, const std::string& column, const std::string& where);
+  int32_t send_loadDistinctDateColumn(const std::string& table, const std::string& column, const std::string& where);
+  void recv_loadDistinctDateColumn(std::vector<int64_t> & _return, const int32_t seqid);
+  void loadDistinctIntegerColumn(std::vector<int32_t> & _return, const std::string& table, const std::string& column, const std::string& where);
+  int32_t send_loadDistinctIntegerColumn(const std::string& table, const std::string& column, const std::string& where);
+  void recv_loadDistinctIntegerColumn(std::vector<int32_t> & _return, const int32_t seqid);
+  void loadDistinctStringColumn(std::vector<std::string> & _return, const std::string& table, const std::string& column, const std::string& where);
+  int32_t send_loadDistinctStringColumn(const std::string& table, const std::string& column, const std::string& where);
+  void recv_loadDistinctStringColumn(std::vector<std::string> & _return, const int32_t seqid);
   void loadFeatureMd5ByUpdate(std::vector<std::string> & _return, const int64_t timestamp);
   int32_t send_loadFeatureMd5ByUpdate(const int64_t timestamp);
   void recv_loadFeatureMd5ByUpdate(std::vector<std::string> & _return, const int32_t seqid);

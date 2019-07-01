@@ -77,8 +77,15 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
     @Override
     public String[] getPrimarykeyNames() {
         return this.nativeManager.getPrimarykeyNames();
+    }    
+    @Override
+    public int columnIDOf(String column){
+        return FeatureBean.columnIDOf(column);
     }
-    
+    @Override
+    public Class<?> typeOf(int columnId){
+        return FeatureBean.typeOf(columnId);
+    }
     /**
      * Get the {@link FeatureManager} singleton.
      *
@@ -93,7 +100,11 @@ public class FeatureManager extends TableManager.BaseAdapter<FeatureBean> implem
     protected Class<FeatureBean> beanType(){
         return FeatureBean.class;
     }
-    
+
+    @Override
+    protected String columnNameOf(int columnId){
+        return FeatureBean.columnNameOf(columnId);
+    }
     //////////////////////////////////////
     // PRIMARY KEY METHODS
     //////////////////////////////////////

@@ -70,7 +70,14 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
     public String[] getPrimarykeyNames() {
         return PRIMARYKEY_NAMES;
     }
-
+    @Override
+    public int columnIDOf(String column){
+        return FlImageBean.columnIDOf(column);
+    }
+    @Override
+    public Class<?> typeOf(int columnId){
+        return FlImageBean.typeOf(columnId);
+    }
     private static FlImageManager singleton = new FlImageManager();
     protected FlImageManager(){}
     /**
@@ -97,6 +104,10 @@ public class FlImageManager extends TableManager.BaseAdapter<FlImageBean>
     @Override
     protected Class<FlImageBean> beanType(){
         return FlImageBean.class;
+    }
+    @Override
+    protected String columnNameOf(int columnId){
+        return FlImageBean.columnNameOf(columnId);
     }
     
     protected FlFaceManager instanceOfFlFaceManager(){

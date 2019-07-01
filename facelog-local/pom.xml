@@ -39,6 +39,12 @@
 			<groupId>${project.groupId}</groupId>
 			<artifactId>common-thrift</artifactId>
 			<version>${common-java.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-beanutils</groupId>
+					<artifactId>commons-beanutils-core</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>com.gitee.l0km</groupId>

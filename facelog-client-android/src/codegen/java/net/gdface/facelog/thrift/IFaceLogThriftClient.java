@@ -1,5 +1,6 @@
 package net.gdface.facelog.thrift;
 import java.nio.ByteBuffer;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import net.gdface.facelog.DuplicateRecordException;
@@ -2910,6 +2911,90 @@ public class IFaceLogThriftClient implements IFaceLog {
                 @Override
                 public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<List<Integer>> nativeCallback){
                     service.loadDeviceIdByWhere(where,nativeCallback);
+                }});
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);
+        }
+    }
+    @Override
+    public List<Date> loadDistinctDateColumn(final String table,
+        final String column,
+        final String where) 
+        {
+        try{
+            return syncCall(new Function<List<Long>,List<Date>>() {
+                @Override
+                public List<Date> apply(List<Long> input) {
+                    return TypeTransformer.getInstance().to(
+                    input,
+                    Long.class,
+                    Date.class);
+                }},
+                new ServiceAsyncCall<List<Long>>(){
+                @Override
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<List<Long>> nativeCallback){
+                    service.loadDistinctDateColumn(table,column,where,nativeCallback);
+                }});
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);
+        }
+    }
+    @Override
+    public List<Integer> loadDistinctIntegerColumn(final String table,
+        final String column,
+        final String where) 
+        {
+        try{
+            return syncCall(new Function<List<Integer>,List<Integer>>() {
+                @Override
+                public List<Integer> apply(List<Integer> input) {
+                    return TypeTransformer.getInstance().to(
+                    input,
+                    Integer.class,
+                    Integer.class);
+                }},
+                new ServiceAsyncCall<List<Integer>>(){
+                @Override
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<List<Integer>> nativeCallback){
+                    service.loadDistinctIntegerColumn(table,column,where,nativeCallback);
+                }});
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);
+        }
+    }
+    @Override
+    public List<String> loadDistinctStringColumn(final String table,
+        final String column,
+        final String where) 
+        {
+        try{
+            return syncCall(new Function<List<String>,List<String>>() {
+                @Override
+                public List<String> apply(List<String> input) {
+                    return TypeTransformer.getInstance().to(
+                    input,
+                    String.class,
+                    String.class);
+                }},
+                new ServiceAsyncCall<List<String>>(){
+                @Override
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<List<String>> nativeCallback){
+                    service.loadDistinctStringColumn(table,column,where,nativeCallback);
                 }});
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){

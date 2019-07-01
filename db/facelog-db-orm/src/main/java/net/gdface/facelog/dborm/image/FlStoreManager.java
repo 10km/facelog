@@ -64,7 +64,14 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
     public String[] getPrimarykeyNames() {
         return PRIMARYKEY_NAMES;
     }
-
+    @Override
+    public int columnIDOf(String column){
+        return FlStoreBean.columnIDOf(column);
+    }
+    @Override
+    public Class<?> typeOf(int columnId){
+        return FlStoreBean.typeOf(columnId);
+    }
     private static FlStoreManager singleton = new FlStoreManager();
     protected FlStoreManager(){}
     /**
@@ -91,6 +98,10 @@ public class FlStoreManager extends TableManager.BaseAdapter<FlStoreBean>
     @Override
     protected Class<FlStoreBean> beanType(){
         return FlStoreBean.class;
+    }
+    @Override
+    protected String columnNameOf(int columnId){
+        return FlStoreBean.columnNameOf(columnId);
     }
     
     //////////////////////////////////////

@@ -68,7 +68,14 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
     public String[] getPrimarykeyNames() {
         return PRIMARYKEY_NAMES;
     }
-
+    @Override
+    public int columnIDOf(String column){
+        return FlFeatureBean.columnIDOf(column);
+    }
+    @Override
+    public Class<?> typeOf(int columnId){
+        return FlFeatureBean.typeOf(columnId);
+    }
     private static FlFeatureManager singleton = new FlFeatureManager();
     protected FlFeatureManager(){}
     /**
@@ -95,6 +102,10 @@ public class FlFeatureManager extends TableManager.BaseAdapter<FlFeatureBean>
     @Override
     protected Class<FlFeatureBean> beanType(){
         return FlFeatureBean.class;
+    }
+    @Override
+    protected String columnNameOf(int columnId){
+        return FlFeatureBean.columnNameOf(columnId);
     }
     
     protected FlFaceManager instanceOfFlFaceManager(){

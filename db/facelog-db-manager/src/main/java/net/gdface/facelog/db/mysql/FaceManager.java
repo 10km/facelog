@@ -77,8 +77,15 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
     @Override
     public String[] getPrimarykeyNames() {
         return this.nativeManager.getPrimarykeyNames();
+    }    
+    @Override
+    public int columnIDOf(String column){
+        return FaceBean.columnIDOf(column);
     }
-    
+    @Override
+    public Class<?> typeOf(int columnId){
+        return FaceBean.typeOf(columnId);
+    }
     /**
      * Get the {@link FaceManager} singleton.
      *
@@ -93,7 +100,11 @@ public class FaceManager extends TableManager.BaseAdapter<FaceBean> implements I
     protected Class<FaceBean> beanType(){
         return FaceBean.class;
     }
-    
+
+    @Override
+    protected String columnNameOf(int columnId){
+        return FaceBean.columnNameOf(columnId);
+    }
     //////////////////////////////////////
     // PRIMARY KEY METHODS
     //////////////////////////////////////

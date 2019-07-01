@@ -1,13 +1,14 @@
 package net.gdface.facelog;
 
-import static org.junit.Assert.*;
+import java.util.List;
 
 import org.junit.Test;
 
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.IDeviceManager;
-import net.gdface.facelog.db.mysql.DeviceManager;
 import net.gdface.facelog.TableManagerInitializer;
+import static net.gdface.facelog.db.Constant.*;
+
 
 /**
  * @author guyadong
@@ -31,6 +32,15 @@ public class DbTest implements ServiceConstant {
 		reload.setName("大家好");
 		deviceManager.save(reload);
 		logger.info(reload.toString(true, false));
+	}
+	@Test
+	public void testSelectDistinct(){
+		FL_DEVICE_FIELDS_LIST.indexOf("hello");
+		List<DeviceBean> devices = deviceManager.loadBySqlAsList("select DISTINCT used_sdks from fl_device", null, new int[]{FL_DEVICE_ID_USED_SDKS});
+		
+		logger.info("devices:{}",devices);
+		List<String> sdks = deviceManager.loadColumnAsList("used_sdks", true, null, 1, -1,String.class);
+		logger.info("sdks:{}",sdks);
 	}
 
 }

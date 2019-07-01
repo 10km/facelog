@@ -1,5 +1,6 @@
 package net.gdface.facelog.thrift;
 import java.nio.ByteBuffer;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import net.gdface.facelog.DuplicateRecordException;
@@ -2173,6 +2174,78 @@ public class IFaceLogThriftClient implements IFaceLog {
                     instance.loadDeviceIdByWhere(where),
                     Integer.class,
                     Integer.class);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch(RuntimeTApplicationException e){
+            return net.gdface.thrift.ThriftUtils.returnNull(e);
+        }
+        finally{
+            factory.releaseInstance(instance);
+        }
+    }
+    @Override
+    public List<Date> loadDistinctDateColumn(String table,
+        String column,
+        String where) 
+        {
+        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        try{
+            return TypeTransformer.getInstance().to(
+                    instance.loadDistinctDateColumn(table,
+                column,
+                where),
+                    Long.class,
+                    Date.class);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch(RuntimeTApplicationException e){
+            return net.gdface.thrift.ThriftUtils.returnNull(e);
+        }
+        finally{
+            factory.releaseInstance(instance);
+        }
+    }
+    @Override
+    public List<Integer> loadDistinctIntegerColumn(String table,
+        String column,
+        String where) 
+        {
+        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        try{
+            return TypeTransformer.getInstance().to(
+                    instance.loadDistinctIntegerColumn(table,
+                column,
+                where),
+                    Integer.class,
+                    Integer.class);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch(RuntimeTApplicationException e){
+            return net.gdface.thrift.ThriftUtils.returnNull(e);
+        }
+        finally{
+            factory.releaseInstance(instance);
+        }
+    }
+    @Override
+    public List<String> loadDistinctStringColumn(String table,
+        String column,
+        String where) 
+        {
+        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        try{
+            return TypeTransformer.getInstance().to(
+                    instance.loadDistinctStringColumn(table,
+                column,
+                where),
+                    String.class,
+                    String.class);
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);

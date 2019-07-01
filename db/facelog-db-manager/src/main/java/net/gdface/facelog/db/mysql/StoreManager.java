@@ -65,8 +65,15 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
     @Override
     public String[] getPrimarykeyNames() {
         return this.nativeManager.getPrimarykeyNames();
+    }    
+    @Override
+    public int columnIDOf(String column){
+        return StoreBean.columnIDOf(column);
     }
-    
+    @Override
+    public Class<?> typeOf(int columnId){
+        return StoreBean.typeOf(columnId);
+    }
     /**
      * Get the {@link StoreManager} singleton.
      *
@@ -81,7 +88,11 @@ public class StoreManager extends TableManager.BaseAdapter<StoreBean> implements
     protected Class<StoreBean> beanType(){
         return StoreBean.class;
     }
-    
+
+    @Override
+    protected String columnNameOf(int columnId){
+        return StoreBean.columnNameOf(columnId);
+    }
     //////////////////////////////////////
     // PRIMARY KEY METHODS
     //////////////////////////////////////

@@ -29,6 +29,7 @@ import net.gdface.facelog.db.PermitBean;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.PersonGroupBean;
 import net.gdface.facelog.db.StoreBean;
+import net.gdface.facelog.db.TableManager;
 import net.gdface.facelog.db.exception.RuntimeDaoException;
 import net.gdface.facelog.ServiceSecurityException;
 import net.gdface.facelog.Token.TokenType;
@@ -1686,6 +1687,29 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
 		} 
+	}
+	private <T>List<T> loadDistinctColumn(String table,String column,String where,Class<T> columnType){
+		try{
+			TableManager<?> manager = BaseDao.getManager(table);
+			int columnId = manager.columnIDOf(column);
+			checkArgument(columnId >=0,"INVALID column %s",column);
+			checkArgument(manager.typeOf(columnId) == columnType,"java type of %s.%s column is not %s",table,column,columnType.getName());
+			return dm.daoLoadColumnAsList(table, column, true, where,columnType);
+		} catch (Exception e) {
+			throw wrapServiceRuntimeException(e);
+		} 
+	}
+	@Override
+	public List<String> loadDistinctStringColumn(String table,String column,String where){
+		return loadDistinctColumn(table,column,where,String.class);
+	}
+	@Override
+	public List<Integer> loadDistinctIntegerColumn(String table,String column,String where){
+		return loadDistinctColumn(table,column,where,Integer.class);
+	}
+	@Override
+	public List<Date> loadDistinctDateColumn(String table,String column,String where){
+		return loadDistinctColumn(table,column,where,Date.class);
 	}
     @Override
     public String getProperty(String key,Token token){

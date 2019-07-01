@@ -746,6 +746,21 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
+    public List<java.util.Date> loadDistinctDateColumn (String table,String column,String where) {
+        return delegate().loadDistinctDateColumn(table,column,where);
+    }
+
+    @Override
+    public List<Integer> loadDistinctIntegerColumn (String table,String column,String where) {
+        return delegate().loadDistinctIntegerColumn(table,column,where);
+    }
+
+    @Override
+    public List<String> loadDistinctStringColumn (String table,String column,String where) {
+        return delegate().loadDistinctStringColumn(table,column,where);
+    }
+
+    @Override
     public List<String> loadFeatureMd5ByUpdate (String timestamp) {
         return delegate().loadFeatureMd5ByUpdate(timestamp);
     }

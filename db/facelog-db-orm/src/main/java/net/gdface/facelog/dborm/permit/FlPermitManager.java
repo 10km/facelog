@@ -69,7 +69,14 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
     public String[] getPrimarykeyNames() {
         return PRIMARYKEY_NAMES;
     }
-
+    @Override
+    public int columnIDOf(String column){
+        return FlPermitBean.columnIDOf(column);
+    }
+    @Override
+    public Class<?> typeOf(int columnId){
+        return FlPermitBean.typeOf(columnId);
+    }
     private static FlPermitManager singleton = new FlPermitManager();
     protected FlPermitManager(){}
     /**
@@ -96,6 +103,10 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
     @Override
     protected Class<FlPermitBean> beanType(){
         return FlPermitBean.class;
+    }
+    @Override
+    protected String columnNameOf(int columnId){
+        return FlPermitBean.columnNameOf(columnId);
     }
     
     protected FlDeviceGroupManager instanceOfFlDeviceGroupManager(){

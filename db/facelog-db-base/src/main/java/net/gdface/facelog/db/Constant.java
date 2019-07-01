@@ -592,6 +592,26 @@ public interface Constant {
                             + ",createTime"
                             + ",updateTime";
     public static final java.util.List<String> FL_DEVICE_JAVA_FIELDS_LIST = java.util.Arrays.asList(FL_DEVICE_JAVA_FIELDS.split(","));
+    
+    /** Field java types of the fl_device table. */
+    public static final Class<?>[] FL_DEVICE_FIELD_TYPES = new Class<?>[]{
+        Integer.class,
+        Integer.class,
+        String.class,
+        String.class,
+        String.class,
+        String.class,
+        String.class,
+        java.util.Date.class,
+        String.class,
+        String.class,
+        String.class,
+        String.class,
+        String.class,
+        java.nio.ByteBuffer.class,
+        String.class,
+        java.util.Date.class,
+        java.util.Date.class};
     /////////////////// fl_device_group ////////////
     /** Contains all the full fields of the fl_device_group table.*/
     public static final String FL_DEVICE_GROUP_FULL_FIELDS ="fl_device_group.id"
@@ -631,6 +651,20 @@ public interface Constant {
                             + ",createTime"
                             + ",updateTime";
     public static final java.util.List<String> FL_DEVICE_GROUP_JAVA_FIELDS_LIST = java.util.Arrays.asList(FL_DEVICE_GROUP_JAVA_FIELDS.split(","));
+    
+    /** Field java types of the fl_device_group table. */
+    public static final Class<?>[] FL_DEVICE_GROUP_FIELD_TYPES = new Class<?>[]{
+        Integer.class,
+        String.class,
+        Integer.class,
+        Integer.class,
+        Integer.class,
+        String.class,
+        String.class,
+        java.nio.ByteBuffer.class,
+        String.class,
+        java.util.Date.class,
+        java.util.Date.class};
     /////////////////// fl_face ////////////
     /** Contains all the full fields of the fl_face table.*/
     public static final String FL_FACE_FULL_FIELDS ="fl_face.id"
@@ -694,6 +728,28 @@ public interface Constant {
                             + ",extInfo"
                             + ",featureMd5";
     public static final java.util.List<String> FL_FACE_JAVA_FIELDS_LIST = java.util.Arrays.asList(FL_FACE_JAVA_FIELDS.split(","));
+    
+    /** Field java types of the fl_face table. */
+    public static final Class<?>[] FL_FACE_FIELD_TYPES = new Class<?>[]{
+        Integer.class,
+        String.class,
+        Integer.class,
+        Integer.class,
+        Integer.class,
+        Integer.class,
+        Integer.class,
+        Integer.class,
+        Integer.class,
+        Integer.class,
+        Integer.class,
+        Integer.class,
+        Integer.class,
+        Integer.class,
+        Integer.class,
+        Integer.class,
+        Integer.class,
+        java.nio.ByteBuffer.class,
+        String.class};
     /////////////////// fl_feature ////////////
     /** Contains all the full fields of the fl_feature table.*/
     public static final String FL_FEATURE_FULL_FIELDS ="fl_feature.md5"
@@ -715,6 +771,14 @@ public interface Constant {
                             + ",feature"
                             + ",updateTime";
     public static final java.util.List<String> FL_FEATURE_JAVA_FIELDS_LIST = java.util.Arrays.asList(FL_FEATURE_JAVA_FIELDS.split(","));
+    
+    /** Field java types of the fl_feature table. */
+    public static final Class<?>[] FL_FEATURE_FIELD_TYPES = new Class<?>[]{
+        String.class,
+        String.class,
+        Integer.class,
+        java.nio.ByteBuffer.class,
+        java.util.Date.class};
     /////////////////// fl_image ////////////
     /** Contains all the full fields of the fl_image table.*/
     public static final String FL_IMAGE_FULL_FIELDS ="fl_image.md5"
@@ -745,6 +809,17 @@ public interface Constant {
                             + ",thumbMd5"
                             + ",deviceId";
     public static final java.util.List<String> FL_IMAGE_JAVA_FIELDS_LIST = java.util.Arrays.asList(FL_IMAGE_JAVA_FIELDS.split(","));
+    
+    /** Field java types of the fl_image table. */
+    public static final Class<?>[] FL_IMAGE_FIELD_TYPES = new Class<?>[]{
+        String.class,
+        String.class,
+        Integer.class,
+        Integer.class,
+        Integer.class,
+        Integer.class,
+        String.class,
+        Integer.class};
     /////////////////// fl_log ////////////
     /** Contains all the full fields of the fl_log table.*/
     public static final String FL_LOG_FULL_FIELDS ="fl_log.id"
@@ -778,6 +853,18 @@ public interface Constant {
                             + ",verifyTime"
                             + ",createTime";
     public static final java.util.List<String> FL_LOG_JAVA_FIELDS_LIST = java.util.Arrays.asList(FL_LOG_JAVA_FIELDS.split(","));
+    
+    /** Field java types of the fl_log table. */
+    public static final Class<?>[] FL_LOG_FIELD_TYPES = new Class<?>[]{
+        Integer.class,
+        Integer.class,
+        Integer.class,
+        String.class,
+        Integer.class,
+        Integer.class,
+        Double.class,
+        java.util.Date.class,
+        java.util.Date.class};
     /////////////////// fl_permit ////////////
     /** Contains all the full fields of the fl_permit table.*/
     public static final String FL_PERMIT_FULL_FIELDS ="fl_permit.device_group_id"
@@ -805,6 +892,16 @@ public interface Constant {
                             + ",extTxt"
                             + ",createTime";
     public static final java.util.List<String> FL_PERMIT_JAVA_FIELDS_LIST = java.util.Arrays.asList(FL_PERMIT_JAVA_FIELDS.split(","));
+    
+    /** Field java types of the fl_permit table. */
+    public static final Class<?>[] FL_PERMIT_FIELD_TYPES = new Class<?>[]{
+        Integer.class,
+        Integer.class,
+        String.class,
+        String.class,
+        java.nio.ByteBuffer.class,
+        String.class,
+        java.util.Date.class};
     /////////////////// fl_person ////////////
     /** Contains all the full fields of the fl_person table.*/
     public static final String FL_PERSON_FULL_FIELDS ="fl_person.id"
@@ -862,6 +959,26 @@ public interface Constant {
                             + ",createTime"
                             + ",updateTime";
     public static final java.util.List<String> FL_PERSON_JAVA_FIELDS_LIST = java.util.Arrays.asList(FL_PERSON_JAVA_FIELDS.split(","));
+    
+    /** Field java types of the fl_person table. */
+    public static final Class<?>[] FL_PERSON_FIELD_TYPES = new Class<?>[]{
+        Integer.class,
+        Integer.class,
+        String.class,
+        Integer.class,
+        Integer.class,
+        String.class,
+        java.util.Date.class,
+        String.class,
+        Integer.class,
+        String.class,
+        String.class,
+        java.util.Date.class,
+        String.class,
+        java.nio.ByteBuffer.class,
+        String.class,
+        java.util.Date.class,
+        java.util.Date.class};
     /////////////////// fl_person_group ////////////
     /** Contains all the full fields of the fl_person_group table.*/
     public static final String FL_PERSON_GROUP_FULL_FIELDS ="fl_person_group.id"
@@ -898,6 +1015,19 @@ public interface Constant {
                             + ",createTime"
                             + ",updateTime";
     public static final java.util.List<String> FL_PERSON_GROUP_JAVA_FIELDS_LIST = java.util.Arrays.asList(FL_PERSON_GROUP_JAVA_FIELDS.split(","));
+    
+    /** Field java types of the fl_person_group table. */
+    public static final Class<?>[] FL_PERSON_GROUP_FIELD_TYPES = new Class<?>[]{
+        Integer.class,
+        String.class,
+        Integer.class,
+        Integer.class,
+        Integer.class,
+        String.class,
+        java.nio.ByteBuffer.class,
+        String.class,
+        java.util.Date.class,
+        java.util.Date.class};
     /////////////////// fl_store ////////////
     /** Contains all the full fields of the fl_store table.*/
     public static final String FL_STORE_FULL_FIELDS ="fl_store.md5"
@@ -913,6 +1043,12 @@ public interface Constant {
                             + ",encoding"
                             + ",data";
     public static final java.util.List<String> FL_STORE_JAVA_FIELDS_LIST = java.util.Arrays.asList(FL_STORE_JAVA_FIELDS.split(","));
+    
+    /** Field java types of the fl_store table. */
+    public static final Class<?>[] FL_STORE_FIELD_TYPES = new Class<?>[]{
+        String.class,
+        String.class,
+        java.nio.ByteBuffer.class};
     /////////////////// fl_log_light ////////////
     /** Contains all the full fields of the fl_log_light table.*/
     public static final String FL_LOG_LIGHT_FULL_FIELDS ="fl_log_light.id"
@@ -937,4 +1073,13 @@ public interface Constant {
                             + ",papersNum"
                             + ",verifyTime";
     public static final java.util.List<String> FL_LOG_LIGHT_JAVA_FIELDS_LIST = java.util.Arrays.asList(FL_LOG_LIGHT_JAVA_FIELDS.split(","));
+    
+    /** Field java types of the fl_log_light table. */
+    public static final Class<?>[] FL_LOG_LIGHT_FIELD_TYPES = new Class<?>[]{
+        Integer.class,
+        Integer.class,
+        String.class,
+        Integer.class,
+        String.class,
+        java.util.Date.class};
 }

@@ -68,7 +68,14 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
     public String[] getPrimarykeyNames() {
         return PRIMARYKEY_NAMES;
     }
-
+    @Override
+    public int columnIDOf(String column){
+        return FlDeviceGroupBean.columnIDOf(column);
+    }
+    @Override
+    public Class<?> typeOf(int columnId){
+        return FlDeviceGroupBean.typeOf(columnId);
+    }
     private static FlDeviceGroupManager singleton = new FlDeviceGroupManager();
     protected FlDeviceGroupManager(){}
     /**
@@ -95,6 +102,10 @@ public class FlDeviceGroupManager extends TableManager.BaseAdapter<FlDeviceGroup
     @Override
     protected Class<FlDeviceGroupBean> beanType(){
         return FlDeviceGroupBean.class;
+    }
+    @Override
+    protected String columnNameOf(int columnId){
+        return FlDeviceGroupBean.columnNameOf(columnId);
     }
     
     protected FlDeviceManager instanceOfFlDeviceManager(){

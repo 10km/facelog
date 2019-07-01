@@ -80,8 +80,15 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
     @Override
     public String[] getPrimarykeyNames() {
         return this.nativeManager.getPrimarykeyNames();
+    }    
+    @Override
+    public int columnIDOf(String column){
+        return DeviceGroupBean.columnIDOf(column);
     }
-    
+    @Override
+    public Class<?> typeOf(int columnId){
+        return DeviceGroupBean.typeOf(columnId);
+    }
     /**
      * Get the {@link DeviceGroupManager} singleton.
      *
@@ -96,7 +103,11 @@ public class DeviceGroupManager extends TableManager.BaseAdapter<DeviceGroupBean
     protected Class<DeviceGroupBean> beanType(){
         return DeviceGroupBean.class;
     }
-    
+
+    @Override
+    protected String columnNameOf(int columnId){
+        return DeviceGroupBean.columnNameOf(columnId);
+    }
     //////////////////////////////////////
     // PRIMARY KEY METHODS
     //////////////////////////////////////

@@ -24,6 +24,8 @@ import com.google.common.collect.Lists;
 
 import net.gdface.facelog.db.TableManager;
 import net.gdface.facelog.db.BaseBean;
+import net.gdface.facelog.db.Constant;
+
 
 import net.gdface.facelog.db.IDeviceManager;
 import net.gdface.facelog.db.DeviceBean;
@@ -55,7 +57,7 @@ import net.gdface.facelog.db.exception.RuntimeDaoException;
  * @author guyadong
  *
  */
-class BaseDao implements CommonConstant {
+class BaseDao implements CommonConstant,Constant {
     
     static final IDeviceManager getDeviceManager(){
         return TableManagerInitializer.INSTANCE.deviceManager;
@@ -90,6 +92,41 @@ class BaseDao implements CommonConstant {
     static final ILogLightManager getLogLightManager(){
         return TableManagerInitializer.INSTANCE.logLightManager;
     }
+    /**
+     * 返回{@code table}指定的数据库表对应的{@link TableManager}对象
+     * @param table 数据库表名,可用的值: fl_device,fl_device_group,fl_face,fl_feature,fl_image,fl_log,fl_permit,fl_person,fl_person_group,fl_store,fl_log_light,
+     *              输入值无效则抛出异常
+     * @return {@link TableManager}对象
+     */
+    @SuppressWarnings("unchecked")
+    static final <B extends BaseBean<B>>TableManager<B> getManager(String table){
+        switch(table){
+        case "fl_device":
+            return (TableManager<B>)getDeviceManager();
+        case "fl_device_group":
+            return (TableManager<B>)getDeviceGroupManager();
+        case "fl_face":
+            return (TableManager<B>)getFaceManager();
+        case "fl_feature":
+            return (TableManager<B>)getFeatureManager();
+        case "fl_image":
+            return (TableManager<B>)getImageManager();
+        case "fl_log":
+            return (TableManager<B>)getLogManager();
+        case "fl_permit":
+            return (TableManager<B>)getPermitManager();
+        case "fl_person":
+            return (TableManager<B>)getPersonManager();
+        case "fl_person_group":
+            return (TableManager<B>)getPersonGroupManager();
+        case "fl_store":
+            return (TableManager<B>)getStoreManager();
+        case "fl_log_light":
+            return (TableManager<B>)getLogLightManager();        
+        default:
+            throw new IllegalArgumentException(String.format("INVALID table name %s",table));
+        }
+    }
     /** 生成 SQL where 语句,example: {@code WHERE create_time >'2017-09-02 12:12:12'} */
     static private String makeWhere(Date timestamp,String field){
         SimpleDateFormat formatter = new SimpleDateFormat(TIMESTAMP_FORMATTER_STR);
@@ -113,6 +150,39 @@ class BaseDao implements CommonConstant {
     protected static void daoRunAsTransaction(Runnable fun)
                     throws RuntimeDaoException{
         getPersonManager().runAsTransaction(checkNotNull(fun));
+    }
+    /**
+     * 查询 {@code table}表的{@code column}字段的数据
+     * @param table 数据库表名
+     * @param column 有效的table表字段名或table对应java类的字段名
+     * @param distinct 为{@code true}只返回不重复记录
+     * @param where 'where'起始的SQL 查询条件语句,可为{@code null}
+     * @return {@code column}字段记录
+     * @param startRow 返回记录的起始行(首行=1,尾行=-1)
+     * @param numRows 返回记录条数(小于0时返回所有记录)
+     * @param columnType 字段类型
+     * @return {@code column}字段记录
+     * @see ILogManager#loadColumnAsList(String,boolean,String,int,int,Class)
+     * @throws RuntimeDaoException
+     */
+    protected<T>List<T> daoLoadColumnAsList(String table,String column,boolean distinct,String where,int startRow, int numRows,Class<T> columnType)
+                    throws RuntimeDaoException{
+        return getManager(table).loadColumnAsList(column, distinct, where, startRow, numRows,columnType);
+    }
+    /**
+     * 查询 {@code table}表的{@code column}字段的数据
+     * @param table 数据库表名
+     * @param column 有效的table表字段名或table对应java类的字段名
+     * @param distinct 为{@code true}只返回不重复记录
+     * @param where 'where'起始的SQL 查询条件语句,可为{@code null}
+     * @param columnType 字段类型
+     * @return {@code column}字段记录
+     * @see ILogManager#loadColumnAsList(String,boolean,String,int,int,Class)
+     * @throws RuntimeDaoException
+     */
+    protected<T>List<T> daoLoadColumnAsList(String table,String column,boolean distinct,String where,Class<T> columnType)
+                    throws RuntimeDaoException{
+        return getManager(table).loadColumnAsList(column, distinct, where, 1, -1,columnType);
     }
 
     protected static final <T extends Exception> void throwCauseIfInstanceOf(Exception error,Class<T> expType) throws T {
@@ -503,6 +573,23 @@ class BaseDao implements CommonConstant {
     protected List<DeviceBean> daoLoadDeviceUsingTemplate(DeviceBean bean,int startRow, int numRows)
                     throws RuntimeDaoException{
         return getDeviceManager().loadUsingTemplateAsList(bean,startRow,numRows);
+    }
+    //16-3
+    /**
+     * 查询 fl_device 的{@code column}字段的数据
+     * @param column 有效的fl_device表字段名或{@link DeviceBean} 字段名
+     * @param distinct 只返回不重复记录
+     * @param where 'where'起始的SQL 查询条件语句,可为{@code null}
+     * @return {@code column}字段记录
+     * @param startRow 返回记录的起始行(首行=1,尾行=-1)
+     * @param numRows 返回记录条数(小于0时返回所有记录)
+     * @param columnType 字段类型
+     * @see IDeviceManager#loadColumnAsList(String,boolean,String)
+     * @throws RuntimeDaoException
+     */
+    protected <T>List<T> daoLoadColumnOfDeviceAsList(String column,boolean distinct,String where,int startRow, int numRows,Class<T> columnType)
+                    throws RuntimeDaoException{
+        return getDeviceManager().loadColumnAsList(column, distinct, where, startRow, numRows,columnType);
     }
     //17
     /**
@@ -1137,6 +1224,23 @@ class BaseDao implements CommonConstant {
                     throws RuntimeDaoException{
         return getDeviceGroupManager().loadUsingTemplateAsList(bean,startRow,numRows);
     }
+    //16-3
+    /**
+     * 查询 fl_device_group 的{@code column}字段的数据
+     * @param column 有效的fl_device_group表字段名或{@link DeviceGroupBean} 字段名
+     * @param distinct 只返回不重复记录
+     * @param where 'where'起始的SQL 查询条件语句,可为{@code null}
+     * @return {@code column}字段记录
+     * @param startRow 返回记录的起始行(首行=1,尾行=-1)
+     * @param numRows 返回记录条数(小于0时返回所有记录)
+     * @param columnType 字段类型
+     * @see IDeviceGroupManager#loadColumnAsList(String,boolean,String)
+     * @throws RuntimeDaoException
+     */
+    protected <T>List<T> daoLoadColumnOfDeviceGroupAsList(String column,boolean distinct,String where,int startRow, int numRows,Class<T> columnType)
+                    throws RuntimeDaoException{
+        return getDeviceGroupManager().loadColumnAsList(column, distinct, where, startRow, numRows,columnType);
+    }
     //17
     /**
      * 返回 fl_device_group 表的所有记录
@@ -1672,6 +1776,23 @@ class BaseDao implements CommonConstant {
     protected List<PersonBean> daoLoadPersonUsingTemplate(PersonBean bean,int startRow, int numRows)
                     throws RuntimeDaoException{
         return getPersonManager().loadUsingTemplateAsList(bean,startRow,numRows);
+    }
+    //16-3
+    /**
+     * 查询 fl_person 的{@code column}字段的数据
+     * @param column 有效的fl_person表字段名或{@link PersonBean} 字段名
+     * @param distinct 只返回不重复记录
+     * @param where 'where'起始的SQL 查询条件语句,可为{@code null}
+     * @return {@code column}字段记录
+     * @param startRow 返回记录的起始行(首行=1,尾行=-1)
+     * @param numRows 返回记录条数(小于0时返回所有记录)
+     * @param columnType 字段类型
+     * @see IPersonManager#loadColumnAsList(String,boolean,String)
+     * @throws RuntimeDaoException
+     */
+    protected <T>List<T> daoLoadColumnOfPersonAsList(String column,boolean distinct,String where,int startRow, int numRows,Class<T> columnType)
+                    throws RuntimeDaoException{
+        return getPersonManager().loadColumnAsList(column, distinct, where, startRow, numRows,columnType);
     }
     //17
     /**
@@ -2306,6 +2427,23 @@ class BaseDao implements CommonConstant {
                     throws RuntimeDaoException{
         return getPersonGroupManager().loadUsingTemplateAsList(bean,startRow,numRows);
     }
+    //16-3
+    /**
+     * 查询 fl_person_group 的{@code column}字段的数据
+     * @param column 有效的fl_person_group表字段名或{@link PersonGroupBean} 字段名
+     * @param distinct 只返回不重复记录
+     * @param where 'where'起始的SQL 查询条件语句,可为{@code null}
+     * @return {@code column}字段记录
+     * @param startRow 返回记录的起始行(首行=1,尾行=-1)
+     * @param numRows 返回记录条数(小于0时返回所有记录)
+     * @param columnType 字段类型
+     * @see IPersonGroupManager#loadColumnAsList(String,boolean,String)
+     * @throws RuntimeDaoException
+     */
+    protected <T>List<T> daoLoadColumnOfPersonGroupAsList(String column,boolean distinct,String where,int startRow, int numRows,Class<T> columnType)
+                    throws RuntimeDaoException{
+        return getPersonGroupManager().loadColumnAsList(column, distinct, where, startRow, numRows,columnType);
+    }
     //17
     /**
      * 返回 fl_person_group 表的所有记录
@@ -2697,6 +2835,23 @@ class BaseDao implements CommonConstant {
     protected List<PermitBean> daoLoadPermitUsingTemplate(PermitBean bean,int startRow, int numRows)
                     throws RuntimeDaoException{
         return getPermitManager().loadUsingTemplateAsList(bean,startRow,numRows);
+    }
+    //16-3
+    /**
+     * 查询 fl_permit 的{@code column}字段的数据
+     * @param column 有效的fl_permit表字段名或{@link PermitBean} 字段名
+     * @param distinct 只返回不重复记录
+     * @param where 'where'起始的SQL 查询条件语句,可为{@code null}
+     * @return {@code column}字段记录
+     * @param startRow 返回记录的起始行(首行=1,尾行=-1)
+     * @param numRows 返回记录条数(小于0时返回所有记录)
+     * @param columnType 字段类型
+     * @see IPermitManager#loadColumnAsList(String,boolean,String)
+     * @throws RuntimeDaoException
+     */
+    protected <T>List<T> daoLoadColumnOfPermitAsList(String column,boolean distinct,String where,int startRow, int numRows,Class<T> columnType)
+                    throws RuntimeDaoException{
+        return getPermitManager().loadColumnAsList(column, distinct, where, startRow, numRows,columnType);
     }
     //17
     /**
@@ -3155,6 +3310,23 @@ class BaseDao implements CommonConstant {
                     throws RuntimeDaoException{
         return getFaceManager().loadUsingTemplateAsList(bean,startRow,numRows);
     }
+    //16-3
+    /**
+     * 查询 fl_face 的{@code column}字段的数据
+     * @param column 有效的fl_face表字段名或{@link FaceBean} 字段名
+     * @param distinct 只返回不重复记录
+     * @param where 'where'起始的SQL 查询条件语句,可为{@code null}
+     * @return {@code column}字段记录
+     * @param startRow 返回记录的起始行(首行=1,尾行=-1)
+     * @param numRows 返回记录条数(小于0时返回所有记录)
+     * @param columnType 字段类型
+     * @see IFaceManager#loadColumnAsList(String,boolean,String)
+     * @throws RuntimeDaoException
+     */
+    protected <T>List<T> daoLoadColumnOfFaceAsList(String column,boolean distinct,String where,int startRow, int numRows,Class<T> columnType)
+                    throws RuntimeDaoException{
+        return getFaceManager().loadColumnAsList(column, distinct, where, startRow, numRows,columnType);
+    }
     //17
     /**
      * 返回 fl_face 表的所有记录
@@ -3575,6 +3747,23 @@ class BaseDao implements CommonConstant {
     protected List<FeatureBean> daoLoadFeatureUsingTemplate(FeatureBean bean,int startRow, int numRows)
                     throws RuntimeDaoException{
         return getFeatureManager().loadUsingTemplateAsList(bean,startRow,numRows);
+    }
+    //16-3
+    /**
+     * 查询 fl_feature 的{@code column}字段的数据
+     * @param column 有效的fl_feature表字段名或{@link FeatureBean} 字段名
+     * @param distinct 只返回不重复记录
+     * @param where 'where'起始的SQL 查询条件语句,可为{@code null}
+     * @return {@code column}字段记录
+     * @param startRow 返回记录的起始行(首行=1,尾行=-1)
+     * @param numRows 返回记录条数(小于0时返回所有记录)
+     * @param columnType 字段类型
+     * @see IFeatureManager#loadColumnAsList(String,boolean,String)
+     * @throws RuntimeDaoException
+     */
+    protected <T>List<T> daoLoadColumnOfFeatureAsList(String column,boolean distinct,String where,int startRow, int numRows,Class<T> columnType)
+                    throws RuntimeDaoException{
+        return getFeatureManager().loadColumnAsList(column, distinct, where, startRow, numRows,columnType);
     }
     //17
     /**
@@ -4039,6 +4228,23 @@ class BaseDao implements CommonConstant {
     protected List<ImageBean> daoLoadImageUsingTemplate(ImageBean bean,int startRow, int numRows)
                     throws RuntimeDaoException{
         return getImageManager().loadUsingTemplateAsList(bean,startRow,numRows);
+    }
+    //16-3
+    /**
+     * 查询 fl_image 的{@code column}字段的数据
+     * @param column 有效的fl_image表字段名或{@link ImageBean} 字段名
+     * @param distinct 只返回不重复记录
+     * @param where 'where'起始的SQL 查询条件语句,可为{@code null}
+     * @return {@code column}字段记录
+     * @param startRow 返回记录的起始行(首行=1,尾行=-1)
+     * @param numRows 返回记录条数(小于0时返回所有记录)
+     * @param columnType 字段类型
+     * @see IImageManager#loadColumnAsList(String,boolean,String)
+     * @throws RuntimeDaoException
+     */
+    protected <T>List<T> daoLoadColumnOfImageAsList(String column,boolean distinct,String where,int startRow, int numRows,Class<T> columnType)
+                    throws RuntimeDaoException{
+        return getImageManager().loadColumnAsList(column, distinct, where, startRow, numRows,columnType);
     }
     //17
     /**
@@ -4537,6 +4743,23 @@ class BaseDao implements CommonConstant {
                     throws RuntimeDaoException{
         return getLogManager().loadUsingTemplateAsList(bean,startRow,numRows);
     }
+    //16-3
+    /**
+     * 查询 fl_log 的{@code column}字段的数据
+     * @param column 有效的fl_log表字段名或{@link LogBean} 字段名
+     * @param distinct 只返回不重复记录
+     * @param where 'where'起始的SQL 查询条件语句,可为{@code null}
+     * @return {@code column}字段记录
+     * @param startRow 返回记录的起始行(首行=1,尾行=-1)
+     * @param numRows 返回记录条数(小于0时返回所有记录)
+     * @param columnType 字段类型
+     * @see ILogManager#loadColumnAsList(String,boolean,String)
+     * @throws RuntimeDaoException
+     */
+    protected <T>List<T> daoLoadColumnOfLogAsList(String column,boolean distinct,String where,int startRow, int numRows,Class<T> columnType)
+                    throws RuntimeDaoException{
+        return getLogManager().loadColumnAsList(column, distinct, where, startRow, numRows,columnType);
+    }
     //17
     /**
      * 返回 fl_log 表的所有记录
@@ -4935,6 +5158,23 @@ class BaseDao implements CommonConstant {
                     throws RuntimeDaoException{
         return getStoreManager().loadUsingTemplateAsList(bean,startRow,numRows);
     }
+    //16-3
+    /**
+     * 查询 fl_store 的{@code column}字段的数据
+     * @param column 有效的fl_store表字段名或{@link StoreBean} 字段名
+     * @param distinct 只返回不重复记录
+     * @param where 'where'起始的SQL 查询条件语句,可为{@code null}
+     * @return {@code column}字段记录
+     * @param startRow 返回记录的起始行(首行=1,尾行=-1)
+     * @param numRows 返回记录条数(小于0时返回所有记录)
+     * @param columnType 字段类型
+     * @see IStoreManager#loadColumnAsList(String,boolean,String)
+     * @throws RuntimeDaoException
+     */
+    protected <T>List<T> daoLoadColumnOfStoreAsList(String column,boolean distinct,String where,int startRow, int numRows,Class<T> columnType)
+                    throws RuntimeDaoException{
+        return getStoreManager().loadColumnAsList(column, distinct, where, startRow, numRows,columnType);
+    }
     //17
     /**
      * 返回 fl_store 表的所有记录
@@ -4995,6 +5235,23 @@ class BaseDao implements CommonConstant {
     protected List<LogLightBean> daoLoadLogLightUsingTemplate(LogLightBean bean,int startRow, int numRows)
                     throws RuntimeDaoException{
         return getLogLightManager().loadUsingTemplateAsList(bean,startRow,numRows);
+    }
+    //16-3
+    /**
+     * 查询 fl_log_light 的{@code column}字段的数据
+     * @param column 有效的fl_log_light表字段名或{@link LogLightBean} 字段名
+     * @param distinct 只返回不重复记录
+     * @param where 'where'起始的SQL 查询条件语句,可为{@code null}
+     * @return {@code column}字段记录
+     * @param startRow 返回记录的起始行(首行=1,尾行=-1)
+     * @param numRows 返回记录条数(小于0时返回所有记录)
+     * @param columnType 字段类型
+     * @see ILogLightManager#loadColumnAsList(String,boolean,String)
+     * @throws RuntimeDaoException
+     */
+    protected <T>List<T> daoLoadColumnOfLogLightAsList(String column,boolean distinct,String where,int startRow, int numRows,Class<T> columnType)
+                    throws RuntimeDaoException{
+        return getLogLightManager().loadColumnAsList(column, distinct, where, startRow, numRows,columnType);
     }
     //17
     /**

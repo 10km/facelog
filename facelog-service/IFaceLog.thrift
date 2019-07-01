@@ -319,6 +319,9 @@ service IFaceLog {
   list<i32> loadDeviceGroupByWhere(1: optional string where, 2: required i32 startRow, 3: required i32 numRows) throws (1: ServiceRuntimeException ex1);
   list<i32> loadDeviceGroupIdByWhere(1: optional string where) throws (1: ServiceRuntimeException ex1);
   list<i32> loadDeviceIdByWhere(1: optional string where) throws (1: ServiceRuntimeException ex1);
+  list<i64> loadDistinctDateColumn(1: optional string table, 2: optional string column, 3: optional string where) throws (1: ServiceRuntimeException ex1);
+  list<i32> loadDistinctIntegerColumn(1: optional string table, 2: optional string column, 3: optional string where) throws (1: ServiceRuntimeException ex1);
+  list<string> loadDistinctStringColumn(1: optional string table, 2: optional string column, 3: optional string where) throws (1: ServiceRuntimeException ex1);
   list<string> loadFeatureMd5ByUpdate(1: required i64 timestamp) throws (1: ServiceRuntimeException ex1);
   list<string> loadFeatureMd5ByUpdateTimeStr(1: optional string timestamp) throws (1: ServiceRuntimeException ex1);
   list<LogBean> loadLogByWhere(1: optional string where, 2: required i32 startRow, 3: required i32 numRows) throws (1: ServiceRuntimeException ex1);

@@ -8,6 +8,7 @@
 package net.gdface.facelog.db;
 import java.util.List;
 import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.Callable;
 import net.gdface.facelog.db.exception.RuntimeDaoException;
@@ -41,6 +42,12 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
          * @return 
          */
         protected abstract Class<B> beanType();
+        /**
+         * @param columnId column id
+         * @return table column name,or NULL if columnId is invalid 
+         */
+        protected abstract String columnNameOf(int columnId);
+
         //13
         /**
          * Insert the B bean into the database.
@@ -304,6 +311,29 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
             return action.getList();
         }
         
+        @Override
+        public <T> List<T> loadColumnAsList(String column,boolean distinct,String where,int startRow,int numRows,Class<T> columnType)throws RuntimeDaoException{
+            int columnId = columnIDOf(column);
+            if(columnId < 0){
+                throw new IllegalArgumentException(String.format("INVALID column name %s",column));
+            }
+            if(null == columnType){
+                throw new NullPointerException("columnType is null");
+            }
+            String fieldName = columnNameOf(columnId);
+            String sql = String.format("SELECT %s " + fieldName + " from %s",
+                    distinct ? "DISTINCT" : "",
+                    getTableName(),
+                    where == null ? "" : where);
+            ListAction action = new ListAction();
+            loadBySqlForAction(sql, null, new int[]{columnId}, startRow, numRows, action);
+            List<B> beans = action.getList();
+            List<T> list =  new ArrayList<T>(beans.size());
+            for(int i = 0 ; i < beans.size(); ++ i){
+                list.add(beans.get(i).<T>getValue(columnId));
+            }
+            return list;
+        }
         /**
          * generate SQL query(SELECT) statement,such as: 'SELECT id,name from mytable WHERE id=1'
          * @param fieldList
@@ -449,7 +479,17 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @return 
      */     
     public String[] getPrimarykeyNames();
-
+    /**
+     * @param column clomn name or java field name of B
+     * @return column id,-1 if column is invalid
+     */
+    public int columnIDOf(String column);
+    /**
+     * return type of column specified by columnId
+     * @param columnId column id
+     * @return 
+     */ 
+    public Class<?> typeOf(int columnId);
     /**
      * return the table name
      * @return 
@@ -1259,7 +1299,18 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @throws RuntimeDaoException
      */
     public List<B> loadBySqlAsList(String sql, Object[] argList, int[] fieldList)throws RuntimeDaoException;
-    
+    /**
+     * Load column from table.
+     * @param column column name or java file name of B
+     * @param distinct select distinct values
+     * @param where the sql 'where' clause
+     * @param startRow the start row to be used (first row = 1, last row = -1)
+     * @param numRows the number of rows to be retrieved (all rows = a negative number)
+     * @param columnType java type of column
+     * @return an list of column
+     * @throws RuntimeDaoException
+     */
+    public <T>List<T> loadColumnAsList(String column,boolean distinct,String where,int startRow,int numRows,Class<T> columnType)throws RuntimeDaoException;
     /**
      * Load each the elements using a SQL statement specifying a list of fields to be retrieved and dealt by action.
      * @param sql the SQL statement for retrieving
