@@ -8,7 +8,7 @@
 package net.gdface.facelog.db;
 import java.util.List;
 import java.util.LinkedList;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.concurrent.Callable;
 import net.gdface.facelog.db.exception.RuntimeDaoException;
@@ -328,11 +328,12 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
             ListAction action = new ListAction();
             loadBySqlForAction(sql, null, new int[]{columnId}, startRow, numRows, action);
             List<B> beans = action.getList();
-            List<T> list =  new ArrayList<T>(beans.size());
+            @SuppressWarnings("unchecked")
+            T[] array = (T[]) java.lang.reflect.Array.newInstance(columnType, beans.size());
             for(int i = 0 ; i < beans.size(); ++ i){
-                list.add(beans.get(i).<T>getValue(columnId));
+                array[i] = beans.get(i).<T>getValue(columnId);
             }
-            return list;
+            return Arrays.asList(array);
         }
         /**
          * generate SQL query(SELECT) statement,such as: 'SELECT id,name from mytable WHERE id=1'
