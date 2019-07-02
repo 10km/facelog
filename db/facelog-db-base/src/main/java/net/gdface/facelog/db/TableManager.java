@@ -8,6 +8,7 @@
 package net.gdface.facelog.db;
 import java.util.List;
 import java.util.LinkedList;
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.concurrent.Callable;
@@ -169,7 +170,7 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
         @SuppressWarnings("unchecked")
         @Override
         public B[] loadByWhere(String where, int[] fieldList, int startRow, int numRows)throws RuntimeDaoException{
-            return this.loadByWhereAsList(where, fieldList, startRow, numRows).toArray((B[])java.lang.reflect.Array.newInstance(beanType(),0));
+            return this.loadByWhereAsList(where, fieldList, startRow, numRows).toArray((B[])Array.newInstance(beanType(),0));
         }
 
         @Override
@@ -226,7 +227,7 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
         @SuppressWarnings("unchecked")
         @Override
         public B[] loadUsingTemplate(B bean, int startRow, int numRows, int searchType)throws RuntimeDaoException{
-            return this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray((B[])java.lang.reflect.Array.newInstance(beanType(),0));
+            return this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray((B[])Array.newInstance(beanType(),0));
         }
 
         @Override
@@ -301,7 +302,7 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
         @SuppressWarnings("unchecked")
         @Override
         public B[] loadBySql(String sql, Object[] argList, int[] fieldList)throws RuntimeDaoException{
-            return loadBySqlAsList(sql, argList, fieldList).toArray((B[])java.lang.reflect.Array.newInstance(beanType(),0));
+            return loadBySqlAsList(sql, argList, fieldList).toArray((B[])Array.newInstance(beanType(),0));
         }
 
         @Override
@@ -329,7 +330,7 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
             loadBySqlForAction(sql, null, new int[]{columnId}, startRow, numRows, action);
             List<B> beans = action.getList();
             @SuppressWarnings("unchecked")
-            T[] array = (T[]) java.lang.reflect.Array.newInstance(columnType, beans.size());
+            T[] array = (T[]) Array.newInstance(columnType, beans.size());
             for(int i = 0 ; i < beans.size(); ++ i){
                 array[i] = beans.get(i).<T>getValue(columnId);
             }
@@ -427,7 +428,7 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
         @SuppressWarnings("unchecked")
         @Override
         public B[] loadByIndex(int keyIndex,Object ...keys)throws RuntimeDaoException{
-            return this.loadByIndexAsList(keyIndex,keys).toArray((B[])java.lang.reflect.Array.newInstance(beanType(),0));
+            return this.loadByIndexAsList(keyIndex,keys).toArray((B[])Array.newInstance(beanType(),0));
         }
         
         @Override

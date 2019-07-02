@@ -161,7 +161,7 @@ class BaseDao implements CommonConstant,Constant {
      * @param numRows 返回记录条数(小于0时返回所有记录)
      * @param columnType 字段类型
      * @return {@code column}字段记录
-     * @see ILogManager#loadColumnAsList(String,boolean,String,int,int,Class)
+     * @see TableManager#loadColumnAsList(String,boolean,String,int,int,Class)
      * @throws RuntimeDaoException
      */
     protected<T>List<T> daoLoadColumnAsList(String table,String column,boolean distinct,String where,int startRow, int numRows,Class<T> columnType)
@@ -176,7 +176,7 @@ class BaseDao implements CommonConstant,Constant {
      * @param where 'where'起始的SQL 查询条件语句,可为{@code null}
      * @param columnType 字段类型
      * @return {@code column}字段记录
-     * @see ILogManager#loadColumnAsList(String,boolean,String,int,int,Class)
+     * @see TableManager#loadColumnAsList(String,boolean,String,int,int,Class)
      * @throws RuntimeDaoException
      */
     protected<T>List<T> daoLoadColumnAsList(String table,String column,boolean distinct,String where,Class<T> columnType)
