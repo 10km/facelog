@@ -1,6 +1,5 @@
 package net.gdface.facelog.thrift;
 import java.nio.ByteBuffer;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import net.gdface.facelog.IFaceLog;
@@ -2637,34 +2636,6 @@ public class IFaceLogThriftClientAsync {
     public void loadDeviceIdByWhere(String where,
         FutureCallback<List<Integer>>callback){
         factory.addCallback(loadDeviceIdByWhere(where), callback);
-    }
-    /**
-     * see also {@link net.gdface.facelog.IFaceLog#loadDistinctDateColumn(java.lang.String,java.lang.String,java.lang.String)}
-     */
-    public ListenableFuture<List<Date>> loadDistinctDateColumn(String table,
-        String column,
-        String where){
-        MethodCallback<List<Date>,List<Long>> nativeCallback = 
-            new MethodCallback<List<Date>,List<Long>>(
-                new Function<List<Long>,List<Date>>() {
-                        @Override
-                        public List<Date> apply(List<Long> input) {
-                            return TypeTransformer.getInstance().to(
-                    input,
-                    Long.class,
-                    Date.class);
-                }});
-        nativeCallback.service.loadDistinctDateColumn(
-                table,
-            column,
-            where,nativeCallback);
-        return nativeCallback.feature;
-    }
-    public void loadDistinctDateColumn(String table,
-        String column,
-        String where,
-        FutureCallback<List<Date>>callback){
-        factory.addCallback(loadDistinctDateColumn(table,column,where), callback);
     }
     /**
      * see also {@link net.gdface.facelog.IFaceLog#loadDistinctIntegerColumn(java.lang.String,java.lang.String,java.lang.String)}

@@ -1,6 +1,5 @@
 package net.gdface.facelog.decorator;
 import java.nio.ByteBuffer;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import net.gdface.facelog.IFaceLog;
@@ -2214,29 +2213,6 @@ public class IFaceLogThriftDecorator {
                     delegate().loadDeviceIdByWhere(where),
                     Integer.class,
                     Integer.class);
-        }
-        catch(ServiceRuntimeException e){
-            throw e;
-        }
-        catch(RuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-    }
-    /**
-     * @see {@link net.gdface.facelog.IFaceLog#loadDistinctDateColumn(java.lang.String,java.lang.String,java.lang.String)}
-     */
-    @ThriftMethod(value = "loadDistinctDateColumn" )
-    public List<Long> loadDistinctDateColumn(String table,
-        String column,
-        String where) 
-        throws ServiceRuntimeException{
-        try{
-            return TypeTransformer.getInstance().to(
-                    delegate().loadDistinctDateColumn(table,
-                column,
-                where),
-                    Date.class,
-                    Long.class);
         }
         catch(ServiceRuntimeException e){
             throw e;

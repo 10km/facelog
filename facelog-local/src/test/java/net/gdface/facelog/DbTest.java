@@ -39,7 +39,7 @@ public class DbTest implements ServiceConstant {
 		List<DeviceBean> devices = deviceManager.loadBySqlAsList("select DISTINCT used_sdks from fl_device", null, new int[]{FL_DEVICE_ID_USED_SDKS});
 		
 		logger.info("devices:{}",devices);
-		List<String> sdks = deviceManager.loadColumnAsList("used_sdks", true, null, 1, -1,String.class);
+		List<String> sdks = deviceManager.loadColumnAsList("used_sdks", true, null, 1, -1);
 		logger.info("sdks:{}",sdks);
 	}
 

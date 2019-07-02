@@ -13,9 +13,12 @@ import java.util.concurrent.Callable;
 
 import static com.google.common.base.Preconditions.*;
 
+import com.google.common.base.Functions;
+import com.google.common.base.Predicates;
 import com.google.common.base.Strings;
 import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 import net.gdface.facelog.db.DeviceBean;
@@ -1688,29 +1691,36 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 			throw wrapServiceRuntimeException(e);
 		} 
 	}
-	private <T>List<T> loadDistinctColumn(String table,String column,String where,Class<T> columnType){
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<String> loadDistinctStringColumn(String table,String column,String where){
 		try{
 			TableManager<?> manager = BaseDao.getManager(table);
 			int columnId = manager.columnIDOf(column);
 			checkArgument(columnId >=0,"INVALID column %s",column);
-			checkArgument(manager.typeOf(columnId) == columnType,"java type of %s.%s column is not %s",table,column,columnType.getName());
-			return dm.daoLoadColumnAsList(table, column, true, where,columnType);
+			List<?> list = dm.daoLoadColumnAsList(table, column, true, where);
+			if(manager.typeOf(columnId) == String.class){
+				return (List<String>) list;
+			}			
+			return Lists.newArrayList(Iterables.transform(Iterables.filter(list, Predicates.notNull()), Functions.toStringFunction()));
+			
 		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
 		} 
 	}
 	@Override
-	public List<String> loadDistinctStringColumn(String table,String column,String where){
-		return loadDistinctColumn(table,column,where,String.class);
-	}
-	@Override
 	public List<Integer> loadDistinctIntegerColumn(String table,String column,String where){
-		return loadDistinctColumn(table,column,where,Integer.class);
+		try{
+			TableManager<?> manager = BaseDao.getManager(table);
+			int columnId = manager.columnIDOf(column);
+			checkArgument(columnId >=0,"INVALID column %s",column);
+			checkArgument(manager.typeOf(columnId) == Integer.class,"java type of %s.%s column is not Integer",table,column);
+			return dm.daoLoadColumnAsList(table, column, true, where);
+		} catch (Exception e) {
+			throw wrapServiceRuntimeException(e);
+		} 
 	}
-	@Override
-	public List<Date> loadDistinctDateColumn(String table,String column,String where){
-		return loadDistinctColumn(table,column,where,Date.class);
-	}
+
     @Override
     public String getProperty(String key,Token token){
     	try {

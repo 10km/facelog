@@ -5986,62 +5986,6 @@ GType i_face_log_load_device_id_by_where_result_get_type (void);
 #define IS_I_FACE_LOG_LOAD_DEVICE_ID_BY_WHERE_RESULT_CLASS(c) (G_TYPE_CHECK_CLASS_TYPE ((c), TYPE_I_FACE_LOG_LOAD_DEVICE_ID_BY_WHERE_RESULT))
 #define I_FACE_LOG_LOAD_DEVICE_ID_BY_WHERE_RESULT_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_I_FACE_LOG_LOAD_DEVICE_ID_BY_WHERE_RESULT, IFaceLogLoadDeviceIdByWhereResultClass))
 
-/* struct IFaceLogLoadDistinctDateColumnArgs */
-struct _IFaceLogLoadDistinctDateColumnArgs
-{ 
-  ThriftStruct parent; 
-
-  /* public */
-  gchar * table;
-  gboolean __isset_table;
-  gchar * column;
-  gboolean __isset_column;
-  gchar * where;
-  gboolean __isset_where;
-};
-typedef struct _IFaceLogLoadDistinctDateColumnArgs IFaceLogLoadDistinctDateColumnArgs;
-
-struct _IFaceLogLoadDistinctDateColumnArgsClass
-{
-  ThriftStructClass parent;
-};
-typedef struct _IFaceLogLoadDistinctDateColumnArgsClass IFaceLogLoadDistinctDateColumnArgsClass;
-
-GType i_face_log_load_distinct_date_column_args_get_type (void);
-#define TYPE_I_FACE_LOG_LOAD_DISTINCT_DATE_COLUMN_ARGS (i_face_log_load_distinct_date_column_args_get_type())
-#define I_FACE_LOG_LOAD_DISTINCT_DATE_COLUMN_ARGS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_I_FACE_LOG_LOAD_DISTINCT_DATE_COLUMN_ARGS, IFaceLogLoadDistinctDateColumnArgs))
-#define I_FACE_LOG_LOAD_DISTINCT_DATE_COLUMN_ARGS_CLASS(c) (G_TYPE_CHECK_CLASS_CAST ((c), _TYPE_I_FACE_LOG_LOAD_DISTINCT_DATE_COLUMN_ARGS, IFaceLogLoadDistinctDateColumnArgsClass))
-#define IS_I_FACE_LOG_LOAD_DISTINCT_DATE_COLUMN_ARGS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_I_FACE_LOG_LOAD_DISTINCT_DATE_COLUMN_ARGS))
-#define IS_I_FACE_LOG_LOAD_DISTINCT_DATE_COLUMN_ARGS_CLASS(c) (G_TYPE_CHECK_CLASS_TYPE ((c), TYPE_I_FACE_LOG_LOAD_DISTINCT_DATE_COLUMN_ARGS))
-#define I_FACE_LOG_LOAD_DISTINCT_DATE_COLUMN_ARGS_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_I_FACE_LOG_LOAD_DISTINCT_DATE_COLUMN_ARGS, IFaceLogLoadDistinctDateColumnArgsClass))
-
-/* struct IFaceLogLoadDistinctDateColumnResult */
-struct _IFaceLogLoadDistinctDateColumnResult
-{ 
-  ThriftStruct parent; 
-
-  /* public */
-  GArray * success;
-  gboolean __isset_success;
-  ServiceRuntimeException * ex1;
-  gboolean __isset_ex1;
-};
-typedef struct _IFaceLogLoadDistinctDateColumnResult IFaceLogLoadDistinctDateColumnResult;
-
-struct _IFaceLogLoadDistinctDateColumnResultClass
-{
-  ThriftStructClass parent;
-};
-typedef struct _IFaceLogLoadDistinctDateColumnResultClass IFaceLogLoadDistinctDateColumnResultClass;
-
-GType i_face_log_load_distinct_date_column_result_get_type (void);
-#define TYPE_I_FACE_LOG_LOAD_DISTINCT_DATE_COLUMN_RESULT (i_face_log_load_distinct_date_column_result_get_type())
-#define I_FACE_LOG_LOAD_DISTINCT_DATE_COLUMN_RESULT(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_I_FACE_LOG_LOAD_DISTINCT_DATE_COLUMN_RESULT, IFaceLogLoadDistinctDateColumnResult))
-#define I_FACE_LOG_LOAD_DISTINCT_DATE_COLUMN_RESULT_CLASS(c) (G_TYPE_CHECK_CLASS_CAST ((c), _TYPE_I_FACE_LOG_LOAD_DISTINCT_DATE_COLUMN_RESULT, IFaceLogLoadDistinctDateColumnResultClass))
-#define IS_I_FACE_LOG_LOAD_DISTINCT_DATE_COLUMN_RESULT(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_I_FACE_LOG_LOAD_DISTINCT_DATE_COLUMN_RESULT))
-#define IS_I_FACE_LOG_LOAD_DISTINCT_DATE_COLUMN_RESULT_CLASS(c) (G_TYPE_CHECK_CLASS_TYPE ((c), TYPE_I_FACE_LOG_LOAD_DISTINCT_DATE_COLUMN_RESULT))
-#define I_FACE_LOG_LOAD_DISTINCT_DATE_COLUMN_RESULT_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_I_FACE_LOG_LOAD_DISTINCT_DATE_COLUMN_RESULT, IFaceLogLoadDistinctDateColumnResultClass))
-
 /* struct IFaceLogLoadDistinctIntegerColumnArgs */
 struct _IFaceLogLoadDistinctIntegerColumnArgs
 { 

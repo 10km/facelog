@@ -313,13 +313,10 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
         }
         
         @Override
-        public <T> List<T> loadColumnAsList(String column,boolean distinct,String where,int startRow,int numRows,Class<T> columnType)throws RuntimeDaoException{
+        public <T> List<T> loadColumnAsList(String column,boolean distinct,String where,int startRow,int numRows)throws RuntimeDaoException{
             int columnId = columnIDOf(column);
             if(columnId < 0){
                 throw new IllegalArgumentException(String.format("INVALID column name %s",column));
-            }
-            if(null == columnType){
-                throw new NullPointerException("columnType is null");
             }
             String fieldName = columnNameOf(columnId);
             String sql = String.format("SELECT %s " + fieldName + " from %s",
@@ -330,7 +327,7 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
             loadBySqlForAction(sql, null, new int[]{columnId}, startRow, numRows, action);
             List<B> beans = action.getList();
             @SuppressWarnings("unchecked")
-            T[] array = (T[]) Array.newInstance(columnType, beans.size());
+            T[] array = (T[]) Array.newInstance(typeOf(columnId), beans.size());
             for(int i = 0 ; i < beans.size(); ++ i){
                 array[i] = beans.get(i).<T>getValue(columnId);
             }
@@ -1308,11 +1305,10 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param where the sql 'where' clause
      * @param startRow the start row to be used (first row = 1, last row = -1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param columnType java type of column
      * @return an list of column
      * @throws RuntimeDaoException
      */
-    public <T>List<T> loadColumnAsList(String column,boolean distinct,String where,int startRow,int numRows,Class<T> columnType)throws RuntimeDaoException;
+    public <T>List<T> loadColumnAsList(String column,boolean distinct,String where,int startRow,int numRows)throws RuntimeDaoException;
     /**
      * Load each the elements using a SQL statement specifying a list of fields to be retrieved and dealt by action.
      * @param sql the SQL statement for retrieving

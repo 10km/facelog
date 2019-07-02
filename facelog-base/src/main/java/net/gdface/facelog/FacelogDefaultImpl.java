@@ -1,6 +1,5 @@
 package net.gdface.facelog;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -771,11 +770,6 @@ public class FacelogDefaultImpl implements IFaceLog {
 
 	@Override
 	public List<Integer> loadDistinctIntegerColumn(String table, String column, String where) {
-		return null;
-	}
-
-	@Override
-	public List<Date> loadDistinctDateColumn(String table, String column, String where) {
 		return null;
 	}
 

@@ -1610,22 +1610,6 @@ IFaceLog_loadDeviceIdByWhere_presult::~IFaceLog_loadDeviceIdByWhere_presult() th
 }
 
 
-IFaceLog_loadDistinctDateColumn_args::~IFaceLog_loadDistinctDateColumn_args() throw() {
-}
-
-
-IFaceLog_loadDistinctDateColumn_pargs::~IFaceLog_loadDistinctDateColumn_pargs() throw() {
-}
-
-
-IFaceLog_loadDistinctDateColumn_result::~IFaceLog_loadDistinctDateColumn_result() throw() {
-}
-
-
-IFaceLog_loadDistinctDateColumn_presult::~IFaceLog_loadDistinctDateColumn_presult() throw() {
-}
-
-
 IFaceLog_loadDistinctIntegerColumn_args::~IFaceLog_loadDistinctIntegerColumn_args() throw() {
 }
 

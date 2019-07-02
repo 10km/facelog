@@ -746,11 +746,6 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
-    public List<java.util.Date> loadDistinctDateColumn (String table,String column,String where) {
-        return delegate().loadDistinctDateColumn(table,column,where);
-    }
-
-    @Override
     public List<Integer> loadDistinctIntegerColumn (String table,String column,String where) {
         return delegate().loadDistinctIntegerColumn(table,column,where);
     }

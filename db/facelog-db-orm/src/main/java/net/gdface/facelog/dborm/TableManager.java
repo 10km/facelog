@@ -8,7 +8,8 @@
 package net.gdface.facelog.dborm;
 import java.util.List;
 import java.util.LinkedList;
-import java.util.ArrayList;
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.concurrent.Callable;
 import net.gdface.facelog.dborm.exception.DaoException;
@@ -169,7 +170,7 @@ public interface TableManager<B extends BaseBean<B>> extends Constant {
         @SuppressWarnings("unchecked")
         @Override
         public B[] loadByWhere(String where, int[] fieldList, int startRow, int numRows)throws DaoException{
-            return this.loadByWhereAsList(where, fieldList, startRow, numRows).toArray((B[])java.lang.reflect.Array.newInstance(beanType(),0));
+            return this.loadByWhereAsList(where, fieldList, startRow, numRows).toArray((B[])Array.newInstance(beanType(),0));
         }
 
         @Override
@@ -226,7 +227,7 @@ public interface TableManager<B extends BaseBean<B>> extends Constant {
         @SuppressWarnings("unchecked")
         @Override
         public B[] loadUsingTemplate(B bean, int startRow, int numRows, int searchType)throws DaoException{
-            return this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray((B[])java.lang.reflect.Array.newInstance(beanType(),0));
+            return this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray((B[])Array.newInstance(beanType(),0));
         }
 
         @Override
@@ -301,7 +302,7 @@ public interface TableManager<B extends BaseBean<B>> extends Constant {
         @SuppressWarnings("unchecked")
         @Override
         public B[] loadBySql(String sql, Object[] argList, int[] fieldList)throws DaoException{
-            return loadBySqlAsList(sql, argList, fieldList).toArray((B[])java.lang.reflect.Array.newInstance(beanType(),0));
+            return loadBySqlAsList(sql, argList, fieldList).toArray((B[])Array.newInstance(beanType(),0));
         }
 
         @Override
@@ -313,23 +314,24 @@ public interface TableManager<B extends BaseBean<B>> extends Constant {
         
         @Override
         public <T> List<T> loadColumnAsList(String column,boolean distinct,String where,int startRow,int numRows)throws DaoException{
-	        int columnId = columnIDOf(column);
-	        if(columnId < 0){
-	        	throw new IllegalArgumentException(String.format("INVALID column name %s",column));
-	        }
-	        String fieldName = columnNameOf(columnId);
-	        String sql = String.format("SELECT %s " + fieldName + " from %s",
-	                distinct ? "DISTINCT" : "",
-	                getTableName(),
-	                where == null ? "" : where);
-	        ListAction action = new ListAction();
-	        loadBySqlForAction(sql, null, new int[]{columnId}, startRow, numRows, action);
-	        List<B> beans = action.getList();
-	        List<T> list =  new ArrayList<T>(beans.size());
-	        for(int i = 0 ; i < list.size(); ++ i){
-	            list.set(i,beans.get(i).<T>getValue(columnId));
-	        }
-	        return list;
+            int columnId = columnIDOf(column);
+            if(columnId < 0){
+                throw new IllegalArgumentException(String.format("INVALID column name %s",column));
+            }
+            String fieldName = columnNameOf(columnId);
+            String sql = String.format("SELECT %s " + fieldName + " from %s",
+                    distinct ? "DISTINCT" : "",
+                    getTableName(),
+                    where == null ? "" : where);
+            ListAction action = new ListAction();
+            loadBySqlForAction(sql, null, new int[]{columnId}, startRow, numRows, action);
+            List<B> beans = action.getList();
+            @SuppressWarnings("unchecked")
+            T[] array = (T[]) Array.newInstance(typeOf(columnId), beans.size());
+            for(int i = 0 ; i < beans.size(); ++ i){
+                array[i] = beans.get(i).<T>getValue(columnId);
+            }
+            return Arrays.asList(array);
         }
         /**
          * generate SQL query(SELECT) statement,such as: 'SELECT id,name from mytable WHERE id=1'
@@ -423,7 +425,7 @@ public interface TableManager<B extends BaseBean<B>> extends Constant {
         @SuppressWarnings("unchecked")
         @Override
         public B[] loadByIndex(int keyIndex,Object ...keys)throws DaoException{
-            return this.loadByIndexAsList(keyIndex,keys).toArray((B[])java.lang.reflect.Array.newInstance(beanType(),0));
+            return this.loadByIndexAsList(keyIndex,keys).toArray((B[])Array.newInstance(beanType(),0));
         }
         
         @Override

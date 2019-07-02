@@ -159,14 +159,13 @@ class BaseDao implements CommonConstant,Constant {
      * @param where 'where'起始的SQL 查询条件语句,可为{@code null}
      * @param startRow 返回记录的起始行(首行=1,尾行=-1)
      * @param numRows 返回记录条数(小于0时返回所有记录)
-     * @param columnType 字段类型
      * @return {@code column}字段记录
-     * @see TableManager#loadColumnAsList(String,boolean,String,int,int,Class)
+     * @see TableManager#loadColumnAsList(String,boolean,String,int,int)
      * @throws RuntimeDaoException
      */
-    protected<T>List<T> daoLoadColumnAsList(String table,String column,boolean distinct,String where,int startRow, int numRows,Class<T> columnType)
+    protected<T>List<T> daoLoadColumnAsList(String table,String column,boolean distinct,String where,int startRow, int numRows)
                     throws RuntimeDaoException{
-        return getManager(table).loadColumnAsList(column, distinct, where, startRow, numRows,columnType);
+        return getManager(table).loadColumnAsList(column, distinct, where, startRow, numRows);
     }
     /**
      * 查询 {@code table}表的{@code column}字段的数据
@@ -174,14 +173,13 @@ class BaseDao implements CommonConstant,Constant {
      * @param column 有效的table表字段名或table对应java类的字段名
      * @param distinct 为{@code true}只返回不重复记录
      * @param where 'where'起始的SQL 查询条件语句,可为{@code null}
-     * @param columnType 字段类型
      * @return {@code column}字段记录
-     * @see TableManager#loadColumnAsList(String,boolean,String,int,int,Class)
+     * @see TableManager#loadColumnAsList(String,boolean,String,int,int)
      * @throws RuntimeDaoException
      */
-    protected<T>List<T> daoLoadColumnAsList(String table,String column,boolean distinct,String where,Class<T> columnType)
+    protected<T>List<T> daoLoadColumnAsList(String table,String column,boolean distinct,String where)
                     throws RuntimeDaoException{
-        return getManager(table).loadColumnAsList(column, distinct, where, 1, -1,columnType);
+        return getManager(table).loadColumnAsList(column, distinct, where, 1, -1);
     }
 
     protected static final <T extends Exception> void throwCauseIfInstanceOf(Exception error,Class<T> expType) throws T {
@@ -582,13 +580,12 @@ class BaseDao implements CommonConstant,Constant {
      * @return {@code column}字段记录
      * @param startRow 返回记录的起始行(首行=1,尾行=-1)
      * @param numRows 返回记录条数(小于0时返回所有记录)
-     * @param columnType 字段类型
-     * @see IDeviceManager#loadColumnAsList(String,boolean,String)
+     * @see IDeviceManager#loadColumnAsList(String,boolean,String,int,int)
      * @throws RuntimeDaoException
      */
-    protected <T>List<T> daoLoadColumnOfDeviceAsList(String column,boolean distinct,String where,int startRow, int numRows,Class<T> columnType)
+    protected <T>List<T> daoLoadColumnOfDeviceAsList(String column,boolean distinct,String where,int startRow, int numRows)
                     throws RuntimeDaoException{
-        return getDeviceManager().loadColumnAsList(column, distinct, where, startRow, numRows,columnType);
+        return getDeviceManager().loadColumnAsList(column, distinct, where, startRow, numRows);
     }
     //17
     /**
@@ -1232,13 +1229,12 @@ class BaseDao implements CommonConstant,Constant {
      * @return {@code column}字段记录
      * @param startRow 返回记录的起始行(首行=1,尾行=-1)
      * @param numRows 返回记录条数(小于0时返回所有记录)
-     * @param columnType 字段类型
-     * @see IDeviceGroupManager#loadColumnAsList(String,boolean,String)
+     * @see IDeviceGroupManager#loadColumnAsList(String,boolean,String,int,int)
      * @throws RuntimeDaoException
      */
-    protected <T>List<T> daoLoadColumnOfDeviceGroupAsList(String column,boolean distinct,String where,int startRow, int numRows,Class<T> columnType)
+    protected <T>List<T> daoLoadColumnOfDeviceGroupAsList(String column,boolean distinct,String where,int startRow, int numRows)
                     throws RuntimeDaoException{
-        return getDeviceGroupManager().loadColumnAsList(column, distinct, where, startRow, numRows,columnType);
+        return getDeviceGroupManager().loadColumnAsList(column, distinct, where, startRow, numRows);
     }
     //17
     /**
@@ -1785,13 +1781,12 @@ class BaseDao implements CommonConstant,Constant {
      * @return {@code column}字段记录
      * @param startRow 返回记录的起始行(首行=1,尾行=-1)
      * @param numRows 返回记录条数(小于0时返回所有记录)
-     * @param columnType 字段类型
-     * @see IPersonManager#loadColumnAsList(String,boolean,String)
+     * @see IPersonManager#loadColumnAsList(String,boolean,String,int,int)
      * @throws RuntimeDaoException
      */
-    protected <T>List<T> daoLoadColumnOfPersonAsList(String column,boolean distinct,String where,int startRow, int numRows,Class<T> columnType)
+    protected <T>List<T> daoLoadColumnOfPersonAsList(String column,boolean distinct,String where,int startRow, int numRows)
                     throws RuntimeDaoException{
-        return getPersonManager().loadColumnAsList(column, distinct, where, startRow, numRows,columnType);
+        return getPersonManager().loadColumnAsList(column, distinct, where, startRow, numRows);
     }
     //17
     /**
@@ -2435,13 +2430,12 @@ class BaseDao implements CommonConstant,Constant {
      * @return {@code column}字段记录
      * @param startRow 返回记录的起始行(首行=1,尾行=-1)
      * @param numRows 返回记录条数(小于0时返回所有记录)
-     * @param columnType 字段类型
-     * @see IPersonGroupManager#loadColumnAsList(String,boolean,String)
+     * @see IPersonGroupManager#loadColumnAsList(String,boolean,String,int,int)
      * @throws RuntimeDaoException
      */
-    protected <T>List<T> daoLoadColumnOfPersonGroupAsList(String column,boolean distinct,String where,int startRow, int numRows,Class<T> columnType)
+    protected <T>List<T> daoLoadColumnOfPersonGroupAsList(String column,boolean distinct,String where,int startRow, int numRows)
                     throws RuntimeDaoException{
-        return getPersonGroupManager().loadColumnAsList(column, distinct, where, startRow, numRows,columnType);
+        return getPersonGroupManager().loadColumnAsList(column, distinct, where, startRow, numRows);
     }
     //17
     /**
@@ -2844,13 +2838,12 @@ class BaseDao implements CommonConstant,Constant {
      * @return {@code column}字段记录
      * @param startRow 返回记录的起始行(首行=1,尾行=-1)
      * @param numRows 返回记录条数(小于0时返回所有记录)
-     * @param columnType 字段类型
-     * @see IPermitManager#loadColumnAsList(String,boolean,String)
+     * @see IPermitManager#loadColumnAsList(String,boolean,String,int,int)
      * @throws RuntimeDaoException
      */
-    protected <T>List<T> daoLoadColumnOfPermitAsList(String column,boolean distinct,String where,int startRow, int numRows,Class<T> columnType)
+    protected <T>List<T> daoLoadColumnOfPermitAsList(String column,boolean distinct,String where,int startRow, int numRows)
                     throws RuntimeDaoException{
-        return getPermitManager().loadColumnAsList(column, distinct, where, startRow, numRows,columnType);
+        return getPermitManager().loadColumnAsList(column, distinct, where, startRow, numRows);
     }
     //17
     /**
@@ -3318,13 +3311,12 @@ class BaseDao implements CommonConstant,Constant {
      * @return {@code column}字段记录
      * @param startRow 返回记录的起始行(首行=1,尾行=-1)
      * @param numRows 返回记录条数(小于0时返回所有记录)
-     * @param columnType 字段类型
-     * @see IFaceManager#loadColumnAsList(String,boolean,String)
+     * @see IFaceManager#loadColumnAsList(String,boolean,String,int,int)
      * @throws RuntimeDaoException
      */
-    protected <T>List<T> daoLoadColumnOfFaceAsList(String column,boolean distinct,String where,int startRow, int numRows,Class<T> columnType)
+    protected <T>List<T> daoLoadColumnOfFaceAsList(String column,boolean distinct,String where,int startRow, int numRows)
                     throws RuntimeDaoException{
-        return getFaceManager().loadColumnAsList(column, distinct, where, startRow, numRows,columnType);
+        return getFaceManager().loadColumnAsList(column, distinct, where, startRow, numRows);
     }
     //17
     /**
@@ -3756,13 +3748,12 @@ class BaseDao implements CommonConstant,Constant {
      * @return {@code column}字段记录
      * @param startRow 返回记录的起始行(首行=1,尾行=-1)
      * @param numRows 返回记录条数(小于0时返回所有记录)
-     * @param columnType 字段类型
-     * @see IFeatureManager#loadColumnAsList(String,boolean,String)
+     * @see IFeatureManager#loadColumnAsList(String,boolean,String,int,int)
      * @throws RuntimeDaoException
      */
-    protected <T>List<T> daoLoadColumnOfFeatureAsList(String column,boolean distinct,String where,int startRow, int numRows,Class<T> columnType)
+    protected <T>List<T> daoLoadColumnOfFeatureAsList(String column,boolean distinct,String where,int startRow, int numRows)
                     throws RuntimeDaoException{
-        return getFeatureManager().loadColumnAsList(column, distinct, where, startRow, numRows,columnType);
+        return getFeatureManager().loadColumnAsList(column, distinct, where, startRow, numRows);
     }
     //17
     /**
@@ -4237,13 +4228,12 @@ class BaseDao implements CommonConstant,Constant {
      * @return {@code column}字段记录
      * @param startRow 返回记录的起始行(首行=1,尾行=-1)
      * @param numRows 返回记录条数(小于0时返回所有记录)
-     * @param columnType 字段类型
-     * @see IImageManager#loadColumnAsList(String,boolean,String)
+     * @see IImageManager#loadColumnAsList(String,boolean,String,int,int)
      * @throws RuntimeDaoException
      */
-    protected <T>List<T> daoLoadColumnOfImageAsList(String column,boolean distinct,String where,int startRow, int numRows,Class<T> columnType)
+    protected <T>List<T> daoLoadColumnOfImageAsList(String column,boolean distinct,String where,int startRow, int numRows)
                     throws RuntimeDaoException{
-        return getImageManager().loadColumnAsList(column, distinct, where, startRow, numRows,columnType);
+        return getImageManager().loadColumnAsList(column, distinct, where, startRow, numRows);
     }
     //17
     /**
@@ -4751,13 +4741,12 @@ class BaseDao implements CommonConstant,Constant {
      * @return {@code column}字段记录
      * @param startRow 返回记录的起始行(首行=1,尾行=-1)
      * @param numRows 返回记录条数(小于0时返回所有记录)
-     * @param columnType 字段类型
-     * @see ILogManager#loadColumnAsList(String,boolean,String)
+     * @see ILogManager#loadColumnAsList(String,boolean,String,int,int)
      * @throws RuntimeDaoException
      */
-    protected <T>List<T> daoLoadColumnOfLogAsList(String column,boolean distinct,String where,int startRow, int numRows,Class<T> columnType)
+    protected <T>List<T> daoLoadColumnOfLogAsList(String column,boolean distinct,String where,int startRow, int numRows)
                     throws RuntimeDaoException{
-        return getLogManager().loadColumnAsList(column, distinct, where, startRow, numRows,columnType);
+        return getLogManager().loadColumnAsList(column, distinct, where, startRow, numRows);
     }
     //17
     /**
@@ -5166,13 +5155,12 @@ class BaseDao implements CommonConstant,Constant {
      * @return {@code column}字段记录
      * @param startRow 返回记录的起始行(首行=1,尾行=-1)
      * @param numRows 返回记录条数(小于0时返回所有记录)
-     * @param columnType 字段类型
-     * @see IStoreManager#loadColumnAsList(String,boolean,String)
+     * @see IStoreManager#loadColumnAsList(String,boolean,String,int,int)
      * @throws RuntimeDaoException
      */
-    protected <T>List<T> daoLoadColumnOfStoreAsList(String column,boolean distinct,String where,int startRow, int numRows,Class<T> columnType)
+    protected <T>List<T> daoLoadColumnOfStoreAsList(String column,boolean distinct,String where,int startRow, int numRows)
                     throws RuntimeDaoException{
-        return getStoreManager().loadColumnAsList(column, distinct, where, startRow, numRows,columnType);
+        return getStoreManager().loadColumnAsList(column, distinct, where, startRow, numRows);
     }
     //17
     /**
@@ -5244,13 +5232,12 @@ class BaseDao implements CommonConstant,Constant {
      * @return {@code column}字段记录
      * @param startRow 返回记录的起始行(首行=1,尾行=-1)
      * @param numRows 返回记录条数(小于0时返回所有记录)
-     * @param columnType 字段类型
-     * @see ILogLightManager#loadColumnAsList(String,boolean,String)
+     * @see ILogLightManager#loadColumnAsList(String,boolean,String,int,int)
      * @throws RuntimeDaoException
      */
-    protected <T>List<T> daoLoadColumnOfLogLightAsList(String column,boolean distinct,String where,int startRow, int numRows,Class<T> columnType)
+    protected <T>List<T> daoLoadColumnOfLogLightAsList(String column,boolean distinct,String where,int startRow, int numRows)
                     throws RuntimeDaoException{
-        return getLogLightManager().loadColumnAsList(column, distinct, where, startRow, numRows,columnType);
+        return getLogLightManager().loadColumnAsList(column, distinct, where, startRow, numRows);
     }
     //17
     /**

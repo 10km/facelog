@@ -893,16 +893,6 @@ public interface IFaceLog
             @ThriftField(value=1, name="where", requiredness=Requiredness.OPTIONAL) final String where
         );
 
-        @ThriftMethod(value = "loadDistinctDateColumn",
-                      exception = {
-                          @ThriftException(type=ServiceRuntimeException.class, id=1)
-                      })
-        ListenableFuture<List<Long>> loadDistinctDateColumn(
-            @ThriftField(value=1, name="table", requiredness=Requiredness.OPTIONAL) final String table,
-            @ThriftField(value=2, name="column", requiredness=Requiredness.OPTIONAL) final String column,
-            @ThriftField(value=3, name="where", requiredness=Requiredness.OPTIONAL) final String where
-        );
-
         @ThriftMethod(value = "loadDistinctIntegerColumn",
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
@@ -2311,16 +2301,6 @@ public interface IFaceLog
                   })
     List<Integer> loadDeviceIdByWhere(
         @ThriftField(value=1, name="where", requiredness=Requiredness.OPTIONAL) final String where
-    ) throws ServiceRuntimeException;
-
-    @ThriftMethod(value = "loadDistinctDateColumn",
-                  exception = {
-                      @ThriftException(type=ServiceRuntimeException.class, id=1)
-                  })
-    List<Long> loadDistinctDateColumn(
-        @ThriftField(value=1, name="table", requiredness=Requiredness.OPTIONAL) final String table,
-        @ThriftField(value=2, name="column", requiredness=Requiredness.OPTIONAL) final String column,
-        @ThriftField(value=3, name="where", requiredness=Requiredness.OPTIONAL) final String where
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "loadDistinctIntegerColumn",
