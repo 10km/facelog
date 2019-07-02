@@ -88,13 +88,17 @@
 			</limit>
 		</person>
 	</feature>
-	<update description="版本更新相关参数">
-		<!-- 示例
-		<MODEL1 description="设备型号">
+	<update description="版本更新相关参数，在产品型号为节点定义版本升级规则">
+		<!-- 升级规则示例 -->
+		<!-- 
+		<MODEL1 description="MODEL1为待升级的设备型号">
+			<disable description="为true时禁用当前升级规则"></disable>
 			<url description="下载更新版本的url"></url>
-			<version description="版本号"></version>
+			<version description="版本号,当前版本低于此版本号是执行升级"></version>
 			<md5 description="url下载版本的MD5校验码(32 char)"></md5>			
 			<force description="true/false,是否强制更新版本,不论当前版本是否高于url下载的版本号"></force>
+			<include description="升级设备的MAC地址白名单，在此名单中的设备需要升级,不指定则默认为所有该型号设备，同时指定白名单和黑名单时以白名单为准"></include>
+			<exclude description="升级设备的MAC地址黑名单，在此名单中的设备不需要升级,不指定则默认为所有该型号设备，同时指定白名单和黑名单时以白名单为准"></exclude>
 		</MODEL1>
 		 -->
 	</update>
