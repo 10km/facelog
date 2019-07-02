@@ -157,7 +157,6 @@ class BaseDao implements CommonConstant,Constant {
      * @param column 有效的table表字段名或table对应java类的字段名
      * @param distinct 为{@code true}只返回不重复记录
      * @param where 'where'起始的SQL 查询条件语句,可为{@code null}
-     * @return {@code column}字段记录
      * @param startRow 返回记录的起始行(首行=1,尾行=-1)
      * @param numRows 返回记录条数(小于0时返回所有记录)
      * @param columnType 字段类型
