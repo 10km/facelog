@@ -24,7 +24,7 @@
 		<idl.generator.version>1.10</idl.generator.version>
 		<dtalk.version>0.2.9</dtalk.version>
 		<thrifty.compiler.maven.plugin.version>1.1</thrifty.compiler.maven.plugin.version>
-		<simplemq.version>1.0.19</simplemq.version>
+		<simplemq.version>1.0.20</simplemq.version>
 		<swagger-annotations>1.5.22</swagger-annotations>	
 		<spring.boot.version>1.5.9.RELEASE</spring.boot.version>
 		<springfox.swagger.version>2.7.0</springfox.swagger.version>
