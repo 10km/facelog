@@ -161,7 +161,7 @@
 		</device>
 	</security>
 	<monitor description ="监控通道配置">
-		<log description="服务端是否主动向人员验证实时监控通道发送log日志">false</log>
+		<log description="服务端是否主动向人员验证实时监控通道发送log日志">true</log>
 	</monitor>
 	<executor description="服务端线程池配置">
 		<cachedPool description="通用线程池配置">
