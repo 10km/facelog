@@ -124,8 +124,8 @@ public class FacelogMenu extends RootMenu{
 						OptionBuilder.builder(StringOption.class).name("password").uiName("连接密码").instance().setValue(DEVINFO_PROVIDER.getPassword())
 								/** 添加侦听器，当password修改时保存 */
 								.addListener(new PasswordChangeListener()),
-						OptionType.STRING.builder().name("version").uiName("版本号").readonly(true).instance().setValue("unknow"),
-						OptionType.STRING.builder().name("sdkVersion").uiName("SDK版本号").readonly(true).instance().setValue("unknow"),
+						OptionType.STRING.builder().name("version").uiName("版本号").readonly(true).value("unknow").instance(),
+						OptionType.STRING.builder().name("sdkVersion").uiName("SDK版本号").readonly(true).value("unknow").instance(),
 						OptionBuilder.builder(IntOption.class).name("status").uiName("当前设备状态").readonly(true).value(0).hide().instance()
 								/** 添加侦听器，当设备状态值改变时同步修改心跳包的状态值 */
 								.addListener(new StatusListener()),
