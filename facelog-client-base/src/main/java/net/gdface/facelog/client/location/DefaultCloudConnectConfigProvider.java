@@ -8,10 +8,10 @@ import net.gdface.facelog.CommonConstant;
  *
  */
 public class DefaultCloudConnectConfigProvider implements ConnectConfigProvider,CommonConstant {
-
+	public static String DEFAULT_CLOUD_HOST = "facelog.facelib.net";
 	@Override
 	public String getHost() {
-		return "facelog.facelib.net";
+		return DEFAULT_CLOUD_HOST;
 	}
 
 	@Override
