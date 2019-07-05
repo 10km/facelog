@@ -12,9 +12,9 @@ import net.gdface.utils.JcifsUtil;
  *
  */
 public class DefaultLocalConnectConfigProvider implements ConnectConfigProvider,CommonConstant {
-	private static final String DEFAULT_LANDFACELOGHOST = "landfaceloghost";
+	public static final String DEFAULT_LANDFACELOGHOST = "landfaceloghost";
+	public static final String DEFAULT_LANDTALKHOST = "landtalkhost";
 	private static String landfaceloghost = DEFAULT_LANDFACELOGHOST;
-	private static final String LANDTALKHOST = "landtalkhost";
 
 	/**
 	 * 返回局域网redis主机名
@@ -40,7 +40,7 @@ public class DefaultLocalConnectConfigProvider implements ConnectConfigProvider,
 				// 如果外部设置了不同的主机名,则不再尝试解析landtalkhost
 				if(DEFAULT_LANDFACELOGHOST.equals(landfaceloghost)){
 					// 如果LANDTALKHOST有facelog连接则用此IP地址
-					String address = JcifsUtil.hostAddressOf(LANDTALKHOST);
+					String address = JcifsUtil.hostAddressOf(DEFAULT_LANDTALKHOST);
 					if(ClientFactory.testConnect(address, getPort(), 0)){
 						return address;
 					}
