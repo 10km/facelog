@@ -1396,13 +1396,14 @@ public class IFaceLogThriftDecorator {
         }
     }
     /**
-     * @see {@link net.gdface.facelog.IFaceLog#getFeaturesPermittedOnDevice(int,boolean,java.lang.String,java.util.List)}
+     * @see {@link net.gdface.facelog.IFaceLog#getFeaturesPermittedOnDevice(int,boolean,java.lang.String,java.util.List,java.lang.Long)}
      */
     @ThriftMethod(value = "getFeaturesPermittedOnDevice" )
     public List<FeatureBean> getFeaturesPermittedOnDevice(int deviceId,
         boolean ignoreSchedule,
         String sdkVersion,
-        List<String> excludeFeatureIds) 
+        List<String> excludeFeatureIds,
+        Long timestamp) 
         throws ServiceRuntimeException{
         try{
             return TypeTransformer.getInstance().to(
@@ -1412,7 +1413,8 @@ public class IFaceLogThriftDecorator {
                 TypeTransformer.getInstance().to(
                     excludeFeatureIds,
                     String.class,
-                    String.class)),
+                    String.class),
+                timestamp),
                     FeatureBean.class,
                     FeatureBean.class);
         }

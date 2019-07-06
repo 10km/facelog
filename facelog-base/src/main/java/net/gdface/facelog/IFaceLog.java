@@ -90,9 +90,10 @@ public interface IFaceLog{
 	 * @param ignoreSchedule 是否忽略时间过滤器(fl_permit.schedule字段)的限制
 	 * @param sdkVersion 特征版本号
 	 * @param excludeFeatureIds 要排除的特征记录id(MD5) ,可为{@code null}
+	 * @param timestamp 不为{@code null}时返回大于指定时间戳的所有fl_feature记录
 	 * @return 返回 fl_feature.md5  列表
 	 */
-	public List<FeatureBean> getFeaturesPermittedOnDevice(int deviceId, boolean ignoreSchedule, String sdkVersion, List<String> excludeFeatureIds);
+	public List<FeatureBean> getFeaturesPermittedOnDevice(int deviceId, boolean ignoreSchedule, String sdkVersion, List<String> excludeFeatureIds, Long timestamp);
 
 	/**
 	 * 删除personId指定的人员(person)记录及关联的所有记录

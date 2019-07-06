@@ -364,9 +364,9 @@ i_face_log_if_get_features_of_person (IFaceLogIf *iface, GPtrArray ** _return, c
 }
 
 gboolean
-i_face_log_if_get_features_permitted_on_device (IFaceLogIf *iface, GPtrArray ** _return, const gint32 deviceId, const gboolean ignoreSchedule, const gchar * sdkVersion, const GPtrArray * excludeFeatureIds, ServiceRuntimeException ** ex1, GError **error)
+i_face_log_if_get_features_permitted_on_device (IFaceLogIf *iface, GPtrArray ** _return, const gint32 deviceId, const gboolean ignoreSchedule, const gchar * sdkVersion, const GPtrArray * excludeFeatureIds, const gint64 timestamp, ServiceRuntimeException ** ex1, GError **error)
 {
-  return I_FACE_LOG_IF_GET_INTERFACE (iface)->get_features_permitted_on_device (iface, _return, deviceId, ignoreSchedule, sdkVersion, excludeFeatureIds, ex1, error);
+  return I_FACE_LOG_IF_GET_INTERFACE (iface)->get_features_permitted_on_device (iface, _return, deviceId, ignoreSchedule, sdkVersion, excludeFeatureIds, timestamp, ex1, error);
 }
 
 gboolean
@@ -14295,7 +14295,7 @@ gboolean i_face_log_client_get_features_of_person (IFaceLogIf * iface, GPtrArray
   return TRUE;
 }
 
-gboolean i_face_log_client_send_get_features_permitted_on_device (IFaceLogIf * iface, const gint32 deviceId, const gboolean ignoreSchedule, const gchar * sdkVersion, const GPtrArray * excludeFeatureIds, GError ** error)
+gboolean i_face_log_client_send_get_features_permitted_on_device (IFaceLogIf * iface, const gint32 deviceId, const gboolean ignoreSchedule, const gchar * sdkVersion, const GPtrArray * excludeFeatureIds, const gint64 timestamp, GError ** error)
 {
   gint32 cseqid = 0;
   ThriftProtocol * protocol = I_FACE_LOG_CLIENT (iface)->output_protocol;
@@ -14361,6 +14361,16 @@ gboolean i_face_log_client_send_get_features_permitted_on_device (IFaceLogIf * i
         return 0;
       xfer += ret;
     }
+    if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
+      return 0;
+    xfer += ret;
+    if ((ret = thrift_protocol_write_field_begin (protocol, "timestamp", T_I64, 5, error)) < 0)
+      return 0;
+    xfer += ret;
+    if ((ret = thrift_protocol_write_i64 (protocol, timestamp, error)) < 0)
+      return 0;
+    xfer += ret;
+
     if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
       return 0;
     xfer += ret;
@@ -14559,9 +14569,9 @@ gboolean i_face_log_client_recv_get_features_permitted_on_device (IFaceLogIf * i
   return TRUE;
 }
 
-gboolean i_face_log_client_get_features_permitted_on_device (IFaceLogIf * iface, GPtrArray ** _return, const gint32 deviceId, const gboolean ignoreSchedule, const gchar * sdkVersion, const GPtrArray * excludeFeatureIds, ServiceRuntimeException ** ex1, GError ** error)
+gboolean i_face_log_client_get_features_permitted_on_device (IFaceLogIf * iface, GPtrArray ** _return, const gint32 deviceId, const gboolean ignoreSchedule, const gchar * sdkVersion, const GPtrArray * excludeFeatureIds, const gint64 timestamp, ServiceRuntimeException ** ex1, GError ** error)
 {
-  if (!i_face_log_client_send_get_features_permitted_on_device (iface, deviceId, ignoreSchedule, sdkVersion, excludeFeatureIds, error))
+  if (!i_face_log_client_send_get_features_permitted_on_device (iface, deviceId, ignoreSchedule, sdkVersion, excludeFeatureIds, timestamp, error))
     return FALSE;
   if (!i_face_log_client_recv_get_features_permitted_on_device (iface, _return, ex1, error))
     return FALSE;
@@ -37012,11 +37022,11 @@ gboolean i_face_log_handler_get_features_of_person (IFaceLogIf * iface, GPtrArra
   return I_FACE_LOG_HANDLER_GET_CLASS (iface)->get_features_of_person (iface, _return, personId, ex1, error);
 }
 
-gboolean i_face_log_handler_get_features_permitted_on_device (IFaceLogIf * iface, GPtrArray ** _return, const gint32 deviceId, const gboolean ignoreSchedule, const gchar * sdkVersion, const GPtrArray * excludeFeatureIds, ServiceRuntimeException ** ex1, GError ** error)
+gboolean i_face_log_handler_get_features_permitted_on_device (IFaceLogIf * iface, GPtrArray ** _return, const gint32 deviceId, const gboolean ignoreSchedule, const gchar * sdkVersion, const GPtrArray * excludeFeatureIds, const gint64 timestamp, ServiceRuntimeException ** ex1, GError ** error)
 {
   g_return_val_if_fail (IS_I_FACE_LOG_HANDLER (iface), FALSE);
 
-  return I_FACE_LOG_HANDLER_GET_CLASS (iface)->get_features_permitted_on_device (iface, _return, deviceId, ignoreSchedule, sdkVersion, excludeFeatureIds, ex1, error);
+  return I_FACE_LOG_HANDLER_GET_CLASS (iface)->get_features_permitted_on_device (iface, _return, deviceId, ignoreSchedule, sdkVersion, excludeFeatureIds, timestamp, ex1, error);
 }
 
 gboolean i_face_log_handler_get_group_permit (IFaceLogIf * iface, PermitBean ** _return, const gint32 deviceId, const gint32 personGroupId, ServiceRuntimeException ** ex1, GError ** error)
@@ -46976,6 +46986,7 @@ i_face_log_processor_process_get_features_permitted_on_device (IFaceLogProcessor
     gboolean ignoreSchedule;
     gchar * sdkVersion;
     GPtrArray * excludeFeatureIds;
+    gint64 timestamp;
     ServiceRuntimeException * ex1 = NULL;
     GPtrArray * return_value;
     IFaceLogGetFeaturesPermittedOnDeviceResult * result_struct;
@@ -46985,6 +46996,7 @@ i_face_log_processor_process_get_features_permitted_on_device (IFaceLogProcessor
                   "ignoreSchedule", &ignoreSchedule,
                   "sdkVersion", &sdkVersion,
                   "excludeFeatureIds", &excludeFeatureIds,
+                  "timestamp", &timestamp,
                   NULL);
 
     g_object_unref (transport);
@@ -46999,6 +47011,7 @@ i_face_log_processor_process_get_features_permitted_on_device (IFaceLogProcessor
                                                              ignoreSchedule,
                                                              sdkVersion,
                                                              excludeFeatureIds,
+                                                             timestamp,
                                                              &ex1,
                                                              error) == TRUE)
     {

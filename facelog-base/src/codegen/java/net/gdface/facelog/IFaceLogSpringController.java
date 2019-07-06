@@ -1494,6 +1494,7 @@ public class IFaceLogSpringController {
      * @param ignoreSchedule 是否忽略时间过滤器(fl_permit.schedule字段)的限制
      * @param sdkVersion 特征版本号
      * @param excludeFeatureIds 要排除的特征记录id(MD5) ,可为{@code null}
+     * @param timestamp 不为{@code null}时返回大于指定时间戳的所有fl_feature记录
      * @return 返回 fl_feature.md5  列表
      */
     @ResponseBody
@@ -1504,7 +1505,7 @@ public class IFaceLogSpringController {
     {
             Response response = responseFactory.newIFaceLogResponse();
             try{
-                response.onComplete(delegate().getFeaturesPermittedOnDevice(args.deviceId,args.ignoreSchedule,args.sdkVersion,args.excludeFeatureIds));
+                response.onComplete(delegate().getFeaturesPermittedOnDevice(args.deviceId,args.ignoreSchedule,args.sdkVersion,args.excludeFeatureIds,args.timestamp));
             }
             catch(Exception e){
                 logger.error(e.getMessage(),e);
@@ -4440,6 +4441,8 @@ public class IFaceLogSpringController {
         public String sdkVersion;
         @ApiModelProperty(value ="要排除的特征记录id(MD5) ,可为{@code null}" ,required=true ,dataType="List")
         public List<String> excludeFeatureIds;
+        @ApiModelProperty(value ="不为{@code null}时返回大于指定时间戳的所有fl_feature记录" ,required=true ,dataType="Long")
+        public Long timestamp;
     }
     /**
      * argClass-61<br>

@@ -50,7 +50,7 @@ public class FacelogDefaultImpl implements IFaceLog {
 	}
 	
 	@Override
-	public List<FeatureBean> getFeaturesPermittedOnDevice(int deviceId, boolean ignoreSchedule, String sdkVersion, List<String> excludeFeatureIds) {
+	public List<FeatureBean> getFeaturesPermittedOnDevice(int deviceId, boolean ignoreSchedule, String sdkVersion, List<String> excludeFeatureIds, Long timestamp) {
 		return null;
 	}
 	@Override

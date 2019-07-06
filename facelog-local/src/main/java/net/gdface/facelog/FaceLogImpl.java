@@ -240,9 +240,9 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 	}
 
 	@Override
-	public List<FeatureBean> getFeaturesPermittedOnDevice(int deviceId,boolean ignoreSchedule, String sdkVersion,List<String> excludeFeatureIds) {
+	public List<FeatureBean> getFeaturesPermittedOnDevice(int deviceId,boolean ignoreSchedule, String sdkVersion,List<String> excludeFeatureIds, Long timestamp) {
 		try{
-			Set<FeatureBean> features = dm.daoGetFeaturesPermittedOnDevice(deviceId, ignoreSchedule, sdkVersion, excludeFeatureIds);
+			Set<FeatureBean> features = dm.daoGetFeaturesPermittedOnDevice(deviceId, ignoreSchedule, sdkVersion, excludeFeatureIds, null);
 			return Lists.newArrayList(features);
 		} catch (RuntimeException e) {
 			throw wrapServiceRuntimeException(e);

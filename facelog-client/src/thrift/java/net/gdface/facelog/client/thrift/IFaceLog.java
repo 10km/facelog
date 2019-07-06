@@ -561,7 +561,8 @@ public interface IFaceLog
             @ThriftField(value=1, name="deviceId", requiredness=Requiredness.REQUIRED) final int deviceId,
             @ThriftField(value=2, name="ignoreSchedule", requiredness=Requiredness.REQUIRED) final boolean ignoreSchedule,
             @ThriftField(value=3, name="sdkVersion", requiredness=Requiredness.OPTIONAL) final String sdkVersion,
-            @ThriftField(value=4, name="excludeFeatureIds", requiredness=Requiredness.OPTIONAL) final List<String> excludeFeatureIds
+            @ThriftField(value=4, name="excludeFeatureIds", requiredness=Requiredness.OPTIONAL) final List<String> excludeFeatureIds,
+            @ThriftField(value=5, name="timestamp", requiredness=Requiredness.OPTIONAL) final Long timestamp
         );
 
         @ThriftMethod(value = "getGroupPermit",
@@ -1979,7 +1980,8 @@ public interface IFaceLog
         @ThriftField(value=1, name="deviceId", requiredness=Requiredness.REQUIRED) final int deviceId,
         @ThriftField(value=2, name="ignoreSchedule", requiredness=Requiredness.REQUIRED) final boolean ignoreSchedule,
         @ThriftField(value=3, name="sdkVersion", requiredness=Requiredness.OPTIONAL) final String sdkVersion,
-        @ThriftField(value=4, name="excludeFeatureIds", requiredness=Requiredness.OPTIONAL) final List<String> excludeFeatureIds
+        @ThriftField(value=4, name="excludeFeatureIds", requiredness=Requiredness.OPTIONAL) final List<String> excludeFeatureIds,
+        @ThriftField(value=5, name="timestamp", requiredness=Requiredness.OPTIONAL) final Long timestamp
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "getGroupPermit",

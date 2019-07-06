@@ -80,7 +80,7 @@ class IFaceLogIf {
   virtual void getFeaturesByPersonId(std::vector<std::string> & _return, const int32_t personId) = 0;
   virtual void getFeaturesByPersonIdAndSdkVersion(std::vector<std::string> & _return, const int32_t personId, const std::string& sdkVersion) = 0;
   virtual void getFeaturesOfPerson(std::vector<std::string> & _return, const int32_t personId) = 0;
-  virtual void getFeaturesPermittedOnDevice(std::vector<FeatureBean> & _return, const int32_t deviceId, const bool ignoreSchedule, const std::string& sdkVersion, const std::vector<std::string> & excludeFeatureIds) = 0;
+  virtual void getFeaturesPermittedOnDevice(std::vector<FeatureBean> & _return, const int32_t deviceId, const bool ignoreSchedule, const std::string& sdkVersion, const std::vector<std::string> & excludeFeatureIds, const int64_t timestamp) = 0;
   virtual void getGroupPermit(PermitBean& _return, const int32_t deviceId, const int32_t personGroupId) = 0;
   virtual void getGroupPermitOnDeviceGroup(PermitBean& _return, const int32_t deviceGroupId, const int32_t personGroupId) = 0;
   virtual void getGroupPermits(std::vector<PermitBean> & _return, const int32_t deviceId, const std::vector<int32_t> & personGroupIdList) = 0;
@@ -409,7 +409,7 @@ class IFaceLogNull : virtual public IFaceLogIf {
   void getFeaturesOfPerson(std::vector<std::string> & /* _return */, const int32_t /* personId */) {
     return;
   }
-  void getFeaturesPermittedOnDevice(std::vector<FeatureBean> & /* _return */, const int32_t /* deviceId */, const bool /* ignoreSchedule */, const std::string& /* sdkVersion */, const std::vector<std::string> & /* excludeFeatureIds */) {
+  void getFeaturesPermittedOnDevice(std::vector<FeatureBean> & /* _return */, const int32_t /* deviceId */, const bool /* ignoreSchedule */, const std::string& /* sdkVersion */, const std::vector<std::string> & /* excludeFeatureIds */, const int64_t /* timestamp */) {
     return;
   }
   void getGroupPermit(PermitBean& /* _return */, const int32_t /* deviceId */, const int32_t /* personGroupId */) {
@@ -8244,9 +8244,10 @@ class IFaceLog_getFeaturesOfPerson_presult {
 };
 
 typedef struct _IFaceLog_getFeaturesPermittedOnDevice_args__isset {
-  _IFaceLog_getFeaturesPermittedOnDevice_args__isset() : sdkVersion(false), excludeFeatureIds(false) {}
+  _IFaceLog_getFeaturesPermittedOnDevice_args__isset() : sdkVersion(false), excludeFeatureIds(false), timestamp(false) {}
   bool sdkVersion :1;
   bool excludeFeatureIds :1;
+  bool timestamp :1;
 } _IFaceLog_getFeaturesPermittedOnDevice_args__isset;
 
 class IFaceLog_getFeaturesPermittedOnDevice_args {
@@ -8256,7 +8257,7 @@ class IFaceLog_getFeaturesPermittedOnDevice_args {
   IFaceLog_getFeaturesPermittedOnDevice_args(IFaceLog_getFeaturesPermittedOnDevice_args&&);
   IFaceLog_getFeaturesPermittedOnDevice_args& operator=(const IFaceLog_getFeaturesPermittedOnDevice_args&);
   IFaceLog_getFeaturesPermittedOnDevice_args& operator=(IFaceLog_getFeaturesPermittedOnDevice_args&&);
-  IFaceLog_getFeaturesPermittedOnDevice_args() : deviceId(0), ignoreSchedule(0), sdkVersion() {
+  IFaceLog_getFeaturesPermittedOnDevice_args() : deviceId(0), ignoreSchedule(0), sdkVersion(), timestamp(0) {
   }
 
   virtual ~IFaceLog_getFeaturesPermittedOnDevice_args() throw();
@@ -8264,6 +8265,7 @@ class IFaceLog_getFeaturesPermittedOnDevice_args {
   bool ignoreSchedule;
   std::string sdkVersion;
   std::vector<std::string>  excludeFeatureIds;
+  int64_t timestamp;
 
   _IFaceLog_getFeaturesPermittedOnDevice_args__isset __isset;
 
@@ -8275,6 +8277,8 @@ class IFaceLog_getFeaturesPermittedOnDevice_args {
 
   void __set_excludeFeatureIds(const std::vector<std::string> & val);
 
+  void __set_timestamp(const int64_t val);
+
   bool operator == (const IFaceLog_getFeaturesPermittedOnDevice_args & rhs) const
   {
     if (!(deviceId == rhs.deviceId))
@@ -8284,6 +8288,8 @@ class IFaceLog_getFeaturesPermittedOnDevice_args {
     if (!(sdkVersion == rhs.sdkVersion))
       return false;
     if (!(excludeFeatureIds == rhs.excludeFeatureIds))
+      return false;
+    if (!(timestamp == rhs.timestamp))
       return false;
     return true;
   }
@@ -8310,6 +8316,7 @@ class IFaceLog_getFeaturesPermittedOnDevice_pargs {
   const bool* ignoreSchedule;
   const std::string* sdkVersion;
   const std::vector<std::string> * excludeFeatureIds;
+  const int64_t* timestamp;
 
   template <class Protocol_>
   uint32_t write(Protocol_* oprot) const;
@@ -20811,8 +20818,8 @@ class IFaceLogClientT : virtual public IFaceLogIf {
   void getFeaturesOfPerson(std::vector<std::string> & _return, const int32_t personId);
   void send_getFeaturesOfPerson(const int32_t personId);
   void recv_getFeaturesOfPerson(std::vector<std::string> & _return);
-  void getFeaturesPermittedOnDevice(std::vector<FeatureBean> & _return, const int32_t deviceId, const bool ignoreSchedule, const std::string& sdkVersion, const std::vector<std::string> & excludeFeatureIds);
-  void send_getFeaturesPermittedOnDevice(const int32_t deviceId, const bool ignoreSchedule, const std::string& sdkVersion, const std::vector<std::string> & excludeFeatureIds);
+  void getFeaturesPermittedOnDevice(std::vector<FeatureBean> & _return, const int32_t deviceId, const bool ignoreSchedule, const std::string& sdkVersion, const std::vector<std::string> & excludeFeatureIds, const int64_t timestamp);
+  void send_getFeaturesPermittedOnDevice(const int32_t deviceId, const bool ignoreSchedule, const std::string& sdkVersion, const std::vector<std::string> & excludeFeatureIds, const int64_t timestamp);
   void recv_getFeaturesPermittedOnDevice(std::vector<FeatureBean> & _return);
   void getGroupPermit(PermitBean& _return, const int32_t deviceId, const int32_t personGroupId);
   void send_getGroupPermit(const int32_t deviceId, const int32_t personGroupId);
@@ -22512,13 +22519,13 @@ class IFaceLogMultiface : virtual public IFaceLogIf {
     return;
   }
 
-  void getFeaturesPermittedOnDevice(std::vector<FeatureBean> & _return, const int32_t deviceId, const bool ignoreSchedule, const std::string& sdkVersion, const std::vector<std::string> & excludeFeatureIds) {
+  void getFeaturesPermittedOnDevice(std::vector<FeatureBean> & _return, const int32_t deviceId, const bool ignoreSchedule, const std::string& sdkVersion, const std::vector<std::string> & excludeFeatureIds, const int64_t timestamp) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->getFeaturesPermittedOnDevice(_return, deviceId, ignoreSchedule, sdkVersion, excludeFeatureIds);
+      ifaces_[i]->getFeaturesPermittedOnDevice(_return, deviceId, ignoreSchedule, sdkVersion, excludeFeatureIds, timestamp);
     }
-    ifaces_[i]->getFeaturesPermittedOnDevice(_return, deviceId, ignoreSchedule, sdkVersion, excludeFeatureIds);
+    ifaces_[i]->getFeaturesPermittedOnDevice(_return, deviceId, ignoreSchedule, sdkVersion, excludeFeatureIds, timestamp);
     return;
   }
 
@@ -23671,8 +23678,8 @@ class IFaceLogConcurrentClientT : virtual public IFaceLogIf {
   void getFeaturesOfPerson(std::vector<std::string> & _return, const int32_t personId);
   int32_t send_getFeaturesOfPerson(const int32_t personId);
   void recv_getFeaturesOfPerson(std::vector<std::string> & _return, const int32_t seqid);
-  void getFeaturesPermittedOnDevice(std::vector<FeatureBean> & _return, const int32_t deviceId, const bool ignoreSchedule, const std::string& sdkVersion, const std::vector<std::string> & excludeFeatureIds);
-  int32_t send_getFeaturesPermittedOnDevice(const int32_t deviceId, const bool ignoreSchedule, const std::string& sdkVersion, const std::vector<std::string> & excludeFeatureIds);
+  void getFeaturesPermittedOnDevice(std::vector<FeatureBean> & _return, const int32_t deviceId, const bool ignoreSchedule, const std::string& sdkVersion, const std::vector<std::string> & excludeFeatureIds, const int64_t timestamp);
+  int32_t send_getFeaturesPermittedOnDevice(const int32_t deviceId, const bool ignoreSchedule, const std::string& sdkVersion, const std::vector<std::string> & excludeFeatureIds, const int64_t timestamp);
   void recv_getFeaturesPermittedOnDevice(std::vector<FeatureBean> & _return, const int32_t seqid);
   void getGroupPermit(PermitBean& _return, const int32_t deviceId, const int32_t personGroupId);
   int32_t send_getGroupPermit(const int32_t deviceId, const int32_t personGroupId);

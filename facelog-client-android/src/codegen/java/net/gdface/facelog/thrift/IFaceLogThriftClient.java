@@ -1846,7 +1846,8 @@ public class IFaceLogThriftClient implements IFaceLog {
     public List<FeatureBean> getFeaturesPermittedOnDevice(final int deviceId,
         final boolean ignoreSchedule,
         final String sdkVersion,
-        final List<String> excludeFeatureIds) 
+        final List<String> excludeFeatureIds,
+        final Long timestamp) 
         {
         try{
             return syncCall(new Function<List<net.gdface.facelog.client.thrift.FeatureBean>,List<FeatureBean>>() {
@@ -1863,7 +1864,7 @@ public class IFaceLogThriftClient implements IFaceLog {
                     service.getFeaturesPermittedOnDevice(deviceId,ignoreSchedule,sdkVersion,TypeTransformer.getInstance().to(
                     excludeFeatureIds,
                     String.class,
-                    String.class),nativeCallback);
+                    String.class),timestamp,nativeCallback);
                 }});
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){

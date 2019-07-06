@@ -1364,7 +1364,8 @@ public class IFaceLogThriftClient implements IFaceLog {
     public List<FeatureBean> getFeaturesPermittedOnDevice(int deviceId,
         boolean ignoreSchedule,
         String sdkVersion,
-        List<String> excludeFeatureIds) 
+        List<String> excludeFeatureIds,
+        Long timestamp) 
         {
         net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
         try{
@@ -1375,7 +1376,8 @@ public class IFaceLogThriftClient implements IFaceLog {
                 TypeTransformer.getInstance().to(
                     excludeFeatureIds,
                     String.class,
-                    String.class)),
+                    String.class),
+                timestamp),
                     net.gdface.facelog.client.thrift.FeatureBean.class,
                     FeatureBean.class);
         }

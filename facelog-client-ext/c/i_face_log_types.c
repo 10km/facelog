@@ -47078,7 +47078,8 @@ enum _IFaceLogGetFeaturesPermittedOnDeviceArgsProperties
   PROP_I_FACE_LOG_GET_FEATURES_PERMITTED_ON_DEVICE_ARGS_DEVICE_ID,
   PROP_I_FACE_LOG_GET_FEATURES_PERMITTED_ON_DEVICE_ARGS_IGNORE_SCHEDULE,
   PROP_I_FACE_LOG_GET_FEATURES_PERMITTED_ON_DEVICE_ARGS_SDK_VERSION,
-  PROP_I_FACE_LOG_GET_FEATURES_PERMITTED_ON_DEVICE_ARGS_EXCLUDE_FEATURE_IDS
+  PROP_I_FACE_LOG_GET_FEATURES_PERMITTED_ON_DEVICE_ARGS_EXCLUDE_FEATURE_IDS,
+  PROP_I_FACE_LOG_GET_FEATURES_PERMITTED_ON_DEVICE_ARGS_TIMESTAMP
 };
 
 /* reads a i_face_log_get_features_permitted_on_device_args object */
@@ -47215,6 +47216,19 @@ i_face_log_get_features_permitted_on_device_args_read (ThriftStruct *object, Thr
           xfer += ret;
         }
         break;
+      case 5:
+        if (ftype == T_I64)
+        {
+          if ((ret = thrift_protocol_read_i64 (protocol, &this_object->timestamp, error)) < 0)
+            return -1;
+          xfer += ret;
+          this_object->__isset_timestamp = TRUE;
+        } else {
+          if ((ret = thrift_protocol_skip (protocol, ftype, error)) < 0)
+            return -1;
+          xfer += ret;
+        }
+        break;
       default:
         if ((ret = thrift_protocol_skip (protocol, ftype, error)) < 0)
           return -1;
@@ -47313,6 +47327,16 @@ i_face_log_get_features_permitted_on_device_args_write (ThriftStruct *object, Th
   if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
     return -1;
   xfer += ret;
+  if ((ret = thrift_protocol_write_field_begin (protocol, "timestamp", T_I64, 5, error)) < 0)
+    return -1;
+  xfer += ret;
+  if ((ret = thrift_protocol_write_i64 (protocol, this_object->timestamp, error)) < 0)
+    return -1;
+  xfer += ret;
+
+  if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
+    return -1;
+  xfer += ret;
   if ((ret = thrift_protocol_write_field_stop (protocol, error)) < 0)
     return -1;
   xfer += ret;
@@ -47355,6 +47379,11 @@ i_face_log_get_features_permitted_on_device_args_set_property (GObject *object,
       self->__isset_excludeFeatureIds = TRUE;
       break;
 
+    case PROP_I_FACE_LOG_GET_FEATURES_PERMITTED_ON_DEVICE_ARGS_TIMESTAMP:
+      self->timestamp = g_value_get_int64 (value);
+      self->__isset_timestamp = TRUE;
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -47387,6 +47416,10 @@ i_face_log_get_features_permitted_on_device_args_get_property (GObject *object,
       g_value_set_boxed (value, self->excludeFeatureIds);
       break;
 
+    case PROP_I_FACE_LOG_GET_FEATURES_PERMITTED_ON_DEVICE_ARGS_TIMESTAMP:
+      g_value_set_int64 (value, self->timestamp);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -47404,6 +47437,8 @@ i_face_log_get_features_permitted_on_device_args_instance_init (IFaceLogGetFeatu
   object->__isset_sdkVersion = FALSE;
   object->excludeFeatureIds = g_ptr_array_new_with_free_func (g_free);
   object->__isset_excludeFeatureIds = FALSE;
+  object->timestamp = 0;
+  object->__isset_timestamp = FALSE;
 }
 
 static void 
@@ -47474,6 +47509,17 @@ i_face_log_get_features_permitted_on_device_args_class_init (IFaceLogGetFeatures
                          NULL,
                          NULL,
                          G_TYPE_PTR_ARRAY,
+                         G_PARAM_READWRITE));
+
+  g_object_class_install_property
+    (gobject_class,
+     PROP_I_FACE_LOG_GET_FEATURES_PERMITTED_ON_DEVICE_ARGS_TIMESTAMP,
+     g_param_spec_int64 ("timestamp",
+                         NULL,
+                         NULL,
+                         G_MININT64,
+                         G_MAXINT64,
+                         0,
                          G_PARAM_READWRITE));
 }
 

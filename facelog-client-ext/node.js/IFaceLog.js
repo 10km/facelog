@@ -8984,6 +8984,7 @@ var IFaceLog_getFeaturesPermittedOnDevice_args = function(args) {
   this.ignoreSchedule = null;
   this.sdkVersion = null;
   this.excludeFeatureIds = null;
+  this.timestamp = null;
   if (args) {
     if (args.deviceId !== undefined && args.deviceId !== null) {
       this.deviceId = args.deviceId;
@@ -9000,6 +9001,9 @@ var IFaceLog_getFeaturesPermittedOnDevice_args = function(args) {
     }
     if (args.excludeFeatureIds !== undefined && args.excludeFeatureIds !== null) {
       this.excludeFeatureIds = Thrift.copyList(args.excludeFeatureIds, [null]);
+    }
+    if (args.timestamp !== undefined && args.timestamp !== null) {
+      this.timestamp = args.timestamp;
     }
   }
 };
@@ -9058,6 +9062,13 @@ IFaceLog_getFeaturesPermittedOnDevice_args.prototype.read = function(input) {
         input.skip(ftype);
       }
       break;
+      case 5:
+      if (ftype == Thrift.Type.I64) {
+        this.timestamp = input.readI64();
+      } else {
+        input.skip(ftype);
+      }
+      break;
       default:
         input.skip(ftype);
     }
@@ -9096,6 +9107,11 @@ IFaceLog_getFeaturesPermittedOnDevice_args.prototype.write = function(output) {
       }
     }
     output.writeListEnd();
+    output.writeFieldEnd();
+  }
+  if (this.timestamp !== null && this.timestamp !== undefined) {
+    output.writeFieldBegin('timestamp', Thrift.Type.I64, 5);
+    output.writeI64(this.timestamp);
     output.writeFieldEnd();
   }
   output.writeFieldStop();
@@ -26949,7 +26965,7 @@ IFaceLogClient.prototype.recv_getFeaturesOfPerson = function(input,mtype,rseqid)
   }
   return callback('getFeaturesOfPerson failed: unknown result');
 };
-IFaceLogClient.prototype.getFeaturesPermittedOnDevice = function(deviceId, ignoreSchedule, sdkVersion, excludeFeatureIds, callback) {
+IFaceLogClient.prototype.getFeaturesPermittedOnDevice = function(deviceId, ignoreSchedule, sdkVersion, excludeFeatureIds, timestamp, callback) {
   this._seqid = this.new_seqid();
   if (callback === undefined) {
     var _defer = Q.defer();
@@ -26960,22 +26976,23 @@ IFaceLogClient.prototype.getFeaturesPermittedOnDevice = function(deviceId, ignor
         _defer.resolve(result);
       }
     };
-    this.send_getFeaturesPermittedOnDevice(deviceId, ignoreSchedule, sdkVersion, excludeFeatureIds);
+    this.send_getFeaturesPermittedOnDevice(deviceId, ignoreSchedule, sdkVersion, excludeFeatureIds, timestamp);
     return _defer.promise;
   } else {
     this._reqs[this.seqid()] = callback;
-    this.send_getFeaturesPermittedOnDevice(deviceId, ignoreSchedule, sdkVersion, excludeFeatureIds);
+    this.send_getFeaturesPermittedOnDevice(deviceId, ignoreSchedule, sdkVersion, excludeFeatureIds, timestamp);
   }
 };
 
-IFaceLogClient.prototype.send_getFeaturesPermittedOnDevice = function(deviceId, ignoreSchedule, sdkVersion, excludeFeatureIds) {
+IFaceLogClient.prototype.send_getFeaturesPermittedOnDevice = function(deviceId, ignoreSchedule, sdkVersion, excludeFeatureIds, timestamp) {
   var output = new this.pClass(this.output);
   output.writeMessageBegin('getFeaturesPermittedOnDevice', Thrift.MessageType.CALL, this.seqid());
   var params = {
     deviceId: deviceId,
     ignoreSchedule: ignoreSchedule,
     sdkVersion: sdkVersion,
-    excludeFeatureIds: excludeFeatureIds
+    excludeFeatureIds: excludeFeatureIds,
+    timestamp: timestamp
   };
   var args = new IFaceLog_getFeaturesPermittedOnDevice_args(params);
   args.write(output);
@@ -34549,8 +34566,8 @@ IFaceLogProcessor.prototype.process_getFeaturesPermittedOnDevice = function(seqi
   var args = new IFaceLog_getFeaturesPermittedOnDevice_args();
   args.read(input);
   input.readMessageEnd();
-  if (this._handler.getFeaturesPermittedOnDevice.length === 4) {
-    Q.fcall(this._handler.getFeaturesPermittedOnDevice.bind(this._handler), args.deviceId, args.ignoreSchedule, args.sdkVersion, args.excludeFeatureIds)
+  if (this._handler.getFeaturesPermittedOnDevice.length === 5) {
+    Q.fcall(this._handler.getFeaturesPermittedOnDevice.bind(this._handler), args.deviceId, args.ignoreSchedule, args.sdkVersion, args.excludeFeatureIds, args.timestamp)
       .then(function(result) {
         var result_obj = new IFaceLog_getFeaturesPermittedOnDevice_result({success: result});
         output.writeMessageBegin("getFeaturesPermittedOnDevice", Thrift.MessageType.REPLY, seqid);
@@ -34571,7 +34588,7 @@ IFaceLogProcessor.prototype.process_getFeaturesPermittedOnDevice = function(seqi
         output.flush();
       });
   } else {
-    this._handler.getFeaturesPermittedOnDevice(args.deviceId, args.ignoreSchedule, args.sdkVersion, args.excludeFeatureIds, function (err, result) {
+    this._handler.getFeaturesPermittedOnDevice(args.deviceId, args.ignoreSchedule, args.sdkVersion, args.excludeFeatureIds, args.timestamp, function (err, result) {
       var result_obj;
       if ((err === null || typeof err === 'undefined') || err instanceof ttypes.ServiceRuntimeException) {
         result_obj = new IFaceLog_getFeaturesPermittedOnDevice_result((err !== null || typeof err === 'undefined') ? err : {success: result});

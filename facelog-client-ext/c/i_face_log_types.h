@@ -3865,6 +3865,8 @@ struct _IFaceLogGetFeaturesPermittedOnDeviceArgs
   gboolean __isset_sdkVersion;
   GPtrArray * excludeFeatureIds;
   gboolean __isset_excludeFeatureIds;
+  gint64 timestamp;
+  gboolean __isset_timestamp;
 };
 typedef struct _IFaceLogGetFeaturesPermittedOnDeviceArgs IFaceLogGetFeaturesPermittedOnDeviceArgs;
 

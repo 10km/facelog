@@ -13583,6 +13583,14 @@ uint32_t IFaceLog_getFeaturesPermittedOnDevice_args::read(Protocol_* iprot) {
           xfer += iprot->skip(ftype);
         }
         break;
+      case 5:
+        if (ftype == ::apache::thrift::protocol::T_I64) {
+          xfer += iprot->readI64(this->timestamp);
+          this->__isset.timestamp = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -13629,6 +13637,10 @@ uint32_t IFaceLog_getFeaturesPermittedOnDevice_args::write(Protocol_* oprot) con
   }
   xfer += oprot->writeFieldEnd();
 
+  xfer += oprot->writeFieldBegin("timestamp", ::apache::thrift::protocol::T_I64, 5);
+  xfer += oprot->writeI64(this->timestamp);
+  xfer += oprot->writeFieldEnd();
+
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
@@ -13663,6 +13675,10 @@ uint32_t IFaceLog_getFeaturesPermittedOnDevice_pargs::write(Protocol_* oprot) co
     }
     xfer += oprot->writeListEnd();
   }
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("timestamp", ::apache::thrift::protocol::T_I64, 5);
+  xfer += oprot->writeI64((*(this->timestamp)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -39845,14 +39861,14 @@ void IFaceLogClientT<Protocol_>::recv_getFeaturesOfPerson(std::vector<std::strin
 }
 
 template <class Protocol_>
-void IFaceLogClientT<Protocol_>::getFeaturesPermittedOnDevice(std::vector<FeatureBean> & _return, const int32_t deviceId, const bool ignoreSchedule, const std::string& sdkVersion, const std::vector<std::string> & excludeFeatureIds)
+void IFaceLogClientT<Protocol_>::getFeaturesPermittedOnDevice(std::vector<FeatureBean> & _return, const int32_t deviceId, const bool ignoreSchedule, const std::string& sdkVersion, const std::vector<std::string> & excludeFeatureIds, const int64_t timestamp)
 {
-  send_getFeaturesPermittedOnDevice(deviceId, ignoreSchedule, sdkVersion, excludeFeatureIds);
+  send_getFeaturesPermittedOnDevice(deviceId, ignoreSchedule, sdkVersion, excludeFeatureIds, timestamp);
   recv_getFeaturesPermittedOnDevice(_return);
 }
 
 template <class Protocol_>
-void IFaceLogClientT<Protocol_>::send_getFeaturesPermittedOnDevice(const int32_t deviceId, const bool ignoreSchedule, const std::string& sdkVersion, const std::vector<std::string> & excludeFeatureIds)
+void IFaceLogClientT<Protocol_>::send_getFeaturesPermittedOnDevice(const int32_t deviceId, const bool ignoreSchedule, const std::string& sdkVersion, const std::vector<std::string> & excludeFeatureIds, const int64_t timestamp)
 {
   int32_t cseqid = 0;
   this->oprot_->writeMessageBegin("getFeaturesPermittedOnDevice", ::apache::thrift::protocol::T_CALL, cseqid);
@@ -39862,6 +39878,7 @@ void IFaceLogClientT<Protocol_>::send_getFeaturesPermittedOnDevice(const int32_t
   args.ignoreSchedule = &ignoreSchedule;
   args.sdkVersion = &sdkVersion;
   args.excludeFeatureIds = &excludeFeatureIds;
+  args.timestamp = &timestamp;
   args.write(this->oprot_);
 
   this->oprot_->writeMessageEnd();
@@ -53118,7 +53135,7 @@ void IFaceLogProcessorT<Protocol_>::process_getFeaturesPermittedOnDevice(int32_t
 
   IFaceLog_getFeaturesPermittedOnDevice_result result;
   try {
-    iface_->getFeaturesPermittedOnDevice(result.success, args.deviceId, args.ignoreSchedule, args.sdkVersion, args.excludeFeatureIds);
+    iface_->getFeaturesPermittedOnDevice(result.success, args.deviceId, args.ignoreSchedule, args.sdkVersion, args.excludeFeatureIds, args.timestamp);
     result.__isset.success = true;
   } catch (ServiceRuntimeException &ex1) {
     result.ex1 = ex1;
@@ -53176,7 +53193,7 @@ void IFaceLogProcessorT<Protocol_>::process_getFeaturesPermittedOnDevice(int32_t
 
   IFaceLog_getFeaturesPermittedOnDevice_result result;
   try {
-    iface_->getFeaturesPermittedOnDevice(result.success, args.deviceId, args.ignoreSchedule, args.sdkVersion, args.excludeFeatureIds);
+    iface_->getFeaturesPermittedOnDevice(result.success, args.deviceId, args.ignoreSchedule, args.sdkVersion, args.excludeFeatureIds, args.timestamp);
     result.__isset.success = true;
   } catch (ServiceRuntimeException &ex1) {
     result.ex1 = ex1;
@@ -69913,14 +69930,14 @@ void IFaceLogConcurrentClientT<Protocol_>::recv_getFeaturesOfPerson(std::vector<
 }
 
 template <class Protocol_>
-void IFaceLogConcurrentClientT<Protocol_>::getFeaturesPermittedOnDevice(std::vector<FeatureBean> & _return, const int32_t deviceId, const bool ignoreSchedule, const std::string& sdkVersion, const std::vector<std::string> & excludeFeatureIds)
+void IFaceLogConcurrentClientT<Protocol_>::getFeaturesPermittedOnDevice(std::vector<FeatureBean> & _return, const int32_t deviceId, const bool ignoreSchedule, const std::string& sdkVersion, const std::vector<std::string> & excludeFeatureIds, const int64_t timestamp)
 {
-  int32_t seqid = send_getFeaturesPermittedOnDevice(deviceId, ignoreSchedule, sdkVersion, excludeFeatureIds);
+  int32_t seqid = send_getFeaturesPermittedOnDevice(deviceId, ignoreSchedule, sdkVersion, excludeFeatureIds, timestamp);
   recv_getFeaturesPermittedOnDevice(_return, seqid);
 }
 
 template <class Protocol_>
-int32_t IFaceLogConcurrentClientT<Protocol_>::send_getFeaturesPermittedOnDevice(const int32_t deviceId, const bool ignoreSchedule, const std::string& sdkVersion, const std::vector<std::string> & excludeFeatureIds)
+int32_t IFaceLogConcurrentClientT<Protocol_>::send_getFeaturesPermittedOnDevice(const int32_t deviceId, const bool ignoreSchedule, const std::string& sdkVersion, const std::vector<std::string> & excludeFeatureIds, const int64_t timestamp)
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
@@ -69931,6 +69948,7 @@ int32_t IFaceLogConcurrentClientT<Protocol_>::send_getFeaturesPermittedOnDevice(
   args.ignoreSchedule = &ignoreSchedule;
   args.sdkVersion = &sdkVersion;
   args.excludeFeatureIds = &excludeFeatureIds;
+  args.timestamp = &timestamp;
   args.write(this->oprot_);
 
   this->oprot_->writeMessageEnd();

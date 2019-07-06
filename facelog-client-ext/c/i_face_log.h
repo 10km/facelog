@@ -77,7 +77,7 @@ struct _IFaceLogIfInterface
   gboolean (*get_features_by_person_id) (IFaceLogIf *iface, GPtrArray ** _return, const gint32 personId, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*get_features_by_person_id_and_sdk_version) (IFaceLogIf *iface, GPtrArray ** _return, const gint32 personId, const gchar * sdkVersion, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*get_features_of_person) (IFaceLogIf *iface, GPtrArray ** _return, const gint32 personId, ServiceRuntimeException ** ex1, GError **error);
-  gboolean (*get_features_permitted_on_device) (IFaceLogIf *iface, GPtrArray ** _return, const gint32 deviceId, const gboolean ignoreSchedule, const gchar * sdkVersion, const GPtrArray * excludeFeatureIds, ServiceRuntimeException ** ex1, GError **error);
+  gboolean (*get_features_permitted_on_device) (IFaceLogIf *iface, GPtrArray ** _return, const gint32 deviceId, const gboolean ignoreSchedule, const gchar * sdkVersion, const GPtrArray * excludeFeatureIds, const gint64 timestamp, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*get_group_permit) (IFaceLogIf *iface, PermitBean ** _return, const gint32 deviceId, const gint32 personGroupId, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*get_group_permit_on_device_group) (IFaceLogIf *iface, PermitBean ** _return, const gint32 deviceGroupId, const gint32 personGroupId, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*get_group_permits) (IFaceLogIf *iface, GPtrArray ** _return, const gint32 deviceId, const GArray * personGroupIdList, ServiceRuntimeException ** ex1, GError **error);
@@ -243,7 +243,7 @@ gboolean i_face_log_if_get_features (IFaceLogIf *iface, GPtrArray ** _return, co
 gboolean i_face_log_if_get_features_by_person_id (IFaceLogIf *iface, GPtrArray ** _return, const gint32 personId, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_if_get_features_by_person_id_and_sdk_version (IFaceLogIf *iface, GPtrArray ** _return, const gint32 personId, const gchar * sdkVersion, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_if_get_features_of_person (IFaceLogIf *iface, GPtrArray ** _return, const gint32 personId, ServiceRuntimeException ** ex1, GError **error);
-gboolean i_face_log_if_get_features_permitted_on_device (IFaceLogIf *iface, GPtrArray ** _return, const gint32 deviceId, const gboolean ignoreSchedule, const gchar * sdkVersion, const GPtrArray * excludeFeatureIds, ServiceRuntimeException ** ex1, GError **error);
+gboolean i_face_log_if_get_features_permitted_on_device (IFaceLogIf *iface, GPtrArray ** _return, const gint32 deviceId, const gboolean ignoreSchedule, const gchar * sdkVersion, const GPtrArray * excludeFeatureIds, const gint64 timestamp, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_if_get_group_permit (IFaceLogIf *iface, PermitBean ** _return, const gint32 deviceId, const gint32 personGroupId, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_if_get_group_permit_on_device_group (IFaceLogIf *iface, PermitBean ** _return, const gint32 deviceGroupId, const gint32 personGroupId, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_if_get_group_permits (IFaceLogIf *iface, GPtrArray ** _return, const gint32 deviceId, const GArray * personGroupIdList, ServiceRuntimeException ** ex1, GError **error);
@@ -543,8 +543,8 @@ gboolean i_face_log_client_recv_get_features_by_person_id_and_sdk_version (IFace
 gboolean i_face_log_client_get_features_of_person (IFaceLogIf * iface, GPtrArray ** _return, const gint32 personId, ServiceRuntimeException ** ex1, GError ** error);
 gboolean i_face_log_client_send_get_features_of_person (IFaceLogIf * iface, const gint32 personId, GError ** error);
 gboolean i_face_log_client_recv_get_features_of_person (IFaceLogIf * iface, GPtrArray ** _return, ServiceRuntimeException ** ex1, GError ** error);
-gboolean i_face_log_client_get_features_permitted_on_device (IFaceLogIf * iface, GPtrArray ** _return, const gint32 deviceId, const gboolean ignoreSchedule, const gchar * sdkVersion, const GPtrArray * excludeFeatureIds, ServiceRuntimeException ** ex1, GError ** error);
-gboolean i_face_log_client_send_get_features_permitted_on_device (IFaceLogIf * iface, const gint32 deviceId, const gboolean ignoreSchedule, const gchar * sdkVersion, const GPtrArray * excludeFeatureIds, GError ** error);
+gboolean i_face_log_client_get_features_permitted_on_device (IFaceLogIf * iface, GPtrArray ** _return, const gint32 deviceId, const gboolean ignoreSchedule, const gchar * sdkVersion, const GPtrArray * excludeFeatureIds, const gint64 timestamp, ServiceRuntimeException ** ex1, GError ** error);
+gboolean i_face_log_client_send_get_features_permitted_on_device (IFaceLogIf * iface, const gint32 deviceId, const gboolean ignoreSchedule, const gchar * sdkVersion, const GPtrArray * excludeFeatureIds, const gint64 timestamp, GError ** error);
 gboolean i_face_log_client_recv_get_features_permitted_on_device (IFaceLogIf * iface, GPtrArray ** _return, ServiceRuntimeException ** ex1, GError ** error);
 gboolean i_face_log_client_get_group_permit (IFaceLogIf * iface, PermitBean ** _return, const gint32 deviceId, const gint32 personGroupId, ServiceRuntimeException ** ex1, GError ** error);
 gboolean i_face_log_client_send_get_group_permit (IFaceLogIf * iface, const gint32 deviceId, const gint32 personGroupId, GError ** error);
@@ -910,7 +910,7 @@ struct _IFaceLogHandlerClass
   gboolean (*get_features_by_person_id) (IFaceLogIf *iface, GPtrArray ** _return, const gint32 personId, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*get_features_by_person_id_and_sdk_version) (IFaceLogIf *iface, GPtrArray ** _return, const gint32 personId, const gchar * sdkVersion, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*get_features_of_person) (IFaceLogIf *iface, GPtrArray ** _return, const gint32 personId, ServiceRuntimeException ** ex1, GError **error);
-  gboolean (*get_features_permitted_on_device) (IFaceLogIf *iface, GPtrArray ** _return, const gint32 deviceId, const gboolean ignoreSchedule, const gchar * sdkVersion, const GPtrArray * excludeFeatureIds, ServiceRuntimeException ** ex1, GError **error);
+  gboolean (*get_features_permitted_on_device) (IFaceLogIf *iface, GPtrArray ** _return, const gint32 deviceId, const gboolean ignoreSchedule, const gchar * sdkVersion, const GPtrArray * excludeFeatureIds, const gint64 timestamp, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*get_group_permit) (IFaceLogIf *iface, PermitBean ** _return, const gint32 deviceId, const gint32 personGroupId, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*get_group_permit_on_device_group) (IFaceLogIf *iface, PermitBean ** _return, const gint32 deviceGroupId, const gint32 personGroupId, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*get_group_permits) (IFaceLogIf *iface, GPtrArray ** _return, const gint32 deviceId, const GArray * personGroupIdList, ServiceRuntimeException ** ex1, GError **error);
@@ -1078,7 +1078,7 @@ gboolean i_face_log_handler_get_features (IFaceLogIf *iface, GPtrArray ** _retur
 gboolean i_face_log_handler_get_features_by_person_id (IFaceLogIf *iface, GPtrArray ** _return, const gint32 personId, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_handler_get_features_by_person_id_and_sdk_version (IFaceLogIf *iface, GPtrArray ** _return, const gint32 personId, const gchar * sdkVersion, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_handler_get_features_of_person (IFaceLogIf *iface, GPtrArray ** _return, const gint32 personId, ServiceRuntimeException ** ex1, GError **error);
-gboolean i_face_log_handler_get_features_permitted_on_device (IFaceLogIf *iface, GPtrArray ** _return, const gint32 deviceId, const gboolean ignoreSchedule, const gchar * sdkVersion, const GPtrArray * excludeFeatureIds, ServiceRuntimeException ** ex1, GError **error);
+gboolean i_face_log_handler_get_features_permitted_on_device (IFaceLogIf *iface, GPtrArray ** _return, const gint32 deviceId, const gboolean ignoreSchedule, const gchar * sdkVersion, const GPtrArray * excludeFeatureIds, const gint64 timestamp, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_handler_get_group_permit (IFaceLogIf *iface, PermitBean ** _return, const gint32 deviceId, const gint32 personGroupId, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_handler_get_group_permit_on_device_group (IFaceLogIf *iface, PermitBean ** _return, const gint32 deviceGroupId, const gint32 personGroupId, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_handler_get_group_permits (IFaceLogIf *iface, GPtrArray ** _return, const gint32 deviceId, const GArray * personGroupIdList, ServiceRuntimeException ** ex1, GError **error);

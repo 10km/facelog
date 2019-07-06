@@ -541,8 +541,8 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
-    public List<FeatureBean> getFeaturesPermittedOnDevice (int deviceId,boolean ignoreSchedule,String sdkVersion,List<String> excludeFeatureIds) {
-        return delegate().getFeaturesPermittedOnDevice(deviceId,ignoreSchedule,sdkVersion,excludeFeatureIds);
+    public List<FeatureBean> getFeaturesPermittedOnDevice (int deviceId,boolean ignoreSchedule,String sdkVersion,List<String> excludeFeatureIds,Long timestamp) {
+        return delegate().getFeaturesPermittedOnDevice(deviceId,ignoreSchedule,sdkVersion,excludeFeatureIds,timestamp);
     }
 
     @Override

@@ -77,7 +77,7 @@ public partial class IFaceLog {
     List<string> getFeaturesByPersonId(int personId);
     List<string> getFeaturesByPersonIdAndSdkVersion(int personId, string sdkVersion);
     List<string> getFeaturesOfPerson(int personId);
-    List<FeatureBean> getFeaturesPermittedOnDevice(int deviceId, bool ignoreSchedule, string sdkVersion, List<string> excludeFeatureIds);
+    List<FeatureBean> getFeaturesPermittedOnDevice(int deviceId, bool ignoreSchedule, string sdkVersion, List<string> excludeFeatureIds, long timestamp);
     PermitBean getGroupPermit(int deviceId, int personGroupId);
     PermitBean getGroupPermitOnDeviceGroup(int deviceGroupId, int personGroupId);
     List<PermitBean> getGroupPermits(int deviceId, List<int> personGroupIdList);
@@ -237,7 +237,7 @@ public partial class IFaceLog {
     Task<List<string>> getFeaturesByPersonIdAsync(int personId);
     Task<List<string>> getFeaturesByPersonIdAndSdkVersionAsync(int personId, string sdkVersion);
     Task<List<string>> getFeaturesOfPersonAsync(int personId);
-    Task<List<FeatureBean>> getFeaturesPermittedOnDeviceAsync(int deviceId, bool ignoreSchedule, string sdkVersion, List<string> excludeFeatureIds);
+    Task<List<FeatureBean>> getFeaturesPermittedOnDeviceAsync(int deviceId, bool ignoreSchedule, string sdkVersion, List<string> excludeFeatureIds, long timestamp);
     Task<PermitBean> getGroupPermitAsync(int deviceId, int personGroupId);
     Task<PermitBean> getGroupPermitOnDeviceGroupAsync(int deviceGroupId, int personGroupId);
     Task<List<PermitBean>> getGroupPermitsAsync(int deviceId, List<int> personGroupIdList);
@@ -456,7 +456,7 @@ public partial class IFaceLog {
     List<string> End_getFeaturesByPersonIdAndSdkVersion(IAsyncResult asyncResult);
     IAsyncResult Begin_getFeaturesOfPerson(AsyncCallback callback, object state, int personId);
     List<string> End_getFeaturesOfPerson(IAsyncResult asyncResult);
-    IAsyncResult Begin_getFeaturesPermittedOnDevice(AsyncCallback callback, object state, int deviceId, bool ignoreSchedule, string sdkVersion, List<string> excludeFeatureIds);
+    IAsyncResult Begin_getFeaturesPermittedOnDevice(AsyncCallback callback, object state, int deviceId, bool ignoreSchedule, string sdkVersion, List<string> excludeFeatureIds, long timestamp);
     List<FeatureBean> End_getFeaturesPermittedOnDevice(IAsyncResult asyncResult);
     IAsyncResult Begin_getGroupPermit(AsyncCallback callback, object state, int deviceId, int personGroupId);
     PermitBean End_getGroupPermit(IAsyncResult asyncResult);
@@ -4188,9 +4188,9 @@ public partial class IFaceLog {
     }
 
     
-    public IAsyncResult Begin_getFeaturesPermittedOnDevice(AsyncCallback callback, object state, int deviceId, bool ignoreSchedule, string sdkVersion, List<string> excludeFeatureIds)
+    public IAsyncResult Begin_getFeaturesPermittedOnDevice(AsyncCallback callback, object state, int deviceId, bool ignoreSchedule, string sdkVersion, List<string> excludeFeatureIds, long timestamp)
     {
-      return send_getFeaturesPermittedOnDevice(callback, state, deviceId, ignoreSchedule, sdkVersion, excludeFeatureIds);
+      return send_getFeaturesPermittedOnDevice(callback, state, deviceId, ignoreSchedule, sdkVersion, excludeFeatureIds, timestamp);
     }
 
     public List<FeatureBean> End_getFeaturesPermittedOnDevice(IAsyncResult asyncResult)
@@ -4199,23 +4199,23 @@ public partial class IFaceLog {
       return recv_getFeaturesPermittedOnDevice();
     }
 
-    public async Task<List<FeatureBean>> getFeaturesPermittedOnDeviceAsync(int deviceId, bool ignoreSchedule, string sdkVersion, List<string> excludeFeatureIds)
+    public async Task<List<FeatureBean>> getFeaturesPermittedOnDeviceAsync(int deviceId, bool ignoreSchedule, string sdkVersion, List<string> excludeFeatureIds, long timestamp)
     {
       List<FeatureBean> retval;
       retval = await Task.Run(() =>
       {
-        return getFeaturesPermittedOnDevice(deviceId, ignoreSchedule, sdkVersion, excludeFeatureIds);
+        return getFeaturesPermittedOnDevice(deviceId, ignoreSchedule, sdkVersion, excludeFeatureIds, timestamp);
       });
       return retval;
     }
 
-    public List<FeatureBean> getFeaturesPermittedOnDevice(int deviceId, bool ignoreSchedule, string sdkVersion, List<string> excludeFeatureIds)
+    public List<FeatureBean> getFeaturesPermittedOnDevice(int deviceId, bool ignoreSchedule, string sdkVersion, List<string> excludeFeatureIds, long timestamp)
     {
-      var asyncResult = Begin_getFeaturesPermittedOnDevice(null, null, deviceId, ignoreSchedule, sdkVersion, excludeFeatureIds);
+      var asyncResult = Begin_getFeaturesPermittedOnDevice(null, null, deviceId, ignoreSchedule, sdkVersion, excludeFeatureIds, timestamp);
       return End_getFeaturesPermittedOnDevice(asyncResult);
 
     }
-    public IAsyncResult send_getFeaturesPermittedOnDevice(AsyncCallback callback, object state, int deviceId, bool ignoreSchedule, string sdkVersion, List<string> excludeFeatureIds)
+    public IAsyncResult send_getFeaturesPermittedOnDevice(AsyncCallback callback, object state, int deviceId, bool ignoreSchedule, string sdkVersion, List<string> excludeFeatureIds, long timestamp)
     {
       oprot_.WriteMessageBegin(new TMessage("getFeaturesPermittedOnDevice", TMessageType.Call, seqid_));
       getFeaturesPermittedOnDevice_args args = new getFeaturesPermittedOnDevice_args();
@@ -4223,6 +4223,7 @@ public partial class IFaceLog {
       args.IgnoreSchedule = ignoreSchedule;
       args.SdkVersion = sdkVersion;
       args.ExcludeFeatureIds = excludeFeatureIds;
+      args.Timestamp = timestamp;
       args.Write(oprot_);
       oprot_.WriteMessageEnd();
       return oprot_.Transport.BeginFlush(callback, state);
@@ -12226,7 +12227,7 @@ public partial class IFaceLog {
       {
         try
         {
-          result.Success = await iface_.getFeaturesPermittedOnDeviceAsync(args.DeviceId.Value, args.IgnoreSchedule.Value, args.SdkVersion, args.ExcludeFeatureIds);
+          result.Success = await iface_.getFeaturesPermittedOnDeviceAsync(args.DeviceId.Value, args.IgnoreSchedule.Value, args.SdkVersion, args.ExcludeFeatureIds, args.Timestamp.Value);
         }
         catch (ServiceRuntimeException ex1)
         {
@@ -17988,7 +17989,7 @@ public partial class IFaceLog {
       {
         try
         {
-          result.Success = iface_.getFeaturesPermittedOnDevice(args.DeviceId.Value, args.IgnoreSchedule.Value, args.SdkVersion, args.ExcludeFeatureIds);
+          result.Success = iface_.getFeaturesPermittedOnDevice(args.DeviceId.Value, args.IgnoreSchedule.Value, args.SdkVersion, args.ExcludeFeatureIds, args.Timestamp.Value);
         }
         catch (ServiceRuntimeException ex1)
         {
@@ -35031,6 +35032,8 @@ public partial class IFaceLog {
 
     public List<string> ExcludeFeatureIds { get; set; }
 
+    public long? Timestamp { get; set; }
+
     public getFeaturesPermittedOnDevice_args() {
     }
 
@@ -35096,6 +35099,13 @@ public partial class IFaceLog {
                 TProtocolUtil.Skip(iprot, field.Type);
               }
               break;
+            case 5:
+              if (field.Type == TType.I64) {
+                Timestamp = iprot.ReadI64();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
             default: 
               TProtocolUtil.Skip(iprot, field.Type);
               break;
@@ -35156,6 +35166,14 @@ public partial class IFaceLog {
           }
           oprot.WriteFieldEnd();
         }
+        if (Timestamp != null) {
+          field.Name = "timestamp";
+          field.Type = TType.I64;
+          field.ID = 5;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteI64(Timestamp.Value);
+          oprot.WriteFieldEnd();
+        }
         oprot.WriteFieldStop();
         oprot.WriteStructEnd();
       }
@@ -35178,6 +35196,10 @@ public partial class IFaceLog {
       if (ExcludeFeatureIds != null) {
         __sb.Append(", ExcludeFeatureIds: ");
         __sb.Append(ExcludeFeatureIds);
+      }
+      if (Timestamp != null) {
+        __sb.Append(", Timestamp: ");
+        __sb.Append(Timestamp);
       }
       __sb.Append(")");
       return __sb.ToString();
