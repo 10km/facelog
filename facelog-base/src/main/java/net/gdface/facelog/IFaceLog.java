@@ -73,7 +73,7 @@ public interface IFaceLog{
 	 * @param deviceId 设备ID
 	 * @param ignoreSchedule 是否忽略时间过滤器(fl_permit.schedule字段)的限制
 	 * @param excludePersonIds 要排除的人员记录id,可为{@code null}
-	 * @param timestamp 不为{@code null}时返回大于指定时间戳的所有fl_feature记录
+	 * @param timestamp 不为{@code null}时返回大于指定时间戳的所有fl_person记录
 	 * @return 返回的用户对象列表中，过滤所有有效期失效的用户<br>
 	 */
 	public List<Integer> getPersonsPermittedOnDevice(int deviceId, boolean ignoreSchedule, List<Integer> excludePersonIds, Long timestamp);
