@@ -526,11 +526,6 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
-    public List<String> getFeaturesByPersonId (int personId) {
-        return delegate().getFeaturesByPersonId(personId);
-    }
-
-    @Override
     public List<String> getFeaturesByPersonIdAndSdkVersion (int personId,String sdkVersion) {
         return delegate().getFeaturesByPersonIdAndSdkVersion(personId,sdkVersion);
     }
@@ -541,7 +536,7 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
-    public List<FeatureBean> getFeaturesPermittedOnDevice (int deviceId,boolean ignoreSchedule,String sdkVersion,List<String> excludeFeatureIds,Long timestamp) {
+    public List<String> getFeaturesPermittedOnDevice (int deviceId,boolean ignoreSchedule,String sdkVersion,List<String> excludeFeatureIds,Long timestamp) {
         return delegate().getFeaturesPermittedOnDevice(deviceId,ignoreSchedule,sdkVersion,excludeFeatureIds,timestamp);
     }
 
@@ -633,6 +628,11 @@ public class IFaceLogDecorator implements IFaceLog{
     @Override
     public List<Integer> getPersonsOfGroup (int personGroupId) {
         return delegate().getPersonsOfGroup(personGroupId);
+    }
+
+    @Override
+    public List<Integer> getPersonsPermittedOnDevice (int deviceId,boolean ignoreSchedule,List<Integer> excludePersonIds,Long timestamp) {
+        return delegate().getPersonsPermittedOnDevice(deviceId,ignoreSchedule,excludePersonIds,timestamp);
     }
 
     @Override

@@ -1618,28 +1618,6 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(getFeatures(md5), callback);
     }
     /**
-     * see also {@link net.gdface.facelog.IFaceLog#getFeaturesByPersonId(int)}
-     */
-    public ListenableFuture<List<String>> getFeaturesByPersonId(int personId){
-        MethodCallback<List<String>,List<String>> nativeCallback = 
-            new MethodCallback<List<String>,List<String>>(
-                new Function<List<String>,List<String>>() {
-                        @Override
-                        public List<String> apply(List<String> input) {
-                            return TypeTransformer.getInstance().to(
-                    input,
-                    String.class,
-                    String.class);
-                }});
-        nativeCallback.service.getFeaturesByPersonId(
-                personId,nativeCallback);
-        return nativeCallback.feature;
-    }
-    public void getFeaturesByPersonId(int personId,
-        FutureCallback<List<String>>callback){
-        factory.addCallback(getFeaturesByPersonId(personId), callback);
-    }
-    /**
      * see also {@link net.gdface.facelog.IFaceLog#getFeaturesByPersonIdAndSdkVersion(int,java.lang.String)}
      */
     public ListenableFuture<List<String>> getFeaturesByPersonIdAndSdkVersion(int personId,
@@ -1689,20 +1667,20 @@ public class IFaceLogThriftClientAsync {
     /**
      * see also {@link net.gdface.facelog.IFaceLog#getFeaturesPermittedOnDevice(int,boolean,java.lang.String,java.util.List,java.lang.Long)}
      */
-    public ListenableFuture<List<FeatureBean>> getFeaturesPermittedOnDevice(int deviceId,
+    public ListenableFuture<List<String>> getFeaturesPermittedOnDevice(int deviceId,
         boolean ignoreSchedule,
         String sdkVersion,
         List<String> excludeFeatureIds,
         Long timestamp){
-        MethodCallback<List<FeatureBean>,List<net.gdface.facelog.client.thrift.FeatureBean>> nativeCallback = 
-            new MethodCallback<List<FeatureBean>,List<net.gdface.facelog.client.thrift.FeatureBean>>(
-                new Function<List<net.gdface.facelog.client.thrift.FeatureBean>,List<FeatureBean>>() {
+        MethodCallback<List<String>,List<String>> nativeCallback = 
+            new MethodCallback<List<String>,List<String>>(
+                new Function<List<String>,List<String>>() {
                         @Override
-                        public List<FeatureBean> apply(List<net.gdface.facelog.client.thrift.FeatureBean> input) {
+                        public List<String> apply(List<String> input) {
                             return TypeTransformer.getInstance().to(
                     input,
-                    net.gdface.facelog.client.thrift.FeatureBean.class,
-                    FeatureBean.class);
+                    String.class,
+                    String.class);
                 }});
         nativeCallback.service.getFeaturesPermittedOnDevice(
                 deviceId,
@@ -1720,7 +1698,7 @@ public class IFaceLogThriftClientAsync {
         String sdkVersion,
         List<String> excludeFeatureIds,
         Long timestamp,
-        FutureCallback<List<FeatureBean>>callback){
+        FutureCallback<List<String>>callback){
         factory.addCallback(getFeaturesPermittedOnDevice(deviceId,ignoreSchedule,sdkVersion,excludeFeatureIds,timestamp), callback);
     }
     /**
@@ -2145,6 +2123,40 @@ public class IFaceLogThriftClientAsync {
     public void getPersonsOfGroup(int personGroupId,
         FutureCallback<List<Integer>>callback){
         factory.addCallback(getPersonsOfGroup(personGroupId), callback);
+    }
+    /**
+     * see also {@link net.gdface.facelog.IFaceLog#getPersonsPermittedOnDevice(int,boolean,java.util.List,java.lang.Long)}
+     */
+    public ListenableFuture<List<Integer>> getPersonsPermittedOnDevice(int deviceId,
+        boolean ignoreSchedule,
+        List<Integer> excludePersonIds,
+        Long timestamp){
+        MethodCallback<List<Integer>,List<Integer>> nativeCallback = 
+            new MethodCallback<List<Integer>,List<Integer>>(
+                new Function<List<Integer>,List<Integer>>() {
+                        @Override
+                        public List<Integer> apply(List<Integer> input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    Integer.class,
+                    Integer.class);
+                }});
+        nativeCallback.service.getPersonsPermittedOnDevice(
+                deviceId,
+            ignoreSchedule,
+            TypeTransformer.getInstance().to(
+                    excludePersonIds,
+                    Integer.class,
+                    Integer.class),
+            timestamp,nativeCallback);
+        return nativeCallback.feature;
+    }
+    public void getPersonsPermittedOnDevice(int deviceId,
+        boolean ignoreSchedule,
+        List<Integer> excludePersonIds,
+        Long timestamp,
+        FutureCallback<List<Integer>>callback){
+        factory.addCallback(getPersonsPermittedOnDevice(deviceId,ignoreSchedule,excludePersonIds,timestamp), callback);
     }
     /**
      * see also {@link net.gdface.facelog.IFaceLog#getProperties(java.lang.String,net.gdface.facelog.Token)}

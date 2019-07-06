@@ -342,10 +342,12 @@ public class DaoManagement extends BaseDao implements ServiceConstant,Constant{
 	 * 返回在指定设备上允许通行的所有人员记录<br>
 	 * @param deviceId 设备ID
 	 * @param ignoreSchedule 是否忽略时间过滤器(fl_permit.schedule字段)的限制
+	 * @param excludePersonIds 要排除的人员记录id,可为{@code null}
+	 * @param timestamp 不为{@code null}时返回大于指定时间戳的所有fl_feature记录
 	 * @return 返回的用户对象列表中，过滤所有有效期失效的用户<br>
 	 */
 	protected Set<PersonBean> 
-	daoGetPersonsPermittedOnDevice(int deviceId, boolean ignoreSchedule) {
+	daoGetPersonsPermittedOnDevice(int deviceId, boolean ignoreSchedule, List<Integer> excludePersonIds, final Long timestamp) {
 			DeviceBean deviceBean = daoGetDeviceChecked(deviceId);
 			Set<PersonGroupBean> permittedGroups = Sets.newHashSet();
 			DateTimeJsonFilter shedule = new DateTimeJsonFilter();
@@ -359,13 +361,16 @@ public class DaoManagement extends BaseDao implements ServiceConstant,Constant{
 			for(PersonGroupBean group : permittedGroups){
 				persons.addAll(daoGetPersonsOfGroup(group.getId()));
 			}
-			// 过滤所有有效期失效的用户
+			final Set<Integer> excludeIds = Sets.newHashSet(MoreObjects.firstNonNull(excludePersonIds, Collections.<Integer>emptySet()));
+
 			return Sets.filter(persons, 
 					new Predicate<PersonBean>() {		
 						@Override
 						public boolean apply(PersonBean input) {
 							Date expiryDate = input.getExpiryDate();
-							return null== expiryDate ? true : expiryDate.after(date);
+							return ! excludeIds.contains(input.getId()) /** 过滤所有有效期失效的用户 */
+									&& (timestamp == null  || input.getUpdateTime().getTime() > timestamp) 
+									&& (null== expiryDate ? true : expiryDate.after(date));
 						}
 			});
 	}
@@ -384,7 +389,7 @@ public class DaoManagement extends BaseDao implements ServiceConstant,Constant{
 			checkArgument(!Strings.isNullOrEmpty(sdkVersion),"sdkVersion is null or empty");
 			
 			Set<FeatureBean> features = Sets.newHashSet();
-			for(PersonBean person:daoGetPersonsPermittedOnDevice(deviceId, ignoreSchedule)){
+			for(PersonBean person:daoGetPersonsPermittedOnDevice(deviceId, ignoreSchedule, null, null)){
 				features.addAll(daoGetFeaturesByPersonIdAndSdkVersion(person.getId(),sdkVersion));
 			}
 			return Sets.filter(features,new Predicate<FeatureBean>() {

@@ -17,10 +17,10 @@ import com.google.common.base.Functions;
 import com.google.common.base.Predicates;
 import com.google.common.base.Strings;
 import com.google.common.base.Throwables;
+import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.DeviceGroupBean;
 import net.gdface.facelog.db.FaceBean;
@@ -223,27 +223,10 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		}
 	}
 	@Override
-	public List<String> getFeaturesByPersonId(int personId) {
+	public List<Integer> getPersonsPermittedOnDevice(int deviceId,boolean ignoreSchedule,List<Integer> excludePersonIds, Long timestamp) {
 		try{
-			return dm.daoToPrimaryKeyListFromFeatures(dm.daoGetFeatureBeansByPersonIdOnPerson(personId));
-		} catch (RuntimeException e) {
-			throw wrapServiceRuntimeException(e);
-		}
-	}
-	@Override
-	public List<String> getFeaturesByPersonIdAndSdkVersion(int personId,String sdkVersion) {
-		try{
-			return dm.daoToPrimaryKeyListFromFeatures(dm.daoGetFeaturesByPersonIdAndSdkVersion(personId,sdkVersion));			
-		} catch (RuntimeException e) {
-			throw wrapServiceRuntimeException(e);
-		}
-	}
-
-	@Override
-	public List<FeatureBean> getFeaturesPermittedOnDevice(int deviceId,boolean ignoreSchedule, String sdkVersion,List<String> excludeFeatureIds, Long timestamp) {
-		try{
-			Set<FeatureBean> features = dm.daoGetFeaturesPermittedOnDevice(deviceId, ignoreSchedule, sdkVersion, excludeFeatureIds, null);
-			return Lists.newArrayList(features);
+			Set<PersonBean> features = dm.daoGetPersonsPermittedOnDevice(deviceId, ignoreSchedule,  excludePersonIds, timestamp);
+			return Lists.newArrayList(Collections2.transform(features, dm.daoCastPersonToPk));
 		} catch (RuntimeException e) {
 			throw wrapServiceRuntimeException(e);
 		}
@@ -936,9 +919,24 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 	@Override
 	public List<String> getFeaturesOfPerson(int personId){
 		try{			
-			return Lists.transform(
-					dm.daoGetFeatureBeansByPersonIdOnPerson(personId),
-					dm.daoCastFeatureToPk); 
+			return dm.daoToPrimaryKeyListFromFeatures(dm.daoGetFeatureBeansByPersonIdOnPerson(personId));
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
+	}
+	@Override
+	public List<String> getFeaturesByPersonIdAndSdkVersion(int personId,String sdkVersion) {
+		try{
+			return dm.daoToPrimaryKeyListFromFeatures(dm.daoGetFeaturesByPersonIdAndSdkVersion(personId,sdkVersion));			
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
+	}
+	@Override
+	public List<String> getFeaturesPermittedOnDevice(int deviceId,boolean ignoreSchedule, String sdkVersion,List<String> excludeFeatureIds, Long timestamp) {
+		try{
+			Set<FeatureBean> features = dm.daoGetFeaturesPermittedOnDevice(deviceId, ignoreSchedule, sdkVersion, excludeFeatureIds, timestamp);
+			return dm.daoToPrimaryKeyListFromFeatures(Lists.newArrayList(features));
 		} catch (RuntimeException e) {
 			throw wrapServiceRuntimeException(e);
 		}

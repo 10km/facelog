@@ -68,32 +68,15 @@ public interface IFaceLog{
 	 * @return 没有找到匹配的记录则返回{@code null}
 	 */
 	public PersonBean getPersonByMobilePhone(String mobilePhone);
-
 	/**
-	 * 返回 persionId 关联的所有人脸特征记录
-	 * @param personId 人员id(fl_person.id)
-	 * @return 返回 fl_feature.md5  列表
-	 */
-	public List<String> getFeaturesByPersonId(int personId);
-	
-	/**
-	 * 返回 persionId 关联的指定SDK的人脸特征记录
-	 * @param personId 人员id(fl_person.id)
-	 * @param sdkVersion 算法(SDK)版本号
-	 * @return 返回 fl_feature.md5  列表
-	 */
-	public List<String> getFeaturesByPersonIdAndSdkVersion(int personId, String sdkVersion);
-	/**
-	 * 返回在指定设备上允许通行的所有特征记录<br>
-	 * 此方法主要设计用于不能通过长连接侦听redis频道的设备(如人脸锁)。
+	 * 返回在指定设备上允许通行的所有人员记录<br>
 	 * @param deviceId 设备ID
 	 * @param ignoreSchedule 是否忽略时间过滤器(fl_permit.schedule字段)的限制
-	 * @param sdkVersion 特征版本号
-	 * @param excludeFeatureIds 要排除的特征记录id(MD5) ,可为{@code null}
+	 * @param excludePersonIds 要排除的人员记录id,可为{@code null}
 	 * @param timestamp 不为{@code null}时返回大于指定时间戳的所有fl_feature记录
-	 * @return 返回 fl_feature.md5  列表
+	 * @return 返回的用户对象列表中，过滤所有有效期失效的用户<br>
 	 */
-	public List<FeatureBean> getFeaturesPermittedOnDevice(int deviceId, boolean ignoreSchedule, String sdkVersion, List<String> excludeFeatureIds, Long timestamp);
+	public List<Integer> getPersonsPermittedOnDevice(int deviceId, boolean ignoreSchedule, List<Integer> excludePersonIds, Long timestamp);
 
 	/**
 	 * 删除personId指定的人员(person)记录及关联的所有记录
@@ -621,6 +604,27 @@ public interface IFaceLog{
 	 * @return
 	 */
 	public List<String> getFeaturesOfPerson(int personId);
+
+	/**
+	 * 返回 persionId 关联的指定SDK的人脸特征记录
+	 * @param personId 人员id(fl_person.id)
+	 * @param sdkVersion 算法(SDK)版本号
+	 * @return 返回 fl_feature.md5  列表
+	 */
+	public List<String> getFeaturesByPersonIdAndSdkVersion(int personId, String sdkVersion);
+
+	/**
+	 * 返回在指定设备上允许通行的所有特征记录<br>
+	 * 此方法主要设计用于不能通过长连接侦听redis频道的设备(如人脸锁)。
+	 * @param deviceId 设备ID
+	 * @param ignoreSchedule 是否忽略时间过滤器(fl_permit.schedule字段)的限制
+	 * @param sdkVersion 特征版本号
+	 * @param excludeFeatureIds 要排除的特征记录id(MD5) ,可为{@code null}
+	 * @param timestamp 不为{@code null}时返回大于指定时间戳的所有fl_feature记录
+	 * @return 返回 fl_feature.md5  列表
+	 */
+	public List<String> getFeaturesPermittedOnDevice(int deviceId, boolean ignoreSchedule, String sdkVersion, List<String> excludeFeatureIds, Long timestamp);
+
 	/**
 	 * 根据MD5校验码返回人脸特征数据
 	 * @param md5

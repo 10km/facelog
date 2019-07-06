@@ -906,22 +906,6 @@ IFaceLog_getFeatures_presult::~IFaceLog_getFeatures_presult() throw() {
 }
 
 
-IFaceLog_getFeaturesByPersonId_args::~IFaceLog_getFeaturesByPersonId_args() throw() {
-}
-
-
-IFaceLog_getFeaturesByPersonId_pargs::~IFaceLog_getFeaturesByPersonId_pargs() throw() {
-}
-
-
-IFaceLog_getFeaturesByPersonId_result::~IFaceLog_getFeaturesByPersonId_result() throw() {
-}
-
-
-IFaceLog_getFeaturesByPersonId_presult::~IFaceLog_getFeaturesByPersonId_presult() throw() {
-}
-
-
 IFaceLog_getFeaturesByPersonIdAndSdkVersion_args::~IFaceLog_getFeaturesByPersonIdAndSdkVersion_args() throw() {
 }
 
@@ -1255,6 +1239,22 @@ IFaceLog_getPersonsOfGroup_result::~IFaceLog_getPersonsOfGroup_result() throw() 
 
 
 IFaceLog_getPersonsOfGroup_presult::~IFaceLog_getPersonsOfGroup_presult() throw() {
+}
+
+
+IFaceLog_getPersonsPermittedOnDevice_args::~IFaceLog_getPersonsPermittedOnDevice_args() throw() {
+}
+
+
+IFaceLog_getPersonsPermittedOnDevice_pargs::~IFaceLog_getPersonsPermittedOnDevice_pargs() throw() {
+}
+
+
+IFaceLog_getPersonsPermittedOnDevice_result::~IFaceLog_getPersonsPermittedOnDevice_result() throw() {
+}
+
+
+IFaceLog_getPersonsPermittedOnDevice_presult::~IFaceLog_getPersonsPermittedOnDevice_presult() throw() {
 }
 
 

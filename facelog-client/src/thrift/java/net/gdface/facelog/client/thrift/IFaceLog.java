@@ -528,14 +528,6 @@ public interface IFaceLog
             @ThriftField(value=1, name="md5", requiredness=Requiredness.OPTIONAL) final List<String> md5
         );
 
-        @ThriftMethod(value = "getFeaturesByPersonId",
-                      exception = {
-                          @ThriftException(type=ServiceRuntimeException.class, id=1)
-                      })
-        ListenableFuture<List<String>> getFeaturesByPersonId(
-            @ThriftField(value=1, name="personId", requiredness=Requiredness.REQUIRED) final int personId
-        );
-
         @ThriftMethod(value = "getFeaturesByPersonIdAndSdkVersion",
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
@@ -557,7 +549,7 @@ public interface IFaceLog
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
-        ListenableFuture<List<FeatureBean>> getFeaturesPermittedOnDevice(
+        ListenableFuture<List<String>> getFeaturesPermittedOnDevice(
             @ThriftField(value=1, name="deviceId", requiredness=Requiredness.REQUIRED) final int deviceId,
             @ThriftField(value=2, name="ignoreSchedule", requiredness=Requiredness.REQUIRED) final boolean ignoreSchedule,
             @ThriftField(value=3, name="sdkVersion", requiredness=Requiredness.OPTIONAL) final String sdkVersion,
@@ -712,6 +704,17 @@ public interface IFaceLog
                       })
         ListenableFuture<List<Integer>> getPersonsOfGroup(
             @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.REQUIRED) final int personGroupId
+        );
+
+        @ThriftMethod(value = "getPersonsPermittedOnDevice",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1)
+                      })
+        ListenableFuture<List<Integer>> getPersonsPermittedOnDevice(
+            @ThriftField(value=1, name="deviceId", requiredness=Requiredness.REQUIRED) final int deviceId,
+            @ThriftField(value=2, name="ignoreSchedule", requiredness=Requiredness.REQUIRED) final boolean ignoreSchedule,
+            @ThriftField(value=3, name="excludePersonIds", requiredness=Requiredness.OPTIONAL) final List<Integer> excludePersonIds,
+            @ThriftField(value=4, name="timestamp", requiredness=Requiredness.OPTIONAL) final Long timestamp
         );
 
         @ThriftMethod(value = "getProperties",
@@ -1947,14 +1950,6 @@ public interface IFaceLog
         @ThriftField(value=1, name="md5", requiredness=Requiredness.OPTIONAL) final List<String> md5
     ) throws ServiceRuntimeException;
 
-    @ThriftMethod(value = "getFeaturesByPersonId",
-                  exception = {
-                      @ThriftException(type=ServiceRuntimeException.class, id=1)
-                  })
-    List<String> getFeaturesByPersonId(
-        @ThriftField(value=1, name="personId", requiredness=Requiredness.REQUIRED) final int personId
-    ) throws ServiceRuntimeException;
-
     @ThriftMethod(value = "getFeaturesByPersonIdAndSdkVersion",
                   exception = {
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
@@ -1976,7 +1971,7 @@ public interface IFaceLog
                   exception = {
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
-    List<FeatureBean> getFeaturesPermittedOnDevice(
+    List<String> getFeaturesPermittedOnDevice(
         @ThriftField(value=1, name="deviceId", requiredness=Requiredness.REQUIRED) final int deviceId,
         @ThriftField(value=2, name="ignoreSchedule", requiredness=Requiredness.REQUIRED) final boolean ignoreSchedule,
         @ThriftField(value=3, name="sdkVersion", requiredness=Requiredness.OPTIONAL) final String sdkVersion,
@@ -2131,6 +2126,17 @@ public interface IFaceLog
                   })
     List<Integer> getPersonsOfGroup(
         @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.REQUIRED) final int personGroupId
+    ) throws ServiceRuntimeException;
+
+    @ThriftMethod(value = "getPersonsPermittedOnDevice",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1)
+                  })
+    List<Integer> getPersonsPermittedOnDevice(
+        @ThriftField(value=1, name="deviceId", requiredness=Requiredness.REQUIRED) final int deviceId,
+        @ThriftField(value=2, name="ignoreSchedule", requiredness=Requiredness.REQUIRED) final boolean ignoreSchedule,
+        @ThriftField(value=3, name="excludePersonIds", requiredness=Requiredness.OPTIONAL) final List<Integer> excludePersonIds,
+        @ThriftField(value=4, name="timestamp", requiredness=Requiredness.OPTIONAL) final Long timestamp
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "getProperties",

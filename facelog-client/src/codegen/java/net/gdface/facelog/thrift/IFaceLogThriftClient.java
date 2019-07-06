@@ -1299,26 +1299,6 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
-    public List<String> getFeaturesByPersonId(int personId) 
-        {
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
-        try{
-            return TypeTransformer.getInstance().to(
-                    instance.getFeaturesByPersonId(personId),
-                    String.class,
-                    String.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
-        }
-        finally{
-            factory.releaseInstance(instance);
-        }
-    }
-    @Override
     public List<String> getFeaturesByPersonIdAndSdkVersion(int personId,
         String sdkVersion) 
         {
@@ -1361,7 +1341,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
-    public List<FeatureBean> getFeaturesPermittedOnDevice(int deviceId,
+    public List<String> getFeaturesPermittedOnDevice(int deviceId,
         boolean ignoreSchedule,
         String sdkVersion,
         List<String> excludeFeatureIds,
@@ -1378,8 +1358,8 @@ public class IFaceLogThriftClient implements IFaceLog {
                     String.class,
                     String.class),
                 timestamp),
-                    net.gdface.facelog.client.thrift.FeatureBean.class,
-                    FeatureBean.class);
+                    String.class,
+                    String.class);
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
@@ -1757,6 +1737,35 @@ public class IFaceLogThriftClient implements IFaceLog {
         try{
             return TypeTransformer.getInstance().to(
                     instance.getPersonsOfGroup(personGroupId),
+                    Integer.class,
+                    Integer.class);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch(RuntimeTApplicationException e){
+            return net.gdface.thrift.ThriftUtils.returnNull(e);
+        }
+        finally{
+            factory.releaseInstance(instance);
+        }
+    }
+    @Override
+    public List<Integer> getPersonsPermittedOnDevice(int deviceId,
+        boolean ignoreSchedule,
+        List<Integer> excludePersonIds,
+        Long timestamp) 
+        {
+        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        try{
+            return TypeTransformer.getInstance().to(
+                    instance.getPersonsPermittedOnDevice(deviceId,
+                ignoreSchedule,
+                TypeTransformer.getInstance().to(
+                    excludePersonIds,
+                    Integer.class,
+                    Integer.class),
+                timestamp),
                     Integer.class,
                     Integer.class);
         }

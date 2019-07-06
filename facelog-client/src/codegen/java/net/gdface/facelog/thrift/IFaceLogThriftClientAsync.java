@@ -1222,18 +1222,6 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(getFeatures(md5), callback);
     }
     /**
-     * see also {@link net.gdface.facelog.IFaceLog#getFeaturesByPersonId(int)}
-     */
-    public ListenableFuture<List<String>> getFeaturesByPersonId(int personId){        
-        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<List<String>> future = async.getFeaturesByPersonId(personId);
-        return factory.wrap(async,future);
-    }
-    public void getFeaturesByPersonId(int personId,
-        FutureCallback<List<String>>callback){
-        factory.addCallback(getFeaturesByPersonId(personId), callback);
-    }
-    /**
      * see also {@link net.gdface.facelog.IFaceLog#getFeaturesByPersonIdAndSdkVersion(int,java.lang.String)}
      */
     public ListenableFuture<List<String>> getFeaturesByPersonIdAndSdkVersion(int personId,
@@ -1263,30 +1251,20 @@ public class IFaceLogThriftClientAsync {
     /**
      * see also {@link net.gdface.facelog.IFaceLog#getFeaturesPermittedOnDevice(int,boolean,java.lang.String,java.util.List,java.lang.Long)}
      */
-    public ListenableFuture<List<FeatureBean>> getFeaturesPermittedOnDevice(int deviceId,
+    public ListenableFuture<List<String>> getFeaturesPermittedOnDevice(int deviceId,
         boolean ignoreSchedule,
         String sdkVersion,
         List<String> excludeFeatureIds,
         Long timestamp){        
         net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
-        ListenableFuture<List<FeatureBean>> future = Futures.transform(
-            async.getFeaturesPermittedOnDevice(deviceId,
+        ListenableFuture<List<String>> future = async.getFeaturesPermittedOnDevice(deviceId,
             ignoreSchedule,
             sdkVersion,
             TypeTransformer.getInstance().to(
                     excludeFeatureIds,
                     String.class,
                     String.class),
-            timestamp),
-            new Function<List<net.gdface.facelog.client.thrift.FeatureBean>,List<FeatureBean>>(){
-                @Override
-                public List<FeatureBean> apply(List<net.gdface.facelog.client.thrift.FeatureBean> input) {
-                    return TypeTransformer.getInstance().to(
-                    input,
-                    net.gdface.facelog.client.thrift.FeatureBean.class,
-                    FeatureBean.class);
-                }
-            });
+            timestamp);
         return factory.wrap(async,future);
     }
     public void getFeaturesPermittedOnDevice(int deviceId,
@@ -1294,7 +1272,7 @@ public class IFaceLogThriftClientAsync {
         String sdkVersion,
         List<String> excludeFeatureIds,
         Long timestamp,
-        FutureCallback<List<FeatureBean>>callback){
+        FutureCallback<List<String>>callback){
         factory.addCallback(getFeaturesPermittedOnDevice(deviceId,ignoreSchedule,sdkVersion,excludeFeatureIds,timestamp), callback);
     }
     /**
@@ -1669,6 +1647,30 @@ public class IFaceLogThriftClientAsync {
     public void getPersonsOfGroup(int personGroupId,
         FutureCallback<List<Integer>>callback){
         factory.addCallback(getPersonsOfGroup(personGroupId), callback);
+    }
+    /**
+     * see also {@link net.gdface.facelog.IFaceLog#getPersonsPermittedOnDevice(int,boolean,java.util.List,java.lang.Long)}
+     */
+    public ListenableFuture<List<Integer>> getPersonsPermittedOnDevice(int deviceId,
+        boolean ignoreSchedule,
+        List<Integer> excludePersonIds,
+        Long timestamp){        
+        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
+        ListenableFuture<List<Integer>> future = async.getPersonsPermittedOnDevice(deviceId,
+            ignoreSchedule,
+            TypeTransformer.getInstance().to(
+                    excludePersonIds,
+                    Integer.class,
+                    Integer.class),
+            timestamp);
+        return factory.wrap(async,future);
+    }
+    public void getPersonsPermittedOnDevice(int deviceId,
+        boolean ignoreSchedule,
+        List<Integer> excludePersonIds,
+        Long timestamp,
+        FutureCallback<List<Integer>>callback){
+        factory.addCallback(getPersonsPermittedOnDevice(deviceId,ignoreSchedule,excludePersonIds,timestamp), callback);
     }
     /**
      * see also {@link net.gdface.facelog.IFaceLog#getProperties(java.lang.String,net.gdface.facelog.Token)}

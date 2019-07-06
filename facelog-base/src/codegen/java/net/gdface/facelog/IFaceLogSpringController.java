@@ -1424,27 +1424,6 @@ public class IFaceLogSpringController {
     }
     // port-57
     /**
-     * 返回 persionId 关联的所有人脸特征记录
-     * @param personId 人员id(fl_person.id)
-     * @return 返回 fl_feature.md5  列表
-     */
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/getFeaturesByPersonId", method = RequestMethod.POST)
-    @ApiOperation(value = "返回 persionId 关联的所有人脸特征记录",httpMethod="POST")
-    public Response getFeaturesByPersonId( @RequestBody GetFeaturesByPersonIdArgs args) 
-    {
-            Response response = responseFactory.newIFaceLogResponse();
-            try{
-                response.onComplete(delegate().getFeaturesByPersonId(args.personId));
-            }
-            catch(Exception e){
-                logger.error(e.getMessage(),e);
-                response.onError(e);
-            }
-            return response;
-    }
-    // port-58
-    /**
      * 返回 persionId 关联的指定SDK的人脸特征记录
      * @param personId 人员id(fl_person.id)
      * @param sdkVersion 算法(SDK)版本号
@@ -1465,7 +1444,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-59
+    // port-58
     /**
      * 返回指定人员{@code personId}关联的所有特征<br>
      * @param personId
@@ -1486,7 +1465,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-60
+    // port-59
     /**
      * 返回在指定设备上允许通行的所有特征记录<br>
      * 此方法主要设计用于不能通过长连接侦听redis频道的设备(如人脸锁)。
@@ -1513,7 +1492,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-61
+    // port-60
     /**
      * 获取人员组通行权限<br>
      * 返回{@code personGroupId}指定的人员组在{@code deviceId}设备上是否允许通行,
@@ -1544,7 +1523,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-62
+    // port-61
     /**
      * 获取人员组通行权限<br>
      * 返回{@code personGroupId}指定的人员组在{@code deviceGroupId}指定的设备组上是否允许通行,
@@ -1574,7 +1553,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-63
+    // port-62
     /**
      * 参见 {@link #getGroupPermit(int, int)}
      * @param deviceId
@@ -1596,7 +1575,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-64
+    // port-63
     /**
      * 根据图像的MD5校验码返回图像记录
      * @param imageMD5
@@ -1617,7 +1596,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-65
+    // port-64
     /**
      * 根据图像的MD5校验码返回图像数据
      * @param imageMD5
@@ -1638,7 +1617,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-66
+    // port-65
     /**
      * 返回featureMd5的人脸特征记录关联的所有图像记录id(MD5)
      * @param featureMd5 人脸特征id(MD5)
@@ -1659,7 +1638,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-67
+    // port-66
     /**
      * 返回 persionId 关联的所有日志记录
      * @param personId fl_person.id
@@ -1680,7 +1659,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-68
+    // port-67
     /**
      * 返回personId指定的人员记录
      * @param personId
@@ -1701,7 +1680,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-69
+    // port-68
     /**
      * 根据登记的手机号码返回人员记录
      * @param mobilePhone
@@ -1722,7 +1701,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-70
+    // port-69
     /**
      * 根据证件号码返回人员记录
      * @param papersNum
@@ -1743,7 +1722,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-71
+    // port-70
     /**
      * 根据人员组id返回数据库记录
      * @param personGroupId
@@ -1765,7 +1744,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-72
+    // port-71
     /**
      * 返回人员组id列表指定的数据库记录
      * @param groupIdList
@@ -1787,7 +1766,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-73
+    // port-72
     /**
      * 返回({@code personId})指定的人员所属所有人员组<br>
      * @param personId
@@ -1809,7 +1788,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-74
+    // port-73
     /**
      * 从permit表返回允许在{@code deviceGroupId}指定的设备组通过的所有人员组{@link PersonGroupBean}对象的id<br>
      * 不排序,不包含重复id,本方法不会对{@link PersonGroupBean}的父结点向上回溯
@@ -1832,7 +1811,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-75
+    // port-74
     /**
      * 获取人员通行权限<br>
      * 返回{@code personId}指定的人员在{@code deviceId}设备上是否允许通行
@@ -1857,7 +1836,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-76
+    // port-75
     /**
      * 参见 {@link #getPersonPermit(int, int) }
      * @param deviceId
@@ -1879,7 +1858,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-77
+    // port-76
     /**
      * 返回 list 指定的人员记录
      * @param idList 人员id列表
@@ -1900,7 +1879,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-78
+    // port-77
     /**
      * 返回{@code deviceGroupId}指定的人员组下属的所有人员记录<br>
      * 如果没有下属人员记录则返回空表
@@ -1917,6 +1896,30 @@ public class IFaceLogSpringController {
             Response response = responseFactory.newIFaceLogResponse();
             try{
                 response.onComplete(delegate().getPersonsOfGroup(args.personGroupId));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // port-78
+    /**
+     * 返回在指定设备上允许通行的所有人员记录<br>
+     * @param deviceId 设备ID
+     * @param ignoreSchedule 是否忽略时间过滤器(fl_permit.schedule字段)的限制
+     * @param excludePersonIds 要排除的人员记录id,可为{@code null}
+     * @param timestamp 不为{@code null}时返回大于指定时间戳的所有fl_feature记录
+     * @return 返回的用户对象列表中，过滤所有有效期失效的用户<br>
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/getPersonsPermittedOnDevice", method = RequestMethod.POST)
+    @ApiOperation(value = "返回在指定设备上允许通行的所有人员记录<br>",httpMethod="POST")
+    public Response getPersonsPermittedOnDevice( @RequestBody GetPersonsPermittedOnDeviceArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().getPersonsPermittedOnDevice(args.deviceId,args.ignoreSchedule,args.excludePersonIds,args.timestamp));
             }
             catch(Exception e){
                 logger.error(e.getMessage(),e);
@@ -4404,14 +4407,6 @@ public class IFaceLogSpringController {
     }
     /**
      * argClass-57<br>
-     * wrap arguments for method {@link #getFeaturesByPersonId(GetFeaturesByPersonIdArgs)}
-     */
-    public static class GetFeaturesByPersonIdArgs{
-        @ApiModelProperty(value ="人员id(fl_person.id)" ,required=true ,dataType="int")
-        public int personId;
-    }
-    /**
-     * argClass-58<br>
      * wrap arguments for method {@link #getFeaturesByPersonIdAndSdkVersion(GetFeaturesByPersonIdAndSdkVersionArgs)}
      */
     public static class GetFeaturesByPersonIdAndSdkVersionArgs{
@@ -4421,7 +4416,7 @@ public class IFaceLogSpringController {
         public String sdkVersion;
     }
     /**
-     * argClass-59<br>
+     * argClass-58<br>
      * wrap arguments for method {@link #getFeaturesOfPerson(GetFeaturesOfPersonArgs)}
      */
     public static class GetFeaturesOfPersonArgs{
@@ -4429,7 +4424,7 @@ public class IFaceLogSpringController {
         public int personId;
     }
     /**
-     * argClass-60<br>
+     * argClass-59<br>
      * wrap arguments for method {@link #getFeaturesPermittedOnDevice(GetFeaturesPermittedOnDeviceArgs)}
      */
     public static class GetFeaturesPermittedOnDeviceArgs{
@@ -4445,7 +4440,7 @@ public class IFaceLogSpringController {
         public Long timestamp;
     }
     /**
-     * argClass-61<br>
+     * argClass-60<br>
      * wrap arguments for method {@link #getGroupPermit(GetGroupPermitArgs)}
      */
     public static class GetGroupPermitArgs{
@@ -4455,7 +4450,7 @@ public class IFaceLogSpringController {
         public int personGroupId;
     }
     /**
-     * argClass-62<br>
+     * argClass-61<br>
      * wrap arguments for method {@link #getGroupPermitOnDeviceGroup(GetGroupPermitOnDeviceGroupArgs)}
      */
     public static class GetGroupPermitOnDeviceGroupArgs{
@@ -4465,7 +4460,7 @@ public class IFaceLogSpringController {
         public int personGroupId;
     }
     /**
-     * argClass-63<br>
+     * argClass-62<br>
      * wrap arguments for method {@link #getGroupPermits(GetGroupPermitsArgs)}
      */
     public static class GetGroupPermitsArgs{
@@ -4475,7 +4470,7 @@ public class IFaceLogSpringController {
         public List<Integer> personGroupIdList;
     }
     /**
-     * argClass-64<br>
+     * argClass-63<br>
      * wrap arguments for method {@link #getImage(GetImageArgs)}
      */
     public static class GetImageArgs{
@@ -4483,7 +4478,7 @@ public class IFaceLogSpringController {
         public String imageMD5;
     }
     /**
-     * argClass-65<br>
+     * argClass-64<br>
      * wrap arguments for method {@link #getImageBytes(GetImageBytesArgs)}
      */
     public static class GetImageBytesArgs{
@@ -4491,7 +4486,7 @@ public class IFaceLogSpringController {
         public String imageMD5;
     }
     /**
-     * argClass-66<br>
+     * argClass-65<br>
      * wrap arguments for method {@link #getImagesAssociatedByFeature(GetImagesAssociatedByFeatureArgs)}
      */
     public static class GetImagesAssociatedByFeatureArgs{
@@ -4499,7 +4494,7 @@ public class IFaceLogSpringController {
         public String featureMd5;
     }
     /**
-     * argClass-67<br>
+     * argClass-66<br>
      * wrap arguments for method {@link #getLogBeansByPersonId(GetLogBeansByPersonIdArgs)}
      */
     public static class GetLogBeansByPersonIdArgs{
@@ -4507,7 +4502,7 @@ public class IFaceLogSpringController {
         public int personId;
     }
     /**
-     * argClass-68<br>
+     * argClass-67<br>
      * wrap arguments for method {@link #getPerson(GetPersonArgs)}
      */
     public static class GetPersonArgs{
@@ -4515,7 +4510,7 @@ public class IFaceLogSpringController {
         public int personId;
     }
     /**
-     * argClass-69<br>
+     * argClass-68<br>
      * wrap arguments for method {@link #getPersonByMobilePhone(GetPersonByMobilePhoneArgs)}
      */
     public static class GetPersonByMobilePhoneArgs{
@@ -4523,7 +4518,7 @@ public class IFaceLogSpringController {
         public String mobilePhone;
     }
     /**
-     * argClass-70<br>
+     * argClass-69<br>
      * wrap arguments for method {@link #getPersonByPapersNum(GetPersonByPapersNumArgs)}
      */
     public static class GetPersonByPapersNumArgs{
@@ -4531,7 +4526,7 @@ public class IFaceLogSpringController {
         public String papersNum;
     }
     /**
-     * argClass-71<br>
+     * argClass-70<br>
      * wrap arguments for method {@link #getPersonGroup(GetPersonGroupArgs)}
      */
     public static class GetPersonGroupArgs{
@@ -4539,7 +4534,7 @@ public class IFaceLogSpringController {
         public int personGroupId;
     }
     /**
-     * argClass-72<br>
+     * argClass-71<br>
      * wrap arguments for method {@link #getPersonGroups(GetPersonGroupsArgs)}
      */
     public static class GetPersonGroupsArgs{
@@ -4547,7 +4542,7 @@ public class IFaceLogSpringController {
         public List<Integer> groupIdList;
     }
     /**
-     * argClass-73<br>
+     * argClass-72<br>
      * wrap arguments for method {@link #getPersonGroupsBelongs(GetPersonGroupsBelongsArgs)}
      */
     public static class GetPersonGroupsBelongsArgs{
@@ -4555,7 +4550,7 @@ public class IFaceLogSpringController {
         public int personId;
     }
     /**
-     * argClass-74<br>
+     * argClass-73<br>
      * wrap arguments for method {@link #getPersonGroupsPermittedBy(GetPersonGroupsPermittedByArgs)}
      */
     public static class GetPersonGroupsPermittedByArgs{
@@ -4563,7 +4558,7 @@ public class IFaceLogSpringController {
         public int deviceGroupId;
     }
     /**
-     * argClass-75<br>
+     * argClass-74<br>
      * wrap arguments for method {@link #getPersonPermit(GetPersonPermitArgs)}
      */
     public static class GetPersonPermitArgs{
@@ -4573,7 +4568,7 @@ public class IFaceLogSpringController {
         public int personId;
     }
     /**
-     * argClass-76<br>
+     * argClass-75<br>
      * wrap arguments for method {@link #getPersonPermits(GetPersonPermitsArgs)}
      */
     public static class GetPersonPermitsArgs{
@@ -4583,7 +4578,7 @@ public class IFaceLogSpringController {
         public List<Integer> personIdList;
     }
     /**
-     * argClass-77<br>
+     * argClass-76<br>
      * wrap arguments for method {@link #getPersons(GetPersonsArgs)}
      */
     public static class GetPersonsArgs{
@@ -4591,12 +4586,26 @@ public class IFaceLogSpringController {
         public List<Integer> idList;
     }
     /**
-     * argClass-78<br>
+     * argClass-77<br>
      * wrap arguments for method {@link #getPersonsOfGroup(GetPersonsOfGroupArgs)}
      */
     public static class GetPersonsOfGroupArgs{
         @ApiModelProperty(value ="" ,required=true ,dataType="int")
         public int personGroupId;
+    }
+    /**
+     * argClass-78<br>
+     * wrap arguments for method {@link #getPersonsPermittedOnDevice(GetPersonsPermittedOnDeviceArgs)}
+     */
+    public static class GetPersonsPermittedOnDeviceArgs{
+        @ApiModelProperty(value ="设备ID" ,required=true ,dataType="int")
+        public int deviceId;
+        @ApiModelProperty(value ="是否忽略时间过滤器(fl_permit.schedule字段)的限制" ,required=true ,dataType="boolean")
+        public boolean ignoreSchedule;
+        @ApiModelProperty(value ="要排除的人员记录id,可为{@code null}" ,required=true ,dataType="List")
+        public List<Integer> excludePersonIds;
+        @ApiModelProperty(value ="不为{@code null}时返回大于指定时间戳的所有fl_feature记录" ,required=true ,dataType="Long")
+        public Long timestamp;
     }
     /**
      * argClass-79<br>

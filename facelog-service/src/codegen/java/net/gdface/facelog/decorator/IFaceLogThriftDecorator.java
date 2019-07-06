@@ -1337,25 +1337,6 @@ public class IFaceLogThriftDecorator {
         }
     }
     /**
-     * @see {@link net.gdface.facelog.IFaceLog#getFeaturesByPersonId(int)}
-     */
-    @ThriftMethod(value = "getFeaturesByPersonId" )
-    public List<String> getFeaturesByPersonId(int personId) 
-        throws ServiceRuntimeException{
-        try{
-            return TypeTransformer.getInstance().to(
-                    delegate().getFeaturesByPersonId(personId),
-                    String.class,
-                    String.class);
-        }
-        catch(ServiceRuntimeException e){
-            throw e;
-        }
-        catch(RuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-    }
-    /**
      * @see {@link net.gdface.facelog.IFaceLog#getFeaturesByPersonIdAndSdkVersion(int,java.lang.String)}
      */
     @ThriftMethod(value = "getFeaturesByPersonIdAndSdkVersion" )
@@ -1399,7 +1380,7 @@ public class IFaceLogThriftDecorator {
      * @see {@link net.gdface.facelog.IFaceLog#getFeaturesPermittedOnDevice(int,boolean,java.lang.String,java.util.List,java.lang.Long)}
      */
     @ThriftMethod(value = "getFeaturesPermittedOnDevice" )
-    public List<FeatureBean> getFeaturesPermittedOnDevice(int deviceId,
+    public List<String> getFeaturesPermittedOnDevice(int deviceId,
         boolean ignoreSchedule,
         String sdkVersion,
         List<String> excludeFeatureIds,
@@ -1415,8 +1396,8 @@ public class IFaceLogThriftDecorator {
                     String.class,
                     String.class),
                 timestamp),
-                    FeatureBean.class,
-                    FeatureBean.class);
+                    String.class,
+                    String.class);
         }
         catch(ServiceRuntimeException e){
             throw e;
@@ -1779,6 +1760,34 @@ public class IFaceLogThriftDecorator {
         try{
             return TypeTransformer.getInstance().to(
                     delegate().getPersonsOfGroup(personGroupId),
+                    Integer.class,
+                    Integer.class);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
+     * @see {@link net.gdface.facelog.IFaceLog#getPersonsPermittedOnDevice(int,boolean,java.util.List,java.lang.Long)}
+     */
+    @ThriftMethod(value = "getPersonsPermittedOnDevice" )
+    public List<Integer> getPersonsPermittedOnDevice(int deviceId,
+        boolean ignoreSchedule,
+        List<Integer> excludePersonIds,
+        Long timestamp) 
+        throws ServiceRuntimeException{
+        try{
+            return TypeTransformer.getInstance().to(
+                    delegate().getPersonsPermittedOnDevice(deviceId,
+                ignoreSchedule,
+                TypeTransformer.getInstance().to(
+                    excludePersonIds,
+                    Integer.class,
+                    Integer.class),
+                timestamp),
                     Integer.class,
                     Integer.class);
         }

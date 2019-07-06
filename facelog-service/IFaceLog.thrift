@@ -275,10 +275,9 @@ service IFaceLog {
   FeatureBean getFeature(1: optional string md5) throws (1: ServiceRuntimeException ex1);
   binary getFeatureBytes(1: optional string md5) throws (1: ServiceRuntimeException ex1);
   list<FeatureBean> getFeatures(1: optional list<string> md5) throws (1: ServiceRuntimeException ex1);
-  list<string> getFeaturesByPersonId(1: required i32 personId) throws (1: ServiceRuntimeException ex1);
   list<string> getFeaturesByPersonIdAndSdkVersion(1: required i32 personId, 2: optional string sdkVersion) throws (1: ServiceRuntimeException ex1);
   list<string> getFeaturesOfPerson(1: required i32 personId) throws (1: ServiceRuntimeException ex1);
-  list<FeatureBean> getFeaturesPermittedOnDevice(1: required i32 deviceId, 2: required bool ignoreSchedule, 3: optional string sdkVersion, 4: optional list<string> excludeFeatureIds, 5: optional i64 timestamp) throws (1: ServiceRuntimeException ex1);
+  list<string> getFeaturesPermittedOnDevice(1: required i32 deviceId, 2: required bool ignoreSchedule, 3: optional string sdkVersion, 4: optional list<string> excludeFeatureIds, 5: optional i64 timestamp) throws (1: ServiceRuntimeException ex1);
   PermitBean getGroupPermit(1: required i32 deviceId, 2: required i32 personGroupId) throws (1: ServiceRuntimeException ex1);
   PermitBean getGroupPermitOnDeviceGroup(1: required i32 deviceGroupId, 2: required i32 personGroupId) throws (1: ServiceRuntimeException ex1);
   list<PermitBean> getGroupPermits(1: required i32 deviceId, 2: optional list<i32> personGroupIdList) throws (1: ServiceRuntimeException ex1);
@@ -297,6 +296,7 @@ service IFaceLog {
   list<PermitBean> getPersonPermits(1: required i32 deviceId, 2: optional list<i32> personIdList) throws (1: ServiceRuntimeException ex1);
   list<PersonBean> getPersons(1: optional list<i32> idList) throws (1: ServiceRuntimeException ex1);
   list<i32> getPersonsOfGroup(1: required i32 personGroupId) throws (1: ServiceRuntimeException ex1);
+  list<i32> getPersonsPermittedOnDevice(1: required i32 deviceId, 2: required bool ignoreSchedule, 3: optional list<i32> excludePersonIds, 4: optional i64 timestamp) throws (1: ServiceRuntimeException ex1);
   map<string, string> getProperties(1: optional string prefix, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
   string getProperty(1: optional string key, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
   map<MQParam, string> getRedisParameters(1: optional Token token) throws (1: ServiceRuntimeException ex1);

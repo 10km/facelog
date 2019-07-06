@@ -74,10 +74,9 @@ public partial class IFaceLog {
     FeatureBean getFeature(string md5);
     byte[] getFeatureBytes(string md5);
     List<FeatureBean> getFeatures(List<string> md5);
-    List<string> getFeaturesByPersonId(int personId);
     List<string> getFeaturesByPersonIdAndSdkVersion(int personId, string sdkVersion);
     List<string> getFeaturesOfPerson(int personId);
-    List<FeatureBean> getFeaturesPermittedOnDevice(int deviceId, bool ignoreSchedule, string sdkVersion, List<string> excludeFeatureIds, long timestamp);
+    List<string> getFeaturesPermittedOnDevice(int deviceId, bool ignoreSchedule, string sdkVersion, List<string> excludeFeatureIds, long timestamp);
     PermitBean getGroupPermit(int deviceId, int personGroupId);
     PermitBean getGroupPermitOnDeviceGroup(int deviceGroupId, int personGroupId);
     List<PermitBean> getGroupPermits(int deviceId, List<int> personGroupIdList);
@@ -96,6 +95,7 @@ public partial class IFaceLog {
     List<PermitBean> getPersonPermits(int deviceId, List<int> personIdList);
     List<PersonBean> getPersons(List<int> idList);
     List<int> getPersonsOfGroup(int personGroupId);
+    List<int> getPersonsPermittedOnDevice(int deviceId, bool ignoreSchedule, List<int> excludePersonIds, long timestamp);
     Dictionary<string, string> getProperties(string prefix, Token token);
     string getProperty(string key, Token token);
     Dictionary<MQParam, string> getRedisParameters(Token token);
@@ -234,10 +234,9 @@ public partial class IFaceLog {
     Task<FeatureBean> getFeatureAsync(string md5);
     Task<byte[]> getFeatureBytesAsync(string md5);
     Task<List<FeatureBean>> getFeaturesAsync(List<string> md5);
-    Task<List<string>> getFeaturesByPersonIdAsync(int personId);
     Task<List<string>> getFeaturesByPersonIdAndSdkVersionAsync(int personId, string sdkVersion);
     Task<List<string>> getFeaturesOfPersonAsync(int personId);
-    Task<List<FeatureBean>> getFeaturesPermittedOnDeviceAsync(int deviceId, bool ignoreSchedule, string sdkVersion, List<string> excludeFeatureIds, long timestamp);
+    Task<List<string>> getFeaturesPermittedOnDeviceAsync(int deviceId, bool ignoreSchedule, string sdkVersion, List<string> excludeFeatureIds, long timestamp);
     Task<PermitBean> getGroupPermitAsync(int deviceId, int personGroupId);
     Task<PermitBean> getGroupPermitOnDeviceGroupAsync(int deviceGroupId, int personGroupId);
     Task<List<PermitBean>> getGroupPermitsAsync(int deviceId, List<int> personGroupIdList);
@@ -256,6 +255,7 @@ public partial class IFaceLog {
     Task<List<PermitBean>> getPersonPermitsAsync(int deviceId, List<int> personIdList);
     Task<List<PersonBean>> getPersonsAsync(List<int> idList);
     Task<List<int>> getPersonsOfGroupAsync(int personGroupId);
+    Task<List<int>> getPersonsPermittedOnDeviceAsync(int deviceId, bool ignoreSchedule, List<int> excludePersonIds, long timestamp);
     Task<Dictionary<string, string>> getPropertiesAsync(string prefix, Token token);
     Task<string> getPropertyAsync(string key, Token token);
     Task<Dictionary<MQParam, string>> getRedisParametersAsync(Token token);
@@ -450,14 +450,12 @@ public partial class IFaceLog {
     byte[] End_getFeatureBytes(IAsyncResult asyncResult);
     IAsyncResult Begin_getFeatures(AsyncCallback callback, object state, List<string> md5);
     List<FeatureBean> End_getFeatures(IAsyncResult asyncResult);
-    IAsyncResult Begin_getFeaturesByPersonId(AsyncCallback callback, object state, int personId);
-    List<string> End_getFeaturesByPersonId(IAsyncResult asyncResult);
     IAsyncResult Begin_getFeaturesByPersonIdAndSdkVersion(AsyncCallback callback, object state, int personId, string sdkVersion);
     List<string> End_getFeaturesByPersonIdAndSdkVersion(IAsyncResult asyncResult);
     IAsyncResult Begin_getFeaturesOfPerson(AsyncCallback callback, object state, int personId);
     List<string> End_getFeaturesOfPerson(IAsyncResult asyncResult);
     IAsyncResult Begin_getFeaturesPermittedOnDevice(AsyncCallback callback, object state, int deviceId, bool ignoreSchedule, string sdkVersion, List<string> excludeFeatureIds, long timestamp);
-    List<FeatureBean> End_getFeaturesPermittedOnDevice(IAsyncResult asyncResult);
+    List<string> End_getFeaturesPermittedOnDevice(IAsyncResult asyncResult);
     IAsyncResult Begin_getGroupPermit(AsyncCallback callback, object state, int deviceId, int personGroupId);
     PermitBean End_getGroupPermit(IAsyncResult asyncResult);
     IAsyncResult Begin_getGroupPermitOnDeviceGroup(AsyncCallback callback, object state, int deviceGroupId, int personGroupId);
@@ -494,6 +492,8 @@ public partial class IFaceLog {
     List<PersonBean> End_getPersons(IAsyncResult asyncResult);
     IAsyncResult Begin_getPersonsOfGroup(AsyncCallback callback, object state, int personGroupId);
     List<int> End_getPersonsOfGroup(IAsyncResult asyncResult);
+    IAsyncResult Begin_getPersonsPermittedOnDevice(AsyncCallback callback, object state, int deviceId, bool ignoreSchedule, List<int> excludePersonIds, long timestamp);
+    List<int> End_getPersonsPermittedOnDevice(IAsyncResult asyncResult);
     IAsyncResult Begin_getProperties(AsyncCallback callback, object state, string prefix, Token token);
     Dictionary<string, string> End_getProperties(IAsyncResult asyncResult);
     IAsyncResult Begin_getProperty(AsyncCallback callback, object state, string key, Token token);
@@ -4013,64 +4013,6 @@ public partial class IFaceLog {
     }
 
     
-    public IAsyncResult Begin_getFeaturesByPersonId(AsyncCallback callback, object state, int personId)
-    {
-      return send_getFeaturesByPersonId(callback, state, personId);
-    }
-
-    public List<string> End_getFeaturesByPersonId(IAsyncResult asyncResult)
-    {
-      oprot_.Transport.EndFlush(asyncResult);
-      return recv_getFeaturesByPersonId();
-    }
-
-    public async Task<List<string>> getFeaturesByPersonIdAsync(int personId)
-    {
-      List<string> retval;
-      retval = await Task.Run(() =>
-      {
-        return getFeaturesByPersonId(personId);
-      });
-      return retval;
-    }
-
-    public List<string> getFeaturesByPersonId(int personId)
-    {
-      var asyncResult = Begin_getFeaturesByPersonId(null, null, personId);
-      return End_getFeaturesByPersonId(asyncResult);
-
-    }
-    public IAsyncResult send_getFeaturesByPersonId(AsyncCallback callback, object state, int personId)
-    {
-      oprot_.WriteMessageBegin(new TMessage("getFeaturesByPersonId", TMessageType.Call, seqid_));
-      getFeaturesByPersonId_args args = new getFeaturesByPersonId_args();
-      args.PersonId = personId;
-      args.Write(oprot_);
-      oprot_.WriteMessageEnd();
-      return oprot_.Transport.BeginFlush(callback, state);
-    }
-
-    public List<string> recv_getFeaturesByPersonId()
-    {
-      TMessage msg = iprot_.ReadMessageBegin();
-      if (msg.Type == TMessageType.Exception) {
-        TApplicationException x = TApplicationException.Read(iprot_);
-        iprot_.ReadMessageEnd();
-        throw x;
-      }
-      getFeaturesByPersonId_result result = new getFeaturesByPersonId_result();
-      result.Read(iprot_);
-      iprot_.ReadMessageEnd();
-      if (result.Success != null) {
-        return result.Success;
-      }
-      if (result.Ex1 != null) {
-        throw result.Ex1;
-      }
-      throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "getFeaturesByPersonId failed: unknown result");
-    }
-
-    
     public IAsyncResult Begin_getFeaturesByPersonIdAndSdkVersion(AsyncCallback callback, object state, int personId, string sdkVersion)
     {
       return send_getFeaturesByPersonIdAndSdkVersion(callback, state, personId, sdkVersion);
@@ -4193,15 +4135,15 @@ public partial class IFaceLog {
       return send_getFeaturesPermittedOnDevice(callback, state, deviceId, ignoreSchedule, sdkVersion, excludeFeatureIds, timestamp);
     }
 
-    public List<FeatureBean> End_getFeaturesPermittedOnDevice(IAsyncResult asyncResult)
+    public List<string> End_getFeaturesPermittedOnDevice(IAsyncResult asyncResult)
     {
       oprot_.Transport.EndFlush(asyncResult);
       return recv_getFeaturesPermittedOnDevice();
     }
 
-    public async Task<List<FeatureBean>> getFeaturesPermittedOnDeviceAsync(int deviceId, bool ignoreSchedule, string sdkVersion, List<string> excludeFeatureIds, long timestamp)
+    public async Task<List<string>> getFeaturesPermittedOnDeviceAsync(int deviceId, bool ignoreSchedule, string sdkVersion, List<string> excludeFeatureIds, long timestamp)
     {
-      List<FeatureBean> retval;
+      List<string> retval;
       retval = await Task.Run(() =>
       {
         return getFeaturesPermittedOnDevice(deviceId, ignoreSchedule, sdkVersion, excludeFeatureIds, timestamp);
@@ -4209,7 +4151,7 @@ public partial class IFaceLog {
       return retval;
     }
 
-    public List<FeatureBean> getFeaturesPermittedOnDevice(int deviceId, bool ignoreSchedule, string sdkVersion, List<string> excludeFeatureIds, long timestamp)
+    public List<string> getFeaturesPermittedOnDevice(int deviceId, bool ignoreSchedule, string sdkVersion, List<string> excludeFeatureIds, long timestamp)
     {
       var asyncResult = Begin_getFeaturesPermittedOnDevice(null, null, deviceId, ignoreSchedule, sdkVersion, excludeFeatureIds, timestamp);
       return End_getFeaturesPermittedOnDevice(asyncResult);
@@ -4229,7 +4171,7 @@ public partial class IFaceLog {
       return oprot_.Transport.BeginFlush(callback, state);
     }
 
-    public List<FeatureBean> recv_getFeaturesPermittedOnDevice()
+    public List<string> recv_getFeaturesPermittedOnDevice()
     {
       TMessage msg = iprot_.ReadMessageBegin();
       if (msg.Type == TMessageType.Exception) {
@@ -5296,6 +5238,67 @@ public partial class IFaceLog {
         throw result.Ex1;
       }
       throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "getPersonsOfGroup failed: unknown result");
+    }
+
+    
+    public IAsyncResult Begin_getPersonsPermittedOnDevice(AsyncCallback callback, object state, int deviceId, bool ignoreSchedule, List<int> excludePersonIds, long timestamp)
+    {
+      return send_getPersonsPermittedOnDevice(callback, state, deviceId, ignoreSchedule, excludePersonIds, timestamp);
+    }
+
+    public List<int> End_getPersonsPermittedOnDevice(IAsyncResult asyncResult)
+    {
+      oprot_.Transport.EndFlush(asyncResult);
+      return recv_getPersonsPermittedOnDevice();
+    }
+
+    public async Task<List<int>> getPersonsPermittedOnDeviceAsync(int deviceId, bool ignoreSchedule, List<int> excludePersonIds, long timestamp)
+    {
+      List<int> retval;
+      retval = await Task.Run(() =>
+      {
+        return getPersonsPermittedOnDevice(deviceId, ignoreSchedule, excludePersonIds, timestamp);
+      });
+      return retval;
+    }
+
+    public List<int> getPersonsPermittedOnDevice(int deviceId, bool ignoreSchedule, List<int> excludePersonIds, long timestamp)
+    {
+      var asyncResult = Begin_getPersonsPermittedOnDevice(null, null, deviceId, ignoreSchedule, excludePersonIds, timestamp);
+      return End_getPersonsPermittedOnDevice(asyncResult);
+
+    }
+    public IAsyncResult send_getPersonsPermittedOnDevice(AsyncCallback callback, object state, int deviceId, bool ignoreSchedule, List<int> excludePersonIds, long timestamp)
+    {
+      oprot_.WriteMessageBegin(new TMessage("getPersonsPermittedOnDevice", TMessageType.Call, seqid_));
+      getPersonsPermittedOnDevice_args args = new getPersonsPermittedOnDevice_args();
+      args.DeviceId = deviceId;
+      args.IgnoreSchedule = ignoreSchedule;
+      args.ExcludePersonIds = excludePersonIds;
+      args.Timestamp = timestamp;
+      args.Write(oprot_);
+      oprot_.WriteMessageEnd();
+      return oprot_.Transport.BeginFlush(callback, state);
+    }
+
+    public List<int> recv_getPersonsPermittedOnDevice()
+    {
+      TMessage msg = iprot_.ReadMessageBegin();
+      if (msg.Type == TMessageType.Exception) {
+        TApplicationException x = TApplicationException.Read(iprot_);
+        iprot_.ReadMessageEnd();
+        throw x;
+      }
+      getPersonsPermittedOnDevice_result result = new getPersonsPermittedOnDevice_result();
+      result.Read(iprot_);
+      iprot_.ReadMessageEnd();
+      if (result.Success != null) {
+        return result.Success;
+      }
+      if (result.Ex1 != null) {
+        throw result.Ex1;
+      }
+      throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "getPersonsPermittedOnDevice failed: unknown result");
     }
 
     
@@ -9975,7 +9978,6 @@ public partial class IFaceLog {
       processMap_["getFeature"] = getFeature_ProcessAsync;
       processMap_["getFeatureBytes"] = getFeatureBytes_ProcessAsync;
       processMap_["getFeatures"] = getFeatures_ProcessAsync;
-      processMap_["getFeaturesByPersonId"] = getFeaturesByPersonId_ProcessAsync;
       processMap_["getFeaturesByPersonIdAndSdkVersion"] = getFeaturesByPersonIdAndSdkVersion_ProcessAsync;
       processMap_["getFeaturesOfPerson"] = getFeaturesOfPerson_ProcessAsync;
       processMap_["getFeaturesPermittedOnDevice"] = getFeaturesPermittedOnDevice_ProcessAsync;
@@ -9997,6 +9999,7 @@ public partial class IFaceLog {
       processMap_["getPersonPermits"] = getPersonPermits_ProcessAsync;
       processMap_["getPersons"] = getPersons_ProcessAsync;
       processMap_["getPersonsOfGroup"] = getPersonsOfGroup_ProcessAsync;
+      processMap_["getPersonsPermittedOnDevice"] = getPersonsPermittedOnDevice_ProcessAsync;
       processMap_["getProperties"] = getProperties_ProcessAsync;
       processMap_["getProperty"] = getProperty_ProcessAsync;
       processMap_["getRedisParameters"] = getRedisParameters_ProcessAsync;
@@ -12112,41 +12115,6 @@ public partial class IFaceLog {
       oprot.Transport.Flush();
     }
 
-    public async Task getFeaturesByPersonId_ProcessAsync(int seqid, TProtocol iprot, TProtocol oprot)
-    {
-      getFeaturesByPersonId_args args = new getFeaturesByPersonId_args();
-      args.Read(iprot);
-      iprot.ReadMessageEnd();
-      getFeaturesByPersonId_result result = new getFeaturesByPersonId_result();
-      try
-      {
-        try
-        {
-          result.Success = await iface_.getFeaturesByPersonIdAsync(args.PersonId.Value);
-        }
-        catch (ServiceRuntimeException ex1)
-        {
-          result.Ex1 = ex1;
-        }
-        oprot.WriteMessageBegin(new TMessage("getFeaturesByPersonId", TMessageType.Reply, seqid)); 
-        result.Write(oprot);
-      }
-      catch (TTransportException)
-      {
-        throw;
-      }
-      catch (Exception ex)
-      {
-        Console.Error.WriteLine("Error occurred in processor:");
-        Console.Error.WriteLine(ex.ToString());
-        TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
-        oprot.WriteMessageBegin(new TMessage("getFeaturesByPersonId", TMessageType.Exception, seqid));
-        x.Write(oprot);
-      }
-      oprot.WriteMessageEnd();
-      oprot.Transport.Flush();
-    }
-
     public async Task getFeaturesByPersonIdAndSdkVersion_ProcessAsync(int seqid, TProtocol iprot, TProtocol oprot)
     {
       getFeaturesByPersonIdAndSdkVersion_args args = new getFeaturesByPersonIdAndSdkVersion_args();
@@ -12876,6 +12844,41 @@ public partial class IFaceLog {
         Console.Error.WriteLine(ex.ToString());
         TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
         oprot.WriteMessageBegin(new TMessage("getPersonsOfGroup", TMessageType.Exception, seqid));
+        x.Write(oprot);
+      }
+      oprot.WriteMessageEnd();
+      oprot.Transport.Flush();
+    }
+
+    public async Task getPersonsPermittedOnDevice_ProcessAsync(int seqid, TProtocol iprot, TProtocol oprot)
+    {
+      getPersonsPermittedOnDevice_args args = new getPersonsPermittedOnDevice_args();
+      args.Read(iprot);
+      iprot.ReadMessageEnd();
+      getPersonsPermittedOnDevice_result result = new getPersonsPermittedOnDevice_result();
+      try
+      {
+        try
+        {
+          result.Success = await iface_.getPersonsPermittedOnDeviceAsync(args.DeviceId.Value, args.IgnoreSchedule.Value, args.ExcludePersonIds, args.Timestamp.Value);
+        }
+        catch (ServiceRuntimeException ex1)
+        {
+          result.Ex1 = ex1;
+        }
+        oprot.WriteMessageBegin(new TMessage("getPersonsPermittedOnDevice", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+      }
+      catch (TTransportException)
+      {
+        throw;
+      }
+      catch (Exception ex)
+      {
+        Console.Error.WriteLine("Error occurred in processor:");
+        Console.Error.WriteLine(ex.ToString());
+        TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
+        oprot.WriteMessageBegin(new TMessage("getPersonsPermittedOnDevice", TMessageType.Exception, seqid));
         x.Write(oprot);
       }
       oprot.WriteMessageEnd();
@@ -15737,7 +15740,6 @@ public partial class IFaceLog {
       processMap_["getFeature"] = getFeature_Process;
       processMap_["getFeatureBytes"] = getFeatureBytes_Process;
       processMap_["getFeatures"] = getFeatures_Process;
-      processMap_["getFeaturesByPersonId"] = getFeaturesByPersonId_Process;
       processMap_["getFeaturesByPersonIdAndSdkVersion"] = getFeaturesByPersonIdAndSdkVersion_Process;
       processMap_["getFeaturesOfPerson"] = getFeaturesOfPerson_Process;
       processMap_["getFeaturesPermittedOnDevice"] = getFeaturesPermittedOnDevice_Process;
@@ -15759,6 +15761,7 @@ public partial class IFaceLog {
       processMap_["getPersonPermits"] = getPersonPermits_Process;
       processMap_["getPersons"] = getPersons_Process;
       processMap_["getPersonsOfGroup"] = getPersonsOfGroup_Process;
+      processMap_["getPersonsPermittedOnDevice"] = getPersonsPermittedOnDevice_Process;
       processMap_["getProperties"] = getProperties_Process;
       processMap_["getProperty"] = getProperty_Process;
       processMap_["getRedisParameters"] = getRedisParameters_Process;
@@ -17874,41 +17877,6 @@ public partial class IFaceLog {
       oprot.Transport.Flush();
     }
 
-    public void getFeaturesByPersonId_Process(int seqid, TProtocol iprot, TProtocol oprot)
-    {
-      getFeaturesByPersonId_args args = new getFeaturesByPersonId_args();
-      args.Read(iprot);
-      iprot.ReadMessageEnd();
-      getFeaturesByPersonId_result result = new getFeaturesByPersonId_result();
-      try
-      {
-        try
-        {
-          result.Success = iface_.getFeaturesByPersonId(args.PersonId.Value);
-        }
-        catch (ServiceRuntimeException ex1)
-        {
-          result.Ex1 = ex1;
-        }
-        oprot.WriteMessageBegin(new TMessage("getFeaturesByPersonId", TMessageType.Reply, seqid)); 
-        result.Write(oprot);
-      }
-      catch (TTransportException)
-      {
-        throw;
-      }
-      catch (Exception ex)
-      {
-        Console.Error.WriteLine("Error occurred in processor:");
-        Console.Error.WriteLine(ex.ToString());
-        TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
-        oprot.WriteMessageBegin(new TMessage("getFeaturesByPersonId", TMessageType.Exception, seqid));
-        x.Write(oprot);
-      }
-      oprot.WriteMessageEnd();
-      oprot.Transport.Flush();
-    }
-
     public void getFeaturesByPersonIdAndSdkVersion_Process(int seqid, TProtocol iprot, TProtocol oprot)
     {
       getFeaturesByPersonIdAndSdkVersion_args args = new getFeaturesByPersonIdAndSdkVersion_args();
@@ -18638,6 +18606,41 @@ public partial class IFaceLog {
         Console.Error.WriteLine(ex.ToString());
         TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
         oprot.WriteMessageBegin(new TMessage("getPersonsOfGroup", TMessageType.Exception, seqid));
+        x.Write(oprot);
+      }
+      oprot.WriteMessageEnd();
+      oprot.Transport.Flush();
+    }
+
+    public void getPersonsPermittedOnDevice_Process(int seqid, TProtocol iprot, TProtocol oprot)
+    {
+      getPersonsPermittedOnDevice_args args = new getPersonsPermittedOnDevice_args();
+      args.Read(iprot);
+      iprot.ReadMessageEnd();
+      getPersonsPermittedOnDevice_result result = new getPersonsPermittedOnDevice_result();
+      try
+      {
+        try
+        {
+          result.Success = iface_.getPersonsPermittedOnDevice(args.DeviceId.Value, args.IgnoreSchedule.Value, args.ExcludePersonIds, args.Timestamp.Value);
+        }
+        catch (ServiceRuntimeException ex1)
+        {
+          result.Ex1 = ex1;
+        }
+        oprot.WriteMessageBegin(new TMessage("getPersonsPermittedOnDevice", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+      }
+      catch (TTransportException)
+      {
+        throw;
+      }
+      catch (Exception ex)
+      {
+        Console.Error.WriteLine("Error occurred in processor:");
+        Console.Error.WriteLine(ex.ToString());
+        TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
+        oprot.WriteMessageBegin(new TMessage("getPersonsPermittedOnDevice", TMessageType.Exception, seqid));
         x.Write(oprot);
       }
       oprot.WriteMessageEnd();
@@ -34352,222 +34355,6 @@ public partial class IFaceLog {
   #if !SILVERLIGHT
   [Serializable]
   #endif
-  public partial class getFeaturesByPersonId_args : TBase
-  {
-
-    public int PersonId { get; set; }
-
-    public getFeaturesByPersonId_args() {
-    }
-
-    public getFeaturesByPersonId_args(int personId) : this() {
-      this.PersonId = personId;
-    }
-
-    public void Read (TProtocol iprot)
-    {
-      iprot.IncrementRecursionDepth();
-      try
-      {
-        bool isset_personId = false;
-        TField field;
-        iprot.ReadStructBegin();
-        while (true)
-        {
-          field = iprot.ReadFieldBegin();
-          if (field.Type == TType.Stop) { 
-            break;
-          }
-          switch (field.ID)
-          {
-            case 1:
-              if (field.Type == TType.I32) {
-                PersonId = iprot.ReadI32();
-                isset_personId = true;
-              } else { 
-                TProtocolUtil.Skip(iprot, field.Type);
-              }
-              break;
-            default: 
-              TProtocolUtil.Skip(iprot, field.Type);
-              break;
-          }
-          iprot.ReadFieldEnd();
-        }
-        iprot.ReadStructEnd();
-        if (!isset_personId)
-          throw new TProtocolException(TProtocolException.INVALID_DATA, "required field PersonId not set");
-      }
-      finally
-      {
-        iprot.DecrementRecursionDepth();
-      }
-    }
-
-    public void Write(TProtocol oprot) {
-      oprot.IncrementRecursionDepth();
-      try
-      {
-        TStruct struc = new TStruct("getFeaturesByPersonId_args");
-        oprot.WriteStructBegin(struc);
-        TField field = new TField();
-        field.Name = "personId";
-        field.Type = TType.I32;
-        field.ID = 1;
-        oprot.WriteFieldBegin(field);
-        oprot.WriteI32(PersonId);
-        oprot.WriteFieldEnd();
-        oprot.WriteFieldStop();
-        oprot.WriteStructEnd();
-      }
-      finally
-      {
-        oprot.DecrementRecursionDepth();
-      }
-    }
-
-    public override string ToString() {
-      StringBuilder __sb = new StringBuilder("getFeaturesByPersonId_args(");
-      __sb.Append(", PersonId: ");
-      __sb.Append(PersonId);
-      __sb.Append(")");
-      return __sb.ToString();
-    }
-
-  }
-
-
-  #if !SILVERLIGHT
-  [Serializable]
-  #endif
-  public partial class getFeaturesByPersonId_result : TBase
-  {
-
-    public List<string> Success { get; set; }
-
-    public ServiceRuntimeException Ex1 { get; set; }
-
-    public getFeaturesByPersonId_result() {
-    }
-
-    public void Read (TProtocol iprot)
-    {
-      iprot.IncrementRecursionDepth();
-      try
-      {
-        TField field;
-        iprot.ReadStructBegin();
-        while (true)
-        {
-          field = iprot.ReadFieldBegin();
-          if (field.Type == TType.Stop) { 
-            break;
-          }
-          switch (field.ID)
-          {
-            case 0:
-              if (field.Type == TType.List) {
-                {
-                  Success = new List<string>();
-                  TList _list92 = iprot.ReadListBegin();
-                  for( int _i93 = 0; _i93 < _list92.Count; ++_i93)
-                  {
-                    string _elem94;
-                    _elem94 = iprot.ReadString();
-                    Success.Add(_elem94);
-                  }
-                  iprot.ReadListEnd();
-                }
-              } else { 
-                TProtocolUtil.Skip(iprot, field.Type);
-              }
-              break;
-            case 1:
-              if (field.Type == TType.Struct) {
-                Ex1 = new ServiceRuntimeException();
-                Ex1.Read(iprot);
-              } else { 
-                TProtocolUtil.Skip(iprot, field.Type);
-              }
-              break;
-            default: 
-              TProtocolUtil.Skip(iprot, field.Type);
-              break;
-          }
-          iprot.ReadFieldEnd();
-        }
-        iprot.ReadStructEnd();
-      }
-      finally
-      {
-        iprot.DecrementRecursionDepth();
-      }
-    }
-
-    public void Write(TProtocol oprot) {
-      oprot.IncrementRecursionDepth();
-      try
-      {
-        TStruct struc = new TStruct("getFeaturesByPersonId_result");
-        oprot.WriteStructBegin(struc);
-        TField field = new TField();
-
-        if (this.Success != null) {
-          field.Name = "Success";
-          field.Type = TType.List;
-          field.ID = 0;
-          oprot.WriteFieldBegin(field);
-          {
-            oprot.WriteListBegin(new TList(TType.String, Success.Count));
-            foreach (string _iter95 in Success)
-            {
-              oprot.WriteString(_iter95);
-            }
-            oprot.WriteListEnd();
-          }
-          oprot.WriteFieldEnd();
-        } else if (this.Ex1 != null) {
-          field.Name = "Ex1";
-          field.Type = TType.Struct;
-          field.ID = 1;
-          oprot.WriteFieldBegin(field);
-          Ex1.Write(oprot);
-          oprot.WriteFieldEnd();
-        }
-        oprot.WriteFieldStop();
-        oprot.WriteStructEnd();
-      }
-      finally
-      {
-        oprot.DecrementRecursionDepth();
-      }
-    }
-
-    public override string ToString() {
-      StringBuilder __sb = new StringBuilder("getFeaturesByPersonId_result(");
-      bool __first = true;
-      if (Success != null) {
-        if(!__first) { __sb.Append(", "); }
-        __first = false;
-        __sb.Append("Success: ");
-        __sb.Append(Success);
-      }
-      if (Ex1 != null) {
-        if(!__first) { __sb.Append(", "); }
-        __first = false;
-        __sb.Append("Ex1: ");
-        __sb.Append(Ex1== null ? "<null>" : Ex1.ToString());
-      }
-      __sb.Append(")");
-      return __sb.ToString();
-    }
-
-  }
-
-
-  #if !SILVERLIGHT
-  [Serializable]
-  #endif
   public partial class getFeaturesByPersonIdAndSdkVersion_args : TBase
   {
 
@@ -34706,12 +34493,12 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   Success = new List<string>();
-                  TList _list96 = iprot.ReadListBegin();
-                  for( int _i97 = 0; _i97 < _list96.Count; ++_i97)
+                  TList _list92 = iprot.ReadListBegin();
+                  for( int _i93 = 0; _i93 < _list92.Count; ++_i93)
                   {
-                    string _elem98;
-                    _elem98 = iprot.ReadString();
-                    Success.Add(_elem98);
+                    string _elem94;
+                    _elem94 = iprot.ReadString();
+                    Success.Add(_elem94);
                   }
                   iprot.ReadListEnd();
                 }
@@ -34756,9 +34543,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.String, Success.Count));
-            foreach (string _iter99 in Success)
+            foreach (string _iter95 in Success)
             {
-              oprot.WriteString(_iter99);
+              oprot.WriteString(_iter95);
             }
             oprot.WriteListEnd();
           }
@@ -34922,12 +34709,12 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   Success = new List<string>();
-                  TList _list100 = iprot.ReadListBegin();
-                  for( int _i101 = 0; _i101 < _list100.Count; ++_i101)
+                  TList _list96 = iprot.ReadListBegin();
+                  for( int _i97 = 0; _i97 < _list96.Count; ++_i97)
                   {
-                    string _elem102;
-                    _elem102 = iprot.ReadString();
-                    Success.Add(_elem102);
+                    string _elem98;
+                    _elem98 = iprot.ReadString();
+                    Success.Add(_elem98);
                   }
                   iprot.ReadListEnd();
                 }
@@ -34972,9 +34759,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.String, Success.Count));
-            foreach (string _iter103 in Success)
+            foreach (string _iter99 in Success)
             {
-              oprot.WriteString(_iter103);
+              oprot.WriteString(_iter99);
             }
             oprot.WriteListEnd();
           }
@@ -35086,12 +34873,12 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   ExcludeFeatureIds = new List<string>();
-                  TList _list104 = iprot.ReadListBegin();
-                  for( int _i105 = 0; _i105 < _list104.Count; ++_i105)
+                  TList _list100 = iprot.ReadListBegin();
+                  for( int _i101 = 0; _i101 < _list100.Count; ++_i101)
                   {
-                    string _elem106;
-                    _elem106 = iprot.ReadString();
-                    ExcludeFeatureIds.Add(_elem106);
+                    string _elem102;
+                    _elem102 = iprot.ReadString();
+                    ExcludeFeatureIds.Add(_elem102);
                   }
                   iprot.ReadListEnd();
                 }
@@ -35158,9 +34945,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.String, ExcludeFeatureIds.Count));
-            foreach (string _iter107 in ExcludeFeatureIds)
+            foreach (string _iter103 in ExcludeFeatureIds)
             {
-              oprot.WriteString(_iter107);
+              oprot.WriteString(_iter103);
             }
             oprot.WriteListEnd();
           }
@@ -35214,7 +35001,7 @@ public partial class IFaceLog {
   public partial class getFeaturesPermittedOnDevice_result : TBase
   {
 
-    public List<FeatureBean> Success { get; set; }
+    public List<string> Success { get; set; }
 
     public ServiceRuntimeException Ex1 { get; set; }
 
@@ -35239,14 +35026,13 @@ public partial class IFaceLog {
             case 0:
               if (field.Type == TType.List) {
                 {
-                  Success = new List<FeatureBean>();
-                  TList _list108 = iprot.ReadListBegin();
-                  for( int _i109 = 0; _i109 < _list108.Count; ++_i109)
+                  Success = new List<string>();
+                  TList _list104 = iprot.ReadListBegin();
+                  for( int _i105 = 0; _i105 < _list104.Count; ++_i105)
                   {
-                    FeatureBean _elem110;
-                    _elem110 = new FeatureBean();
-                    _elem110.Read(iprot);
-                    Success.Add(_elem110);
+                    string _elem106;
+                    _elem106 = iprot.ReadString();
+                    Success.Add(_elem106);
                   }
                   iprot.ReadListEnd();
                 }
@@ -35290,10 +35076,10 @@ public partial class IFaceLog {
           field.ID = 0;
           oprot.WriteFieldBegin(field);
           {
-            oprot.WriteListBegin(new TList(TType.Struct, Success.Count));
-            foreach (FeatureBean _iter111 in Success)
+            oprot.WriteListBegin(new TList(TType.String, Success.Count));
+            foreach (string _iter107 in Success)
             {
-              _iter111.Write(oprot);
+              oprot.WriteString(_iter107);
             }
             oprot.WriteListEnd();
           }
@@ -35826,12 +35612,12 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   PersonGroupIdList = new List<int>();
-                  TList _list112 = iprot.ReadListBegin();
-                  for( int _i113 = 0; _i113 < _list112.Count; ++_i113)
+                  TList _list108 = iprot.ReadListBegin();
+                  for( int _i109 = 0; _i109 < _list108.Count; ++_i109)
                   {
-                    int _elem114;
-                    _elem114 = iprot.ReadI32();
-                    PersonGroupIdList.Add(_elem114);
+                    int _elem110;
+                    _elem110 = iprot.ReadI32();
+                    PersonGroupIdList.Add(_elem110);
                   }
                   iprot.ReadListEnd();
                 }
@@ -35875,9 +35661,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.I32, PersonGroupIdList.Count));
-            foreach (int _iter115 in PersonGroupIdList)
+            foreach (int _iter111 in PersonGroupIdList)
             {
-              oprot.WriteI32(_iter115);
+              oprot.WriteI32(_iter111);
             }
             oprot.WriteListEnd();
           }
@@ -35939,13 +35725,13 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   Success = new List<PermitBean>();
-                  TList _list116 = iprot.ReadListBegin();
-                  for( int _i117 = 0; _i117 < _list116.Count; ++_i117)
+                  TList _list112 = iprot.ReadListBegin();
+                  for( int _i113 = 0; _i113 < _list112.Count; ++_i113)
                   {
-                    PermitBean _elem118;
-                    _elem118 = new PermitBean();
-                    _elem118.Read(iprot);
-                    Success.Add(_elem118);
+                    PermitBean _elem114;
+                    _elem114 = new PermitBean();
+                    _elem114.Read(iprot);
+                    Success.Add(_elem114);
                   }
                   iprot.ReadListEnd();
                 }
@@ -35990,9 +35776,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.Struct, Success.Count));
-            foreach (PermitBean _iter119 in Success)
+            foreach (PermitBean _iter115 in Success)
             {
-              _iter119.Write(oprot);
+              _iter115.Write(oprot);
             }
             oprot.WriteListEnd();
           }
@@ -36552,12 +36338,12 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   Success = new List<string>();
-                  TList _list120 = iprot.ReadListBegin();
-                  for( int _i121 = 0; _i121 < _list120.Count; ++_i121)
+                  TList _list116 = iprot.ReadListBegin();
+                  for( int _i117 = 0; _i117 < _list116.Count; ++_i117)
                   {
-                    string _elem122;
-                    _elem122 = iprot.ReadString();
-                    Success.Add(_elem122);
+                    string _elem118;
+                    _elem118 = iprot.ReadString();
+                    Success.Add(_elem118);
                   }
                   iprot.ReadListEnd();
                 }
@@ -36602,9 +36388,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.String, Success.Count));
-            foreach (string _iter123 in Success)
+            foreach (string _iter119 in Success)
             {
-              oprot.WriteString(_iter123);
+              oprot.WriteString(_iter119);
             }
             oprot.WriteListEnd();
           }
@@ -36768,13 +36554,13 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   Success = new List<LogBean>();
-                  TList _list124 = iprot.ReadListBegin();
-                  for( int _i125 = 0; _i125 < _list124.Count; ++_i125)
+                  TList _list120 = iprot.ReadListBegin();
+                  for( int _i121 = 0; _i121 < _list120.Count; ++_i121)
                   {
-                    LogBean _elem126;
-                    _elem126 = new LogBean();
-                    _elem126.Read(iprot);
-                    Success.Add(_elem126);
+                    LogBean _elem122;
+                    _elem122 = new LogBean();
+                    _elem122.Read(iprot);
+                    Success.Add(_elem122);
                   }
                   iprot.ReadListEnd();
                 }
@@ -36819,9 +36605,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.Struct, Success.Count));
-            foreach (LogBean _iter127 in Success)
+            foreach (LogBean _iter123 in Success)
             {
-              _iter127.Write(oprot);
+              _iter123.Write(oprot);
             }
             oprot.WriteListEnd();
           }
@@ -37693,12 +37479,12 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   GroupIdList = new List<int>();
-                  TList _list128 = iprot.ReadListBegin();
-                  for( int _i129 = 0; _i129 < _list128.Count; ++_i129)
+                  TList _list124 = iprot.ReadListBegin();
+                  for( int _i125 = 0; _i125 < _list124.Count; ++_i125)
                   {
-                    int _elem130;
-                    _elem130 = iprot.ReadI32();
-                    GroupIdList.Add(_elem130);
+                    int _elem126;
+                    _elem126 = iprot.ReadI32();
+                    GroupIdList.Add(_elem126);
                   }
                   iprot.ReadListEnd();
                 }
@@ -37734,9 +37520,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.I32, GroupIdList.Count));
-            foreach (int _iter131 in GroupIdList)
+            foreach (int _iter127 in GroupIdList)
             {
-              oprot.WriteI32(_iter131);
+              oprot.WriteI32(_iter127);
             }
             oprot.WriteListEnd();
           }
@@ -37799,13 +37585,13 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   Success = new List<PersonGroupBean>();
-                  TList _list132 = iprot.ReadListBegin();
-                  for( int _i133 = 0; _i133 < _list132.Count; ++_i133)
+                  TList _list128 = iprot.ReadListBegin();
+                  for( int _i129 = 0; _i129 < _list128.Count; ++_i129)
                   {
-                    PersonGroupBean _elem134;
-                    _elem134 = new PersonGroupBean();
-                    _elem134.Read(iprot);
-                    Success.Add(_elem134);
+                    PersonGroupBean _elem130;
+                    _elem130 = new PersonGroupBean();
+                    _elem130.Read(iprot);
+                    Success.Add(_elem130);
                   }
                   iprot.ReadListEnd();
                 }
@@ -37850,9 +37636,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.Struct, Success.Count));
-            foreach (PersonGroupBean _iter135 in Success)
+            foreach (PersonGroupBean _iter131 in Success)
             {
-              _iter135.Write(oprot);
+              _iter131.Write(oprot);
             }
             oprot.WriteListEnd();
           }
@@ -38016,12 +37802,12 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   Success = new List<int>();
-                  TList _list136 = iprot.ReadListBegin();
-                  for( int _i137 = 0; _i137 < _list136.Count; ++_i137)
+                  TList _list132 = iprot.ReadListBegin();
+                  for( int _i133 = 0; _i133 < _list132.Count; ++_i133)
                   {
-                    int _elem138;
-                    _elem138 = iprot.ReadI32();
-                    Success.Add(_elem138);
+                    int _elem134;
+                    _elem134 = iprot.ReadI32();
+                    Success.Add(_elem134);
                   }
                   iprot.ReadListEnd();
                 }
@@ -38066,9 +37852,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.I32, Success.Count));
-            foreach (int _iter139 in Success)
+            foreach (int _iter135 in Success)
             {
-              oprot.WriteI32(_iter139);
+              oprot.WriteI32(_iter135);
             }
             oprot.WriteListEnd();
           }
@@ -38232,12 +38018,12 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   Success = new List<int>();
-                  TList _list140 = iprot.ReadListBegin();
-                  for( int _i141 = 0; _i141 < _list140.Count; ++_i141)
+                  TList _list136 = iprot.ReadListBegin();
+                  for( int _i137 = 0; _i137 < _list136.Count; ++_i137)
                   {
-                    int _elem142;
-                    _elem142 = iprot.ReadI32();
-                    Success.Add(_elem142);
+                    int _elem138;
+                    _elem138 = iprot.ReadI32();
+                    Success.Add(_elem138);
                   }
                   iprot.ReadListEnd();
                 }
@@ -38282,9 +38068,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.I32, Success.Count));
-            foreach (int _iter143 in Success)
+            foreach (int _iter139 in Success)
             {
-              oprot.WriteI32(_iter143);
+              oprot.WriteI32(_iter139);
             }
             oprot.WriteListEnd();
           }
@@ -38595,12 +38381,12 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   PersonIdList = new List<int>();
-                  TList _list144 = iprot.ReadListBegin();
-                  for( int _i145 = 0; _i145 < _list144.Count; ++_i145)
+                  TList _list140 = iprot.ReadListBegin();
+                  for( int _i141 = 0; _i141 < _list140.Count; ++_i141)
                   {
-                    int _elem146;
-                    _elem146 = iprot.ReadI32();
-                    PersonIdList.Add(_elem146);
+                    int _elem142;
+                    _elem142 = iprot.ReadI32();
+                    PersonIdList.Add(_elem142);
                   }
                   iprot.ReadListEnd();
                 }
@@ -38644,9 +38430,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.I32, PersonIdList.Count));
-            foreach (int _iter147 in PersonIdList)
+            foreach (int _iter143 in PersonIdList)
             {
-              oprot.WriteI32(_iter147);
+              oprot.WriteI32(_iter143);
             }
             oprot.WriteListEnd();
           }
@@ -38708,13 +38494,13 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   Success = new List<PermitBean>();
-                  TList _list148 = iprot.ReadListBegin();
-                  for( int _i149 = 0; _i149 < _list148.Count; ++_i149)
+                  TList _list144 = iprot.ReadListBegin();
+                  for( int _i145 = 0; _i145 < _list144.Count; ++_i145)
                   {
-                    PermitBean _elem150;
-                    _elem150 = new PermitBean();
-                    _elem150.Read(iprot);
-                    Success.Add(_elem150);
+                    PermitBean _elem146;
+                    _elem146 = new PermitBean();
+                    _elem146.Read(iprot);
+                    Success.Add(_elem146);
                   }
                   iprot.ReadListEnd();
                 }
@@ -38759,9 +38545,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.Struct, Success.Count));
-            foreach (PermitBean _iter151 in Success)
+            foreach (PermitBean _iter147 in Success)
             {
-              _iter151.Write(oprot);
+              _iter147.Write(oprot);
             }
             oprot.WriteListEnd();
           }
@@ -38835,12 +38621,12 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   IdList = new List<int>();
-                  TList _list152 = iprot.ReadListBegin();
-                  for( int _i153 = 0; _i153 < _list152.Count; ++_i153)
+                  TList _list148 = iprot.ReadListBegin();
+                  for( int _i149 = 0; _i149 < _list148.Count; ++_i149)
                   {
-                    int _elem154;
-                    _elem154 = iprot.ReadI32();
-                    IdList.Add(_elem154);
+                    int _elem150;
+                    _elem150 = iprot.ReadI32();
+                    IdList.Add(_elem150);
                   }
                   iprot.ReadListEnd();
                 }
@@ -38876,9 +38662,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.I32, IdList.Count));
-            foreach (int _iter155 in IdList)
+            foreach (int _iter151 in IdList)
             {
-              oprot.WriteI32(_iter155);
+              oprot.WriteI32(_iter151);
             }
             oprot.WriteListEnd();
           }
@@ -38941,13 +38727,13 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   Success = new List<PersonBean>();
-                  TList _list156 = iprot.ReadListBegin();
-                  for( int _i157 = 0; _i157 < _list156.Count; ++_i157)
+                  TList _list152 = iprot.ReadListBegin();
+                  for( int _i153 = 0; _i153 < _list152.Count; ++_i153)
                   {
-                    PersonBean _elem158;
-                    _elem158 = new PersonBean();
-                    _elem158.Read(iprot);
-                    Success.Add(_elem158);
+                    PersonBean _elem154;
+                    _elem154 = new PersonBean();
+                    _elem154.Read(iprot);
+                    Success.Add(_elem154);
                   }
                   iprot.ReadListEnd();
                 }
@@ -38992,9 +38778,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.Struct, Success.Count));
-            foreach (PersonBean _iter159 in Success)
+            foreach (PersonBean _iter155 in Success)
             {
-              _iter159.Write(oprot);
+              _iter155.Write(oprot);
             }
             oprot.WriteListEnd();
           }
@@ -39158,12 +38944,12 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   Success = new List<int>();
-                  TList _list160 = iprot.ReadListBegin();
-                  for( int _i161 = 0; _i161 < _list160.Count; ++_i161)
+                  TList _list156 = iprot.ReadListBegin();
+                  for( int _i157 = 0; _i157 < _list156.Count; ++_i157)
                   {
-                    int _elem162;
-                    _elem162 = iprot.ReadI32();
-                    Success.Add(_elem162);
+                    int _elem158;
+                    _elem158 = iprot.ReadI32();
+                    Success.Add(_elem158);
                   }
                   iprot.ReadListEnd();
                 }
@@ -39208,9 +38994,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.I32, Success.Count));
-            foreach (int _iter163 in Success)
+            foreach (int _iter159 in Success)
             {
-              oprot.WriteI32(_iter163);
+              oprot.WriteI32(_iter159);
             }
             oprot.WriteListEnd();
           }
@@ -39234,6 +39020,303 @@ public partial class IFaceLog {
 
     public override string ToString() {
       StringBuilder __sb = new StringBuilder("getPersonsOfGroup_result(");
+      bool __first = true;
+      if (Success != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Success: ");
+        __sb.Append(Success);
+      }
+      if (Ex1 != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Ex1: ");
+        __sb.Append(Ex1== null ? "<null>" : Ex1.ToString());
+      }
+      __sb.Append(")");
+      return __sb.ToString();
+    }
+
+  }
+
+
+  #if !SILVERLIGHT
+  [Serializable]
+  #endif
+  public partial class getPersonsPermittedOnDevice_args : TBase
+  {
+
+    public int DeviceId { get; set; }
+
+    public bool IgnoreSchedule { get; set; }
+
+    public List<int> ExcludePersonIds { get; set; }
+
+    public long? Timestamp { get; set; }
+
+    public getPersonsPermittedOnDevice_args() {
+    }
+
+    public getPersonsPermittedOnDevice_args(int deviceId, bool ignoreSchedule) : this() {
+      this.DeviceId = deviceId;
+      this.IgnoreSchedule = ignoreSchedule;
+    }
+
+    public void Read (TProtocol iprot)
+    {
+      iprot.IncrementRecursionDepth();
+      try
+      {
+        bool isset_deviceId = false;
+        bool isset_ignoreSchedule = false;
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 1:
+              if (field.Type == TType.I32) {
+                DeviceId = iprot.ReadI32();
+                isset_deviceId = true;
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 2:
+              if (field.Type == TType.Bool) {
+                IgnoreSchedule = iprot.ReadBool();
+                isset_ignoreSchedule = true;
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 3:
+              if (field.Type == TType.List) {
+                {
+                  ExcludePersonIds = new List<int>();
+                  TList _list160 = iprot.ReadListBegin();
+                  for( int _i161 = 0; _i161 < _list160.Count; ++_i161)
+                  {
+                    int _elem162;
+                    _elem162 = iprot.ReadI32();
+                    ExcludePersonIds.Add(_elem162);
+                  }
+                  iprot.ReadListEnd();
+                }
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 4:
+              if (field.Type == TType.I64) {
+                Timestamp = iprot.ReadI64();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+        if (!isset_deviceId)
+          throw new TProtocolException(TProtocolException.INVALID_DATA, "required field DeviceId not set");
+        if (!isset_ignoreSchedule)
+          throw new TProtocolException(TProtocolException.INVALID_DATA, "required field IgnoreSchedule not set");
+      }
+      finally
+      {
+        iprot.DecrementRecursionDepth();
+      }
+    }
+
+    public void Write(TProtocol oprot) {
+      oprot.IncrementRecursionDepth();
+      try
+      {
+        TStruct struc = new TStruct("getPersonsPermittedOnDevice_args");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+        field.Name = "deviceId";
+        field.Type = TType.I32;
+        field.ID = 1;
+        oprot.WriteFieldBegin(field);
+        oprot.WriteI32(DeviceId);
+        oprot.WriteFieldEnd();
+        field.Name = "ignoreSchedule";
+        field.Type = TType.Bool;
+        field.ID = 2;
+        oprot.WriteFieldBegin(field);
+        oprot.WriteBool(IgnoreSchedule);
+        oprot.WriteFieldEnd();
+        if (ExcludePersonIds != null) {
+          field.Name = "excludePersonIds";
+          field.Type = TType.List;
+          field.ID = 3;
+          oprot.WriteFieldBegin(field);
+          {
+            oprot.WriteListBegin(new TList(TType.I32, ExcludePersonIds.Count));
+            foreach (int _iter163 in ExcludePersonIds)
+            {
+              oprot.WriteI32(_iter163);
+            }
+            oprot.WriteListEnd();
+          }
+          oprot.WriteFieldEnd();
+        }
+        if (Timestamp != null) {
+          field.Name = "timestamp";
+          field.Type = TType.I64;
+          field.ID = 4;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteI64(Timestamp.Value);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+      finally
+      {
+        oprot.DecrementRecursionDepth();
+      }
+    }
+
+    public override string ToString() {
+      StringBuilder __sb = new StringBuilder("getPersonsPermittedOnDevice_args(");
+      __sb.Append(", DeviceId: ");
+      __sb.Append(DeviceId);
+      __sb.Append(", IgnoreSchedule: ");
+      __sb.Append(IgnoreSchedule);
+      if (ExcludePersonIds != null) {
+        __sb.Append(", ExcludePersonIds: ");
+        __sb.Append(ExcludePersonIds);
+      }
+      if (Timestamp != null) {
+        __sb.Append(", Timestamp: ");
+        __sb.Append(Timestamp);
+      }
+      __sb.Append(")");
+      return __sb.ToString();
+    }
+
+  }
+
+
+  #if !SILVERLIGHT
+  [Serializable]
+  #endif
+  public partial class getPersonsPermittedOnDevice_result : TBase
+  {
+
+    public List<int> Success { get; set; }
+
+    public ServiceRuntimeException Ex1 { get; set; }
+
+    public getPersonsPermittedOnDevice_result() {
+    }
+
+    public void Read (TProtocol iprot)
+    {
+      iprot.IncrementRecursionDepth();
+      try
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 0:
+              if (field.Type == TType.List) {
+                {
+                  Success = new List<int>();
+                  TList _list164 = iprot.ReadListBegin();
+                  for( int _i165 = 0; _i165 < _list164.Count; ++_i165)
+                  {
+                    int _elem166;
+                    _elem166 = iprot.ReadI32();
+                    Success.Add(_elem166);
+                  }
+                  iprot.ReadListEnd();
+                }
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 1:
+              if (field.Type == TType.Struct) {
+                Ex1 = new ServiceRuntimeException();
+                Ex1.Read(iprot);
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+      finally
+      {
+        iprot.DecrementRecursionDepth();
+      }
+    }
+
+    public void Write(TProtocol oprot) {
+      oprot.IncrementRecursionDepth();
+      try
+      {
+        TStruct struc = new TStruct("getPersonsPermittedOnDevice_result");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+
+        if (this.Success != null) {
+          field.Name = "Success";
+          field.Type = TType.List;
+          field.ID = 0;
+          oprot.WriteFieldBegin(field);
+          {
+            oprot.WriteListBegin(new TList(TType.I32, Success.Count));
+            foreach (int _iter167 in Success)
+            {
+              oprot.WriteI32(_iter167);
+            }
+            oprot.WriteListEnd();
+          }
+          oprot.WriteFieldEnd();
+        } else if (this.Ex1 != null) {
+          field.Name = "Ex1";
+          field.Type = TType.Struct;
+          field.ID = 1;
+          oprot.WriteFieldBegin(field);
+          Ex1.Write(oprot);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+      finally
+      {
+        oprot.DecrementRecursionDepth();
+      }
+    }
+
+    public override string ToString() {
+      StringBuilder __sb = new StringBuilder("getPersonsPermittedOnDevice_result(");
       bool __first = true;
       if (Success != null) {
         if(!__first) { __sb.Append(", "); }
@@ -39397,14 +39480,14 @@ public partial class IFaceLog {
               if (field.Type == TType.Map) {
                 {
                   Success = new Dictionary<string, string>();
-                  TMap _map164 = iprot.ReadMapBegin();
-                  for( int _i165 = 0; _i165 < _map164.Count; ++_i165)
+                  TMap _map168 = iprot.ReadMapBegin();
+                  for( int _i169 = 0; _i169 < _map168.Count; ++_i169)
                   {
-                    string _key166;
-                    string _val167;
-                    _key166 = iprot.ReadString();
-                    _val167 = iprot.ReadString();
-                    Success[_key166] = _val167;
+                    string _key170;
+                    string _val171;
+                    _key170 = iprot.ReadString();
+                    _val171 = iprot.ReadString();
+                    Success[_key170] = _val171;
                   }
                   iprot.ReadMapEnd();
                 }
@@ -39449,10 +39532,10 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteMapBegin(new TMap(TType.String, TType.String, Success.Count));
-            foreach (string _iter168 in Success.Keys)
+            foreach (string _iter172 in Success.Keys)
             {
-              oprot.WriteString(_iter168);
-              oprot.WriteString(Success[_iter168]);
+              oprot.WriteString(_iter172);
+              oprot.WriteString(Success[_iter172]);
             }
             oprot.WriteMapEnd();
           }
@@ -39838,14 +39921,14 @@ public partial class IFaceLog {
               if (field.Type == TType.Map) {
                 {
                   Success = new Dictionary<MQParam, string>();
-                  TMap _map169 = iprot.ReadMapBegin();
-                  for( int _i170 = 0; _i170 < _map169.Count; ++_i170)
+                  TMap _map173 = iprot.ReadMapBegin();
+                  for( int _i174 = 0; _i174 < _map173.Count; ++_i174)
                   {
-                    MQParam _key171;
-                    string _val172;
-                    _key171 = (MQParam)iprot.ReadI32();
-                    _val172 = iprot.ReadString();
-                    Success[_key171] = _val172;
+                    MQParam _key175;
+                    string _val176;
+                    _key175 = (MQParam)iprot.ReadI32();
+                    _val176 = iprot.ReadString();
+                    Success[_key175] = _val176;
                   }
                   iprot.ReadMapEnd();
                 }
@@ -39890,10 +39973,10 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteMapBegin(new TMap(TType.I32, TType.String, Success.Count));
-            foreach (MQParam _iter173 in Success.Keys)
+            foreach (MQParam _iter177 in Success.Keys)
             {
-              oprot.WriteI32((int)_iter173);
-              oprot.WriteString(Success[_iter173]);
+              oprot.WriteI32((int)_iter177);
+              oprot.WriteString(Success[_iter177]);
             }
             oprot.WriteMapEnd();
           }
@@ -40057,14 +40140,14 @@ public partial class IFaceLog {
               if (field.Type == TType.Map) {
                 {
                   Success = new Dictionary<string, string>();
-                  TMap _map174 = iprot.ReadMapBegin();
-                  for( int _i175 = 0; _i175 < _map174.Count; ++_i175)
+                  TMap _map178 = iprot.ReadMapBegin();
+                  for( int _i179 = 0; _i179 < _map178.Count; ++_i179)
                   {
-                    string _key176;
-                    string _val177;
-                    _key176 = iprot.ReadString();
-                    _val177 = iprot.ReadString();
-                    Success[_key176] = _val177;
+                    string _key180;
+                    string _val181;
+                    _key180 = iprot.ReadString();
+                    _val181 = iprot.ReadString();
+                    Success[_key180] = _val181;
                   }
                   iprot.ReadMapEnd();
                 }
@@ -40109,10 +40192,10 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteMapBegin(new TMap(TType.String, TType.String, Success.Count));
-            foreach (string _iter178 in Success.Keys)
+            foreach (string _iter182 in Success.Keys)
             {
-              oprot.WriteString(_iter178);
-              oprot.WriteString(Success[_iter178]);
+              oprot.WriteString(_iter182);
+              oprot.WriteString(Success[_iter182]);
             }
             oprot.WriteMapEnd();
           }
@@ -40276,12 +40359,12 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   Success = new List<int>();
-                  TList _list179 = iprot.ReadListBegin();
-                  for( int _i180 = 0; _i180 < _list179.Count; ++_i180)
+                  TList _list183 = iprot.ReadListBegin();
+                  for( int _i184 = 0; _i184 < _list183.Count; ++_i184)
                   {
-                    int _elem181;
-                    _elem181 = iprot.ReadI32();
-                    Success.Add(_elem181);
+                    int _elem185;
+                    _elem185 = iprot.ReadI32();
+                    Success.Add(_elem185);
                   }
                   iprot.ReadListEnd();
                 }
@@ -40326,9 +40409,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.I32, Success.Count));
-            foreach (int _iter182 in Success)
+            foreach (int _iter186 in Success)
             {
-              oprot.WriteI32(_iter182);
+              oprot.WriteI32(_iter186);
             }
             oprot.WriteListEnd();
           }
@@ -40492,12 +40575,12 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   Success = new List<int>();
-                  TList _list183 = iprot.ReadListBegin();
-                  for( int _i184 = 0; _i184 < _list183.Count; ++_i184)
+                  TList _list187 = iprot.ReadListBegin();
+                  for( int _i188 = 0; _i188 < _list187.Count; ++_i188)
                   {
-                    int _elem185;
-                    _elem185 = iprot.ReadI32();
-                    Success.Add(_elem185);
+                    int _elem189;
+                    _elem189 = iprot.ReadI32();
+                    Success.Add(_elem189);
                   }
                   iprot.ReadListEnd();
                 }
@@ -40542,9 +40625,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.I32, Success.Count));
-            foreach (int _iter186 in Success)
+            foreach (int _iter190 in Success)
             {
-              oprot.WriteI32(_iter186);
+              oprot.WriteI32(_iter190);
             }
             oprot.WriteListEnd();
           }
@@ -42719,12 +42802,12 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   Success = new List<int>();
-                  TList _list187 = iprot.ReadListBegin();
-                  for( int _i188 = 0; _i188 < _list187.Count; ++_i188)
+                  TList _list191 = iprot.ReadListBegin();
+                  for( int _i192 = 0; _i192 < _list191.Count; ++_i192)
                   {
-                    int _elem189;
-                    _elem189 = iprot.ReadI32();
-                    Success.Add(_elem189);
+                    int _elem193;
+                    _elem193 = iprot.ReadI32();
+                    Success.Add(_elem193);
                   }
                   iprot.ReadListEnd();
                 }
@@ -42769,9 +42852,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.I32, Success.Count));
-            foreach (int _iter190 in Success)
+            foreach (int _iter194 in Success)
             {
-              oprot.WriteI32(_iter190);
+              oprot.WriteI32(_iter194);
             }
             oprot.WriteListEnd();
           }
@@ -42935,12 +43018,12 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   Success = new List<int>();
-                  TList _list191 = iprot.ReadListBegin();
-                  for( int _i192 = 0; _i192 < _list191.Count; ++_i192)
+                  TList _list195 = iprot.ReadListBegin();
+                  for( int _i196 = 0; _i196 < _list195.Count; ++_i196)
                   {
-                    int _elem193;
-                    _elem193 = iprot.ReadI32();
-                    Success.Add(_elem193);
+                    int _elem197;
+                    _elem197 = iprot.ReadI32();
+                    Success.Add(_elem197);
                   }
                   iprot.ReadListEnd();
                 }
@@ -42985,9 +43068,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.I32, Success.Count));
-            foreach (int _iter194 in Success)
+            foreach (int _iter198 in Success)
             {
-              oprot.WriteI32(_iter194);
+              oprot.WriteI32(_iter198);
             }
             oprot.WriteListEnd();
           }
@@ -43125,12 +43208,12 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   Success = new List<int>();
-                  TList _list195 = iprot.ReadListBegin();
-                  for( int _i196 = 0; _i196 < _list195.Count; ++_i196)
+                  TList _list199 = iprot.ReadListBegin();
+                  for( int _i200 = 0; _i200 < _list199.Count; ++_i200)
                   {
-                    int _elem197;
-                    _elem197 = iprot.ReadI32();
-                    Success.Add(_elem197);
+                    int _elem201;
+                    _elem201 = iprot.ReadI32();
+                    Success.Add(_elem201);
                   }
                   iprot.ReadListEnd();
                 }
@@ -43175,9 +43258,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.I32, Success.Count));
-            foreach (int _iter198 in Success)
+            foreach (int _iter202 in Success)
             {
-              oprot.WriteI32(_iter198);
+              oprot.WriteI32(_iter202);
             }
             oprot.WriteListEnd();
           }
@@ -43388,13 +43471,13 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   Success = new List<DeviceBean>();
-                  TList _list199 = iprot.ReadListBegin();
-                  for( int _i200 = 0; _i200 < _list199.Count; ++_i200)
+                  TList _list203 = iprot.ReadListBegin();
+                  for( int _i204 = 0; _i204 < _list203.Count; ++_i204)
                   {
-                    DeviceBean _elem201;
-                    _elem201 = new DeviceBean();
-                    _elem201.Read(iprot);
-                    Success.Add(_elem201);
+                    DeviceBean _elem205;
+                    _elem205 = new DeviceBean();
+                    _elem205.Read(iprot);
+                    Success.Add(_elem205);
                   }
                   iprot.ReadListEnd();
                 }
@@ -43439,9 +43522,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.Struct, Success.Count));
-            foreach (DeviceBean _iter202 in Success)
+            foreach (DeviceBean _iter206 in Success)
             {
-              _iter202.Write(oprot);
+              _iter206.Write(oprot);
             }
             oprot.WriteListEnd();
           }
@@ -43652,12 +43735,12 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   Success = new List<int>();
-                  TList _list203 = iprot.ReadListBegin();
-                  for( int _i204 = 0; _i204 < _list203.Count; ++_i204)
+                  TList _list207 = iprot.ReadListBegin();
+                  for( int _i208 = 0; _i208 < _list207.Count; ++_i208)
                   {
-                    int _elem205;
-                    _elem205 = iprot.ReadI32();
-                    Success.Add(_elem205);
+                    int _elem209;
+                    _elem209 = iprot.ReadI32();
+                    Success.Add(_elem209);
                   }
                   iprot.ReadListEnd();
                 }
@@ -43702,9 +43785,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.I32, Success.Count));
-            foreach (int _iter206 in Success)
+            foreach (int _iter210 in Success)
             {
-              oprot.WriteI32(_iter206);
+              oprot.WriteI32(_iter210);
             }
             oprot.WriteListEnd();
           }
@@ -43867,12 +43950,12 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   Success = new List<int>();
-                  TList _list207 = iprot.ReadListBegin();
-                  for( int _i208 = 0; _i208 < _list207.Count; ++_i208)
+                  TList _list211 = iprot.ReadListBegin();
+                  for( int _i212 = 0; _i212 < _list211.Count; ++_i212)
                   {
-                    int _elem209;
-                    _elem209 = iprot.ReadI32();
-                    Success.Add(_elem209);
+                    int _elem213;
+                    _elem213 = iprot.ReadI32();
+                    Success.Add(_elem213);
                   }
                   iprot.ReadListEnd();
                 }
@@ -43917,9 +44000,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.I32, Success.Count));
-            foreach (int _iter210 in Success)
+            foreach (int _iter214 in Success)
             {
-              oprot.WriteI32(_iter210);
+              oprot.WriteI32(_iter214);
             }
             oprot.WriteListEnd();
           }
@@ -44082,12 +44165,12 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   Success = new List<int>();
-                  TList _list211 = iprot.ReadListBegin();
-                  for( int _i212 = 0; _i212 < _list211.Count; ++_i212)
+                  TList _list215 = iprot.ReadListBegin();
+                  for( int _i216 = 0; _i216 < _list215.Count; ++_i216)
                   {
-                    int _elem213;
-                    _elem213 = iprot.ReadI32();
-                    Success.Add(_elem213);
+                    int _elem217;
+                    _elem217 = iprot.ReadI32();
+                    Success.Add(_elem217);
                   }
                   iprot.ReadListEnd();
                 }
@@ -44132,9 +44215,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.I32, Success.Count));
-            foreach (int _iter214 in Success)
+            foreach (int _iter218 in Success)
             {
-              oprot.WriteI32(_iter214);
+              oprot.WriteI32(_iter218);
             }
             oprot.WriteListEnd();
           }
@@ -44343,12 +44426,12 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   Success = new List<int>();
-                  TList _list215 = iprot.ReadListBegin();
-                  for( int _i216 = 0; _i216 < _list215.Count; ++_i216)
+                  TList _list219 = iprot.ReadListBegin();
+                  for( int _i220 = 0; _i220 < _list219.Count; ++_i220)
                   {
-                    int _elem217;
-                    _elem217 = iprot.ReadI32();
-                    Success.Add(_elem217);
+                    int _elem221;
+                    _elem221 = iprot.ReadI32();
+                    Success.Add(_elem221);
                   }
                   iprot.ReadListEnd();
                 }
@@ -44393,9 +44476,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.I32, Success.Count));
-            foreach (int _iter218 in Success)
+            foreach (int _iter222 in Success)
             {
-              oprot.WriteI32(_iter218);
+              oprot.WriteI32(_iter222);
             }
             oprot.WriteListEnd();
           }
@@ -44604,12 +44687,12 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   Success = new List<string>();
-                  TList _list219 = iprot.ReadListBegin();
-                  for( int _i220 = 0; _i220 < _list219.Count; ++_i220)
+                  TList _list223 = iprot.ReadListBegin();
+                  for( int _i224 = 0; _i224 < _list223.Count; ++_i224)
                   {
-                    string _elem221;
-                    _elem221 = iprot.ReadString();
-                    Success.Add(_elem221);
+                    string _elem225;
+                    _elem225 = iprot.ReadString();
+                    Success.Add(_elem225);
                   }
                   iprot.ReadListEnd();
                 }
@@ -44654,9 +44737,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.String, Success.Count));
-            foreach (string _iter222 in Success)
+            foreach (string _iter226 in Success)
             {
-              oprot.WriteString(_iter222);
+              oprot.WriteString(_iter226);
             }
             oprot.WriteListEnd();
           }
@@ -44820,12 +44903,12 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   Success = new List<string>();
-                  TList _list223 = iprot.ReadListBegin();
-                  for( int _i224 = 0; _i224 < _list223.Count; ++_i224)
+                  TList _list227 = iprot.ReadListBegin();
+                  for( int _i228 = 0; _i228 < _list227.Count; ++_i228)
                   {
-                    string _elem225;
-                    _elem225 = iprot.ReadString();
-                    Success.Add(_elem225);
+                    string _elem229;
+                    _elem229 = iprot.ReadString();
+                    Success.Add(_elem229);
                   }
                   iprot.ReadListEnd();
                 }
@@ -44870,9 +44953,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.String, Success.Count));
-            foreach (string _iter226 in Success)
+            foreach (string _iter230 in Success)
             {
-              oprot.WriteString(_iter226);
+              oprot.WriteString(_iter230);
             }
             oprot.WriteListEnd();
           }
@@ -45035,12 +45118,12 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   Success = new List<string>();
-                  TList _list227 = iprot.ReadListBegin();
-                  for( int _i228 = 0; _i228 < _list227.Count; ++_i228)
+                  TList _list231 = iprot.ReadListBegin();
+                  for( int _i232 = 0; _i232 < _list231.Count; ++_i232)
                   {
-                    string _elem229;
-                    _elem229 = iprot.ReadString();
-                    Success.Add(_elem229);
+                    string _elem233;
+                    _elem233 = iprot.ReadString();
+                    Success.Add(_elem233);
                   }
                   iprot.ReadListEnd();
                 }
@@ -45085,9 +45168,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.String, Success.Count));
-            foreach (string _iter230 in Success)
+            foreach (string _iter234 in Success)
             {
-              oprot.WriteString(_iter230);
+              oprot.WriteString(_iter234);
             }
             oprot.WriteListEnd();
           }
@@ -45298,13 +45381,13 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   Success = new List<LogBean>();
-                  TList _list231 = iprot.ReadListBegin();
-                  for( int _i232 = 0; _i232 < _list231.Count; ++_i232)
+                  TList _list235 = iprot.ReadListBegin();
+                  for( int _i236 = 0; _i236 < _list235.Count; ++_i236)
                   {
-                    LogBean _elem233;
-                    _elem233 = new LogBean();
-                    _elem233.Read(iprot);
-                    Success.Add(_elem233);
+                    LogBean _elem237;
+                    _elem237 = new LogBean();
+                    _elem237.Read(iprot);
+                    Success.Add(_elem237);
                   }
                   iprot.ReadListEnd();
                 }
@@ -45349,9 +45432,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.Struct, Success.Count));
-            foreach (LogBean _iter234 in Success)
+            foreach (LogBean _iter238 in Success)
             {
-              _iter234.Write(oprot);
+              _iter238.Write(oprot);
             }
             oprot.WriteListEnd();
           }
@@ -45559,13 +45642,13 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   Success = new List<LogLightBean>();
-                  TList _list235 = iprot.ReadListBegin();
-                  for( int _i236 = 0; _i236 < _list235.Count; ++_i236)
+                  TList _list239 = iprot.ReadListBegin();
+                  for( int _i240 = 0; _i240 < _list239.Count; ++_i240)
                   {
-                    LogLightBean _elem237;
-                    _elem237 = new LogLightBean();
-                    _elem237.Read(iprot);
-                    Success.Add(_elem237);
+                    LogLightBean _elem241;
+                    _elem241 = new LogLightBean();
+                    _elem241.Read(iprot);
+                    Success.Add(_elem241);
                   }
                   iprot.ReadListEnd();
                 }
@@ -45610,9 +45693,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.Struct, Success.Count));
-            foreach (LogLightBean _iter238 in Success)
+            foreach (LogLightBean _iter242 in Success)
             {
-              _iter238.Write(oprot);
+              _iter242.Write(oprot);
             }
             oprot.WriteListEnd();
           }
@@ -45823,13 +45906,13 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   Success = new List<LogLightBean>();
-                  TList _list239 = iprot.ReadListBegin();
-                  for( int _i240 = 0; _i240 < _list239.Count; ++_i240)
+                  TList _list243 = iprot.ReadListBegin();
+                  for( int _i244 = 0; _i244 < _list243.Count; ++_i244)
                   {
-                    LogLightBean _elem241;
-                    _elem241 = new LogLightBean();
-                    _elem241.Read(iprot);
-                    Success.Add(_elem241);
+                    LogLightBean _elem245;
+                    _elem245 = new LogLightBean();
+                    _elem245.Read(iprot);
+                    Success.Add(_elem245);
                   }
                   iprot.ReadListEnd();
                 }
@@ -45874,9 +45957,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.Struct, Success.Count));
-            foreach (LogLightBean _iter242 in Success)
+            foreach (LogLightBean _iter246 in Success)
             {
-              _iter242.Write(oprot);
+              _iter246.Write(oprot);
             }
             oprot.WriteListEnd();
           }
@@ -46087,13 +46170,13 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   Success = new List<LogLightBean>();
-                  TList _list243 = iprot.ReadListBegin();
-                  for( int _i244 = 0; _i244 < _list243.Count; ++_i244)
+                  TList _list247 = iprot.ReadListBegin();
+                  for( int _i248 = 0; _i248 < _list247.Count; ++_i248)
                   {
-                    LogLightBean _elem245;
-                    _elem245 = new LogLightBean();
-                    _elem245.Read(iprot);
-                    Success.Add(_elem245);
+                    LogLightBean _elem249;
+                    _elem249 = new LogLightBean();
+                    _elem249.Read(iprot);
+                    Success.Add(_elem249);
                   }
                   iprot.ReadListEnd();
                 }
@@ -46138,9 +46221,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.Struct, Success.Count));
-            foreach (LogLightBean _iter246 in Success)
+            foreach (LogLightBean _iter250 in Success)
             {
-              _iter246.Write(oprot);
+              _iter250.Write(oprot);
             }
             oprot.WriteListEnd();
           }
@@ -46304,13 +46387,13 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   Success = new List<PermitBean>();
-                  TList _list247 = iprot.ReadListBegin();
-                  for( int _i248 = 0; _i248 < _list247.Count; ++_i248)
+                  TList _list251 = iprot.ReadListBegin();
+                  for( int _i252 = 0; _i252 < _list251.Count; ++_i252)
                   {
-                    PermitBean _elem249;
-                    _elem249 = new PermitBean();
-                    _elem249.Read(iprot);
-                    Success.Add(_elem249);
+                    PermitBean _elem253;
+                    _elem253 = new PermitBean();
+                    _elem253.Read(iprot);
+                    Success.Add(_elem253);
                   }
                   iprot.ReadListEnd();
                 }
@@ -46355,9 +46438,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.Struct, Success.Count));
-            foreach (PermitBean _iter250 in Success)
+            foreach (PermitBean _iter254 in Success)
             {
-              _iter250.Write(oprot);
+              _iter254.Write(oprot);
             }
             oprot.WriteListEnd();
           }
@@ -46520,13 +46603,13 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   Success = new List<PermitBean>();
-                  TList _list251 = iprot.ReadListBegin();
-                  for( int _i252 = 0; _i252 < _list251.Count; ++_i252)
+                  TList _list255 = iprot.ReadListBegin();
+                  for( int _i256 = 0; _i256 < _list255.Count; ++_i256)
                   {
-                    PermitBean _elem253;
-                    _elem253 = new PermitBean();
-                    _elem253.Read(iprot);
-                    Success.Add(_elem253);
+                    PermitBean _elem257;
+                    _elem257 = new PermitBean();
+                    _elem257.Read(iprot);
+                    Success.Add(_elem257);
                   }
                   iprot.ReadListEnd();
                 }
@@ -46571,9 +46654,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.Struct, Success.Count));
-            foreach (PermitBean _iter254 in Success)
+            foreach (PermitBean _iter258 in Success)
             {
-              _iter254.Write(oprot);
+              _iter258.Write(oprot);
             }
             oprot.WriteListEnd();
           }
@@ -46784,13 +46867,13 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   Success = new List<PersonBean>();
-                  TList _list255 = iprot.ReadListBegin();
-                  for( int _i256 = 0; _i256 < _list255.Count; ++_i256)
+                  TList _list259 = iprot.ReadListBegin();
+                  for( int _i260 = 0; _i260 < _list259.Count; ++_i260)
                   {
-                    PersonBean _elem257;
-                    _elem257 = new PersonBean();
-                    _elem257.Read(iprot);
-                    Success.Add(_elem257);
+                    PersonBean _elem261;
+                    _elem261 = new PersonBean();
+                    _elem261.Read(iprot);
+                    Success.Add(_elem261);
                   }
                   iprot.ReadListEnd();
                 }
@@ -46835,9 +46918,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.Struct, Success.Count));
-            foreach (PersonBean _iter258 in Success)
+            foreach (PersonBean _iter262 in Success)
             {
-              _iter258.Write(oprot);
+              _iter262.Write(oprot);
             }
             oprot.WriteListEnd();
           }
@@ -47048,12 +47131,12 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   Success = new List<int>();
-                  TList _list259 = iprot.ReadListBegin();
-                  for( int _i260 = 0; _i260 < _list259.Count; ++_i260)
+                  TList _list263 = iprot.ReadListBegin();
+                  for( int _i264 = 0; _i264 < _list263.Count; ++_i264)
                   {
-                    int _elem261;
-                    _elem261 = iprot.ReadI32();
-                    Success.Add(_elem261);
+                    int _elem265;
+                    _elem265 = iprot.ReadI32();
+                    Success.Add(_elem265);
                   }
                   iprot.ReadListEnd();
                 }
@@ -47098,9 +47181,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.I32, Success.Count));
-            foreach (int _iter262 in Success)
+            foreach (int _iter266 in Success)
             {
-              oprot.WriteI32(_iter262);
+              oprot.WriteI32(_iter266);
             }
             oprot.WriteListEnd();
           }
@@ -47263,12 +47346,12 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   Success = new List<int>();
-                  TList _list263 = iprot.ReadListBegin();
-                  for( int _i264 = 0; _i264 < _list263.Count; ++_i264)
+                  TList _list267 = iprot.ReadListBegin();
+                  for( int _i268 = 0; _i268 < _list267.Count; ++_i268)
                   {
-                    int _elem265;
-                    _elem265 = iprot.ReadI32();
-                    Success.Add(_elem265);
+                    int _elem269;
+                    _elem269 = iprot.ReadI32();
+                    Success.Add(_elem269);
                   }
                   iprot.ReadListEnd();
                 }
@@ -47313,9 +47396,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.I32, Success.Count));
-            foreach (int _iter266 in Success)
+            foreach (int _iter270 in Success)
             {
-              oprot.WriteI32(_iter266);
+              oprot.WriteI32(_iter270);
             }
             oprot.WriteListEnd();
           }
@@ -47479,12 +47562,12 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   Success = new List<int>();
-                  TList _list267 = iprot.ReadListBegin();
-                  for( int _i268 = 0; _i268 < _list267.Count; ++_i268)
+                  TList _list271 = iprot.ReadListBegin();
+                  for( int _i272 = 0; _i272 < _list271.Count; ++_i272)
                   {
-                    int _elem269;
-                    _elem269 = iprot.ReadI32();
-                    Success.Add(_elem269);
+                    int _elem273;
+                    _elem273 = iprot.ReadI32();
+                    Success.Add(_elem273);
                   }
                   iprot.ReadListEnd();
                 }
@@ -47529,9 +47612,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.I32, Success.Count));
-            foreach (int _iter270 in Success)
+            foreach (int _iter274 in Success)
             {
-              oprot.WriteI32(_iter270);
+              oprot.WriteI32(_iter274);
             }
             oprot.WriteListEnd();
           }
@@ -47694,12 +47777,12 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   Success = new List<int>();
-                  TList _list271 = iprot.ReadListBegin();
-                  for( int _i272 = 0; _i272 < _list271.Count; ++_i272)
+                  TList _list275 = iprot.ReadListBegin();
+                  for( int _i276 = 0; _i276 < _list275.Count; ++_i276)
                   {
-                    int _elem273;
-                    _elem273 = iprot.ReadI32();
-                    Success.Add(_elem273);
+                    int _elem277;
+                    _elem277 = iprot.ReadI32();
+                    Success.Add(_elem277);
                   }
                   iprot.ReadListEnd();
                 }
@@ -47744,9 +47827,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.I32, Success.Count));
-            foreach (int _iter274 in Success)
+            foreach (int _iter278 in Success)
             {
-              oprot.WriteI32(_iter274);
+              oprot.WriteI32(_iter278);
             }
             oprot.WriteListEnd();
           }
@@ -47909,12 +47992,12 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   Success = new List<int>();
-                  TList _list275 = iprot.ReadListBegin();
-                  for( int _i276 = 0; _i276 < _list275.Count; ++_i276)
+                  TList _list279 = iprot.ReadListBegin();
+                  for( int _i280 = 0; _i280 < _list279.Count; ++_i280)
                   {
-                    int _elem277;
-                    _elem277 = iprot.ReadI32();
-                    Success.Add(_elem277);
+                    int _elem281;
+                    _elem281 = iprot.ReadI32();
+                    Success.Add(_elem281);
                   }
                   iprot.ReadListEnd();
                 }
@@ -47959,9 +48042,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.I32, Success.Count));
-            foreach (int _iter278 in Success)
+            foreach (int _iter282 in Success)
             {
-              oprot.WriteI32(_iter278);
+              oprot.WriteI32(_iter282);
             }
             oprot.WriteListEnd();
           }
@@ -48125,12 +48208,12 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   Success = new List<int>();
-                  TList _list279 = iprot.ReadListBegin();
-                  for( int _i280 = 0; _i280 < _list279.Count; ++_i280)
+                  TList _list283 = iprot.ReadListBegin();
+                  for( int _i284 = 0; _i284 < _list283.Count; ++_i284)
                   {
-                    int _elem281;
-                    _elem281 = iprot.ReadI32();
-                    Success.Add(_elem281);
+                    int _elem285;
+                    _elem285 = iprot.ReadI32();
+                    Success.Add(_elem285);
                   }
                   iprot.ReadListEnd();
                 }
@@ -48175,9 +48258,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.I32, Success.Count));
-            foreach (int _iter282 in Success)
+            foreach (int _iter286 in Success)
             {
-              oprot.WriteI32(_iter282);
+              oprot.WriteI32(_iter286);
             }
             oprot.WriteListEnd();
           }
@@ -48340,12 +48423,12 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   Success = new List<int>();
-                  TList _list283 = iprot.ReadListBegin();
-                  for( int _i284 = 0; _i284 < _list283.Count; ++_i284)
+                  TList _list287 = iprot.ReadListBegin();
+                  for( int _i288 = 0; _i288 < _list287.Count; ++_i288)
                   {
-                    int _elem285;
-                    _elem285 = iprot.ReadI32();
-                    Success.Add(_elem285);
+                    int _elem289;
+                    _elem289 = iprot.ReadI32();
+                    Success.Add(_elem289);
                   }
                   iprot.ReadListEnd();
                 }
@@ -48390,9 +48473,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.I32, Success.Count));
-            foreach (int _iter286 in Success)
+            foreach (int _iter290 in Success)
             {
-              oprot.WriteI32(_iter286);
+              oprot.WriteI32(_iter290);
             }
             oprot.WriteListEnd();
           }
@@ -50370,12 +50453,12 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   Target = new List<int>();
-                  TList _list287 = iprot.ReadListBegin();
-                  for( int _i288 = 0; _i288 < _list287.Count; ++_i288)
+                  TList _list291 = iprot.ReadListBegin();
+                  for( int _i292 = 0; _i292 < _list291.Count; ++_i292)
                   {
-                    int _elem289;
-                    _elem289 = iprot.ReadI32();
-                    Target.Add(_elem289);
+                    int _elem293;
+                    _elem293 = iprot.ReadI32();
+                    Target.Add(_elem293);
                   }
                   iprot.ReadListEnd();
                 }
@@ -50450,9 +50533,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.I32, Target.Count));
-            foreach (int _iter290 in Target)
+            foreach (int _iter294 in Target)
             {
-              oprot.WriteI32(_iter290);
+              oprot.WriteI32(_iter294);
             }
             oprot.WriteListEnd();
           }
@@ -53254,13 +53337,13 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   FaceBeans = new List<FaceBean>();
-                  TList _list291 = iprot.ReadListBegin();
-                  for( int _i292 = 0; _i292 < _list291.Count; ++_i292)
+                  TList _list295 = iprot.ReadListBegin();
+                  for( int _i296 = 0; _i296 < _list295.Count; ++_i296)
                   {
-                    FaceBean _elem293;
-                    _elem293 = new FaceBean();
-                    _elem293.Read(iprot);
-                    FaceBeans.Add(_elem293);
+                    FaceBean _elem297;
+                    _elem297 = new FaceBean();
+                    _elem297.Read(iprot);
+                    FaceBeans.Add(_elem297);
                   }
                   iprot.ReadListEnd();
                 }
@@ -53336,9 +53419,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.Struct, FaceBeans.Count));
-            foreach (FaceBean _iter294 in FaceBeans)
+            foreach (FaceBean _iter298 in FaceBeans)
             {
-              _iter294.Write(oprot);
+              _iter298.Write(oprot);
             }
             oprot.WriteListEnd();
           }
@@ -53590,12 +53673,12 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   Photos = new List<byte[]>();
-                  TList _list295 = iprot.ReadListBegin();
-                  for( int _i296 = 0; _i296 < _list295.Count; ++_i296)
+                  TList _list299 = iprot.ReadListBegin();
+                  for( int _i300 = 0; _i300 < _list299.Count; ++_i300)
                   {
-                    byte[] _elem297;
-                    _elem297 = iprot.ReadBinary();
-                    Photos.Add(_elem297);
+                    byte[] _elem301;
+                    _elem301 = iprot.ReadBinary();
+                    Photos.Add(_elem301);
                   }
                   iprot.ReadListEnd();
                 }
@@ -53607,13 +53690,13 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   Faces = new List<FaceBean>();
-                  TList _list298 = iprot.ReadListBegin();
-                  for( int _i299 = 0; _i299 < _list298.Count; ++_i299)
+                  TList _list302 = iprot.ReadListBegin();
+                  for( int _i303 = 0; _i303 < _list302.Count; ++_i303)
                   {
-                    FaceBean _elem300;
-                    _elem300 = new FaceBean();
-                    _elem300.Read(iprot);
-                    Faces.Add(_elem300);
+                    FaceBean _elem304;
+                    _elem304 = new FaceBean();
+                    _elem304.Read(iprot);
+                    Faces.Add(_elem304);
                   }
                   iprot.ReadListEnd();
                 }
@@ -53689,9 +53772,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.String, Photos.Count));
-            foreach (byte[] _iter301 in Photos)
+            foreach (byte[] _iter305 in Photos)
             {
-              oprot.WriteBinary(_iter301);
+              oprot.WriteBinary(_iter305);
             }
             oprot.WriteListEnd();
           }
@@ -53704,9 +53787,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.Struct, Faces.Count));
-            foreach (FaceBean _iter302 in Faces)
+            foreach (FaceBean _iter306 in Faces)
             {
-              _iter302.Write(oprot);
+              _iter306.Write(oprot);
             }
             oprot.WriteListEnd();
           }
@@ -54195,13 +54278,13 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   Persons = new List<PersonBean>();
-                  TList _list303 = iprot.ReadListBegin();
-                  for( int _i304 = 0; _i304 < _list303.Count; ++_i304)
+                  TList _list307 = iprot.ReadListBegin();
+                  for( int _i308 = 0; _i308 < _list307.Count; ++_i308)
                   {
-                    PersonBean _elem305;
-                    _elem305 = new PersonBean();
-                    _elem305.Read(iprot);
-                    Persons.Add(_elem305);
+                    PersonBean _elem309;
+                    _elem309 = new PersonBean();
+                    _elem309.Read(iprot);
+                    Persons.Add(_elem309);
                   }
                   iprot.ReadListEnd();
                 }
@@ -54245,9 +54328,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.Struct, Persons.Count));
-            foreach (PersonBean _iter306 in Persons)
+            foreach (PersonBean _iter310 in Persons)
             {
-              _iter306.Write(oprot);
+              _iter310.Write(oprot);
             }
             oprot.WriteListEnd();
           }
@@ -54415,12 +54498,12 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   Photos = new List<byte[]>();
-                  TList _list307 = iprot.ReadListBegin();
-                  for( int _i308 = 0; _i308 < _list307.Count; ++_i308)
+                  TList _list311 = iprot.ReadListBegin();
+                  for( int _i312 = 0; _i312 < _list311.Count; ++_i312)
                   {
-                    byte[] _elem309;
-                    _elem309 = iprot.ReadBinary();
-                    Photos.Add(_elem309);
+                    byte[] _elem313;
+                    _elem313 = iprot.ReadBinary();
+                    Photos.Add(_elem313);
                   }
                   iprot.ReadListEnd();
                 }
@@ -54432,13 +54515,13 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   Persons = new List<PersonBean>();
-                  TList _list310 = iprot.ReadListBegin();
-                  for( int _i311 = 0; _i311 < _list310.Count; ++_i311)
+                  TList _list314 = iprot.ReadListBegin();
+                  for( int _i315 = 0; _i315 < _list314.Count; ++_i315)
                   {
-                    PersonBean _elem312;
-                    _elem312 = new PersonBean();
-                    _elem312.Read(iprot);
-                    Persons.Add(_elem312);
+                    PersonBean _elem316;
+                    _elem316 = new PersonBean();
+                    _elem316.Read(iprot);
+                    Persons.Add(_elem316);
                   }
                   iprot.ReadListEnd();
                 }
@@ -54482,9 +54565,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.String, Photos.Count));
-            foreach (byte[] _iter313 in Photos)
+            foreach (byte[] _iter317 in Photos)
             {
-              oprot.WriteBinary(_iter313);
+              oprot.WriteBinary(_iter317);
             }
             oprot.WriteListEnd();
           }
@@ -54497,9 +54580,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.Struct, Persons.Count));
-            foreach (PersonBean _iter314 in Persons)
+            foreach (PersonBean _iter318 in Persons)
             {
-              _iter314.Write(oprot);
+              _iter318.Write(oprot);
             }
             oprot.WriteListEnd();
           }
@@ -55343,12 +55426,12 @@ public partial class IFaceLog {
               if (field.Type == TType.List) {
                 {
                   PersonIdList = new List<int>();
-                  TList _list315 = iprot.ReadListBegin();
-                  for( int _i316 = 0; _i316 < _list315.Count; ++_i316)
+                  TList _list319 = iprot.ReadListBegin();
+                  for( int _i320 = 0; _i320 < _list319.Count; ++_i320)
                   {
-                    int _elem317;
-                    _elem317 = iprot.ReadI32();
-                    PersonIdList.Add(_elem317);
+                    int _elem321;
+                    _elem321 = iprot.ReadI32();
+                    PersonIdList.Add(_elem321);
                   }
                   iprot.ReadListEnd();
                 }
@@ -55402,9 +55485,9 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.I32, PersonIdList.Count));
-            foreach (int _iter318 in PersonIdList)
+            foreach (int _iter322 in PersonIdList)
             {
-              oprot.WriteI32(_iter318);
+              oprot.WriteI32(_iter322);
             }
             oprot.WriteListEnd();
           }
@@ -55797,14 +55880,14 @@ public partial class IFaceLog {
               if (field.Type == TType.Map) {
                 {
                   Config = new Dictionary<string, string>();
-                  TMap _map319 = iprot.ReadMapBegin();
-                  for( int _i320 = 0; _i320 < _map319.Count; ++_i320)
+                  TMap _map323 = iprot.ReadMapBegin();
+                  for( int _i324 = 0; _i324 < _map323.Count; ++_i324)
                   {
-                    string _key321;
-                    string _val322;
-                    _key321 = iprot.ReadString();
-                    _val322 = iprot.ReadString();
-                    Config[_key321] = _val322;
+                    string _key325;
+                    string _val326;
+                    _key325 = iprot.ReadString();
+                    _val326 = iprot.ReadString();
+                    Config[_key325] = _val326;
                   }
                   iprot.ReadMapEnd();
                 }
@@ -55848,10 +55931,10 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteMapBegin(new TMap(TType.String, TType.String, Config.Count));
-            foreach (string _iter323 in Config.Keys)
+            foreach (string _iter327 in Config.Keys)
             {
-              oprot.WriteString(_iter323);
-              oprot.WriteString(Config[_iter323]);
+              oprot.WriteString(_iter327);
+              oprot.WriteString(Config[_iter327]);
             }
             oprot.WriteMapEnd();
           }
@@ -57344,14 +57427,14 @@ public partial class IFaceLog {
               if (field.Type == TType.Map) {
                 {
                   Success = new Dictionary<string, string>();
-                  TMap _map324 = iprot.ReadMapBegin();
-                  for( int _i325 = 0; _i325 < _map324.Count; ++_i325)
+                  TMap _map328 = iprot.ReadMapBegin();
+                  for( int _i329 = 0; _i329 < _map328.Count; ++_i329)
                   {
-                    string _key326;
-                    string _val327;
-                    _key326 = iprot.ReadString();
-                    _val327 = iprot.ReadString();
-                    Success[_key326] = _val327;
+                    string _key330;
+                    string _val331;
+                    _key330 = iprot.ReadString();
+                    _val331 = iprot.ReadString();
+                    Success[_key330] = _val331;
                   }
                   iprot.ReadMapEnd();
                 }
@@ -57396,10 +57479,10 @@ public partial class IFaceLog {
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteMapBegin(new TMap(TType.String, TType.String, Success.Count));
-            foreach (string _iter328 in Success.Keys)
+            foreach (string _iter332 in Success.Keys)
             {
-              oprot.WriteString(_iter328);
-              oprot.WriteString(Success[_iter328]);
+              oprot.WriteString(_iter332);
+              oprot.WriteString(Success[_iter332]);
             }
             oprot.WriteMapEnd();
           }

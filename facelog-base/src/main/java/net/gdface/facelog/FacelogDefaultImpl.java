@@ -40,19 +40,10 @@ public class FacelogDefaultImpl implements IFaceLog {
 	}
 	
 	@Override
-	public List<String> getFeaturesByPersonId(int personId) {
+	public List<Integer> getPersonsPermittedOnDevice(int deviceId, boolean ignoreSchedule, List<Integer> excludePersonIds, Long timestamp) {
 		return null;
 	}
 
-	@Override
-	public List<String> getFeaturesByPersonIdAndSdkVersion(int personId, String sdkVersion) {
-		return null;
-	}
-	
-	@Override
-	public List<FeatureBean> getFeaturesPermittedOnDevice(int deviceId, boolean ignoreSchedule, String sdkVersion, List<String> excludeFeatureIds, Long timestamp) {
-		return null;
-	}
 	@Override
 	public int deletePerson(int personId, Token token) {
 		return 0;
@@ -329,6 +320,16 @@ public class FacelogDefaultImpl implements IFaceLog {
 
 	@Override
 	public List<String> getFeaturesOfPerson(int personId) {
+		return null;
+	}
+
+	@Override
+	public List<String> getFeaturesByPersonIdAndSdkVersion(int personId, String sdkVersion) {
+		return null;
+	}
+
+	@Override
+	public List<String> getFeaturesPermittedOnDevice(int deviceId, boolean ignoreSchedule, String sdkVersion, List<String> excludeFeatureIds, Long timestamp) {
 		return null;
 	}
 
