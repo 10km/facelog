@@ -58,9 +58,16 @@ public interface IFaceLog{
 	/**
 	 * 根据证件号码返回人员记录
 	 * @param papersNum
-	 * @return
+	 * @return 没有找到匹配的记录则返回{@code null}
 	 */
 	public PersonBean getPersonByPapersNum(String papersNum);
+
+	/**
+	 * 根据登记的手机号码返回人员记录
+	 * @param mobilePhone
+	 * @return 没有找到匹配的记录则返回{@code null}
+	 */
+	public PersonBean getPersonByMobilePhone(String mobilePhone);
 
 	/**
 	 * 返回 persionId 关联的所有人脸特征记录
@@ -1391,6 +1398,5 @@ public interface IFaceLog{
 	 * @return
 	 */
 	public boolean isLocal();
-
 
 }

@@ -1463,6 +1463,28 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(getPerson(personId), callback);
     }
     /**
+     * see also {@link net.gdface.facelog.IFaceLog#getPersonByMobilePhone(java.lang.String)}
+     */
+    public ListenableFuture<PersonBean> getPersonByMobilePhone(String mobilePhone){        
+        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
+        ListenableFuture<PersonBean> future = Futures.transform(
+            async.getPersonByMobilePhone(mobilePhone),
+            new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
+                @Override
+                public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
+                    return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.PersonBean.class,
+                    PersonBean.class);
+                }
+            });
+        return factory.wrap(async,future);
+    }
+    public void getPersonByMobilePhone(String mobilePhone,
+        FutureCallback<PersonBean>callback){
+        factory.addCallback(getPersonByMobilePhone(mobilePhone), callback);
+    }
+    /**
      * see also {@link net.gdface.facelog.IFaceLog#getPersonByPapersNum(java.lang.String)}
      */
     public ListenableFuture<PersonBean> getPersonByPapersNum(String papersNum){        

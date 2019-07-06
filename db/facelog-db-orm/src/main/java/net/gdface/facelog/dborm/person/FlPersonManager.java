@@ -1778,6 +1778,135 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
     
 
     /**
+     * Retrieves an unique FlPersonBean using the mobile_phone index.
+     * 
+     * @param mobilePhone the mobile_phone column's value filter
+     * @return an FlPersonBean,otherwise null if not found or exists null in input arguments
+     * @throws DaoException
+     */
+    public FlPersonBean loadByIndexMobilePhone(String mobilePhone) throws DaoException
+    {
+        try{
+            return loadByIndexMobilePhoneChecked(mobilePhone);
+        }catch(ObjectRetrievalException e){
+            return null;
+        }
+    }
+    /**
+     * Retrieves an unique FlPersonBean using the mobile_phone index.
+     * 
+     * @param mobilePhone the mobile_phone column's value filter. must not be null
+     * @return an FlPersonBean
+     * @throws NullPointerException exists null in input arguments
+     * @throws ObjectRetrievalException if not found
+     * @throws DaoException
+     */
+    public FlPersonBean loadByIndexMobilePhoneChecked(String mobilePhone) throws DaoException
+    {
+        FlPersonBean bean = new FlPersonBean();
+        if(null == mobilePhone){
+            throw new ObjectRetrievalException(new NullPointerException());
+        }
+        
+        bean.setMobilePhone(mobilePhone);
+        
+        return loadUniqueUsingTemplateChecked(bean);
+    }
+    /**
+     * Retrieves an unique FlPersonBean for each mobile_phone index.
+     *
+     * @param indexs index array
+     * @return an list of FlPersonBean
+     * @throws DaoException
+     */
+    public java.util.List<FlPersonBean> loadByIndexMobilePhone(String... indexs)throws DaoException
+    {
+        if(null == indexs){
+            return new java.util.ArrayList<FlPersonBean>();
+        }
+        java.util.ArrayList<FlPersonBean> list = new java.util.ArrayList<FlPersonBean>(indexs.length);
+        for(int i = 0 ;i< indexs.length;++i){
+            list.add(loadByIndexMobilePhone(indexs[i]));
+        }
+        return list;
+    }
+    /**
+     * Retrieves an unique FlPersonBean for each mobile_phone index.
+     *
+     * @param indexs index array
+     * @return an list of FlPersonBean
+     * @throws DaoException
+     */
+    public java.util.List<FlPersonBean> loadByIndexMobilePhone(java.util.Collection<String> indexs)throws DaoException
+    {
+        if(null == indexs ){
+            return new java.util.ArrayList<FlPersonBean>();
+        }
+        java.util.ArrayList<FlPersonBean> list = new java.util.ArrayList<FlPersonBean>(indexs.size());
+        if(indexs instanceof java.util.List){
+            for(String key: indexs){
+                list.add(loadByIndexMobilePhone(key));
+            }
+        }else{
+            FlPersonBean bean;
+            for(String key: indexs){
+                if(null != (bean = loadByIndexMobilePhone(key))){
+                    list.add(bean);
+                }
+            }
+        }
+        return list;
+    }
+    /**
+     * Deletes rows for each mobile_phone index.
+     *
+     * @param indexs index array
+     * @return the number of deleted rows
+     * @throws DaoException
+     */
+    public int deleteByIndexMobilePhone(String... indexs)throws DaoException
+    {
+        int count = 0;
+        if(null != indexs){
+            for(String index : indexs){
+                count += deleteByIndexMobilePhone(index);
+            }
+        }
+        return count;
+    }
+    /**
+     * Deletes rows for each mobile_phone index.
+     *
+     * @param indexs index collection
+     * @return the number of deleted rows
+     * @throws DaoException
+     */
+    public int deleteByIndexMobilePhone(java.util.Collection<String> indexs)throws DaoException
+    {
+        int count = 0;
+        if(null != indexs){
+            for(String index : indexs){
+                count += deleteByIndexMobilePhone(index);
+            }
+        }
+        return count;
+    }
+    /**
+     * Deletes rows using the mobile_phone index.
+     *
+     * @param mobilePhone the mobile_phone column's value filter.
+     * @return the number of deleted objects
+     * @throws DaoException
+     */
+    public int deleteByIndexMobilePhone(String mobilePhone) throws DaoException
+    {
+        FlPersonBean bean = this.createBean();
+        bean.setMobilePhone(mobilePhone);
+        return deleteUsingTemplate(bean);
+    }
+    
+
+    /**
      * Retrieves an unique FlPersonBean using the papers_num index.
      * 
      * @param papersNum the papers_num column's value filter
@@ -1989,7 +2118,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
     /**
      * Retrieves a list of FlPersonBean using the index specified by keyIndex.
      * @param keyIndex valid values: <br>
-     *        {@link Constant#FL_PERSON_INDEX_IMAGE_MD5},{@link Constant#FL_PERSON_INDEX_PAPERS_NUM},{@link Constant#FL_PERSON_INDEX_EXPIRY_DATE},{@link Constant#FL_PERSON_INDEX_GROUP_ID}
+     *        {@link Constant#FL_PERSON_INDEX_IMAGE_MD5},{@link Constant#FL_PERSON_INDEX_MOBILE_PHONE},{@link Constant#FL_PERSON_INDEX_PAPERS_NUM},{@link Constant#FL_PERSON_INDEX_EXPIRY_DATE},{@link Constant#FL_PERSON_INDEX_GROUP_ID}
      * @param keys key values of index
      * @return a list of FlPersonBean
      * @throws DaoException
@@ -2010,6 +2139,17 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
             }
             FlPersonBean bean= this.loadByIndexImageMd5((String)keys[0]);
+            return null == bean ? new java.util.ArrayList<FlPersonBean>() : java.util.Arrays.asList(bean);
+        }
+        case FL_PERSON_INDEX_MOBILE_PHONE:{
+            if(keys.length != 1){
+                throw new IllegalArgumentException("argument number mismatch with index 'mobile_phone' column number");
+            }
+            
+            if(null != keys[0] && !(keys[0] instanceof String)){
+                throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
+            }
+            FlPersonBean bean= this.loadByIndexMobilePhone((String)keys[0]);
             return null == bean ? new java.util.ArrayList<FlPersonBean>() : java.util.Arrays.asList(bean);
         }
         case FL_PERSON_INDEX_PAPERS_NUM:{
@@ -2051,7 +2191,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
     /**
      * Deletes rows using key.
      * @param keyIndex valid values: <br>
-     *        {@link Constant#FL_PERSON_INDEX_IMAGE_MD5},{@link Constant#FL_PERSON_INDEX_PAPERS_NUM},{@link Constant#FL_PERSON_INDEX_EXPIRY_DATE},{@link Constant#FL_PERSON_INDEX_GROUP_ID}
+     *        {@link Constant#FL_PERSON_INDEX_IMAGE_MD5},{@link Constant#FL_PERSON_INDEX_MOBILE_PHONE},{@link Constant#FL_PERSON_INDEX_PAPERS_NUM},{@link Constant#FL_PERSON_INDEX_EXPIRY_DATE},{@link Constant#FL_PERSON_INDEX_GROUP_ID}
      * @param keys key values of index
      * @return the number of deleted objects
      * @throws DaoException
@@ -2072,6 +2212,16 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
             }
             return this.deleteByIndexImageMd5((String)keys[0]);
+        }
+        case FL_PERSON_INDEX_MOBILE_PHONE:{
+            if(keys.length != 1){
+                throw new IllegalArgumentException("argument number mismatch with index 'mobile_phone' column number");
+            }
+            
+            if(null != keys[0] && !(keys[0] instanceof String)){
+                throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
+            }
+            return this.deleteByIndexMobilePhone((String)keys[0]);
         }
         case FL_PERSON_INDEX_PAPERS_NUM:{
             if(keys.length != 1){

@@ -782,6 +782,7 @@ public interface DaoConstant {
         }
         public static enum Index{
             /** fl_person index (image_md5) */indexImageMd5,
+            /** fl_person index (mobile_phone) */indexMobilePhone,
             /** fl_person index (papers_num) */indexPapersNum,
             /** fl_person index (expiry_date) */indexExpiryDate,
             /** fl_person index (group_id) */indexGroupId

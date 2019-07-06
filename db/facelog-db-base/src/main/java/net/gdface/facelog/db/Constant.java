@@ -185,12 +185,14 @@ public interface Constant {
     public static final int FL_LOG_INDEX_VERIFY_FEATURE = 3;
     /** fl_person index (image_md5) */
     public static final int FL_PERSON_INDEX_IMAGE_MD5 = 0;
+    /** fl_person index (mobile_phone) */
+    public static final int FL_PERSON_INDEX_MOBILE_PHONE = 1;
     /** fl_person index (papers_num) */
-    public static final int FL_PERSON_INDEX_PAPERS_NUM = 1;
+    public static final int FL_PERSON_INDEX_PAPERS_NUM = 2;
     /** fl_person index (expiry_date) */
-    public static final int FL_PERSON_INDEX_EXPIRY_DATE = 2;
+    public static final int FL_PERSON_INDEX_EXPIRY_DATE = 3;
     /** fl_person index (group_id) */
-    public static final int FL_PERSON_INDEX_GROUP_ID = 3;
+    public static final int FL_PERSON_INDEX_GROUP_ID = 4;
     /** fl_person_group index (parent) */
     public static final int FL_PERSON_GROUP_INDEX_PARENT = 0;
     //////////////////////////////////////

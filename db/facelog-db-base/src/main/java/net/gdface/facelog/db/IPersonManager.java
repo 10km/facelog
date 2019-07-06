@@ -462,6 +462,67 @@ public interface IPersonManager extends TableManager<PersonBean>
     
 
     /**
+     * Retrieves an unique PersonBean using the mobile_phone index.
+     * 
+     * @param mobilePhone the mobile_phone column's value filter
+     * @return an PersonBean,otherwise null if not found or exists null in input arguments
+     * @throws RuntimeDaoException
+     */
+    public PersonBean loadByIndexMobilePhone(String mobilePhone)throws RuntimeDaoException;
+    /**
+     * Retrieves an unique PersonBean using the mobile_phone index.
+     * 
+     * @param mobilePhone the mobile_phone column's value filter. must not be null
+     * @return an PersonBean
+     * @throws NullPointerException exists null in input arguments
+     * @throws ObjectRetrievalException if not found
+     * @throws RuntimeDaoException
+     */
+    public PersonBean loadByIndexMobilePhoneChecked(String mobilePhone)throws RuntimeDaoException,ObjectRetrievalException;
+    /**
+     * Retrieves an unique PersonBean for each mobile_phone index.
+     *
+     * @param indexs index array
+     * @return an list of PersonBean
+     * @throws RuntimeDaoException
+     */
+    public java.util.List<PersonBean> loadByIndexMobilePhone(String... indexs)throws RuntimeDaoException;
+    /**
+     * Retrieves an unique PersonBean for each mobile_phone index.
+     *
+     * @param indexs index collection
+     * @return an list of PersonBean
+     * @throws RuntimeDaoException
+     */
+    public java.util.List<PersonBean> loadByIndexMobilePhone(java.util.Collection<String> indexs)throws RuntimeDaoException;
+    /**
+     * Deletes rows for each mobile_phone index.
+     *
+     * @param indexs index array
+     * @return the number of deleted rows
+     * @throws RuntimeDaoException
+     */
+    public int deleteByIndexMobilePhone(String... indexs)throws RuntimeDaoException;
+    /**
+     * Deletes rows for each mobile_phone index.
+     *
+     * @param indexs index collection
+     * @return the number of deleted rows
+     * @throws RuntimeDaoException
+     */
+    public int deleteByIndexMobilePhone(java.util.Collection<String> indexs)throws RuntimeDaoException;
+
+    /**
+     * Deletes rows using the mobile_phone index.
+     *
+     * @param mobilePhone the mobile_phone column's value filter.
+     * @return the number of deleted objects
+     * @throws RuntimeDaoException
+     */
+    public int deleteByIndexMobilePhone(String mobilePhone)throws RuntimeDaoException;
+    
+
+    /**
      * Retrieves an unique PersonBean using the papers_num index.
      * 
      * @param papersNum the papers_num column's value filter

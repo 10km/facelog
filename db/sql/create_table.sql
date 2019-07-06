@@ -123,7 +123,7 @@ CREATE TABLE IF NOT EXISTS fl_person (
   `rank`        tinyint(1) DEFAULT NULL COMMENT '用户级别,NULL,0:普通用户,2:操作员,3:管理员,其他:未定义',
   `password`    char(32) DEFAULT NULL COMMENT '用户密码,MD5',
   `birthdate`   date DEFAULT NULL COMMENT '出生日期',
-  `mobile_phone`char(11) NULL COMMENT '手机号码',
+  `mobile_phone`char(11) DEFAULT NULL UNIQUE COMMENT '手机号码',
   `papers_type` tinyint(1) DEFAULT NULL COMMENT '证件类型,0:未知,1:身份证,2:护照,3:台胞证,4:港澳通行证,5:军官证,6:外国人居留证,7:员工卡,8:其他',
   `papers_num`  varchar(32) DEFAULT NULL UNIQUE COMMENT '证件号码' ,
   `image_md5`   char(32)    DEFAULT NULL UNIQUE COMMENT '用户默认照片(证件照,标准照)的md5校验码,外键',

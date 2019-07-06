@@ -1098,6 +1098,22 @@ IFaceLog_getPerson_presult::~IFaceLog_getPerson_presult() throw() {
 }
 
 
+IFaceLog_getPersonByMobilePhone_args::~IFaceLog_getPersonByMobilePhone_args() throw() {
+}
+
+
+IFaceLog_getPersonByMobilePhone_pargs::~IFaceLog_getPersonByMobilePhone_pargs() throw() {
+}
+
+
+IFaceLog_getPersonByMobilePhone_result::~IFaceLog_getPersonByMobilePhone_result() throw() {
+}
+
+
+IFaceLog_getPersonByMobilePhone_presult::~IFaceLog_getPersonByMobilePhone_presult() throw() {
+}
+
+
 IFaceLog_getPersonByPapersNum_args::~IFaceLog_getPersonByPapersNum_args() throw() {
 }
 

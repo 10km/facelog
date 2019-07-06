@@ -287,6 +287,7 @@ service IFaceLog {
   list<string> getImagesAssociatedByFeature(1: optional string featureMd5) throws (1: ServiceRuntimeException ex1);
   list<LogBean> getLogBeansByPersonId(1: required i32 personId) throws (1: ServiceRuntimeException ex1);
   PersonBean getPerson(1: required i32 personId) throws (1: ServiceRuntimeException ex1);
+  PersonBean getPersonByMobilePhone(1: optional string mobilePhone) throws (1: ServiceRuntimeException ex1);
   PersonBean getPersonByPapersNum(1: optional string papersNum) throws (1: ServiceRuntimeException ex1);
   PersonGroupBean getPersonGroup(1: required i32 personGroupId) throws (1: ServiceRuntimeException ex1);
   list<PersonGroupBean> getPersonGroups(1: optional list<i32> groupIdList) throws (1: ServiceRuntimeException ex1);

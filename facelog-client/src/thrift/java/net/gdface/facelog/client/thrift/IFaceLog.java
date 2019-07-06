@@ -631,6 +631,14 @@ public interface IFaceLog
             @ThriftField(value=1, name="personId", requiredness=Requiredness.REQUIRED) final int personId
         );
 
+        @ThriftMethod(value = "getPersonByMobilePhone",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1)
+                      })
+        ListenableFuture<PersonBean> getPersonByMobilePhone(
+            @ThriftField(value=1, name="mobilePhone", requiredness=Requiredness.OPTIONAL) final String mobilePhone
+        );
+
         @ThriftMethod(value = "getPersonByPapersNum",
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
@@ -2039,6 +2047,14 @@ public interface IFaceLog
                   })
     PersonBean getPerson(
         @ThriftField(value=1, name="personId", requiredness=Requiredness.REQUIRED) final int personId
+    ) throws ServiceRuntimeException;
+
+    @ThriftMethod(value = "getPersonByMobilePhone",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1)
+                  })
+    PersonBean getPersonByMobilePhone(
+        @ThriftField(value=1, name="mobilePhone", requiredness=Requiredness.OPTIONAL) final String mobilePhone
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "getPersonByPapersNum",

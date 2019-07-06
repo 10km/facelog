@@ -2089,6 +2089,32 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
+    public PersonBean getPersonByMobilePhone(final String mobilePhone) 
+        {
+        try{
+            return syncCall(new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>() {
+                @Override
+                public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
+                    return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.PersonBean.class,
+                    PersonBean.class);
+                }},
+                new ServiceAsyncCall<net.gdface.facelog.client.thrift.PersonBean>(){
+                @Override
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonBean> nativeCallback){
+                    service.getPersonByMobilePhone(mobilePhone,nativeCallback);
+                }});
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);
+        }
+    }
+    @Override
     public PersonBean getPersonByPapersNum(final String papersNum) 
         {
         try{

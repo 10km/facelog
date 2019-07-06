@@ -89,6 +89,7 @@ class IFaceLogIf {
   virtual void getImagesAssociatedByFeature(std::vector<std::string> & _return, const std::string& featureMd5) = 0;
   virtual void getLogBeansByPersonId(std::vector<LogBean> & _return, const int32_t personId) = 0;
   virtual void getPerson(PersonBean& _return, const int32_t personId) = 0;
+  virtual void getPersonByMobilePhone(PersonBean& _return, const std::string& mobilePhone) = 0;
   virtual void getPersonByPapersNum(PersonBean& _return, const std::string& papersNum) = 0;
   virtual void getPersonGroup(PersonGroupBean& _return, const int32_t personGroupId) = 0;
   virtual void getPersonGroups(std::vector<PersonGroupBean> & _return, const std::vector<int32_t> & groupIdList) = 0;
@@ -433,6 +434,9 @@ class IFaceLogNull : virtual public IFaceLogIf {
     return;
   }
   void getPerson(PersonBean& /* _return */, const int32_t /* personId */) {
+    return;
+  }
+  void getPersonByMobilePhone(PersonBean& /* _return */, const std::string& /* mobilePhone */) {
     return;
   }
   void getPersonByPapersNum(PersonBean& /* _return */, const std::string& /* papersNum */) {
@@ -9344,6 +9348,128 @@ class IFaceLog_getPerson_presult {
   ServiceRuntimeException ex1;
 
   _IFaceLog_getPerson_presult__isset __isset;
+
+  template <class Protocol_>
+  uint32_t read(Protocol_* iprot);
+
+};
+
+typedef struct _IFaceLog_getPersonByMobilePhone_args__isset {
+  _IFaceLog_getPersonByMobilePhone_args__isset() : mobilePhone(false) {}
+  bool mobilePhone :1;
+} _IFaceLog_getPersonByMobilePhone_args__isset;
+
+class IFaceLog_getPersonByMobilePhone_args {
+ public:
+
+  IFaceLog_getPersonByMobilePhone_args(const IFaceLog_getPersonByMobilePhone_args&);
+  IFaceLog_getPersonByMobilePhone_args(IFaceLog_getPersonByMobilePhone_args&&);
+  IFaceLog_getPersonByMobilePhone_args& operator=(const IFaceLog_getPersonByMobilePhone_args&);
+  IFaceLog_getPersonByMobilePhone_args& operator=(IFaceLog_getPersonByMobilePhone_args&&);
+  IFaceLog_getPersonByMobilePhone_args() : mobilePhone() {
+  }
+
+  virtual ~IFaceLog_getPersonByMobilePhone_args() throw();
+  std::string mobilePhone;
+
+  _IFaceLog_getPersonByMobilePhone_args__isset __isset;
+
+  void __set_mobilePhone(const std::string& val);
+
+  bool operator == (const IFaceLog_getPersonByMobilePhone_args & rhs) const
+  {
+    if (!(mobilePhone == rhs.mobilePhone))
+      return false;
+    return true;
+  }
+  bool operator != (const IFaceLog_getPersonByMobilePhone_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IFaceLog_getPersonByMobilePhone_args & ) const;
+
+  template <class Protocol_>
+  uint32_t read(Protocol_* iprot);
+  template <class Protocol_>
+  uint32_t write(Protocol_* oprot) const;
+
+};
+
+
+class IFaceLog_getPersonByMobilePhone_pargs {
+ public:
+
+
+  virtual ~IFaceLog_getPersonByMobilePhone_pargs() throw();
+  const std::string* mobilePhone;
+
+  template <class Protocol_>
+  uint32_t write(Protocol_* oprot) const;
+
+};
+
+typedef struct _IFaceLog_getPersonByMobilePhone_result__isset {
+  _IFaceLog_getPersonByMobilePhone_result__isset() : success(false), ex1(false) {}
+  bool success :1;
+  bool ex1 :1;
+} _IFaceLog_getPersonByMobilePhone_result__isset;
+
+class IFaceLog_getPersonByMobilePhone_result {
+ public:
+
+  IFaceLog_getPersonByMobilePhone_result(const IFaceLog_getPersonByMobilePhone_result&);
+  IFaceLog_getPersonByMobilePhone_result(IFaceLog_getPersonByMobilePhone_result&&);
+  IFaceLog_getPersonByMobilePhone_result& operator=(const IFaceLog_getPersonByMobilePhone_result&);
+  IFaceLog_getPersonByMobilePhone_result& operator=(IFaceLog_getPersonByMobilePhone_result&&);
+  IFaceLog_getPersonByMobilePhone_result() {
+  }
+
+  virtual ~IFaceLog_getPersonByMobilePhone_result() throw();
+  PersonBean success;
+  ServiceRuntimeException ex1;
+
+  _IFaceLog_getPersonByMobilePhone_result__isset __isset;
+
+  void __set_success(const PersonBean& val);
+
+  void __set_ex1(const ServiceRuntimeException& val);
+
+  bool operator == (const IFaceLog_getPersonByMobilePhone_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex1 == rhs.ex1))
+      return false;
+    return true;
+  }
+  bool operator != (const IFaceLog_getPersonByMobilePhone_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IFaceLog_getPersonByMobilePhone_result & ) const;
+
+  template <class Protocol_>
+  uint32_t read(Protocol_* iprot);
+  template <class Protocol_>
+  uint32_t write(Protocol_* oprot) const;
+
+};
+
+typedef struct _IFaceLog_getPersonByMobilePhone_presult__isset {
+  _IFaceLog_getPersonByMobilePhone_presult__isset() : success(false), ex1(false) {}
+  bool success :1;
+  bool ex1 :1;
+} _IFaceLog_getPersonByMobilePhone_presult__isset;
+
+class IFaceLog_getPersonByMobilePhone_presult {
+ public:
+
+
+  virtual ~IFaceLog_getPersonByMobilePhone_presult() throw();
+  PersonBean* success;
+  ServiceRuntimeException ex1;
+
+  _IFaceLog_getPersonByMobilePhone_presult__isset __isset;
 
   template <class Protocol_>
   uint32_t read(Protocol_* iprot);
@@ -20712,6 +20838,9 @@ class IFaceLogClientT : virtual public IFaceLogIf {
   void getPerson(PersonBean& _return, const int32_t personId);
   void send_getPerson(const int32_t personId);
   void recv_getPerson(PersonBean& _return);
+  void getPersonByMobilePhone(PersonBean& _return, const std::string& mobilePhone);
+  void send_getPersonByMobilePhone(const std::string& mobilePhone);
+  void recv_getPersonByMobilePhone(PersonBean& _return);
   void getPersonByPapersNum(PersonBean& _return, const std::string& papersNum);
   void send_getPersonByPapersNum(const std::string& papersNum);
   void recv_getPersonByPapersNum(PersonBean& _return);
@@ -21140,6 +21269,8 @@ class IFaceLogProcessorT : public ::apache::thrift::TDispatchProcessorT<Protocol
   void process_getLogBeansByPersonId(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext);
   void process_getPerson(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_getPerson(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext);
+  void process_getPersonByMobilePhone(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_getPersonByMobilePhone(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext);
   void process_getPersonByPapersNum(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_getPersonByPapersNum(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext);
   void process_getPersonGroup(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -21523,6 +21654,9 @@ class IFaceLogProcessorT : public ::apache::thrift::TDispatchProcessorT<Protocol
     processMap_["getPerson"] = ProcessFunctions(
       &IFaceLogProcessorT::process_getPerson,
       &IFaceLogProcessorT::process_getPerson);
+    processMap_["getPersonByMobilePhone"] = ProcessFunctions(
+      &IFaceLogProcessorT::process_getPersonByMobilePhone,
+      &IFaceLogProcessorT::process_getPersonByMobilePhone);
     processMap_["getPersonByPapersNum"] = ProcessFunctions(
       &IFaceLogProcessorT::process_getPersonByPapersNum,
       &IFaceLogProcessorT::process_getPersonByPapersNum);
@@ -22465,6 +22599,16 @@ class IFaceLogMultiface : virtual public IFaceLogIf {
       ifaces_[i]->getPerson(_return, personId);
     }
     ifaces_[i]->getPerson(_return, personId);
+    return;
+  }
+
+  void getPersonByMobilePhone(PersonBean& _return, const std::string& mobilePhone) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->getPersonByMobilePhone(_return, mobilePhone);
+    }
+    ifaces_[i]->getPersonByMobilePhone(_return, mobilePhone);
     return;
   }
 
@@ -23554,6 +23698,9 @@ class IFaceLogConcurrentClientT : virtual public IFaceLogIf {
   void getPerson(PersonBean& _return, const int32_t personId);
   int32_t send_getPerson(const int32_t personId);
   void recv_getPerson(PersonBean& _return, const int32_t seqid);
+  void getPersonByMobilePhone(PersonBean& _return, const std::string& mobilePhone);
+  int32_t send_getPersonByMobilePhone(const std::string& mobilePhone);
+  void recv_getPersonByMobilePhone(PersonBean& _return, const int32_t seqid);
   void getPersonByPapersNum(PersonBean& _return, const std::string& papersNum);
   int32_t send_getPersonByPapersNum(const std::string& papersNum);
   void recv_getPersonByPapersNum(PersonBean& _return, const int32_t seqid);

@@ -1114,6 +1114,107 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
     // override IPersonManager
 
     @Override 
+    public PersonBean loadByIndexMobilePhone(String mobilePhone){
+        try{
+            return loadByIndexMobilePhoneChecked(mobilePhone);
+        }catch(ObjectRetrievalException e){
+            return null;
+        }
+    }
+    // override IPersonManager
+
+    @Override 
+    public PersonBean loadByIndexMobilePhoneChecked(String mobilePhone)throws ObjectRetrievalException{
+        if(null == mobilePhone){
+            throw new ObjectRetrievalException(new NullPointerException());
+        }
+        PersonBean bean = new PersonBean();
+        
+        bean.setMobilePhone(mobilePhone);
+        
+        return loadUniqueUsingTemplateChecked(bean);
+    }
+    // override IPersonManager
+
+    @Override 
+    public java.util.List<PersonBean> loadByIndexMobilePhone(String... indexs)
+    {
+        if(null == indexs){
+            return new java.util.ArrayList<PersonBean>();
+        }
+        java.util.ArrayList<PersonBean> list = new java.util.ArrayList<PersonBean>(indexs.length);
+        for(int i = 0 ;i< indexs.length;++i){
+            list.add(loadByIndexMobilePhone(indexs[i]));
+        }
+        return list;
+    }
+    // override IPersonManager
+
+    @Override 
+    public java.util.List<PersonBean> loadByIndexMobilePhone(java.util.Collection<String> indexs)
+    {
+        if(null == indexs ){
+            return new java.util.ArrayList<PersonBean>();
+        }
+        java.util.ArrayList<PersonBean> list = new java.util.ArrayList<PersonBean>(indexs.size());
+        if(indexs instanceof java.util.List){
+            for(String key: indexs){
+                list.add(loadByIndexMobilePhone(key));
+            }
+        }else{
+            PersonBean bean;
+            for(String key: indexs){
+                if(null != (bean = loadByIndexMobilePhone(key))){
+                    list.add(bean);
+                }
+            }
+        }
+        return list;
+    }
+    // override IPersonManager
+
+    @Override 
+    public int deleteByIndexMobilePhone(String... indexs)
+    {
+        int count = 0;
+        if(null != indexs){
+            for(String index : indexs){
+                count += deleteByIndexMobilePhone(index);
+            }
+        }
+        return count;
+    }
+    // override IPersonManager
+
+    @Override 
+    public int deleteByIndexMobilePhone(java.util.Collection<String> indexs)
+    {
+        int count = 0;
+        if(null != indexs){
+            for(String index : indexs){
+                count += deleteByIndexMobilePhone(index);
+            }
+        }
+        return count;
+    }
+
+    // override IPersonManager
+
+    @Override 
+    public int deleteByIndexMobilePhone(String mobilePhone)
+    {
+        try{
+            return this.nativeManager.deleteByIndexMobilePhone(mobilePhone);
+        }
+        catch(DaoException e)
+        {
+            throw new RuntimeDaoException(e);
+        }
+    }
+    
+    // override IPersonManager
+
+    @Override 
     public PersonBean loadByIndexPapersNum(String papersNum){
         try{
             return loadByIndexPapersNumChecked(papersNum);
@@ -1288,7 +1389,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
     /**
      * Retrieves a list of PersonBean using the index specified by keyIndex.
      * @param keyIndex valid values: <br>
-     *        {@link Constant#FL_PERSON_INDEX_IMAGE_MD5},{@link Constant#FL_PERSON_INDEX_PAPERS_NUM},{@link Constant#FL_PERSON_INDEX_EXPIRY_DATE},{@link Constant#FL_PERSON_INDEX_GROUP_ID}
+     *        {@link Constant#FL_PERSON_INDEX_IMAGE_MD5},{@link Constant#FL_PERSON_INDEX_MOBILE_PHONE},{@link Constant#FL_PERSON_INDEX_PAPERS_NUM},{@link Constant#FL_PERSON_INDEX_EXPIRY_DATE},{@link Constant#FL_PERSON_INDEX_GROUP_ID}
      * @param keys key values of index
      * @return a list of PersonBean
      */
@@ -1305,7 +1406,7 @@ public class PersonManager extends TableManager.BaseAdapter<PersonBean> implemen
     /**
      * Deletes rows using key.
      * @param keyIndex valid values: <br>
-     *        {@link Constant#FL_PERSON_INDEX_IMAGE_MD5},{@link Constant#FL_PERSON_INDEX_PAPERS_NUM},{@link Constant#FL_PERSON_INDEX_EXPIRY_DATE},{@link Constant#FL_PERSON_INDEX_GROUP_ID}
+     *        {@link Constant#FL_PERSON_INDEX_IMAGE_MD5},{@link Constant#FL_PERSON_INDEX_MOBILE_PHONE},{@link Constant#FL_PERSON_INDEX_PAPERS_NUM},{@link Constant#FL_PERSON_INDEX_EXPIRY_DATE},{@link Constant#FL_PERSON_INDEX_GROUP_ID}
      * @param keys key values of index
      * @return the number of deleted objects
      */

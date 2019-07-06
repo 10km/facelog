@@ -1585,6 +1585,25 @@ public class IFaceLogThriftDecorator {
         }
     }
     /**
+     * @see {@link net.gdface.facelog.IFaceLog#getPersonByMobilePhone(java.lang.String)}
+     */
+    @ThriftMethod(value = "getPersonByMobilePhone" )
+    public PersonBean getPersonByMobilePhone(String mobilePhone) 
+        throws ServiceRuntimeException{
+        try{
+            return TypeTransformer.getInstance().to(
+                    delegate().getPersonByMobilePhone(mobilePhone),
+                    PersonBean.class,
+                    PersonBean.class);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
      * @see {@link net.gdface.facelog.IFaceLog#getPersonByPapersNum(java.lang.String)}
      */
     @ThriftMethod(value = "getPersonByPapersNum" )

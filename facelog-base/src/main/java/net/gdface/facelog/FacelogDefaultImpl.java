@@ -35,6 +35,11 @@ public class FacelogDefaultImpl implements IFaceLog {
 	}
 
 	@Override
+	public PersonBean getPersonByMobilePhone(String mobilePhone) {
+		return null;
+	}
+	
+	@Override
 	public List<String> getFeaturesByPersonId(int personId) {
 		return null;
 	}
@@ -794,4 +799,5 @@ public class FacelogDefaultImpl implements IFaceLog {
 	@Override
 	public void bindBorder(Integer personGroupId, Integer deviceGroupId, Token token) {
 	}
+
 }

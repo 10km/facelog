@@ -10336,6 +10336,131 @@ IFaceLog_getPerson_result.prototype.write = function(output) {
   return;
 };
 
+var IFaceLog_getPersonByMobilePhone_args = function(args) {
+  this.mobilePhone = null;
+  if (args) {
+    if (args.mobilePhone !== undefined && args.mobilePhone !== null) {
+      this.mobilePhone = args.mobilePhone;
+    }
+  }
+};
+IFaceLog_getPersonByMobilePhone_args.prototype = {};
+IFaceLog_getPersonByMobilePhone_args.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+      if (ftype == Thrift.Type.STRING) {
+        this.mobilePhone = input.readString();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 0:
+        input.skip(ftype);
+        break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+IFaceLog_getPersonByMobilePhone_args.prototype.write = function(output) {
+  output.writeStructBegin('IFaceLog_getPersonByMobilePhone_args');
+  if (this.mobilePhone !== null && this.mobilePhone !== undefined) {
+    output.writeFieldBegin('mobilePhone', Thrift.Type.STRING, 1);
+    output.writeString(this.mobilePhone);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+var IFaceLog_getPersonByMobilePhone_result = function(args) {
+  this.success = null;
+  this.ex1 = null;
+  if (args instanceof ttypes.ServiceRuntimeException) {
+    this.ex1 = args;
+    return;
+  }
+  if (args) {
+    if (args.success !== undefined && args.success !== null) {
+      this.success = new ttypes.PersonBean(args.success);
+    }
+    if (args.ex1 !== undefined && args.ex1 !== null) {
+      this.ex1 = args.ex1;
+    }
+  }
+};
+IFaceLog_getPersonByMobilePhone_result.prototype = {};
+IFaceLog_getPersonByMobilePhone_result.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.success = new ttypes.PersonBean();
+        this.success.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 1:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.ex1 = new ttypes.ServiceRuntimeException();
+        this.ex1.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+IFaceLog_getPersonByMobilePhone_result.prototype.write = function(output) {
+  output.writeStructBegin('IFaceLog_getPersonByMobilePhone_result');
+  if (this.success !== null && this.success !== undefined) {
+    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
+    this.success.write(output);
+    output.writeFieldEnd();
+  }
+  if (this.ex1 !== null && this.ex1 !== undefined) {
+    output.writeFieldBegin('ex1', Thrift.Type.STRUCT, 1);
+    this.ex1.write(output);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
 var IFaceLog_getPersonByPapersNum_args = function(args) {
   this.papersNum = null;
   if (args) {
@@ -27298,6 +27423,58 @@ IFaceLogClient.prototype.recv_getPerson = function(input,mtype,rseqid) {
   }
   return callback('getPerson failed: unknown result');
 };
+IFaceLogClient.prototype.getPersonByMobilePhone = function(mobilePhone, callback) {
+  this._seqid = this.new_seqid();
+  if (callback === undefined) {
+    var _defer = Q.defer();
+    this._reqs[this.seqid()] = function(error, result) {
+      if (error) {
+        _defer.reject(error);
+      } else {
+        _defer.resolve(result);
+      }
+    };
+    this.send_getPersonByMobilePhone(mobilePhone);
+    return _defer.promise;
+  } else {
+    this._reqs[this.seqid()] = callback;
+    this.send_getPersonByMobilePhone(mobilePhone);
+  }
+};
+
+IFaceLogClient.prototype.send_getPersonByMobilePhone = function(mobilePhone) {
+  var output = new this.pClass(this.output);
+  output.writeMessageBegin('getPersonByMobilePhone', Thrift.MessageType.CALL, this.seqid());
+  var params = {
+    mobilePhone: mobilePhone
+  };
+  var args = new IFaceLog_getPersonByMobilePhone_args(params);
+  args.write(output);
+  output.writeMessageEnd();
+  return this.output.flush();
+};
+
+IFaceLogClient.prototype.recv_getPersonByMobilePhone = function(input,mtype,rseqid) {
+  var callback = this._reqs[rseqid] || function() {};
+  delete this._reqs[rseqid];
+  if (mtype == Thrift.MessageType.EXCEPTION) {
+    var x = new Thrift.TApplicationException();
+    x.read(input);
+    input.readMessageEnd();
+    return callback(x);
+  }
+  var result = new IFaceLog_getPersonByMobilePhone_result();
+  result.read(input);
+  input.readMessageEnd();
+
+  if (null !== result.ex1) {
+    return callback(result.ex1);
+  }
+  if (null !== result.success) {
+    return callback(null, result.success);
+  }
+  return callback('getPersonByMobilePhone failed: unknown result');
+};
 IFaceLogClient.prototype.getPersonByPapersNum = function(papersNum, callback) {
   this._seqid = this.new_seqid();
   if (callback === undefined) {
@@ -34730,6 +34907,47 @@ IFaceLogProcessor.prototype.process_getPerson = function(seqid, input, output) {
       } else {
         result_obj = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
         output.writeMessageBegin("getPerson", Thrift.MessageType.EXCEPTION, seqid);
+      }
+      result_obj.write(output);
+      output.writeMessageEnd();
+      output.flush();
+    });
+  }
+};
+IFaceLogProcessor.prototype.process_getPersonByMobilePhone = function(seqid, input, output) {
+  var args = new IFaceLog_getPersonByMobilePhone_args();
+  args.read(input);
+  input.readMessageEnd();
+  if (this._handler.getPersonByMobilePhone.length === 1) {
+    Q.fcall(this._handler.getPersonByMobilePhone.bind(this._handler), args.mobilePhone)
+      .then(function(result) {
+        var result_obj = new IFaceLog_getPersonByMobilePhone_result({success: result});
+        output.writeMessageBegin("getPersonByMobilePhone", Thrift.MessageType.REPLY, seqid);
+        result_obj.write(output);
+        output.writeMessageEnd();
+        output.flush();
+      }, function (err) {
+        var result;
+        if (err instanceof ttypes.ServiceRuntimeException) {
+          result = new IFaceLog_getPersonByMobilePhone_result(err);
+          output.writeMessageBegin("getPersonByMobilePhone", Thrift.MessageType.REPLY, seqid);
+        } else {
+          result = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
+          output.writeMessageBegin("getPersonByMobilePhone", Thrift.MessageType.EXCEPTION, seqid);
+        }
+        result.write(output);
+        output.writeMessageEnd();
+        output.flush();
+      });
+  } else {
+    this._handler.getPersonByMobilePhone(args.mobilePhone, function (err, result) {
+      var result_obj;
+      if ((err === null || typeof err === 'undefined') || err instanceof ttypes.ServiceRuntimeException) {
+        result_obj = new IFaceLog_getPersonByMobilePhone_result((err !== null || typeof err === 'undefined') ? err : {success: result});
+        output.writeMessageBegin("getPersonByMobilePhone", Thrift.MessageType.REPLY, seqid);
+      } else {
+        result_obj = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
+        output.writeMessageBegin("getPersonByMobilePhone", Thrift.MessageType.EXCEPTION, seqid);
       }
       result_obj.write(output);
       output.writeMessageEnd();

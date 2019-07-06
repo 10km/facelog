@@ -222,6 +222,41 @@ public class PersonCacheManager extends PersonManager
     // override PersonManager
 
     @Override 
+    public PersonBean loadByIndexMobilePhoneChecked(String mobilePhone) throws ObjectRetrievalException{
+        if(null == mobilePhone){
+            throw new ObjectRetrievalException(new NullPointerException());
+        }
+        try{
+            return cache.getBeanByMobilePhone(mobilePhone);
+        }catch(ExecutionException ee){
+            try{
+                throw ee.getCause();
+            }catch(ObjectRetrievalException oe){
+                throw oe;
+            } catch (RuntimeDaoException we) {
+                throw we;
+            } catch (RuntimeException re) {
+                throw re;
+            }catch (Throwable e) {
+                throw new RuntimeException(ee);
+            }
+        }catch(UncheckedExecutionException ue){
+            try{
+                throw ue.getCause();
+            }catch(ObjectRetrievalException oe){
+                throw oe;
+            } catch (RuntimeDaoException we) {
+                throw we;
+            } catch (RuntimeException re) {
+                throw re;
+            }catch (Throwable e) {
+                throw new RuntimeException(ue);
+            }
+        }
+    }
+    // override PersonManager
+
+    @Override 
     public PersonBean loadByIndexPapersNumChecked(String papersNum) throws ObjectRetrievalException{
         if(null == papersNum){
             throw new ObjectRetrievalException(new NullPointerException());

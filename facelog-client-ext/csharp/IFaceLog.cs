@@ -86,6 +86,7 @@ public partial class IFaceLog {
     List<string> getImagesAssociatedByFeature(string featureMd5);
     List<LogBean> getLogBeansByPersonId(int personId);
     PersonBean getPerson(int personId);
+    PersonBean getPersonByMobilePhone(string mobilePhone);
     PersonBean getPersonByPapersNum(string papersNum);
     PersonGroupBean getPersonGroup(int personGroupId);
     List<PersonGroupBean> getPersonGroups(List<int> groupIdList);
@@ -245,6 +246,7 @@ public partial class IFaceLog {
     Task<List<string>> getImagesAssociatedByFeatureAsync(string featureMd5);
     Task<List<LogBean>> getLogBeansByPersonIdAsync(int personId);
     Task<PersonBean> getPersonAsync(int personId);
+    Task<PersonBean> getPersonByMobilePhoneAsync(string mobilePhone);
     Task<PersonBean> getPersonByPapersNumAsync(string papersNum);
     Task<PersonGroupBean> getPersonGroupAsync(int personGroupId);
     Task<List<PersonGroupBean>> getPersonGroupsAsync(List<int> groupIdList);
@@ -472,6 +474,8 @@ public partial class IFaceLog {
     List<LogBean> End_getLogBeansByPersonId(IAsyncResult asyncResult);
     IAsyncResult Begin_getPerson(AsyncCallback callback, object state, int personId);
     PersonBean End_getPerson(IAsyncResult asyncResult);
+    IAsyncResult Begin_getPersonByMobilePhone(AsyncCallback callback, object state, string mobilePhone);
+    PersonBean End_getPersonByMobilePhone(IAsyncResult asyncResult);
     IAsyncResult Begin_getPersonByPapersNum(AsyncCallback callback, object state, string papersNum);
     PersonBean End_getPersonByPapersNum(IAsyncResult asyncResult);
     IAsyncResult Begin_getPersonGroup(AsyncCallback callback, object state, int personGroupId);
@@ -4709,6 +4713,64 @@ public partial class IFaceLog {
         throw result.Ex1;
       }
       throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "getPerson failed: unknown result");
+    }
+
+    
+    public IAsyncResult Begin_getPersonByMobilePhone(AsyncCallback callback, object state, string mobilePhone)
+    {
+      return send_getPersonByMobilePhone(callback, state, mobilePhone);
+    }
+
+    public PersonBean End_getPersonByMobilePhone(IAsyncResult asyncResult)
+    {
+      oprot_.Transport.EndFlush(asyncResult);
+      return recv_getPersonByMobilePhone();
+    }
+
+    public async Task<PersonBean> getPersonByMobilePhoneAsync(string mobilePhone)
+    {
+      PersonBean retval;
+      retval = await Task.Run(() =>
+      {
+        return getPersonByMobilePhone(mobilePhone);
+      });
+      return retval;
+    }
+
+    public PersonBean getPersonByMobilePhone(string mobilePhone)
+    {
+      var asyncResult = Begin_getPersonByMobilePhone(null, null, mobilePhone);
+      return End_getPersonByMobilePhone(asyncResult);
+
+    }
+    public IAsyncResult send_getPersonByMobilePhone(AsyncCallback callback, object state, string mobilePhone)
+    {
+      oprot_.WriteMessageBegin(new TMessage("getPersonByMobilePhone", TMessageType.Call, seqid_));
+      getPersonByMobilePhone_args args = new getPersonByMobilePhone_args();
+      args.MobilePhone = mobilePhone;
+      args.Write(oprot_);
+      oprot_.WriteMessageEnd();
+      return oprot_.Transport.BeginFlush(callback, state);
+    }
+
+    public PersonBean recv_getPersonByMobilePhone()
+    {
+      TMessage msg = iprot_.ReadMessageBegin();
+      if (msg.Type == TMessageType.Exception) {
+        TApplicationException x = TApplicationException.Read(iprot_);
+        iprot_.ReadMessageEnd();
+        throw x;
+      }
+      getPersonByMobilePhone_result result = new getPersonByMobilePhone_result();
+      result.Read(iprot_);
+      iprot_.ReadMessageEnd();
+      if (result.Success != null) {
+        return result.Success;
+      }
+      if (result.Ex1 != null) {
+        throw result.Ex1;
+      }
+      throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "getPersonByMobilePhone failed: unknown result");
     }
 
     
@@ -9924,6 +9986,7 @@ public partial class IFaceLog {
       processMap_["getImagesAssociatedByFeature"] = getImagesAssociatedByFeature_ProcessAsync;
       processMap_["getLogBeansByPersonId"] = getLogBeansByPersonId_ProcessAsync;
       processMap_["getPerson"] = getPerson_ProcessAsync;
+      processMap_["getPersonByMobilePhone"] = getPersonByMobilePhone_ProcessAsync;
       processMap_["getPersonByPapersNum"] = getPersonByPapersNum_ProcessAsync;
       processMap_["getPersonGroup"] = getPersonGroup_ProcessAsync;
       processMap_["getPersonGroups"] = getPersonGroups_ProcessAsync;
@@ -12462,6 +12525,41 @@ public partial class IFaceLog {
         Console.Error.WriteLine(ex.ToString());
         TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
         oprot.WriteMessageBegin(new TMessage("getPerson", TMessageType.Exception, seqid));
+        x.Write(oprot);
+      }
+      oprot.WriteMessageEnd();
+      oprot.Transport.Flush();
+    }
+
+    public async Task getPersonByMobilePhone_ProcessAsync(int seqid, TProtocol iprot, TProtocol oprot)
+    {
+      getPersonByMobilePhone_args args = new getPersonByMobilePhone_args();
+      args.Read(iprot);
+      iprot.ReadMessageEnd();
+      getPersonByMobilePhone_result result = new getPersonByMobilePhone_result();
+      try
+      {
+        try
+        {
+          result.Success = await iface_.getPersonByMobilePhoneAsync(args.MobilePhone);
+        }
+        catch (ServiceRuntimeException ex1)
+        {
+          result.Ex1 = ex1;
+        }
+        oprot.WriteMessageBegin(new TMessage("getPersonByMobilePhone", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+      }
+      catch (TTransportException)
+      {
+        throw;
+      }
+      catch (Exception ex)
+      {
+        Console.Error.WriteLine("Error occurred in processor:");
+        Console.Error.WriteLine(ex.ToString());
+        TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
+        oprot.WriteMessageBegin(new TMessage("getPersonByMobilePhone", TMessageType.Exception, seqid));
         x.Write(oprot);
       }
       oprot.WriteMessageEnd();
@@ -15650,6 +15748,7 @@ public partial class IFaceLog {
       processMap_["getImagesAssociatedByFeature"] = getImagesAssociatedByFeature_Process;
       processMap_["getLogBeansByPersonId"] = getLogBeansByPersonId_Process;
       processMap_["getPerson"] = getPerson_Process;
+      processMap_["getPersonByMobilePhone"] = getPersonByMobilePhone_Process;
       processMap_["getPersonByPapersNum"] = getPersonByPapersNum_Process;
       processMap_["getPersonGroup"] = getPersonGroup_Process;
       processMap_["getPersonGroups"] = getPersonGroups_Process;
@@ -18188,6 +18287,41 @@ public partial class IFaceLog {
         Console.Error.WriteLine(ex.ToString());
         TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
         oprot.WriteMessageBegin(new TMessage("getPerson", TMessageType.Exception, seqid));
+        x.Write(oprot);
+      }
+      oprot.WriteMessageEnd();
+      oprot.Transport.Flush();
+    }
+
+    public void getPersonByMobilePhone_Process(int seqid, TProtocol iprot, TProtocol oprot)
+    {
+      getPersonByMobilePhone_args args = new getPersonByMobilePhone_args();
+      args.Read(iprot);
+      iprot.ReadMessageEnd();
+      getPersonByMobilePhone_result result = new getPersonByMobilePhone_result();
+      try
+      {
+        try
+        {
+          result.Success = iface_.getPersonByMobilePhone(args.MobilePhone);
+        }
+        catch (ServiceRuntimeException ex1)
+        {
+          result.Ex1 = ex1;
+        }
+        oprot.WriteMessageBegin(new TMessage("getPersonByMobilePhone", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+      }
+      catch (TTransportException)
+      {
+        throw;
+      }
+      catch (Exception ex)
+      {
+        Console.Error.WriteLine("Error occurred in processor:");
+        Console.Error.WriteLine(ex.ToString());
+        TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
+        oprot.WriteMessageBegin(new TMessage("getPersonByMobilePhone", TMessageType.Exception, seqid));
         x.Write(oprot);
       }
       oprot.WriteMessageEnd();
@@ -36889,6 +37023,205 @@ public partial class IFaceLog {
 
     public override string ToString() {
       StringBuilder __sb = new StringBuilder("getPerson_result(");
+      bool __first = true;
+      if (Success != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Success: ");
+        __sb.Append(Success== null ? "<null>" : Success.ToString());
+      }
+      if (Ex1 != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Ex1: ");
+        __sb.Append(Ex1== null ? "<null>" : Ex1.ToString());
+      }
+      __sb.Append(")");
+      return __sb.ToString();
+    }
+
+  }
+
+
+  #if !SILVERLIGHT
+  [Serializable]
+  #endif
+  public partial class getPersonByMobilePhone_args : TBase
+  {
+
+    public string MobilePhone { get; set; }
+
+    public getPersonByMobilePhone_args() {
+    }
+
+    public void Read (TProtocol iprot)
+    {
+      iprot.IncrementRecursionDepth();
+      try
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 1:
+              if (field.Type == TType.String) {
+                MobilePhone = iprot.ReadString();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+      finally
+      {
+        iprot.DecrementRecursionDepth();
+      }
+    }
+
+    public void Write(TProtocol oprot) {
+      oprot.IncrementRecursionDepth();
+      try
+      {
+        TStruct struc = new TStruct("getPersonByMobilePhone_args");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+        if (MobilePhone != null) {
+          field.Name = "mobilePhone";
+          field.Type = TType.String;
+          field.ID = 1;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteString(MobilePhone);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+      finally
+      {
+        oprot.DecrementRecursionDepth();
+      }
+    }
+
+    public override string ToString() {
+      StringBuilder __sb = new StringBuilder("getPersonByMobilePhone_args(");
+      bool __first = true;
+      if (MobilePhone != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("MobilePhone: ");
+        __sb.Append(MobilePhone);
+      }
+      __sb.Append(")");
+      return __sb.ToString();
+    }
+
+  }
+
+
+  #if !SILVERLIGHT
+  [Serializable]
+  #endif
+  public partial class getPersonByMobilePhone_result : TBase
+  {
+
+    public PersonBean Success { get; set; }
+
+    public ServiceRuntimeException Ex1 { get; set; }
+
+    public getPersonByMobilePhone_result() {
+    }
+
+    public void Read (TProtocol iprot)
+    {
+      iprot.IncrementRecursionDepth();
+      try
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 0:
+              if (field.Type == TType.Struct) {
+                Success = new PersonBean();
+                Success.Read(iprot);
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 1:
+              if (field.Type == TType.Struct) {
+                Ex1 = new ServiceRuntimeException();
+                Ex1.Read(iprot);
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+      finally
+      {
+        iprot.DecrementRecursionDepth();
+      }
+    }
+
+    public void Write(TProtocol oprot) {
+      oprot.IncrementRecursionDepth();
+      try
+      {
+        TStruct struc = new TStruct("getPersonByMobilePhone_result");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+
+        if (this.Success != null) {
+          field.Name = "Success";
+          field.Type = TType.Struct;
+          field.ID = 0;
+          oprot.WriteFieldBegin(field);
+          Success.Write(oprot);
+          oprot.WriteFieldEnd();
+        } else if (this.Ex1 != null) {
+          field.Name = "Ex1";
+          field.Type = TType.Struct;
+          field.ID = 1;
+          oprot.WriteFieldBegin(field);
+          Ex1.Write(oprot);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+      finally
+      {
+        oprot.DecrementRecursionDepth();
+      }
+    }
+
+    public override string ToString() {
+      StringBuilder __sb = new StringBuilder("getPersonByMobilePhone_result(");
       bool __first = true;
       if (Success != null) {
         if(!__first) { __sb.Append(", "); }

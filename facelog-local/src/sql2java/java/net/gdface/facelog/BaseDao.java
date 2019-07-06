@@ -1846,6 +1846,31 @@ class BaseDao implements CommonConstant,Constant {
     }
     //18-5
     /** 
+     * 索引(fl_person.mobile_phone)查询,没有找到记录返回{@code null}<br>
+     * 
+     * @param mobilePhone 手机号码
+     * @see IPersonManager#loadByIndexMobilePhone(String)
+     * @throws RuntimeDaoException
+     */
+    protected PersonBean daoGetPersonByIndexMobilePhone(String mobilePhone)
+                    throws RuntimeDaoException{
+        return getPersonManager().loadByIndexMobilePhone(mobilePhone);
+    }
+    //18-7
+    /** 
+     * 索引(fl_person.mobile_phone)查询,没有找到记录抛出异常<br>
+     * 
+     * @param mobilePhone 手机号码
+     * @see IPersonManager#loadByIndexMobilePhoneChecked(String)
+     * @throws RuntimeDaoException
+     * @throws ObjectRetrievalException 没有找到记录
+     */
+    protected PersonBean daoGetPersonByIndexMobilePhoneChecked(String mobilePhone)
+                    throws RuntimeDaoException,ObjectRetrievalException{
+        return getPersonManager().loadByIndexMobilePhoneChecked(mobilePhone);
+    }
+    //18-5
+    /** 
      * 索引(fl_person.papers_num)查询,没有找到记录返回{@code null}<br>
      * 
      * @param papersNum 证件号码

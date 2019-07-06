@@ -214,7 +214,14 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 			throw wrapServiceRuntimeException(e);
 		}
 	}
-
+	@Override
+	public PersonBean getPersonByMobilePhone(String mobilePhone)  {
+		try{
+			return dm.daoGetPersonByIndexMobilePhone(mobilePhone);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
+	}
 	@Override
 	public List<String> getFeaturesByPersonId(int personId) {
 		try{

@@ -586,6 +586,11 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
+    public PersonBean getPersonByMobilePhone (String mobilePhone) {
+        return delegate().getPersonByMobilePhone(mobilePhone);
+    }
+
+    @Override
     public PersonBean getPersonByPapersNum (String papersNum) {
         return delegate().getPersonByPapersNum(papersNum);
     }

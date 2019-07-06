@@ -23,6 +23,7 @@ public class PersonCache extends BaseTableLoadCaching<Integer, PersonBean> {
     private final PersonManager manager = PersonManager.getInstance();
     
     private final BaseTableLoadCaching<String, PersonBean> imageMd5Cacher;
+    private final BaseTableLoadCaching<String, PersonBean> mobilePhoneCacher;
     private final BaseTableLoadCaching<String, PersonBean> papersNumCacher;
     /** constructor<br>
      * @see BaseTableLoadCaching#BaseTableLoadCaching(UpdateStrategy ,long , long , TimeUnit )
@@ -47,6 +48,24 @@ public class PersonCache extends BaseTableLoadCaching<Integer, PersonBean> {
             @Override
             protected PersonBean loadfromDatabase(String key) throws Exception {
                 return manager.loadByIndexImageMd5Checked(key);
+            }};
+
+        mobilePhoneCacher = new BaseTableLoadCaching<String, PersonBean>(updateStrategy, maximumSize, duration, unit){
+            @Override
+            public void registerListener() {
+                manager.registerListener(this.tableListener);
+            }
+            @Override
+            public void unregisterListener() {
+                manager.unregisterListener(this.tableListener);
+            }
+            @Override
+            protected String returnKey(PersonBean bean) {
+                return null == bean ? null : bean.getMobilePhone();
+            }
+            @Override
+            protected PersonBean loadfromDatabase(String key) throws Exception {
+                return manager.loadByIndexMobilePhoneChecked(key);
             }};
 
         papersNumCacher = new BaseTableLoadCaching<String, PersonBean>(updateStrategy, maximumSize, duration, unit){
@@ -86,6 +105,7 @@ public class PersonCache extends BaseTableLoadCaching<Integer, PersonBean> {
         manager.registerListener(tableListener);
         
         imageMd5Cacher.registerListener();
+        mobilePhoneCacher.registerListener();
         papersNumCacher.registerListener();
     }
     @Override
@@ -93,6 +113,7 @@ public class PersonCache extends BaseTableLoadCaching<Integer, PersonBean> {
         manager.unregisterListener(tableListener);
         
         imageMd5Cacher.unregisterListener();
+        mobilePhoneCacher.unregisterListener();
         papersNumCacher.unregisterListener();
     }
     @Override
@@ -108,6 +129,7 @@ public class PersonCache extends BaseTableLoadCaching<Integer, PersonBean> {
         super.update(bean);
         
         imageMd5Cacher.update(bean);
+        mobilePhoneCacher.update(bean);
         papersNumCacher.update(bean);
     }
     @Override
@@ -115,6 +137,7 @@ public class PersonCache extends BaseTableLoadCaching<Integer, PersonBean> {
         super.remove(bean);
         
         imageMd5Cacher.remove(bean);
+        mobilePhoneCacher.remove(bean);
         papersNumCacher.remove(bean);
     }
     public PersonBean getBeanById(Integer id) throws ExecutionException{
@@ -128,6 +151,12 @@ public class PersonCache extends BaseTableLoadCaching<Integer, PersonBean> {
     }
     public PersonBean getBeanByImageMd5Unchecked(String imageMd5){
         return imageMd5Cacher.getBeanUnchecked(imageMd5);
+    }
+    public PersonBean getBeanByMobilePhone(String mobilePhone)  throws ExecutionException{
+        return mobilePhoneCacher.getBean(mobilePhone);
+    }
+    public PersonBean getBeanByMobilePhoneUnchecked(String mobilePhone){
+        return mobilePhoneCacher.getBeanUnchecked(mobilePhone);
     }
     public PersonBean getBeanByPapersNum(String papersNum)  throws ExecutionException{
         return papersNumCacher.getBean(papersNum);

@@ -86,6 +86,7 @@ struct _IFaceLogIfInterface
   gboolean (*get_images_associated_by_feature) (IFaceLogIf *iface, GPtrArray ** _return, const gchar * featureMd5, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*get_log_beans_by_person_id) (IFaceLogIf *iface, GPtrArray ** _return, const gint32 personId, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*get_person) (IFaceLogIf *iface, PersonBean ** _return, const gint32 personId, ServiceRuntimeException ** ex1, GError **error);
+  gboolean (*get_person_by_mobile_phone) (IFaceLogIf *iface, PersonBean ** _return, const gchar * mobilePhone, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*get_person_by_papers_num) (IFaceLogIf *iface, PersonBean ** _return, const gchar * papersNum, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*get_person_group) (IFaceLogIf *iface, PersonGroupBean ** _return, const gint32 personGroupId, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*get_person_groups) (IFaceLogIf *iface, GPtrArray ** _return, const GArray * groupIdList, ServiceRuntimeException ** ex1, GError **error);
@@ -251,6 +252,7 @@ gboolean i_face_log_if_get_image_bytes (IFaceLogIf *iface, GByteArray ** _return
 gboolean i_face_log_if_get_images_associated_by_feature (IFaceLogIf *iface, GPtrArray ** _return, const gchar * featureMd5, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_if_get_log_beans_by_person_id (IFaceLogIf *iface, GPtrArray ** _return, const gint32 personId, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_if_get_person (IFaceLogIf *iface, PersonBean ** _return, const gint32 personId, ServiceRuntimeException ** ex1, GError **error);
+gboolean i_face_log_if_get_person_by_mobile_phone (IFaceLogIf *iface, PersonBean ** _return, const gchar * mobilePhone, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_if_get_person_by_papers_num (IFaceLogIf *iface, PersonBean ** _return, const gchar * papersNum, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_if_get_person_group (IFaceLogIf *iface, PersonGroupBean ** _return, const gint32 personGroupId, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_if_get_person_groups (IFaceLogIf *iface, GPtrArray ** _return, const GArray * groupIdList, ServiceRuntimeException ** ex1, GError **error);
@@ -568,6 +570,9 @@ gboolean i_face_log_client_recv_get_log_beans_by_person_id (IFaceLogIf * iface, 
 gboolean i_face_log_client_get_person (IFaceLogIf * iface, PersonBean ** _return, const gint32 personId, ServiceRuntimeException ** ex1, GError ** error);
 gboolean i_face_log_client_send_get_person (IFaceLogIf * iface, const gint32 personId, GError ** error);
 gboolean i_face_log_client_recv_get_person (IFaceLogIf * iface, PersonBean ** _return, ServiceRuntimeException ** ex1, GError ** error);
+gboolean i_face_log_client_get_person_by_mobile_phone (IFaceLogIf * iface, PersonBean ** _return, const gchar * mobilePhone, ServiceRuntimeException ** ex1, GError ** error);
+gboolean i_face_log_client_send_get_person_by_mobile_phone (IFaceLogIf * iface, const gchar * mobilePhone, GError ** error);
+gboolean i_face_log_client_recv_get_person_by_mobile_phone (IFaceLogIf * iface, PersonBean ** _return, ServiceRuntimeException ** ex1, GError ** error);
 gboolean i_face_log_client_get_person_by_papers_num (IFaceLogIf * iface, PersonBean ** _return, const gchar * papersNum, ServiceRuntimeException ** ex1, GError ** error);
 gboolean i_face_log_client_send_get_person_by_papers_num (IFaceLogIf * iface, const gchar * papersNum, GError ** error);
 gboolean i_face_log_client_recv_get_person_by_papers_num (IFaceLogIf * iface, PersonBean ** _return, ServiceRuntimeException ** ex1, GError ** error);
@@ -914,6 +919,7 @@ struct _IFaceLogHandlerClass
   gboolean (*get_images_associated_by_feature) (IFaceLogIf *iface, GPtrArray ** _return, const gchar * featureMd5, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*get_log_beans_by_person_id) (IFaceLogIf *iface, GPtrArray ** _return, const gint32 personId, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*get_person) (IFaceLogIf *iface, PersonBean ** _return, const gint32 personId, ServiceRuntimeException ** ex1, GError **error);
+  gboolean (*get_person_by_mobile_phone) (IFaceLogIf *iface, PersonBean ** _return, const gchar * mobilePhone, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*get_person_by_papers_num) (IFaceLogIf *iface, PersonBean ** _return, const gchar * papersNum, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*get_person_group) (IFaceLogIf *iface, PersonGroupBean ** _return, const gint32 personGroupId, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*get_person_groups) (IFaceLogIf *iface, GPtrArray ** _return, const GArray * groupIdList, ServiceRuntimeException ** ex1, GError **error);
@@ -1081,6 +1087,7 @@ gboolean i_face_log_handler_get_image_bytes (IFaceLogIf *iface, GByteArray ** _r
 gboolean i_face_log_handler_get_images_associated_by_feature (IFaceLogIf *iface, GPtrArray ** _return, const gchar * featureMd5, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_handler_get_log_beans_by_person_id (IFaceLogIf *iface, GPtrArray ** _return, const gint32 personId, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_handler_get_person (IFaceLogIf *iface, PersonBean ** _return, const gint32 personId, ServiceRuntimeException ** ex1, GError **error);
+gboolean i_face_log_handler_get_person_by_mobile_phone (IFaceLogIf *iface, PersonBean ** _return, const gchar * mobilePhone, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_handler_get_person_by_papers_num (IFaceLogIf *iface, PersonBean ** _return, const gchar * papersNum, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_handler_get_person_group (IFaceLogIf *iface, PersonGroupBean ** _return, const gint32 personGroupId, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_handler_get_person_groups (IFaceLogIf *iface, GPtrArray ** _return, const GArray * groupIdList, ServiceRuntimeException ** ex1, GError **error);
