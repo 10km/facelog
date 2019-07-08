@@ -1,5 +1,10 @@
 package net.gdface.facelog;
 
+/**
+ * 服务心跳包
+ * @author guyadong
+ *
+ */
 public class  ServiceHeartbeatPackage{
 	/** 服务ID(服务每次启动会不一样，消息接收端根据此判断服务是否重启) */
 	private int id;
@@ -7,11 +12,14 @@ public class  ServiceHeartbeatPackage{
 	private Integer port;
 	/** (XHR)服务端口,如果XHR服务未启动则为{@code null} */
 	private Integer xhrPort;
-	public ServiceHeartbeatPackage(int id, Integer port, Integer xhrPort) {
+	/** 主机名 */
+	private String host;
+	public ServiceHeartbeatPackage(int id, Integer port, Integer xhrPort, String host) {
 		super();
 		this.id = id;
 		this.port = port;
 		this.xhrPort = xhrPort;
+		this.host = host;
 	}
 	public ServiceHeartbeatPackage() {
 		super();
@@ -59,6 +67,21 @@ public class  ServiceHeartbeatPackage{
 		return this;
 	}
 
+	/**
+	 * @return host
+	 */
+	public String getHost() {
+		return host;
+	}
+	/**
+	 * @param host 要设置的 host
+	 * @return 
+	 */
+	public ServiceHeartbeatPackage setHost(String host) {
+		this.host = host;
+		return this;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -73,9 +96,15 @@ public class  ServiceHeartbeatPackage{
 		if (xhrPort != null) {
 			builder.append("xhrPort=");
 			builder.append(xhrPort);
+			builder.append(", ");
+		}
+		if (host != null) {
+			builder.append("host=");
+			builder.append(host);
 		}
 		builder.append("]");
 		return builder.toString();
 	}
+
 
 }

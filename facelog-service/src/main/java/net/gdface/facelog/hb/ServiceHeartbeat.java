@@ -1,9 +1,14 @@
 package net.gdface.facelog.hb;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.util.concurrent.MoreExecutors;
@@ -25,6 +30,8 @@ import net.gdface.facelog.ServiceHeartbeatPackage;
  *
  */
 public class ServiceHeartbeat implements ChannelConstant{
+    private static final Logger logger = LoggerFactory.getLogger(ServiceHeartbeat.class);
+
 	/**  单实例 */
 	private static ServiceHeartbeat heartbeat;
 	/** 心跳周期(毫秒) */
@@ -42,7 +49,11 @@ public class ServiceHeartbeat implements ChannelConstant{
 	private final Runnable timerTask = new Runnable(){
 		@Override
 		public void run() {
-			publisher.publish(SERVICE_HEARTBEAT_CHANNEL, heartBeatPackage);
+			try {
+				publisher.publish(SERVICE_HEARTBEAT_CHANNEL, heartBeatPackage);	
+			} catch (Exception e) {
+				logger.error(e.getMessage());
+			}			
 		}};
 	/**
 	 * 构造方法
@@ -55,13 +66,22 @@ public class ServiceHeartbeat implements ChannelConstant{
 	 */
 	private ServiceHeartbeat(int serviceID, Integer port, Integer xhrPort, JedisPoolLazy poolLazy) {
 		this.heartBeatPackage = new ServiceHeartbeatPackage(
-				checkNotNull(serviceID,"serviceID is null"),
+				serviceID,
 				port,
-				xhrPort);
+				xhrPort, 
+				hostname());
 		this.publisher = RedisFactory.getPublisher(checkNotNull(poolLazy,"pool is null"));
 		this.scheduledExecutor =new ScheduledThreadPoolExecutor(1,
 				new ThreadFactoryBuilder().setNameFormat("heartbeat-pool-%d").build());	
 		this.timerExecutor = MoreExecutors.getExitingScheduledExecutorService(	scheduledExecutor);
+	}
+	private static String  hostname(){
+        try {
+        	//获取本机计算机名称
+			return InetAddress.getLocalHost().getHostName();
+		} catch (UnknownHostException e) {
+			throw new RuntimeException(e);
+		}
 	}
 	/**
 	 * 构造方法
