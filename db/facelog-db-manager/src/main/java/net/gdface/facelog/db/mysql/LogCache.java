@@ -29,6 +29,16 @@ public class LogCache extends BaseTableLoadCaching<Integer, LogBean> {
         super(updateStrategy,maximumSize, duration, unit);
         manager.bindForeignKeyListenerForDeleteRule();
     }
+    /**
+     * add bean to all other cacher
+     * @param bean
+     * @param exclude
+     */
+    private void addToOtherCache(LogBean bean,BaseTableLoadCaching<?,?> exclude){
+        if(exclude != this){
+            this.getCacheMap().putIfAbsent(bean.getId(),bean);
+        }
+    }    
     public LogCache(long maximumSize, long duration, TimeUnit unit) {
         this(DEFAULT_STRATEGY,maximumSize,duration,unit);
     }
@@ -44,9 +54,9 @@ public class LogCache extends BaseTableLoadCaching<Integer, LogBean> {
     }
     
     @Override
-    public void registerListener() {
-        manager.registerListener(tableListener);
+    public void registerListener() {        
         
+        manager.registerListener(tableListener);
     }
     @Override
     public void unregisterListener() {
@@ -59,7 +69,9 @@ public class LogCache extends BaseTableLoadCaching<Integer, LogBean> {
     }
     @Override
     protected LogBean loadfromDatabase(Integer key)throws Exception {
-        return manager.loadByPrimaryKeyChecked(key);
+        LogBean bean = manager.loadByPrimaryKeyChecked(key);
+        addToOtherCache(bean,this);
+        return bean;
     }
     public LogBean getBeanById(Integer id) throws ExecutionException{
         return getBean(id);

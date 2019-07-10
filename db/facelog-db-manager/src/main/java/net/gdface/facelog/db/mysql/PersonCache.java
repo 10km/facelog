@@ -43,11 +43,21 @@ public class PersonCache extends BaseTableLoadCaching<Integer, PersonBean> {
             }
             @Override
             protected String returnKey(PersonBean bean) {
-                return null == bean ? null : bean.getImageMd5();
+                if(null == bean){
+                    return null;
+                }
+                String key = bean.getImageMd5();
+                if(key == null){
+                    bean = PersonCache.this.getBeanIfPresent(bean.getId());
+                    return null == bean ? null : bean.getImageMd5();
+                }
+                return key;
             }
             @Override
             protected PersonBean loadfromDatabase(String key) throws Exception {
-                return manager.loadByIndexImageMd5Checked(key);
+                PersonBean bean = manager.loadByIndexImageMd5Checked(key);
+                addToOtherCache(bean,this);
+                return bean;
             }};
 
         mobilePhoneCacher = new BaseTableLoadCaching<String, PersonBean>(updateStrategy, maximumSize, duration, unit){
@@ -61,11 +71,21 @@ public class PersonCache extends BaseTableLoadCaching<Integer, PersonBean> {
             }
             @Override
             protected String returnKey(PersonBean bean) {
-                return null == bean ? null : bean.getMobilePhone();
+                if(null == bean){
+                    return null;
+                }
+                String key = bean.getMobilePhone();
+                if(key == null){
+                    bean = PersonCache.this.getBeanIfPresent(bean.getId());
+                    return null == bean ? null : bean.getMobilePhone();
+                }
+                return key;
             }
             @Override
             protected PersonBean loadfromDatabase(String key) throws Exception {
-                return manager.loadByIndexMobilePhoneChecked(key);
+                PersonBean bean = manager.loadByIndexMobilePhoneChecked(key);
+                addToOtherCache(bean,this);
+                return bean;
             }};
 
         papersNumCacher = new BaseTableLoadCaching<String, PersonBean>(updateStrategy, maximumSize, duration, unit){
@@ -79,13 +99,51 @@ public class PersonCache extends BaseTableLoadCaching<Integer, PersonBean> {
             }
             @Override
             protected String returnKey(PersonBean bean) {
-                return null == bean ? null : bean.getPapersNum();
+                if(null == bean){
+                    return null;
+                }
+                String key = bean.getPapersNum();
+                if(key == null){
+                    bean = PersonCache.this.getBeanIfPresent(bean.getId());
+                    return null == bean ? null : bean.getPapersNum();
+                }
+                return key;
             }
             @Override
             protected PersonBean loadfromDatabase(String key) throws Exception {
-                return manager.loadByIndexPapersNumChecked(key);
+                PersonBean bean = manager.loadByIndexPapersNumChecked(key);
+                addToOtherCache(bean,this);
+                return bean;
             }};
     }
+    /**
+     * add bean to all other cacher
+     * @param bean
+     * @param exclude
+     */
+    private void addToOtherCache(PersonBean bean,BaseTableLoadCaching<?,?> exclude){
+        if(exclude != this){
+            this.getCacheMap().putIfAbsent(bean.getId(),bean);
+        }
+        if(exclude != imageMd5Cacher){
+            String key = bean.getImageMd5();
+            if(key != null){
+                imageMd5Cacher.getCacheMap().putIfAbsent(key,bean);
+            }
+        }
+        if(exclude != mobilePhoneCacher){
+            String key = bean.getMobilePhone();
+            if(key != null){
+                mobilePhoneCacher.getCacheMap().putIfAbsent(key,bean);
+            }
+        }
+        if(exclude != papersNumCacher){
+            String key = bean.getPapersNum();
+            if(key != null){
+                papersNumCacher.getCacheMap().putIfAbsent(key,bean);
+            }
+        }
+    }    
     public PersonCache(long maximumSize, long duration, TimeUnit unit) {
         this(DEFAULT_STRATEGY,maximumSize,duration,unit);
     }
@@ -101,12 +159,12 @@ public class PersonCache extends BaseTableLoadCaching<Integer, PersonBean> {
     }
     
     @Override
-    public void registerListener() {
-        manager.registerListener(tableListener);
+    public void registerListener() {        
         
         imageMd5Cacher.registerListener();
         mobilePhoneCacher.registerListener();
         papersNumCacher.registerListener();
+        manager.registerListener(tableListener);
     }
     @Override
     public void unregisterListener() {
@@ -122,7 +180,9 @@ public class PersonCache extends BaseTableLoadCaching<Integer, PersonBean> {
     }
     @Override
     protected PersonBean loadfromDatabase(Integer key)throws Exception {
-        return manager.loadByPrimaryKeyChecked(key);
+        PersonBean bean = manager.loadByPrimaryKeyChecked(key);
+        addToOtherCache(bean,this);
+        return bean;
     }
     @Override
     public void update(PersonBean bean){

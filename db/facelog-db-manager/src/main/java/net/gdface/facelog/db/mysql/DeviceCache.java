@@ -42,11 +42,21 @@ public class DeviceCache extends BaseTableLoadCaching<Integer, DeviceBean> {
             }
             @Override
             protected String returnKey(DeviceBean bean) {
-                return null == bean ? null : bean.getMac();
+                if(null == bean){
+                    return null;
+                }
+                String key = bean.getMac();
+                if(key == null){
+                    bean = DeviceCache.this.getBeanIfPresent(bean.getId());
+                    return null == bean ? null : bean.getMac();
+                }
+                return key;
             }
             @Override
             protected DeviceBean loadfromDatabase(String key) throws Exception {
-                return manager.loadByIndexMacChecked(key);
+                DeviceBean bean = manager.loadByIndexMacChecked(key);
+                addToOtherCache(bean,this);
+                return bean;
             }};
 
         serialNoCacher = new BaseTableLoadCaching<String, DeviceBean>(updateStrategy, maximumSize, duration, unit){
@@ -60,13 +70,45 @@ public class DeviceCache extends BaseTableLoadCaching<Integer, DeviceBean> {
             }
             @Override
             protected String returnKey(DeviceBean bean) {
-                return null == bean ? null : bean.getSerialNo();
+                if(null == bean){
+                    return null;
+                }
+                String key = bean.getSerialNo();
+                if(key == null){
+                    bean = DeviceCache.this.getBeanIfPresent(bean.getId());
+                    return null == bean ? null : bean.getSerialNo();
+                }
+                return key;
             }
             @Override
             protected DeviceBean loadfromDatabase(String key) throws Exception {
-                return manager.loadByIndexSerialNoChecked(key);
+                DeviceBean bean = manager.loadByIndexSerialNoChecked(key);
+                addToOtherCache(bean,this);
+                return bean;
             }};
     }
+    /**
+     * add bean to all other cacher
+     * @param bean
+     * @param exclude
+     */
+    private void addToOtherCache(DeviceBean bean,BaseTableLoadCaching<?,?> exclude){
+        if(exclude != this){
+            this.getCacheMap().putIfAbsent(bean.getId(),bean);
+        }
+        if(exclude != macCacher){
+            String key = bean.getMac();
+            if(key != null){
+                macCacher.getCacheMap().putIfAbsent(key,bean);
+            }
+        }
+        if(exclude != serialNoCacher){
+            String key = bean.getSerialNo();
+            if(key != null){
+                serialNoCacher.getCacheMap().putIfAbsent(key,bean);
+            }
+        }
+    }    
     public DeviceCache(long maximumSize, long duration, TimeUnit unit) {
         this(DEFAULT_STRATEGY,maximumSize,duration,unit);
     }
@@ -82,11 +124,11 @@ public class DeviceCache extends BaseTableLoadCaching<Integer, DeviceBean> {
     }
     
     @Override
-    public void registerListener() {
-        manager.registerListener(tableListener);
+    public void registerListener() {        
         
         macCacher.registerListener();
         serialNoCacher.registerListener();
+        manager.registerListener(tableListener);
     }
     @Override
     public void unregisterListener() {
@@ -101,7 +143,9 @@ public class DeviceCache extends BaseTableLoadCaching<Integer, DeviceBean> {
     }
     @Override
     protected DeviceBean loadfromDatabase(Integer key)throws Exception {
-        return manager.loadByPrimaryKeyChecked(key);
+        DeviceBean bean = manager.loadByPrimaryKeyChecked(key);
+        addToOtherCache(bean,this);
+        return bean;
     }
     @Override
     public void update(DeviceBean bean){

@@ -29,6 +29,16 @@ public class FaceCache extends BaseTableLoadCaching<Integer, FaceBean> {
         super(updateStrategy,maximumSize, duration, unit);
         manager.bindForeignKeyListenerForDeleteRule();
     }
+    /**
+     * add bean to all other cacher
+     * @param bean
+     * @param exclude
+     */
+    private void addToOtherCache(FaceBean bean,BaseTableLoadCaching<?,?> exclude){
+        if(exclude != this){
+            this.getCacheMap().putIfAbsent(bean.getId(),bean);
+        }
+    }    
     public FaceCache(long maximumSize, long duration, TimeUnit unit) {
         this(DEFAULT_STRATEGY,maximumSize,duration,unit);
     }
@@ -44,9 +54,9 @@ public class FaceCache extends BaseTableLoadCaching<Integer, FaceBean> {
     }
     
     @Override
-    public void registerListener() {
-        manager.registerListener(tableListener);
+    public void registerListener() {        
         
+        manager.registerListener(tableListener);
     }
     @Override
     public void unregisterListener() {
@@ -59,7 +69,9 @@ public class FaceCache extends BaseTableLoadCaching<Integer, FaceBean> {
     }
     @Override
     protected FaceBean loadfromDatabase(Integer key)throws Exception {
-        return manager.loadByPrimaryKeyChecked(key);
+        FaceBean bean = manager.loadByPrimaryKeyChecked(key);
+        addToOtherCache(bean,this);
+        return bean;
     }
     public FaceBean getBeanById(Integer id) throws ExecutionException{
         return getBean(id);

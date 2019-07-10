@@ -29,6 +29,16 @@ public class FeatureCache extends BaseTableLoadCaching<String, FeatureBean> {
         super(updateStrategy,maximumSize, duration, unit);
         manager.bindForeignKeyListenerForDeleteRule();
     }
+    /**
+     * add bean to all other cacher
+     * @param bean
+     * @param exclude
+     */
+    private void addToOtherCache(FeatureBean bean,BaseTableLoadCaching<?,?> exclude){
+        if(exclude != this){
+            this.getCacheMap().putIfAbsent(bean.getMd5(),bean);
+        }
+    }    
     public FeatureCache(long maximumSize, long duration, TimeUnit unit) {
         this(DEFAULT_STRATEGY,maximumSize,duration,unit);
     }
@@ -44,9 +54,9 @@ public class FeatureCache extends BaseTableLoadCaching<String, FeatureBean> {
     }
     
     @Override
-    public void registerListener() {
-        manager.registerListener(tableListener);
+    public void registerListener() {        
         
+        manager.registerListener(tableListener);
     }
     @Override
     public void unregisterListener() {
@@ -59,7 +69,9 @@ public class FeatureCache extends BaseTableLoadCaching<String, FeatureBean> {
     }
     @Override
     protected FeatureBean loadfromDatabase(String key)throws Exception {
-        return manager.loadByPrimaryKeyChecked(key);
+        FeatureBean bean = manager.loadByPrimaryKeyChecked(key);
+        addToOtherCache(bean,this);
+        return bean;
     }
     public FeatureBean getBeanByMd5(String md5) throws ExecutionException{
         return getBean(md5);

@@ -29,6 +29,16 @@ public class DeviceGroupCache extends BaseTableLoadCaching<Integer, DeviceGroupB
         super(updateStrategy,maximumSize, duration, unit);
         manager.bindForeignKeyListenerForDeleteRule();
     }
+    /**
+     * add bean to all other cacher
+     * @param bean
+     * @param exclude
+     */
+    private void addToOtherCache(DeviceGroupBean bean,BaseTableLoadCaching<?,?> exclude){
+        if(exclude != this){
+            this.getCacheMap().putIfAbsent(bean.getId(),bean);
+        }
+    }    
     public DeviceGroupCache(long maximumSize, long duration, TimeUnit unit) {
         this(DEFAULT_STRATEGY,maximumSize,duration,unit);
     }
@@ -44,9 +54,9 @@ public class DeviceGroupCache extends BaseTableLoadCaching<Integer, DeviceGroupB
     }
     
     @Override
-    public void registerListener() {
-        manager.registerListener(tableListener);
+    public void registerListener() {        
         
+        manager.registerListener(tableListener);
     }
     @Override
     public void unregisterListener() {
@@ -59,7 +69,9 @@ public class DeviceGroupCache extends BaseTableLoadCaching<Integer, DeviceGroupB
     }
     @Override
     protected DeviceGroupBean loadfromDatabase(Integer key)throws Exception {
-        return manager.loadByPrimaryKeyChecked(key);
+        DeviceGroupBean bean = manager.loadByPrimaryKeyChecked(key);
+        addToOtherCache(bean,this);
+        return bean;
     }
     public DeviceGroupBean getBeanById(Integer id) throws ExecutionException{
         return getBean(id);

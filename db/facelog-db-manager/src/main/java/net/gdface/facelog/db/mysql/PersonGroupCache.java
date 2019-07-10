@@ -29,6 +29,16 @@ public class PersonGroupCache extends BaseTableLoadCaching<Integer, PersonGroupB
         super(updateStrategy,maximumSize, duration, unit);
         manager.bindForeignKeyListenerForDeleteRule();
     }
+    /**
+     * add bean to all other cacher
+     * @param bean
+     * @param exclude
+     */
+    private void addToOtherCache(PersonGroupBean bean,BaseTableLoadCaching<?,?> exclude){
+        if(exclude != this){
+            this.getCacheMap().putIfAbsent(bean.getId(),bean);
+        }
+    }    
     public PersonGroupCache(long maximumSize, long duration, TimeUnit unit) {
         this(DEFAULT_STRATEGY,maximumSize,duration,unit);
     }
@@ -44,9 +54,9 @@ public class PersonGroupCache extends BaseTableLoadCaching<Integer, PersonGroupB
     }
     
     @Override
-    public void registerListener() {
-        manager.registerListener(tableListener);
+    public void registerListener() {        
         
+        manager.registerListener(tableListener);
     }
     @Override
     public void unregisterListener() {
@@ -59,7 +69,9 @@ public class PersonGroupCache extends BaseTableLoadCaching<Integer, PersonGroupB
     }
     @Override
     protected PersonGroupBean loadfromDatabase(Integer key)throws Exception {
-        return manager.loadByPrimaryKeyChecked(key);
+        PersonGroupBean bean = manager.loadByPrimaryKeyChecked(key);
+        addToOtherCache(bean,this);
+        return bean;
     }
     public PersonGroupBean getBeanById(Integer id) throws ExecutionException{
         return getBean(id);

@@ -29,6 +29,16 @@ public class StoreCache extends BaseTableLoadCaching<String, StoreBean> {
         super(updateStrategy,maximumSize, duration, unit);
         manager.bindForeignKeyListenerForDeleteRule();
     }
+    /**
+     * add bean to all other cacher
+     * @param bean
+     * @param exclude
+     */
+    private void addToOtherCache(StoreBean bean,BaseTableLoadCaching<?,?> exclude){
+        if(exclude != this){
+            this.getCacheMap().putIfAbsent(bean.getMd5(),bean);
+        }
+    }    
     public StoreCache(long maximumSize, long duration, TimeUnit unit) {
         this(DEFAULT_STRATEGY,maximumSize,duration,unit);
     }
@@ -44,9 +54,9 @@ public class StoreCache extends BaseTableLoadCaching<String, StoreBean> {
     }
     
     @Override
-    public void registerListener() {
-        manager.registerListener(tableListener);
+    public void registerListener() {        
         
+        manager.registerListener(tableListener);
     }
     @Override
     public void unregisterListener() {
@@ -59,7 +69,9 @@ public class StoreCache extends BaseTableLoadCaching<String, StoreBean> {
     }
     @Override
     protected StoreBean loadfromDatabase(String key)throws Exception {
-        return manager.loadByPrimaryKeyChecked(key);
+        StoreBean bean = manager.loadByPrimaryKeyChecked(key);
+        addToOtherCache(bean,this);
+        return bean;
     }
     public StoreBean getBeanByMd5(String md5) throws ExecutionException{
         return getBean(md5);
