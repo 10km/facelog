@@ -82,10 +82,11 @@ public class ClientTest implements CommonConstant {
 			newPerson = facelogClient.savePerson(newPerson,rootToken);
 			logger.info("person = {}", newPerson.toString());
 			PersonBean person = facelogClient.getPerson(newPerson.getId());
+			PersonBean p1 = facelogClient.getPersonByMobilePhone(person.getMobilePhone());
 			logger.info("person = {}", person.toString());
 			facelogClient.deletePerson(person.getId(), rootToken);
-			PersonBean p = facelogClient.getPersonByMobilePhone(person.getMobilePhone());
-			logger.info("{}",p != null);
+			PersonBean p2 = facelogClient.getPersonByMobilePhone(person.getMobilePhone());
+			logger.info("{}",p2 != null);
 		} catch(ServiceRuntimeException e){
 			e.printServiceStackTrace();
 			assertTrue(false);
