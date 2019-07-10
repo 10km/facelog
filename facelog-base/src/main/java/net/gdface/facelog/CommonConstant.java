@@ -25,6 +25,8 @@ public interface CommonConstant {
     public static final int DEFAULT_HEARTBEAT_EXPIRE = 60;
     /** 服务端状态频道名 */
     public static final String FACELOG_HB_CHANNEL = "FACELOG_HB";
+    /** 组播地址和端口号 */
+	public static String MULTICAST_ADDRESS = "224.42.64.11:26411";
     /** 默认(设备/人员)组id */
     public static final int DEFAULT_GROUP_ID = 1;
     /** 默认(设备/人员)组名 */

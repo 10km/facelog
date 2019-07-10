@@ -432,6 +432,14 @@ public interface IFaceLog
             @ThriftField(value=1, name="deviceId", requiredness=Requiredness.REQUIRED) final int deviceId
         );
 
+        @ThriftMethod(value = "getDeviceByMac",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1)
+                      })
+        ListenableFuture<DeviceBean> getDeviceByMac(
+            @ThriftField(value=1, name="mac", requiredness=Requiredness.OPTIONAL) final String mac
+        );
+
         @ThriftMethod(value = "getDeviceGroup",
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
@@ -1852,6 +1860,14 @@ public interface IFaceLog
                   })
     DeviceBean getDevice(
         @ThriftField(value=1, name="deviceId", requiredness=Requiredness.REQUIRED) final int deviceId
+    ) throws ServiceRuntimeException;
+
+    @ThriftMethod(value = "getDeviceByMac",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1)
+                  })
+    DeviceBean getDeviceByMac(
+        @ThriftField(value=1, name="mac", requiredness=Requiredness.OPTIONAL) final String mac
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "getDeviceGroup",

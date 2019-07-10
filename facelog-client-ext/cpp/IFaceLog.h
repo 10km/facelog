@@ -65,6 +65,7 @@ class IFaceLogIf {
   virtual bool existsImage(const std::string& md5) = 0;
   virtual bool existsPerson(const int32_t persionId) = 0;
   virtual void getDevice(DeviceBean& _return, const int32_t deviceId) = 0;
+  virtual void getDeviceByMac(DeviceBean& _return, const std::string& mac) = 0;
   virtual void getDeviceGroup(DeviceGroupBean& _return, const int32_t deviceGroupId) = 0;
   virtual void getDeviceGroups(std::vector<DeviceGroupBean> & _return, const std::vector<int32_t> & groupIdList) = 0;
   virtual void getDeviceGroupsBelongs(std::vector<int32_t> & _return, const int32_t deviceId) = 0;
@@ -361,6 +362,9 @@ class IFaceLogNull : virtual public IFaceLogIf {
     return _return;
   }
   void getDevice(DeviceBean& /* _return */, const int32_t /* deviceId */) {
+    return;
+  }
+  void getDeviceByMac(DeviceBean& /* _return */, const std::string& /* mac */) {
     return;
   }
   void getDeviceGroup(DeviceGroupBean& /* _return */, const int32_t /* deviceGroupId */) {
@@ -6449,6 +6453,128 @@ class IFaceLog_getDevice_presult {
   ServiceRuntimeException ex1;
 
   _IFaceLog_getDevice_presult__isset __isset;
+
+  template <class Protocol_>
+  uint32_t read(Protocol_* iprot);
+
+};
+
+typedef struct _IFaceLog_getDeviceByMac_args__isset {
+  _IFaceLog_getDeviceByMac_args__isset() : mac(false) {}
+  bool mac :1;
+} _IFaceLog_getDeviceByMac_args__isset;
+
+class IFaceLog_getDeviceByMac_args {
+ public:
+
+  IFaceLog_getDeviceByMac_args(const IFaceLog_getDeviceByMac_args&);
+  IFaceLog_getDeviceByMac_args(IFaceLog_getDeviceByMac_args&&);
+  IFaceLog_getDeviceByMac_args& operator=(const IFaceLog_getDeviceByMac_args&);
+  IFaceLog_getDeviceByMac_args& operator=(IFaceLog_getDeviceByMac_args&&);
+  IFaceLog_getDeviceByMac_args() : mac() {
+  }
+
+  virtual ~IFaceLog_getDeviceByMac_args() throw();
+  std::string mac;
+
+  _IFaceLog_getDeviceByMac_args__isset __isset;
+
+  void __set_mac(const std::string& val);
+
+  bool operator == (const IFaceLog_getDeviceByMac_args & rhs) const
+  {
+    if (!(mac == rhs.mac))
+      return false;
+    return true;
+  }
+  bool operator != (const IFaceLog_getDeviceByMac_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IFaceLog_getDeviceByMac_args & ) const;
+
+  template <class Protocol_>
+  uint32_t read(Protocol_* iprot);
+  template <class Protocol_>
+  uint32_t write(Protocol_* oprot) const;
+
+};
+
+
+class IFaceLog_getDeviceByMac_pargs {
+ public:
+
+
+  virtual ~IFaceLog_getDeviceByMac_pargs() throw();
+  const std::string* mac;
+
+  template <class Protocol_>
+  uint32_t write(Protocol_* oprot) const;
+
+};
+
+typedef struct _IFaceLog_getDeviceByMac_result__isset {
+  _IFaceLog_getDeviceByMac_result__isset() : success(false), ex1(false) {}
+  bool success :1;
+  bool ex1 :1;
+} _IFaceLog_getDeviceByMac_result__isset;
+
+class IFaceLog_getDeviceByMac_result {
+ public:
+
+  IFaceLog_getDeviceByMac_result(const IFaceLog_getDeviceByMac_result&);
+  IFaceLog_getDeviceByMac_result(IFaceLog_getDeviceByMac_result&&);
+  IFaceLog_getDeviceByMac_result& operator=(const IFaceLog_getDeviceByMac_result&);
+  IFaceLog_getDeviceByMac_result& operator=(IFaceLog_getDeviceByMac_result&&);
+  IFaceLog_getDeviceByMac_result() {
+  }
+
+  virtual ~IFaceLog_getDeviceByMac_result() throw();
+  DeviceBean success;
+  ServiceRuntimeException ex1;
+
+  _IFaceLog_getDeviceByMac_result__isset __isset;
+
+  void __set_success(const DeviceBean& val);
+
+  void __set_ex1(const ServiceRuntimeException& val);
+
+  bool operator == (const IFaceLog_getDeviceByMac_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex1 == rhs.ex1))
+      return false;
+    return true;
+  }
+  bool operator != (const IFaceLog_getDeviceByMac_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IFaceLog_getDeviceByMac_result & ) const;
+
+  template <class Protocol_>
+  uint32_t read(Protocol_* iprot);
+  template <class Protocol_>
+  uint32_t write(Protocol_* oprot) const;
+
+};
+
+typedef struct _IFaceLog_getDeviceByMac_presult__isset {
+  _IFaceLog_getDeviceByMac_presult__isset() : success(false), ex1(false) {}
+  bool success :1;
+  bool ex1 :1;
+} _IFaceLog_getDeviceByMac_presult__isset;
+
+class IFaceLog_getDeviceByMac_presult {
+ public:
+
+
+  virtual ~IFaceLog_getDeviceByMac_presult() throw();
+  DeviceBean* success;
+  ServiceRuntimeException ex1;
+
+  _IFaceLog_getDeviceByMac_presult__isset __isset;
 
   template <class Protocol_>
   uint32_t read(Protocol_* iprot);
@@ -20798,6 +20924,9 @@ class IFaceLogClientT : virtual public IFaceLogIf {
   void getDevice(DeviceBean& _return, const int32_t deviceId);
   void send_getDevice(const int32_t deviceId);
   void recv_getDevice(DeviceBean& _return);
+  void getDeviceByMac(DeviceBean& _return, const std::string& mac);
+  void send_getDeviceByMac(const std::string& mac);
+  void recv_getDeviceByMac(DeviceBean& _return);
   void getDeviceGroup(DeviceGroupBean& _return, const int32_t deviceGroupId);
   void send_getDeviceGroup(const int32_t deviceGroupId);
   void recv_getDeviceGroup(DeviceGroupBean& _return);
@@ -21253,6 +21382,8 @@ class IFaceLogProcessorT : public ::apache::thrift::TDispatchProcessorT<Protocol
   void process_existsPerson(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext);
   void process_getDevice(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_getDevice(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext);
+  void process_getDeviceByMac(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_getDeviceByMac(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext);
   void process_getDeviceGroup(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_getDeviceGroup(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext);
   void process_getDeviceGroups(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -21614,6 +21745,9 @@ class IFaceLogProcessorT : public ::apache::thrift::TDispatchProcessorT<Protocol
     processMap_["getDevice"] = ProcessFunctions(
       &IFaceLogProcessorT::process_getDevice,
       &IFaceLogProcessorT::process_getDevice);
+    processMap_["getDeviceByMac"] = ProcessFunctions(
+      &IFaceLogProcessorT::process_getDeviceByMac,
+      &IFaceLogProcessorT::process_getDeviceByMac);
     processMap_["getDeviceGroup"] = ProcessFunctions(
       &IFaceLogProcessorT::process_getDeviceGroup,
       &IFaceLogProcessorT::process_getDeviceGroup);
@@ -22392,6 +22526,16 @@ class IFaceLogMultiface : virtual public IFaceLogIf {
       ifaces_[i]->getDevice(_return, deviceId);
     }
     ifaces_[i]->getDevice(_return, deviceId);
+    return;
+  }
+
+  void getDeviceByMac(DeviceBean& _return, const std::string& mac) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->getDeviceByMac(_return, mac);
+    }
+    ifaces_[i]->getDeviceByMac(_return, mac);
     return;
   }
 
@@ -23658,6 +23802,9 @@ class IFaceLogConcurrentClientT : virtual public IFaceLogIf {
   void getDevice(DeviceBean& _return, const int32_t deviceId);
   int32_t send_getDevice(const int32_t deviceId);
   void recv_getDevice(DeviceBean& _return, const int32_t seqid);
+  void getDeviceByMac(DeviceBean& _return, const std::string& mac);
+  int32_t send_getDeviceByMac(const std::string& mac);
+  void recv_getDeviceByMac(DeviceBean& _return, const int32_t seqid);
   void getDeviceGroup(DeviceGroupBean& _return, const int32_t deviceGroupId);
   int32_t send_getDeviceGroup(const int32_t deviceGroupId);
   void recv_getDeviceGroup(DeviceGroupBean& _return, const int32_t seqid);

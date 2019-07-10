@@ -62,6 +62,7 @@ public partial class IFaceLog {
     bool existsImage(string md5);
     bool existsPerson(int persionId);
     DeviceBean getDevice(int deviceId);
+    DeviceBean getDeviceByMac(string mac);
     DeviceGroupBean getDeviceGroup(int deviceGroupId);
     List<DeviceGroupBean> getDeviceGroups(List<int> groupIdList);
     List<int> getDeviceGroupsBelongs(int deviceId);
@@ -222,6 +223,7 @@ public partial class IFaceLog {
     Task<bool> existsImageAsync(string md5);
     Task<bool> existsPersonAsync(int persionId);
     Task<DeviceBean> getDeviceAsync(int deviceId);
+    Task<DeviceBean> getDeviceByMacAsync(string mac);
     Task<DeviceGroupBean> getDeviceGroupAsync(int deviceGroupId);
     Task<List<DeviceGroupBean>> getDeviceGroupsAsync(List<int> groupIdList);
     Task<List<int>> getDeviceGroupsBelongsAsync(int deviceId);
@@ -426,6 +428,8 @@ public partial class IFaceLog {
     bool End_existsPerson(IAsyncResult asyncResult);
     IAsyncResult Begin_getDevice(AsyncCallback callback, object state, int deviceId);
     DeviceBean End_getDevice(IAsyncResult asyncResult);
+    IAsyncResult Begin_getDeviceByMac(AsyncCallback callback, object state, string mac);
+    DeviceBean End_getDeviceByMac(IAsyncResult asyncResult);
     IAsyncResult Begin_getDeviceGroup(AsyncCallback callback, object state, int deviceGroupId);
     DeviceGroupBean End_getDeviceGroup(IAsyncResult asyncResult);
     IAsyncResult Begin_getDeviceGroups(AsyncCallback callback, object state, List<int> groupIdList);
@@ -3314,6 +3318,64 @@ public partial class IFaceLog {
         throw result.Ex1;
       }
       throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "getDevice failed: unknown result");
+    }
+
+    
+    public IAsyncResult Begin_getDeviceByMac(AsyncCallback callback, object state, string mac)
+    {
+      return send_getDeviceByMac(callback, state, mac);
+    }
+
+    public DeviceBean End_getDeviceByMac(IAsyncResult asyncResult)
+    {
+      oprot_.Transport.EndFlush(asyncResult);
+      return recv_getDeviceByMac();
+    }
+
+    public async Task<DeviceBean> getDeviceByMacAsync(string mac)
+    {
+      DeviceBean retval;
+      retval = await Task.Run(() =>
+      {
+        return getDeviceByMac(mac);
+      });
+      return retval;
+    }
+
+    public DeviceBean getDeviceByMac(string mac)
+    {
+      var asyncResult = Begin_getDeviceByMac(null, null, mac);
+      return End_getDeviceByMac(asyncResult);
+
+    }
+    public IAsyncResult send_getDeviceByMac(AsyncCallback callback, object state, string mac)
+    {
+      oprot_.WriteMessageBegin(new TMessage("getDeviceByMac", TMessageType.Call, seqid_));
+      getDeviceByMac_args args = new getDeviceByMac_args();
+      args.Mac = mac;
+      args.Write(oprot_);
+      oprot_.WriteMessageEnd();
+      return oprot_.Transport.BeginFlush(callback, state);
+    }
+
+    public DeviceBean recv_getDeviceByMac()
+    {
+      TMessage msg = iprot_.ReadMessageBegin();
+      if (msg.Type == TMessageType.Exception) {
+        TApplicationException x = TApplicationException.Read(iprot_);
+        iprot_.ReadMessageEnd();
+        throw x;
+      }
+      getDeviceByMac_result result = new getDeviceByMac_result();
+      result.Read(iprot_);
+      iprot_.ReadMessageEnd();
+      if (result.Success != null) {
+        return result.Success;
+      }
+      if (result.Ex1 != null) {
+        throw result.Ex1;
+      }
+      throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "getDeviceByMac failed: unknown result");
     }
 
     
@@ -9966,6 +10028,7 @@ public partial class IFaceLog {
       processMap_["existsImage"] = existsImage_ProcessAsync;
       processMap_["existsPerson"] = existsPerson_ProcessAsync;
       processMap_["getDevice"] = getDevice_ProcessAsync;
+      processMap_["getDeviceByMac"] = getDeviceByMac_ProcessAsync;
       processMap_["getDeviceGroup"] = getDeviceGroup_ProcessAsync;
       processMap_["getDeviceGroups"] = getDeviceGroups_ProcessAsync;
       processMap_["getDeviceGroupsBelongs"] = getDeviceGroupsBelongs_ProcessAsync;
@@ -11689,6 +11752,41 @@ public partial class IFaceLog {
         Console.Error.WriteLine(ex.ToString());
         TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
         oprot.WriteMessageBegin(new TMessage("getDevice", TMessageType.Exception, seqid));
+        x.Write(oprot);
+      }
+      oprot.WriteMessageEnd();
+      oprot.Transport.Flush();
+    }
+
+    public async Task getDeviceByMac_ProcessAsync(int seqid, TProtocol iprot, TProtocol oprot)
+    {
+      getDeviceByMac_args args = new getDeviceByMac_args();
+      args.Read(iprot);
+      iprot.ReadMessageEnd();
+      getDeviceByMac_result result = new getDeviceByMac_result();
+      try
+      {
+        try
+        {
+          result.Success = await iface_.getDeviceByMacAsync(args.Mac);
+        }
+        catch (ServiceRuntimeException ex1)
+        {
+          result.Ex1 = ex1;
+        }
+        oprot.WriteMessageBegin(new TMessage("getDeviceByMac", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+      }
+      catch (TTransportException)
+      {
+        throw;
+      }
+      catch (Exception ex)
+      {
+        Console.Error.WriteLine("Error occurred in processor:");
+        Console.Error.WriteLine(ex.ToString());
+        TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
+        oprot.WriteMessageBegin(new TMessage("getDeviceByMac", TMessageType.Exception, seqid));
         x.Write(oprot);
       }
       oprot.WriteMessageEnd();
@@ -15728,6 +15826,7 @@ public partial class IFaceLog {
       processMap_["existsImage"] = existsImage_Process;
       processMap_["existsPerson"] = existsPerson_Process;
       processMap_["getDevice"] = getDevice_Process;
+      processMap_["getDeviceByMac"] = getDeviceByMac_Process;
       processMap_["getDeviceGroup"] = getDeviceGroup_Process;
       processMap_["getDeviceGroups"] = getDeviceGroups_Process;
       processMap_["getDeviceGroupsBelongs"] = getDeviceGroupsBelongs_Process;
@@ -17451,6 +17550,41 @@ public partial class IFaceLog {
         Console.Error.WriteLine(ex.ToString());
         TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
         oprot.WriteMessageBegin(new TMessage("getDevice", TMessageType.Exception, seqid));
+        x.Write(oprot);
+      }
+      oprot.WriteMessageEnd();
+      oprot.Transport.Flush();
+    }
+
+    public void getDeviceByMac_Process(int seqid, TProtocol iprot, TProtocol oprot)
+    {
+      getDeviceByMac_args args = new getDeviceByMac_args();
+      args.Read(iprot);
+      iprot.ReadMessageEnd();
+      getDeviceByMac_result result = new getDeviceByMac_result();
+      try
+      {
+        try
+        {
+          result.Success = iface_.getDeviceByMac(args.Mac);
+        }
+        catch (ServiceRuntimeException ex1)
+        {
+          result.Ex1 = ex1;
+        }
+        oprot.WriteMessageBegin(new TMessage("getDeviceByMac", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+      }
+      catch (TTransportException)
+      {
+        throw;
+      }
+      catch (Exception ex)
+      {
+        Console.Error.WriteLine("Error occurred in processor:");
+        Console.Error.WriteLine(ex.ToString());
+        TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
+        oprot.WriteMessageBegin(new TMessage("getDeviceByMac", TMessageType.Exception, seqid));
         x.Write(oprot);
       }
       oprot.WriteMessageEnd();
@@ -31774,6 +31908,205 @@ public partial class IFaceLog {
 
     public override string ToString() {
       StringBuilder __sb = new StringBuilder("getDevice_result(");
+      bool __first = true;
+      if (Success != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Success: ");
+        __sb.Append(Success== null ? "<null>" : Success.ToString());
+      }
+      if (Ex1 != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Ex1: ");
+        __sb.Append(Ex1== null ? "<null>" : Ex1.ToString());
+      }
+      __sb.Append(")");
+      return __sb.ToString();
+    }
+
+  }
+
+
+  #if !SILVERLIGHT
+  [Serializable]
+  #endif
+  public partial class getDeviceByMac_args : TBase
+  {
+
+    public string Mac { get; set; }
+
+    public getDeviceByMac_args() {
+    }
+
+    public void Read (TProtocol iprot)
+    {
+      iprot.IncrementRecursionDepth();
+      try
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 1:
+              if (field.Type == TType.String) {
+                Mac = iprot.ReadString();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+      finally
+      {
+        iprot.DecrementRecursionDepth();
+      }
+    }
+
+    public void Write(TProtocol oprot) {
+      oprot.IncrementRecursionDepth();
+      try
+      {
+        TStruct struc = new TStruct("getDeviceByMac_args");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+        if (Mac != null) {
+          field.Name = "mac";
+          field.Type = TType.String;
+          field.ID = 1;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteString(Mac);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+      finally
+      {
+        oprot.DecrementRecursionDepth();
+      }
+    }
+
+    public override string ToString() {
+      StringBuilder __sb = new StringBuilder("getDeviceByMac_args(");
+      bool __first = true;
+      if (Mac != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Mac: ");
+        __sb.Append(Mac);
+      }
+      __sb.Append(")");
+      return __sb.ToString();
+    }
+
+  }
+
+
+  #if !SILVERLIGHT
+  [Serializable]
+  #endif
+  public partial class getDeviceByMac_result : TBase
+  {
+
+    public DeviceBean Success { get; set; }
+
+    public ServiceRuntimeException Ex1 { get; set; }
+
+    public getDeviceByMac_result() {
+    }
+
+    public void Read (TProtocol iprot)
+    {
+      iprot.IncrementRecursionDepth();
+      try
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 0:
+              if (field.Type == TType.Struct) {
+                Success = new DeviceBean();
+                Success.Read(iprot);
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 1:
+              if (field.Type == TType.Struct) {
+                Ex1 = new ServiceRuntimeException();
+                Ex1.Read(iprot);
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+      finally
+      {
+        iprot.DecrementRecursionDepth();
+      }
+    }
+
+    public void Write(TProtocol oprot) {
+      oprot.IncrementRecursionDepth();
+      try
+      {
+        TStruct struc = new TStruct("getDeviceByMac_result");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+
+        if (this.Success != null) {
+          field.Name = "Success";
+          field.Type = TType.Struct;
+          field.ID = 0;
+          oprot.WriteFieldBegin(field);
+          Success.Write(oprot);
+          oprot.WriteFieldEnd();
+        } else if (this.Ex1 != null) {
+          field.Name = "Ex1";
+          field.Type = TType.Struct;
+          field.ID = 1;
+          oprot.WriteFieldBegin(field);
+          Ex1.Write(oprot);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+      finally
+      {
+        oprot.DecrementRecursionDepth();
+      }
+    }
+
+    public override string ToString() {
+      StringBuilder __sb = new StringBuilder("getDeviceByMac_result(");
       bool __first = true;
       if (Success != null) {
         if(!__first) { __sb.Append(", "); }

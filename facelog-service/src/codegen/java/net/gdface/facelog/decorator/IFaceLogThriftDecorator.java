@@ -1103,6 +1103,25 @@ public class IFaceLogThriftDecorator {
         }
     }
     /**
+     * @see {@link net.gdface.facelog.IFaceLog#getDeviceByMac(java.lang.String)}
+     */
+    @ThriftMethod(value = "getDeviceByMac" )
+    public DeviceBean getDeviceByMac(String mac) 
+        throws ServiceRuntimeException{
+        try{
+            return TypeTransformer.getInstance().to(
+                    delegate().getDeviceByMac(mac),
+                    DeviceBean.class,
+                    DeviceBean.class);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
      * @see {@link net.gdface.facelog.IFaceLog#getDeviceGroup(int)}
      */
     @ThriftMethod(value = "getDeviceGroup" )

@@ -1048,7 +1048,14 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 			throw wrapServiceRuntimeException(e);
 		} 
 	}
-
+	@Override
+	public DeviceBean getDeviceByMac(String mac){
+		try{
+			return dm.daoGetDeviceByIndexMac(mac);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		} 
+	}
 	@Override
 	public List<DeviceBean> getDevices(List<Integer> idList){
 		try{

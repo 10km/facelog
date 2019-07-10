@@ -389,6 +389,11 @@ public class FacelogDefaultImpl implements IFaceLog {
 	}
 
 	@Override
+	public DeviceBean getDeviceByMac(String mac) {
+		return null;
+	}
+	
+	@Override
 	public List<DeviceBean> getDevices(List<Integer> idList) {
 		return null;
 	}

@@ -700,6 +700,13 @@ public interface IFaceLog{
 	 * @return 返回设备记录
 	 */
 	public DeviceBean getDevice(int deviceId);
+	
+	/**
+	 * 根据设备MAC地址查找指定的设备记录
+	 * @param mac
+	 * @return 返回设备记录
+	 */
+	public DeviceBean getDeviceByMac(String mac);
 	/**
 	 * 返回 {@code idList} 指定的设备记录
 	 * @param idList

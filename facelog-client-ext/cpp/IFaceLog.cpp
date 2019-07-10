@@ -714,6 +714,22 @@ IFaceLog_getDevice_presult::~IFaceLog_getDevice_presult() throw() {
 }
 
 
+IFaceLog_getDeviceByMac_args::~IFaceLog_getDeviceByMac_args() throw() {
+}
+
+
+IFaceLog_getDeviceByMac_pargs::~IFaceLog_getDeviceByMac_pargs() throw() {
+}
+
+
+IFaceLog_getDeviceByMac_result::~IFaceLog_getDeviceByMac_result() throw() {
+}
+
+
+IFaceLog_getDeviceByMac_presult::~IFaceLog_getDeviceByMac_presult() throw() {
+}
+
+
 IFaceLog_getDeviceGroup_args::~IFaceLog_getDeviceGroup_args() throw() {
 }
 

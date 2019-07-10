@@ -1056,6 +1056,26 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
+    public DeviceBean getDeviceByMac(String mac) 
+        {
+        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        try{
+            return TypeTransformer.getInstance().to(
+                    instance.getDeviceByMac(mac),
+                    net.gdface.facelog.client.thrift.DeviceBean.class,
+                    DeviceBean.class);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch(RuntimeTApplicationException e){
+            return net.gdface.thrift.ThriftUtils.returnNull(e);
+        }
+        finally{
+            factory.releaseInstance(instance);
+        }
+    }
+    @Override
     public DeviceGroupBean getDeviceGroup(int deviceGroupId) 
         {
         net.gdface.facelog.client.thrift.IFaceLog instance = delegate();

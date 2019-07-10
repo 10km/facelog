@@ -42,6 +42,12 @@
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
+			<artifactId>common-base2</artifactId>
+			<version>${common-java.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>faceapi-base</artifactId>
 			<version>${faceapi.version}</version>
 		</dependency>

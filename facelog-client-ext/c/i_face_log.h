@@ -62,6 +62,7 @@ struct _IFaceLogIfInterface
   gboolean (*exists_image) (IFaceLogIf *iface, gboolean* _return, const gchar * md5, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*exists_person) (IFaceLogIf *iface, gboolean* _return, const gint32 persionId, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*get_device) (IFaceLogIf *iface, DeviceBean ** _return, const gint32 deviceId, ServiceRuntimeException ** ex1, GError **error);
+  gboolean (*get_device_by_mac) (IFaceLogIf *iface, DeviceBean ** _return, const gchar * mac, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*get_device_group) (IFaceLogIf *iface, DeviceGroupBean ** _return, const gint32 deviceGroupId, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*get_device_groups) (IFaceLogIf *iface, GPtrArray ** _return, const GArray * groupIdList, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*get_device_groups_belongs) (IFaceLogIf *iface, GArray ** _return, const gint32 deviceId, ServiceRuntimeException ** ex1, GError **error);
@@ -228,6 +229,7 @@ gboolean i_face_log_if_exists_feature (IFaceLogIf *iface, gboolean* _return, con
 gboolean i_face_log_if_exists_image (IFaceLogIf *iface, gboolean* _return, const gchar * md5, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_if_exists_person (IFaceLogIf *iface, gboolean* _return, const gint32 persionId, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_if_get_device (IFaceLogIf *iface, DeviceBean ** _return, const gint32 deviceId, ServiceRuntimeException ** ex1, GError **error);
+gboolean i_face_log_if_get_device_by_mac (IFaceLogIf *iface, DeviceBean ** _return, const gchar * mac, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_if_get_device_group (IFaceLogIf *iface, DeviceGroupBean ** _return, const gint32 deviceGroupId, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_if_get_device_groups (IFaceLogIf *iface, GPtrArray ** _return, const GArray * groupIdList, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_if_get_device_groups_belongs (IFaceLogIf *iface, GArray ** _return, const gint32 deviceId, ServiceRuntimeException ** ex1, GError **error);
@@ -498,6 +500,9 @@ gboolean i_face_log_client_recv_exists_person (IFaceLogIf * iface, gboolean* _re
 gboolean i_face_log_client_get_device (IFaceLogIf * iface, DeviceBean ** _return, const gint32 deviceId, ServiceRuntimeException ** ex1, GError ** error);
 gboolean i_face_log_client_send_get_device (IFaceLogIf * iface, const gint32 deviceId, GError ** error);
 gboolean i_face_log_client_recv_get_device (IFaceLogIf * iface, DeviceBean ** _return, ServiceRuntimeException ** ex1, GError ** error);
+gboolean i_face_log_client_get_device_by_mac (IFaceLogIf * iface, DeviceBean ** _return, const gchar * mac, ServiceRuntimeException ** ex1, GError ** error);
+gboolean i_face_log_client_send_get_device_by_mac (IFaceLogIf * iface, const gchar * mac, GError ** error);
+gboolean i_face_log_client_recv_get_device_by_mac (IFaceLogIf * iface, DeviceBean ** _return, ServiceRuntimeException ** ex1, GError ** error);
 gboolean i_face_log_client_get_device_group (IFaceLogIf * iface, DeviceGroupBean ** _return, const gint32 deviceGroupId, ServiceRuntimeException ** ex1, GError ** error);
 gboolean i_face_log_client_send_get_device_group (IFaceLogIf * iface, const gint32 deviceGroupId, GError ** error);
 gboolean i_face_log_client_recv_get_device_group (IFaceLogIf * iface, DeviceGroupBean ** _return, ServiceRuntimeException ** ex1, GError ** error);
@@ -895,6 +900,7 @@ struct _IFaceLogHandlerClass
   gboolean (*exists_image) (IFaceLogIf *iface, gboolean* _return, const gchar * md5, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*exists_person) (IFaceLogIf *iface, gboolean* _return, const gint32 persionId, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*get_device) (IFaceLogIf *iface, DeviceBean ** _return, const gint32 deviceId, ServiceRuntimeException ** ex1, GError **error);
+  gboolean (*get_device_by_mac) (IFaceLogIf *iface, DeviceBean ** _return, const gchar * mac, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*get_device_group) (IFaceLogIf *iface, DeviceGroupBean ** _return, const gint32 deviceGroupId, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*get_device_groups) (IFaceLogIf *iface, GPtrArray ** _return, const GArray * groupIdList, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*get_device_groups_belongs) (IFaceLogIf *iface, GArray ** _return, const gint32 deviceId, ServiceRuntimeException ** ex1, GError **error);
@@ -1063,6 +1069,7 @@ gboolean i_face_log_handler_exists_feature (IFaceLogIf *iface, gboolean* _return
 gboolean i_face_log_handler_exists_image (IFaceLogIf *iface, gboolean* _return, const gchar * md5, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_handler_exists_person (IFaceLogIf *iface, gboolean* _return, const gint32 persionId, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_handler_get_device (IFaceLogIf *iface, DeviceBean ** _return, const gint32 deviceId, ServiceRuntimeException ** ex1, GError **error);
+gboolean i_face_log_handler_get_device_by_mac (IFaceLogIf *iface, DeviceBean ** _return, const gchar * mac, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_handler_get_device_group (IFaceLogIf *iface, DeviceGroupBean ** _return, const gint32 deviceGroupId, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_handler_get_device_groups (IFaceLogIf *iface, GPtrArray ** _return, const GArray * groupIdList, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_handler_get_device_groups_belongs (IFaceLogIf *iface, GArray ** _return, const gint32 deviceId, ServiceRuntimeException ** ex1, GError **error);

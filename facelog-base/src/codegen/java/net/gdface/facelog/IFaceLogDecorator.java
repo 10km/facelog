@@ -466,6 +466,11 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
+    public DeviceBean getDeviceByMac (String mac) {
+        return delegate().getDeviceByMac(mac);
+    }
+
+    @Override
     public DeviceGroupBean getDeviceGroup (int deviceGroupId) {
         return delegate().getDeviceGroup(deviceGroupId);
     }

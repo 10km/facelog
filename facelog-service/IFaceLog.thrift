@@ -263,6 +263,7 @@ service IFaceLog {
   bool existsImage(1: optional string md5) throws (1: ServiceRuntimeException ex1);
   bool existsPerson(1: required i32 persionId) throws (1: ServiceRuntimeException ex1);
   DeviceBean getDevice(1: required i32 deviceId) throws (1: ServiceRuntimeException ex1);
+  DeviceBean getDeviceByMac(1: optional string mac) throws (1: ServiceRuntimeException ex1);
   DeviceGroupBean getDeviceGroup(1: required i32 deviceGroupId) throws (1: ServiceRuntimeException ex1);
   list<DeviceGroupBean> getDeviceGroups(1: optional list<i32> groupIdList) throws (1: ServiceRuntimeException ex1);
   list<i32> getDeviceGroupsBelongs(1: required i32 deviceId) throws (1: ServiceRuntimeException ex1);

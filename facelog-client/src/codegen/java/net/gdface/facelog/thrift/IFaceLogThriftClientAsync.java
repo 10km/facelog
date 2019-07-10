@@ -1009,6 +1009,28 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(getDevice(deviceId), callback);
     }
     /**
+     * see also {@link net.gdface.facelog.IFaceLog#getDeviceByMac(java.lang.String)}
+     */
+    public ListenableFuture<DeviceBean> getDeviceByMac(String mac){        
+        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
+        ListenableFuture<DeviceBean> future = Futures.transform(
+            async.getDeviceByMac(mac),
+            new Function<net.gdface.facelog.client.thrift.DeviceBean,DeviceBean>(){
+                @Override
+                public DeviceBean apply(net.gdface.facelog.client.thrift.DeviceBean input) {
+                    return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.DeviceBean.class,
+                    DeviceBean.class);
+                }
+            });
+        return factory.wrap(async,future);
+    }
+    public void getDeviceByMac(String mac,
+        FutureCallback<DeviceBean>callback){
+        factory.addCallback(getDeviceByMac(mac), callback);
+    }
+    /**
      * see also {@link net.gdface.facelog.IFaceLog#getDeviceGroup(int)}
      */
     public ListenableFuture<DeviceGroupBean> getDeviceGroup(int deviceGroupId){        

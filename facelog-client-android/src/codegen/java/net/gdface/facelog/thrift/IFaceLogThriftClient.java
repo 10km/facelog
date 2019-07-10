@@ -1446,6 +1446,32 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
+    public DeviceBean getDeviceByMac(final String mac) 
+        {
+        try{
+            return syncCall(new Function<net.gdface.facelog.client.thrift.DeviceBean,DeviceBean>() {
+                @Override
+                public DeviceBean apply(net.gdface.facelog.client.thrift.DeviceBean input) {
+                    return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.DeviceBean.class,
+                    DeviceBean.class);
+                }},
+                new ServiceAsyncCall<net.gdface.facelog.client.thrift.DeviceBean>(){
+                @Override
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<net.gdface.facelog.client.thrift.DeviceBean> nativeCallback){
+                    service.getDeviceByMac(mac,nativeCallback);
+                }});
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);
+        }
+    }
+    @Override
     public DeviceGroupBean getDeviceGroup(final int deviceGroupId) 
         {
         try{

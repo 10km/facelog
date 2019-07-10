@@ -1,7 +1,7 @@
 package net.gdface.facelog.hb;
 
+import java.io.IOException;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -11,15 +11,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.MoreObjects;
+import com.google.common.io.ByteStreams;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 import static com.google.common.base.Preconditions.*;
+import static net.gdface.utils.NetworkUtil.*;
 
+import gu.simplemq.json.BaseJsonEncoder;
 import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.RedisFactory;
 import gu.simplemq.redis.RedisPublisher;
 import net.gdface.facelog.ChannelConstant;
+import net.gdface.facelog.CommonConstant;
 import net.gdface.facelog.ServiceHeartbeatPackage;
 /**
  * 服务心跳包redis实现<br>
@@ -31,8 +35,8 @@ import net.gdface.facelog.ServiceHeartbeatPackage;
  */
 public class ServiceHeartbeat implements ChannelConstant{
     private static final Logger logger = LoggerFactory.getLogger(ServiceHeartbeat.class);
-
-	/**  单实例 */
+    
+    /**  单实例 */
 	private static ServiceHeartbeat heartbeat;
 	/** 心跳周期(毫秒) */
 	private long intervalMills = TimeUnit.MILLISECONDS.convert(DEFAULT_HEARTBEAT_PERIOD,TimeUnit.SECONDS);
@@ -55,6 +59,19 @@ public class ServiceHeartbeat implements ChannelConstant{
 				logger.error(e.getMessage());
 			}			
 		}};
+	/** 定时广播任务 */
+	private final Runnable timerTask2 = new Runnable(){
+		@Override
+		public void run() {
+			try {
+				sendMultiCast(CommonConstant.MULTICAST_ADDRESS, BaseJsonEncoder.getEncoder().toJsonString(heartBeatPackage).getBytes());
+			} catch (Exception e) {
+				logger.error(e.getMessage(),e);
+			}			
+		}};
+
+	private ScheduledFuture<?> futureMc;
+
 	/**
 	 * 构造方法
 	 * @param serviceID 当前服务ID(确保每次服务启动都不一样)
@@ -79,7 +96,13 @@ public class ServiceHeartbeat implements ChannelConstant{
         try {
         	//获取本机计算机名称
 			return InetAddress.getLocalHost().getHostName();
-		} catch (UnknownHostException e) {
+		} catch (IOException e) {
+			try {
+				byte[] out = ByteStreams.toByteArray(Runtime.getRuntime().exec("hostname").getInputStream());
+				return new String(out);
+			} catch (IOException e1) {
+				e = e1;
+			}
 			throw new RuntimeException(e);
 		}
 	}
@@ -150,6 +173,9 @@ public class ServiceHeartbeat implements ChannelConstant{
 		}
 		/** 返回 RunnableScheduledFuture<?>实例  */
 		future = this.timerExecutor.scheduleAtFixedRate(timerTask, 0, intervalMills, TimeUnit.MILLISECONDS);
+		if(null == futureMc){
+			futureMc = this.timerExecutor.scheduleAtFixedRate(timerTask2, 0, 2, TimeUnit.SECONDS);
+		}
 	}
 	/**
 	 * 设置设备心跳包发送周期<br>
