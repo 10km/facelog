@@ -11,6 +11,9 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.cache.Cache;
@@ -31,6 +34,7 @@ import net.gdface.utils.MultiCastDispatcher;
  *
  */
 public class LanServiceHeartbeatListener {
+	private static final Logger logger = LoggerFactory.getLogger(LanServiceHeartbeatListener.class);
 
 	/** 执行组播包接收线程池对象 */
 	private static final ExecutorService executor = MoreExecutors.getExitingExecutorService(
@@ -73,19 +77,24 @@ public class LanServiceHeartbeatListener {
 		try {
 			multiCastDispatcher = new MultiCastDispatcher(CommonConstant.MULTICAST_ADDRESS, 512, 
 					processor,
-					Predicates.<Throwable>alwaysFalse()).init();
+					Predicates.<Throwable>alwaysFalse());
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
 	}
-	public LanServiceHeartbeatListener start(){
+	public synchronized LanServiceHeartbeatListener start(){
 		if(!multiCastDispatcher.isRunning()){
-			executor.execute(multiCastDispatcher);
+			try {
+				executor.execute(multiCastDispatcher.init().running());
+			} catch (IOException e) {
+				logger.error(e.getMessage());
+				throw new RuntimeException(e);
+			}
 		}
 		return this;
 	}
 	public LanServiceHeartbeatListener stop(){
-		multiCastDispatcher.close();
+		multiCastDispatcher.stop();
 		return this;
 	}
 	/**

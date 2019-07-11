@@ -39,7 +39,7 @@ public class MultiCastTest {
 	@Test
 	public void test() {
 		// 在此设置断点暂停，可以看到线程输出心跳包
-		dispatcher.close();
+		dispatcher.stop();
 	}
 
 }
