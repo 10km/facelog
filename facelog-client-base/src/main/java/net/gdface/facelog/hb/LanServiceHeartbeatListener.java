@@ -25,7 +25,8 @@ import net.gdface.facelog.ServiceHeartbeatPackage;
 import net.gdface.utils.MultiCastDispatcher;
 
 /**
- * 局域网组播(multicast)心跳包侦听器
+ * 局域网组播(multicast)心跳包侦听器<br>
+ * 通过侦听服务心跳包组播数据，记录当前存活(2秒内)的所有局域网内facelog 服务器
  * @author guyadong
  *
  */
