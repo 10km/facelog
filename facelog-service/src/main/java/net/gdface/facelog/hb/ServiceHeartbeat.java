@@ -64,7 +64,7 @@ public class ServiceHeartbeat implements ChannelConstant{
 		@Override
 		public void run() {
 			try {
-				sendMultiCast(CommonConstant.MULTICAST_ADDRESS, BaseJsonEncoder.getEncoder().toJsonString(heartBeatPackage).getBytes());
+				sendMulticast(CommonConstant.MULTICAST_ADDRESS, BaseJsonEncoder.getEncoder().toJsonString(heartBeatPackage).getBytes());
 			} catch (Exception e) {
 				logger.error(e.getMessage(),e);
 			}			

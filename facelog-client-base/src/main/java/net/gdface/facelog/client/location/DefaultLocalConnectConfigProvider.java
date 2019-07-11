@@ -1,8 +1,12 @@
 package net.gdface.facelog.client.location;
 
 import java.net.UnknownHostException;
+import java.util.Collections;
+import java.util.List;
 
 import net.gdface.facelog.CommonConstant;
+import net.gdface.facelog.ServiceHeartbeatPackage;
+import net.gdface.facelog.hb.LanServiceHeartbeatListener;
 import net.gdface.thrift.ClientFactory;
 import net.gdface.utils.JcifsUtil;
 
@@ -17,7 +21,7 @@ public class DefaultLocalConnectConfigProvider implements ConnectConfigProvider,
 	private static String landfaceloghost = DEFAULT_LANDFACELOGHOST;
 
 	/**
-	 * 返回局域网redis主机名
+	 * 返回局域网facelog主机名
 	 * @return landtalkhost
 	 */
 	public static String getLanfaceloghost() {
@@ -31,6 +35,8 @@ public class DefaultLocalConnectConfigProvider implements ConnectConfigProvider,
 	public static void initLanfaceloghost(String lanfaceloghost) {
 		DefaultLocalConnectConfigProvider.landfaceloghost = lanfaceloghost;
 	}
+
+	private ServiceHeartbeatPackage lanServer = null;
 	@Override
 	public String getHost() {
 		try {
@@ -46,7 +52,12 @@ public class DefaultLocalConnectConfigProvider implements ConnectConfigProvider,
 					}
 				}
 			} catch (UnknownHostException e1) {
-				
+				List<ServiceHeartbeatPackage> servers = LanServiceHeartbeatListener.INSTANCE.lanServers();
+				if(!servers.isEmpty()){
+					Collections.reverse(servers);
+					lanServer = servers.get(0);
+					return lanServer.getHost();
+				}
 			}
 		}
 		return landfaceloghost;
@@ -58,7 +69,7 @@ public class DefaultLocalConnectConfigProvider implements ConnectConfigProvider,
 
 	@Override
 	public int getPort() {
-		return DEFAULT_PORT;
+		return lanServer == null ? DEFAULT_PORT : lanServer.getPort();
 	}
 
 	@Override

@@ -1,8 +1,9 @@
 package net.gdface.facelog.hb;
 
-import static net.gdface.utils.NetworkUtil.recevieMultiCastLoop;
-
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutorService;
@@ -21,51 +22,80 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import gu.simplemq.json.BaseJsonEncoder;
 import net.gdface.facelog.CommonConstant;
 import net.gdface.facelog.ServiceHeartbeatPackage;
+import net.gdface.utils.MultiCastDispatcher;
 
+/**
+ * 局域网组播(multicast)心跳包侦听器
+ * @author guyadong
+ *
+ */
 public class LanServiceHeartbeatListener {
+
 	/** 执行组播包接收线程池对象 */
 	private static final ExecutorService executor = MoreExecutors.getExitingExecutorService(
 			new ThreadPoolExecutor(1, 1,
 	                0L, TimeUnit.MILLISECONDS,
 	                new LinkedBlockingQueue<Runnable>(),
 	                new ThreadFactoryBuilder().setNameFormat("mc-listener-%d").build()));
-	private final static Runnable runnable = new Runnable() {
-		
-		@Override
-		public void run() {
-			try {
-				recevieMultiCastLoop(CommonConstant.MULTICAST_ADDRESS, 512,new Predicate<byte[]>() {
-
-					@Override
-					public boolean apply(byte[] input) {
-						ServiceHeartbeatPackage serviceHeartbeatPackage = 
-								BaseJsonEncoder.getEncoder().fromJson(new String(input), ServiceHeartbeatPackage.class);
-						synchronized (cacheMap) {
-							cacheMap.put(serviceHeartbeatPackage.getHost(), serviceHeartbeatPackage);
-						}
-						return true;
-					}
-				},
-				Predicates.<Throwable>alwaysFalse(),
-				null);
-			} catch (IOException e) {					
-				e.printStackTrace();
-			}			
-		}
-	};
 	private final static Cache<String, ServiceHeartbeatPackage> cache 
 		= CacheBuilder.newBuilder().expireAfterWrite(3, TimeUnit.SECONDS).<String, ServiceHeartbeatPackage>build();
 	private static final ConcurrentMap<String, ServiceHeartbeatPackage> cacheMap = cache.asMap();
-	
-	private LanServiceHeartbeatListener() {
-	}
-	public static void start(){
-		executor.execute(runnable);
-	}
-	public static List<ServiceHeartbeatPackage> lanServers(){
-		synchronized (cacheMap) {
-			return Lists.newArrayList(cacheMap.values());			
-		}
+	private static final Comparator<ServiceHeartbeatPackage> comparator= new Comparator<ServiceHeartbeatPackage>(){
 
+		@Override
+		public int compare(ServiceHeartbeatPackage o1, ServiceHeartbeatPackage o2) {
+			return (int) (o1.readTimestamp() - o2.readTimestamp());
+		}};
+	private static final Predicate<byte[]> processor = new Predicate<byte[]>() {
+
+		@Override
+		public boolean apply(byte[] input) {
+			ServiceHeartbeatPackage serviceHeartbeatPackage = 
+					BaseJsonEncoder.getEncoder().fromJson(new String(input), ServiceHeartbeatPackage.class);
+			synchronized (cacheMap) {
+				cacheMap.put(serviceHeartbeatPackage.getHost(), serviceHeartbeatPackage);
+			}
+			return true;
+		}
+	};
+	public static final LanServiceHeartbeatListener INSTANCE = new LanServiceHeartbeatListener().start();
+	static{
+		Runtime.getRuntime().addShutdownHook(new Thread(){
+
+			@Override
+			public void run() {
+				INSTANCE.stop();
+			}});
+	}
+	private final MultiCastDispatcher multiCastDispatcher;
+	private LanServiceHeartbeatListener() {
+		try {
+			multiCastDispatcher = new MultiCastDispatcher(CommonConstant.MULTICAST_ADDRESS, 512, 
+					processor,
+					Predicates.<Throwable>alwaysFalse()).init();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	public LanServiceHeartbeatListener start(){
+		if(!multiCastDispatcher.isRunning()){
+			executor.execute(multiCastDispatcher);
+		}
+		return this;
+	}
+	public LanServiceHeartbeatListener stop(){
+		multiCastDispatcher.close();
+		return this;
+	}
+	/**
+	 * 返回所有局域网内发现的当前活动的facelog服务器(以服务启动时间升序排序)
+	 * @return 没有找到局域网服务则返回空表
+	 */
+	public List<ServiceHeartbeatPackage> lanServers(){
+		synchronized (cacheMap) {
+			ArrayList<ServiceHeartbeatPackage> list = Lists.newArrayList(cacheMap.values());
+			Collections.sort(list, comparator);
+			return list;
+		}
 	}
 }

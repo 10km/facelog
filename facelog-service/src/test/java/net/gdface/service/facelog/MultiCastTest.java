@@ -1,8 +1,6 @@
 package net.gdface.service.facelog;
 
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -10,39 +8,27 @@ import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 
 import net.gdface.facelog.CommonConstant;
-
-import static net.gdface.utils.NetworkUtil.*;
+import net.gdface.utils.MultiCastDispatcher;
 
 public class MultiCastTest {
-	private static AtomicBoolean stop = new AtomicBoolean(false);
+	private static MultiCastDispatcher dispatcher;
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		new Thread(){
+		dispatcher = new MultiCastDispatcher(CommonConstant.MULTICAST_ADDRESS, 512,new Predicate<byte[]>() {
 
 			@Override
-			public void run() {
+			public boolean apply(byte[] input) {
 				try {
-					recevieMultiCastLoop(CommonConstant.MULTICAST_ADDRESS, 512,new Predicate<byte[]>() {
-
-						@Override
-						public boolean apply(byte[] input) {
-							try {
-								System.out.write(input);
-								System.out.println();
-							} catch (IOException e) {
-								e.printStackTrace();
-							}
-							return true;
-						}
-					},
-					Predicates.<Throwable>alwaysFalse(),
-					stop);
-				} catch (IOException e) {					
+					System.out.write(input);
+					System.out.println();
+				} catch (IOException e) {
 					e.printStackTrace();
 				}
+				return true;
 			}
-			
-		}.start();
+		},
+		Predicates.<Throwable>alwaysFalse()).init();
+		new Thread(dispatcher).start();
 
 	}
 
@@ -52,7 +38,8 @@ public class MultiCastTest {
 
 	@Test
 	public void test() {
-		stop.set(true);
+		// 在此设置断点暂停，可以看到线程输出心跳包
+		dispatcher.close();
 	}
 
 }

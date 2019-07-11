@@ -1,11 +1,17 @@
 package net.gdface.facelog;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import com.google.common.base.Strings;
+
 /**
  * 服务心跳包
  * @author guyadong
  *
  */
-public class  ServiceHeartbeatPackage{
+public class  ServiceHeartbeatPackage implements CommonConstant{
 	/** 服务ID(服务每次启动会不一样，消息接收端根据此判断服务是否重启) */
 	private int id;
 	/** (FRAMED)服务端口 */
@@ -14,6 +20,8 @@ public class  ServiceHeartbeatPackage{
 	private Integer xhrPort;
 	/** 主机名 */
 	private String host;
+	/** 服务启动时间戳 ISO8601 格式 */
+	private String timestamp = new SimpleDateFormat(ISO8601_FORMATTER_STR).format(new Date());
 	public ServiceHeartbeatPackage(int id, Integer port, Integer xhrPort, String host) {
 		super();
 		this.id = id;
@@ -82,6 +90,30 @@ public class  ServiceHeartbeatPackage{
 		return this;
 	}
 
+	/**
+	 * @return timestamp
+	 */
+	public String getTimestamp() {
+		return timestamp;
+	}
+	/**
+	 * @param timestamp 要设置的 timestamp
+	 * @return 
+	 */
+	public ServiceHeartbeatPackage setTimestamp(String timestamp) {
+		this.timestamp = timestamp;
+		return this;
+	}
+	public long readTimestamp(){
+		try {
+			return Strings.isNullOrEmpty(timestamp) 
+					? 0L 
+					: new SimpleDateFormat(ISO8601_FORMATTER_STR).parse(timestamp).getTime();
+		} catch (ParseException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -101,10 +133,14 @@ public class  ServiceHeartbeatPackage{
 		if (host != null) {
 			builder.append("host=");
 			builder.append(host);
+			builder.append(", ");
+		}
+		if (timestamp != null) {
+			builder.append("timestamp=");
+			builder.append(timestamp);
 		}
 		builder.append("]");
 		return builder.toString();
 	}
-
 
 }
