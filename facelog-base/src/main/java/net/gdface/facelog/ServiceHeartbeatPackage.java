@@ -1,10 +1,18 @@
 package net.gdface.facelog;
 
+import java.net.InetAddress;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
-
+import java.util.List;
+import com.google.common.base.Function;
+import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
+import com.google.common.collect.Collections2;
+
+import net.gdface.utils.FaceUtilits;
 
 /**
  * 服务心跳包
@@ -20,6 +28,8 @@ public class  ServiceHeartbeatPackage implements CommonConstant{
 	private Integer xhrPort;
 	/** 主机名 */
 	private String host;
+	/** 绑定的ip地址列表(','号分隔) */
+	private String addresses;
 	/** 服务启动时间戳 ISO8601 格式 */
 	private String timestamp = new SimpleDateFormat(ISO8601_FORMATTER_STR).format(new Date());
 	public ServiceHeartbeatPackage(int id, Integer port, Integer xhrPort, String host) {
@@ -91,6 +101,44 @@ public class  ServiceHeartbeatPackage implements CommonConstant{
 	}
 
 	/**
+	 * @return addresses
+	 */
+	public String getAddresses() {
+		return addresses;
+	}
+	/**
+	 * @param addresses 要设置的 addresses
+	 * @return 
+	 */
+	public ServiceHeartbeatPackage setAddresses(String addresses) {
+		this.addresses = addresses;
+		return this;
+	}
+	public ServiceHeartbeatPackage writeAddresses(String...addresses){
+		return setAddresses(Joiner.on(',').join(addresses));
+	}
+	public ServiceHeartbeatPackage writeAddresses(Iterable<String>addresses){
+		if(addresses != null){
+			setAddresses(Joiner.on(',').join(addresses));
+		}
+		return this;
+	}
+	public ServiceHeartbeatPackage writeAddresses(Collection<InetAddress>addresses){
+		if(addresses != null){
+			Collection<String> c = Collections2.transform(addresses, new Function<InetAddress, String>() {
+				@Override
+				public String apply(InetAddress input) {
+					return input.getHostAddress();
+				}
+			});
+			writeAddresses(c);
+		}
+		return this;
+	}
+	public List<String> readAddresses(){
+		return Strings.isNullOrEmpty(addresses) ? Collections.<String>emptyList() : FaceUtilits.elementsOf(addresses);
+	}
+	/**
 	 * @return timestamp
 	 */
 	public String getTimestamp() {
@@ -113,7 +161,6 @@ public class  ServiceHeartbeatPackage implements CommonConstant{
 			throw new RuntimeException(e);
 		}
 	}
-
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -133,6 +180,11 @@ public class  ServiceHeartbeatPackage implements CommonConstant{
 		if (host != null) {
 			builder.append("host=");
 			builder.append(host);
+			builder.append(", ");
+		}
+		if (addresses != null) {
+			builder.append("address=");
+			builder.append(addresses);
 			builder.append(", ");
 		}
 		if (timestamp != null) {

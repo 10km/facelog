@@ -1,6 +1,7 @@
 package net.gdface.facelog.hb;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -10,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.MoreObjects;
+import com.google.common.io.ByteStreams;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
@@ -84,17 +86,25 @@ public class ServiceHeartbeat implements ChannelConstant{
 				serviceID,
 				port,
 				xhrPort, 
-				locaIp());
+				hostname())
+				//.writeAddresses(ipv4AddressesOfPhysicalNICs());
+				.writeAddresses(addressesOfPhysicalNICs(FILTER_IPV4));
 		this.publisher = RedisFactory.getPublisher(checkNotNull(poolLazy,"pool is null"));
 		this.scheduledExecutor =new ScheduledThreadPoolExecutor(1,
 				new ThreadFactoryBuilder().setNameFormat("heartbeat-pool-%d").build());	
 		this.timerExecutor = MoreExecutors.getExitingScheduledExecutorService(	scheduledExecutor);
 	}
-	private static String locaIp(){
+	private static String  hostname(){
         try {
-        	// 获取本机计算机IP地址
-        	return getLocalIp("www.cnnic.net.cn", 80).getHostAddress();
+        	//获取本机计算机名称
+			return InetAddress.getLocalHost().getHostName();
 		} catch (IOException e) {
+			try {
+				byte[] out = ByteStreams.toByteArray(Runtime.getRuntime().exec("hostname").getInputStream());
+				return new String(out);
+			} catch (IOException e1) {
+				e = e1;
+			}
 			throw new RuntimeException(e);
 		}
 	}

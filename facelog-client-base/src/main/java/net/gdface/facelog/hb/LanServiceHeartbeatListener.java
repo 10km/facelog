@@ -1,6 +1,7 @@
 package net.gdface.facelog.hb;
 
 import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -25,7 +26,9 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import gu.simplemq.json.BaseJsonEncoder;
 import net.gdface.facelog.CommonConstant;
 import net.gdface.facelog.ServiceHeartbeatPackage;
+import net.gdface.utils.JcifsUtil;
 import net.gdface.utils.MultiCastDispatcher;
+import net.gdface.utils.NetworkUtil;
 
 /**
  * 局域网组播(multicast)心跳包侦听器<br>
@@ -107,5 +110,26 @@ public class LanServiceHeartbeatListener {
 			Collections.sort(list, comparator);
 			return list;
 		}
+	}
+
+	/**
+	 * 从服务心跳包中的数据中获取第一个可以访问的服务端IP地址
+	 * @param serviceHeartbeatPackage
+	 * @return 如果服务心跳中提供的地址都不可访问则返回{@code null}
+	 */
+	public static String firstReachableAddress(ServiceHeartbeatPackage serviceHeartbeatPackage){
+		try {
+			String address = JcifsUtil.hostAddressOf(serviceHeartbeatPackage.getHost());
+			if(NetworkUtil.isReachable(address,serviceHeartbeatPackage.getPort(),500)){
+				return address;
+			}
+		} catch (UnknownHostException e) {
+			for(String address:serviceHeartbeatPackage.readAddresses()){
+				if(NetworkUtil.isReachable(address,serviceHeartbeatPackage.getPort(),500)){
+					return address;
+				}
+			}
+		}
+		return null;
 	}
 }

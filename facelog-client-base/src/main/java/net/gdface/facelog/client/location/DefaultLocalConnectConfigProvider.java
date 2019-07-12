@@ -10,6 +10,8 @@ import net.gdface.facelog.hb.LanServiceHeartbeatListener;
 import net.gdface.thrift.ClientFactory;
 import net.gdface.utils.JcifsUtil;
 
+import static net.gdface.facelog.hb.LanServiceHeartbeatListener.*;
+
 /**
  * {@link ConnectConfigProvider}局域网配置
  * @author guyadong
@@ -42,21 +44,22 @@ public class DefaultLocalConnectConfigProvider implements ConnectConfigProvider,
 		try {
 			return JcifsUtil.hostAddressOf(landfaceloghost);
 		} catch (UnknownHostException e) {
-			try {
-				// 如果外部设置了不同的主机名,则不再尝试解析landtalkhost
-				if(DEFAULT_LANDFACELOGHOST.equals(landfaceloghost)){
-					// 如果LANDTALKHOST有facelog连接则用此IP地址
-					String address = JcifsUtil.hostAddressOf(DEFAULT_LANDTALKHOST);
-					if(ClientFactory.testConnect(address, getPort(), 0)){
-						return address;
-					}
+			// 如果外部设置了不同的主机名,则不再尝试解析landtalkhost
+			if(DEFAULT_LANDFACELOGHOST.equals(landfaceloghost)){
+				// 如果LANDTALKHOST有facelog连接则用此IP地址
+				String address = JcifsUtil.getAddressIfPossible(DEFAULT_LANDTALKHOST);
+				if(address != null && ClientFactory.testConnect(address, getPort(), 0)){
+					return address;
 				}
-			} catch (UnknownHostException e1) {
-				List<ServiceHeartbeatPackage> servers = LanServiceHeartbeatListener.INSTANCE.lanServers();
-				if(!servers.isEmpty()){
-					Collections.reverse(servers);
-					lanServer = servers.get(0);
-					return lanServer.getHost();
+			}
+
+			List<ServiceHeartbeatPackage> servers = LanServiceHeartbeatListener.INSTANCE.lanServers();
+			if(!servers.isEmpty()){
+				Collections.reverse(servers);
+				lanServer = servers.get(0);
+				String address = firstReachableAddress(lanServer);
+				if(address != null){
+					return address;
 				}
 			}
 		}
