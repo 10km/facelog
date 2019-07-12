@@ -7563,7 +7563,7 @@ struct _IFaceLogRunCmdResult
   ThriftStruct parent; 
 
   /* public */
-  gint32 success;
+  gchar * success;
   gboolean __isset_success;
   ServiceRuntimeException * ex1;
   gboolean __isset_ex1;
@@ -7623,7 +7623,7 @@ struct _IFaceLogRunTaskResult
   ThriftStruct parent; 
 
   /* public */
-  gboolean success;
+  gint32 success;
   gboolean __isset_success;
   ServiceRuntimeException * ex1;
   gboolean __isset_ex1;

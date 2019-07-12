@@ -348,8 +348,8 @@ service IFaceLog {
   void replaceFeature(1: optional i32 personId, 2: optional string featureMd5, 3: required bool deleteOldFeatureImage, 4: optional Token token) throws (1: ServiceRuntimeException ex1);
   i32 rootGroupOfDevice(1: optional i32 deviceId) throws (1: ServiceRuntimeException ex1);
   i32 rootGroupOfPerson(1: optional i32 personId) throws (1: ServiceRuntimeException ex1);
-  i32 runCmd(1: optional list<i32> target, 2: required bool group, 3: optional string cmdpath, 4: optional string jsonArgs, 5: optional string ackChannel, 6: optional Token token) throws (1: ServiceRuntimeException ex1);
-  bool runTask(1: optional string taskQueue, 2: optional string cmdpath, 3: optional string jsonArgs, 4: optional string ackChannel, 5: optional Token token) throws (1: ServiceRuntimeException ex1);
+  string runCmd(1: optional list<i32> target, 2: required bool group, 3: optional string cmdpath, 4: optional string jsonArgs, 5: optional string ackChannel, 6: optional Token token) throws (1: ServiceRuntimeException ex1);
+  i32 runTask(1: optional string taskQueue, 2: optional string cmdpath, 3: optional string jsonArgs, 4: optional string ackChannel, 5: optional Token token) throws (1: ServiceRuntimeException ex1);
   DeviceBean saveDevice(1: optional DeviceBean deviceBean, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
   DeviceGroupBean saveDeviceGroup(1: optional DeviceGroupBean deviceGroupBean, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
   PermitBean savePermit(1: optional PermitBean permitBean, 2: optional Token token) throws (1: ServiceRuntimeException ex1);

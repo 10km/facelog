@@ -987,12 +987,12 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
-    public int runCmd (List<Integer> target,boolean group,String cmdpath,String jsonArgs,String ackChannel,Token token) {
+    public String runCmd (List<Integer> target,boolean group,String cmdpath,String jsonArgs,String ackChannel,Token token) {
         return delegate().runCmd(target,group,cmdpath,jsonArgs,ackChannel,token);
     }
 
     @Override
-    public boolean runTask (String taskQueue,String cmdpath,String jsonArgs,String ackChannel,Token token) {
+    public Integer runTask (String taskQueue,String cmdpath,String jsonArgs,String ackChannel,Token token) {
         return delegate().runTask(taskQueue,cmdpath,jsonArgs,ackChannel,token);
     }
 

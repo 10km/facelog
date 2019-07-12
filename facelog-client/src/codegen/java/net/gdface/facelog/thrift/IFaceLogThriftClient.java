@@ -2835,7 +2835,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
-    public int runCmd(List<Integer> target,
+    public String runCmd(List<Integer> target,
         boolean group,
         String cmdpath,
         String jsonArgs,
@@ -2860,12 +2860,15 @@ public class IFaceLogThriftClient implements IFaceLog {
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
         }
+        catch(RuntimeTApplicationException e){
+            return net.gdface.thrift.ThriftUtils.returnNull(e);
+        }
         finally{
             factory.releaseInstance(instance);
         }
     }
     @Override
-    public boolean runTask(String taskQueue,
+    public Integer runTask(String taskQueue,
         String cmdpath,
         String jsonArgs,
         String ackChannel,
@@ -2884,6 +2887,9 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
             throw new ServiceRuntimeException(e);
+        }
+        catch(RuntimeTApplicationException e){
+            return net.gdface.thrift.ThriftUtils.returnNull(e);
         }
         finally{
             factory.releaseInstance(instance);

@@ -19573,8 +19573,8 @@ IFaceLog_runCmd_result.prototype.read = function(input) {
     switch (fid)
     {
       case 0:
-      if (ftype == Thrift.Type.I32) {
-        this.success = input.readI32().value;
+      if (ftype == Thrift.Type.STRING) {
+        this.success = input.readString().value;
       } else {
         input.skip(ftype);
       }
@@ -19599,8 +19599,8 @@ IFaceLog_runCmd_result.prototype.read = function(input) {
 IFaceLog_runCmd_result.prototype.write = function(output) {
   output.writeStructBegin('IFaceLog_runCmd_result');
   if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.I32, 0);
-    output.writeI32(this.success);
+    output.writeFieldBegin('success', Thrift.Type.STRING, 0);
+    output.writeString(this.success);
     output.writeFieldEnd();
   }
   if (this.ex1 !== null && this.ex1 !== undefined) {
@@ -19759,8 +19759,8 @@ IFaceLog_runTask_result.prototype.read = function(input) {
     switch (fid)
     {
       case 0:
-      if (ftype == Thrift.Type.BOOL) {
-        this.success = input.readBool().value;
+      if (ftype == Thrift.Type.I32) {
+        this.success = input.readI32().value;
       } else {
         input.skip(ftype);
       }
@@ -19785,8 +19785,8 @@ IFaceLog_runTask_result.prototype.read = function(input) {
 IFaceLog_runTask_result.prototype.write = function(output) {
   output.writeStructBegin('IFaceLog_runTask_result');
   if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.BOOL, 0);
-    output.writeBool(this.success);
+    output.writeFieldBegin('success', Thrift.Type.I32, 0);
+    output.writeI32(this.success);
     output.writeFieldEnd();
   }
   if (this.ex1 !== null && this.ex1 !== undefined) {

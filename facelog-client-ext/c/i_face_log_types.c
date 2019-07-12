@@ -89017,9 +89017,15 @@ i_face_log_run_cmd_result_read (ThriftStruct *object, ThriftProtocol *protocol, 
     switch (fid)
     {
       case 0:
-        if (ftype == T_I32)
+        if (ftype == T_STRING)
         {
-          if ((ret = thrift_protocol_read_i32 (protocol, &this_object->success, error)) < 0)
+          if (this_object->success != NULL)
+          {
+            g_free(this_object->success);
+            this_object->success = NULL;
+          }
+
+          if ((ret = thrift_protocol_read_string (protocol, &this_object->success, error)) < 0)
             return -1;
           xfer += ret;
           this_object->__isset_success = TRUE;
@@ -89082,10 +89088,10 @@ i_face_log_run_cmd_result_write (ThriftStruct *object, ThriftProtocol *protocol,
     return -1;
   xfer += ret;
   if (this_object->__isset_success == TRUE) {
-    if ((ret = thrift_protocol_write_field_begin (protocol, "success", T_I32, 0, error)) < 0)
+    if ((ret = thrift_protocol_write_field_begin (protocol, "success", T_STRING, 0, error)) < 0)
       return -1;
     xfer += ret;
-    if ((ret = thrift_protocol_write_i32 (protocol, this_object->success, error)) < 0)
+    if ((ret = thrift_protocol_write_string (protocol, this_object->success, error)) < 0)
       return -1;
     xfer += ret;
 
@@ -89126,7 +89132,9 @@ i_face_log_run_cmd_result_set_property (GObject *object,
   switch (property_id)
   {
     case PROP_I_FACE_LOG_RUN_CMD_RESULT_SUCCESS:
-      self->success = g_value_get_int (value);
+      if (self->success != NULL)
+        g_free (self->success);
+      self->success = g_value_dup_string (value);
       self->__isset_success = TRUE;
       break;
 
@@ -89154,7 +89162,7 @@ i_face_log_run_cmd_result_get_property (GObject *object,
   switch (property_id)
   {
     case PROP_I_FACE_LOG_RUN_CMD_RESULT_SUCCESS:
-      g_value_set_int (value, self->success);
+      g_value_set_string (value, self->success);
       break;
 
     case PROP_I_FACE_LOG_RUN_CMD_RESULT_EX1:
@@ -89172,7 +89180,7 @@ i_face_log_run_cmd_result_instance_init (IFaceLogRunCmdResult * object)
 {
   /* satisfy -Wall */
   THRIFT_UNUSED_VAR (object);
-  object->success = 0;
+  object->success = NULL;
   object->__isset_success = FALSE;
   object->ex1 = NULL;
   object->__isset_ex1 = FALSE;
@@ -89185,6 +89193,11 @@ i_face_log_run_cmd_result_finalize (GObject *object)
 
   /* satisfy -Wall in case we don't use tobject */
   THRIFT_UNUSED_VAR (tobject);
+  if (tobject->success != NULL)
+  {
+    g_free(tobject->success);
+    tobject->success = NULL;
+  }
   if (tobject->ex1 != NULL)
   {
     g_object_unref(tobject->ex1);
@@ -89208,13 +89221,11 @@ i_face_log_run_cmd_result_class_init (IFaceLogRunCmdResultClass * cls)
   g_object_class_install_property
     (gobject_class,
      PROP_I_FACE_LOG_RUN_CMD_RESULT_SUCCESS,
-     g_param_spec_int ("success",
-                       NULL,
-                       NULL,
-                       G_MININT32,
-                       G_MAXINT32,
-                       0,
-                       G_PARAM_READWRITE));
+     g_param_spec_string ("success",
+                          NULL,
+                          NULL,
+                          NULL,
+                          G_PARAM_READWRITE));
 
   g_object_class_install_property
     (gobject_class,
@@ -89777,9 +89788,9 @@ i_face_log_run_task_result_read (ThriftStruct *object, ThriftProtocol *protocol,
     switch (fid)
     {
       case 0:
-        if (ftype == T_BOOL)
+        if (ftype == T_I32)
         {
-          if ((ret = thrift_protocol_read_bool (protocol, &this_object->success, error)) < 0)
+          if ((ret = thrift_protocol_read_i32 (protocol, &this_object->success, error)) < 0)
             return -1;
           xfer += ret;
           this_object->__isset_success = TRUE;
@@ -89842,10 +89853,10 @@ i_face_log_run_task_result_write (ThriftStruct *object, ThriftProtocol *protocol
     return -1;
   xfer += ret;
   if (this_object->__isset_success == TRUE) {
-    if ((ret = thrift_protocol_write_field_begin (protocol, "success", T_BOOL, 0, error)) < 0)
+    if ((ret = thrift_protocol_write_field_begin (protocol, "success", T_I32, 0, error)) < 0)
       return -1;
     xfer += ret;
-    if ((ret = thrift_protocol_write_bool (protocol, this_object->success, error)) < 0)
+    if ((ret = thrift_protocol_write_i32 (protocol, this_object->success, error)) < 0)
       return -1;
     xfer += ret;
 
@@ -89886,7 +89897,7 @@ i_face_log_run_task_result_set_property (GObject *object,
   switch (property_id)
   {
     case PROP_I_FACE_LOG_RUN_TASK_RESULT_SUCCESS:
-      self->success = g_value_get_boolean (value);
+      self->success = g_value_get_int (value);
       self->__isset_success = TRUE;
       break;
 
@@ -89914,7 +89925,7 @@ i_face_log_run_task_result_get_property (GObject *object,
   switch (property_id)
   {
     case PROP_I_FACE_LOG_RUN_TASK_RESULT_SUCCESS:
-      g_value_set_boolean (value, self->success);
+      g_value_set_int (value, self->success);
       break;
 
     case PROP_I_FACE_LOG_RUN_TASK_RESULT_EX1:
@@ -89968,11 +89979,13 @@ i_face_log_run_task_result_class_init (IFaceLogRunTaskResultClass * cls)
   g_object_class_install_property
     (gobject_class,
      PROP_I_FACE_LOG_RUN_TASK_RESULT_SUCCESS,
-     g_param_spec_boolean ("success",
-                           NULL,
-                           NULL,
-                           FALSE,
-                           G_PARAM_READWRITE));
+     g_param_spec_int ("success",
+                       NULL,
+                       NULL,
+                       G_MININT32,
+                       G_MAXINT32,
+                       0,
+                       G_PARAM_READWRITE));
 
   g_object_class_install_property
     (gobject_class,

@@ -784,13 +784,13 @@ i_face_log_if_root_group_of_person (IFaceLogIf *iface, gint32* _return, const gi
 }
 
 gboolean
-i_face_log_if_run_cmd (IFaceLogIf *iface, gint32* _return, const GArray * target, const gboolean group, const gchar * cmdpath, const gchar * jsonArgs, const gchar * ackChannel, const Token * token, ServiceRuntimeException ** ex1, GError **error)
+i_face_log_if_run_cmd (IFaceLogIf *iface, gchar ** _return, const GArray * target, const gboolean group, const gchar * cmdpath, const gchar * jsonArgs, const gchar * ackChannel, const Token * token, ServiceRuntimeException ** ex1, GError **error)
 {
   return I_FACE_LOG_IF_GET_INTERFACE (iface)->run_cmd (iface, _return, target, group, cmdpath, jsonArgs, ackChannel, token, ex1, error);
 }
 
 gboolean
-i_face_log_if_run_task (IFaceLogIf *iface, gboolean* _return, const gchar * taskQueue, const gchar * cmdpath, const gchar * jsonArgs, const gchar * ackChannel, const Token * token, ServiceRuntimeException ** ex1, GError **error)
+i_face_log_if_run_task (IFaceLogIf *iface, gint32* _return, const gchar * taskQueue, const gchar * cmdpath, const gchar * jsonArgs, const gchar * ackChannel, const Token * token, ServiceRuntimeException ** ex1, GError **error)
 {
   return I_FACE_LOG_IF_GET_INTERFACE (iface)->run_task (iface, _return, taskQueue, cmdpath, jsonArgs, ackChannel, token, ex1, error);
 }
@@ -30153,7 +30153,7 @@ gboolean i_face_log_client_send_run_cmd (IFaceLogIf * iface, const GArray * targ
   return TRUE;
 }
 
-gboolean i_face_log_client_recv_run_cmd (IFaceLogIf * iface, gint32* _return, ServiceRuntimeException ** ex1, GError ** error)
+gboolean i_face_log_client_recv_run_cmd (IFaceLogIf * iface, gchar ** _return, ServiceRuntimeException ** ex1, GError ** error)
 {
   gint32 rseqid;
   gchar * fname = NULL;
@@ -30187,6 +30187,255 @@ gboolean i_face_log_client_recv_run_cmd (IFaceLogIf * iface, gint32* _return, Se
     thrift_protocol_read_message_end (protocol,error);
     thrift_transport_read_end (protocol->transport, error);
     g_set_error (error, THRIFT_APPLICATION_EXCEPTION_ERROR, THRIFT_APPLICATION_EXCEPTION_ERROR_WRONG_METHOD_NAME, "wrong method name %s, expected runCmd", fname);
+    if (fname) g_free (fname);
+    return FALSE;
+  }
+  if (fname) g_free (fname);
+
+  {
+    gint32 ret;
+    gint32 xfer = 0;
+    gchar *name = NULL;
+    ThriftType ftype;
+    gint16 fid;
+    guint32 len = 0;
+    gpointer data = NULL;
+    
+
+    /* satisfy -Wall in case these aren't used */
+    THRIFT_UNUSED_VAR (len);
+    THRIFT_UNUSED_VAR (data);
+
+    /* read the struct begin marker */
+    if ((ret = thrift_protocol_read_struct_begin (protocol, &name, error)) < 0)
+    {
+      if (name) g_free (name);
+      return 0;
+    }
+    xfer += ret;
+    if (name) g_free (name);
+    name = NULL;
+
+    /* read the struct fields */
+    while (1)
+    {
+      /* read the beginning of a field */
+      if ((ret = thrift_protocol_read_field_begin (protocol, &name, &ftype, &fid, error)) < 0)
+      {
+        if (name) g_free (name);
+        return 0;
+      }
+      xfer += ret;
+      if (name) g_free (name);
+      name = NULL;
+
+      /* break if we get a STOP field */
+      if (ftype == T_STOP)
+      {
+        break;
+      }
+
+      switch (fid)
+      {
+        case 0:
+          if (ftype == T_STRING)
+          {
+            if (*_return != NULL)
+            {
+              g_free(*_return);
+              *_return = NULL;
+            }
+
+            if ((ret = thrift_protocol_read_string (protocol, &*_return, error)) < 0)
+              return 0;
+            xfer += ret;
+          } else {
+            if ((ret = thrift_protocol_skip (protocol, ftype, error)) < 0)
+              return 0;
+            xfer += ret;
+          }
+          break;
+        case 1:
+          if (ftype == T_STRUCT)
+          {
+            /* This struct is an exception */
+            if ( *ex1 != NULL)
+            {
+              g_object_unref (*ex1);
+            }
+            *ex1 = g_object_new (TYPE_SERVICE_RUNTIME_EXCEPTION, NULL);
+            if ((ret = thrift_struct_read (THRIFT_STRUCT (*ex1), protocol, error)) < 0)
+            {
+              g_object_unref (*ex1);
+              *ex1 = NULL;
+              return 0;
+            }
+            xfer += ret;
+          } else {
+            if ((ret = thrift_protocol_skip (protocol, ftype, error)) < 0)
+              return 0;
+            xfer += ret;
+          }
+          break;
+        default:
+          if ((ret = thrift_protocol_skip (protocol, ftype, error)) < 0)
+            return 0;
+          xfer += ret;
+          break;
+      }
+      if ((ret = thrift_protocol_read_field_end (protocol, error)) < 0)
+        return 0;
+      xfer += ret;
+    }
+
+    if ((ret = thrift_protocol_read_struct_end (protocol, error)) < 0)
+      return 0;
+    xfer += ret;
+
+  }
+
+  if (thrift_protocol_read_message_end (protocol, error) < 0)
+    return FALSE;
+
+  if (!thrift_transport_read_end (protocol->transport, error))
+    return FALSE;
+
+  if (*ex1 != NULL)
+  {
+      g_set_error (error, SERVICE_RUNTIME_EXCEPTION_ERROR, SERVICE_RUNTIME_EXCEPTION_ERROR_CODE, "ServiceRuntimeException");
+      return FALSE;
+  }
+  return TRUE;
+}
+
+gboolean i_face_log_client_run_cmd (IFaceLogIf * iface, gchar ** _return, const GArray * target, const gboolean group, const gchar * cmdpath, const gchar * jsonArgs, const gchar * ackChannel, const Token * token, ServiceRuntimeException ** ex1, GError ** error)
+{
+  if (!i_face_log_client_send_run_cmd (iface, target, group, cmdpath, jsonArgs, ackChannel, token, error))
+    return FALSE;
+  if (!i_face_log_client_recv_run_cmd (iface, _return, ex1, error))
+    return FALSE;
+  return TRUE;
+}
+
+gboolean i_face_log_client_send_run_task (IFaceLogIf * iface, const gchar * taskQueue, const gchar * cmdpath, const gchar * jsonArgs, const gchar * ackChannel, const Token * token, GError ** error)
+{
+  gint32 cseqid = 0;
+  ThriftProtocol * protocol = I_FACE_LOG_CLIENT (iface)->output_protocol;
+
+  if (thrift_protocol_write_message_begin (protocol, "runTask", T_CALL, cseqid, error) < 0)
+    return FALSE;
+
+  {
+    gint32 ret;
+    gint32 xfer = 0;
+
+    
+    if ((ret = thrift_protocol_write_struct_begin (protocol, "runTask_args", error)) < 0)
+      return 0;
+    xfer += ret;
+    if ((ret = thrift_protocol_write_field_begin (protocol, "taskQueue", T_STRING, 1, error)) < 0)
+      return 0;
+    xfer += ret;
+    if ((ret = thrift_protocol_write_string (protocol, taskQueue, error)) < 0)
+      return 0;
+    xfer += ret;
+
+    if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
+      return 0;
+    xfer += ret;
+    if ((ret = thrift_protocol_write_field_begin (protocol, "cmdpath", T_STRING, 2, error)) < 0)
+      return 0;
+    xfer += ret;
+    if ((ret = thrift_protocol_write_string (protocol, cmdpath, error)) < 0)
+      return 0;
+    xfer += ret;
+
+    if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
+      return 0;
+    xfer += ret;
+    if ((ret = thrift_protocol_write_field_begin (protocol, "jsonArgs", T_STRING, 3, error)) < 0)
+      return 0;
+    xfer += ret;
+    if ((ret = thrift_protocol_write_string (protocol, jsonArgs, error)) < 0)
+      return 0;
+    xfer += ret;
+
+    if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
+      return 0;
+    xfer += ret;
+    if ((ret = thrift_protocol_write_field_begin (protocol, "ackChannel", T_STRING, 4, error)) < 0)
+      return 0;
+    xfer += ret;
+    if ((ret = thrift_protocol_write_string (protocol, ackChannel, error)) < 0)
+      return 0;
+    xfer += ret;
+
+    if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
+      return 0;
+    xfer += ret;
+    if ((ret = thrift_protocol_write_field_begin (protocol, "token", T_STRUCT, 5, error)) < 0)
+      return 0;
+    xfer += ret;
+    if ((ret = thrift_struct_write (THRIFT_STRUCT (token), protocol, error)) < 0)
+      return 0;
+    xfer += ret;
+
+    if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
+      return 0;
+    xfer += ret;
+    if ((ret = thrift_protocol_write_field_stop (protocol, error)) < 0)
+      return 0;
+    xfer += ret;
+    if ((ret = thrift_protocol_write_struct_end (protocol, error)) < 0)
+      return 0;
+    xfer += ret;
+
+  }
+
+  if (thrift_protocol_write_message_end (protocol, error) < 0)
+    return FALSE;
+  if (!thrift_transport_flush (protocol->transport, error))
+    return FALSE;
+  if (!thrift_transport_write_end (protocol->transport, error))
+    return FALSE;
+
+  return TRUE;
+}
+
+gboolean i_face_log_client_recv_run_task (IFaceLogIf * iface, gint32* _return, ServiceRuntimeException ** ex1, GError ** error)
+{
+  gint32 rseqid;
+  gchar * fname = NULL;
+  ThriftMessageType mtype;
+  ThriftProtocol * protocol = I_FACE_LOG_CLIENT (iface)->input_protocol;
+  ThriftApplicationException *xception;
+
+  if (thrift_protocol_read_message_begin (protocol, &fname, &mtype, &rseqid, error) < 0) {
+    if (fname) g_free (fname);
+    return FALSE;
+  }
+
+  if (mtype == T_EXCEPTION) {
+    if (fname) g_free (fname);
+    xception = g_object_new (THRIFT_TYPE_APPLICATION_EXCEPTION, NULL);
+    thrift_struct_read (THRIFT_STRUCT (xception), protocol, NULL);
+    thrift_protocol_read_message_end (protocol, NULL);
+    thrift_transport_read_end (protocol->transport, NULL);
+    g_set_error (error, THRIFT_APPLICATION_EXCEPTION_ERROR,xception->type, "application error: %s", xception->message);
+    g_object_unref (xception);
+    return FALSE;
+  } else if (mtype != T_REPLY) {
+    if (fname) g_free (fname);
+    thrift_protocol_skip (protocol, T_STRUCT, NULL);
+    thrift_protocol_read_message_end (protocol, NULL);
+    thrift_transport_read_end (protocol->transport, NULL);
+    g_set_error (error, THRIFT_APPLICATION_EXCEPTION_ERROR, THRIFT_APPLICATION_EXCEPTION_ERROR_INVALID_MESSAGE_TYPE, "invalid message type %d, expected T_REPLY", mtype);
+    return FALSE;
+  } else if (strncmp (fname, "runTask", 7) != 0) {
+    thrift_protocol_skip (protocol, T_STRUCT, NULL);
+    thrift_protocol_read_message_end (protocol,error);
+    thrift_transport_read_end (protocol->transport, error);
+    g_set_error (error, THRIFT_APPLICATION_EXCEPTION_ERROR, THRIFT_APPLICATION_EXCEPTION_ERROR_WRONG_METHOD_NAME, "wrong method name %s, expected runTask", fname);
     if (fname) g_free (fname);
     return FALSE;
   }
@@ -30302,250 +30551,7 @@ gboolean i_face_log_client_recv_run_cmd (IFaceLogIf * iface, gint32* _return, Se
   return TRUE;
 }
 
-gboolean i_face_log_client_run_cmd (IFaceLogIf * iface, gint32* _return, const GArray * target, const gboolean group, const gchar * cmdpath, const gchar * jsonArgs, const gchar * ackChannel, const Token * token, ServiceRuntimeException ** ex1, GError ** error)
-{
-  if (!i_face_log_client_send_run_cmd (iface, target, group, cmdpath, jsonArgs, ackChannel, token, error))
-    return FALSE;
-  if (!i_face_log_client_recv_run_cmd (iface, _return, ex1, error))
-    return FALSE;
-  return TRUE;
-}
-
-gboolean i_face_log_client_send_run_task (IFaceLogIf * iface, const gchar * taskQueue, const gchar * cmdpath, const gchar * jsonArgs, const gchar * ackChannel, const Token * token, GError ** error)
-{
-  gint32 cseqid = 0;
-  ThriftProtocol * protocol = I_FACE_LOG_CLIENT (iface)->output_protocol;
-
-  if (thrift_protocol_write_message_begin (protocol, "runTask", T_CALL, cseqid, error) < 0)
-    return FALSE;
-
-  {
-    gint32 ret;
-    gint32 xfer = 0;
-
-    
-    if ((ret = thrift_protocol_write_struct_begin (protocol, "runTask_args", error)) < 0)
-      return 0;
-    xfer += ret;
-    if ((ret = thrift_protocol_write_field_begin (protocol, "taskQueue", T_STRING, 1, error)) < 0)
-      return 0;
-    xfer += ret;
-    if ((ret = thrift_protocol_write_string (protocol, taskQueue, error)) < 0)
-      return 0;
-    xfer += ret;
-
-    if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
-      return 0;
-    xfer += ret;
-    if ((ret = thrift_protocol_write_field_begin (protocol, "cmdpath", T_STRING, 2, error)) < 0)
-      return 0;
-    xfer += ret;
-    if ((ret = thrift_protocol_write_string (protocol, cmdpath, error)) < 0)
-      return 0;
-    xfer += ret;
-
-    if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
-      return 0;
-    xfer += ret;
-    if ((ret = thrift_protocol_write_field_begin (protocol, "jsonArgs", T_STRING, 3, error)) < 0)
-      return 0;
-    xfer += ret;
-    if ((ret = thrift_protocol_write_string (protocol, jsonArgs, error)) < 0)
-      return 0;
-    xfer += ret;
-
-    if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
-      return 0;
-    xfer += ret;
-    if ((ret = thrift_protocol_write_field_begin (protocol, "ackChannel", T_STRING, 4, error)) < 0)
-      return 0;
-    xfer += ret;
-    if ((ret = thrift_protocol_write_string (protocol, ackChannel, error)) < 0)
-      return 0;
-    xfer += ret;
-
-    if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
-      return 0;
-    xfer += ret;
-    if ((ret = thrift_protocol_write_field_begin (protocol, "token", T_STRUCT, 5, error)) < 0)
-      return 0;
-    xfer += ret;
-    if ((ret = thrift_struct_write (THRIFT_STRUCT (token), protocol, error)) < 0)
-      return 0;
-    xfer += ret;
-
-    if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
-      return 0;
-    xfer += ret;
-    if ((ret = thrift_protocol_write_field_stop (protocol, error)) < 0)
-      return 0;
-    xfer += ret;
-    if ((ret = thrift_protocol_write_struct_end (protocol, error)) < 0)
-      return 0;
-    xfer += ret;
-
-  }
-
-  if (thrift_protocol_write_message_end (protocol, error) < 0)
-    return FALSE;
-  if (!thrift_transport_flush (protocol->transport, error))
-    return FALSE;
-  if (!thrift_transport_write_end (protocol->transport, error))
-    return FALSE;
-
-  return TRUE;
-}
-
-gboolean i_face_log_client_recv_run_task (IFaceLogIf * iface, gboolean* _return, ServiceRuntimeException ** ex1, GError ** error)
-{
-  gint32 rseqid;
-  gchar * fname = NULL;
-  ThriftMessageType mtype;
-  ThriftProtocol * protocol = I_FACE_LOG_CLIENT (iface)->input_protocol;
-  ThriftApplicationException *xception;
-
-  if (thrift_protocol_read_message_begin (protocol, &fname, &mtype, &rseqid, error) < 0) {
-    if (fname) g_free (fname);
-    return FALSE;
-  }
-
-  if (mtype == T_EXCEPTION) {
-    if (fname) g_free (fname);
-    xception = g_object_new (THRIFT_TYPE_APPLICATION_EXCEPTION, NULL);
-    thrift_struct_read (THRIFT_STRUCT (xception), protocol, NULL);
-    thrift_protocol_read_message_end (protocol, NULL);
-    thrift_transport_read_end (protocol->transport, NULL);
-    g_set_error (error, THRIFT_APPLICATION_EXCEPTION_ERROR,xception->type, "application error: %s", xception->message);
-    g_object_unref (xception);
-    return FALSE;
-  } else if (mtype != T_REPLY) {
-    if (fname) g_free (fname);
-    thrift_protocol_skip (protocol, T_STRUCT, NULL);
-    thrift_protocol_read_message_end (protocol, NULL);
-    thrift_transport_read_end (protocol->transport, NULL);
-    g_set_error (error, THRIFT_APPLICATION_EXCEPTION_ERROR, THRIFT_APPLICATION_EXCEPTION_ERROR_INVALID_MESSAGE_TYPE, "invalid message type %d, expected T_REPLY", mtype);
-    return FALSE;
-  } else if (strncmp (fname, "runTask", 7) != 0) {
-    thrift_protocol_skip (protocol, T_STRUCT, NULL);
-    thrift_protocol_read_message_end (protocol,error);
-    thrift_transport_read_end (protocol->transport, error);
-    g_set_error (error, THRIFT_APPLICATION_EXCEPTION_ERROR, THRIFT_APPLICATION_EXCEPTION_ERROR_WRONG_METHOD_NAME, "wrong method name %s, expected runTask", fname);
-    if (fname) g_free (fname);
-    return FALSE;
-  }
-  if (fname) g_free (fname);
-
-  {
-    gint32 ret;
-    gint32 xfer = 0;
-    gchar *name = NULL;
-    ThriftType ftype;
-    gint16 fid;
-    guint32 len = 0;
-    gpointer data = NULL;
-    
-
-    /* satisfy -Wall in case these aren't used */
-    THRIFT_UNUSED_VAR (len);
-    THRIFT_UNUSED_VAR (data);
-
-    /* read the struct begin marker */
-    if ((ret = thrift_protocol_read_struct_begin (protocol, &name, error)) < 0)
-    {
-      if (name) g_free (name);
-      return 0;
-    }
-    xfer += ret;
-    if (name) g_free (name);
-    name = NULL;
-
-    /* read the struct fields */
-    while (1)
-    {
-      /* read the beginning of a field */
-      if ((ret = thrift_protocol_read_field_begin (protocol, &name, &ftype, &fid, error)) < 0)
-      {
-        if (name) g_free (name);
-        return 0;
-      }
-      xfer += ret;
-      if (name) g_free (name);
-      name = NULL;
-
-      /* break if we get a STOP field */
-      if (ftype == T_STOP)
-      {
-        break;
-      }
-
-      switch (fid)
-      {
-        case 0:
-          if (ftype == T_BOOL)
-          {
-            if ((ret = thrift_protocol_read_bool (protocol, &*_return, error)) < 0)
-              return 0;
-            xfer += ret;
-          } else {
-            if ((ret = thrift_protocol_skip (protocol, ftype, error)) < 0)
-              return 0;
-            xfer += ret;
-          }
-          break;
-        case 1:
-          if (ftype == T_STRUCT)
-          {
-            /* This struct is an exception */
-            if ( *ex1 != NULL)
-            {
-              g_object_unref (*ex1);
-            }
-            *ex1 = g_object_new (TYPE_SERVICE_RUNTIME_EXCEPTION, NULL);
-            if ((ret = thrift_struct_read (THRIFT_STRUCT (*ex1), protocol, error)) < 0)
-            {
-              g_object_unref (*ex1);
-              *ex1 = NULL;
-              return 0;
-            }
-            xfer += ret;
-          } else {
-            if ((ret = thrift_protocol_skip (protocol, ftype, error)) < 0)
-              return 0;
-            xfer += ret;
-          }
-          break;
-        default:
-          if ((ret = thrift_protocol_skip (protocol, ftype, error)) < 0)
-            return 0;
-          xfer += ret;
-          break;
-      }
-      if ((ret = thrift_protocol_read_field_end (protocol, error)) < 0)
-        return 0;
-      xfer += ret;
-    }
-
-    if ((ret = thrift_protocol_read_struct_end (protocol, error)) < 0)
-      return 0;
-    xfer += ret;
-
-  }
-
-  if (thrift_protocol_read_message_end (protocol, error) < 0)
-    return FALSE;
-
-  if (!thrift_transport_read_end (protocol->transport, error))
-    return FALSE;
-
-  if (*ex1 != NULL)
-  {
-      g_set_error (error, SERVICE_RUNTIME_EXCEPTION_ERROR, SERVICE_RUNTIME_EXCEPTION_ERROR_CODE, "ServiceRuntimeException");
-      return FALSE;
-  }
-  return TRUE;
-}
-
-gboolean i_face_log_client_run_task (IFaceLogIf * iface, gboolean* _return, const gchar * taskQueue, const gchar * cmdpath, const gchar * jsonArgs, const gchar * ackChannel, const Token * token, ServiceRuntimeException ** ex1, GError ** error)
+gboolean i_face_log_client_run_task (IFaceLogIf * iface, gint32* _return, const gchar * taskQueue, const gchar * cmdpath, const gchar * jsonArgs, const gchar * ackChannel, const Token * token, ServiceRuntimeException ** ex1, GError ** error)
 {
   if (!i_face_log_client_send_run_task (iface, taskQueue, cmdpath, jsonArgs, ackChannel, token, error))
     return FALSE;
@@ -37759,14 +37765,14 @@ gboolean i_face_log_handler_root_group_of_person (IFaceLogIf * iface, gint32* _r
   return I_FACE_LOG_HANDLER_GET_CLASS (iface)->root_group_of_person (iface, _return, personId, ex1, error);
 }
 
-gboolean i_face_log_handler_run_cmd (IFaceLogIf * iface, gint32* _return, const GArray * target, const gboolean group, const gchar * cmdpath, const gchar * jsonArgs, const gchar * ackChannel, const Token * token, ServiceRuntimeException ** ex1, GError ** error)
+gboolean i_face_log_handler_run_cmd (IFaceLogIf * iface, gchar ** _return, const GArray * target, const gboolean group, const gchar * cmdpath, const gchar * jsonArgs, const gchar * ackChannel, const Token * token, ServiceRuntimeException ** ex1, GError ** error)
 {
   g_return_val_if_fail (IS_I_FACE_LOG_HANDLER (iface), FALSE);
 
   return I_FACE_LOG_HANDLER_GET_CLASS (iface)->run_cmd (iface, _return, target, group, cmdpath, jsonArgs, ackChannel, token, ex1, error);
 }
 
-gboolean i_face_log_handler_run_task (IFaceLogIf * iface, gboolean* _return, const gchar * taskQueue, const gchar * cmdpath, const gchar * jsonArgs, const gchar * ackChannel, const Token * token, ServiceRuntimeException ** ex1, GError ** error)
+gboolean i_face_log_handler_run_task (IFaceLogIf * iface, gint32* _return, const gchar * taskQueue, const gchar * cmdpath, const gchar * jsonArgs, const gchar * ackChannel, const Token * token, ServiceRuntimeException ** ex1, GError ** error)
 {
   g_return_val_if_fail (IS_I_FACE_LOG_HANDLER (iface), FALSE);
 
@@ -55717,7 +55723,7 @@ i_face_log_processor_process_run_cmd (IFaceLogProcessor *self,
     gchar * ackChannel;
     Token * token;
     ServiceRuntimeException * ex1 = NULL;
-    gint return_value;
+    gchar * return_value;
     IFaceLogRunCmdResult * result_struct;
 
     g_object_get (args,
@@ -55736,7 +55742,7 @@ i_face_log_processor_process_run_cmd (IFaceLogProcessor *self,
     g_object_get (result_struct, "success", &return_value, NULL);
 
     if (i_face_log_handler_run_cmd (I_FACE_LOG_IF (self->handler),
-                                    (gint32 *)&return_value,
+                                    &return_value,
                                     target,
                                     group,
                                     cmdpath,
@@ -55746,7 +55752,9 @@ i_face_log_processor_process_run_cmd (IFaceLogProcessor *self,
                                     &ex1,
                                     error) == TRUE)
     {
-      g_object_set (result_struct, "success", (gint)(gint32)return_value, NULL);
+      g_object_set (result_struct, "success", return_value, NULL);
+      if (return_value != NULL)
+        g_free (return_value);
 
       result =
         ((thrift_protocol_write_message_begin (output_protocol,
@@ -55856,7 +55864,7 @@ i_face_log_processor_process_run_task (IFaceLogProcessor *self,
     gchar * ackChannel;
     Token * token;
     ServiceRuntimeException * ex1 = NULL;
-    gboolean return_value;
+    gint return_value;
     IFaceLogRunTaskResult * result_struct;
 
     g_object_get (args,
@@ -55874,7 +55882,7 @@ i_face_log_processor_process_run_task (IFaceLogProcessor *self,
     g_object_get (result_struct, "success", &return_value, NULL);
 
     if (i_face_log_handler_run_task (I_FACE_LOG_IF (self->handler),
-                                     &return_value,
+                                     (gint32 *)&return_value,
                                      taskQueue,
                                      cmdpath,
                                      jsonArgs,
@@ -55883,7 +55891,7 @@ i_face_log_processor_process_run_task (IFaceLogProcessor *self,
                                      &ex1,
                                      error) == TRUE)
     {
-      g_object_set (result_struct, "success", return_value, NULL);
+      g_object_set (result_struct, "success", (gint)(gint32)return_value, NULL);
 
       result =
         ((thrift_protocol_write_message_begin (output_protocol,

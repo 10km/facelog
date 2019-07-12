@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Predicates;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import gu.dtalk.client.CmdManager;
@@ -35,18 +36,20 @@ class DtalkCmd {
 	 * @param jsonArgs 设备命令参数(JSON)
 	 * @param ackChannel 设备命令响应频道,可为{@code null}
 	 * @param id 执行设备命令的用户id
-	 * @return 收到命令的客户端数目
+	 * @return 以map形式返回收到命令的客户端数目和命令序列号,如{"client":25,"cmdSn":12309898}
 	 */
-	int doRunCmd(List<Integer>target,boolean group,String cmdpath,String jsonArgs,String ackChannel,int id){
+	String doRunCmd(List<Integer>target,boolean group,String cmdpath,String jsonArgs,String ackChannel,int id){
 		checkArgument(target != null,"target is null");
 		// 过滤所有空元素
 		target = Lists.newArrayList(Iterables.filter(target, Predicates.notNull()));
 		checkArgument(!target.isEmpty(),"target list is empty");
+		int cmdSn = tm.applyCmdSn(id);
 		cmdManager.targetBuilder()
 			.setTarget(target, group)
-			.setCmdSn(tm.applyCmdSn(id))
+			.setCmdSn(cmdSn)
 			.setAckChannel(ackChannel);
-		return cmdManager.runCmd(cmdpath, BaseJsonEncoder.getEncoder().fromJson(jsonArgs,JSONObject.class));
+		int c = cmdManager.runCmd(cmdpath, BaseJsonEncoder.getEncoder().fromJson(jsonArgs,JSONObject.class));
+		return BaseJsonEncoder.getEncoder().toJsonString(ImmutableMap.of("client",c,"cmdSn",cmdSn));
 	}
 	/**
 	 * (异步)执行cmdpath指定的任务<br>
@@ -55,15 +58,17 @@ class DtalkCmd {
 	 * @param jsonArgs 设备命令参数(JSON)
 	 * @param ackChannel 设备命令响应频道,可为{@code null}
 	 * @param id 执行设备命令的用户id
-	 * @return 成功提交任务返回{@code true},否则返回{@code false}
+	 * @return 成功提交任务返回命令序列号,否则返回{@code null}
 	 */
-	boolean doRunTask(String taskQueue,String cmdpath,String jsonArgs,String ackChannel,int id){
+	Integer doRunTask(String taskQueue,String cmdpath,String jsonArgs,String ackChannel,int id){
+		int cmdSn = tm.applyCmdSn(id);
 		taskManager.targetBuilder()
-			.setCmdSn(tm.applyCmdSn(id))
+			.setCmdSn(cmdSn)
 			.setAckChannel(ackChannel);
-		return taskManager
+		boolean ret = taskManager
 				.setTaskQueue(taskQueue)
 				.setCmdpath(cmdpath)
 				.runCmd(BaseJsonEncoder.getEncoder().fromJson(jsonArgs,JSONObject.class));
+		return ret ? cmdSn : null;
 	}
 }

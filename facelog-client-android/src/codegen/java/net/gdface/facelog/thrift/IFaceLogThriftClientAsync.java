@@ -3365,17 +3365,17 @@ public class IFaceLogThriftClientAsync {
     /**
      * see also {@link net.gdface.facelog.IFaceLog#runCmd(java.util.List,boolean,java.lang.String,java.lang.String,java.lang.String,net.gdface.facelog.Token)}
      */
-    public ListenableFuture<Integer> runCmd(List<Integer> target,
+    public ListenableFuture<String> runCmd(List<Integer> target,
         boolean group,
         String cmdpath,
         String jsonArgs,
         String ackChannel,
         Token token){
-        MethodCallback<Integer,Integer> nativeCallback = 
-            new MethodCallback<Integer,Integer>(
-                new Function<Integer,Integer>() {
+        MethodCallback<String,String> nativeCallback = 
+            new MethodCallback<String,String>(
+                new Function<String,String>() {
                         @Override
-                        public Integer apply(Integer input) {
+                        public String apply(String input) {
                             return input;
                 }});
         nativeCallback.service.runCmd(
@@ -3399,22 +3399,22 @@ public class IFaceLogThriftClientAsync {
         String jsonArgs,
         String ackChannel,
         Token token,
-        FutureCallback<Integer>callback){
+        FutureCallback<String>callback){
         factory.addCallback(runCmd(target,group,cmdpath,jsonArgs,ackChannel,token), callback);
     }
     /**
      * see also {@link net.gdface.facelog.IFaceLog#runTask(java.lang.String,java.lang.String,java.lang.String,java.lang.String,net.gdface.facelog.Token)}
      */
-    public ListenableFuture<Boolean> runTask(String taskQueue,
+    public ListenableFuture<Integer> runTask(String taskQueue,
         String cmdpath,
         String jsonArgs,
         String ackChannel,
         Token token){
-        MethodCallback<Boolean,Boolean> nativeCallback = 
-            new MethodCallback<Boolean,Boolean>(
-                new Function<Boolean,Boolean>() {
+        MethodCallback<Integer,Integer> nativeCallback = 
+            new MethodCallback<Integer,Integer>(
+                new Function<Integer,Integer>() {
                         @Override
-                        public Boolean apply(Boolean input) {
+                        public Integer apply(Integer input) {
                             return input;
                 }});
         nativeCallback.service.runTask(
@@ -3433,7 +3433,7 @@ public class IFaceLogThriftClientAsync {
         String jsonArgs,
         String ackChannel,
         Token token,
-        FutureCallback<Boolean>callback){
+        FutureCallback<Integer>callback){
         factory.addCallback(runTask(taskQueue,cmdpath,jsonArgs,ackChannel,token), callback);
     }
     /**

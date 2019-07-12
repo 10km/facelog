@@ -3737,7 +3737,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
-    public int runCmd(final List<Integer> target,
+    public String runCmd(final List<Integer> target,
         final boolean group,
         final String cmdpath,
         final String jsonArgs,
@@ -3745,14 +3745,14 @@ public class IFaceLogThriftClient implements IFaceLog {
         final Token token) 
         {
         try{
-            return syncCall(new Function<Integer,Integer>() {
+            return syncCall(new Function<String,String>() {
                 @Override
-                public Integer apply(Integer input) {
+                public String apply(String input) {
                     return input;
                 }},
-                new ServiceAsyncCall<Integer>(){
+                new ServiceAsyncCall<String>(){
                 @Override
-                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<Integer> nativeCallback){
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<String> nativeCallback){
                     service.runCmd(TypeTransformer.getInstance().to(
                     target,
                     Integer.class,
@@ -3771,21 +3771,21 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
-    public boolean runTask(final String taskQueue,
+    public Integer runTask(final String taskQueue,
         final String cmdpath,
         final String jsonArgs,
         final String ackChannel,
         final Token token) 
         {
         try{
-            return syncCall(new Function<Boolean,Boolean>() {
+            return syncCall(new Function<Integer,Integer>() {
                 @Override
-                public Boolean apply(Boolean input) {
+                public Integer apply(Integer input) {
                     return input;
                 }},
-                new ServiceAsyncCall<Boolean>(){
+                new ServiceAsyncCall<Integer>(){
                 @Override
-                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<Boolean> nativeCallback){
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<Integer> nativeCallback){
                     service.runTask(taskQueue,cmdpath,jsonArgs,ackChannel,TypeTransformer.getInstance().to(
                     token,
                     Token.class,

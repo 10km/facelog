@@ -29726,8 +29726,8 @@ uint32_t IFaceLog_runCmd_result::read(Protocol_* iprot) {
     switch (fid)
     {
       case 0:
-        if (ftype == ::apache::thrift::protocol::T_I32) {
-          xfer += iprot->readI32(this->success);
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->success);
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -29761,8 +29761,8 @@ uint32_t IFaceLog_runCmd_result::write(Protocol_* oprot) const {
   xfer += oprot->writeStructBegin("IFaceLog_runCmd_result");
 
   if (this->__isset.success) {
-    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_I32, 0);
-    xfer += oprot->writeI32(this->success);
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRING, 0);
+    xfer += oprot->writeString(this->success);
     xfer += oprot->writeFieldEnd();
   } else if (this->__isset.ex1) {
     xfer += oprot->writeFieldBegin("ex1", ::apache::thrift::protocol::T_STRUCT, 1);
@@ -29798,8 +29798,8 @@ uint32_t IFaceLog_runCmd_presult::read(Protocol_* iprot) {
     switch (fid)
     {
       case 0:
-        if (ftype == ::apache::thrift::protocol::T_I32) {
-          xfer += iprot->readI32((*(this->success)));
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString((*(this->success)));
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -29987,8 +29987,8 @@ uint32_t IFaceLog_runTask_result::read(Protocol_* iprot) {
     switch (fid)
     {
       case 0:
-        if (ftype == ::apache::thrift::protocol::T_BOOL) {
-          xfer += iprot->readBool(this->success);
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->success);
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -30022,8 +30022,8 @@ uint32_t IFaceLog_runTask_result::write(Protocol_* oprot) const {
   xfer += oprot->writeStructBegin("IFaceLog_runTask_result");
 
   if (this->__isset.success) {
-    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_BOOL, 0);
-    xfer += oprot->writeBool(this->success);
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_I32, 0);
+    xfer += oprot->writeI32(this->success);
     xfer += oprot->writeFieldEnd();
   } else if (this->__isset.ex1) {
     xfer += oprot->writeFieldBegin("ex1", ::apache::thrift::protocol::T_STRUCT, 1);
@@ -30059,8 +30059,8 @@ uint32_t IFaceLog_runTask_presult::read(Protocol_* iprot) {
     switch (fid)
     {
       case 0:
-        if (ftype == ::apache::thrift::protocol::T_BOOL) {
-          xfer += iprot->readBool((*(this->success)));
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32((*(this->success)));
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -44647,10 +44647,10 @@ int32_t IFaceLogClientT<Protocol_>::recv_rootGroupOfPerson()
 }
 
 template <class Protocol_>
-int32_t IFaceLogClientT<Protocol_>::runCmd(const std::vector<int32_t> & target, const bool group, const std::string& cmdpath, const std::string& jsonArgs, const std::string& ackChannel, const Token& token)
+void IFaceLogClientT<Protocol_>::runCmd(std::string& _return, const std::vector<int32_t> & target, const bool group, const std::string& cmdpath, const std::string& jsonArgs, const std::string& ackChannel, const Token& token)
 {
   send_runCmd(target, group, cmdpath, jsonArgs, ackChannel, token);
-  return recv_runCmd();
+  recv_runCmd(_return);
 }
 
 template <class Protocol_>
@@ -44674,7 +44674,7 @@ void IFaceLogClientT<Protocol_>::send_runCmd(const std::vector<int32_t> & target
 }
 
 template <class Protocol_>
-int32_t IFaceLogClientT<Protocol_>::recv_runCmd()
+void IFaceLogClientT<Protocol_>::recv_runCmd(std::string& _return)
 {
 
   int32_t rseqid = 0;
@@ -44699,7 +44699,6 @@ int32_t IFaceLogClientT<Protocol_>::recv_runCmd()
     this->iprot_->readMessageEnd();
     this->iprot_->getTransport()->readEnd();
   }
-  int32_t _return;
   IFaceLog_runCmd_presult result;
   result.success = &_return;
   result.read(this->iprot_);
@@ -44707,7 +44706,8 @@ int32_t IFaceLogClientT<Protocol_>::recv_runCmd()
   this->iprot_->getTransport()->readEnd();
 
   if (result.__isset.success) {
-    return _return;
+    // _return pointer has now been filled
+    return;
   }
   if (result.__isset.ex1) {
     throw result.ex1;
@@ -44716,7 +44716,7 @@ int32_t IFaceLogClientT<Protocol_>::recv_runCmd()
 }
 
 template <class Protocol_>
-bool IFaceLogClientT<Protocol_>::runTask(const std::string& taskQueue, const std::string& cmdpath, const std::string& jsonArgs, const std::string& ackChannel, const Token& token)
+int32_t IFaceLogClientT<Protocol_>::runTask(const std::string& taskQueue, const std::string& cmdpath, const std::string& jsonArgs, const std::string& ackChannel, const Token& token)
 {
   send_runTask(taskQueue, cmdpath, jsonArgs, ackChannel, token);
   return recv_runTask();
@@ -44742,7 +44742,7 @@ void IFaceLogClientT<Protocol_>::send_runTask(const std::string& taskQueue, cons
 }
 
 template <class Protocol_>
-bool IFaceLogClientT<Protocol_>::recv_runTask()
+int32_t IFaceLogClientT<Protocol_>::recv_runTask()
 {
 
   int32_t rseqid = 0;
@@ -44767,7 +44767,7 @@ bool IFaceLogClientT<Protocol_>::recv_runTask()
     this->iprot_->readMessageEnd();
     this->iprot_->getTransport()->readEnd();
   }
-  bool _return;
+  int32_t _return;
   IFaceLog_runTask_presult result;
   result.success = &_return;
   result.read(this->iprot_);
@@ -61624,7 +61624,7 @@ void IFaceLogProcessorT<Protocol_>::process_runCmd(int32_t seqid, ::apache::thri
 
   IFaceLog_runCmd_result result;
   try {
-    result.success = iface_->runCmd(args.target, args.group, args.cmdpath, args.jsonArgs, args.ackChannel, args.token);
+    iface_->runCmd(result.success, args.target, args.group, args.cmdpath, args.jsonArgs, args.ackChannel, args.token);
     result.__isset.success = true;
   } catch (ServiceRuntimeException &ex1) {
     result.ex1 = ex1;
@@ -61682,7 +61682,7 @@ void IFaceLogProcessorT<Protocol_>::process_runCmd(int32_t seqid, Protocol_* ipr
 
   IFaceLog_runCmd_result result;
   try {
-    result.success = iface_->runCmd(args.target, args.group, args.cmdpath, args.jsonArgs, args.ackChannel, args.token);
+    iface_->runCmd(result.success, args.target, args.group, args.cmdpath, args.jsonArgs, args.ackChannel, args.token);
     result.__isset.success = true;
   } catch (ServiceRuntimeException &ex1) {
     result.ex1 = ex1;
@@ -76790,10 +76790,10 @@ int32_t IFaceLogConcurrentClientT<Protocol_>::recv_rootGroupOfPerson(const int32
 }
 
 template <class Protocol_>
-int32_t IFaceLogConcurrentClientT<Protocol_>::runCmd(const std::vector<int32_t> & target, const bool group, const std::string& cmdpath, const std::string& jsonArgs, const std::string& ackChannel, const Token& token)
+void IFaceLogConcurrentClientT<Protocol_>::runCmd(std::string& _return, const std::vector<int32_t> & target, const bool group, const std::string& cmdpath, const std::string& jsonArgs, const std::string& ackChannel, const Token& token)
 {
   int32_t seqid = send_runCmd(target, group, cmdpath, jsonArgs, ackChannel, token);
-  return recv_runCmd(seqid);
+  recv_runCmd(_return, seqid);
 }
 
 template <class Protocol_>
@@ -76821,7 +76821,7 @@ int32_t IFaceLogConcurrentClientT<Protocol_>::send_runCmd(const std::vector<int3
 }
 
 template <class Protocol_>
-int32_t IFaceLogConcurrentClientT<Protocol_>::recv_runCmd(const int32_t seqid)
+void IFaceLogConcurrentClientT<Protocol_>::recv_runCmd(std::string& _return, const int32_t seqid)
 {
 
   int32_t rseqid = 0;
@@ -76859,7 +76859,6 @@ int32_t IFaceLogConcurrentClientT<Protocol_>::recv_runCmd(const int32_t seqid)
         using ::apache::thrift::protocol::TProtocolException;
         throw TProtocolException(TProtocolException::INVALID_DATA);
       }
-      int32_t _return;
       IFaceLog_runCmd_presult result;
       result.success = &_return;
       result.read(this->iprot_);
@@ -76867,8 +76866,9 @@ int32_t IFaceLogConcurrentClientT<Protocol_>::recv_runCmd(const int32_t seqid)
       this->iprot_->getTransport()->readEnd();
 
       if (result.__isset.success) {
+        // _return pointer has now been filled
         sentry.commit();
-        return _return;
+        return;
       }
       if (result.__isset.ex1) {
         sentry.commit();
@@ -76886,7 +76886,7 @@ int32_t IFaceLogConcurrentClientT<Protocol_>::recv_runCmd(const int32_t seqid)
 }
 
 template <class Protocol_>
-bool IFaceLogConcurrentClientT<Protocol_>::runTask(const std::string& taskQueue, const std::string& cmdpath, const std::string& jsonArgs, const std::string& ackChannel, const Token& token)
+int32_t IFaceLogConcurrentClientT<Protocol_>::runTask(const std::string& taskQueue, const std::string& cmdpath, const std::string& jsonArgs, const std::string& ackChannel, const Token& token)
 {
   int32_t seqid = send_runTask(taskQueue, cmdpath, jsonArgs, ackChannel, token);
   return recv_runTask(seqid);
@@ -76916,7 +76916,7 @@ int32_t IFaceLogConcurrentClientT<Protocol_>::send_runTask(const std::string& ta
 }
 
 template <class Protocol_>
-bool IFaceLogConcurrentClientT<Protocol_>::recv_runTask(const int32_t seqid)
+int32_t IFaceLogConcurrentClientT<Protocol_>::recv_runTask(const int32_t seqid)
 {
 
   int32_t rseqid = 0;
@@ -76954,7 +76954,7 @@ bool IFaceLogConcurrentClientT<Protocol_>::recv_runTask(const int32_t seqid)
         using ::apache::thrift::protocol::TProtocolException;
         throw TProtocolException(TProtocolException::INVALID_DATA);
       }
-      bool _return;
+      int32_t _return;
       IFaceLog_runTask_presult result;
       result.success = &_return;
       result.read(this->iprot_);

@@ -3128,7 +3128,7 @@ public class IFaceLogSpringController {
      * @param jsonArgs 设备命令参数(JSON)
      * @param ackChannel 设备命令响应频道,不需要接收命令响应时设置为{@code null}
      * @param token 访问令牌
-     * @return 收到命令的客户端数目
+     * @return 以map形式返回收到命令的客户端数目和命令序列号,如{"client":25,"cmdSn":12309898}
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/runCmd", method = RequestMethod.POST)
@@ -3155,7 +3155,7 @@ public class IFaceLogSpringController {
      * @param jsonArgs 设备命令参数(JSON)
      * @param ackChannel 设备命令响应频道,不需要接收命令响应时设置为{@code null}
      * @param token 访问令牌
-     * @return 成功提交任务返回{@code true},否则返回{@code false}
+     * @return 成功提交任务返回命令序列号,否则返回{@code null}
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/runTask", method = RequestMethod.POST)

@@ -150,8 +150,8 @@ class IFaceLogIf {
   virtual void replaceFeature(const int32_t personId, const std::string& featureMd5, const bool deleteOldFeatureImage, const Token& token) = 0;
   virtual int32_t rootGroupOfDevice(const int32_t deviceId) = 0;
   virtual int32_t rootGroupOfPerson(const int32_t personId) = 0;
-  virtual int32_t runCmd(const std::vector<int32_t> & target, const bool group, const std::string& cmdpath, const std::string& jsonArgs, const std::string& ackChannel, const Token& token) = 0;
-  virtual bool runTask(const std::string& taskQueue, const std::string& cmdpath, const std::string& jsonArgs, const std::string& ackChannel, const Token& token) = 0;
+  virtual void runCmd(std::string& _return, const std::vector<int32_t> & target, const bool group, const std::string& cmdpath, const std::string& jsonArgs, const std::string& ackChannel, const Token& token) = 0;
+  virtual int32_t runTask(const std::string& taskQueue, const std::string& cmdpath, const std::string& jsonArgs, const std::string& ackChannel, const Token& token) = 0;
   virtual void saveDevice(DeviceBean& _return, const DeviceBean& deviceBean, const Token& token) = 0;
   virtual void saveDeviceGroup(DeviceGroupBean& _return, const DeviceGroupBean& deviceGroupBean, const Token& token) = 0;
   virtual void savePermit(PermitBean& _return, const PermitBean& permitBean, const Token& token) = 0;
@@ -632,12 +632,11 @@ class IFaceLogNull : virtual public IFaceLogIf {
     int32_t _return = 0;
     return _return;
   }
-  int32_t runCmd(const std::vector<int32_t> & /* target */, const bool /* group */, const std::string& /* cmdpath */, const std::string& /* jsonArgs */, const std::string& /* ackChannel */, const Token& /* token */) {
-    int32_t _return = 0;
-    return _return;
+  void runCmd(std::string& /* _return */, const std::vector<int32_t> & /* target */, const bool /* group */, const std::string& /* cmdpath */, const std::string& /* jsonArgs */, const std::string& /* ackChannel */, const Token& /* token */) {
+    return;
   }
-  bool runTask(const std::string& /* taskQueue */, const std::string& /* cmdpath */, const std::string& /* jsonArgs */, const std::string& /* ackChannel */, const Token& /* token */) {
-    bool _return = false;
+  int32_t runTask(const std::string& /* taskQueue */, const std::string& /* cmdpath */, const std::string& /* jsonArgs */, const std::string& /* ackChannel */, const Token& /* token */) {
+    int32_t _return = 0;
     return _return;
   }
   void saveDevice(DeviceBean& /* _return */, const DeviceBean& /* deviceBean */, const Token& /* token */) {
@@ -17004,16 +17003,16 @@ class IFaceLog_runCmd_result {
   IFaceLog_runCmd_result(IFaceLog_runCmd_result&&);
   IFaceLog_runCmd_result& operator=(const IFaceLog_runCmd_result&);
   IFaceLog_runCmd_result& operator=(IFaceLog_runCmd_result&&);
-  IFaceLog_runCmd_result() : success(0) {
+  IFaceLog_runCmd_result() : success() {
   }
 
   virtual ~IFaceLog_runCmd_result() throw();
-  int32_t success;
+  std::string success;
   ServiceRuntimeException ex1;
 
   _IFaceLog_runCmd_result__isset __isset;
 
-  void __set_success(const int32_t val);
+  void __set_success(const std::string& val);
 
   void __set_ex1(const ServiceRuntimeException& val);
 
@@ -17049,7 +17048,7 @@ class IFaceLog_runCmd_presult {
 
 
   virtual ~IFaceLog_runCmd_presult() throw();
-  int32_t* success;
+  std::string* success;
   ServiceRuntimeException ex1;
 
   _IFaceLog_runCmd_presult__isset __isset;
@@ -17158,12 +17157,12 @@ class IFaceLog_runTask_result {
   }
 
   virtual ~IFaceLog_runTask_result() throw();
-  bool success;
+  int32_t success;
   ServiceRuntimeException ex1;
 
   _IFaceLog_runTask_result__isset __isset;
 
-  void __set_success(const bool val);
+  void __set_success(const int32_t val);
 
   void __set_ex1(const ServiceRuntimeException& val);
 
@@ -17199,7 +17198,7 @@ class IFaceLog_runTask_presult {
 
 
   virtual ~IFaceLog_runTask_presult() throw();
-  bool* success;
+  int32_t* success;
   ServiceRuntimeException ex1;
 
   _IFaceLog_runTask_presult__isset __isset;
@@ -21179,12 +21178,12 @@ class IFaceLogClientT : virtual public IFaceLogIf {
   int32_t rootGroupOfPerson(const int32_t personId);
   void send_rootGroupOfPerson(const int32_t personId);
   int32_t recv_rootGroupOfPerson();
-  int32_t runCmd(const std::vector<int32_t> & target, const bool group, const std::string& cmdpath, const std::string& jsonArgs, const std::string& ackChannel, const Token& token);
+  void runCmd(std::string& _return, const std::vector<int32_t> & target, const bool group, const std::string& cmdpath, const std::string& jsonArgs, const std::string& ackChannel, const Token& token);
   void send_runCmd(const std::vector<int32_t> & target, const bool group, const std::string& cmdpath, const std::string& jsonArgs, const std::string& ackChannel, const Token& token);
-  int32_t recv_runCmd();
-  bool runTask(const std::string& taskQueue, const std::string& cmdpath, const std::string& jsonArgs, const std::string& ackChannel, const Token& token);
+  void recv_runCmd(std::string& _return);
+  int32_t runTask(const std::string& taskQueue, const std::string& cmdpath, const std::string& jsonArgs, const std::string& ackChannel, const Token& token);
   void send_runTask(const std::string& taskQueue, const std::string& cmdpath, const std::string& jsonArgs, const std::string& ackChannel, const Token& token);
-  bool recv_runTask();
+  int32_t recv_runTask();
   void saveDevice(DeviceBean& _return, const DeviceBean& deviceBean, const Token& token);
   void send_saveDevice(const DeviceBean& deviceBean, const Token& token);
   void recv_saveDevice(DeviceBean& _return);
@@ -23361,16 +23360,17 @@ class IFaceLogMultiface : virtual public IFaceLogIf {
     return ifaces_[i]->rootGroupOfPerson(personId);
   }
 
-  int32_t runCmd(const std::vector<int32_t> & target, const bool group, const std::string& cmdpath, const std::string& jsonArgs, const std::string& ackChannel, const Token& token) {
+  void runCmd(std::string& _return, const std::vector<int32_t> & target, const bool group, const std::string& cmdpath, const std::string& jsonArgs, const std::string& ackChannel, const Token& token) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->runCmd(target, group, cmdpath, jsonArgs, ackChannel, token);
+      ifaces_[i]->runCmd(_return, target, group, cmdpath, jsonArgs, ackChannel, token);
     }
-    return ifaces_[i]->runCmd(target, group, cmdpath, jsonArgs, ackChannel, token);
+    ifaces_[i]->runCmd(_return, target, group, cmdpath, jsonArgs, ackChannel, token);
+    return;
   }
 
-  bool runTask(const std::string& taskQueue, const std::string& cmdpath, const std::string& jsonArgs, const std::string& ackChannel, const Token& token) {
+  int32_t runTask(const std::string& taskQueue, const std::string& cmdpath, const std::string& jsonArgs, const std::string& ackChannel, const Token& token) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
@@ -24057,12 +24057,12 @@ class IFaceLogConcurrentClientT : virtual public IFaceLogIf {
   int32_t rootGroupOfPerson(const int32_t personId);
   int32_t send_rootGroupOfPerson(const int32_t personId);
   int32_t recv_rootGroupOfPerson(const int32_t seqid);
-  int32_t runCmd(const std::vector<int32_t> & target, const bool group, const std::string& cmdpath, const std::string& jsonArgs, const std::string& ackChannel, const Token& token);
+  void runCmd(std::string& _return, const std::vector<int32_t> & target, const bool group, const std::string& cmdpath, const std::string& jsonArgs, const std::string& ackChannel, const Token& token);
   int32_t send_runCmd(const std::vector<int32_t> & target, const bool group, const std::string& cmdpath, const std::string& jsonArgs, const std::string& ackChannel, const Token& token);
-  int32_t recv_runCmd(const int32_t seqid);
-  bool runTask(const std::string& taskQueue, const std::string& cmdpath, const std::string& jsonArgs, const std::string& ackChannel, const Token& token);
+  void recv_runCmd(std::string& _return, const int32_t seqid);
+  int32_t runTask(const std::string& taskQueue, const std::string& cmdpath, const std::string& jsonArgs, const std::string& ackChannel, const Token& token);
   int32_t send_runTask(const std::string& taskQueue, const std::string& cmdpath, const std::string& jsonArgs, const std::string& ackChannel, const Token& token);
-  bool recv_runTask(const int32_t seqid);
+  int32_t recv_runTask(const int32_t seqid);
   void saveDevice(DeviceBean& _return, const DeviceBean& deviceBean, const Token& token);
   int32_t send_saveDevice(const DeviceBean& deviceBean, const Token& token);
   void recv_saveDevice(DeviceBean& _return, const int32_t seqid);

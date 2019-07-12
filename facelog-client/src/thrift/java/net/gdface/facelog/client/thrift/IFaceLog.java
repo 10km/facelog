@@ -1158,7 +1158,7 @@ public interface IFaceLog
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
-        ListenableFuture<Integer> runCmd(
+        ListenableFuture<String> runCmd(
             @ThriftField(value=1, name="target", requiredness=Requiredness.OPTIONAL) final List<Integer> target,
             @ThriftField(value=2, name="group", requiredness=Requiredness.REQUIRED) final boolean group,
             @ThriftField(value=3, name="cmdpath", requiredness=Requiredness.OPTIONAL) final String cmdpath,
@@ -1171,7 +1171,7 @@ public interface IFaceLog
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
-        ListenableFuture<Boolean> runTask(
+        ListenableFuture<Integer> runTask(
             @ThriftField(value=1, name="taskQueue", requiredness=Requiredness.OPTIONAL) final String taskQueue,
             @ThriftField(value=2, name="cmdpath", requiredness=Requiredness.OPTIONAL) final String cmdpath,
             @ThriftField(value=3, name="jsonArgs", requiredness=Requiredness.OPTIONAL) final String jsonArgs,
@@ -2588,7 +2588,7 @@ public interface IFaceLog
                   exception = {
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
-    int runCmd(
+    String runCmd(
         @ThriftField(value=1, name="target", requiredness=Requiredness.OPTIONAL) final List<Integer> target,
         @ThriftField(value=2, name="group", requiredness=Requiredness.REQUIRED) final boolean group,
         @ThriftField(value=3, name="cmdpath", requiredness=Requiredness.OPTIONAL) final String cmdpath,
@@ -2601,7 +2601,7 @@ public interface IFaceLog
                   exception = {
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
-    boolean runTask(
+    int runTask(
         @ThriftField(value=1, name="taskQueue", requiredness=Requiredness.OPTIONAL) final String taskQueue,
         @ThriftField(value=2, name="cmdpath", requiredness=Requiredness.OPTIONAL) final String cmdpath,
         @ThriftField(value=3, name="jsonArgs", requiredness=Requiredness.OPTIONAL) final String jsonArgs,

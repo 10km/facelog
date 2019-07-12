@@ -2861,7 +2861,7 @@ public class IFaceLogThriftDecorator {
      * @see {@link net.gdface.facelog.IFaceLog#runCmd(java.util.List,boolean,java.lang.String,java.lang.String,java.lang.String,net.gdface.facelog.Token)}
      */
     @ThriftMethod(value = "runCmd" )
-    public int runCmd(List<Integer> target,
+    public String runCmd(List<Integer> target,
         boolean group,
         String cmdpath,
         String jsonArgs,
@@ -2893,7 +2893,7 @@ public class IFaceLogThriftDecorator {
      * @see {@link net.gdface.facelog.IFaceLog#runTask(java.lang.String,java.lang.String,java.lang.String,java.lang.String,net.gdface.facelog.Token)}
      */
     @ThriftMethod(value = "runTask" )
-    public boolean runTask(String taskQueue,
+    public Integer runTask(String taskQueue,
         String cmdpath,
         String jsonArgs,
         String ackChannel,

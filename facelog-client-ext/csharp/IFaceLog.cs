@@ -147,8 +147,8 @@ public partial class IFaceLog {
     void replaceFeature(int personId, string featureMd5, bool deleteOldFeatureImage, Token token);
     int rootGroupOfDevice(int deviceId);
     int rootGroupOfPerson(int personId);
-    int runCmd(List<int> target, bool @group, string cmdpath, string jsonArgs, string ackChannel, Token token);
-    bool runTask(string taskQueue, string cmdpath, string jsonArgs, string ackChannel, Token token);
+    string runCmd(List<int> target, bool @group, string cmdpath, string jsonArgs, string ackChannel, Token token);
+    int runTask(string taskQueue, string cmdpath, string jsonArgs, string ackChannel, Token token);
     DeviceBean saveDevice(DeviceBean deviceBean, Token token);
     DeviceGroupBean saveDeviceGroup(DeviceGroupBean deviceGroupBean, Token token);
     PermitBean savePermit(PermitBean permitBean, Token token);
@@ -308,8 +308,8 @@ public partial class IFaceLog {
     Task replaceFeatureAsync(int personId, string featureMd5, bool deleteOldFeatureImage, Token token);
     Task<int> rootGroupOfDeviceAsync(int deviceId);
     Task<int> rootGroupOfPersonAsync(int personId);
-    Task<int> runCmdAsync(List<int> target, bool @group, string cmdpath, string jsonArgs, string ackChannel, Token token);
-    Task<bool> runTaskAsync(string taskQueue, string cmdpath, string jsonArgs, string ackChannel, Token token);
+    Task<string> runCmdAsync(List<int> target, bool @group, string cmdpath, string jsonArgs, string ackChannel, Token token);
+    Task<int> runTaskAsync(string taskQueue, string cmdpath, string jsonArgs, string ackChannel, Token token);
     Task<DeviceBean> saveDeviceAsync(DeviceBean deviceBean, Token token);
     Task<DeviceGroupBean> saveDeviceGroupAsync(DeviceGroupBean deviceGroupBean, Token token);
     Task<PermitBean> savePermitAsync(PermitBean permitBean, Token token);
@@ -599,9 +599,9 @@ public partial class IFaceLog {
     IAsyncResult Begin_rootGroupOfPerson(AsyncCallback callback, object state, int personId);
     int End_rootGroupOfPerson(IAsyncResult asyncResult);
     IAsyncResult Begin_runCmd(AsyncCallback callback, object state, List<int> target, bool @group, string cmdpath, string jsonArgs, string ackChannel, Token token);
-    int End_runCmd(IAsyncResult asyncResult);
+    string End_runCmd(IAsyncResult asyncResult);
     IAsyncResult Begin_runTask(AsyncCallback callback, object state, string taskQueue, string cmdpath, string jsonArgs, string ackChannel, Token token);
-    bool End_runTask(IAsyncResult asyncResult);
+    int End_runTask(IAsyncResult asyncResult);
     IAsyncResult Begin_saveDevice(AsyncCallback callback, object state, DeviceBean deviceBean, Token token);
     DeviceBean End_saveDevice(IAsyncResult asyncResult);
     IAsyncResult Begin_saveDeviceGroup(AsyncCallback callback, object state, DeviceGroupBean deviceGroupBean, Token token);
@@ -8287,15 +8287,15 @@ public partial class IFaceLog {
       return send_runCmd(callback, state, target, @group, cmdpath, jsonArgs, ackChannel, token);
     }
 
-    public int End_runCmd(IAsyncResult asyncResult)
+    public string End_runCmd(IAsyncResult asyncResult)
     {
       oprot_.Transport.EndFlush(asyncResult);
       return recv_runCmd();
     }
 
-    public async Task<int> runCmdAsync(List<int> target, bool @group, string cmdpath, string jsonArgs, string ackChannel, Token token)
+    public async Task<string> runCmdAsync(List<int> target, bool @group, string cmdpath, string jsonArgs, string ackChannel, Token token)
     {
-      int retval;
+      string retval;
       retval = await Task.Run(() =>
       {
         return runCmd(target, group, cmdpath, jsonArgs, ackChannel, token);
@@ -8303,7 +8303,7 @@ public partial class IFaceLog {
       return retval;
     }
 
-    public int runCmd(List<int> target, bool @group, string cmdpath, string jsonArgs, string ackChannel, Token token)
+    public string runCmd(List<int> target, bool @group, string cmdpath, string jsonArgs, string ackChannel, Token token)
     {
       var asyncResult = Begin_runCmd(null, null, target, @group, cmdpath, jsonArgs, ackChannel, token);
       return End_runCmd(asyncResult);
@@ -8324,7 +8324,7 @@ public partial class IFaceLog {
       return oprot_.Transport.BeginFlush(callback, state);
     }
 
-    public int recv_runCmd()
+    public string recv_runCmd()
     {
       TMessage msg = iprot_.ReadMessageBegin();
       if (msg.Type == TMessageType.Exception) {
@@ -8335,8 +8335,8 @@ public partial class IFaceLog {
       runCmd_result result = new runCmd_result();
       result.Read(iprot_);
       iprot_.ReadMessageEnd();
-      if (result.Success.HasValue) {
-        return result.Success.Value;
+      if (result.Success != null) {
+        return result.Success;
       }
       if (result.Ex1 != null) {
         throw result.Ex1;
@@ -8350,15 +8350,15 @@ public partial class IFaceLog {
       return send_runTask(callback, state, taskQueue, cmdpath, jsonArgs, ackChannel, token);
     }
 
-    public bool End_runTask(IAsyncResult asyncResult)
+    public int End_runTask(IAsyncResult asyncResult)
     {
       oprot_.Transport.EndFlush(asyncResult);
       return recv_runTask();
     }
 
-    public async Task<bool> runTaskAsync(string taskQueue, string cmdpath, string jsonArgs, string ackChannel, Token token)
+    public async Task<int> runTaskAsync(string taskQueue, string cmdpath, string jsonArgs, string ackChannel, Token token)
     {
-      bool retval;
+      int retval;
       retval = await Task.Run(() =>
       {
         return runTask(taskQueue, cmdpath, jsonArgs, ackChannel, token);
@@ -8366,7 +8366,7 @@ public partial class IFaceLog {
       return retval;
     }
 
-    public bool runTask(string taskQueue, string cmdpath, string jsonArgs, string ackChannel, Token token)
+    public int runTask(string taskQueue, string cmdpath, string jsonArgs, string ackChannel, Token token)
     {
       var asyncResult = Begin_runTask(null, null, taskQueue, cmdpath, jsonArgs, ackChannel, token);
       return End_runTask(asyncResult);
@@ -8386,7 +8386,7 @@ public partial class IFaceLog {
       return oprot_.Transport.BeginFlush(callback, state);
     }
 
-    public bool recv_runTask()
+    public int recv_runTask()
     {
       TMessage msg = iprot_.ReadMessageBegin();
       if (msg.Type == TMessageType.Exception) {
@@ -50962,7 +50962,7 @@ public partial class IFaceLog {
   public partial class runCmd_result : TBase
   {
 
-    public int? Success { get; set; }
+    public string Success { get; set; }
 
     public ServiceRuntimeException Ex1 { get; set; }
 
@@ -50985,8 +50985,8 @@ public partial class IFaceLog {
           switch (field.ID)
           {
             case 0:
-              if (field.Type == TType.I32) {
-                Success = iprot.ReadI32();
+              if (field.Type == TType.String) {
+                Success = iprot.ReadString();
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
@@ -51023,10 +51023,10 @@ public partial class IFaceLog {
 
         if (this.Success != null) {
           field.Name = "Success";
-          field.Type = TType.I32;
+          field.Type = TType.String;
           field.ID = 0;
           oprot.WriteFieldBegin(field);
-          oprot.WriteI32(Success.Value);
+          oprot.WriteString(Success);
           oprot.WriteFieldEnd();
         } else if (this.Ex1 != null) {
           field.Name = "Ex1";
@@ -51253,7 +51253,7 @@ public partial class IFaceLog {
   public partial class runTask_result : TBase
   {
 
-    public bool? Success { get; set; }
+    public int? Success { get; set; }
 
     public ServiceRuntimeException Ex1 { get; set; }
 
@@ -51276,8 +51276,8 @@ public partial class IFaceLog {
           switch (field.ID)
           {
             case 0:
-              if (field.Type == TType.Bool) {
-                Success = iprot.ReadBool();
+              if (field.Type == TType.I32) {
+                Success = iprot.ReadI32();
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
@@ -51314,10 +51314,10 @@ public partial class IFaceLog {
 
         if (this.Success != null) {
           field.Name = "Success";
-          field.Type = TType.Bool;
+          field.Type = TType.I32;
           field.ID = 0;
           oprot.WriteFieldBegin(field);
-          oprot.WriteBool(Success.Value);
+          oprot.WriteI32(Success.Value);
           oprot.WriteFieldEnd();
         } else if (this.Ex1 != null) {
           field.Name = "Ex1";

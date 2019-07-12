@@ -770,8 +770,8 @@ public class FacelogDefaultImpl implements IFaceLog {
 	}
 
 	@Override
-	public boolean runTask(String taskQueue, String cmdpath, String jsonArgs, String ackChannel, Token token) {
-		return false;
+	public Integer runTask(String taskQueue, String cmdpath, String jsonArgs, String ackChannel, Token token) {
+		return null;
 	}
 	
 	@Override
@@ -785,8 +785,8 @@ public class FacelogDefaultImpl implements IFaceLog {
 	}
 
 	@Override
-	public int runCmd(List<Integer>target, boolean group, String cmdpath, String jsonArgs, String ackChannel, Token token) {
-		return 0;
+	public String runCmd(List<Integer>target, boolean group, String cmdpath, String jsonArgs, String ackChannel, Token token) {
+		return null;
 	}
 	@Override
 	public Integer rootGroupOfDevice(Integer deviceId) {
