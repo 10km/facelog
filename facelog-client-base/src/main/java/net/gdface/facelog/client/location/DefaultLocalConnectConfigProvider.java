@@ -57,6 +57,7 @@ public class DefaultLocalConnectConfigProvider implements ConnectConfigProvider,
 	}
 	@Override
 	public String getHost() {
+		lanServer = null;
 		String address;
 		if(null != (address = addressOf(landfaceloghost,getPort()))){
 			return address;
@@ -70,7 +71,6 @@ public class DefaultLocalConnectConfigProvider implements ConnectConfigProvider,
 		}
 
 		List<ServiceHeartbeatPackage> servers = LanServiceHeartbeatListener.INSTANCE.lanServers();
-		lanServer = null;
 		if(!servers.isEmpty()){
 			if(null != (lanServer = findHost(servers,landfaceloghost))){
 				// DO NOTHING
