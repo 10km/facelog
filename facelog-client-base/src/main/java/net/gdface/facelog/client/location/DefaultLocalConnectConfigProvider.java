@@ -156,4 +156,18 @@ public class DefaultLocalConnectConfigProvider implements ConnectConfigProvider,
 		return this;
 	}
 
+	/**
+	 * @return address
+	 */
+	public String getAddress() {
+		return address;
+	}
+
+	/**
+	 * @param address 要设置的 address
+	 */
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
 }
