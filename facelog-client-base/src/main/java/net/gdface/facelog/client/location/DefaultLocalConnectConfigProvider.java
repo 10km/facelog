@@ -43,7 +43,7 @@ public class DefaultLocalConnectConfigProvider implements ConnectConfigProvider,
 	}
 
 	private ServiceHeartbeatPackage lanServer = null;
-	
+	private String address = null;
 	private static ServiceHeartbeatPackage findHost(List<ServiceHeartbeatPackage> servers,String host){
 		Optional<ServiceHeartbeatPackage> find = Iterables.tryFind(servers, new Filter(host));
 		return find.isPresent() ? find.get() : null;
@@ -57,14 +57,16 @@ public class DefaultLocalConnectConfigProvider implements ConnectConfigProvider,
 	}
 	@Override
 	public synchronized String getHost() {
+		if(address != null){
+			return address;
+		}
 		if(lanServer != null){
-			String address = firstReachableAddress(lanServer);
+			address = firstReachableAddress(lanServer);
 			if(address != null){
 				return address;
 			}
 			lanServer = null;
 		}
-		String address;
 		if(null != (address = addressOf(landfaceloghost,getPort()))){
 			return address;
 		}
