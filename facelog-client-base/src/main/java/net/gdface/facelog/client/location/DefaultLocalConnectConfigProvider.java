@@ -1,8 +1,12 @@
 package net.gdface.facelog.client.location;
 
-import java.net.UnknownHostException;
 import java.util.Collections;
 import java.util.List;
+
+import com.google.common.base.Optional;
+import com.google.common.base.Predicate;
+import com.google.common.base.Strings;
+import com.google.common.collect.Iterables;
 
 import net.gdface.facelog.CommonConstant;
 import net.gdface.facelog.ServiceHeartbeatPackage;
@@ -11,7 +15,7 @@ import net.gdface.thrift.ClientFactory;
 import net.gdface.utils.JcifsUtil;
 
 import static net.gdface.facelog.hb.LanServiceHeartbeatListener.*;
-
+import static com.google.common.base.Preconditions.*;
 /**
  * {@link ConnectConfigProvider}局域网配置
  * @author guyadong
@@ -31,36 +35,56 @@ public class DefaultLocalConnectConfigProvider implements ConnectConfigProvider,
 	}
 
 	/**
-	 * 初始化局域网redis主机名，默认值为'landtalkhost'
-	 * @param lanfaceloghost 要设置的 landtalkhost
+	 * 初始化局域网facelog主机名，默认值为'landfaceloghost'
+	 * @param lanfaceloghost 要设置的 landfaceloghost,不可为{@code null}或空
 	 */
 	public static void initLanfaceloghost(String lanfaceloghost) {
-		DefaultLocalConnectConfigProvider.landfaceloghost = lanfaceloghost;
+		DefaultLocalConnectConfigProvider.landfaceloghost = checkNotNull(Strings.emptyToNull(lanfaceloghost),"lanfaceloghost is null or empty");
 	}
 
 	private ServiceHeartbeatPackage lanServer = null;
+	
+	private static ServiceHeartbeatPackage findHost(List<ServiceHeartbeatPackage> servers,String host){
+		Optional<ServiceHeartbeatPackage> find = Iterables.tryFind(servers, new Filter(host));
+		return find.isPresent() ? find.get() : null;
+	}
+	private static String addressOf(String host,int port){
+		String address = JcifsUtil.getAddressIfPossible(host);
+		if(null != address && ClientFactory.testConnect(address, port, 0)){
+			return address;
+		}
+		return null;
+	}
 	@Override
 	public String getHost() {
-		try {
-			return JcifsUtil.hostAddressOf(landfaceloghost);
-		} catch (UnknownHostException e) {
-			// 如果外部设置了不同的主机名,则不再尝试解析landtalkhost
-			if(DEFAULT_LANDFACELOGHOST.equals(landfaceloghost)){
-				// 如果LANDTALKHOST有facelog连接则用此IP地址
-				String address = JcifsUtil.getAddressIfPossible(DEFAULT_LANDTALKHOST);
-				if(address != null && ClientFactory.testConnect(address, getPort(), 0)){
-					return address;
-				}
+		String address;
+		if(null != (address = addressOf(landfaceloghost,getPort()))){
+			return address;
+		}
+		// 如果外部设置了不同的主机名,则不再尝试解析landtalkhost
+		if(DEFAULT_LANDFACELOGHOST.equals(landfaceloghost)){
+			// 如果LANDTALKHOST有facelog连接则用此IP地址
+			if(null != (address = addressOf(DEFAULT_LANDTALKHOST,getPort()))){
+				return address;
 			}
+		}
 
-			List<ServiceHeartbeatPackage> servers = LanServiceHeartbeatListener.INSTANCE.lanServers();
-			if(!servers.isEmpty()){
-				Collections.reverse(servers);
-				lanServer = servers.get(0);
-				String address = firstReachableAddress(lanServer);
-				if(address != null){
-					return address;
+		List<ServiceHeartbeatPackage> servers = LanServiceHeartbeatListener.INSTANCE.lanServers();
+		lanServer = null;
+		if(!servers.isEmpty()){
+			if(null != (lanServer = findHost(servers,landfaceloghost))){
+				// DO NOTHING
+			}else // 如果外部设置了不同的主机名,则不再尝试解析landtalkhost
+				if(DEFAULT_LANDFACELOGHOST.equals(landfaceloghost) && null != (lanServer = findHost(servers,DEFAULT_LANDTALKHOST))){
+					// 如果LANDTALKHOST有facelog连接则用此IP地址
+					//	DO NOTHING
+				}else{
+					Collections.reverse(servers);
+					lanServer = servers.get(0);
 				}
+			address = firstReachableAddress(lanServer);
+			if(address != null){
+				return address;
 			}
 		}
 		return landfaceloghost;
@@ -93,6 +117,19 @@ public class DefaultLocalConnectConfigProvider implements ConnectConfigProvider,
 	@Override
 	public final ConnectConfigType type() {
 		return ConnectConfigType.LOCALHOST;
+	}
+
+	private static class Filter implements Predicate<ServiceHeartbeatPackage>{
+
+		private final String host; 
+		public Filter(String host) {
+			this.host = checkNotNull(Strings.emptyToNull(host),"host is null or empty");
+		}
+		@Override
+		public boolean apply(ServiceHeartbeatPackage input) {
+			return host.equals(input.getHost());
+		}
+		
 	}
 
 }
