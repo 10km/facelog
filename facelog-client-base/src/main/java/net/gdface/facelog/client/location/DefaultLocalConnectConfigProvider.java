@@ -56,8 +56,14 @@ public class DefaultLocalConnectConfigProvider implements ConnectConfigProvider,
 		return null;
 	}
 	@Override
-	public String getHost() {
-		lanServer = null;
+	public synchronized String getHost() {
+		if(lanServer != null){
+			String address = firstReachableAddress(lanServer);
+			if(address != null){
+				return address;
+			}
+			lanServer = null;
+		}
 		String address;
 		if(null != (address = addressOf(landfaceloghost,getPort()))){
 			return address;
@@ -130,6 +136,22 @@ public class DefaultLocalConnectConfigProvider implements ConnectConfigProvider,
 			return host.equals(input.getHost());
 		}
 		
+	}
+
+	/**
+	 * @return lanServer
+	 */
+	public ServiceHeartbeatPackage getLanServer() {
+		return lanServer;
+	}
+
+	/**
+	 * @param lanServer 要设置的 lanServer
+	 * @return 
+	 */
+	public DefaultLocalConnectConfigProvider setLanServer(ServiceHeartbeatPackage lanServer) {
+		this.lanServer = lanServer;
+		return this;
 	}
 
 }
