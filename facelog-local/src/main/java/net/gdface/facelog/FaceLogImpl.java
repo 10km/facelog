@@ -472,7 +472,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 	public PersonBean savePerson(final PersonBean personBean, final byte[] idPhoto, final FeatureBean featureBean,
 			final Token token)  {
 		try {
-			Enable.DEVICE_ONLY.check(tm, token);
+			Enable.ALL.check(tm, token);
 			checkArgument(null != personBean, "personBean is null");
 			return BaseDao.daoRunAsTransaction(new Callable<PersonBean>() {
 				@Override
@@ -492,7 +492,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 	public PersonBean savePerson(final PersonBean personBean, final byte[] idPhoto, final byte[] feature,
 			final String featureVersion, final List<FaceBean> faceBeans, final Token token)  {
 		try {
-			Enable.DEVICE_ONLY.check(tm, token);
+			Enable.ALL.check(tm, token);
 			checkArgument(null != personBean, "personBean is null");
 			checkArgument(null != feature, "feature is null");
 			return BaseDao.daoRunAsTransaction(new Callable<PersonBean>() {
@@ -513,7 +513,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 	public PersonBean savePerson(final PersonBean personBean, final byte[] idPhoto, final byte[] feature,
 			final String featureVersion, List<byte[]> photos, final List<FaceBean> faces, final Token token)  {
 		try {
-			Enable.DEVICE_ONLY.check(tm, token);
+			Enable.ALL.check(tm, token);
 			checkArgument(null != personBean, "personBean is null");
 			checkArgument(null != feature, "feature is null");
 			final List<ByteBuffer> buffers = Lists.transform(photos, typeTransformer.getTransformer(byte[].class, ByteBuffer.class));
@@ -537,7 +537,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 	public PersonBean savePerson(final PersonBean personBean, final byte[] idPhoto, final byte[] feature,
 			final String featureVersion, final byte[] featureImage, final FaceBean featureFaceBean, final Token token) {
 		try{
-			Enable.DEVICE_ONLY.check(tm, token);
+			Enable.ALL.check(tm, token);
 			checkArgument(null != personBean,"personBean is null");
 			return BaseDao.daoRunAsTransaction(new Callable<PersonBean>(){
 				@Override

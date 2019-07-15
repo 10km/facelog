@@ -267,7 +267,6 @@ public interface IFaceLog{
 
 	/**
 	 * 保存人员信息记录
-	 * <br>{@code DEVICE_ONLY}
 	 * @param personBean {@code fl_person}表记录
 	 * @param idPhoto 标准照图像,可为null
 	 * @param featureBean 用于验证的人脸特征数据对象,可为null
@@ -279,7 +278,6 @@ public interface IFaceLog{
 
 	/**
 	 * 保存人员信息记录
-	 * <br>{@code DEVICE_ONLY}
 	 * @param personBean {@code fl_person}表记录
 	 * @param idPhoto 标准照图像,可为null
 	 * @param feature 用于验证的人脸特征数据,不可重复, 参见 {@link #addFeature(byte[], String, Integer, List, Token)}
@@ -295,7 +293,6 @@ public interface IFaceLog{
 	 * 保存人员信息记录<br>
 	 * {@code photos}与{@code faces}为提取特征{@code feature}的人脸照片对应的人脸位置对象，必须一一对应,
 	 * 该方法用于多张照片合成一个人脸特征的算法
-	 * <br>{@code DEVICE_ONLY}
 	 * @param personBean {@code fl_person}表记录
 	 * @param idPhoto 标准照图像,可为null
 	 * @param feature 用于验证的人脸特征数据 
@@ -311,7 +308,6 @@ public interface IFaceLog{
 
 	/**
 	 * 保存人员信息记录<br>
-	 * {@code DEVICE_ONLY}
 	 * @param personBean 人员信息对象,{@code fl_person}表记录
 	 * @param idPhoto 标准照图像,可以为{@code null}
 	 * @param feature 人脸特征数据,可以为{@code null}
