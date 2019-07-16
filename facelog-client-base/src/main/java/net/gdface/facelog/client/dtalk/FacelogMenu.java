@@ -162,7 +162,7 @@ public class FacelogMenu extends RootMenu{
 								OptionType.INTEGER.builder().name("schedule").uiName("延迟执行时间").description("指定执行时间(unix time[秒]),为null立即执行").instance()
 								).needReset().instance(),
 						ItemBuilder.builder(CmdItem.class).name(CMD_TIME).uiName("时间同步").addChilds(
-								OptionType.DATE.builder().name("timestamp").uiName("服务器时间").required().description("服务器时间").instance()
+								OptionType.STRING.builder().name("timestamp").uiName("服务器时间").required().description("服务器时间ISO8601格式 '"+ISO8601_FORMATTER_STR +"'").instance()
 								).instance(),
 						ItemBuilder.builder(CmdItem.class).name(CMD_UPDATE).uiName("更新版本").addChilds(
 								OptionType.URL.builder().name(CMD_UPDATE_URL).uiName("更新版本的位置").description("下载更新版本的url").required().instance(),
