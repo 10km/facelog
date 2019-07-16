@@ -59,8 +59,12 @@ class RedisManagement implements ServiceConstant{
 		Runtime.getRuntime().addShutdownHook(new Thread(){
 			@Override
 			public void run() {
-				shutdownLocalWebredisServer();
-				shutdownLocalServer();
+				try {
+					shutdownLocalWebredisServer();
+					shutdownLocalServer();
+				} catch (Exception e) {
+					logger.error(e.getMessage(),e);
+				}
 			}
 		});
 	}
