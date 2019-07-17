@@ -1,3 +1,3 @@
 pushd %~dp0
-java -jar ${project.build.finalName}-standalone.jar %*
+java %FACELOG_OPTS% %FACELOG_DEBUG_OPTS% -jar ${project.build.finalName}-standalone.jar %*
 popd
