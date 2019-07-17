@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>com.gitee.l0km</groupId>
 		<artifactId>facelog</artifactId>
-		<version>2.3.1-SNAPSHOT</version>
+		<version>2.4.0</version>
 		<relativePath>..</relativePath>		
 	</parent>
 	<artifactId>facelog-service</artifactId>
@@ -13,7 +13,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<codegen.dir>${project.basedir}/src/codegen/java</codegen.dir>
 		<thrift.service.decorator.package>net.gdface.facelog.decorator</thrift.service.decorator.package>
-		<thrift.service.decorator.config></thrift.service.decorator.config>
+		<thrift.service.decorator.config />
 		<swift2thrift.out>IFaceLog.thrift</swift2thrift.out>
 	</properties>
 	<dependencies>
