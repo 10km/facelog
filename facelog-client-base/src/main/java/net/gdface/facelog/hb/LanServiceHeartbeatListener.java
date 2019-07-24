@@ -66,7 +66,7 @@ public class LanServiceHeartbeatListener {
 			return true;
 		}
 	};
-	public static final LanServiceHeartbeatListener INSTANCE = new LanServiceHeartbeatListener().start();
+	public static final LanServiceHeartbeatListener INSTANCE = new LanServiceHeartbeatListener();
 	static{
 		Runtime.getRuntime().addShutdownHook(new Thread(){
 
@@ -85,6 +85,10 @@ public class LanServiceHeartbeatListener {
 			throw new RuntimeException(e);
 		}
 	}
+	/**
+	 * 启动组播侦听线程
+	 * @return
+	 */
 	public synchronized LanServiceHeartbeatListener start(){
 		if(!multiCastDispatcher.isRunning()){
 			try {
