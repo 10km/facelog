@@ -872,17 +872,11 @@ public final class FeatureBean
     public FeatureBean copy(FeatureBean bean, int... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length){
-            for (int i = 0; i < FL_FEATURE_COLUMN_COUNT; ++i) {
-                if( bean.isInitialized(i)){
-                    setValue(i, bean.getValue(i));
-                }
-            }
+            fieldList = new int[]{0,1,2,3,4};
         }
-        else{
-            for (int i = 0; i < fieldList.length; ++i) {
-                if( bean.isInitialized(fieldList[i])){
-                    setValue(fieldList[i], bean.getValue(fieldList[i]));
-                }
+        for (int i = 0; i < fieldList.length; ++i) {
+            if( bean.isInitialized(fieldList[i]) && !Objects.deepEquals(bean.getValue(fieldList[i]), getValue(fieldList[i]))){
+                setValue(fieldList[i], bean.getValue(fieldList[i]));
             }
         }
         return this;
@@ -897,7 +891,7 @@ public final class FeatureBean
             int field;
             for (int i = 0; i < fieldList.length; i++) {
                 field = columnIDOf(fieldList[i].trim());
-                if(bean.isInitialized(field)){
+                if(bean.isInitialized(field) && !Objects.deepEquals(bean.getValue(field), getValue(field))){
                     setValue(field, bean.getValue(field));
                 }
             }

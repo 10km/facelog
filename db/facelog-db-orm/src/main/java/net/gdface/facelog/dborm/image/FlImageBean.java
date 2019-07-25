@@ -1002,17 +1002,11 @@ public  class FlImageBean
     public FlImageBean copy(FlImageBean bean, int... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length){
-            for (int i = 0; i < FL_IMAGE_COLUMN_COUNT; ++i) {
-                if( bean.isInitialized(i)){
-                    setValue(i, bean.getValue(i));
-                }
-            }
+            fieldList = new int[]{0,1,2,3,4,5,6,7};
         }
-        else{
-            for (int i = 0; i < fieldList.length; ++i) {
-                if( bean.isInitialized(fieldList[i])){
-                    setValue(fieldList[i], bean.getValue(fieldList[i]));
-                }
+        for (int i = 0; i < fieldList.length; ++i) {
+            if( bean.isInitialized(fieldList[i]) && !Objects.deepEquals(bean.getValue(fieldList[i]), getValue(fieldList[i]))){
+                setValue(fieldList[i], bean.getValue(fieldList[i]));
             }
         }
         return this;
@@ -1027,7 +1021,7 @@ public  class FlImageBean
             int field;
             for (int i = 0; i < fieldList.length; i++) {
                 field = columnIDOf(fieldList[i].trim());
-                if(bean.isInitialized(field)){
+                if(bean.isInitialized(field) && !Objects.deepEquals(bean.getValue(field), getValue(field))){
                     setValue(field, bean.getValue(field));
                 }
             }
