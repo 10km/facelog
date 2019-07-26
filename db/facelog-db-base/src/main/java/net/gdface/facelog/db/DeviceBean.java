@@ -68,7 +68,7 @@ public final class DeviceBean
     private String version;
 
     /** comments:支持的特征码(算法)版本号列表(逗号分隔),特征版本号用于区分不同人脸识别算法生成的特征数据(SDK版本号命名允许字母,数字,-,.,_符号) */
-    @ApiModelProperty(value = "支持的特征码(算法)版本号列表(逗号分隔),特征版本号用于区分不同人脸识别算法生成的特征数据(SDK版本号命名允许字母,数字,-,.,_符号)" ,required=true ,dataType="String")
+    @ApiModelProperty(value = "支持的特征码(算法)版本号列表(逗号分隔),特征版本号用于区分不同人脸识别算法生成的特征数据(SDK版本号命名允许字母,数字,-,.,_符号)"  ,dataType="String")
     private String usedSdks;
 
     /** comments:设备序列号 */
@@ -874,7 +874,6 @@ public final class DeviceBean
      * <ul>
      * <li>full name: fl_device.used_sdks</li>
      * <li>comments: 支持的特征码(算法)版本号列表(逗号分隔),特征版本号用于区分不同人脸识别算法生成的特征数据(SDK版本号命名允许字母,数字,-,.,_符号)</li>
-     * <li>NOT NULL</li>
      * <li>column size: 128</li>
      * <li>JDBC type returned by the driver: Types.VARCHAR</li>
      * </ul>
@@ -891,7 +890,7 @@ public final class DeviceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value( NOT NULL) to be assigned to usedSdks
+     * @param newVal the new value to be assigned to usedSdks
      */
     public void setUsedSdks(String newVal)
     {
