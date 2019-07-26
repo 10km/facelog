@@ -643,6 +643,21 @@ class BaseDao implements CommonConstant,Constant {
                     throws RuntimeDaoException,ObjectRetrievalException{
         return getDeviceManager().loadByIndexMacChecked(mac);
     }
+    //18-8
+    /** 
+     * 检查数据库中是否有(唯一键)相同的记录,如果有则抛出异常
+     * 
+     * @param mac 6字节MAC地址(HEX)
+     * @throws DuplicateRecordException if exists duplicated row
+     * @throws RuntimeDaoException
+     */
+    protected String daoCheckDuplicateDeviceByIndexMac(String mac)
+                    throws RuntimeDaoException,DuplicateRecordException{
+        if(null != daoGetDeviceByIndexMac(mac)){
+            throw new DuplicateRecordException();
+        }
+        return mac;
+    }
     //18-5
     /** 
      * 索引(fl_device.serial_no)查询,没有找到记录返回{@code null}<br>
@@ -667,6 +682,21 @@ class BaseDao implements CommonConstant,Constant {
     protected DeviceBean daoGetDeviceByIndexSerialNoChecked(String serialNo)
                     throws RuntimeDaoException,ObjectRetrievalException{
         return getDeviceManager().loadByIndexSerialNoChecked(serialNo);
+    }
+    //18-8
+    /** 
+     * 检查数据库中是否有(唯一键)相同的记录,如果有则抛出异常
+     * 
+     * @param serialNo 设备序列号
+     * @throws DuplicateRecordException if exists duplicated row
+     * @throws RuntimeDaoException
+     */
+    protected String daoCheckDuplicateDeviceByIndexSerialNo(String serialNo)
+                    throws RuntimeDaoException,DuplicateRecordException{
+        if(null != daoGetDeviceByIndexSerialNo(serialNo)){
+            throw new DuplicateRecordException();
+        }
+        return serialNo;
     }
     //19
     /**
@@ -1844,6 +1874,21 @@ class BaseDao implements CommonConstant,Constant {
                     throws RuntimeDaoException,ObjectRetrievalException{
         return getPersonManager().loadByIndexImageMd5Checked(imageMd5);
     }
+    //18-8
+    /** 
+     * 检查数据库中是否有(唯一键)相同的记录,如果有则抛出异常
+     * 
+     * @param imageMd5 用户默认照片(证件照,标准照)的md5校验码,外键
+     * @throws DuplicateRecordException if exists duplicated row
+     * @throws RuntimeDaoException
+     */
+    protected String daoCheckDuplicatePersonByIndexImageMd5(String imageMd5)
+                    throws RuntimeDaoException,DuplicateRecordException{
+        if(null != daoGetPersonByIndexImageMd5(imageMd5)){
+            throw new DuplicateRecordException();
+        }
+        return imageMd5;
+    }
     //18-5
     /** 
      * 索引(fl_person.mobile_phone)查询,没有找到记录返回{@code null}<br>
@@ -1869,6 +1914,21 @@ class BaseDao implements CommonConstant,Constant {
                     throws RuntimeDaoException,ObjectRetrievalException{
         return getPersonManager().loadByIndexMobilePhoneChecked(mobilePhone);
     }
+    //18-8
+    /** 
+     * 检查数据库中是否有(唯一键)相同的记录,如果有则抛出异常
+     * 
+     * @param mobilePhone 手机号码
+     * @throws DuplicateRecordException if exists duplicated row
+     * @throws RuntimeDaoException
+     */
+    protected String daoCheckDuplicatePersonByIndexMobilePhone(String mobilePhone)
+                    throws RuntimeDaoException,DuplicateRecordException{
+        if(null != daoGetPersonByIndexMobilePhone(mobilePhone)){
+            throw new DuplicateRecordException();
+        }
+        return mobilePhone;
+    }
     //18-5
     /** 
      * 索引(fl_person.papers_num)查询,没有找到记录返回{@code null}<br>
@@ -1893,6 +1953,21 @@ class BaseDao implements CommonConstant,Constant {
     protected PersonBean daoGetPersonByIndexPapersNumChecked(String papersNum)
                     throws RuntimeDaoException,ObjectRetrievalException{
         return getPersonManager().loadByIndexPapersNumChecked(papersNum);
+    }
+    //18-8
+    /** 
+     * 检查数据库中是否有(唯一键)相同的记录,如果有则抛出异常
+     * 
+     * @param papersNum 证件号码
+     * @throws DuplicateRecordException if exists duplicated row
+     * @throws RuntimeDaoException
+     */
+    protected String daoCheckDuplicatePersonByIndexPapersNum(String papersNum)
+                    throws RuntimeDaoException,DuplicateRecordException{
+        if(null != daoGetPersonByIndexPapersNum(papersNum)){
+            throw new DuplicateRecordException();
+        }
+        return papersNum;
     }
     //19
     /**

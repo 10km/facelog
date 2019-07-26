@@ -233,6 +233,32 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
+    public DeviceBean addNullDevice (Integer groupId,String name,String mac,String serialNo,String remark,Token token) throws DuplicateRecordException{
+        return delegate().addNullDevice(groupId,name,mac,serialNo,remark,token);
+    }
+
+    /**
+     * {@link IFaceLog#addNullDevice(java.lang.Integer,java.lang.String,java.lang.String,java.lang.String,java.lang.String,Token)}对应的unchecked方法,
+     * 所有显式申明的异常都被封装到{@link RuntimeException}抛出<br>
+     * @param groupId
+     * @param name
+     * @param mac
+     * @param serialNo
+     * @param remark
+     * @param token
+     * @return DeviceBean
+     */
+    public DeviceBean addNullDeviceUnchecked (Integer groupId,String name,String mac,String serialNo,String remark,Token token) {
+        try{
+            return delegate().addNullDevice(groupId,name,mac,serialNo,remark,token);
+        } catch(RuntimeException e){
+            throw e;
+        } catch(Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public String applyAckChannel (int duration,Token token) {
         return delegate().applyAckChannel(duration,token);
     }

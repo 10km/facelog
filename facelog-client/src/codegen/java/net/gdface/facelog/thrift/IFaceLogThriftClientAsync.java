@@ -387,6 +387,46 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(addLogs(beans,token), callback);
     }
     /**
+     * see also {@link net.gdface.facelog.IFaceLog#addNullDevice(java.lang.Integer,java.lang.String,java.lang.String,java.lang.String,java.lang.String,net.gdface.facelog.Token)}
+     */
+    public ListenableFuture<DeviceBean> addNullDevice(Integer groupId,
+        String name,
+        String mac,
+        String serialNo,
+        String remark,
+        Token token){        
+        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
+        ListenableFuture<DeviceBean> future = Futures.transform(
+            async.addNullDevice(groupId,
+            name,
+            mac,
+            serialNo,
+            remark,
+            TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class)),
+            new Function<net.gdface.facelog.client.thrift.DeviceBean,DeviceBean>(){
+                @Override
+                public DeviceBean apply(net.gdface.facelog.client.thrift.DeviceBean input) {
+                    return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.DeviceBean.class,
+                    DeviceBean.class);
+                }
+            });
+        return factory.wrap(async,future);
+    }
+    public void addNullDevice(Integer groupId,
+        String name,
+        String mac,
+        String serialNo,
+        String remark,
+        Token token,
+        FutureCallback<DeviceBean>callback){
+        factory.addCallback(addNullDevice(groupId,name,mac,serialNo,remark,token), callback);
+    }
+    /**
      * see also {@link net.gdface.facelog.IFaceLog#applyAckChannel(int,net.gdface.facelog.Token)}
      */
     public ListenableFuture<String> applyAckChannel(int duration,

@@ -3,7 +3,7 @@ package net.gdface.facelog;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static net.gdface.facelog.FeatureConfig.*;
-
+import static net.gdface.facelog.db.Constant.*;
 
 import java.nio.ByteBuffer;
 import java.util.concurrent.TimeUnit;
@@ -30,6 +30,20 @@ import net.gdface.utils.FaceUtilits;
  *
  */
 class TokenMangement implements ServiceConstant {
+	/**
+	 * 由设备填写的常量字段
+	 */
+	private static final int[] CONST_FIELDS = {
+			FL_DEVICE_ID_PRODUCT_NAME,
+			FL_DEVICE_ID_MODEL,
+			FL_DEVICE_ID_VENDOR,
+			FL_DEVICE_ID_MANUFACTURER,
+			FL_DEVICE_ID_MADE_DATE,
+			FL_DEVICE_ID_VERSION,
+			FL_DEVICE_ID_USED_SDKS,
+			FL_DEVICE_ID_SERIAL_NO,
+			FL_DEVICE_ID_EXT_BIN,
+			FL_DEVICE_ID_EXT_TXT};
 	private static final String ACK_PREFIX = "ack_";
 	private final DaoManagement dao;
 	private final CryptographGenerator cg;
@@ -296,7 +310,7 @@ class TokenMangement implements ServiceConstant {
 				"for device registeration the 'newDevice' must be a new record,so the _isNew field must be true ");
 		// ID为自增长键，新记录ID字段不能指定，由数据库分配
 		checkArgument(
-				!newDevice.isModified(net.gdface.facelog.db.Constant.FL_DEVICE_ID_ID) 
+				!newDevice.isModified(FL_DEVICE_ID_ID) 
 				|| Objects.equal(0,newDevice.getId()),
 				"for device registeration the 'newDevice' must be a new record,so id field must be not be set or be zero");
 		// sdk_version字段不可为空
@@ -305,25 +319,27 @@ class TokenMangement implements ServiceConstant {
 		// 检查sdk_version是否允许注册
 		checkArgument(FEATURE_CONFIG.allValidSdkVersions(newDevice.getUsedSdks()), 
 				"UNSUPPORTED SDK Version [%s]",newDevice.getUsedSdks());
-
-		DeviceBean dmac = this.dao.daoGetDeviceByIndexMac(newDevice.getMac());
-		DeviceBean dsn = this.dao.daoGetDeviceByIndexSerialNo(newDevice.getSerialNo());
+		String mac = newDevice.getMac();
+    	checkArgument(mac != null && mac.matches("^[\\da-fA-F]{12}$"),"INVALID mac address");
+    	mac = mac.toLowerCase();
+		DeviceBean dmac = this.dao.daoGetDeviceByIndexMac(mac);
 		if(null !=dmac ){
-			if(dmac.equals(dsn) || Objects.equal(newDevice.getSerialNo(),dmac.getSerialNo())){
-				// 设备已经注册,序列号一致
-				return dmac;
-			}
-			// 设备已经注册,序列号不一致
-			if(isValidSerialNo(dmac.getSerialNo())){
-				// 原序列号有效就返回原记录
-				return dmac;
+			// 设备已经注册
+			boolean oldSnValid = isValidSerialNo(dmac.getSerialNo());
+			if(Objects.equal(newDevice.getSerialNo(),dmac.getSerialNo()) && oldSnValid){
+				// 序列号一致且有效
+				// DO NOTHING
+			}else	if(null == newDevice.getSerialNo() && oldSnValid){
+				// 原序列号有效就使用原序列号
+				newDevice.setSerialNo(dmac.getSerialNo());
 			}else{
 				checkNotOccupiedSerialNo(newDevice.getSerialNo());
 				checkValidSerialNo(newDevice.getSerialNo());
 				// 用新序列号替换原记录中无效的序列号
-				dmac.setSerialNo(newDevice.getSerialNo());
-				return dao.daoSaveDevice(dmac);
 			}
+			// 复制新记录中的常量字段
+			dmac.copy(newDevice, CONST_FIELDS);			
+			return dmac.isModified() ? dao.daoSaveDevice(dmac):dmac;
 		}else{
 			checkNotOccupiedSerialNo(newDevice.getSerialNo());
 			checkValidSerialNo(newDevice.getSerialNo());

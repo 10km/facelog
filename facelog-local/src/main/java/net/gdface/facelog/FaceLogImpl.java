@@ -1460,6 +1460,17 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 			throw wrapServiceRuntimeException(e);
 		}
     }
+    
+	@Override
+	public DeviceBean addNullDevice(Integer groupId,String name,String mac,String serialNo,String remark,Token token) throws DuplicateRecordException{
+    	try{
+    		Enable.PERSON_ONLY.check(tm, token);
+    		return dm.daoAddNullDevice(groupId, name, mac, serialNo, remark);
+    	} catch (Exception e) {
+    		Throwables.throwIfInstanceOf(e, DuplicateRecordException.class);
+    		throw wrapServiceRuntimeException(e);
+		}	
+    }
     @Override
     public DeviceBean registerDevice(DeviceBean newDevice) throws ServiceSecurityException{
     	try{

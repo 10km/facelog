@@ -607,6 +607,12 @@ public class FacelogDefaultImpl implements IFaceLog {
 	}
 
 	@Override
+	public DeviceBean addNullDevice(Integer groupId, String name, String mac, String serialNo, String remark, Token token)
+			throws DuplicateRecordException {
+		return null;
+	}
+
+	@Override
 	public DeviceBean registerDevice(DeviceBean newDevice) throws ServiceSecurityException {
 		return null;
 	}
@@ -805,5 +811,4 @@ public class FacelogDefaultImpl implements IFaceLog {
 	@Override
 	public void bindBorder(Integer personGroupId, Integer deviceGroupId, Token token) {
 	}
-
 }

@@ -1689,6 +1689,230 @@ IFaceLog_addLogsFull_result.prototype.write = function(output) {
   return;
 };
 
+IFaceLog_addNullDevice_args = function(args) {
+  this.groupId = null;
+  this.name = null;
+  this.mac = null;
+  this.serialNo = null;
+  this.remark = null;
+  this.token = null;
+  if (args) {
+    if (args.groupId !== undefined && args.groupId !== null) {
+      this.groupId = args.groupId;
+    }
+    if (args.name !== undefined && args.name !== null) {
+      this.name = args.name;
+    }
+    if (args.mac !== undefined && args.mac !== null) {
+      this.mac = args.mac;
+    }
+    if (args.serialNo !== undefined && args.serialNo !== null) {
+      this.serialNo = args.serialNo;
+    }
+    if (args.remark !== undefined && args.remark !== null) {
+      this.remark = args.remark;
+    }
+    if (args.token !== undefined && args.token !== null) {
+      this.token = new Token(args.token);
+    }
+  }
+};
+IFaceLog_addNullDevice_args.prototype = {};
+IFaceLog_addNullDevice_args.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+      if (ftype == Thrift.Type.I32) {
+        this.groupId = input.readI32().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 2:
+      if (ftype == Thrift.Type.STRING) {
+        this.name = input.readString().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 3:
+      if (ftype == Thrift.Type.STRING) {
+        this.mac = input.readString().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 4:
+      if (ftype == Thrift.Type.STRING) {
+        this.serialNo = input.readString().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 5:
+      if (ftype == Thrift.Type.STRING) {
+        this.remark = input.readString().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 6:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.token = new Token();
+        this.token.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+IFaceLog_addNullDevice_args.prototype.write = function(output) {
+  output.writeStructBegin('IFaceLog_addNullDevice_args');
+  if (this.groupId !== null && this.groupId !== undefined) {
+    output.writeFieldBegin('groupId', Thrift.Type.I32, 1);
+    output.writeI32(this.groupId);
+    output.writeFieldEnd();
+  }
+  if (this.name !== null && this.name !== undefined) {
+    output.writeFieldBegin('name', Thrift.Type.STRING, 2);
+    output.writeString(this.name);
+    output.writeFieldEnd();
+  }
+  if (this.mac !== null && this.mac !== undefined) {
+    output.writeFieldBegin('mac', Thrift.Type.STRING, 3);
+    output.writeString(this.mac);
+    output.writeFieldEnd();
+  }
+  if (this.serialNo !== null && this.serialNo !== undefined) {
+    output.writeFieldBegin('serialNo', Thrift.Type.STRING, 4);
+    output.writeString(this.serialNo);
+    output.writeFieldEnd();
+  }
+  if (this.remark !== null && this.remark !== undefined) {
+    output.writeFieldBegin('remark', Thrift.Type.STRING, 5);
+    output.writeString(this.remark);
+    output.writeFieldEnd();
+  }
+  if (this.token !== null && this.token !== undefined) {
+    output.writeFieldBegin('token', Thrift.Type.STRUCT, 6);
+    this.token.write(output);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+IFaceLog_addNullDevice_result = function(args) {
+  this.success = null;
+  this.ex1 = null;
+  this.ex2 = null;
+  if (args instanceof DuplicateRecordException) {
+    this.ex1 = args;
+    return;
+  }
+  if (args instanceof ServiceRuntimeException) {
+    this.ex2 = args;
+    return;
+  }
+  if (args) {
+    if (args.success !== undefined && args.success !== null) {
+      this.success = new DeviceBean(args.success);
+    }
+    if (args.ex1 !== undefined && args.ex1 !== null) {
+      this.ex1 = args.ex1;
+    }
+    if (args.ex2 !== undefined && args.ex2 !== null) {
+      this.ex2 = args.ex2;
+    }
+  }
+};
+IFaceLog_addNullDevice_result.prototype = {};
+IFaceLog_addNullDevice_result.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.success = new DeviceBean();
+        this.success.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 1:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.ex1 = new DuplicateRecordException();
+        this.ex1.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 2:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.ex2 = new ServiceRuntimeException();
+        this.ex2.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+IFaceLog_addNullDevice_result.prototype.write = function(output) {
+  output.writeStructBegin('IFaceLog_addNullDevice_result');
+  if (this.success !== null && this.success !== undefined) {
+    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
+    this.success.write(output);
+    output.writeFieldEnd();
+  }
+  if (this.ex1 !== null && this.ex1 !== undefined) {
+    output.writeFieldBegin('ex1', Thrift.Type.STRUCT, 1);
+    this.ex1.write(output);
+    output.writeFieldEnd();
+  }
+  if (this.ex2 !== null && this.ex2 !== undefined) {
+    output.writeFieldBegin('ex2', Thrift.Type.STRUCT, 2);
+    this.ex2.write(output);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
 IFaceLog_applyAckChannel_args = function(args) {
   this.token = null;
   if (args) {
@@ -24435,6 +24659,59 @@ IFaceLogClient.prototype.recv_addLogsFull = function() {
     throw result.ex2;
   }
   return;
+};
+IFaceLogClient.prototype.addNullDevice = function(groupId, name, mac, serialNo, remark, token, callback) {
+  if (callback === undefined) {
+    this.send_addNullDevice(groupId, name, mac, serialNo, remark, token);
+    return this.recv_addNullDevice();
+  } else {
+    var postData = this.send_addNullDevice(groupId, name, mac, serialNo, remark, token, true);
+    return this.output.getTransport()
+      .jqRequest(this, postData, arguments, this.recv_addNullDevice);
+  }
+};
+
+IFaceLogClient.prototype.send_addNullDevice = function(groupId, name, mac, serialNo, remark, token, callback) {
+  this.output.writeMessageBegin('addNullDevice', Thrift.MessageType.CALL, this.seqid);
+  var params = {
+    groupId: groupId,
+    name: name,
+    mac: mac,
+    serialNo: serialNo,
+    remark: remark,
+    token: token
+  };
+  var args = new IFaceLog_addNullDevice_args(params);
+  args.write(this.output);
+  this.output.writeMessageEnd();
+  return this.output.getTransport().flush(callback);
+};
+
+IFaceLogClient.prototype.recv_addNullDevice = function() {
+  var ret = this.input.readMessageBegin();
+  var fname = ret.fname;
+  var mtype = ret.mtype;
+  var rseqid = ret.rseqid;
+  if (mtype == Thrift.MessageType.EXCEPTION) {
+    var x = new Thrift.TApplicationException();
+    x.read(this.input);
+    this.input.readMessageEnd();
+    throw x;
+  }
+  var result = new IFaceLog_addNullDevice_result();
+  result.read(this.input);
+  this.input.readMessageEnd();
+
+  if (null !== result.ex1) {
+    throw result.ex1;
+  }
+  if (null !== result.ex2) {
+    throw result.ex2;
+  }
+  if (null !== result.success) {
+    return result.success;
+  }
+  throw 'addNullDevice failed: unknown result';
 };
 IFaceLogClient.prototype.applyAckChannel = function(token, callback) {
   if (callback === undefined) {

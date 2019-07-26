@@ -112,6 +112,20 @@ public interface IFaceLog
             @ThriftField(value=4, name="token", requiredness=Requiredness.OPTIONAL) final Token token
         );
 
+        @ThriftMethod(value = "addNullDevice",
+                      exception = {
+                          @ThriftException(type=DuplicateRecordException.class, id=1),
+                          @ThriftException(type=ServiceRuntimeException.class, id=2)
+                      })
+        ListenableFuture<DeviceBean> addNullDevice(
+            @ThriftField(value=1, name="groupId", requiredness=Requiredness.OPTIONAL) final Integer groupId,
+            @ThriftField(value=2, name="name", requiredness=Requiredness.OPTIONAL) final String name,
+            @ThriftField(value=3, name="mac", requiredness=Requiredness.OPTIONAL) final String mac,
+            @ThriftField(value=4, name="serialNo", requiredness=Requiredness.OPTIONAL) final String serialNo,
+            @ThriftField(value=5, name="remark", requiredness=Requiredness.OPTIONAL) final String remark,
+            @ThriftField(value=6, name="token", requiredness=Requiredness.OPTIONAL) final Token token
+        );
+
         @ThriftMethod(value = "applyAckChannel",
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
@@ -1540,6 +1554,20 @@ public interface IFaceLog
         @ThriftField(value=2, name="faceBeans", requiredness=Requiredness.OPTIONAL) final List<FaceBean> faceBeans,
         @ThriftField(value=3, name="featureImages", requiredness=Requiredness.OPTIONAL) final List<byte []> featureImages,
         @ThriftField(value=4, name="token", requiredness=Requiredness.OPTIONAL) final Token token
+    ) throws DuplicateRecordException, ServiceRuntimeException;
+
+    @ThriftMethod(value = "addNullDevice",
+                  exception = {
+                      @ThriftException(type=DuplicateRecordException.class, id=1),
+                      @ThriftException(type=ServiceRuntimeException.class, id=2)
+                  })
+    DeviceBean addNullDevice(
+        @ThriftField(value=1, name="groupId", requiredness=Requiredness.OPTIONAL) final Integer groupId,
+        @ThriftField(value=2, name="name", requiredness=Requiredness.OPTIONAL) final String name,
+        @ThriftField(value=3, name="mac", requiredness=Requiredness.OPTIONAL) final String mac,
+        @ThriftField(value=4, name="serialNo", requiredness=Requiredness.OPTIONAL) final String serialNo,
+        @ThriftField(value=5, name="remark", requiredness=Requiredness.OPTIONAL) final String remark,
+        @ThriftField(value=6, name="token", requiredness=Requiredness.OPTIONAL) final Token token
     ) throws DuplicateRecordException, ServiceRuntimeException;
 
     @ThriftMethod(value = "applyAckChannel",

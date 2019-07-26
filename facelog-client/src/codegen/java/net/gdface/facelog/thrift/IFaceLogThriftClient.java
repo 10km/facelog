@@ -365,6 +365,45 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
+    public DeviceBean addNullDevice(Integer groupId,
+        String name,
+        String mac,
+        String serialNo,
+        String remark,
+        Token token) 
+        throws DuplicateRecordException{
+        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        try{
+            return TypeTransformer.getInstance().to(
+                    instance.addNullDevice(groupId,
+                name,
+                mac,
+                serialNo,
+                remark,
+                TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class)),
+                    net.gdface.facelog.client.thrift.DeviceBean.class,
+                    DeviceBean.class);
+        }
+        catch(net.gdface.facelog.client.thrift.DuplicateRecordException e){
+            throw TypeTransformer.getInstance().to(
+                    e,
+                    net.gdface.facelog.client.thrift.DuplicateRecordException.class,
+                    DuplicateRecordException.class);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch(RuntimeTApplicationException e){
+            return net.gdface.thrift.ThriftUtils.returnNull(e);
+        }
+        finally{
+            factory.releaseInstance(instance);
+        }
+    }
+    @Override
     public String applyAckChannel(int duration,
         Token token) 
         {

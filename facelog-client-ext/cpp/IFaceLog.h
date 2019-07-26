@@ -29,6 +29,7 @@ class IFaceLogIf {
   virtual void addLogFull(const LogBean& logBean, const FaceBean& faceBean, const std::string& featureImage, const Token& token) = 0;
   virtual void addLogs(const std::vector<LogBean> & beans, const Token& token) = 0;
   virtual void addLogsFull(const std::vector<LogBean> & logBeans, const std::vector<FaceBean> & faceBeans, const std::vector<std::string> & featureImages, const Token& token) = 0;
+  virtual void addNullDevice(DeviceBean& _return, const int32_t groupId, const std::string& name, const std::string& mac, const std::string& serialNo, const std::string& remark, const Token& token) = 0;
   virtual void applyAckChannel(std::string& _return, const Token& token) = 0;
   virtual void applyAckChannelWithDuration(std::string& _return, const int32_t duration, const Token& token) = 0;
   virtual int32_t applyCmdSn(const Token& token) = 0;
@@ -230,6 +231,9 @@ class IFaceLogNull : virtual public IFaceLogIf {
     return;
   }
   void addLogsFull(const std::vector<LogBean> & /* logBeans */, const std::vector<FaceBean> & /* faceBeans */, const std::vector<std::string> & /* featureImages */, const Token& /* token */) {
+    return;
+  }
+  void addNullDevice(DeviceBean& /* _return */, const int32_t /* groupId */, const std::string& /* name */, const std::string& /* mac */, const std::string& /* serialNo */, const std::string& /* remark */, const Token& /* token */) {
     return;
   }
   void applyAckChannel(std::string& /* _return */, const Token& /* token */) {
@@ -1913,6 +1917,171 @@ class IFaceLog_addLogsFull_presult {
   ServiceRuntimeException ex2;
 
   _IFaceLog_addLogsFull_presult__isset __isset;
+
+  template <class Protocol_>
+  uint32_t read(Protocol_* iprot);
+
+};
+
+typedef struct _IFaceLog_addNullDevice_args__isset {
+  _IFaceLog_addNullDevice_args__isset() : groupId(false), name(false), mac(false), serialNo(false), remark(false), token(false) {}
+  bool groupId :1;
+  bool name :1;
+  bool mac :1;
+  bool serialNo :1;
+  bool remark :1;
+  bool token :1;
+} _IFaceLog_addNullDevice_args__isset;
+
+class IFaceLog_addNullDevice_args {
+ public:
+
+  IFaceLog_addNullDevice_args(const IFaceLog_addNullDevice_args&);
+  IFaceLog_addNullDevice_args(IFaceLog_addNullDevice_args&&);
+  IFaceLog_addNullDevice_args& operator=(const IFaceLog_addNullDevice_args&);
+  IFaceLog_addNullDevice_args& operator=(IFaceLog_addNullDevice_args&&);
+  IFaceLog_addNullDevice_args() : groupId(0), name(), mac(), serialNo(), remark() {
+  }
+
+  virtual ~IFaceLog_addNullDevice_args() throw();
+  int32_t groupId;
+  std::string name;
+  std::string mac;
+  std::string serialNo;
+  std::string remark;
+  Token token;
+
+  _IFaceLog_addNullDevice_args__isset __isset;
+
+  void __set_groupId(const int32_t val);
+
+  void __set_name(const std::string& val);
+
+  void __set_mac(const std::string& val);
+
+  void __set_serialNo(const std::string& val);
+
+  void __set_remark(const std::string& val);
+
+  void __set_token(const Token& val);
+
+  bool operator == (const IFaceLog_addNullDevice_args & rhs) const
+  {
+    if (!(groupId == rhs.groupId))
+      return false;
+    if (!(name == rhs.name))
+      return false;
+    if (!(mac == rhs.mac))
+      return false;
+    if (!(serialNo == rhs.serialNo))
+      return false;
+    if (!(remark == rhs.remark))
+      return false;
+    if (!(token == rhs.token))
+      return false;
+    return true;
+  }
+  bool operator != (const IFaceLog_addNullDevice_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IFaceLog_addNullDevice_args & ) const;
+
+  template <class Protocol_>
+  uint32_t read(Protocol_* iprot);
+  template <class Protocol_>
+  uint32_t write(Protocol_* oprot) const;
+
+};
+
+
+class IFaceLog_addNullDevice_pargs {
+ public:
+
+
+  virtual ~IFaceLog_addNullDevice_pargs() throw();
+  const int32_t* groupId;
+  const std::string* name;
+  const std::string* mac;
+  const std::string* serialNo;
+  const std::string* remark;
+  const Token* token;
+
+  template <class Protocol_>
+  uint32_t write(Protocol_* oprot) const;
+
+};
+
+typedef struct _IFaceLog_addNullDevice_result__isset {
+  _IFaceLog_addNullDevice_result__isset() : success(false), ex1(false), ex2(false) {}
+  bool success :1;
+  bool ex1 :1;
+  bool ex2 :1;
+} _IFaceLog_addNullDevice_result__isset;
+
+class IFaceLog_addNullDevice_result {
+ public:
+
+  IFaceLog_addNullDevice_result(const IFaceLog_addNullDevice_result&);
+  IFaceLog_addNullDevice_result(IFaceLog_addNullDevice_result&&);
+  IFaceLog_addNullDevice_result& operator=(const IFaceLog_addNullDevice_result&);
+  IFaceLog_addNullDevice_result& operator=(IFaceLog_addNullDevice_result&&);
+  IFaceLog_addNullDevice_result() {
+  }
+
+  virtual ~IFaceLog_addNullDevice_result() throw();
+  DeviceBean success;
+  DuplicateRecordException ex1;
+  ServiceRuntimeException ex2;
+
+  _IFaceLog_addNullDevice_result__isset __isset;
+
+  void __set_success(const DeviceBean& val);
+
+  void __set_ex1(const DuplicateRecordException& val);
+
+  void __set_ex2(const ServiceRuntimeException& val);
+
+  bool operator == (const IFaceLog_addNullDevice_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex1 == rhs.ex1))
+      return false;
+    if (!(ex2 == rhs.ex2))
+      return false;
+    return true;
+  }
+  bool operator != (const IFaceLog_addNullDevice_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IFaceLog_addNullDevice_result & ) const;
+
+  template <class Protocol_>
+  uint32_t read(Protocol_* iprot);
+  template <class Protocol_>
+  uint32_t write(Protocol_* oprot) const;
+
+};
+
+typedef struct _IFaceLog_addNullDevice_presult__isset {
+  _IFaceLog_addNullDevice_presult__isset() : success(false), ex1(false), ex2(false) {}
+  bool success :1;
+  bool ex1 :1;
+  bool ex2 :1;
+} _IFaceLog_addNullDevice_presult__isset;
+
+class IFaceLog_addNullDevice_presult {
+ public:
+
+
+  virtual ~IFaceLog_addNullDevice_presult() throw();
+  DeviceBean* success;
+  DuplicateRecordException ex1;
+  ServiceRuntimeException ex2;
+
+  _IFaceLog_addNullDevice_presult__isset __isset;
 
   template <class Protocol_>
   uint32_t read(Protocol_* iprot);
@@ -20815,6 +20984,9 @@ class IFaceLogClientT : virtual public IFaceLogIf {
   void addLogsFull(const std::vector<LogBean> & logBeans, const std::vector<FaceBean> & faceBeans, const std::vector<std::string> & featureImages, const Token& token);
   void send_addLogsFull(const std::vector<LogBean> & logBeans, const std::vector<FaceBean> & faceBeans, const std::vector<std::string> & featureImages, const Token& token);
   void recv_addLogsFull();
+  void addNullDevice(DeviceBean& _return, const int32_t groupId, const std::string& name, const std::string& mac, const std::string& serialNo, const std::string& remark, const Token& token);
+  void send_addNullDevice(const int32_t groupId, const std::string& name, const std::string& mac, const std::string& serialNo, const std::string& remark, const Token& token);
+  void recv_addNullDevice(DeviceBean& _return);
   void applyAckChannel(std::string& _return, const Token& token);
   void send_applyAckChannel(const Token& token);
   void recv_applyAckChannel(std::string& _return);
@@ -21309,6 +21481,8 @@ class IFaceLogProcessorT : public ::apache::thrift::TDispatchProcessorT<Protocol
   void process_addLogs(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext);
   void process_addLogsFull(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_addLogsFull(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext);
+  void process_addNullDevice(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_addNullDevice(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext);
   void process_applyAckChannel(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_applyAckChannel(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext);
   void process_applyAckChannelWithDuration(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -21636,6 +21810,9 @@ class IFaceLogProcessorT : public ::apache::thrift::TDispatchProcessorT<Protocol
     processMap_["addLogsFull"] = ProcessFunctions(
       &IFaceLogProcessorT::process_addLogsFull,
       &IFaceLogProcessorT::process_addLogsFull);
+    processMap_["addNullDevice"] = ProcessFunctions(
+      &IFaceLogProcessorT::process_addNullDevice,
+      &IFaceLogProcessorT::process_addNullDevice);
     processMap_["applyAckChannel"] = ProcessFunctions(
       &IFaceLogProcessorT::process_applyAckChannel,
       &IFaceLogProcessorT::process_applyAckChannel);
@@ -22193,6 +22370,16 @@ class IFaceLogMultiface : virtual public IFaceLogIf {
       ifaces_[i]->addLogsFull(logBeans, faceBeans, featureImages, token);
     }
     ifaces_[i]->addLogsFull(logBeans, faceBeans, featureImages, token);
+  }
+
+  void addNullDevice(DeviceBean& _return, const int32_t groupId, const std::string& name, const std::string& mac, const std::string& serialNo, const std::string& remark, const Token& token) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->addNullDevice(_return, groupId, name, mac, serialNo, remark, token);
+    }
+    ifaces_[i]->addNullDevice(_return, groupId, name, mac, serialNo, remark, token);
+    return;
   }
 
   void applyAckChannel(std::string& _return, const Token& token) {
@@ -23694,6 +23881,9 @@ class IFaceLogConcurrentClientT : virtual public IFaceLogIf {
   void addLogsFull(const std::vector<LogBean> & logBeans, const std::vector<FaceBean> & faceBeans, const std::vector<std::string> & featureImages, const Token& token);
   int32_t send_addLogsFull(const std::vector<LogBean> & logBeans, const std::vector<FaceBean> & faceBeans, const std::vector<std::string> & featureImages, const Token& token);
   void recv_addLogsFull(const int32_t seqid);
+  void addNullDevice(DeviceBean& _return, const int32_t groupId, const std::string& name, const std::string& mac, const std::string& serialNo, const std::string& remark, const Token& token);
+  int32_t send_addNullDevice(const int32_t groupId, const std::string& name, const std::string& mac, const std::string& serialNo, const std::string& remark, const Token& token);
+  void recv_addNullDevice(DeviceBean& _return, const int32_t seqid);
   void applyAckChannel(std::string& _return, const Token& token);
   int32_t send_applyAckChannel(const Token& token);
   void recv_applyAckChannel(std::string& _return, const int32_t seqid);

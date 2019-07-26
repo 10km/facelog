@@ -367,6 +367,44 @@ public class IFaceLogThriftDecorator {
         }
     }
     /**
+     * @see {@link net.gdface.facelog.IFaceLog#addNullDevice(java.lang.Integer,java.lang.String,java.lang.String,java.lang.String,java.lang.String,net.gdface.facelog.Token)}
+     */
+    @ThriftMethod(value = "addNullDevice" ,exception = {
+                @ThriftException(type=DuplicateRecordException.class, id=1),
+                @ThriftException(type=ServiceRuntimeException.class, id=2)
+                })
+    public DeviceBean addNullDevice(Integer groupId,
+        String name,
+        String mac,
+        String serialNo,
+        String remark,
+        Token token) 
+        throws DuplicateRecordException,ServiceRuntimeException{
+        try{
+            return TypeTransformer.getInstance().to(
+                    delegate().addNullDevice(groupId,
+                name,
+                mac,
+                serialNo,
+                remark,
+                TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.Token.class)),
+                    DeviceBean.class,
+                    DeviceBean.class);
+        }
+        catch(net.gdface.facelog.DuplicateRecordException e){
+            throw new DuplicateRecordException(e);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
      * @see {@link net.gdface.facelog.IFaceLog#applyAckChannel(int,net.gdface.facelog.Token)}
      */
     @ThriftMethod(value = "applyAckChannelWithDuration" )

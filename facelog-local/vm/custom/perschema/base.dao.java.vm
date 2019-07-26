@@ -785,6 +785,31 @@ class BaseDao implements CommonConstant,Constant {
                     throws RuntimeDaoException,ObjectRetrievalException{
         return ${table.getGetManagerMethod()}().loadBy${index.asCamelCaseName()}Checked(#join($indexColumns '$e.varName' ','));
     }
+#if($indexColumns.size() == 1)
+#set ($checkReturnType = $indexColumns[0].javaType)
+#set ($checkReturnComment = "@return always {@code $indexColumns[0].fullVarName} ")
+#else
+#set ($checkReturnType = 'void')
+#set ($checkReturnComment = "")
+#end    
+    //18-8
+    /** 
+     * 检查数据库中是否有(唯一键)相同的记录,如果有则抛出异常
+     * #join($indexColumns '
+     * @param $e.varName $e.remarks' '')
+
+     * @throws DuplicateRecordException if exists duplicated row
+     * @throws RuntimeDaoException
+     */
+    $!{modifier}$checkReturnType daoCheckDuplicate${coreClass}By${index.asCamelCaseName()}(#join($indexColumns '$e.javaType $e.varName' ','))
+                    throws RuntimeDaoException,DuplicateRecordException{
+        if(null != daoGet${coreClass}By${index.asCamelCaseName()}(#join($indexColumns '$e.varName' ','))){
+            throw new DuplicateRecordException();
+        }
+#if($indexColumns.size() == 1)
+        return $indexColumns[0].varName;
+#end
+    }
 #end
 #### 生成 loadByTimestamp方法
 #define($defineLoadByTimestamp)

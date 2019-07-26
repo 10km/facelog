@@ -487,6 +487,46 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
+    public DeviceBean addNullDevice(final Integer groupId,
+        final String name,
+        final String mac,
+        final String serialNo,
+        final String remark,
+        final Token token) 
+        throws DuplicateRecordException{
+        try{
+            return syncCall(new Function<net.gdface.facelog.client.thrift.DeviceBean,DeviceBean>() {
+                @Override
+                public DeviceBean apply(net.gdface.facelog.client.thrift.DeviceBean input) {
+                    return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.DeviceBean.class,
+                    DeviceBean.class);
+                }},
+                new ServiceAsyncCall<net.gdface.facelog.client.thrift.DeviceBean>(){
+                @Override
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<net.gdface.facelog.client.thrift.DeviceBean> nativeCallback){
+                    service.addNullDevice(groupId,name,mac,serialNo,remark,TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                }});
+        }
+        catch(net.gdface.facelog.client.thrift.DuplicateRecordException e){
+            throw TypeTransformer.getInstance().to(
+                    e,
+                    net.gdface.facelog.client.thrift.DuplicateRecordException.class,
+                    DuplicateRecordException.class);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);
+        }
+    }
+    @Override
     public String applyAckChannel(final int duration,
         final Token token) 
         {
