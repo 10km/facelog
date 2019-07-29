@@ -484,46 +484,6 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(addLogs(beans,token), callback);
     }
     /**
-     * see also {@link net.gdface.facelog.IFaceLog#addNullDevice(java.lang.Integer,java.lang.String,java.lang.String,java.lang.String,java.lang.String,net.gdface.facelog.Token)}
-     */
-    public ListenableFuture<DeviceBean> addNullDevice(Integer groupId,
-        String name,
-        String mac,
-        String serialNo,
-        String remark,
-        Token token){
-        MethodCallback<DeviceBean,net.gdface.facelog.client.thrift.DeviceBean> nativeCallback = 
-            new MethodCallback<DeviceBean,net.gdface.facelog.client.thrift.DeviceBean>(
-                new Function<net.gdface.facelog.client.thrift.DeviceBean,DeviceBean>() {
-                        @Override
-                        public DeviceBean apply(net.gdface.facelog.client.thrift.DeviceBean input) {
-                            return TypeTransformer.getInstance().to(
-                    input,
-                    net.gdface.facelog.client.thrift.DeviceBean.class,
-                    DeviceBean.class);
-                }});
-        nativeCallback.service.addNullDevice(
-                groupId,
-            name,
-            mac,
-            serialNo,
-            remark,
-            TypeTransformer.getInstance().to(
-                    token,
-                    Token.class,
-                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
-        return nativeCallback.feature;
-    }
-    public void addNullDevice(Integer groupId,
-        String name,
-        String mac,
-        String serialNo,
-        String remark,
-        Token token,
-        FutureCallback<DeviceBean>callback){
-        factory.addCallback(addNullDevice(groupId,name,mac,serialNo,remark,token), callback);
-    }
-    /**
      * see also {@link net.gdface.facelog.IFaceLog#applyAckChannel(int,net.gdface.facelog.Token)}
      */
     public ListenableFuture<String> applyAckChannel(int duration,

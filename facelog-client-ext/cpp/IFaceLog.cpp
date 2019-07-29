@@ -138,22 +138,6 @@ IFaceLog_addLogsFull_presult::~IFaceLog_addLogsFull_presult() throw() {
 }
 
 
-IFaceLog_addNullDevice_args::~IFaceLog_addNullDevice_args() throw() {
-}
-
-
-IFaceLog_addNullDevice_pargs::~IFaceLog_addNullDevice_pargs() throw() {
-}
-
-
-IFaceLog_addNullDevice_result::~IFaceLog_addNullDevice_result() throw() {
-}
-
-
-IFaceLog_addNullDevice_presult::~IFaceLog_addNullDevice_presult() throw() {
-}
-
-
 IFaceLog_applyAckChannel_args::~IFaceLog_applyAckChannel_args() throw() {
 }
 

@@ -227,7 +227,6 @@ service IFaceLog {
   void addLogFull(1: optional LogBean logBean, 2: optional FaceBean faceBean, 3: optional binary featureImage, 4: optional Token token) throws (1: DuplicateRecordException ex1, 2: ServiceRuntimeException ex2);
   void addLogs(1: optional list<LogBean> beans, 2: optional Token token) throws (1: DuplicateRecordException ex1, 2: ServiceRuntimeException ex2);
   void addLogsFull(1: optional list<LogBean> logBeans, 2: optional list<FaceBean> faceBeans, 3: optional list<binary> featureImages, 4: optional Token token) throws (1: DuplicateRecordException ex1, 2: ServiceRuntimeException ex2);
-  DeviceBean addNullDevice(1: optional i32 groupId, 2: optional string name, 3: optional string mac, 4: optional string serialNo, 5: optional string remark, 6: optional Token token) throws (1: DuplicateRecordException ex1, 2: ServiceRuntimeException ex2);
   string applyAckChannel(1: optional Token token) throws (1: ServiceRuntimeException ex1);
   string applyAckChannelWithDuration(1: required i32 duration, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
   i32 applyCmdSn(1: optional Token token) throws (1: ServiceRuntimeException ex1);

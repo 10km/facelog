@@ -1116,22 +1116,6 @@ public interface IFaceLog{
     public List<Integer> loadPersonGroupIdByWhere(String where);
 
 	/**
-     * 添加一条空的设备记录
-	 * <br>{@code PERSON_ONLY}
-     * @param groupId 所有设备组ID,可为{@code null}
-     * @param name 设备名字,可为{@code null}
-     * @param mac 设备MAC地址,必须为12位16进制(HEX)字符串,如:'d017c2d03fbf'
-     * @param serialNo 设备序列号,可为{@code null}
-     * @param remark 备注,可为{@code null}
-	 * @param token 设备令牌
-     * @return 返回创建设备记录对象
-     * @throws DuplicateRecordException 设备MAC地址重复
-	 */
-	public DeviceBean addNullDevice(Integer groupId, String name, String mac, String serialNo, String remark, Token token)
-			throws DuplicateRecordException;
-
-
-	/**
 	 * 新设备注册,如果设备已经注册则返回注册设备记录<br>
 	 * 注册时必须提供设备MAC地址,是否提供序列号,根据应用需要选择
 	 * @param newDevice 设备记录,_isNew字段必须为{@code true},{@code id}字段不要指定,数据库会自动分配,保存在返回值中

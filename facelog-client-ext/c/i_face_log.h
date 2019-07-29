@@ -26,7 +26,6 @@ struct _IFaceLogIfInterface
   gboolean (*add_log_full) (IFaceLogIf *iface, const LogBean * logBean, const FaceBean * faceBean, const GByteArray * featureImage, const Token * token, DuplicateRecordException ** ex1, ServiceRuntimeException ** ex2, GError **error);
   gboolean (*add_logs) (IFaceLogIf *iface, const GPtrArray * beans, const Token * token, DuplicateRecordException ** ex1, ServiceRuntimeException ** ex2, GError **error);
   gboolean (*add_logs_full) (IFaceLogIf *iface, const GPtrArray * logBeans, const GPtrArray * faceBeans, const GPtrArray * featureImages, const Token * token, DuplicateRecordException ** ex1, ServiceRuntimeException ** ex2, GError **error);
-  gboolean (*add_null_device) (IFaceLogIf *iface, DeviceBean ** _return, const gint32 groupId, const gchar * name, const gchar * mac, const gchar * serialNo, const gchar * remark, const Token * token, DuplicateRecordException ** ex1, ServiceRuntimeException ** ex2, GError **error);
   gboolean (*apply_ack_channel) (IFaceLogIf *iface, gchar ** _return, const Token * token, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*apply_ack_channel_with_duration) (IFaceLogIf *iface, gchar ** _return, const gint32 duration, const Token * token, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*apply_cmd_sn) (IFaceLogIf *iface, gint32* _return, const Token * token, ServiceRuntimeException ** ex1, GError **error);
@@ -196,7 +195,6 @@ gboolean i_face_log_if_add_log (IFaceLogIf *iface, const LogBean * logBean, cons
 gboolean i_face_log_if_add_log_full (IFaceLogIf *iface, const LogBean * logBean, const FaceBean * faceBean, const GByteArray * featureImage, const Token * token, DuplicateRecordException ** ex1, ServiceRuntimeException ** ex2, GError **error);
 gboolean i_face_log_if_add_logs (IFaceLogIf *iface, const GPtrArray * beans, const Token * token, DuplicateRecordException ** ex1, ServiceRuntimeException ** ex2, GError **error);
 gboolean i_face_log_if_add_logs_full (IFaceLogIf *iface, const GPtrArray * logBeans, const GPtrArray * faceBeans, const GPtrArray * featureImages, const Token * token, DuplicateRecordException ** ex1, ServiceRuntimeException ** ex2, GError **error);
-gboolean i_face_log_if_add_null_device (IFaceLogIf *iface, DeviceBean ** _return, const gint32 groupId, const gchar * name, const gchar * mac, const gchar * serialNo, const gchar * remark, const Token * token, DuplicateRecordException ** ex1, ServiceRuntimeException ** ex2, GError **error);
 gboolean i_face_log_if_apply_ack_channel (IFaceLogIf *iface, gchar ** _return, const Token * token, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_if_apply_ack_channel_with_duration (IFaceLogIf *iface, gchar ** _return, const gint32 duration, const Token * token, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_if_apply_cmd_sn (IFaceLogIf *iface, gint32* _return, const Token * token, ServiceRuntimeException ** ex1, GError **error);
@@ -398,9 +396,6 @@ gboolean i_face_log_client_recv_add_logs (IFaceLogIf * iface, DuplicateRecordExc
 gboolean i_face_log_client_add_logs_full (IFaceLogIf * iface, const GPtrArray * logBeans, const GPtrArray * faceBeans, const GPtrArray * featureImages, const Token * token, DuplicateRecordException ** ex1, ServiceRuntimeException ** ex2, GError ** error);
 gboolean i_face_log_client_send_add_logs_full (IFaceLogIf * iface, const GPtrArray * logBeans, const GPtrArray * faceBeans, const GPtrArray * featureImages, const Token * token, GError ** error);
 gboolean i_face_log_client_recv_add_logs_full (IFaceLogIf * iface, DuplicateRecordException ** ex1, ServiceRuntimeException ** ex2, GError ** error);
-gboolean i_face_log_client_add_null_device (IFaceLogIf * iface, DeviceBean ** _return, const gint32 groupId, const gchar * name, const gchar * mac, const gchar * serialNo, const gchar * remark, const Token * token, DuplicateRecordException ** ex1, ServiceRuntimeException ** ex2, GError ** error);
-gboolean i_face_log_client_send_add_null_device (IFaceLogIf * iface, const gint32 groupId, const gchar * name, const gchar * mac, const gchar * serialNo, const gchar * remark, const Token * token, GError ** error);
-gboolean i_face_log_client_recv_add_null_device (IFaceLogIf * iface, DeviceBean ** _return, DuplicateRecordException ** ex1, ServiceRuntimeException ** ex2, GError ** error);
 gboolean i_face_log_client_apply_ack_channel (IFaceLogIf * iface, gchar ** _return, const Token * token, ServiceRuntimeException ** ex1, GError ** error);
 gboolean i_face_log_client_send_apply_ack_channel (IFaceLogIf * iface, const Token * token, GError ** error);
 gboolean i_face_log_client_recv_apply_ack_channel (IFaceLogIf * iface, gchar ** _return, ServiceRuntimeException ** ex1, GError ** error);
@@ -879,7 +874,6 @@ struct _IFaceLogHandlerClass
   gboolean (*add_log_full) (IFaceLogIf *iface, const LogBean * logBean, const FaceBean * faceBean, const GByteArray * featureImage, const Token * token, DuplicateRecordException ** ex1, ServiceRuntimeException ** ex2, GError **error);
   gboolean (*add_logs) (IFaceLogIf *iface, const GPtrArray * beans, const Token * token, DuplicateRecordException ** ex1, ServiceRuntimeException ** ex2, GError **error);
   gboolean (*add_logs_full) (IFaceLogIf *iface, const GPtrArray * logBeans, const GPtrArray * faceBeans, const GPtrArray * featureImages, const Token * token, DuplicateRecordException ** ex1, ServiceRuntimeException ** ex2, GError **error);
-  gboolean (*add_null_device) (IFaceLogIf *iface, DeviceBean ** _return, const gint32 groupId, const gchar * name, const gchar * mac, const gchar * serialNo, const gchar * remark, const Token * token, DuplicateRecordException ** ex1, ServiceRuntimeException ** ex2, GError **error);
   gboolean (*apply_ack_channel) (IFaceLogIf *iface, gchar ** _return, const Token * token, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*apply_ack_channel_with_duration) (IFaceLogIf *iface, gchar ** _return, const gint32 duration, const Token * token, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*apply_cmd_sn) (IFaceLogIf *iface, gint32* _return, const Token * token, ServiceRuntimeException ** ex1, GError **error);
@@ -1051,7 +1045,6 @@ gboolean i_face_log_handler_add_log (IFaceLogIf *iface, const LogBean * logBean,
 gboolean i_face_log_handler_add_log_full (IFaceLogIf *iface, const LogBean * logBean, const FaceBean * faceBean, const GByteArray * featureImage, const Token * token, DuplicateRecordException ** ex1, ServiceRuntimeException ** ex2, GError **error);
 gboolean i_face_log_handler_add_logs (IFaceLogIf *iface, const GPtrArray * beans, const Token * token, DuplicateRecordException ** ex1, ServiceRuntimeException ** ex2, GError **error);
 gboolean i_face_log_handler_add_logs_full (IFaceLogIf *iface, const GPtrArray * logBeans, const GPtrArray * faceBeans, const GPtrArray * featureImages, const Token * token, DuplicateRecordException ** ex1, ServiceRuntimeException ** ex2, GError **error);
-gboolean i_face_log_handler_add_null_device (IFaceLogIf *iface, DeviceBean ** _return, const gint32 groupId, const gchar * name, const gchar * mac, const gchar * serialNo, const gchar * remark, const Token * token, DuplicateRecordException ** ex1, ServiceRuntimeException ** ex2, GError **error);
 gboolean i_face_log_handler_apply_ack_channel (IFaceLogIf *iface, gchar ** _return, const Token * token, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_handler_apply_ack_channel_with_duration (IFaceLogIf *iface, gchar ** _return, const gint32 duration, const Token * token, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_handler_apply_cmd_sn (IFaceLogIf *iface, gint32* _return, const Token * token, ServiceRuntimeException ** ex1, GError **error);

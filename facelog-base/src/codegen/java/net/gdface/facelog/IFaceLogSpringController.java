@@ -323,35 +323,6 @@ public class IFaceLogSpringController {
     }
     // port-9
     /**
-     * 添加一条空的设备记录
-     * <br>{@code PERSON_ONLY}
-     * @param groupId 所有设备组ID,可为{@code null}
-     * @param name 设备名字,可为{@code null}
-     * @param mac 设备MAC地址,必须为12位16进制(HEX)字符串,如:'d017c2d03fbf'
-     * @param serialNo 设备序列号,可为{@code null}
-     * @param remark 备注,可为{@code null}
-     * @param token 设备令牌
-     * @return 返回创建设备记录对象
-     * @throws DuplicateRecordException 设备MAC地址重复
-     */
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/addNullDevice", method = RequestMethod.POST)
-    @ApiOperation(value = "添加一条空的设备记录\n"
-+" <br>{@code PERSON_ONLY}",httpMethod="POST")
-    public Response addNullDevice( @RequestBody AddNullDeviceArgs args) 
-    {
-            Response response = responseFactory.newIFaceLogResponse();
-            try{
-                response.onComplete(delegate().addNullDevice(args.groupId,args.name,args.mac,args.serialNo,args.remark,args.token));
-            }
-            catch(Exception e){
-                logger.error(e.getMessage(),e);
-                response.onError(e);
-            }
-            return response;
-    }
-    // port-10
-    /**
      * 申请一个唯一的命令响应通道<br>
      * <br>{@code PERSON_ONLY}
      * @param duration 通道有效时间(秒) 大于0有效,否则使用默认的有效期
@@ -374,7 +345,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-11
+    // port-10
     /**
      * 申请一个唯一的命令响应通道(默认有效期)<br>
      * <br>{@code PERSON_ONLY}
@@ -397,7 +368,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-12
+    // port-11
     /**
      * 申请一个唯一的命令序列号
      * <br>{@code PERSON_ONLY}
@@ -420,7 +391,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-13
+    // port-12
     /**
      * 申请人员访问令牌
      * @param personId 用户ID
@@ -444,7 +415,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-14
+    // port-13
     /**
      * 申请root访问令牌
      * @param password root用户密码
@@ -467,7 +438,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-15
+    // port-14
     /**
      * 申请person/root访问令牌
      * @param userid 用户ID(为-1时为root)
@@ -492,7 +463,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-16
+    // port-15
     /**
      * 创建管理边界<br>
      * 设置fl_person_group.root_group和fl_device_group.root_group字段互相指向<br>
@@ -523,7 +494,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-17
+    // port-16
     /**
      * 返回(deviceGroupId))指定的fl_device_group记录的所有的子节点(包括自己)<br>
      * 自引用字段:fl_device_group(parent)
@@ -547,7 +518,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-18
+    // port-17
     /**
      * 返回(personGroupId))指定的fl_person_group记录的所有的子节点(包括自己)<br>
      * 自引用字段:fl_person_group(parent)
@@ -571,7 +542,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-19
+    // port-18
     /**
      * 返回满足{@code where} SQL条件语句的fl_device记录总数
      * @param where 'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录
@@ -592,7 +563,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-20
+    // port-19
     /**
      * 返回满足{@code where} SQL条件语句的fl_device_group记录总数
      * @param where 'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录
@@ -613,7 +584,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-21
+    // port-20
     /**
      * 返回满足{@code where}条件的日志记录(fl_log)数目
      * @param where 'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录
@@ -634,7 +605,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-22
+    // port-21
     /**
      * 返回fl_log_light.verify_time 字段大于指定时间戳({@code timestamp})的记录总数
      * @param timestamp 时间戳,{@code yyyy-MM-dd}或{@code yyyy-MM-dd HH:mm:ss}或{@code yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}(ISO8601)格式日期字符串
@@ -656,7 +627,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-23
+    // port-22
     /**
      * 返回fl_log_light.verify_time 字段大于指定时间戳({@code timestamp})的记录总数
      * @param timestamp 时间戳
@@ -678,7 +649,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-24
+    // port-23
     /**
      * 返回符合{@code where}条件的记录条数
      * @param where 'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录
@@ -699,7 +670,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-25
+    // port-24
     /**
      * 返回满足{@code where}条件的日志记录(fl_person)数目
      * @param where 'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录
@@ -720,7 +691,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-26
+    // port-25
     /**
      * 返回满足{@code where} SQL条件语句的 fl_person_group 记录总数
      * @param where 'WHERE'开头的SQL条件语句,为{@code null}或空时加载所有记录
@@ -742,7 +713,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-27
+    // port-26
     /**
      * 删除 personId 关联的所有特征(feature)记录
      * @param personId
@@ -766,7 +737,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-28
+    // port-27
     /**
      * 删除设备id指定的设备记录
      * <br>{@code PERSON_ONLY}
@@ -790,7 +761,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-29
+    // port-28
     /**
      * 删除设备MAC地址指定的设备记录
      * <br>{@code PERSON_ONLY}
@@ -814,7 +785,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-30
+    // port-29
     /**
      * 删除{@code deviceGroupId}指定的设备组<br>
      * 组删除后，所有子节点记录不会被删除，但parent字段会被自动默认为{@code null}
@@ -841,7 +812,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-31
+    // port-30
     /**
      * 删除featureMd5指定的特征记录及关联的face记录
      * @param featureMd5
@@ -864,7 +835,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-32
+    // port-31
     /**
      * 从permit表删除指定{@code deviceGroupId}指定设备组上的人员通行权限
      * @param deviceGroupId
@@ -886,7 +857,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-33
+    // port-32
     /**
      * 删除imageMd5指定图像及其缩略图
      * @param imageMd5
@@ -908,7 +879,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-34
+    // port-33
     /**
      * 删除fl_device_group和fl_person_group之间的MANY TO MANY 联接表(fl_permit)记录<br>
      * @param deviceGroupId 设备组id
@@ -932,7 +903,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-35
+    // port-34
     /**
      * 删除personId指定的人员(person)记录及关联的所有记录
      * <br>{@code PERSON_ONLY}
@@ -956,7 +927,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-36
+    // port-35
     /**
      * 删除papersNum指定的人员(person)记录及关联的所有记录
      * <br>{@code PERSON_ONLY}
@@ -981,7 +952,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-37
+    // port-36
     /**
      * 删除{@code personGroupId}指定的人员组<br>
      * 组删除后，所有子节点记录不会被删除，但parent字段会被自动默认为{@code null}
@@ -1008,7 +979,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-38
+    // port-37
     /**
      * 从permit表删除指定{@code personGroupId}指定人员组的在所有设备上的通行权限
      * @param personGroupId
@@ -1030,7 +1001,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-39
+    // port-38
     /**
      * 删除personIdList指定的人员(person)记录及关联的所有记录
      * <br>{@code PERSON_ONLY}
@@ -1054,7 +1025,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-40
+    // port-39
     /**
      * 删除papersNum指定的人员(person)记录及关联的所有记录
      * <br>{@code PERSON_ONLY}
@@ -1078,7 +1049,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-41
+    // port-40
     /**
      * 设置 personId 指定的人员为禁止状态<br>
      * 将{@code fl_person.expiry_date}设置为昨天
@@ -1108,7 +1079,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-42
+    // port-41
     /**
      * 设置 personIdList 指定的人员为禁止状态
      * <br>{@code PERSON_ONLY}
@@ -1132,7 +1103,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-43
+    // port-42
     /**
      * 判断id指定的设备记录是否存在
      * @param id
@@ -1153,7 +1124,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-44
+    // port-43
     /**
      * 判断md5指定的特征记录是否存在
      * @param md5
@@ -1174,7 +1145,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-45
+    // port-44
     /**
      * 判断{@code md5}指定的图像记录是否存在
      * @param md5 图像的MD5校验码
@@ -1195,7 +1166,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-46
+    // port-45
     /**
      * 判断是否存在personId指定的人员记录
      * @param persionId
@@ -1216,7 +1187,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-47
+    // port-46
     /**
      * 返回{@code deviceId}指定的设备记录
      * @param deviceId
@@ -1237,7 +1208,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-48
+    // port-47
     /**
      * 根据设备MAC地址查找指定的设备记录
      * @param mac
@@ -1258,7 +1229,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-49
+    // port-48
     /**
      * 根据设备组id返回数据库记录
      * @param deviceGroupId
@@ -1280,7 +1251,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-50
+    // port-49
     /**
      * 返回设备组id列表指定的数据库记录
      * @param groupIdList
@@ -1302,7 +1273,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-51
+    // port-50
     /**
      * 返回({@code deviceId})指定的设备所属所有设备组<br>
      * @param deviceId
@@ -1324,7 +1295,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-52
+    // port-51
     /**
      * 从permit表返回允许在{@code personGroupId}指定的人员组通过的所有设备组({@link DeviceGroupBean})的id<br>
      * 不排序,不包含重复id
@@ -1347,7 +1318,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-53
+    // port-52
     /**
      * 从permit表返回允许在{@code personGroupId}指定的人员组通过的所有设备组({@link DeviceGroupBean})的id<br>
      * 不排序,不包含重复id,本方法不会对{@code personGroupId}的父结点向上回溯
@@ -1370,7 +1341,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-54
+    // port-53
     /**
      * 返回featureMd5的人脸特征记录关联的设备id<br>
      * @param featureMd5
@@ -1391,7 +1362,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-55
+    // port-54
     /**
      * 返回 {@code idList} 指定的设备记录
      * @param idList
@@ -1412,7 +1383,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-56
+    // port-55
     /**
      * 返回{@code deviceGroupId}指定的设备组下属的所有设备记录<br>
      * 如果没有下属设备记录则返回空表
@@ -1436,7 +1407,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-57
+    // port-56
     /**
      * 返回faceId指定的人脸信息记录
      * @param faceId
@@ -1457,7 +1428,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-58
+    // port-57
     /**
      * 根据MD5校验码返回人脸特征数据记录
      * @param md5
@@ -1478,7 +1449,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-59
+    // port-58
     /**
      * 根据MD5校验码返回人脸特征数据
      * @param md5
@@ -1499,7 +1470,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-60
+    // port-59
     /**
      * 根据MD5校验码返回人脸特征数据记录
      * @param md5 md5列表
@@ -1520,7 +1491,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-61
+    // port-60
     /**
      * 返回 persionId 关联的指定SDK的人脸特征记录
      * @param personId 人员id(fl_person.id)
@@ -1542,7 +1513,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-62
+    // port-61
     /**
      * 返回指定人员{@code personId}关联的所有特征<br>
      * @param personId
@@ -1563,7 +1534,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-63
+    // port-62
     /**
      * 返回在指定设备上允许通行的所有特征记录<br>
      * 此方法主要设计用于不能通过长连接侦听redis频道的设备(如人脸锁)。
@@ -1590,7 +1561,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-64
+    // port-63
     /**
      * 获取人员组通行权限<br>
      * 返回{@code personGroupId}指定的人员组在{@code deviceId}设备上是否允许通行,
@@ -1621,7 +1592,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-65
+    // port-64
     /**
      * 获取人员组通行权限<br>
      * 返回{@code personGroupId}指定的人员组在{@code deviceGroupId}指定的设备组上是否允许通行,
@@ -1651,7 +1622,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-66
+    // port-65
     /**
      * 参见 {@link #getGroupPermit(int, int)}
      * @param deviceId
@@ -1673,7 +1644,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-67
+    // port-66
     /**
      * 根据图像的MD5校验码返回图像记录
      * @param imageMD5
@@ -1694,7 +1665,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-68
+    // port-67
     /**
      * 根据图像的MD5校验码返回图像数据
      * @param imageMD5
@@ -1715,7 +1686,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-69
+    // port-68
     /**
      * 返回featureMd5的人脸特征记录关联的所有图像记录id(MD5)
      * @param featureMd5 人脸特征id(MD5)
@@ -1736,7 +1707,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-70
+    // port-69
     /**
      * 返回 persionId 关联的所有日志记录
      * @param personId fl_person.id
@@ -1757,7 +1728,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-71
+    // port-70
     /**
      * 返回personId指定的人员记录
      * @param personId
@@ -1778,7 +1749,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-72
+    // port-71
     /**
      * 根据登记的手机号码返回人员记录
      * @param mobilePhone
@@ -1799,7 +1770,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-73
+    // port-72
     /**
      * 根据证件号码返回人员记录
      * @param papersNum
@@ -1820,7 +1791,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-74
+    // port-73
     /**
      * 根据人员组id返回数据库记录
      * @param personGroupId
@@ -1842,7 +1813,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-75
+    // port-74
     /**
      * 返回人员组id列表指定的数据库记录
      * @param groupIdList
@@ -1864,7 +1835,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-76
+    // port-75
     /**
      * 返回({@code personId})指定的人员所属所有人员组<br>
      * @param personId
@@ -1886,7 +1857,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-77
+    // port-76
     /**
      * 从permit表返回允许在{@code deviceGroupId}指定的设备组通过的所有人员组{@link PersonGroupBean}对象的id<br>
      * 不排序,不包含重复id,本方法不会对{@link PersonGroupBean}的父结点向上回溯
@@ -1909,7 +1880,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-78
+    // port-77
     /**
      * 获取人员通行权限<br>
      * 返回{@code personId}指定的人员在{@code deviceId}设备上是否允许通行
@@ -1934,7 +1905,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-79
+    // port-78
     /**
      * 参见 {@link #getPersonPermit(int, int) }
      * @param deviceId
@@ -1956,7 +1927,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-80
+    // port-79
     /**
      * 返回 list 指定的人员记录
      * @param idList 人员id列表
@@ -1977,7 +1948,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-81
+    // port-80
     /**
      * 返回{@code deviceGroupId}指定的人员组下属的所有人员记录<br>
      * 如果没有下属人员记录则返回空表
@@ -2001,7 +1972,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-82
+    // port-81
     /**
      * 返回在指定设备上允许通行的所有人员记录<br>
      * @param deviceId 设备ID
@@ -2025,7 +1996,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-83
+    // port-82
     /**
      * 返回{@code prefix}为前缀的所有参数
      * 非root令牌只能访问指定范围的参数,否则会抛出异常<br>
@@ -2051,7 +2022,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-84
+    // port-83
     /**
      * 返回指定的参数,如果参数没有定义则返回{@code null}<br>
      * 非root令牌只能访问指定范围的参数,否则会抛出异常<br>
@@ -2077,7 +2048,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-85
+    // port-84
     /**
      * 返回redis访问基本参数:<br>
      * <ul>
@@ -2116,7 +2087,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-86
+    // port-85
     /**
      * 获取服务的所有配置参数
      * <br>{@code ROOT_ONLY}
@@ -2139,7 +2110,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-87
+    // port-86
     /**
      * 返回{@code deviceGroupId}指定的设备组下的所有子节点(设备组)<br>
      * 如果没有子节点则返回空表
@@ -2163,7 +2134,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-88
+    // port-87
     /**
      * 返回{@code personGroupId}指定的人员组下的所有子节点(人员组)<br>
      * 如果没有子节点则返回空表
@@ -2187,7 +2158,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-89
+    // port-88
     /**
      * 判断 personId 指定的人员记录是否过期
      * @param personId
@@ -2208,7 +2179,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-90
+    // port-89
     /**
      * 是否为本地实现
      * @return 
@@ -2228,7 +2199,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-91
+    // port-90
     /**
      * 判断命令响应通道是否有效<br>
      * 通道过期或不存在都返回{@code false}
@@ -2251,7 +2222,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-92
+    // port-91
     /**
      * 判断命令序列号是否有效<br>
      * 序列号过期或不存在都返回{@code false}
@@ -2274,7 +2245,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-93
+    // port-92
     /**
      * 验证设备令牌是否有效
      * @param token
@@ -2295,7 +2266,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-94
+    // port-93
     /**
      * 验证用户密码是否匹配
      * @param userId 用户id字符串,root用户id即为{@link CommonConstant#ROOT_NAME}
@@ -2318,7 +2289,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-95
+    // port-94
     /**
      * 验证人员令牌是否有效
      * @param token
@@ -2339,7 +2310,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-96
+    // port-95
     /**
      * 验证root令牌是否有效
      * @param token
@@ -2360,7 +2331,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-97
+    // port-96
     /**
      * 验证令牌是否有效
      * @param token
@@ -2382,7 +2353,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-98
+    // port-97
     /**
      * 验证PERSON/ROOT令牌是否有效
      * @param token
@@ -2404,7 +2375,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-99
+    // port-98
     /**
      * 返回({@code deviceGroupId})指定的fl_device_group记录的所有的父节点(包括自己)<br>
      * 自引用字段:fl_device_group(parent)
@@ -2427,7 +2398,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-100
+    // port-99
     /**
      * 返回({@code personGroupId})指定的fl_person_group记录的所有的父节点(包括自己)<br>
      * 自引用字段:fl_person_group(parent)
@@ -2450,7 +2421,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-101
+    // port-100
     /**
      * 返回所有人员记录
      * @return 
@@ -2470,7 +2441,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-102
+    // port-101
     /**
      * 根据{@code where}指定的查询条件查询设备记录
      * @param where 'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录
@@ -2493,7 +2464,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-103
+    // port-102
     /**
      * 查询{@code where} SQL条件语句指定的记录
      * @param where 'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录
@@ -2516,7 +2487,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-104
+    // port-103
     /**
      * 查询{@code where}条件指定的记录
      * @param where 'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录
@@ -2538,7 +2509,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-105
+    // port-104
     /**
      * 根据{@code where}指定的查询条件查询设备记录
      * @param where 'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录
@@ -2559,7 +2530,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-106
+    // port-105
     /**
      * 查询 {@code table}表的名为{@code column}类型为{@link Integer}类型的字段数据
      * @param table 数据库表名
@@ -2582,7 +2553,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-107
+    // port-106
     /**
      * 查询 {@code table}表的名为{@code column}类型为字段数据,将字段值转为{@link String}类型返回
      * @param table 数据库表名
@@ -2605,7 +2576,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-108
+    // port-107
     /**
      * (主动更新机制实现)<br>
      * 返回 fl_feature.update_time 字段大于指定时间戳( {@code timestamp} )的所有fl_feature记录
@@ -2628,7 +2599,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-109
+    // port-108
     /**
      * (主动更新机制实现)<br>
      * 返回 fl_feature.update_time 字段大于指定时间戳( {@code timestamp} )的所有fl_feature记录
@@ -2651,7 +2622,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-110
+    // port-109
     /**
      * 日志查询<br>
      * 根据{@code where}指定的查询条件查询日志记录
@@ -2676,7 +2647,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-111
+    // port-110
     /**
      * (主动更新机制实现)<br>
      * 返回 fl_log_light.verify_time 字段大于指定时间戳({@code timestamp})的所有记录
@@ -2700,7 +2671,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-112
+    // port-111
     /**
      * (主动更新机制实现)<br>
      * 返回 fl_log_light.verify_time 字段大于指定时间戳({@code timestamp})的所有记录
@@ -2724,7 +2695,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-113
+    // port-112
     /**
      * 日志查询<br>
      * 根据{@code where}指定的查询条件查询日志记录{@link LogLightBean}
@@ -2749,7 +2720,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-114
+    // port-113
     /**
      * (主动更新机制实现)<br>
      * 返回 fl_permit.create_time 字段大于指定时间戳( {@code timestamp} )的所有fl_permit记录
@@ -2772,7 +2743,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-115
+    // port-114
     /**
      * (主动更新机制实现)<br>
      * 返回 fl_permit.create_time 字段大于指定时间戳( {@code timestamp} )的所有fl_permit记录
@@ -2795,7 +2766,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-116
+    // port-115
     /**
      * 返回 where 指定的所有人员记录
      * @param where 'WHERE'开头的SQL条件语句,为{@code null}或空时加载所有记录
@@ -2818,7 +2789,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-117
+    // port-116
     /**
      * 查询{@code where} SQL条件语句指定的记录
      * @param where 'WHERE'开头的SQL条件语句,为{@code null}或空时加载所有记录
@@ -2841,7 +2812,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-118
+    // port-117
     /**
      * 查询{@code where}条件指定的记录
      * @param where 'WHERE'开头的SQL条件语句,为{@code null}或空时加载所有记录
@@ -2863,7 +2834,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-119
+    // port-118
     /**
      * (主动更新机制实现)<br>
      * 返回 fl_person.update_time 字段大于指定时间戳( {@code timestamp} )的所有fl_person记录
@@ -2886,7 +2857,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-120
+    // port-119
     /**
      * (主动更新机制实现)<br>
      * 返回 fl_person.update_time 字段大于指定时间戳( {@code timestamp} )的所有fl_person记录
@@ -2909,7 +2880,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-121
+    // port-120
     /**
      * 返回 where 指定的所有人员记录
      * @param where 'WHERE'开头的SQL条件语句,为{@code null}或空时加载所有记录
@@ -2930,7 +2901,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-122
+    // port-121
     /**
      * (主动更新机制实现)<br>
      * 返回fl_person.update_time字段大于指定时间戳( {@code timestamp} )的所有fl_person记录<br>
@@ -2955,7 +2926,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-123
+    // port-122
     /**
      * (主动更新机制实现)<br>
      * 返回fl_person.update_time字段大于指定时间戳( {@code timestamp} )的所有fl_person记录<br>
@@ -2980,7 +2951,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-124
+    // port-123
     /**
      * 设备申请离线,删除设备令牌
      * <br>{@code DEVICE_ONLY}
@@ -3004,7 +2975,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-125
+    // port-124
     /**
      * 设备申请上线,每次调用都会产生一个新的令牌
      * @param device 上线设备信息，必须提供{@code id, mac, serialNo}字段
@@ -3026,7 +2997,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-126
+    // port-125
     /**
      * 新设备注册,如果设备已经注册则返回注册设备记录<br>
      * 注册时必须提供设备MAC地址,是否提供序列号,根据应用需要选择
@@ -3050,7 +3021,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-127
+    // port-126
     /**
      * 释放人员访问令牌
      * <br>{@code PERSON_ONLY}
@@ -3074,7 +3045,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-128
+    // port-127
     /**
      * 释放root访问令牌
      * <br>{@code ROOT_ONLY}
@@ -3098,7 +3069,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-129
+    // port-128
     /**
      * 释放person/root访问令牌
      * @param token 要释放的令牌,如果令牌类型非{@link net.gdface.facelog.Token.TokenType#PERSON}或{@link net.gdface.facelog.Token.TokenType#ROOT}则抛出{@link ServiceSecurityException}异常
@@ -3121,7 +3092,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-130
+    // port-129
     /**
      * 替换personId指定的人员记录的人脸特征数据,同时删除原特征数据记录(fl_feature)及关联的fl_face表记录
      * @param personId 人员记录id,{@code fl_person.id}
@@ -3145,7 +3116,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-131
+    // port-130
     /**
      * 返回deviceId所属的管理边界设备组id<br>
      * 在deviceId所属组的所有父节点中自顶向下查找第一个{@code fl_device_group.root_group}字段不为空的组，返回此记录id<br>
@@ -3170,7 +3141,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-132
+    // port-131
     /**
      * 返回personId所属的管理边界人员组id<br>
      * 在personId所属组的所有父节点中自顶向下查找第一个{@code fl_person_group.root_group}字段不为空的人员组，返回此记录组id<br>
@@ -3195,7 +3166,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-133
+    // port-132
     /**
      * (异步)执行cmdpath指定的设备命令<br>
      * <br>{@code PERSON_ONLY}
@@ -3223,7 +3194,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-134
+    // port-133
     /**
      * (异步)执行cmdpath指定的任务<br>
      * <br>{@code PERSON_ONLY}
@@ -3250,7 +3221,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-135
+    // port-134
     /**
      * 保存设备记录
      * <br>{@code PERSON_ONLY}
@@ -3274,7 +3245,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-136
+    // port-135
     /**
      * 保存设备组记录
      * <br>{@code PERSON_ONLY}
@@ -3299,7 +3270,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-137
+    // port-136
     /**
      * 如果记录不存在则创建deviceGroupId和personGroupId之间的MANY TO MANY 联接表(fl_permit)记录,
      * 否则修改指定记录的通行时间安排表<br>
@@ -3327,7 +3298,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-138
+    // port-137
     /**
      * 保存通行权限(permit)记录
      * <br>{@code PERSON_ONLY}
@@ -3351,7 +3322,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-139
+    // port-138
     /**
      * 保存人员信息记录<br>
      * @param personBean 人员信息对象,{@code fl_person}表记录
@@ -3378,7 +3349,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-140
+    // port-139
     /**
      * 保存人员信息记录<br>
      * {@code photos}与{@code faces}为提取特征{@code feature}的人脸照片对应的人脸位置对象，必须一一对应,
@@ -3409,7 +3380,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-141
+    // port-140
     /**
      * 保存人员信息记录
      * @param personBean {@code fl_person}表记录
@@ -3435,7 +3406,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-142
+    // port-141
     /**
      * 保存人员信息记录
      * @param personBean {@code fl_person}表记录
@@ -3458,7 +3429,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-143
+    // port-142
     /**
      * 保存人员信息记录
      * @param personBean {@code fl_person}表记录
@@ -3482,7 +3453,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-144
+    // port-143
     /**
      * 保存人员信息记录
      * @param personBean {@code fl_person}表记录
@@ -3506,7 +3477,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-145
+    // port-144
     /**
      * 保存人员(person)记录
      * @param personBean {@code fl_person}表记录
@@ -3528,7 +3499,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-146
+    // port-145
     /**
      * 保存人员组记录
      * <br>{@code PERSON_ONLY}
@@ -3553,7 +3524,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-147
+    // port-146
     /**
      * 保存人员信息记录(包含标准照)<br>
      * 每一张照片对应一个{@code PersonBean}记录, {@code photos}元素不可重复
@@ -3582,7 +3553,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-148
+    // port-147
     /**
      * 保存人员(person)记录
      * <br>{@code PERSON_ONLY}
@@ -3606,7 +3577,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-149
+    // port-148
     /**
      * 配置参数持久化<br>
      * 保存修改的配置到自定义配置文件
@@ -3631,7 +3602,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-150
+    // port-149
     /**
      * 返回sdk任务队列名
      * @param task 任务名,可选值:{@link CommonConstant#TASK_FACEAPI_BASE},{@link CommonConstant#TASK_REGISTER_BASE}
@@ -3654,7 +3625,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-151
+    // port-150
     /**
      * 修改 personId 指定的人员记录的有效期
      * <br>{@code PERSON_ONLY}
@@ -3679,7 +3650,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-152
+    // port-151
     /**
      * 修改 personId 指定的人员记录的有效期
      * <br>{@code PERSON_ONLY}
@@ -3704,7 +3675,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-153
+    // port-152
     /**
      * 修改 personIdList 指定的人员记录的有效期
      * <br>{@code PERSON_ONLY}
@@ -3730,7 +3701,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-154
+    // port-153
     /**
      * 修改一组配置参数
      * <br>{@code ROOT_ONLY}
@@ -3754,7 +3725,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-155
+    // port-154
     /**
      * 修改/增加指定的配置参数
      * <br>{@code ROOT_ONLY}
@@ -3779,7 +3750,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-156
+    // port-155
     /**
      * 根据任务名返回redis队列名
      * @param task 任务名
@@ -3801,7 +3772,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-157
+    // port-156
     /**
      * 删除管理边界<br>
      * 删除fl_person_group.root_group和fl_device_group.root_group字段的互相指向,设置为{@code null},
@@ -3834,7 +3805,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-158
+    // port-157
     /**
      * (设备端)删除当前设备<br>
      * 从fl_device表中删除当前设备记录
@@ -3860,7 +3831,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-159
+    // port-158
     /**
      * 更新设备记录(必须是已经存在的设备记录，否则抛出异常)
      * @param deviceBean
@@ -3882,7 +3853,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-160
+    // port-159
     /**
      * 返回服务版本号
      * @return 
@@ -3902,7 +3873,7 @@ public class IFaceLogSpringController {
             }
             return response;
     }
-    // port-161
+    // port-160
     /**
      * 返回服务版本的详细信息<br>
      * <ul>
@@ -4055,24 +4026,6 @@ public class IFaceLogSpringController {
     }
     /**
      * argClass-9<br>
-     * wrap arguments for method {@link #addNullDevice(AddNullDeviceArgs)}
-     */
-    public static class AddNullDeviceArgs{
-        @ApiModelProperty(value ="所有设备组ID,可为{@code null}" ,required=true ,dataType="Integer")
-        public Integer groupId;
-        @ApiModelProperty(value ="设备名字,可为{@code null}" ,required=true ,dataType="String")
-        public String name;
-        @ApiModelProperty(value ="设备MAC地址,必须为12位16进制(HEX)字符串,如:'d017c2d03fbf'" ,required=true ,dataType="String")
-        public String mac;
-        @ApiModelProperty(value ="设备序列号,可为{@code null}" ,required=true ,dataType="String")
-        public String serialNo;
-        @ApiModelProperty(value ="备注,可为{@code null}" ,required=true ,dataType="String")
-        public String remark;
-        @ApiModelProperty(value ="设备令牌" ,required=true ,dataType="Token")
-        public Token token;
-    }
-    /**
-     * argClass-10<br>
      * wrap arguments for method {@link #applyAckChannel(ApplyAckChannelWithDurationArgs)}
      */
     public static class ApplyAckChannelWithDurationArgs{
@@ -4082,7 +4035,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-11<br>
+     * argClass-10<br>
      * wrap arguments for method {@link #applyAckChannel(ApplyAckChannelArgs)}
      */
     public static class ApplyAckChannelArgs{
@@ -4090,7 +4043,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-12<br>
+     * argClass-11<br>
      * wrap arguments for method {@link #applyCmdSn(ApplyCmdSnArgs)}
      */
     public static class ApplyCmdSnArgs{
@@ -4098,7 +4051,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-13<br>
+     * argClass-12<br>
      * wrap arguments for method {@link #applyPersonToken(ApplyPersonTokenArgs)}
      */
     public static class ApplyPersonTokenArgs{
@@ -4110,7 +4063,7 @@ public class IFaceLogSpringController {
         public boolean isMd5;
     }
     /**
-     * argClass-14<br>
+     * argClass-13<br>
      * wrap arguments for method {@link #applyRootToken(ApplyRootTokenArgs)}
      */
     public static class ApplyRootTokenArgs{
@@ -4120,7 +4073,7 @@ public class IFaceLogSpringController {
         public boolean isMd5;
     }
     /**
-     * argClass-15<br>
+     * argClass-14<br>
      * wrap arguments for method {@link #applyUserToken(ApplyUserTokenArgs)}
      */
     public static class ApplyUserTokenArgs{
@@ -4132,7 +4085,7 @@ public class IFaceLogSpringController {
         public boolean isMd5;
     }
     /**
-     * argClass-16<br>
+     * argClass-15<br>
      * wrap arguments for method {@link #bindBorder(BindBorderArgs)}
      */
     public static class BindBorderArgs{
@@ -4144,7 +4097,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-17<br>
+     * argClass-16<br>
      * wrap arguments for method {@link #childListForDeviceGroup(ChildListForDeviceGroupArgs)}
      */
     public static class ChildListForDeviceGroupArgs{
@@ -4152,7 +4105,7 @@ public class IFaceLogSpringController {
         public int deviceGroupId;
     }
     /**
-     * argClass-18<br>
+     * argClass-17<br>
      * wrap arguments for method {@link #childListForPersonGroup(ChildListForPersonGroupArgs)}
      */
     public static class ChildListForPersonGroupArgs{
@@ -4160,7 +4113,7 @@ public class IFaceLogSpringController {
         public int personGroupId;
     }
     /**
-     * argClass-19<br>
+     * argClass-18<br>
      * wrap arguments for method {@link #countDeviceByWhere(CountDeviceByWhereArgs)}
      */
     public static class CountDeviceByWhereArgs{
@@ -4168,7 +4121,7 @@ public class IFaceLogSpringController {
         public String where;
     }
     /**
-     * argClass-20<br>
+     * argClass-19<br>
      * wrap arguments for method {@link #countDeviceGroupByWhere(CountDeviceGroupByWhereArgs)}
      */
     public static class CountDeviceGroupByWhereArgs{
@@ -4176,7 +4129,7 @@ public class IFaceLogSpringController {
         public String where;
     }
     /**
-     * argClass-21<br>
+     * argClass-20<br>
      * wrap arguments for method {@link #countLogByWhere(CountLogByWhereArgs)}
      */
     public static class CountLogByWhereArgs{
@@ -4184,7 +4137,7 @@ public class IFaceLogSpringController {
         public String where;
     }
     /**
-     * argClass-22<br>
+     * argClass-21<br>
      * wrap arguments for method {@link #countLogLightByVerifyTime(CountLogLightByVerifyTimeTimestrArgs)}
      */
     public static class CountLogLightByVerifyTimeTimestrArgs{
@@ -4192,7 +4145,7 @@ public class IFaceLogSpringController {
         public String timestamp;
     }
     /**
-     * argClass-23<br>
+     * argClass-22<br>
      * wrap arguments for method {@link #countLogLightByVerifyTime(CountLogLightByVerifyTimeArgs)}
      */
     public static class CountLogLightByVerifyTimeArgs{
@@ -4200,7 +4153,7 @@ public class IFaceLogSpringController {
         public long timestamp;
     }
     /**
-     * argClass-24<br>
+     * argClass-23<br>
      * wrap arguments for method {@link #countLogLightByWhere(CountLogLightByWhereArgs)}
      */
     public static class CountLogLightByWhereArgs{
@@ -4208,7 +4161,7 @@ public class IFaceLogSpringController {
         public String where;
     }
     /**
-     * argClass-25<br>
+     * argClass-24<br>
      * wrap arguments for method {@link #countPersonByWhere(CountPersonByWhereArgs)}
      */
     public static class CountPersonByWhereArgs{
@@ -4216,7 +4169,7 @@ public class IFaceLogSpringController {
         public String where;
     }
     /**
-     * argClass-26<br>
+     * argClass-25<br>
      * wrap arguments for method {@link #countPersonGroupByWhere(CountPersonGroupByWhereArgs)}
      */
     public static class CountPersonGroupByWhereArgs{
@@ -4224,7 +4177,7 @@ public class IFaceLogSpringController {
         public String where;
     }
     /**
-     * argClass-27<br>
+     * argClass-26<br>
      * wrap arguments for method {@link #deleteAllFeaturesByPersonId(DeleteAllFeaturesByPersonIdArgs)}
      */
     public static class DeleteAllFeaturesByPersonIdArgs{
@@ -4236,7 +4189,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-28<br>
+     * argClass-27<br>
      * wrap arguments for method {@link #deleteDevice(DeleteDeviceArgs)}
      */
     public static class DeleteDeviceArgs{
@@ -4246,7 +4199,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-29<br>
+     * argClass-28<br>
      * wrap arguments for method {@link #deleteDeviceByMac(DeleteDeviceByMacArgs)}
      */
     public static class DeleteDeviceByMacArgs{
@@ -4256,7 +4209,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-30<br>
+     * argClass-29<br>
      * wrap arguments for method {@link #deleteDeviceGroup(DeleteDeviceGroupArgs)}
      */
     public static class DeleteDeviceGroupArgs{
@@ -4266,7 +4219,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-31<br>
+     * argClass-30<br>
      * wrap arguments for method {@link #deleteFeature(DeleteFeatureArgs)}
      */
     public static class DeleteFeatureArgs{
@@ -4278,7 +4231,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-32<br>
+     * argClass-31<br>
      * wrap arguments for method {@link #deleteGroupPermitOnDeviceGroup(DeleteGroupPermitOnDeviceGroupArgs)}
      */
     public static class DeleteGroupPermitOnDeviceGroupArgs{
@@ -4288,7 +4241,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-33<br>
+     * argClass-32<br>
      * wrap arguments for method {@link #deleteImage(DeleteImageArgs)}
      */
     public static class DeleteImageArgs{
@@ -4298,7 +4251,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-34<br>
+     * argClass-33<br>
      * wrap arguments for method {@link #deletePermit(DeletePermitByIdArgs)}
      */
     public static class DeletePermitByIdArgs{
@@ -4310,7 +4263,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-35<br>
+     * argClass-34<br>
      * wrap arguments for method {@link #deletePerson(DeletePersonArgs)}
      */
     public static class DeletePersonArgs{
@@ -4320,7 +4273,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-36<br>
+     * argClass-35<br>
      * wrap arguments for method {@link #deletePersonByPapersNum(DeletePersonByPapersNumArgs)}
      */
     public static class DeletePersonByPapersNumArgs{
@@ -4330,7 +4283,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-37<br>
+     * argClass-36<br>
      * wrap arguments for method {@link #deletePersonGroup(DeletePersonGroupArgs)}
      */
     public static class DeletePersonGroupArgs{
@@ -4340,7 +4293,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-38<br>
+     * argClass-37<br>
      * wrap arguments for method {@link #deletePersonGroupPermit(DeletePersonGroupPermitArgs)}
      */
     public static class DeletePersonGroupPermitArgs{
@@ -4350,7 +4303,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-39<br>
+     * argClass-38<br>
      * wrap arguments for method {@link #deletePersons(DeletePersonsArgs)}
      */
     public static class DeletePersonsArgs{
@@ -4360,7 +4313,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-40<br>
+     * argClass-39<br>
      * wrap arguments for method {@link #deletePersonsByPapersNum(DeletePersonsByPapersNumArgs)}
      */
     public static class DeletePersonsByPapersNumArgs{
@@ -4370,7 +4323,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-41<br>
+     * argClass-40<br>
      * wrap arguments for method {@link #disablePerson(DisablePersonArgs)}
      */
     public static class DisablePersonArgs{
@@ -4388,7 +4341,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-42<br>
+     * argClass-41<br>
      * wrap arguments for method {@link #disablePerson(DisablePersonListArgs)}
      */
     public static class DisablePersonListArgs{
@@ -4398,7 +4351,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-43<br>
+     * argClass-42<br>
      * wrap arguments for method {@link #existsDevice(ExistsDeviceArgs)}
      */
     public static class ExistsDeviceArgs{
@@ -4406,7 +4359,7 @@ public class IFaceLogSpringController {
         public int id;
     }
     /**
-     * argClass-44<br>
+     * argClass-43<br>
      * wrap arguments for method {@link #existsFeature(ExistsFeatureArgs)}
      */
     public static class ExistsFeatureArgs{
@@ -4414,7 +4367,7 @@ public class IFaceLogSpringController {
         public String md5;
     }
     /**
-     * argClass-45<br>
+     * argClass-44<br>
      * wrap arguments for method {@link #existsImage(ExistsImageArgs)}
      */
     public static class ExistsImageArgs{
@@ -4422,7 +4375,7 @@ public class IFaceLogSpringController {
         public String md5;
     }
     /**
-     * argClass-46<br>
+     * argClass-45<br>
      * wrap arguments for method {@link #existsPerson(ExistsPersonArgs)}
      */
     public static class ExistsPersonArgs{
@@ -4430,7 +4383,7 @@ public class IFaceLogSpringController {
         public int persionId;
     }
     /**
-     * argClass-47<br>
+     * argClass-46<br>
      * wrap arguments for method {@link #getDevice(GetDeviceArgs)}
      */
     public static class GetDeviceArgs{
@@ -4438,7 +4391,7 @@ public class IFaceLogSpringController {
         public int deviceId;
     }
     /**
-     * argClass-48<br>
+     * argClass-47<br>
      * wrap arguments for method {@link #getDeviceByMac(GetDeviceByMacArgs)}
      */
     public static class GetDeviceByMacArgs{
@@ -4446,7 +4399,7 @@ public class IFaceLogSpringController {
         public String mac;
     }
     /**
-     * argClass-49<br>
+     * argClass-48<br>
      * wrap arguments for method {@link #getDeviceGroup(GetDeviceGroupArgs)}
      */
     public static class GetDeviceGroupArgs{
@@ -4454,7 +4407,7 @@ public class IFaceLogSpringController {
         public int deviceGroupId;
     }
     /**
-     * argClass-50<br>
+     * argClass-49<br>
      * wrap arguments for method {@link #getDeviceGroups(GetDeviceGroupsArgs)}
      */
     public static class GetDeviceGroupsArgs{
@@ -4462,7 +4415,7 @@ public class IFaceLogSpringController {
         public List<Integer> groupIdList;
     }
     /**
-     * argClass-51<br>
+     * argClass-50<br>
      * wrap arguments for method {@link #getDeviceGroupsBelongs(GetDeviceGroupsBelongsArgs)}
      */
     public static class GetDeviceGroupsBelongsArgs{
@@ -4470,7 +4423,7 @@ public class IFaceLogSpringController {
         public int deviceId;
     }
     /**
-     * argClass-52<br>
+     * argClass-51<br>
      * wrap arguments for method {@link #getDeviceGroupsPermit(GetDeviceGroupsPermitArgs)}
      */
     public static class GetDeviceGroupsPermitArgs{
@@ -4478,7 +4431,7 @@ public class IFaceLogSpringController {
         public int personGroupId;
     }
     /**
-     * argClass-53<br>
+     * argClass-52<br>
      * wrap arguments for method {@link #getDeviceGroupsPermittedBy(GetDeviceGroupsPermittedByArgs)}
      */
     public static class GetDeviceGroupsPermittedByArgs{
@@ -4486,7 +4439,7 @@ public class IFaceLogSpringController {
         public int personGroupId;
     }
     /**
-     * argClass-54<br>
+     * argClass-53<br>
      * wrap arguments for method {@link #getDeviceIdOfFeature(GetDeviceIdOfFeatureArgs)}
      */
     public static class GetDeviceIdOfFeatureArgs{
@@ -4494,7 +4447,7 @@ public class IFaceLogSpringController {
         public String featureMd5;
     }
     /**
-     * argClass-55<br>
+     * argClass-54<br>
      * wrap arguments for method {@link #getDevices(GetDevicesArgs)}
      */
     public static class GetDevicesArgs{
@@ -4502,7 +4455,7 @@ public class IFaceLogSpringController {
         public List<Integer> idList;
     }
     /**
-     * argClass-56<br>
+     * argClass-55<br>
      * wrap arguments for method {@link #getDevicesOfGroup(GetDevicesOfGroupArgs)}
      */
     public static class GetDevicesOfGroupArgs{
@@ -4510,7 +4463,7 @@ public class IFaceLogSpringController {
         public int deviceGroupId;
     }
     /**
-     * argClass-57<br>
+     * argClass-56<br>
      * wrap arguments for method {@link #getFace(GetFaceArgs)}
      */
     public static class GetFaceArgs{
@@ -4518,7 +4471,7 @@ public class IFaceLogSpringController {
         public int faceId;
     }
     /**
-     * argClass-58<br>
+     * argClass-57<br>
      * wrap arguments for method {@link #getFeature(GetFeatureArgs)}
      */
     public static class GetFeatureArgs{
@@ -4526,7 +4479,7 @@ public class IFaceLogSpringController {
         public String md5;
     }
     /**
-     * argClass-59<br>
+     * argClass-58<br>
      * wrap arguments for method {@link #getFeatureBytes(GetFeatureBytesArgs)}
      */
     public static class GetFeatureBytesArgs{
@@ -4534,7 +4487,7 @@ public class IFaceLogSpringController {
         public String md5;
     }
     /**
-     * argClass-60<br>
+     * argClass-59<br>
      * wrap arguments for method {@link #getFeatures(GetFeaturesArgs)}
      */
     public static class GetFeaturesArgs{
@@ -4542,7 +4495,7 @@ public class IFaceLogSpringController {
         public List<String> md5;
     }
     /**
-     * argClass-61<br>
+     * argClass-60<br>
      * wrap arguments for method {@link #getFeaturesByPersonIdAndSdkVersion(GetFeaturesByPersonIdAndSdkVersionArgs)}
      */
     public static class GetFeaturesByPersonIdAndSdkVersionArgs{
@@ -4552,7 +4505,7 @@ public class IFaceLogSpringController {
         public String sdkVersion;
     }
     /**
-     * argClass-62<br>
+     * argClass-61<br>
      * wrap arguments for method {@link #getFeaturesOfPerson(GetFeaturesOfPersonArgs)}
      */
     public static class GetFeaturesOfPersonArgs{
@@ -4560,7 +4513,7 @@ public class IFaceLogSpringController {
         public int personId;
     }
     /**
-     * argClass-63<br>
+     * argClass-62<br>
      * wrap arguments for method {@link #getFeaturesPermittedOnDevice(GetFeaturesPermittedOnDeviceArgs)}
      */
     public static class GetFeaturesPermittedOnDeviceArgs{
@@ -4576,7 +4529,7 @@ public class IFaceLogSpringController {
         public Long timestamp;
     }
     /**
-     * argClass-64<br>
+     * argClass-63<br>
      * wrap arguments for method {@link #getGroupPermit(GetGroupPermitArgs)}
      */
     public static class GetGroupPermitArgs{
@@ -4586,7 +4539,7 @@ public class IFaceLogSpringController {
         public int personGroupId;
     }
     /**
-     * argClass-65<br>
+     * argClass-64<br>
      * wrap arguments for method {@link #getGroupPermitOnDeviceGroup(GetGroupPermitOnDeviceGroupArgs)}
      */
     public static class GetGroupPermitOnDeviceGroupArgs{
@@ -4596,7 +4549,7 @@ public class IFaceLogSpringController {
         public int personGroupId;
     }
     /**
-     * argClass-66<br>
+     * argClass-65<br>
      * wrap arguments for method {@link #getGroupPermits(GetGroupPermitsArgs)}
      */
     public static class GetGroupPermitsArgs{
@@ -4606,7 +4559,7 @@ public class IFaceLogSpringController {
         public List<Integer> personGroupIdList;
     }
     /**
-     * argClass-67<br>
+     * argClass-66<br>
      * wrap arguments for method {@link #getImage(GetImageArgs)}
      */
     public static class GetImageArgs{
@@ -4614,7 +4567,7 @@ public class IFaceLogSpringController {
         public String imageMD5;
     }
     /**
-     * argClass-68<br>
+     * argClass-67<br>
      * wrap arguments for method {@link #getImageBytes(GetImageBytesArgs)}
      */
     public static class GetImageBytesArgs{
@@ -4622,7 +4575,7 @@ public class IFaceLogSpringController {
         public String imageMD5;
     }
     /**
-     * argClass-69<br>
+     * argClass-68<br>
      * wrap arguments for method {@link #getImagesAssociatedByFeature(GetImagesAssociatedByFeatureArgs)}
      */
     public static class GetImagesAssociatedByFeatureArgs{
@@ -4630,7 +4583,7 @@ public class IFaceLogSpringController {
         public String featureMd5;
     }
     /**
-     * argClass-70<br>
+     * argClass-69<br>
      * wrap arguments for method {@link #getLogBeansByPersonId(GetLogBeansByPersonIdArgs)}
      */
     public static class GetLogBeansByPersonIdArgs{
@@ -4638,7 +4591,7 @@ public class IFaceLogSpringController {
         public int personId;
     }
     /**
-     * argClass-71<br>
+     * argClass-70<br>
      * wrap arguments for method {@link #getPerson(GetPersonArgs)}
      */
     public static class GetPersonArgs{
@@ -4646,7 +4599,7 @@ public class IFaceLogSpringController {
         public int personId;
     }
     /**
-     * argClass-72<br>
+     * argClass-71<br>
      * wrap arguments for method {@link #getPersonByMobilePhone(GetPersonByMobilePhoneArgs)}
      */
     public static class GetPersonByMobilePhoneArgs{
@@ -4654,7 +4607,7 @@ public class IFaceLogSpringController {
         public String mobilePhone;
     }
     /**
-     * argClass-73<br>
+     * argClass-72<br>
      * wrap arguments for method {@link #getPersonByPapersNum(GetPersonByPapersNumArgs)}
      */
     public static class GetPersonByPapersNumArgs{
@@ -4662,7 +4615,7 @@ public class IFaceLogSpringController {
         public String papersNum;
     }
     /**
-     * argClass-74<br>
+     * argClass-73<br>
      * wrap arguments for method {@link #getPersonGroup(GetPersonGroupArgs)}
      */
     public static class GetPersonGroupArgs{
@@ -4670,7 +4623,7 @@ public class IFaceLogSpringController {
         public int personGroupId;
     }
     /**
-     * argClass-75<br>
+     * argClass-74<br>
      * wrap arguments for method {@link #getPersonGroups(GetPersonGroupsArgs)}
      */
     public static class GetPersonGroupsArgs{
@@ -4678,7 +4631,7 @@ public class IFaceLogSpringController {
         public List<Integer> groupIdList;
     }
     /**
-     * argClass-76<br>
+     * argClass-75<br>
      * wrap arguments for method {@link #getPersonGroupsBelongs(GetPersonGroupsBelongsArgs)}
      */
     public static class GetPersonGroupsBelongsArgs{
@@ -4686,7 +4639,7 @@ public class IFaceLogSpringController {
         public int personId;
     }
     /**
-     * argClass-77<br>
+     * argClass-76<br>
      * wrap arguments for method {@link #getPersonGroupsPermittedBy(GetPersonGroupsPermittedByArgs)}
      */
     public static class GetPersonGroupsPermittedByArgs{
@@ -4694,7 +4647,7 @@ public class IFaceLogSpringController {
         public int deviceGroupId;
     }
     /**
-     * argClass-78<br>
+     * argClass-77<br>
      * wrap arguments for method {@link #getPersonPermit(GetPersonPermitArgs)}
      */
     public static class GetPersonPermitArgs{
@@ -4704,7 +4657,7 @@ public class IFaceLogSpringController {
         public int personId;
     }
     /**
-     * argClass-79<br>
+     * argClass-78<br>
      * wrap arguments for method {@link #getPersonPermits(GetPersonPermitsArgs)}
      */
     public static class GetPersonPermitsArgs{
@@ -4714,7 +4667,7 @@ public class IFaceLogSpringController {
         public List<Integer> personIdList;
     }
     /**
-     * argClass-80<br>
+     * argClass-79<br>
      * wrap arguments for method {@link #getPersons(GetPersonsArgs)}
      */
     public static class GetPersonsArgs{
@@ -4722,7 +4675,7 @@ public class IFaceLogSpringController {
         public List<Integer> idList;
     }
     /**
-     * argClass-81<br>
+     * argClass-80<br>
      * wrap arguments for method {@link #getPersonsOfGroup(GetPersonsOfGroupArgs)}
      */
     public static class GetPersonsOfGroupArgs{
@@ -4730,7 +4683,7 @@ public class IFaceLogSpringController {
         public int personGroupId;
     }
     /**
-     * argClass-82<br>
+     * argClass-81<br>
      * wrap arguments for method {@link #getPersonsPermittedOnDevice(GetPersonsPermittedOnDeviceArgs)}
      */
     public static class GetPersonsPermittedOnDeviceArgs{
@@ -4744,7 +4697,7 @@ public class IFaceLogSpringController {
         public Long timestamp;
     }
     /**
-     * argClass-83<br>
+     * argClass-82<br>
      * wrap arguments for method {@link #getProperties(GetPropertiesArgs)}
      */
     public static class GetPropertiesArgs{
@@ -4754,7 +4707,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-84<br>
+     * argClass-83<br>
      * wrap arguments for method {@link #getProperty(GetPropertyArgs)}
      */
     public static class GetPropertyArgs{
@@ -4764,7 +4717,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-85<br>
+     * argClass-84<br>
      * wrap arguments for method {@link #getRedisParameters(GetRedisParametersArgs)}
      */
     public static class GetRedisParametersArgs{
@@ -4772,7 +4725,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-86<br>
+     * argClass-85<br>
      * wrap arguments for method {@link #getServiceConfig(GetServiceConfigArgs)}
      */
     public static class GetServiceConfigArgs{
@@ -4780,7 +4733,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-87<br>
+     * argClass-86<br>
      * wrap arguments for method {@link #getSubDeviceGroup(GetSubDeviceGroupArgs)}
      */
     public static class GetSubDeviceGroupArgs{
@@ -4788,7 +4741,7 @@ public class IFaceLogSpringController {
         public int deviceGroupId;
     }
     /**
-     * argClass-88<br>
+     * argClass-87<br>
      * wrap arguments for method {@link #getSubPersonGroup(GetSubPersonGroupArgs)}
      */
     public static class GetSubPersonGroupArgs{
@@ -4796,7 +4749,7 @@ public class IFaceLogSpringController {
         public int personGroupId;
     }
     /**
-     * argClass-89<br>
+     * argClass-88<br>
      * wrap arguments for method {@link #isDisable(IsDisableArgs)}
      */
     public static class IsDisableArgs{
@@ -4804,7 +4757,7 @@ public class IFaceLogSpringController {
         public int personId;
     }
     /**
-     * argClass-91<br>
+     * argClass-90<br>
      * wrap arguments for method {@link #isValidAckChannel(IsValidAckChannelArgs)}
      */
     public static class IsValidAckChannelArgs{
@@ -4812,7 +4765,7 @@ public class IFaceLogSpringController {
         public String ackChannel;
     }
     /**
-     * argClass-92<br>
+     * argClass-91<br>
      * wrap arguments for method {@link #isValidCmdSn(IsValidCmdSnArgs)}
      */
     public static class IsValidCmdSnArgs{
@@ -4820,7 +4773,7 @@ public class IFaceLogSpringController {
         public int cmdSn;
     }
     /**
-     * argClass-93<br>
+     * argClass-92<br>
      * wrap arguments for method {@link #isValidDeviceToken(IsValidDeviceTokenArgs)}
      */
     public static class IsValidDeviceTokenArgs{
@@ -4828,7 +4781,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-94<br>
+     * argClass-93<br>
      * wrap arguments for method {@link #isValidPassword(IsValidPasswordArgs)}
      */
     public static class IsValidPasswordArgs{
@@ -4840,7 +4793,7 @@ public class IFaceLogSpringController {
         public boolean isMd5;
     }
     /**
-     * argClass-95<br>
+     * argClass-94<br>
      * wrap arguments for method {@link #isValidPersonToken(IsValidPersonTokenArgs)}
      */
     public static class IsValidPersonTokenArgs{
@@ -4848,7 +4801,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-96<br>
+     * argClass-95<br>
      * wrap arguments for method {@link #isValidRootToken(IsValidRootTokenArgs)}
      */
     public static class IsValidRootTokenArgs{
@@ -4856,7 +4809,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-97<br>
+     * argClass-96<br>
      * wrap arguments for method {@link #isValidToken(IsValidTokenArgs)}
      */
     public static class IsValidTokenArgs{
@@ -4864,7 +4817,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-98<br>
+     * argClass-97<br>
      * wrap arguments for method {@link #isValidUserToken(IsValidUserTokenArgs)}
      */
     public static class IsValidUserTokenArgs{
@@ -4872,7 +4825,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-99<br>
+     * argClass-98<br>
      * wrap arguments for method {@link #listOfParentForDeviceGroup(ListOfParentForDeviceGroupArgs)}
      */
     public static class ListOfParentForDeviceGroupArgs{
@@ -4880,7 +4833,7 @@ public class IFaceLogSpringController {
         public int deviceGroupId;
     }
     /**
-     * argClass-100<br>
+     * argClass-99<br>
      * wrap arguments for method {@link #listOfParentForPersonGroup(ListOfParentForPersonGroupArgs)}
      */
     public static class ListOfParentForPersonGroupArgs{
@@ -4888,7 +4841,7 @@ public class IFaceLogSpringController {
         public int personGroupId;
     }
     /**
-     * argClass-102<br>
+     * argClass-101<br>
      * wrap arguments for method {@link #loadDeviceByWhere(LoadDeviceByWhereArgs)}
      */
     public static class LoadDeviceByWhereArgs{
@@ -4900,7 +4853,7 @@ public class IFaceLogSpringController {
         public int numRows;
     }
     /**
-     * argClass-103<br>
+     * argClass-102<br>
      * wrap arguments for method {@link #loadDeviceGroupByWhere(LoadDeviceGroupByWhereArgs)}
      */
     public static class LoadDeviceGroupByWhereArgs{
@@ -4912,7 +4865,7 @@ public class IFaceLogSpringController {
         public int numRows;
     }
     /**
-     * argClass-104<br>
+     * argClass-103<br>
      * wrap arguments for method {@link #loadDeviceGroupIdByWhere(LoadDeviceGroupIdByWhereArgs)}
      */
     public static class LoadDeviceGroupIdByWhereArgs{
@@ -4920,7 +4873,7 @@ public class IFaceLogSpringController {
         public String where;
     }
     /**
-     * argClass-105<br>
+     * argClass-104<br>
      * wrap arguments for method {@link #loadDeviceIdByWhere(LoadDeviceIdByWhereArgs)}
      */
     public static class LoadDeviceIdByWhereArgs{
@@ -4928,7 +4881,7 @@ public class IFaceLogSpringController {
         public String where;
     }
     /**
-     * argClass-106<br>
+     * argClass-105<br>
      * wrap arguments for method {@link #loadDistinctIntegerColumn(LoadDistinctIntegerColumnArgs)}
      */
     public static class LoadDistinctIntegerColumnArgs{
@@ -4940,7 +4893,7 @@ public class IFaceLogSpringController {
         public String where;
     }
     /**
-     * argClass-107<br>
+     * argClass-106<br>
      * wrap arguments for method {@link #loadDistinctStringColumn(LoadDistinctStringColumnArgs)}
      */
     public static class LoadDistinctStringColumnArgs{
@@ -4952,7 +4905,7 @@ public class IFaceLogSpringController {
         public String where;
     }
     /**
-     * argClass-108<br>
+     * argClass-107<br>
      * wrap arguments for method {@link #loadFeatureMd5ByUpdate(LoadFeatureMd5ByUpdateTimeStrArgs)}
      */
     public static class LoadFeatureMd5ByUpdateTimeStrArgs{
@@ -4960,7 +4913,7 @@ public class IFaceLogSpringController {
         public String timestamp;
     }
     /**
-     * argClass-109<br>
+     * argClass-108<br>
      * wrap arguments for method {@link #loadFeatureMd5ByUpdate(LoadFeatureMd5ByUpdateArgs)}
      */
     public static class LoadFeatureMd5ByUpdateArgs{
@@ -4968,7 +4921,7 @@ public class IFaceLogSpringController {
         public long timestamp;
     }
     /**
-     * argClass-110<br>
+     * argClass-109<br>
      * wrap arguments for method {@link #loadLogByWhere(LoadLogByWhereArgs)}
      */
     public static class LoadLogByWhereArgs{
@@ -4980,7 +4933,7 @@ public class IFaceLogSpringController {
         public int numRows;
     }
     /**
-     * argClass-111<br>
+     * argClass-110<br>
      * wrap arguments for method {@link #loadLogLightByVerifyTime(LoadLogLightByVerifyTimeTimestrArgs)}
      */
     public static class LoadLogLightByVerifyTimeTimestrArgs{
@@ -4992,7 +4945,7 @@ public class IFaceLogSpringController {
         public int numRows;
     }
     /**
-     * argClass-112<br>
+     * argClass-111<br>
      * wrap arguments for method {@link #loadLogLightByVerifyTime(LoadLogLightByVerifyTimeArgs)}
      */
     public static class LoadLogLightByVerifyTimeArgs{
@@ -5004,7 +4957,7 @@ public class IFaceLogSpringController {
         public int numRows;
     }
     /**
-     * argClass-113<br>
+     * argClass-112<br>
      * wrap arguments for method {@link #loadLogLightByWhere(LoadLogLightByWhereArgs)}
      */
     public static class LoadLogLightByWhereArgs{
@@ -5016,7 +4969,7 @@ public class IFaceLogSpringController {
         public int numRows;
     }
     /**
-     * argClass-114<br>
+     * argClass-113<br>
      * wrap arguments for method {@link #loadPermitByUpdate(LoadPermitByUpdateTimestrArgs)}
      */
     public static class LoadPermitByUpdateTimestrArgs{
@@ -5024,7 +4977,7 @@ public class IFaceLogSpringController {
         public String timestamp;
     }
     /**
-     * argClass-115<br>
+     * argClass-114<br>
      * wrap arguments for method {@link #loadPermitByUpdate(LoadPermitByUpdateArgs)}
      */
     public static class LoadPermitByUpdateArgs{
@@ -5032,7 +4985,7 @@ public class IFaceLogSpringController {
         public long timestamp;
     }
     /**
-     * argClass-116<br>
+     * argClass-115<br>
      * wrap arguments for method {@link #loadPersonByWhere(LoadPersonByWhereArgs)}
      */
     public static class LoadPersonByWhereArgs{
@@ -5044,7 +4997,7 @@ public class IFaceLogSpringController {
         public int numRows;
     }
     /**
-     * argClass-117<br>
+     * argClass-116<br>
      * wrap arguments for method {@link #loadPersonGroupByWhere(LoadPersonGroupByWhereArgs)}
      */
     public static class LoadPersonGroupByWhereArgs{
@@ -5056,7 +5009,7 @@ public class IFaceLogSpringController {
         public int numRows;
     }
     /**
-     * argClass-118<br>
+     * argClass-117<br>
      * wrap arguments for method {@link #loadPersonGroupIdByWhere(LoadPersonGroupIdByWhereArgs)}
      */
     public static class LoadPersonGroupIdByWhereArgs{
@@ -5064,7 +5017,7 @@ public class IFaceLogSpringController {
         public String where;
     }
     /**
-     * argClass-119<br>
+     * argClass-118<br>
      * wrap arguments for method {@link #loadPersonIdByUpdateTime(LoadPersonIdByUpdateTimeTimeStrArgs)}
      */
     public static class LoadPersonIdByUpdateTimeTimeStrArgs{
@@ -5072,7 +5025,7 @@ public class IFaceLogSpringController {
         public String timestamp;
     }
     /**
-     * argClass-120<br>
+     * argClass-119<br>
      * wrap arguments for method {@link #loadPersonIdByUpdateTime(LoadPersonIdByUpdateTimeArgs)}
      */
     public static class LoadPersonIdByUpdateTimeArgs{
@@ -5080,7 +5033,7 @@ public class IFaceLogSpringController {
         public long timestamp;
     }
     /**
-     * argClass-121<br>
+     * argClass-120<br>
      * wrap arguments for method {@link #loadPersonIdByWhere(LoadPersonIdByWhereArgs)}
      */
     public static class LoadPersonIdByWhereArgs{
@@ -5088,7 +5041,7 @@ public class IFaceLogSpringController {
         public String where;
     }
     /**
-     * argClass-122<br>
+     * argClass-121<br>
      * wrap arguments for method {@link #loadUpdatedPersons(LoadUpdatedPersonsTimestrArgs)}
      */
     public static class LoadUpdatedPersonsTimestrArgs{
@@ -5096,7 +5049,7 @@ public class IFaceLogSpringController {
         public String timestamp;
     }
     /**
-     * argClass-123<br>
+     * argClass-122<br>
      * wrap arguments for method {@link #loadUpdatedPersons(LoadUpdatedPersonsArgs)}
      */
     public static class LoadUpdatedPersonsArgs{
@@ -5104,7 +5057,7 @@ public class IFaceLogSpringController {
         public long timestamp;
     }
     /**
-     * argClass-124<br>
+     * argClass-123<br>
      * wrap arguments for method {@link #offline(OfflineArgs)}
      */
     public static class OfflineArgs{
@@ -5112,7 +5065,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-125<br>
+     * argClass-124<br>
      * wrap arguments for method {@link #online(OnlineArgs)}
      */
     public static class OnlineArgs{
@@ -5120,7 +5073,7 @@ public class IFaceLogSpringController {
         public DeviceBean device;
     }
     /**
-     * argClass-126<br>
+     * argClass-125<br>
      * wrap arguments for method {@link #registerDevice(RegisterDeviceArgs)}
      */
     public static class RegisterDeviceArgs{
@@ -5128,7 +5081,7 @@ public class IFaceLogSpringController {
         public DeviceBean newDevice;
     }
     /**
-     * argClass-127<br>
+     * argClass-126<br>
      * wrap arguments for method {@link #releasePersonToken(ReleasePersonTokenArgs)}
      */
     public static class ReleasePersonTokenArgs{
@@ -5136,7 +5089,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-128<br>
+     * argClass-127<br>
      * wrap arguments for method {@link #releaseRootToken(ReleaseRootTokenArgs)}
      */
     public static class ReleaseRootTokenArgs{
@@ -5144,7 +5097,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-129<br>
+     * argClass-128<br>
      * wrap arguments for method {@link #releaseUserToken(ReleaseUserTokenArgs)}
      */
     public static class ReleaseUserTokenArgs{
@@ -5152,7 +5105,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-130<br>
+     * argClass-129<br>
      * wrap arguments for method {@link #replaceFeature(ReplaceFeatureArgs)}
      */
     public static class ReplaceFeatureArgs{
@@ -5166,7 +5119,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-131<br>
+     * argClass-130<br>
      * wrap arguments for method {@link #rootGroupOfDevice(RootGroupOfDeviceArgs)}
      */
     public static class RootGroupOfDeviceArgs{
@@ -5174,7 +5127,7 @@ public class IFaceLogSpringController {
         public Integer deviceId;
     }
     /**
-     * argClass-132<br>
+     * argClass-131<br>
      * wrap arguments for method {@link #rootGroupOfPerson(RootGroupOfPersonArgs)}
      */
     public static class RootGroupOfPersonArgs{
@@ -5182,7 +5135,7 @@ public class IFaceLogSpringController {
         public Integer personId;
     }
     /**
-     * argClass-133<br>
+     * argClass-132<br>
      * wrap arguments for method {@link #runCmd(RunCmdArgs)}
      */
     public static class RunCmdArgs{
@@ -5200,7 +5153,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-134<br>
+     * argClass-133<br>
      * wrap arguments for method {@link #runTask(RunTaskArgs)}
      */
     public static class RunTaskArgs{
@@ -5216,7 +5169,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-135<br>
+     * argClass-134<br>
      * wrap arguments for method {@link #saveDevice(SaveDeviceArgs)}
      */
     public static class SaveDeviceArgs{
@@ -5226,7 +5179,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-136<br>
+     * argClass-135<br>
      * wrap arguments for method {@link #saveDeviceGroup(SaveDeviceGroupArgs)}
      */
     public static class SaveDeviceGroupArgs{
@@ -5236,7 +5189,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-137<br>
+     * argClass-136<br>
      * wrap arguments for method {@link #savePermit(SavePermitWithScheduleArgs)}
      */
     public static class SavePermitWithScheduleArgs{
@@ -5250,7 +5203,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-138<br>
+     * argClass-137<br>
      * wrap arguments for method {@link #savePermit(SavePermitArgs)}
      */
     public static class SavePermitArgs{
@@ -5260,7 +5213,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-139<br>
+     * argClass-138<br>
      * wrap arguments for method {@link #savePerson(SavePersonFullArgs)}
      */
     public static class SavePersonFullArgs{
@@ -5280,7 +5233,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-140<br>
+     * argClass-139<br>
      * wrap arguments for method {@link #savePerson(SavePersonWithPhotoAndFeatureMultiImageArgs)}
      */
     public static class SavePersonWithPhotoAndFeatureMultiImageArgs{
@@ -5300,7 +5253,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-141<br>
+     * argClass-140<br>
      * wrap arguments for method {@link #savePerson(SavePersonWithPhotoAndFeatureMultiFacesArgs)}
      */
     public static class SavePersonWithPhotoAndFeatureMultiFacesArgs{
@@ -5318,7 +5271,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-142<br>
+     * argClass-141<br>
      * wrap arguments for method {@link #savePerson(SavePersonWithPhotoArgs)}
      */
     public static class SavePersonWithPhotoArgs{
@@ -5330,7 +5283,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-143<br>
+     * argClass-142<br>
      * wrap arguments for method {@link #savePerson(SavePersonWithPhotoAndFeatureArgs)}
      */
     public static class SavePersonWithPhotoAndFeatureArgs{
@@ -5344,7 +5297,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-144<br>
+     * argClass-143<br>
      * wrap arguments for method {@link #savePerson(SavePersonWithPhotoAndFeatureSavedArgs)}
      */
     public static class SavePersonWithPhotoAndFeatureSavedArgs{
@@ -5358,7 +5311,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-145<br>
+     * argClass-144<br>
      * wrap arguments for method {@link #savePerson(SavePersonArgs)}
      */
     public static class SavePersonArgs{
@@ -5368,7 +5321,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-146<br>
+     * argClass-145<br>
      * wrap arguments for method {@link #savePersonGroup(SavePersonGroupArgs)}
      */
     public static class SavePersonGroupArgs{
@@ -5378,7 +5331,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-147<br>
+     * argClass-146<br>
      * wrap arguments for method {@link #savePersons(SavePersonsWithPhotoArgs)}
      */
     public static class SavePersonsWithPhotoArgs{
@@ -5390,7 +5343,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-148<br>
+     * argClass-147<br>
      * wrap arguments for method {@link #savePersons(SavePersonsArgs)}
      */
     public static class SavePersonsArgs{
@@ -5400,7 +5353,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-149<br>
+     * argClass-148<br>
      * wrap arguments for method {@link #saveServiceConfig(SaveServiceConfigArgs)}
      */
     public static class SaveServiceConfigArgs{
@@ -5408,7 +5361,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-150<br>
+     * argClass-149<br>
      * wrap arguments for method {@link #sdkTaskQueueOf(SdkTaskQueueOfArgs)}
      */
     public static class SdkTaskQueueOfArgs{
@@ -5420,7 +5373,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-151<br>
+     * argClass-150<br>
      * wrap arguments for method {@link #setPersonExpiryDate(SetPersonExpiryDateTimeStrArgs)}
      */
     public static class SetPersonExpiryDateTimeStrArgs{
@@ -5432,7 +5385,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-152<br>
+     * argClass-151<br>
      * wrap arguments for method {@link #setPersonExpiryDate(SetPersonExpiryDateArgs)}
      */
     public static class SetPersonExpiryDateArgs{
@@ -5444,7 +5397,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-153<br>
+     * argClass-152<br>
      * wrap arguments for method {@link #setPersonExpiryDate(SetPersonExpiryDateListArgs)}
      */
     public static class SetPersonExpiryDateListArgs{
@@ -5456,7 +5409,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-154<br>
+     * argClass-153<br>
      * wrap arguments for method {@link #setProperties(SetPropertiesArgs)}
      */
     public static class SetPropertiesArgs{
@@ -5466,7 +5419,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-155<br>
+     * argClass-154<br>
      * wrap arguments for method {@link #setProperty(SetPropertyArgs)}
      */
     public static class SetPropertyArgs{
@@ -5478,7 +5431,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-156<br>
+     * argClass-155<br>
      * wrap arguments for method {@link #taskQueueOf(TaskQueueOfArgs)}
      */
     public static class TaskQueueOfArgs{
@@ -5488,7 +5441,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-157<br>
+     * argClass-156<br>
      * wrap arguments for method {@link #unbindBorder(UnbindBorderArgs)}
      */
     public static class UnbindBorderArgs{
@@ -5500,7 +5453,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-158<br>
+     * argClass-157<br>
      * wrap arguments for method {@link #unregisterDevice(UnregisterDeviceArgs)}
      */
     public static class UnregisterDeviceArgs{
@@ -5508,7 +5461,7 @@ public class IFaceLogSpringController {
         public Token token;
     }
     /**
-     * argClass-159<br>
+     * argClass-158<br>
      * wrap arguments for method {@link #updateDevice(UpdateDeviceArgs)}
      */
     public static class UpdateDeviceArgs{

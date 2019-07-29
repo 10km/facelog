@@ -26,7 +26,6 @@ public partial class IFaceLog {
     void addLogFull(LogBean logBean, FaceBean faceBean, byte[] featureImage, Token token);
     void addLogs(List<LogBean> beans, Token token);
     void addLogsFull(List<LogBean> logBeans, List<FaceBean> faceBeans, List<byte[]> featureImages, Token token);
-    DeviceBean addNullDevice(int groupId, string name, string mac, string serialNo, string remark, Token token);
     string applyAckChannel(Token token);
     string applyAckChannelWithDuration(int duration, Token token);
     int applyCmdSn(Token token);
@@ -190,7 +189,6 @@ public partial class IFaceLog {
     Task addLogFullAsync(LogBean logBean, FaceBean faceBean, byte[] featureImage, Token token);
     Task addLogsAsync(List<LogBean> beans, Token token);
     Task addLogsFullAsync(List<LogBean> logBeans, List<FaceBean> faceBeans, List<byte[]> featureImages, Token token);
-    Task<DeviceBean> addNullDeviceAsync(int groupId, string name, string mac, string serialNo, string remark, Token token);
     Task<string> applyAckChannelAsync(Token token);
     Task<string> applyAckChannelWithDurationAsync(int duration, Token token);
     Task<int> applyCmdSnAsync(Token token);
@@ -362,8 +360,6 @@ public partial class IFaceLog {
     void End_addLogs(IAsyncResult asyncResult);
     IAsyncResult Begin_addLogsFull(AsyncCallback callback, object state, List<LogBean> logBeans, List<FaceBean> faceBeans, List<byte[]> featureImages, Token token);
     void End_addLogsFull(IAsyncResult asyncResult);
-    IAsyncResult Begin_addNullDevice(AsyncCallback callback, object state, int groupId, string name, string mac, string serialNo, string remark, Token token);
-    DeviceBean End_addNullDevice(IAsyncResult asyncResult);
     IAsyncResult Begin_applyAckChannel(AsyncCallback callback, object state, Token token);
     string End_applyAckChannel(IAsyncResult asyncResult);
     IAsyncResult Begin_applyAckChannelWithDuration(AsyncCallback callback, object state, int duration, Token token);
@@ -1219,72 +1215,6 @@ public partial class IFaceLog {
         throw result.Ex2;
       }
       return;
-    }
-
-    
-    public IAsyncResult Begin_addNullDevice(AsyncCallback callback, object state, int groupId, string name, string mac, string serialNo, string remark, Token token)
-    {
-      return send_addNullDevice(callback, state, groupId, name, mac, serialNo, remark, token);
-    }
-
-    public DeviceBean End_addNullDevice(IAsyncResult asyncResult)
-    {
-      oprot_.Transport.EndFlush(asyncResult);
-      return recv_addNullDevice();
-    }
-
-    public async Task<DeviceBean> addNullDeviceAsync(int groupId, string name, string mac, string serialNo, string remark, Token token)
-    {
-      DeviceBean retval;
-      retval = await Task.Run(() =>
-      {
-        return addNullDevice(groupId, name, mac, serialNo, remark, token);
-      });
-      return retval;
-    }
-
-    public DeviceBean addNullDevice(int groupId, string name, string mac, string serialNo, string remark, Token token)
-    {
-      var asyncResult = Begin_addNullDevice(null, null, groupId, name, mac, serialNo, remark, token);
-      return End_addNullDevice(asyncResult);
-
-    }
-    public IAsyncResult send_addNullDevice(AsyncCallback callback, object state, int groupId, string name, string mac, string serialNo, string remark, Token token)
-    {
-      oprot_.WriteMessageBegin(new TMessage("addNullDevice", TMessageType.Call, seqid_));
-      addNullDevice_args args = new addNullDevice_args();
-      args.GroupId = groupId;
-      args.Name = name;
-      args.Mac = mac;
-      args.SerialNo = serialNo;
-      args.Remark = remark;
-      args.Token = token;
-      args.Write(oprot_);
-      oprot_.WriteMessageEnd();
-      return oprot_.Transport.BeginFlush(callback, state);
-    }
-
-    public DeviceBean recv_addNullDevice()
-    {
-      TMessage msg = iprot_.ReadMessageBegin();
-      if (msg.Type == TMessageType.Exception) {
-        TApplicationException x = TApplicationException.Read(iprot_);
-        iprot_.ReadMessageEnd();
-        throw x;
-      }
-      addNullDevice_result result = new addNullDevice_result();
-      result.Read(iprot_);
-      iprot_.ReadMessageEnd();
-      if (result.Success != null) {
-        return result.Success;
-      }
-      if (result.Ex1 != null) {
-        throw result.Ex1;
-      }
-      if (result.Ex2 != null) {
-        throw result.Ex2;
-      }
-      throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "addNullDevice failed: unknown result");
     }
 
     
@@ -10188,7 +10118,6 @@ public partial class IFaceLog {
       processMap_["addLogFull"] = addLogFull_ProcessAsync;
       processMap_["addLogs"] = addLogs_ProcessAsync;
       processMap_["addLogsFull"] = addLogsFull_ProcessAsync;
-      processMap_["addNullDevice"] = addNullDevice_ProcessAsync;
       processMap_["applyAckChannel"] = applyAckChannel_ProcessAsync;
       processMap_["applyAckChannelWithDuration"] = applyAckChannelWithDuration_ProcessAsync;
       processMap_["applyCmdSn"] = applyCmdSn_ProcessAsync;
@@ -10679,45 +10608,6 @@ public partial class IFaceLog {
         Console.Error.WriteLine(ex.ToString());
         TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
         oprot.WriteMessageBegin(new TMessage("addLogsFull", TMessageType.Exception, seqid));
-        x.Write(oprot);
-      }
-      oprot.WriteMessageEnd();
-      oprot.Transport.Flush();
-    }
-
-    public async Task addNullDevice_ProcessAsync(int seqid, TProtocol iprot, TProtocol oprot)
-    {
-      addNullDevice_args args = new addNullDevice_args();
-      args.Read(iprot);
-      iprot.ReadMessageEnd();
-      addNullDevice_result result = new addNullDevice_result();
-      try
-      {
-        try
-        {
-          result.Success = await iface_.addNullDeviceAsync(args.GroupId.Value, args.Name, args.Mac, args.SerialNo, args.Remark, args.Token);
-        }
-        catch (DuplicateRecordException ex1)
-        {
-          result.Ex1 = ex1;
-        }
-        catch (ServiceRuntimeException ex2)
-        {
-          result.Ex2 = ex2;
-        }
-        oprot.WriteMessageBegin(new TMessage("addNullDevice", TMessageType.Reply, seqid)); 
-        result.Write(oprot);
-      }
-      catch (TTransportException)
-      {
-        throw;
-      }
-      catch (Exception ex)
-      {
-        Console.Error.WriteLine("Error occurred in processor:");
-        Console.Error.WriteLine(ex.ToString());
-        TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
-        oprot.WriteMessageBegin(new TMessage("addNullDevice", TMessageType.Exception, seqid));
         x.Write(oprot);
       }
       oprot.WriteMessageEnd();
@@ -16098,7 +15988,6 @@ public partial class IFaceLog {
       processMap_["addLogFull"] = addLogFull_Process;
       processMap_["addLogs"] = addLogs_Process;
       processMap_["addLogsFull"] = addLogsFull_Process;
-      processMap_["addNullDevice"] = addNullDevice_Process;
       processMap_["applyAckChannel"] = applyAckChannel_Process;
       processMap_["applyAckChannelWithDuration"] = applyAckChannelWithDuration_Process;
       processMap_["applyCmdSn"] = applyCmdSn_Process;
@@ -16589,45 +16478,6 @@ public partial class IFaceLog {
         Console.Error.WriteLine(ex.ToString());
         TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
         oprot.WriteMessageBegin(new TMessage("addLogsFull", TMessageType.Exception, seqid));
-        x.Write(oprot);
-      }
-      oprot.WriteMessageEnd();
-      oprot.Transport.Flush();
-    }
-
-    public void addNullDevice_Process(int seqid, TProtocol iprot, TProtocol oprot)
-    {
-      addNullDevice_args args = new addNullDevice_args();
-      args.Read(iprot);
-      iprot.ReadMessageEnd();
-      addNullDevice_result result = new addNullDevice_result();
-      try
-      {
-        try
-        {
-          result.Success = iface_.addNullDevice(args.GroupId.Value, args.Name, args.Mac, args.SerialNo, args.Remark, args.Token);
-        }
-        catch (DuplicateRecordException ex1)
-        {
-          result.Ex1 = ex1;
-        }
-        catch (ServiceRuntimeException ex2)
-        {
-          result.Ex2 = ex2;
-        }
-        oprot.WriteMessageBegin(new TMessage("addNullDevice", TMessageType.Reply, seqid)); 
-        result.Write(oprot);
-      }
-      catch (TTransportException)
-      {
-        throw;
-      }
-      catch (Exception ex)
-      {
-        Console.Error.WriteLine("Error occurred in processor:");
-        Console.Error.WriteLine(ex.ToString());
-        TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
-        oprot.WriteMessageBegin(new TMessage("addNullDevice", TMessageType.Exception, seqid));
         x.Write(oprot);
       }
       oprot.WriteMessageEnd();
@@ -24417,344 +24267,6 @@ public partial class IFaceLog {
     public override string ToString() {
       StringBuilder __sb = new StringBuilder("addLogsFull_result(");
       bool __first = true;
-      if (Ex1 != null) {
-        if(!__first) { __sb.Append(", "); }
-        __first = false;
-        __sb.Append("Ex1: ");
-        __sb.Append(Ex1== null ? "<null>" : Ex1.ToString());
-      }
-      if (Ex2 != null) {
-        if(!__first) { __sb.Append(", "); }
-        __first = false;
-        __sb.Append("Ex2: ");
-        __sb.Append(Ex2== null ? "<null>" : Ex2.ToString());
-      }
-      __sb.Append(")");
-      return __sb.ToString();
-    }
-
-  }
-
-
-  #if !SILVERLIGHT
-  [Serializable]
-  #endif
-  public partial class addNullDevice_args : TBase
-  {
-
-    public int? GroupId { get; set; }
-
-    public string Name { get; set; }
-
-    public string Mac { get; set; }
-
-    public string SerialNo { get; set; }
-
-    public string Remark { get; set; }
-
-    public Token Token { get; set; }
-
-    public addNullDevice_args() {
-    }
-
-    public void Read (TProtocol iprot)
-    {
-      iprot.IncrementRecursionDepth();
-      try
-      {
-        TField field;
-        iprot.ReadStructBegin();
-        while (true)
-        {
-          field = iprot.ReadFieldBegin();
-          if (field.Type == TType.Stop) { 
-            break;
-          }
-          switch (field.ID)
-          {
-            case 1:
-              if (field.Type == TType.I32) {
-                GroupId = iprot.ReadI32();
-              } else { 
-                TProtocolUtil.Skip(iprot, field.Type);
-              }
-              break;
-            case 2:
-              if (field.Type == TType.String) {
-                Name = iprot.ReadString();
-              } else { 
-                TProtocolUtil.Skip(iprot, field.Type);
-              }
-              break;
-            case 3:
-              if (field.Type == TType.String) {
-                Mac = iprot.ReadString();
-              } else { 
-                TProtocolUtil.Skip(iprot, field.Type);
-              }
-              break;
-            case 4:
-              if (field.Type == TType.String) {
-                SerialNo = iprot.ReadString();
-              } else { 
-                TProtocolUtil.Skip(iprot, field.Type);
-              }
-              break;
-            case 5:
-              if (field.Type == TType.String) {
-                Remark = iprot.ReadString();
-              } else { 
-                TProtocolUtil.Skip(iprot, field.Type);
-              }
-              break;
-            case 6:
-              if (field.Type == TType.Struct) {
-                Token = new Token();
-                Token.Read(iprot);
-              } else { 
-                TProtocolUtil.Skip(iprot, field.Type);
-              }
-              break;
-            default: 
-              TProtocolUtil.Skip(iprot, field.Type);
-              break;
-          }
-          iprot.ReadFieldEnd();
-        }
-        iprot.ReadStructEnd();
-      }
-      finally
-      {
-        iprot.DecrementRecursionDepth();
-      }
-    }
-
-    public void Write(TProtocol oprot) {
-      oprot.IncrementRecursionDepth();
-      try
-      {
-        TStruct struc = new TStruct("addNullDevice_args");
-        oprot.WriteStructBegin(struc);
-        TField field = new TField();
-        if (GroupId != null) {
-          field.Name = "groupId";
-          field.Type = TType.I32;
-          field.ID = 1;
-          oprot.WriteFieldBegin(field);
-          oprot.WriteI32(GroupId.Value);
-          oprot.WriteFieldEnd();
-        }
-        if (Name != null) {
-          field.Name = "name";
-          field.Type = TType.String;
-          field.ID = 2;
-          oprot.WriteFieldBegin(field);
-          oprot.WriteString(Name);
-          oprot.WriteFieldEnd();
-        }
-        if (Mac != null) {
-          field.Name = "mac";
-          field.Type = TType.String;
-          field.ID = 3;
-          oprot.WriteFieldBegin(field);
-          oprot.WriteString(Mac);
-          oprot.WriteFieldEnd();
-        }
-        if (SerialNo != null) {
-          field.Name = "serialNo";
-          field.Type = TType.String;
-          field.ID = 4;
-          oprot.WriteFieldBegin(field);
-          oprot.WriteString(SerialNo);
-          oprot.WriteFieldEnd();
-        }
-        if (Remark != null) {
-          field.Name = "remark";
-          field.Type = TType.String;
-          field.ID = 5;
-          oprot.WriteFieldBegin(field);
-          oprot.WriteString(Remark);
-          oprot.WriteFieldEnd();
-        }
-        if (Token != null) {
-          field.Name = "token";
-          field.Type = TType.Struct;
-          field.ID = 6;
-          oprot.WriteFieldBegin(field);
-          Token.Write(oprot);
-          oprot.WriteFieldEnd();
-        }
-        oprot.WriteFieldStop();
-        oprot.WriteStructEnd();
-      }
-      finally
-      {
-        oprot.DecrementRecursionDepth();
-      }
-    }
-
-    public override string ToString() {
-      StringBuilder __sb = new StringBuilder("addNullDevice_args(");
-      bool __first = true;
-      if (GroupId != null) {
-        if(!__first) { __sb.Append(", "); }
-        __first = false;
-        __sb.Append("GroupId: ");
-        __sb.Append(GroupId);
-      }
-      if (Name != null) {
-        if(!__first) { __sb.Append(", "); }
-        __first = false;
-        __sb.Append("Name: ");
-        __sb.Append(Name);
-      }
-      if (Mac != null) {
-        if(!__first) { __sb.Append(", "); }
-        __first = false;
-        __sb.Append("Mac: ");
-        __sb.Append(Mac);
-      }
-      if (SerialNo != null) {
-        if(!__first) { __sb.Append(", "); }
-        __first = false;
-        __sb.Append("SerialNo: ");
-        __sb.Append(SerialNo);
-      }
-      if (Remark != null) {
-        if(!__first) { __sb.Append(", "); }
-        __first = false;
-        __sb.Append("Remark: ");
-        __sb.Append(Remark);
-      }
-      if (Token != null) {
-        if(!__first) { __sb.Append(", "); }
-        __first = false;
-        __sb.Append("Token: ");
-        __sb.Append(Token== null ? "<null>" : Token.ToString());
-      }
-      __sb.Append(")");
-      return __sb.ToString();
-    }
-
-  }
-
-
-  #if !SILVERLIGHT
-  [Serializable]
-  #endif
-  public partial class addNullDevice_result : TBase
-  {
-
-    public DeviceBean Success { get; set; }
-
-    public DuplicateRecordException Ex1 { get; set; }
-
-    public ServiceRuntimeException Ex2 { get; set; }
-
-    public addNullDevice_result() {
-    }
-
-    public void Read (TProtocol iprot)
-    {
-      iprot.IncrementRecursionDepth();
-      try
-      {
-        TField field;
-        iprot.ReadStructBegin();
-        while (true)
-        {
-          field = iprot.ReadFieldBegin();
-          if (field.Type == TType.Stop) { 
-            break;
-          }
-          switch (field.ID)
-          {
-            case 0:
-              if (field.Type == TType.Struct) {
-                Success = new DeviceBean();
-                Success.Read(iprot);
-              } else { 
-                TProtocolUtil.Skip(iprot, field.Type);
-              }
-              break;
-            case 1:
-              if (field.Type == TType.Struct) {
-                Ex1 = new DuplicateRecordException();
-                Ex1.Read(iprot);
-              } else { 
-                TProtocolUtil.Skip(iprot, field.Type);
-              }
-              break;
-            case 2:
-              if (field.Type == TType.Struct) {
-                Ex2 = new ServiceRuntimeException();
-                Ex2.Read(iprot);
-              } else { 
-                TProtocolUtil.Skip(iprot, field.Type);
-              }
-              break;
-            default: 
-              TProtocolUtil.Skip(iprot, field.Type);
-              break;
-          }
-          iprot.ReadFieldEnd();
-        }
-        iprot.ReadStructEnd();
-      }
-      finally
-      {
-        iprot.DecrementRecursionDepth();
-      }
-    }
-
-    public void Write(TProtocol oprot) {
-      oprot.IncrementRecursionDepth();
-      try
-      {
-        TStruct struc = new TStruct("addNullDevice_result");
-        oprot.WriteStructBegin(struc);
-        TField field = new TField();
-
-        if (this.Success != null) {
-          field.Name = "Success";
-          field.Type = TType.Struct;
-          field.ID = 0;
-          oprot.WriteFieldBegin(field);
-          Success.Write(oprot);
-          oprot.WriteFieldEnd();
-        } else if (this.Ex1 != null) {
-          field.Name = "Ex1";
-          field.Type = TType.Struct;
-          field.ID = 1;
-          oprot.WriteFieldBegin(field);
-          Ex1.Write(oprot);
-          oprot.WriteFieldEnd();
-        } else if (this.Ex2 != null) {
-          field.Name = "Ex2";
-          field.Type = TType.Struct;
-          field.ID = 2;
-          oprot.WriteFieldBegin(field);
-          Ex2.Write(oprot);
-          oprot.WriteFieldEnd();
-        }
-        oprot.WriteFieldStop();
-        oprot.WriteStructEnd();
-      }
-      finally
-      {
-        oprot.DecrementRecursionDepth();
-      }
-    }
-
-    public override string ToString() {
-      StringBuilder __sb = new StringBuilder("addNullDevice_result(");
-      bool __first = true;
-      if (Success != null) {
-        if(!__first) { __sb.Append(", "); }
-        __first = false;
-        __sb.Append("Success: ");
-        __sb.Append(Success== null ? "<null>" : Success.ToString());
-      }
       if (Ex1 != null) {
         if(!__first) { __sb.Append(", "); }
         __first = false;

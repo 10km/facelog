@@ -835,25 +835,4 @@ public class DaoManagement extends BaseDao implements ServiceConstant,Constant{
 		}
 		return daoSavePermit(permitBean);
 	}
-    /**
-     * 添加一条空的设备记录
-     * @param groupId 所有设备组ID,可为{@code null}
-     * @param name 设备名字,可为{@code null}
-     * @param mac 设备MAC地址,必须为12位16进制(HEX)字符串,如:'d017c2d03fbf'
-     * @param serialNo 设备序列号,可为{@code null}
-     * @param remark 备注,可为{@code null}
-     * @return 返回创建设备记录对象
-     * @throws DuplicateRecordException 设备MAC地址重复
-     */
-    protected DeviceBean daoAddNullDevice(Integer groupId,String name,String mac,String serialNo,String remark) throws DuplicateRecordException{
-    	checkArgument(mac != null && mac.matches("^[\\da-fA-F]{12}$"),"INVALID mac address");
-    	mac = mac.toLowerCase();
-    	// 如果mac地址不符合要求抛出异常
-    	daoCheckDuplicateDeviceByIndexMac(mac);
-    	DeviceBean deviceBean = DeviceBean.builder().name(name).mac(mac).serialNo(serialNo).remark(remark).build();
-    	if(groupId != null){
-    		deviceBean.setGroupId(groupId);
-    	}
-    	return daoSaveDevice(deviceBean);
-    }
 }
