@@ -402,6 +402,16 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
+    public boolean deleteDevice (int id,Token token) {
+        return delegate().deleteDevice(id,token);
+    }
+
+    @Override
+    public boolean deleteDeviceByMac (String mac,Token token) {
+        return delegate().deleteDeviceByMac(mac,token);
+    }
+
+    @Override
     public int deleteDeviceGroup (int deviceGroupId,Token token) {
         return delegate().deleteDeviceGroup(deviceGroupId,token);
     }

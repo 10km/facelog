@@ -24,7 +24,8 @@ SecurityExceptionType = {
   'ACCESS_DENIED' : 9,
   'TABLE_INSERT_DENIED' : 10,
   'TABLE_UPDATE_DENIED' : 11,
-  'TABLE_DELETE_DENIED' : 12
+  'TABLE_DELETE_DENIED' : 12,
+  'TOO_LOW_RANK' : 13
 };
 MQParam = {
   'REDIS_URI' : 0,

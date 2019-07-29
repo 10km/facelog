@@ -45,6 +45,8 @@ public partial class IFaceLog {
     int countPersonByWhere(string @where);
     int countPersonGroupByWhere(string @where);
     int deleteAllFeaturesByPersonId(int personId, bool deleteImage, Token token);
+    bool deleteDevice(int id, Token token);
+    bool deleteDeviceByMac(string mac, Token token);
     int deleteDeviceGroup(int deviceGroupId, Token token);
     List<string> deleteFeature(string featureMd5, bool deleteImage, Token token);
     int deleteGroupPermitOnDeviceGroup(int deviceGroupId, Token token);
@@ -207,6 +209,8 @@ public partial class IFaceLog {
     Task<int> countPersonByWhereAsync(string @where);
     Task<int> countPersonGroupByWhereAsync(string @where);
     Task<int> deleteAllFeaturesByPersonIdAsync(int personId, bool deleteImage, Token token);
+    Task<bool> deleteDeviceAsync(int id, Token token);
+    Task<bool> deleteDeviceByMacAsync(string mac, Token token);
     Task<int> deleteDeviceGroupAsync(int deviceGroupId, Token token);
     Task<List<string>> deleteFeatureAsync(string featureMd5, bool deleteImage, Token token);
     Task<int> deleteGroupPermitOnDeviceGroupAsync(int deviceGroupId, Token token);
@@ -396,6 +400,10 @@ public partial class IFaceLog {
     int End_countPersonGroupByWhere(IAsyncResult asyncResult);
     IAsyncResult Begin_deleteAllFeaturesByPersonId(AsyncCallback callback, object state, int personId, bool deleteImage, Token token);
     int End_deleteAllFeaturesByPersonId(IAsyncResult asyncResult);
+    IAsyncResult Begin_deleteDevice(AsyncCallback callback, object state, int id, Token token);
+    bool End_deleteDevice(IAsyncResult asyncResult);
+    IAsyncResult Begin_deleteDeviceByMac(AsyncCallback callback, object state, string mac, Token token);
+    bool End_deleteDeviceByMac(IAsyncResult asyncResult);
     IAsyncResult Begin_deleteDeviceGroup(AsyncCallback callback, object state, int deviceGroupId, Token token);
     int End_deleteDeviceGroup(IAsyncResult asyncResult);
     IAsyncResult Begin_deleteFeature(AsyncCallback callback, object state, string featureMd5, bool deleteImage, Token token);
@@ -2335,6 +2343,124 @@ public partial class IFaceLog {
         throw result.Ex1;
       }
       throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "deleteAllFeaturesByPersonId failed: unknown result");
+    }
+
+    
+    public IAsyncResult Begin_deleteDevice(AsyncCallback callback, object state, int id, Token token)
+    {
+      return send_deleteDevice(callback, state, id, token);
+    }
+
+    public bool End_deleteDevice(IAsyncResult asyncResult)
+    {
+      oprot_.Transport.EndFlush(asyncResult);
+      return recv_deleteDevice();
+    }
+
+    public async Task<bool> deleteDeviceAsync(int id, Token token)
+    {
+      bool retval;
+      retval = await Task.Run(() =>
+      {
+        return deleteDevice(id, token);
+      });
+      return retval;
+    }
+
+    public bool deleteDevice(int id, Token token)
+    {
+      var asyncResult = Begin_deleteDevice(null, null, id, token);
+      return End_deleteDevice(asyncResult);
+
+    }
+    public IAsyncResult send_deleteDevice(AsyncCallback callback, object state, int id, Token token)
+    {
+      oprot_.WriteMessageBegin(new TMessage("deleteDevice", TMessageType.Call, seqid_));
+      deleteDevice_args args = new deleteDevice_args();
+      args.Id = id;
+      args.Token = token;
+      args.Write(oprot_);
+      oprot_.WriteMessageEnd();
+      return oprot_.Transport.BeginFlush(callback, state);
+    }
+
+    public bool recv_deleteDevice()
+    {
+      TMessage msg = iprot_.ReadMessageBegin();
+      if (msg.Type == TMessageType.Exception) {
+        TApplicationException x = TApplicationException.Read(iprot_);
+        iprot_.ReadMessageEnd();
+        throw x;
+      }
+      deleteDevice_result result = new deleteDevice_result();
+      result.Read(iprot_);
+      iprot_.ReadMessageEnd();
+      if (result.Success.HasValue) {
+        return result.Success.Value;
+      }
+      if (result.Ex1 != null) {
+        throw result.Ex1;
+      }
+      throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "deleteDevice failed: unknown result");
+    }
+
+    
+    public IAsyncResult Begin_deleteDeviceByMac(AsyncCallback callback, object state, string mac, Token token)
+    {
+      return send_deleteDeviceByMac(callback, state, mac, token);
+    }
+
+    public bool End_deleteDeviceByMac(IAsyncResult asyncResult)
+    {
+      oprot_.Transport.EndFlush(asyncResult);
+      return recv_deleteDeviceByMac();
+    }
+
+    public async Task<bool> deleteDeviceByMacAsync(string mac, Token token)
+    {
+      bool retval;
+      retval = await Task.Run(() =>
+      {
+        return deleteDeviceByMac(mac, token);
+      });
+      return retval;
+    }
+
+    public bool deleteDeviceByMac(string mac, Token token)
+    {
+      var asyncResult = Begin_deleteDeviceByMac(null, null, mac, token);
+      return End_deleteDeviceByMac(asyncResult);
+
+    }
+    public IAsyncResult send_deleteDeviceByMac(AsyncCallback callback, object state, string mac, Token token)
+    {
+      oprot_.WriteMessageBegin(new TMessage("deleteDeviceByMac", TMessageType.Call, seqid_));
+      deleteDeviceByMac_args args = new deleteDeviceByMac_args();
+      args.Mac = mac;
+      args.Token = token;
+      args.Write(oprot_);
+      oprot_.WriteMessageEnd();
+      return oprot_.Transport.BeginFlush(callback, state);
+    }
+
+    public bool recv_deleteDeviceByMac()
+    {
+      TMessage msg = iprot_.ReadMessageBegin();
+      if (msg.Type == TMessageType.Exception) {
+        TApplicationException x = TApplicationException.Read(iprot_);
+        iprot_.ReadMessageEnd();
+        throw x;
+      }
+      deleteDeviceByMac_result result = new deleteDeviceByMac_result();
+      result.Read(iprot_);
+      iprot_.ReadMessageEnd();
+      if (result.Success.HasValue) {
+        return result.Success.Value;
+      }
+      if (result.Ex1 != null) {
+        throw result.Ex1;
+      }
+      throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "deleteDeviceByMac failed: unknown result");
     }
 
     
@@ -10081,6 +10207,8 @@ public partial class IFaceLog {
       processMap_["countPersonByWhere"] = countPersonByWhere_ProcessAsync;
       processMap_["countPersonGroupByWhere"] = countPersonGroupByWhere_ProcessAsync;
       processMap_["deleteAllFeaturesByPersonId"] = deleteAllFeaturesByPersonId_ProcessAsync;
+      processMap_["deleteDevice"] = deleteDevice_ProcessAsync;
+      processMap_["deleteDeviceByMac"] = deleteDeviceByMac_ProcessAsync;
       processMap_["deleteDeviceGroup"] = deleteDeviceGroup_ProcessAsync;
       processMap_["deleteFeature"] = deleteFeature_ProcessAsync;
       processMap_["deleteGroupPermitOnDeviceGroup"] = deleteGroupPermitOnDeviceGroup_ProcessAsync;
@@ -11232,6 +11360,76 @@ public partial class IFaceLog {
         Console.Error.WriteLine(ex.ToString());
         TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
         oprot.WriteMessageBegin(new TMessage("deleteAllFeaturesByPersonId", TMessageType.Exception, seqid));
+        x.Write(oprot);
+      }
+      oprot.WriteMessageEnd();
+      oprot.Transport.Flush();
+    }
+
+    public async Task deleteDevice_ProcessAsync(int seqid, TProtocol iprot, TProtocol oprot)
+    {
+      deleteDevice_args args = new deleteDevice_args();
+      args.Read(iprot);
+      iprot.ReadMessageEnd();
+      deleteDevice_result result = new deleteDevice_result();
+      try
+      {
+        try
+        {
+          result.Success = await iface_.deleteDeviceAsync(args.Id.Value, args.Token);
+        }
+        catch (ServiceRuntimeException ex1)
+        {
+          result.Ex1 = ex1;
+        }
+        oprot.WriteMessageBegin(new TMessage("deleteDevice", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+      }
+      catch (TTransportException)
+      {
+        throw;
+      }
+      catch (Exception ex)
+      {
+        Console.Error.WriteLine("Error occurred in processor:");
+        Console.Error.WriteLine(ex.ToString());
+        TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
+        oprot.WriteMessageBegin(new TMessage("deleteDevice", TMessageType.Exception, seqid));
+        x.Write(oprot);
+      }
+      oprot.WriteMessageEnd();
+      oprot.Transport.Flush();
+    }
+
+    public async Task deleteDeviceByMac_ProcessAsync(int seqid, TProtocol iprot, TProtocol oprot)
+    {
+      deleteDeviceByMac_args args = new deleteDeviceByMac_args();
+      args.Read(iprot);
+      iprot.ReadMessageEnd();
+      deleteDeviceByMac_result result = new deleteDeviceByMac_result();
+      try
+      {
+        try
+        {
+          result.Success = await iface_.deleteDeviceByMacAsync(args.Mac, args.Token);
+        }
+        catch (ServiceRuntimeException ex1)
+        {
+          result.Ex1 = ex1;
+        }
+        oprot.WriteMessageBegin(new TMessage("deleteDeviceByMac", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+      }
+      catch (TTransportException)
+      {
+        throw;
+      }
+      catch (Exception ex)
+      {
+        Console.Error.WriteLine("Error occurred in processor:");
+        Console.Error.WriteLine(ex.ToString());
+        TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
+        oprot.WriteMessageBegin(new TMessage("deleteDeviceByMac", TMessageType.Exception, seqid));
         x.Write(oprot);
       }
       oprot.WriteMessageEnd();
@@ -15919,6 +16117,8 @@ public partial class IFaceLog {
       processMap_["countPersonByWhere"] = countPersonByWhere_Process;
       processMap_["countPersonGroupByWhere"] = countPersonGroupByWhere_Process;
       processMap_["deleteAllFeaturesByPersonId"] = deleteAllFeaturesByPersonId_Process;
+      processMap_["deleteDevice"] = deleteDevice_Process;
+      processMap_["deleteDeviceByMac"] = deleteDeviceByMac_Process;
       processMap_["deleteDeviceGroup"] = deleteDeviceGroup_Process;
       processMap_["deleteFeature"] = deleteFeature_Process;
       processMap_["deleteGroupPermitOnDeviceGroup"] = deleteGroupPermitOnDeviceGroup_Process;
@@ -17070,6 +17270,76 @@ public partial class IFaceLog {
         Console.Error.WriteLine(ex.ToString());
         TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
         oprot.WriteMessageBegin(new TMessage("deleteAllFeaturesByPersonId", TMessageType.Exception, seqid));
+        x.Write(oprot);
+      }
+      oprot.WriteMessageEnd();
+      oprot.Transport.Flush();
+    }
+
+    public void deleteDevice_Process(int seqid, TProtocol iprot, TProtocol oprot)
+    {
+      deleteDevice_args args = new deleteDevice_args();
+      args.Read(iprot);
+      iprot.ReadMessageEnd();
+      deleteDevice_result result = new deleteDevice_result();
+      try
+      {
+        try
+        {
+          result.Success = iface_.deleteDevice(args.Id.Value, args.Token);
+        }
+        catch (ServiceRuntimeException ex1)
+        {
+          result.Ex1 = ex1;
+        }
+        oprot.WriteMessageBegin(new TMessage("deleteDevice", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+      }
+      catch (TTransportException)
+      {
+        throw;
+      }
+      catch (Exception ex)
+      {
+        Console.Error.WriteLine("Error occurred in processor:");
+        Console.Error.WriteLine(ex.ToString());
+        TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
+        oprot.WriteMessageBegin(new TMessage("deleteDevice", TMessageType.Exception, seqid));
+        x.Write(oprot);
+      }
+      oprot.WriteMessageEnd();
+      oprot.Transport.Flush();
+    }
+
+    public void deleteDeviceByMac_Process(int seqid, TProtocol iprot, TProtocol oprot)
+    {
+      deleteDeviceByMac_args args = new deleteDeviceByMac_args();
+      args.Read(iprot);
+      iprot.ReadMessageEnd();
+      deleteDeviceByMac_result result = new deleteDeviceByMac_result();
+      try
+      {
+        try
+        {
+          result.Success = iface_.deleteDeviceByMac(args.Mac, args.Token);
+        }
+        catch (ServiceRuntimeException ex1)
+        {
+          result.Ex1 = ex1;
+        }
+        oprot.WriteMessageBegin(new TMessage("deleteDeviceByMac", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+      }
+      catch (TTransportException)
+      {
+        throw;
+      }
+      catch (Exception ex)
+      {
+        Console.Error.WriteLine("Error occurred in processor:");
+        Console.Error.WriteLine(ex.ToString());
+        TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
+        oprot.WriteMessageBegin(new TMessage("deleteDeviceByMac", TMessageType.Exception, seqid));
         x.Write(oprot);
       }
       oprot.WriteMessageEnd();
@@ -28366,6 +28636,449 @@ public partial class IFaceLog {
 
     public override string ToString() {
       StringBuilder __sb = new StringBuilder("deleteAllFeaturesByPersonId_result(");
+      bool __first = true;
+      if (Success != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Success: ");
+        __sb.Append(Success);
+      }
+      if (Ex1 != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Ex1: ");
+        __sb.Append(Ex1== null ? "<null>" : Ex1.ToString());
+      }
+      __sb.Append(")");
+      return __sb.ToString();
+    }
+
+  }
+
+
+  #if !SILVERLIGHT
+  [Serializable]
+  #endif
+  public partial class deleteDevice_args : TBase
+  {
+
+    public int Id { get; set; }
+
+    public Token Token { get; set; }
+
+    public deleteDevice_args() {
+    }
+
+    public deleteDevice_args(int id) : this() {
+      this.Id = id;
+    }
+
+    public void Read (TProtocol iprot)
+    {
+      iprot.IncrementRecursionDepth();
+      try
+      {
+        bool isset_id = false;
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 1:
+              if (field.Type == TType.I32) {
+                Id = iprot.ReadI32();
+                isset_id = true;
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 2:
+              if (field.Type == TType.Struct) {
+                Token = new Token();
+                Token.Read(iprot);
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+        if (!isset_id)
+          throw new TProtocolException(TProtocolException.INVALID_DATA, "required field Id not set");
+      }
+      finally
+      {
+        iprot.DecrementRecursionDepth();
+      }
+    }
+
+    public void Write(TProtocol oprot) {
+      oprot.IncrementRecursionDepth();
+      try
+      {
+        TStruct struc = new TStruct("deleteDevice_args");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+        field.Name = "id";
+        field.Type = TType.I32;
+        field.ID = 1;
+        oprot.WriteFieldBegin(field);
+        oprot.WriteI32(Id);
+        oprot.WriteFieldEnd();
+        if (Token != null) {
+          field.Name = "token";
+          field.Type = TType.Struct;
+          field.ID = 2;
+          oprot.WriteFieldBegin(field);
+          Token.Write(oprot);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+      finally
+      {
+        oprot.DecrementRecursionDepth();
+      }
+    }
+
+    public override string ToString() {
+      StringBuilder __sb = new StringBuilder("deleteDevice_args(");
+      __sb.Append(", Id: ");
+      __sb.Append(Id);
+      if (Token != null) {
+        __sb.Append(", Token: ");
+        __sb.Append(Token== null ? "<null>" : Token.ToString());
+      }
+      __sb.Append(")");
+      return __sb.ToString();
+    }
+
+  }
+
+
+  #if !SILVERLIGHT
+  [Serializable]
+  #endif
+  public partial class deleteDevice_result : TBase
+  {
+
+    public bool? Success { get; set; }
+
+    public ServiceRuntimeException Ex1 { get; set; }
+
+    public deleteDevice_result() {
+    }
+
+    public void Read (TProtocol iprot)
+    {
+      iprot.IncrementRecursionDepth();
+      try
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 0:
+              if (field.Type == TType.Bool) {
+                Success = iprot.ReadBool();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 1:
+              if (field.Type == TType.Struct) {
+                Ex1 = new ServiceRuntimeException();
+                Ex1.Read(iprot);
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+      finally
+      {
+        iprot.DecrementRecursionDepth();
+      }
+    }
+
+    public void Write(TProtocol oprot) {
+      oprot.IncrementRecursionDepth();
+      try
+      {
+        TStruct struc = new TStruct("deleteDevice_result");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+
+        if (this.Success != null) {
+          field.Name = "Success";
+          field.Type = TType.Bool;
+          field.ID = 0;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteBool(Success.Value);
+          oprot.WriteFieldEnd();
+        } else if (this.Ex1 != null) {
+          field.Name = "Ex1";
+          field.Type = TType.Struct;
+          field.ID = 1;
+          oprot.WriteFieldBegin(field);
+          Ex1.Write(oprot);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+      finally
+      {
+        oprot.DecrementRecursionDepth();
+      }
+    }
+
+    public override string ToString() {
+      StringBuilder __sb = new StringBuilder("deleteDevice_result(");
+      bool __first = true;
+      if (Success != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Success: ");
+        __sb.Append(Success);
+      }
+      if (Ex1 != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Ex1: ");
+        __sb.Append(Ex1== null ? "<null>" : Ex1.ToString());
+      }
+      __sb.Append(")");
+      return __sb.ToString();
+    }
+
+  }
+
+
+  #if !SILVERLIGHT
+  [Serializable]
+  #endif
+  public partial class deleteDeviceByMac_args : TBase
+  {
+
+    public string Mac { get; set; }
+
+    public Token Token { get; set; }
+
+    public deleteDeviceByMac_args() {
+    }
+
+    public void Read (TProtocol iprot)
+    {
+      iprot.IncrementRecursionDepth();
+      try
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 1:
+              if (field.Type == TType.String) {
+                Mac = iprot.ReadString();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 2:
+              if (field.Type == TType.Struct) {
+                Token = new Token();
+                Token.Read(iprot);
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+      finally
+      {
+        iprot.DecrementRecursionDepth();
+      }
+    }
+
+    public void Write(TProtocol oprot) {
+      oprot.IncrementRecursionDepth();
+      try
+      {
+        TStruct struc = new TStruct("deleteDeviceByMac_args");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+        if (Mac != null) {
+          field.Name = "mac";
+          field.Type = TType.String;
+          field.ID = 1;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteString(Mac);
+          oprot.WriteFieldEnd();
+        }
+        if (Token != null) {
+          field.Name = "token";
+          field.Type = TType.Struct;
+          field.ID = 2;
+          oprot.WriteFieldBegin(field);
+          Token.Write(oprot);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+      finally
+      {
+        oprot.DecrementRecursionDepth();
+      }
+    }
+
+    public override string ToString() {
+      StringBuilder __sb = new StringBuilder("deleteDeviceByMac_args(");
+      bool __first = true;
+      if (Mac != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Mac: ");
+        __sb.Append(Mac);
+      }
+      if (Token != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Token: ");
+        __sb.Append(Token== null ? "<null>" : Token.ToString());
+      }
+      __sb.Append(")");
+      return __sb.ToString();
+    }
+
+  }
+
+
+  #if !SILVERLIGHT
+  [Serializable]
+  #endif
+  public partial class deleteDeviceByMac_result : TBase
+  {
+
+    public bool? Success { get; set; }
+
+    public ServiceRuntimeException Ex1 { get; set; }
+
+    public deleteDeviceByMac_result() {
+    }
+
+    public void Read (TProtocol iprot)
+    {
+      iprot.IncrementRecursionDepth();
+      try
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 0:
+              if (field.Type == TType.Bool) {
+                Success = iprot.ReadBool();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 1:
+              if (field.Type == TType.Struct) {
+                Ex1 = new ServiceRuntimeException();
+                Ex1.Read(iprot);
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+      finally
+      {
+        iprot.DecrementRecursionDepth();
+      }
+    }
+
+    public void Write(TProtocol oprot) {
+      oprot.IncrementRecursionDepth();
+      try
+      {
+        TStruct struc = new TStruct("deleteDeviceByMac_result");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+
+        if (this.Success != null) {
+          field.Name = "Success";
+          field.Type = TType.Bool;
+          field.ID = 0;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteBool(Success.Value);
+          oprot.WriteFieldEnd();
+        } else if (this.Ex1 != null) {
+          field.Name = "Ex1";
+          field.Type = TType.Struct;
+          field.ID = 1;
+          oprot.WriteFieldBegin(field);
+          Ex1.Write(oprot);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+      finally
+      {
+        oprot.DecrementRecursionDepth();
+      }
+    }
+
+    public override string ToString() {
+      StringBuilder __sb = new StringBuilder("deleteDeviceByMac_result(");
       bool __first = true;
       if (Success != null) {
         if(!__first) { __sb.Append(", "); }

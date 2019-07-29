@@ -20,4 +20,5 @@ public enum SecurityExceptionType
   TABLE_INSERT_DENIED = 10,
   TABLE_UPDATE_DENIED = 11,
   TABLE_DELETE_DENIED = 12,
+  TOO_LOW_RANK = 13,
 }

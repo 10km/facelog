@@ -164,18 +164,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 			Throwables.throwIfInstanceOf(error.getCause(),expType);
 		}
 	}
-	
-	/**
-	 * 如果{@code token}为设备令牌则返回对应的设备信息对象{@link DeviceBean},否则返回{@code null}
-	 * @param token 令牌
-	 * @return {@link DeviceBean}对象或{@code null}
-	 */
-	private DeviceBean getDeviceOrNull(Token token){
-		if(token == null){
-			return null;
-		}
-		return token.getType() == TokenType.DEVICE ? dm.daoGetDevice(token.getId()) : null;
-	}
+
 	private static Date toDate(String date) throws ParseException{
 		if(Strings.isNullOrEmpty(date)){
 			return null;
@@ -427,7 +416,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 			return BaseDao.daoRunAsTransaction(new Callable<PersonBean>(){
 				@Override
 				public PersonBean call() throws Exception {
-					return dm.daoSavePerson(personBean, FaceUtilits.getByteBufferOrNull(idPhoto), null,getDeviceOrNull(token));
+					return dm.daoSavePerson(personBean, FaceUtilits.getByteBufferOrNull(idPhoto), null,tm.getDeviceOrNull(token));
 				}});
 		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
@@ -480,7 +469,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 					return dm.daoSavePerson(personBean, 
 							FaceUtilits.getByteBufferOrNull(idPhoto), 
 							featureBean, 
-							getDeviceOrNull(token));
+							tm.getDeviceOrNull(token));
 				}
 			});
 		} catch (Exception e) {
@@ -501,7 +490,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 					return dm.daoSavePerson(personBean, FaceUtilits.getByteBufferOrNull(idPhoto), 
 							dm.daoAddFeature(FaceUtilits.getByteBuffer(feature), 
 									featureVersion, personBean, faceBeans), 
-							getDeviceOrNull(token));
+							tm.getDeviceOrNull(token));
 				}
 			});
 		} catch (Exception e) {
@@ -525,7 +514,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 							FaceUtilits.getByteBuffer(feature), 
 							featureVersion, 
 							CollectionUtils.merge(buffers, faces), 
-							getDeviceOrNull(token));
+							tm.getDeviceOrNull(token));
 				}
 			});
 		} catch (Exception e) {
@@ -548,7 +537,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 							featureVersion,
 							FaceUtilits.getByteBufferOrNull(featureImage),
 							featureFaceBean, 
-							getDeviceOrNull(token));
+							tm.getDeviceOrNull(token));
 				}});
 		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
@@ -833,7 +822,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 					PersonBean personBean = dm.daoGetPerson(personId);
 					List<FaceBean> faceList = faceBean == null ? null : Arrays.asList(faceBean);
 					ImageBean imageBean = dm.daoAddImage(FaceUtilits.getByteBufferOrNull(featurePhoto), 
-							getDeviceOrNull(token),faceList, null);
+							tm.getDeviceOrNull(token),faceList, null);
 					if(personBean != null && imageBean != null 
 							&& personBean.getImageMd5() == null && asIdPhotoIfAbsent){
 						personBean.setImageMd5(imageBean.getMd5());
@@ -860,7 +849,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 					return dm.daoAddFeature(FaceUtilits.getByteBuffer(feature), 
 							featureVersion, dm.daoGetPerson(personId), 
 							CollectionUtils.merge(buffers, faces), 
-							getDeviceOrNull(token));
+							tm.getDeviceOrNull(token));
 				}
 			});
 		} catch (Exception e) {
@@ -1471,7 +1460,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
     		throw wrapServiceRuntimeException(e);
 		}	
     }
-    @Override
+	@Override
     public DeviceBean registerDevice(DeviceBean newDevice) throws ServiceSecurityException{
     	try{
     		return tm.registerDevice(newDevice);
@@ -1491,6 +1480,26 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		}
 	}
     @Override
+	public boolean deleteDevice(int id,Token token){
+		try{
+			Enable.PERSON_ONLY.check(tm, token);
+			// tm.checkRank(token, PersonRank.admin);
+			return 1 == dm.daoDeleteDevice(id);
+		} catch (Exception e) {
+			throw wrapServiceRuntimeException(e);
+		}	
+	}
+	@Override
+	public boolean deleteDeviceByMac(String mac,Token token){
+		try{
+			Enable.PERSON_ONLY.check(tm, token);
+			// tm.checkRank(token, PersonRank.admin);
+			return 1 == dm.daoDeleteDeviceByIndexMac(mac);  		
+		} catch (Exception e) {
+			throw wrapServiceRuntimeException(e);
+		}	
+	}
+	@Override
 	public Token online(DeviceBean device)
 			throws ServiceSecurityException{
     	try{

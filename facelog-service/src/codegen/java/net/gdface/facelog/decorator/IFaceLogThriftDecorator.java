@@ -761,6 +761,48 @@ public class IFaceLogThriftDecorator {
         }
     }
     /**
+     * @see {@link net.gdface.facelog.IFaceLog#deleteDevice(int,net.gdface.facelog.Token)}
+     */
+    @ThriftMethod(value = "deleteDevice" )
+    public boolean deleteDevice(int id,
+        Token token) 
+        throws ServiceRuntimeException{
+        try{
+            return delegate().deleteDevice(id,
+                TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.Token.class));
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
+     * @see {@link net.gdface.facelog.IFaceLog#deleteDeviceByMac(java.lang.String,net.gdface.facelog.Token)}
+     */
+    @ThriftMethod(value = "deleteDeviceByMac" )
+    public boolean deleteDeviceByMac(String mac,
+        Token token) 
+        throws ServiceRuntimeException{
+        try{
+            return delegate().deleteDeviceByMac(mac,
+                TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.Token.class));
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
      * @see {@link net.gdface.facelog.IFaceLog#deleteDeviceGroup(int,net.gdface.facelog.Token)}
      */
     @ThriftMethod(value = "deleteDeviceGroup" )

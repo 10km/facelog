@@ -9,7 +9,7 @@ enum TokenType {
 }
 
 enum SecurityExceptionType {
-  UNCLASSIFIED, INVALID_MAC, INVALID_SN, OCCUPIED_SN, INVALID_TOKEN, INVALID_DEVICE_ID, INVALID_PERSON_ID, INVALID_PASSWORD, REJECT_APPLY, ACCESS_DENIED, TABLE_INSERT_DENIED, TABLE_UPDATE_DENIED, TABLE_DELETE_DENIED
+  UNCLASSIFIED, INVALID_MAC, INVALID_SN, OCCUPIED_SN, INVALID_TOKEN, INVALID_DEVICE_ID, INVALID_PERSON_ID, INVALID_PASSWORD, REJECT_APPLY, ACCESS_DENIED, TABLE_INSERT_DENIED, TABLE_UPDATE_DENIED, TABLE_DELETE_DENIED, TOO_LOW_RANK
 }
 
 enum MQParam {
@@ -246,6 +246,8 @@ service IFaceLog {
   i32 countPersonByWhere(1: optional string where) throws (1: ServiceRuntimeException ex1);
   i32 countPersonGroupByWhere(1: optional string where) throws (1: ServiceRuntimeException ex1);
   i32 deleteAllFeaturesByPersonId(1: required i32 personId, 2: required bool deleteImage, 3: optional Token token) throws (1: ServiceRuntimeException ex1);
+  bool deleteDevice(1: required i32 id, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
+  bool deleteDeviceByMac(1: optional string mac, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
   i32 deleteDeviceGroup(1: required i32 deviceGroupId, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
   list<string> deleteFeature(1: optional string featureMd5, 2: required bool deleteImage, 3: optional Token token) throws (1: ServiceRuntimeException ex1);
   i32 deleteGroupPermitOnDeviceGroup(1: required i32 deviceGroupId, 2: optional Token token) throws (1: ServiceRuntimeException ex1);

@@ -442,6 +442,38 @@ IFaceLog_deleteAllFeaturesByPersonId_presult::~IFaceLog_deleteAllFeaturesByPerso
 }
 
 
+IFaceLog_deleteDevice_args::~IFaceLog_deleteDevice_args() throw() {
+}
+
+
+IFaceLog_deleteDevice_pargs::~IFaceLog_deleteDevice_pargs() throw() {
+}
+
+
+IFaceLog_deleteDevice_result::~IFaceLog_deleteDevice_result() throw() {
+}
+
+
+IFaceLog_deleteDevice_presult::~IFaceLog_deleteDevice_presult() throw() {
+}
+
+
+IFaceLog_deleteDeviceByMac_args::~IFaceLog_deleteDeviceByMac_args() throw() {
+}
+
+
+IFaceLog_deleteDeviceByMac_pargs::~IFaceLog_deleteDeviceByMac_pargs() throw() {
+}
+
+
+IFaceLog_deleteDeviceByMac_result::~IFaceLog_deleteDeviceByMac_result() throw() {
+}
+
+
+IFaceLog_deleteDeviceByMac_presult::~IFaceLog_deleteDeviceByMac_presult() throw() {
+}
+
+
 IFaceLog_deleteDeviceGroup_args::~IFaceLog_deleteDeviceGroup_args() throw() {
 }
 

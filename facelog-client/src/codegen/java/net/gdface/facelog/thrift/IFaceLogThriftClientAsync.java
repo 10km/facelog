@@ -718,6 +718,42 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(deleteAllFeaturesByPersonId(personId,deleteImage,token), callback);
     }
     /**
+     * see also {@link net.gdface.facelog.IFaceLog#deleteDevice(int,net.gdface.facelog.Token)}
+     */
+    public ListenableFuture<Boolean> deleteDevice(int id,
+        Token token){        
+        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
+        ListenableFuture<Boolean> future = async.deleteDevice(id,
+            TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class));
+        return factory.wrap(async,future);
+    }
+    public void deleteDevice(int id,
+        Token token,
+        FutureCallback<Boolean>callback){
+        factory.addCallback(deleteDevice(id,token), callback);
+    }
+    /**
+     * see also {@link net.gdface.facelog.IFaceLog#deleteDeviceByMac(java.lang.String,net.gdface.facelog.Token)}
+     */
+    public ListenableFuture<Boolean> deleteDeviceByMac(String mac,
+        Token token){        
+        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
+        ListenableFuture<Boolean> future = async.deleteDeviceByMac(mac,
+            TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class));
+        return factory.wrap(async,future);
+    }
+    public void deleteDeviceByMac(String mac,
+        Token token,
+        FutureCallback<Boolean>callback){
+        factory.addCallback(deleteDeviceByMac(mac,token), callback);
+    }
+    /**
      * see also {@link net.gdface.facelog.IFaceLog#deleteDeviceGroup(int,net.gdface.facelog.Token)}
      */
     public ListenableFuture<Integer> deleteDeviceGroup(int deviceGroupId,

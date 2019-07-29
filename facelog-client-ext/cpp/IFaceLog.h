@@ -48,6 +48,8 @@ class IFaceLogIf {
   virtual int32_t countPersonByWhere(const std::string& where) = 0;
   virtual int32_t countPersonGroupByWhere(const std::string& where) = 0;
   virtual int32_t deleteAllFeaturesByPersonId(const int32_t personId, const bool deleteImage, const Token& token) = 0;
+  virtual bool deleteDevice(const int32_t id, const Token& token) = 0;
+  virtual bool deleteDeviceByMac(const std::string& mac, const Token& token) = 0;
   virtual int32_t deleteDeviceGroup(const int32_t deviceGroupId, const Token& token) = 0;
   virtual void deleteFeature(std::vector<std::string> & _return, const std::string& featureMd5, const bool deleteImage, const Token& token) = 0;
   virtual int32_t deleteGroupPermitOnDeviceGroup(const int32_t deviceGroupId, const Token& token) = 0;
@@ -298,6 +300,14 @@ class IFaceLogNull : virtual public IFaceLogIf {
   }
   int32_t deleteAllFeaturesByPersonId(const int32_t /* personId */, const bool /* deleteImage */, const Token& /* token */) {
     int32_t _return = 0;
+    return _return;
+  }
+  bool deleteDevice(const int32_t /* id */, const Token& /* token */) {
+    bool _return = false;
+    return _return;
+  }
+  bool deleteDeviceByMac(const std::string& /* mac */, const Token& /* token */) {
+    bool _return = false;
     return _return;
   }
   int32_t deleteDeviceGroup(const int32_t /* deviceGroupId */, const Token& /* token */) {
@@ -4338,6 +4348,263 @@ class IFaceLog_deleteAllFeaturesByPersonId_presult {
   ServiceRuntimeException ex1;
 
   _IFaceLog_deleteAllFeaturesByPersonId_presult__isset __isset;
+
+  template <class Protocol_>
+  uint32_t read(Protocol_* iprot);
+
+};
+
+typedef struct _IFaceLog_deleteDevice_args__isset {
+  _IFaceLog_deleteDevice_args__isset() : token(false) {}
+  bool token :1;
+} _IFaceLog_deleteDevice_args__isset;
+
+class IFaceLog_deleteDevice_args {
+ public:
+
+  IFaceLog_deleteDevice_args(const IFaceLog_deleteDevice_args&);
+  IFaceLog_deleteDevice_args(IFaceLog_deleteDevice_args&&);
+  IFaceLog_deleteDevice_args& operator=(const IFaceLog_deleteDevice_args&);
+  IFaceLog_deleteDevice_args& operator=(IFaceLog_deleteDevice_args&&);
+  IFaceLog_deleteDevice_args() : id(0) {
+  }
+
+  virtual ~IFaceLog_deleteDevice_args() throw();
+  int32_t id;
+  Token token;
+
+  _IFaceLog_deleteDevice_args__isset __isset;
+
+  void __set_id(const int32_t val);
+
+  void __set_token(const Token& val);
+
+  bool operator == (const IFaceLog_deleteDevice_args & rhs) const
+  {
+    if (!(id == rhs.id))
+      return false;
+    if (!(token == rhs.token))
+      return false;
+    return true;
+  }
+  bool operator != (const IFaceLog_deleteDevice_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IFaceLog_deleteDevice_args & ) const;
+
+  template <class Protocol_>
+  uint32_t read(Protocol_* iprot);
+  template <class Protocol_>
+  uint32_t write(Protocol_* oprot) const;
+
+};
+
+
+class IFaceLog_deleteDevice_pargs {
+ public:
+
+
+  virtual ~IFaceLog_deleteDevice_pargs() throw();
+  const int32_t* id;
+  const Token* token;
+
+  template <class Protocol_>
+  uint32_t write(Protocol_* oprot) const;
+
+};
+
+typedef struct _IFaceLog_deleteDevice_result__isset {
+  _IFaceLog_deleteDevice_result__isset() : success(false), ex1(false) {}
+  bool success :1;
+  bool ex1 :1;
+} _IFaceLog_deleteDevice_result__isset;
+
+class IFaceLog_deleteDevice_result {
+ public:
+
+  IFaceLog_deleteDevice_result(const IFaceLog_deleteDevice_result&);
+  IFaceLog_deleteDevice_result(IFaceLog_deleteDevice_result&&);
+  IFaceLog_deleteDevice_result& operator=(const IFaceLog_deleteDevice_result&);
+  IFaceLog_deleteDevice_result& operator=(IFaceLog_deleteDevice_result&&);
+  IFaceLog_deleteDevice_result() : success(0) {
+  }
+
+  virtual ~IFaceLog_deleteDevice_result() throw();
+  bool success;
+  ServiceRuntimeException ex1;
+
+  _IFaceLog_deleteDevice_result__isset __isset;
+
+  void __set_success(const bool val);
+
+  void __set_ex1(const ServiceRuntimeException& val);
+
+  bool operator == (const IFaceLog_deleteDevice_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex1 == rhs.ex1))
+      return false;
+    return true;
+  }
+  bool operator != (const IFaceLog_deleteDevice_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IFaceLog_deleteDevice_result & ) const;
+
+  template <class Protocol_>
+  uint32_t read(Protocol_* iprot);
+  template <class Protocol_>
+  uint32_t write(Protocol_* oprot) const;
+
+};
+
+typedef struct _IFaceLog_deleteDevice_presult__isset {
+  _IFaceLog_deleteDevice_presult__isset() : success(false), ex1(false) {}
+  bool success :1;
+  bool ex1 :1;
+} _IFaceLog_deleteDevice_presult__isset;
+
+class IFaceLog_deleteDevice_presult {
+ public:
+
+
+  virtual ~IFaceLog_deleteDevice_presult() throw();
+  bool* success;
+  ServiceRuntimeException ex1;
+
+  _IFaceLog_deleteDevice_presult__isset __isset;
+
+  template <class Protocol_>
+  uint32_t read(Protocol_* iprot);
+
+};
+
+typedef struct _IFaceLog_deleteDeviceByMac_args__isset {
+  _IFaceLog_deleteDeviceByMac_args__isset() : mac(false), token(false) {}
+  bool mac :1;
+  bool token :1;
+} _IFaceLog_deleteDeviceByMac_args__isset;
+
+class IFaceLog_deleteDeviceByMac_args {
+ public:
+
+  IFaceLog_deleteDeviceByMac_args(const IFaceLog_deleteDeviceByMac_args&);
+  IFaceLog_deleteDeviceByMac_args(IFaceLog_deleteDeviceByMac_args&&);
+  IFaceLog_deleteDeviceByMac_args& operator=(const IFaceLog_deleteDeviceByMac_args&);
+  IFaceLog_deleteDeviceByMac_args& operator=(IFaceLog_deleteDeviceByMac_args&&);
+  IFaceLog_deleteDeviceByMac_args() : mac() {
+  }
+
+  virtual ~IFaceLog_deleteDeviceByMac_args() throw();
+  std::string mac;
+  Token token;
+
+  _IFaceLog_deleteDeviceByMac_args__isset __isset;
+
+  void __set_mac(const std::string& val);
+
+  void __set_token(const Token& val);
+
+  bool operator == (const IFaceLog_deleteDeviceByMac_args & rhs) const
+  {
+    if (!(mac == rhs.mac))
+      return false;
+    if (!(token == rhs.token))
+      return false;
+    return true;
+  }
+  bool operator != (const IFaceLog_deleteDeviceByMac_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IFaceLog_deleteDeviceByMac_args & ) const;
+
+  template <class Protocol_>
+  uint32_t read(Protocol_* iprot);
+  template <class Protocol_>
+  uint32_t write(Protocol_* oprot) const;
+
+};
+
+
+class IFaceLog_deleteDeviceByMac_pargs {
+ public:
+
+
+  virtual ~IFaceLog_deleteDeviceByMac_pargs() throw();
+  const std::string* mac;
+  const Token* token;
+
+  template <class Protocol_>
+  uint32_t write(Protocol_* oprot) const;
+
+};
+
+typedef struct _IFaceLog_deleteDeviceByMac_result__isset {
+  _IFaceLog_deleteDeviceByMac_result__isset() : success(false), ex1(false) {}
+  bool success :1;
+  bool ex1 :1;
+} _IFaceLog_deleteDeviceByMac_result__isset;
+
+class IFaceLog_deleteDeviceByMac_result {
+ public:
+
+  IFaceLog_deleteDeviceByMac_result(const IFaceLog_deleteDeviceByMac_result&);
+  IFaceLog_deleteDeviceByMac_result(IFaceLog_deleteDeviceByMac_result&&);
+  IFaceLog_deleteDeviceByMac_result& operator=(const IFaceLog_deleteDeviceByMac_result&);
+  IFaceLog_deleteDeviceByMac_result& operator=(IFaceLog_deleteDeviceByMac_result&&);
+  IFaceLog_deleteDeviceByMac_result() : success(0) {
+  }
+
+  virtual ~IFaceLog_deleteDeviceByMac_result() throw();
+  bool success;
+  ServiceRuntimeException ex1;
+
+  _IFaceLog_deleteDeviceByMac_result__isset __isset;
+
+  void __set_success(const bool val);
+
+  void __set_ex1(const ServiceRuntimeException& val);
+
+  bool operator == (const IFaceLog_deleteDeviceByMac_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex1 == rhs.ex1))
+      return false;
+    return true;
+  }
+  bool operator != (const IFaceLog_deleteDeviceByMac_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IFaceLog_deleteDeviceByMac_result & ) const;
+
+  template <class Protocol_>
+  uint32_t read(Protocol_* iprot);
+  template <class Protocol_>
+  uint32_t write(Protocol_* oprot) const;
+
+};
+
+typedef struct _IFaceLog_deleteDeviceByMac_presult__isset {
+  _IFaceLog_deleteDeviceByMac_presult__isset() : success(false), ex1(false) {}
+  bool success :1;
+  bool ex1 :1;
+} _IFaceLog_deleteDeviceByMac_presult__isset;
+
+class IFaceLog_deleteDeviceByMac_presult {
+ public:
+
+
+  virtual ~IFaceLog_deleteDeviceByMac_presult() throw();
+  bool* success;
+  ServiceRuntimeException ex1;
+
+  _IFaceLog_deleteDeviceByMac_presult__isset __isset;
 
   template <class Protocol_>
   uint32_t read(Protocol_* iprot);
@@ -21041,6 +21308,12 @@ class IFaceLogClientT : virtual public IFaceLogIf {
   int32_t deleteAllFeaturesByPersonId(const int32_t personId, const bool deleteImage, const Token& token);
   void send_deleteAllFeaturesByPersonId(const int32_t personId, const bool deleteImage, const Token& token);
   int32_t recv_deleteAllFeaturesByPersonId();
+  bool deleteDevice(const int32_t id, const Token& token);
+  void send_deleteDevice(const int32_t id, const Token& token);
+  bool recv_deleteDevice();
+  bool deleteDeviceByMac(const std::string& mac, const Token& token);
+  void send_deleteDeviceByMac(const std::string& mac, const Token& token);
+  bool recv_deleteDeviceByMac();
   int32_t deleteDeviceGroup(const int32_t deviceGroupId, const Token& token);
   void send_deleteDeviceGroup(const int32_t deviceGroupId, const Token& token);
   int32_t recv_deleteDeviceGroup();
@@ -21519,6 +21792,10 @@ class IFaceLogProcessorT : public ::apache::thrift::TDispatchProcessorT<Protocol
   void process_countPersonGroupByWhere(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext);
   void process_deleteAllFeaturesByPersonId(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_deleteAllFeaturesByPersonId(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext);
+  void process_deleteDevice(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_deleteDevice(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext);
+  void process_deleteDeviceByMac(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_deleteDeviceByMac(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext);
   void process_deleteDeviceGroup(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_deleteDeviceGroup(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext);
   void process_deleteFeature(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -21867,6 +22144,12 @@ class IFaceLogProcessorT : public ::apache::thrift::TDispatchProcessorT<Protocol
     processMap_["deleteAllFeaturesByPersonId"] = ProcessFunctions(
       &IFaceLogProcessorT::process_deleteAllFeaturesByPersonId,
       &IFaceLogProcessorT::process_deleteAllFeaturesByPersonId);
+    processMap_["deleteDevice"] = ProcessFunctions(
+      &IFaceLogProcessorT::process_deleteDevice,
+      &IFaceLogProcessorT::process_deleteDevice);
+    processMap_["deleteDeviceByMac"] = ProcessFunctions(
+      &IFaceLogProcessorT::process_deleteDeviceByMac,
+      &IFaceLogProcessorT::process_deleteDeviceByMac);
     processMap_["deleteDeviceGroup"] = ProcessFunctions(
       &IFaceLogProcessorT::process_deleteDeviceGroup,
       &IFaceLogProcessorT::process_deleteDeviceGroup);
@@ -22549,6 +22832,24 @@ class IFaceLogMultiface : virtual public IFaceLogIf {
       ifaces_[i]->deleteAllFeaturesByPersonId(personId, deleteImage, token);
     }
     return ifaces_[i]->deleteAllFeaturesByPersonId(personId, deleteImage, token);
+  }
+
+  bool deleteDevice(const int32_t id, const Token& token) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->deleteDevice(id, token);
+    }
+    return ifaces_[i]->deleteDevice(id, token);
+  }
+
+  bool deleteDeviceByMac(const std::string& mac, const Token& token) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->deleteDeviceByMac(mac, token);
+    }
+    return ifaces_[i]->deleteDeviceByMac(mac, token);
   }
 
   int32_t deleteDeviceGroup(const int32_t deviceGroupId, const Token& token) {
@@ -23938,6 +24239,12 @@ class IFaceLogConcurrentClientT : virtual public IFaceLogIf {
   int32_t deleteAllFeaturesByPersonId(const int32_t personId, const bool deleteImage, const Token& token);
   int32_t send_deleteAllFeaturesByPersonId(const int32_t personId, const bool deleteImage, const Token& token);
   int32_t recv_deleteAllFeaturesByPersonId(const int32_t seqid);
+  bool deleteDevice(const int32_t id, const Token& token);
+  int32_t send_deleteDevice(const int32_t id, const Token& token);
+  bool recv_deleteDevice(const int32_t seqid);
+  bool deleteDeviceByMac(const std::string& mac, const Token& token);
+  int32_t send_deleteDeviceByMac(const std::string& mac, const Token& token);
+  bool recv_deleteDeviceByMac(const int32_t seqid);
   int32_t deleteDeviceGroup(const int32_t deviceGroupId, const Token& token);
   int32_t send_deleteDeviceGroup(const int32_t deviceGroupId, const Token& token);
   int32_t recv_deleteDeviceGroup(const int32_t seqid);

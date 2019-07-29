@@ -43,7 +43,8 @@ public class ServiceSecurityException extends Exception {
         /** 拒绝访问 */ACCESS_DENIED,
         /** 拒绝表insert操作 */TABLE_INSERT_DENIED,
         /** 拒绝表update操作 */TABLE_UPDATE_DENIED,
-        /** 拒绝表delete操作 */TABLE_DELETE_DENIED
+        /** 拒绝表delete操作 */TABLE_DELETE_DENIED,
+        /** 用户级别过低 */TOO_LOW_RANK
 	}
     private SecurityExceptionType type = SecurityExceptionType.UNCLASSIFIED;
     private Integer deviceID;

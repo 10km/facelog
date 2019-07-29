@@ -18,6 +18,7 @@ import gu.simplemq.redis.JedisUtils;
 import gu.simplemq.redis.RedisFactory;
 import gu.simplemq.redis.RedisTable;
 import net.gdface.facelog.db.DeviceBean;
+import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
 import net.gdface.facelog.db.exception.RuntimeDaoException;
 import net.gdface.facelog.ServiceSecurityException.SecurityExceptionType;
@@ -294,7 +295,45 @@ class TokenMangement implements ServiceConstant {
 	private void removePersonTokenOf(int personId){
 		personTokenTable.remove(Integer.toString(personId));
 	}
-	
+	/**
+	 * 如果{@code token}为设备令牌则返回对应的设备信息对象{@link DeviceBean},否则返回{@code null}
+	 * @param token 令牌
+	 * @return {@link DeviceBean}对象或{@code null}
+	 */
+	protected DeviceBean getDeviceOrNull(Token token){
+		return (token != null && token.getType() == TokenType.DEVICE) ? dao.daoGetDevice(token.getId()) : null;
+	}
+	/**
+	 * 如果{@code token}为人员令牌则返回对应的人员信息对象{@link PersonBean},否则返回{@code null}
+	 * @param token 令牌
+	 * @return {@link PersonBean}对象或{@code null}
+	 */
+	protected PersonBean getPersonOrNull(Token token){
+		return (token != null && token.getType() == TokenType.PERSON) ? dao.daoGetPerson(token.getId()) : null;
+	}
+	/**
+	 * 从令牌中获取人员等级
+	 * @param token
+	 * @return
+	 */
+	protected PersonRank rankOf(Token token){
+		if(token != null && token.getType() == TokenType.ROOT){
+			return PersonRank.root;
+		}
+		PersonBean personBean = getPersonOrNull(token);
+		return personBean == null ? PersonRank.person : PersonRank.fromRank(personBean.getRank());
+	}
+	/**
+	 * 人员令牌(token)的等级小于指定的等级(rank)时抛出异常
+	 * @param token
+	 * @param rank
+	 * @throws ServiceSecurityException
+	 */
+	protected void checkRank(Token token,PersonRank rank) throws ServiceSecurityException{
+		if(rankOf(token).ordinal() < checkNotNull(rank,"rank is null").ordinal()){
+			throw new ServiceSecurityException("admin rank required",SecurityExceptionType.TOO_LOW_RANK);
+		}
+	}
 	/**
 	 * 设备注册
 	 * @param newDevice

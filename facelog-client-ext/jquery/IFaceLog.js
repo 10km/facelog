@@ -4411,6 +4411,284 @@ IFaceLog_deleteAllFeaturesByPersonId_result.prototype.write = function(output) {
   return;
 };
 
+IFaceLog_deleteDevice_args = function(args) {
+  this.id = null;
+  this.token = null;
+  if (args) {
+    if (args.id !== undefined && args.id !== null) {
+      this.id = args.id;
+    } else {
+      throw new Thrift.TProtocolException(Thrift.TProtocolExceptionType.UNKNOWN, 'Required field id is unset!');
+    }
+    if (args.token !== undefined && args.token !== null) {
+      this.token = new Token(args.token);
+    }
+  }
+};
+IFaceLog_deleteDevice_args.prototype = {};
+IFaceLog_deleteDevice_args.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+      if (ftype == Thrift.Type.I32) {
+        this.id = input.readI32().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 2:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.token = new Token();
+        this.token.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+IFaceLog_deleteDevice_args.prototype.write = function(output) {
+  output.writeStructBegin('IFaceLog_deleteDevice_args');
+  if (this.id !== null && this.id !== undefined) {
+    output.writeFieldBegin('id', Thrift.Type.I32, 1);
+    output.writeI32(this.id);
+    output.writeFieldEnd();
+  }
+  if (this.token !== null && this.token !== undefined) {
+    output.writeFieldBegin('token', Thrift.Type.STRUCT, 2);
+    this.token.write(output);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+IFaceLog_deleteDevice_result = function(args) {
+  this.success = null;
+  this.ex1 = null;
+  if (args instanceof ServiceRuntimeException) {
+    this.ex1 = args;
+    return;
+  }
+  if (args) {
+    if (args.success !== undefined && args.success !== null) {
+      this.success = args.success;
+    }
+    if (args.ex1 !== undefined && args.ex1 !== null) {
+      this.ex1 = args.ex1;
+    }
+  }
+};
+IFaceLog_deleteDevice_result.prototype = {};
+IFaceLog_deleteDevice_result.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+      if (ftype == Thrift.Type.BOOL) {
+        this.success = input.readBool().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 1:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.ex1 = new ServiceRuntimeException();
+        this.ex1.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+IFaceLog_deleteDevice_result.prototype.write = function(output) {
+  output.writeStructBegin('IFaceLog_deleteDevice_result');
+  if (this.success !== null && this.success !== undefined) {
+    output.writeFieldBegin('success', Thrift.Type.BOOL, 0);
+    output.writeBool(this.success);
+    output.writeFieldEnd();
+  }
+  if (this.ex1 !== null && this.ex1 !== undefined) {
+    output.writeFieldBegin('ex1', Thrift.Type.STRUCT, 1);
+    this.ex1.write(output);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+IFaceLog_deleteDeviceByMac_args = function(args) {
+  this.mac = null;
+  this.token = null;
+  if (args) {
+    if (args.mac !== undefined && args.mac !== null) {
+      this.mac = args.mac;
+    }
+    if (args.token !== undefined && args.token !== null) {
+      this.token = new Token(args.token);
+    }
+  }
+};
+IFaceLog_deleteDeviceByMac_args.prototype = {};
+IFaceLog_deleteDeviceByMac_args.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+      if (ftype == Thrift.Type.STRING) {
+        this.mac = input.readString().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 2:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.token = new Token();
+        this.token.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+IFaceLog_deleteDeviceByMac_args.prototype.write = function(output) {
+  output.writeStructBegin('IFaceLog_deleteDeviceByMac_args');
+  if (this.mac !== null && this.mac !== undefined) {
+    output.writeFieldBegin('mac', Thrift.Type.STRING, 1);
+    output.writeString(this.mac);
+    output.writeFieldEnd();
+  }
+  if (this.token !== null && this.token !== undefined) {
+    output.writeFieldBegin('token', Thrift.Type.STRUCT, 2);
+    this.token.write(output);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+IFaceLog_deleteDeviceByMac_result = function(args) {
+  this.success = null;
+  this.ex1 = null;
+  if (args instanceof ServiceRuntimeException) {
+    this.ex1 = args;
+    return;
+  }
+  if (args) {
+    if (args.success !== undefined && args.success !== null) {
+      this.success = args.success;
+    }
+    if (args.ex1 !== undefined && args.ex1 !== null) {
+      this.ex1 = args.ex1;
+    }
+  }
+};
+IFaceLog_deleteDeviceByMac_result.prototype = {};
+IFaceLog_deleteDeviceByMac_result.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+      if (ftype == Thrift.Type.BOOL) {
+        this.success = input.readBool().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 1:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.ex1 = new ServiceRuntimeException();
+        this.ex1.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+IFaceLog_deleteDeviceByMac_result.prototype.write = function(output) {
+  output.writeStructBegin('IFaceLog_deleteDeviceByMac_result');
+  if (this.success !== null && this.success !== undefined) {
+    output.writeFieldBegin('success', Thrift.Type.BOOL, 0);
+    output.writeBool(this.success);
+    output.writeFieldEnd();
+  }
+  if (this.ex1 !== null && this.ex1 !== undefined) {
+    output.writeFieldBegin('ex1', Thrift.Type.STRUCT, 1);
+    this.ex1.write(output);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
 IFaceLog_deleteDeviceGroup_args = function(args) {
   this.deviceGroupId = null;
   this.token = null;
@@ -25538,6 +25816,98 @@ IFaceLogClient.prototype.recv_deleteAllFeaturesByPersonId = function() {
     return result.success;
   }
   throw 'deleteAllFeaturesByPersonId failed: unknown result';
+};
+IFaceLogClient.prototype.deleteDevice = function(id, token, callback) {
+  if (callback === undefined) {
+    this.send_deleteDevice(id, token);
+    return this.recv_deleteDevice();
+  } else {
+    var postData = this.send_deleteDevice(id, token, true);
+    return this.output.getTransport()
+      .jqRequest(this, postData, arguments, this.recv_deleteDevice);
+  }
+};
+
+IFaceLogClient.prototype.send_deleteDevice = function(id, token, callback) {
+  this.output.writeMessageBegin('deleteDevice', Thrift.MessageType.CALL, this.seqid);
+  var params = {
+    id: id,
+    token: token
+  };
+  var args = new IFaceLog_deleteDevice_args(params);
+  args.write(this.output);
+  this.output.writeMessageEnd();
+  return this.output.getTransport().flush(callback);
+};
+
+IFaceLogClient.prototype.recv_deleteDevice = function() {
+  var ret = this.input.readMessageBegin();
+  var fname = ret.fname;
+  var mtype = ret.mtype;
+  var rseqid = ret.rseqid;
+  if (mtype == Thrift.MessageType.EXCEPTION) {
+    var x = new Thrift.TApplicationException();
+    x.read(this.input);
+    this.input.readMessageEnd();
+    throw x;
+  }
+  var result = new IFaceLog_deleteDevice_result();
+  result.read(this.input);
+  this.input.readMessageEnd();
+
+  if (null !== result.ex1) {
+    throw result.ex1;
+  }
+  if (null !== result.success) {
+    return result.success;
+  }
+  throw 'deleteDevice failed: unknown result';
+};
+IFaceLogClient.prototype.deleteDeviceByMac = function(mac, token, callback) {
+  if (callback === undefined) {
+    this.send_deleteDeviceByMac(mac, token);
+    return this.recv_deleteDeviceByMac();
+  } else {
+    var postData = this.send_deleteDeviceByMac(mac, token, true);
+    return this.output.getTransport()
+      .jqRequest(this, postData, arguments, this.recv_deleteDeviceByMac);
+  }
+};
+
+IFaceLogClient.prototype.send_deleteDeviceByMac = function(mac, token, callback) {
+  this.output.writeMessageBegin('deleteDeviceByMac', Thrift.MessageType.CALL, this.seqid);
+  var params = {
+    mac: mac,
+    token: token
+  };
+  var args = new IFaceLog_deleteDeviceByMac_args(params);
+  args.write(this.output);
+  this.output.writeMessageEnd();
+  return this.output.getTransport().flush(callback);
+};
+
+IFaceLogClient.prototype.recv_deleteDeviceByMac = function() {
+  var ret = this.input.readMessageBegin();
+  var fname = ret.fname;
+  var mtype = ret.mtype;
+  var rseqid = ret.rseqid;
+  if (mtype == Thrift.MessageType.EXCEPTION) {
+    var x = new Thrift.TApplicationException();
+    x.read(this.input);
+    this.input.readMessageEnd();
+    throw x;
+  }
+  var result = new IFaceLog_deleteDeviceByMac_result();
+  result.read(this.input);
+  this.input.readMessageEnd();
+
+  if (null !== result.ex1) {
+    throw result.ex1;
+  }
+  if (null !== result.success) {
+    return result.success;
+  }
+  throw 'deleteDeviceByMac failed: unknown result';
 };
 IFaceLogClient.prototype.deleteDeviceGroup = function(deviceGroupId, token, callback) {
   if (callback === undefined) {

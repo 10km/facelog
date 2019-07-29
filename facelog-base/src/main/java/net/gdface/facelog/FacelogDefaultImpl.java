@@ -434,6 +434,16 @@ public class FacelogDefaultImpl implements IFaceLog {
 	}
 
 	@Override
+	public boolean deleteDeviceByMac(String mac, Token token) {
+		return false;
+	}
+
+	@Override
+	public boolean deleteDevice(int id, Token token) {
+		return false;
+	}
+
+	@Override
 	public List<Integer> getSubDeviceGroup(int deviceGroupId) {
 		return null;
 	}

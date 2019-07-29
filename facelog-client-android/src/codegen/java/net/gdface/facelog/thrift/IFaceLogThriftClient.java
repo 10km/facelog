@@ -999,6 +999,60 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
+    public boolean deleteDevice(final int id,
+        final Token token) 
+        {
+        try{
+            return syncCall(new Function<Boolean,Boolean>() {
+                @Override
+                public Boolean apply(Boolean input) {
+                    return input;
+                }},
+                new ServiceAsyncCall<Boolean>(){
+                @Override
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<Boolean> nativeCallback){
+                    service.deleteDevice(id,TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                }});
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);
+        }
+    }
+    @Override
+    public boolean deleteDeviceByMac(final String mac,
+        final Token token) 
+        {
+        try{
+            return syncCall(new Function<Boolean,Boolean>() {
+                @Override
+                public Boolean apply(Boolean input) {
+                    return input;
+                }},
+                new ServiceAsyncCall<Boolean>(){
+                @Override
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<Boolean> nativeCallback){
+                    service.deleteDeviceByMac(mac,TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                }});
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);
+        }
+    }
+    @Override
     public int deleteDeviceGroup(final int deviceGroupId,
         final Token token) 
         {

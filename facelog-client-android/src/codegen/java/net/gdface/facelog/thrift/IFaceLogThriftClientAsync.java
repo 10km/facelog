@@ -929,6 +929,56 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(deleteAllFeaturesByPersonId(personId,deleteImage,token), callback);
     }
     /**
+     * see also {@link net.gdface.facelog.IFaceLog#deleteDevice(int,net.gdface.facelog.Token)}
+     */
+    public ListenableFuture<Boolean> deleteDevice(int id,
+        Token token){
+        MethodCallback<Boolean,Boolean> nativeCallback = 
+            new MethodCallback<Boolean,Boolean>(
+                new Function<Boolean,Boolean>() {
+                        @Override
+                        public Boolean apply(Boolean input) {
+                            return input;
+                }});
+        nativeCallback.service.deleteDevice(
+                id,
+            TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
+    }
+    public void deleteDevice(int id,
+        Token token,
+        FutureCallback<Boolean>callback){
+        factory.addCallback(deleteDevice(id,token), callback);
+    }
+    /**
+     * see also {@link net.gdface.facelog.IFaceLog#deleteDeviceByMac(java.lang.String,net.gdface.facelog.Token)}
+     */
+    public ListenableFuture<Boolean> deleteDeviceByMac(String mac,
+        Token token){
+        MethodCallback<Boolean,Boolean> nativeCallback = 
+            new MethodCallback<Boolean,Boolean>(
+                new Function<Boolean,Boolean>() {
+                        @Override
+                        public Boolean apply(Boolean input) {
+                            return input;
+                }});
+        nativeCallback.service.deleteDeviceByMac(
+                mac,
+            TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
+    }
+    public void deleteDeviceByMac(String mac,
+        Token token,
+        FutureCallback<Boolean>callback){
+        factory.addCallback(deleteDeviceByMac(mac,token), callback);
+    }
+    /**
      * see also {@link net.gdface.facelog.IFaceLog#deleteDeviceGroup(int,net.gdface.facelog.Token)}
      */
     public ListenableFuture<Integer> deleteDeviceGroup(int deviceGroupId,

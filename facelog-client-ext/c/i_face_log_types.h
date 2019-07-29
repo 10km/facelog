@@ -41,7 +41,8 @@ enum _SecurityExceptionType {
   SECURITY_EXCEPTION_TYPE_ACCESS_DENIED = 9,
   SECURITY_EXCEPTION_TYPE_TABLE_INSERT_DENIED = 10,
   SECURITY_EXCEPTION_TYPE_TABLE_UPDATE_DENIED = 11,
-  SECURITY_EXCEPTION_TYPE_TABLE_DELETE_DENIED = 12
+  SECURITY_EXCEPTION_TYPE_TABLE_DELETE_DENIED = 12,
+  SECURITY_EXCEPTION_TYPE_TOO_LOW_RANK = 13
 };
 typedef enum _SecurityExceptionType SecurityExceptionType;
 
@@ -2188,6 +2189,113 @@ GType i_face_log_delete_all_features_by_person_id_result_get_type (void);
 #define IS_I_FACE_LOG_DELETE_ALL_FEATURES_BY_PERSON_ID_RESULT(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_I_FACE_LOG_DELETE_ALL_FEATURES_BY_PERSON_ID_RESULT))
 #define IS_I_FACE_LOG_DELETE_ALL_FEATURES_BY_PERSON_ID_RESULT_CLASS(c) (G_TYPE_CHECK_CLASS_TYPE ((c), TYPE_I_FACE_LOG_DELETE_ALL_FEATURES_BY_PERSON_ID_RESULT))
 #define I_FACE_LOG_DELETE_ALL_FEATURES_BY_PERSON_ID_RESULT_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_I_FACE_LOG_DELETE_ALL_FEATURES_BY_PERSON_ID_RESULT, IFaceLogDeleteAllFeaturesByPersonIdResultClass))
+
+/* struct IFaceLogDeleteDeviceArgs */
+struct _IFaceLogDeleteDeviceArgs
+{ 
+  ThriftStruct parent; 
+
+  /* public */
+  gint32 id;
+  Token * token;
+  gboolean __isset_token;
+};
+typedef struct _IFaceLogDeleteDeviceArgs IFaceLogDeleteDeviceArgs;
+
+struct _IFaceLogDeleteDeviceArgsClass
+{
+  ThriftStructClass parent;
+};
+typedef struct _IFaceLogDeleteDeviceArgsClass IFaceLogDeleteDeviceArgsClass;
+
+GType i_face_log_delete_device_args_get_type (void);
+#define TYPE_I_FACE_LOG_DELETE_DEVICE_ARGS (i_face_log_delete_device_args_get_type())
+#define I_FACE_LOG_DELETE_DEVICE_ARGS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_I_FACE_LOG_DELETE_DEVICE_ARGS, IFaceLogDeleteDeviceArgs))
+#define I_FACE_LOG_DELETE_DEVICE_ARGS_CLASS(c) (G_TYPE_CHECK_CLASS_CAST ((c), _TYPE_I_FACE_LOG_DELETE_DEVICE_ARGS, IFaceLogDeleteDeviceArgsClass))
+#define IS_I_FACE_LOG_DELETE_DEVICE_ARGS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_I_FACE_LOG_DELETE_DEVICE_ARGS))
+#define IS_I_FACE_LOG_DELETE_DEVICE_ARGS_CLASS(c) (G_TYPE_CHECK_CLASS_TYPE ((c), TYPE_I_FACE_LOG_DELETE_DEVICE_ARGS))
+#define I_FACE_LOG_DELETE_DEVICE_ARGS_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_I_FACE_LOG_DELETE_DEVICE_ARGS, IFaceLogDeleteDeviceArgsClass))
+
+/* struct IFaceLogDeleteDeviceResult */
+struct _IFaceLogDeleteDeviceResult
+{ 
+  ThriftStruct parent; 
+
+  /* public */
+  gboolean success;
+  gboolean __isset_success;
+  ServiceRuntimeException * ex1;
+  gboolean __isset_ex1;
+};
+typedef struct _IFaceLogDeleteDeviceResult IFaceLogDeleteDeviceResult;
+
+struct _IFaceLogDeleteDeviceResultClass
+{
+  ThriftStructClass parent;
+};
+typedef struct _IFaceLogDeleteDeviceResultClass IFaceLogDeleteDeviceResultClass;
+
+GType i_face_log_delete_device_result_get_type (void);
+#define TYPE_I_FACE_LOG_DELETE_DEVICE_RESULT (i_face_log_delete_device_result_get_type())
+#define I_FACE_LOG_DELETE_DEVICE_RESULT(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_I_FACE_LOG_DELETE_DEVICE_RESULT, IFaceLogDeleteDeviceResult))
+#define I_FACE_LOG_DELETE_DEVICE_RESULT_CLASS(c) (G_TYPE_CHECK_CLASS_CAST ((c), _TYPE_I_FACE_LOG_DELETE_DEVICE_RESULT, IFaceLogDeleteDeviceResultClass))
+#define IS_I_FACE_LOG_DELETE_DEVICE_RESULT(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_I_FACE_LOG_DELETE_DEVICE_RESULT))
+#define IS_I_FACE_LOG_DELETE_DEVICE_RESULT_CLASS(c) (G_TYPE_CHECK_CLASS_TYPE ((c), TYPE_I_FACE_LOG_DELETE_DEVICE_RESULT))
+#define I_FACE_LOG_DELETE_DEVICE_RESULT_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_I_FACE_LOG_DELETE_DEVICE_RESULT, IFaceLogDeleteDeviceResultClass))
+
+/* struct IFaceLogDeleteDeviceByMacArgs */
+struct _IFaceLogDeleteDeviceByMacArgs
+{ 
+  ThriftStruct parent; 
+
+  /* public */
+  gchar * mac;
+  gboolean __isset_mac;
+  Token * token;
+  gboolean __isset_token;
+};
+typedef struct _IFaceLogDeleteDeviceByMacArgs IFaceLogDeleteDeviceByMacArgs;
+
+struct _IFaceLogDeleteDeviceByMacArgsClass
+{
+  ThriftStructClass parent;
+};
+typedef struct _IFaceLogDeleteDeviceByMacArgsClass IFaceLogDeleteDeviceByMacArgsClass;
+
+GType i_face_log_delete_device_by_mac_args_get_type (void);
+#define TYPE_I_FACE_LOG_DELETE_DEVICE_BY_MAC_ARGS (i_face_log_delete_device_by_mac_args_get_type())
+#define I_FACE_LOG_DELETE_DEVICE_BY_MAC_ARGS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_I_FACE_LOG_DELETE_DEVICE_BY_MAC_ARGS, IFaceLogDeleteDeviceByMacArgs))
+#define I_FACE_LOG_DELETE_DEVICE_BY_MAC_ARGS_CLASS(c) (G_TYPE_CHECK_CLASS_CAST ((c), _TYPE_I_FACE_LOG_DELETE_DEVICE_BY_MAC_ARGS, IFaceLogDeleteDeviceByMacArgsClass))
+#define IS_I_FACE_LOG_DELETE_DEVICE_BY_MAC_ARGS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_I_FACE_LOG_DELETE_DEVICE_BY_MAC_ARGS))
+#define IS_I_FACE_LOG_DELETE_DEVICE_BY_MAC_ARGS_CLASS(c) (G_TYPE_CHECK_CLASS_TYPE ((c), TYPE_I_FACE_LOG_DELETE_DEVICE_BY_MAC_ARGS))
+#define I_FACE_LOG_DELETE_DEVICE_BY_MAC_ARGS_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_I_FACE_LOG_DELETE_DEVICE_BY_MAC_ARGS, IFaceLogDeleteDeviceByMacArgsClass))
+
+/* struct IFaceLogDeleteDeviceByMacResult */
+struct _IFaceLogDeleteDeviceByMacResult
+{ 
+  ThriftStruct parent; 
+
+  /* public */
+  gboolean success;
+  gboolean __isset_success;
+  ServiceRuntimeException * ex1;
+  gboolean __isset_ex1;
+};
+typedef struct _IFaceLogDeleteDeviceByMacResult IFaceLogDeleteDeviceByMacResult;
+
+struct _IFaceLogDeleteDeviceByMacResultClass
+{
+  ThriftStructClass parent;
+};
+typedef struct _IFaceLogDeleteDeviceByMacResultClass IFaceLogDeleteDeviceByMacResultClass;
+
+GType i_face_log_delete_device_by_mac_result_get_type (void);
+#define TYPE_I_FACE_LOG_DELETE_DEVICE_BY_MAC_RESULT (i_face_log_delete_device_by_mac_result_get_type())
+#define I_FACE_LOG_DELETE_DEVICE_BY_MAC_RESULT(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_I_FACE_LOG_DELETE_DEVICE_BY_MAC_RESULT, IFaceLogDeleteDeviceByMacResult))
+#define I_FACE_LOG_DELETE_DEVICE_BY_MAC_RESULT_CLASS(c) (G_TYPE_CHECK_CLASS_CAST ((c), _TYPE_I_FACE_LOG_DELETE_DEVICE_BY_MAC_RESULT, IFaceLogDeleteDeviceByMacResultClass))
+#define IS_I_FACE_LOG_DELETE_DEVICE_BY_MAC_RESULT(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_I_FACE_LOG_DELETE_DEVICE_BY_MAC_RESULT))
+#define IS_I_FACE_LOG_DELETE_DEVICE_BY_MAC_RESULT_CLASS(c) (G_TYPE_CHECK_CLASS_TYPE ((c), TYPE_I_FACE_LOG_DELETE_DEVICE_BY_MAC_RESULT))
+#define I_FACE_LOG_DELETE_DEVICE_BY_MAC_RESULT_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_I_FACE_LOG_DELETE_DEVICE_BY_MAC_RESULT, IFaceLogDeleteDeviceByMacResultClass))
 
 /* struct IFaceLogDeleteDeviceGroupArgs */
 struct _IFaceLogDeleteDeviceGroupArgs

@@ -283,6 +283,24 @@ public interface IFaceLog
             @ThriftField(value=3, name="token", requiredness=Requiredness.OPTIONAL) final Token token
         );
 
+        @ThriftMethod(value = "deleteDevice",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1)
+                      })
+        ListenableFuture<Boolean> deleteDevice(
+            @ThriftField(value=1, name="id", requiredness=Requiredness.REQUIRED) final int id,
+            @ThriftField(value=2, name="token", requiredness=Requiredness.OPTIONAL) final Token token
+        );
+
+        @ThriftMethod(value = "deleteDeviceByMac",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1)
+                      })
+        ListenableFuture<Boolean> deleteDeviceByMac(
+            @ThriftField(value=1, name="mac", requiredness=Requiredness.OPTIONAL) final String mac,
+            @ThriftField(value=2, name="token", requiredness=Requiredness.OPTIONAL) final Token token
+        );
+
         @ThriftMethod(value = "deleteDeviceGroup",
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
@@ -1725,6 +1743,24 @@ public interface IFaceLog
         @ThriftField(value=1, name="personId", requiredness=Requiredness.REQUIRED) final int personId,
         @ThriftField(value=2, name="deleteImage", requiredness=Requiredness.REQUIRED) final boolean deleteImage,
         @ThriftField(value=3, name="token", requiredness=Requiredness.OPTIONAL) final Token token
+    ) throws ServiceRuntimeException;
+
+    @ThriftMethod(value = "deleteDevice",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1)
+                  })
+    boolean deleteDevice(
+        @ThriftField(value=1, name="id", requiredness=Requiredness.REQUIRED) final int id,
+        @ThriftField(value=2, name="token", requiredness=Requiredness.OPTIONAL) final Token token
+    ) throws ServiceRuntimeException;
+
+    @ThriftMethod(value = "deleteDeviceByMac",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1)
+                  })
+    boolean deleteDeviceByMac(
+        @ThriftField(value=1, name="mac", requiredness=Requiredness.OPTIONAL) final String mac,
+        @ThriftField(value=2, name="token", requiredness=Requiredness.OPTIONAL) final Token token
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "deleteDeviceGroup",

@@ -231,6 +231,25 @@ class BaseDao implements CommonConstant,Constant {
                     throws RuntimeDaoException{
         return null == bean ? 0 : daoDelete${coreClass}(#join($primaryKeys 'bean.$e.getGetMethod()()' ','));
     }
+#foreach($index in $table.uniqueIndicesAsList)
+#set ($indexColumns = $index.getIndexColumnsList())
+    //5-3
+    /**
+     * 删除唯一键指定的记录
+     * #join($indexColumns '
+     * @param $e.varName $e.remarks' '')
+
+     * @return 返回删除的记录条数(1),输入参数为{@code null}或记录不存在返回0
+     * @see ${esc.hash}daoDelete${coreClass}($varTypes)
+     * @throws RuntimeDaoException
+     */
+    $!{modifier}int daoDelete${coreClass}By${index.asCamelCaseName()}(#join($indexColumns '$e.javaType $e.varName'))
+                    throws RuntimeDaoException{
+        return (#join($indexColumns 'null == $e.varName' '|')) 
+            ? 0 
+            : ${table.getGetManagerMethod()}().deleteBy${index.asCamelCaseName()}(#join($indexColumns '$e.varName'));
+    }
+#end
     //6
     /**
      * 删除{@code ${table.asVarBean()}Collection}列表指定的记录

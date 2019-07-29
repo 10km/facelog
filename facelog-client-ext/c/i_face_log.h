@@ -45,6 +45,8 @@ struct _IFaceLogIfInterface
   gboolean (*count_person_by_where) (IFaceLogIf *iface, gint32* _return, const gchar * where, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*count_person_group_by_where) (IFaceLogIf *iface, gint32* _return, const gchar * where, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*delete_all_features_by_person_id) (IFaceLogIf *iface, gint32* _return, const gint32 personId, const gboolean deleteImage, const Token * token, ServiceRuntimeException ** ex1, GError **error);
+  gboolean (*delete_device) (IFaceLogIf *iface, gboolean* _return, const gint32 id, const Token * token, ServiceRuntimeException ** ex1, GError **error);
+  gboolean (*delete_device_by_mac) (IFaceLogIf *iface, gboolean* _return, const gchar * mac, const Token * token, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*delete_device_group) (IFaceLogIf *iface, gint32* _return, const gint32 deviceGroupId, const Token * token, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*delete_feature) (IFaceLogIf *iface, GPtrArray ** _return, const gchar * featureMd5, const gboolean deleteImage, const Token * token, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*delete_group_permit_on_device_group) (IFaceLogIf *iface, gint32* _return, const gint32 deviceGroupId, const Token * token, ServiceRuntimeException ** ex1, GError **error);
@@ -213,6 +215,8 @@ gboolean i_face_log_if_count_log_light_by_where (IFaceLogIf *iface, gint32* _ret
 gboolean i_face_log_if_count_person_by_where (IFaceLogIf *iface, gint32* _return, const gchar * where, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_if_count_person_group_by_where (IFaceLogIf *iface, gint32* _return, const gchar * where, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_if_delete_all_features_by_person_id (IFaceLogIf *iface, gint32* _return, const gint32 personId, const gboolean deleteImage, const Token * token, ServiceRuntimeException ** ex1, GError **error);
+gboolean i_face_log_if_delete_device (IFaceLogIf *iface, gboolean* _return, const gint32 id, const Token * token, ServiceRuntimeException ** ex1, GError **error);
+gboolean i_face_log_if_delete_device_by_mac (IFaceLogIf *iface, gboolean* _return, const gchar * mac, const Token * token, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_if_delete_device_group (IFaceLogIf *iface, gint32* _return, const gint32 deviceGroupId, const Token * token, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_if_delete_feature (IFaceLogIf *iface, GPtrArray ** _return, const gchar * featureMd5, const gboolean deleteImage, const Token * token, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_if_delete_group_permit_on_device_group (IFaceLogIf *iface, gint32* _return, const gint32 deviceGroupId, const Token * token, ServiceRuntimeException ** ex1, GError **error);
@@ -451,6 +455,12 @@ gboolean i_face_log_client_recv_count_person_group_by_where (IFaceLogIf * iface,
 gboolean i_face_log_client_delete_all_features_by_person_id (IFaceLogIf * iface, gint32* _return, const gint32 personId, const gboolean deleteImage, const Token * token, ServiceRuntimeException ** ex1, GError ** error);
 gboolean i_face_log_client_send_delete_all_features_by_person_id (IFaceLogIf * iface, const gint32 personId, const gboolean deleteImage, const Token * token, GError ** error);
 gboolean i_face_log_client_recv_delete_all_features_by_person_id (IFaceLogIf * iface, gint32* _return, ServiceRuntimeException ** ex1, GError ** error);
+gboolean i_face_log_client_delete_device (IFaceLogIf * iface, gboolean* _return, const gint32 id, const Token * token, ServiceRuntimeException ** ex1, GError ** error);
+gboolean i_face_log_client_send_delete_device (IFaceLogIf * iface, const gint32 id, const Token * token, GError ** error);
+gboolean i_face_log_client_recv_delete_device (IFaceLogIf * iface, gboolean* _return, ServiceRuntimeException ** ex1, GError ** error);
+gboolean i_face_log_client_delete_device_by_mac (IFaceLogIf * iface, gboolean* _return, const gchar * mac, const Token * token, ServiceRuntimeException ** ex1, GError ** error);
+gboolean i_face_log_client_send_delete_device_by_mac (IFaceLogIf * iface, const gchar * mac, const Token * token, GError ** error);
+gboolean i_face_log_client_recv_delete_device_by_mac (IFaceLogIf * iface, gboolean* _return, ServiceRuntimeException ** ex1, GError ** error);
 gboolean i_face_log_client_delete_device_group (IFaceLogIf * iface, gint32* _return, const gint32 deviceGroupId, const Token * token, ServiceRuntimeException ** ex1, GError ** error);
 gboolean i_face_log_client_send_delete_device_group (IFaceLogIf * iface, const gint32 deviceGroupId, const Token * token, GError ** error);
 gboolean i_face_log_client_recv_delete_device_group (IFaceLogIf * iface, gint32* _return, ServiceRuntimeException ** ex1, GError ** error);
@@ -888,6 +898,8 @@ struct _IFaceLogHandlerClass
   gboolean (*count_person_by_where) (IFaceLogIf *iface, gint32* _return, const gchar * where, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*count_person_group_by_where) (IFaceLogIf *iface, gint32* _return, const gchar * where, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*delete_all_features_by_person_id) (IFaceLogIf *iface, gint32* _return, const gint32 personId, const gboolean deleteImage, const Token * token, ServiceRuntimeException ** ex1, GError **error);
+  gboolean (*delete_device) (IFaceLogIf *iface, gboolean* _return, const gint32 id, const Token * token, ServiceRuntimeException ** ex1, GError **error);
+  gboolean (*delete_device_by_mac) (IFaceLogIf *iface, gboolean* _return, const gchar * mac, const Token * token, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*delete_device_group) (IFaceLogIf *iface, gint32* _return, const gint32 deviceGroupId, const Token * token, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*delete_feature) (IFaceLogIf *iface, GPtrArray ** _return, const gchar * featureMd5, const gboolean deleteImage, const Token * token, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*delete_group_permit_on_device_group) (IFaceLogIf *iface, gint32* _return, const gint32 deviceGroupId, const Token * token, ServiceRuntimeException ** ex1, GError **error);
@@ -1058,6 +1070,8 @@ gboolean i_face_log_handler_count_log_light_by_where (IFaceLogIf *iface, gint32*
 gboolean i_face_log_handler_count_person_by_where (IFaceLogIf *iface, gint32* _return, const gchar * where, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_handler_count_person_group_by_where (IFaceLogIf *iface, gint32* _return, const gchar * where, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_handler_delete_all_features_by_person_id (IFaceLogIf *iface, gint32* _return, const gint32 personId, const gboolean deleteImage, const Token * token, ServiceRuntimeException ** ex1, GError **error);
+gboolean i_face_log_handler_delete_device (IFaceLogIf *iface, gboolean* _return, const gint32 id, const Token * token, ServiceRuntimeException ** ex1, GError **error);
+gboolean i_face_log_handler_delete_device_by_mac (IFaceLogIf *iface, gboolean* _return, const gchar * mac, const Token * token, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_handler_delete_device_group (IFaceLogIf *iface, gint32* _return, const gint32 deviceGroupId, const Token * token, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_handler_delete_feature (IFaceLogIf *iface, GPtrArray ** _return, const gchar * featureMd5, const gboolean deleteImage, const Token * token, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_handler_delete_group_permit_on_device_group (IFaceLogIf *iface, gint32* _return, const gint32 deviceGroupId, const Token * token, ServiceRuntimeException ** ex1, GError **error);

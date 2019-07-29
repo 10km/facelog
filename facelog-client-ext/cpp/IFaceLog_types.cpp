@@ -50,7 +50,8 @@ int _kSecurityExceptionTypeValues[] = {
   SecurityExceptionType::ACCESS_DENIED,
   SecurityExceptionType::TABLE_INSERT_DENIED,
   SecurityExceptionType::TABLE_UPDATE_DENIED,
-  SecurityExceptionType::TABLE_DELETE_DENIED
+  SecurityExceptionType::TABLE_DELETE_DENIED,
+  SecurityExceptionType::TOO_LOW_RANK
 };
 const char* _kSecurityExceptionTypeNames[] = {
   "UNCLASSIFIED",
@@ -65,9 +66,10 @@ const char* _kSecurityExceptionTypeNames[] = {
   "ACCESS_DENIED",
   "TABLE_INSERT_DENIED",
   "TABLE_UPDATE_DENIED",
-  "TABLE_DELETE_DENIED"
+  "TABLE_DELETE_DENIED",
+  "TOO_LOW_RANK"
 };
-const std::map<int, const char*> _SecurityExceptionType_VALUES_TO_NAMES(::apache::thrift::TEnumIterator(13, _kSecurityExceptionTypeValues, _kSecurityExceptionTypeNames), ::apache::thrift::TEnumIterator(-1, NULL, NULL));
+const std::map<int, const char*> _SecurityExceptionType_VALUES_TO_NAMES(::apache::thrift::TEnumIterator(14, _kSecurityExceptionTypeValues, _kSecurityExceptionTypeNames), ::apache::thrift::TEnumIterator(-1, NULL, NULL));
 
 std::ostream& operator<<(std::ostream& out, const SecurityExceptionType::type& val) {
   std::map<int, const char*>::const_iterator it = _SecurityExceptionType_VALUES_TO_NAMES.find(val);

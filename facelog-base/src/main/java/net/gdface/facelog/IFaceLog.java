@@ -764,6 +764,25 @@ public interface IFaceLog{
 	 * @throws RuntimeDaoException
 	 */
 	public int deleteDeviceGroup(int deviceGroupId, Token token);
+
+	/**
+	 *  删除设备id指定的设备记录
+	 * <br>{@code PERSON_ONLY}
+	 * @param id
+	 * @param token 人员令牌
+	 * @return 返回删除的记录条数(1),如果记录不存在返回0
+	 */
+	public boolean deleteDevice(int id, Token token);
+
+	/**
+	 * 删除设备MAC地址指定的设备记录
+	 * <br>{@code PERSON_ONLY}
+	 * @param mac 设备MAC地址(12位HEX字符串)
+	 * @param token 人员令牌
+	 * @return 返回删除的记录条数(1),如果记录不存在返回0
+	 */
+	public boolean deleteDeviceByMac(String mac, Token token);
+
 	/**
 	 * 返回{@code deviceGroupId}指定的设备组下的所有子节点(设备组)<br>
 	 * 如果没有子节点则返回空表
@@ -1424,4 +1443,5 @@ public interface IFaceLog{
 	 * @return
 	 */
 	public boolean isLocal();
+
 }

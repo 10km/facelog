@@ -348,6 +348,36 @@ class BaseDao implements CommonConstant,Constant {
                     throws RuntimeDaoException{
         return null == bean ? 0 : daoDeleteDevice(bean.getId());
     }
+    //5-3
+    /**
+     * 删除唯一键指定的记录
+     * 
+     * @param mac 6字节MAC地址(HEX)
+     * @return 返回删除的记录条数,输入参数为{@code null}或记录不存在返回0
+     * @see #daoDeleteDevice(Integer)
+     * @throws RuntimeDaoException
+     */
+    protected int daoDeleteDeviceByIndexMac(String mac)
+                    throws RuntimeDaoException{
+        return (null == mac) 
+            ? 0 
+            : getDeviceManager().deleteByIndexMac(mac);
+    }
+    //5-3
+    /**
+     * 删除唯一键指定的记录
+     * 
+     * @param serialNo 设备序列号
+     * @return 返回删除的记录条数,输入参数为{@code null}或记录不存在返回0
+     * @see #daoDeleteDevice(Integer)
+     * @throws RuntimeDaoException
+     */
+    protected int daoDeleteDeviceByIndexSerialNo(String serialNo)
+                    throws RuntimeDaoException{
+        return (null == serialNo) 
+            ? 0 
+            : getDeviceManager().deleteByIndexSerialNo(serialNo);
+    }
     //6
     /**
      * 删除{@code deviceBeanCollection}列表指定的记录
@@ -1536,6 +1566,51 @@ class BaseDao implements CommonConstant,Constant {
     protected int daoDeletePerson(PersonBean bean)
                     throws RuntimeDaoException{
         return null == bean ? 0 : daoDeletePerson(bean.getId());
+    }
+    //5-3
+    /**
+     * 删除唯一键指定的记录
+     * 
+     * @param imageMd5 用户默认照片(证件照,标准照)的md5校验码,外键
+     * @return 返回删除的记录条数,输入参数为{@code null}或记录不存在返回0
+     * @see #daoDeletePerson(Integer)
+     * @throws RuntimeDaoException
+     */
+    protected int daoDeletePersonByIndexImageMd5(String imageMd5)
+                    throws RuntimeDaoException{
+        return (null == imageMd5) 
+            ? 0 
+            : getPersonManager().deleteByIndexImageMd5(imageMd5);
+    }
+    //5-3
+    /**
+     * 删除唯一键指定的记录
+     * 
+     * @param mobilePhone 手机号码
+     * @return 返回删除的记录条数,输入参数为{@code null}或记录不存在返回0
+     * @see #daoDeletePerson(Integer)
+     * @throws RuntimeDaoException
+     */
+    protected int daoDeletePersonByIndexMobilePhone(String mobilePhone)
+                    throws RuntimeDaoException{
+        return (null == mobilePhone) 
+            ? 0 
+            : getPersonManager().deleteByIndexMobilePhone(mobilePhone);
+    }
+    //5-3
+    /**
+     * 删除唯一键指定的记录
+     * 
+     * @param papersNum 证件号码
+     * @return 返回删除的记录条数,输入参数为{@code null}或记录不存在返回0
+     * @see #daoDeletePerson(Integer)
+     * @throws RuntimeDaoException
+     */
+    protected int daoDeletePersonByIndexPapersNum(String papersNum)
+                    throws RuntimeDaoException{
+        return (null == papersNum) 
+            ? 0 
+            : getPersonManager().deleteByIndexPapersNum(papersNum);
     }
     //6
     /**
