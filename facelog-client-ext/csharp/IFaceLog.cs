@@ -18,9 +18,9 @@ using Thrift.Transport;
 
 public partial class IFaceLog {
   public interface ISync {
-    FeatureBean addFeature(byte[] feature, string featureVersion, int personId, List<FaceBean> faecBeans, Token token);
-    FeatureBean addFeatureMulti(byte[] feature, string featureVersion, int personId, List<byte[]> photos, List<FaceBean> faces, Token token);
-    FeatureBean addFeatureWithImage(byte[] feature, string featureVersion, int personId, bool asIdPhotoIfAbsent, byte[] featurePhoto, FaceBean faceBean, Token token);
+    FeatureBean addFeature(byte[] feature, string featureVersion, int personId, List<FaceBean> faecBeans, string removed, Token token);
+    FeatureBean addFeatureMulti(byte[] feature, string featureVersion, int personId, List<byte[]> photos, List<FaceBean> faces, string removed, Token token);
+    FeatureBean addFeatureWithImage(byte[] feature, string featureVersion, int personId, bool asIdPhotoIfAbsent, byte[] featurePhoto, FaceBean faceBean, string removed, Token token);
     ImageBean addImage(byte[] imageData, int deviceId, FaceBean faceBean, int personId, Token token);
     void addLog(LogBean logBean, Token token);
     void addLogFull(LogBean logBean, FaceBean faceBean, byte[] featureImage, Token token);
@@ -181,9 +181,9 @@ public partial class IFaceLog {
   }
 
   public interface IAsync {
-    Task<FeatureBean> addFeatureAsync(byte[] feature, string featureVersion, int personId, List<FaceBean> faecBeans, Token token);
-    Task<FeatureBean> addFeatureMultiAsync(byte[] feature, string featureVersion, int personId, List<byte[]> photos, List<FaceBean> faces, Token token);
-    Task<FeatureBean> addFeatureWithImageAsync(byte[] feature, string featureVersion, int personId, bool asIdPhotoIfAbsent, byte[] featurePhoto, FaceBean faceBean, Token token);
+    Task<FeatureBean> addFeatureAsync(byte[] feature, string featureVersion, int personId, List<FaceBean> faecBeans, string removed, Token token);
+    Task<FeatureBean> addFeatureMultiAsync(byte[] feature, string featureVersion, int personId, List<byte[]> photos, List<FaceBean> faces, string removed, Token token);
+    Task<FeatureBean> addFeatureWithImageAsync(byte[] feature, string featureVersion, int personId, bool asIdPhotoIfAbsent, byte[] featurePhoto, FaceBean faceBean, string removed, Token token);
     Task<ImageBean> addImageAsync(byte[] imageData, int deviceId, FaceBean faceBean, int personId, Token token);
     Task addLogAsync(LogBean logBean, Token token);
     Task addLogFullAsync(LogBean logBean, FaceBean faceBean, byte[] featureImage, Token token);
@@ -344,11 +344,11 @@ public partial class IFaceLog {
   }
 
   public interface Iface : ISync, IAsync {
-    IAsyncResult Begin_addFeature(AsyncCallback callback, object state, byte[] feature, string featureVersion, int personId, List<FaceBean> faecBeans, Token token);
+    IAsyncResult Begin_addFeature(AsyncCallback callback, object state, byte[] feature, string featureVersion, int personId, List<FaceBean> faecBeans, string removed, Token token);
     FeatureBean End_addFeature(IAsyncResult asyncResult);
-    IAsyncResult Begin_addFeatureMulti(AsyncCallback callback, object state, byte[] feature, string featureVersion, int personId, List<byte[]> photos, List<FaceBean> faces, Token token);
+    IAsyncResult Begin_addFeatureMulti(AsyncCallback callback, object state, byte[] feature, string featureVersion, int personId, List<byte[]> photos, List<FaceBean> faces, string removed, Token token);
     FeatureBean End_addFeatureMulti(IAsyncResult asyncResult);
-    IAsyncResult Begin_addFeatureWithImage(AsyncCallback callback, object state, byte[] feature, string featureVersion, int personId, bool asIdPhotoIfAbsent, byte[] featurePhoto, FaceBean faceBean, Token token);
+    IAsyncResult Begin_addFeatureWithImage(AsyncCallback callback, object state, byte[] feature, string featureVersion, int personId, bool asIdPhotoIfAbsent, byte[] featurePhoto, FaceBean faceBean, string removed, Token token);
     FeatureBean End_addFeatureWithImage(IAsyncResult asyncResult);
     IAsyncResult Begin_addImage(AsyncCallback callback, object state, byte[] imageData, int deviceId, FaceBean faceBean, int personId, Token token);
     ImageBean End_addImage(IAsyncResult asyncResult);
@@ -723,9 +723,9 @@ public partial class IFaceLog {
 
 
     
-    public IAsyncResult Begin_addFeature(AsyncCallback callback, object state, byte[] feature, string featureVersion, int personId, List<FaceBean> faecBeans, Token token)
+    public IAsyncResult Begin_addFeature(AsyncCallback callback, object state, byte[] feature, string featureVersion, int personId, List<FaceBean> faecBeans, string removed, Token token)
     {
-      return send_addFeature(callback, state, feature, featureVersion, personId, faecBeans, token);
+      return send_addFeature(callback, state, feature, featureVersion, personId, faecBeans, removed, token);
     }
 
     public FeatureBean End_addFeature(IAsyncResult asyncResult)
@@ -734,23 +734,23 @@ public partial class IFaceLog {
       return recv_addFeature();
     }
 
-    public async Task<FeatureBean> addFeatureAsync(byte[] feature, string featureVersion, int personId, List<FaceBean> faecBeans, Token token)
+    public async Task<FeatureBean> addFeatureAsync(byte[] feature, string featureVersion, int personId, List<FaceBean> faecBeans, string removed, Token token)
     {
       FeatureBean retval;
       retval = await Task.Run(() =>
       {
-        return addFeature(feature, featureVersion, personId, faecBeans, token);
+        return addFeature(feature, featureVersion, personId, faecBeans, removed, token);
       });
       return retval;
     }
 
-    public FeatureBean addFeature(byte[] feature, string featureVersion, int personId, List<FaceBean> faecBeans, Token token)
+    public FeatureBean addFeature(byte[] feature, string featureVersion, int personId, List<FaceBean> faecBeans, string removed, Token token)
     {
-      var asyncResult = Begin_addFeature(null, null, feature, featureVersion, personId, faecBeans, token);
+      var asyncResult = Begin_addFeature(null, null, feature, featureVersion, personId, faecBeans, removed, token);
       return End_addFeature(asyncResult);
 
     }
-    public IAsyncResult send_addFeature(AsyncCallback callback, object state, byte[] feature, string featureVersion, int personId, List<FaceBean> faecBeans, Token token)
+    public IAsyncResult send_addFeature(AsyncCallback callback, object state, byte[] feature, string featureVersion, int personId, List<FaceBean> faecBeans, string removed, Token token)
     {
       oprot_.WriteMessageBegin(new TMessage("addFeature", TMessageType.Call, seqid_));
       addFeature_args args = new addFeature_args();
@@ -758,6 +758,7 @@ public partial class IFaceLog {
       args.FeatureVersion = featureVersion;
       args.PersonId = personId;
       args.FaecBeans = faecBeans;
+      args.Removed = removed;
       args.Token = token;
       args.Write(oprot_);
       oprot_.WriteMessageEnd();
@@ -788,9 +789,9 @@ public partial class IFaceLog {
     }
 
     
-    public IAsyncResult Begin_addFeatureMulti(AsyncCallback callback, object state, byte[] feature, string featureVersion, int personId, List<byte[]> photos, List<FaceBean> faces, Token token)
+    public IAsyncResult Begin_addFeatureMulti(AsyncCallback callback, object state, byte[] feature, string featureVersion, int personId, List<byte[]> photos, List<FaceBean> faces, string removed, Token token)
     {
-      return send_addFeatureMulti(callback, state, feature, featureVersion, personId, photos, faces, token);
+      return send_addFeatureMulti(callback, state, feature, featureVersion, personId, photos, faces, removed, token);
     }
 
     public FeatureBean End_addFeatureMulti(IAsyncResult asyncResult)
@@ -799,23 +800,23 @@ public partial class IFaceLog {
       return recv_addFeatureMulti();
     }
 
-    public async Task<FeatureBean> addFeatureMultiAsync(byte[] feature, string featureVersion, int personId, List<byte[]> photos, List<FaceBean> faces, Token token)
+    public async Task<FeatureBean> addFeatureMultiAsync(byte[] feature, string featureVersion, int personId, List<byte[]> photos, List<FaceBean> faces, string removed, Token token)
     {
       FeatureBean retval;
       retval = await Task.Run(() =>
       {
-        return addFeatureMulti(feature, featureVersion, personId, photos, faces, token);
+        return addFeatureMulti(feature, featureVersion, personId, photos, faces, removed, token);
       });
       return retval;
     }
 
-    public FeatureBean addFeatureMulti(byte[] feature, string featureVersion, int personId, List<byte[]> photos, List<FaceBean> faces, Token token)
+    public FeatureBean addFeatureMulti(byte[] feature, string featureVersion, int personId, List<byte[]> photos, List<FaceBean> faces, string removed, Token token)
     {
-      var asyncResult = Begin_addFeatureMulti(null, null, feature, featureVersion, personId, photos, faces, token);
+      var asyncResult = Begin_addFeatureMulti(null, null, feature, featureVersion, personId, photos, faces, removed, token);
       return End_addFeatureMulti(asyncResult);
 
     }
-    public IAsyncResult send_addFeatureMulti(AsyncCallback callback, object state, byte[] feature, string featureVersion, int personId, List<byte[]> photos, List<FaceBean> faces, Token token)
+    public IAsyncResult send_addFeatureMulti(AsyncCallback callback, object state, byte[] feature, string featureVersion, int personId, List<byte[]> photos, List<FaceBean> faces, string removed, Token token)
     {
       oprot_.WriteMessageBegin(new TMessage("addFeatureMulti", TMessageType.Call, seqid_));
       addFeatureMulti_args args = new addFeatureMulti_args();
@@ -824,6 +825,7 @@ public partial class IFaceLog {
       args.PersonId = personId;
       args.Photos = photos;
       args.Faces = faces;
+      args.Removed = removed;
       args.Token = token;
       args.Write(oprot_);
       oprot_.WriteMessageEnd();
@@ -854,9 +856,9 @@ public partial class IFaceLog {
     }
 
     
-    public IAsyncResult Begin_addFeatureWithImage(AsyncCallback callback, object state, byte[] feature, string featureVersion, int personId, bool asIdPhotoIfAbsent, byte[] featurePhoto, FaceBean faceBean, Token token)
+    public IAsyncResult Begin_addFeatureWithImage(AsyncCallback callback, object state, byte[] feature, string featureVersion, int personId, bool asIdPhotoIfAbsent, byte[] featurePhoto, FaceBean faceBean, string removed, Token token)
     {
-      return send_addFeatureWithImage(callback, state, feature, featureVersion, personId, asIdPhotoIfAbsent, featurePhoto, faceBean, token);
+      return send_addFeatureWithImage(callback, state, feature, featureVersion, personId, asIdPhotoIfAbsent, featurePhoto, faceBean, removed, token);
     }
 
     public FeatureBean End_addFeatureWithImage(IAsyncResult asyncResult)
@@ -865,23 +867,23 @@ public partial class IFaceLog {
       return recv_addFeatureWithImage();
     }
 
-    public async Task<FeatureBean> addFeatureWithImageAsync(byte[] feature, string featureVersion, int personId, bool asIdPhotoIfAbsent, byte[] featurePhoto, FaceBean faceBean, Token token)
+    public async Task<FeatureBean> addFeatureWithImageAsync(byte[] feature, string featureVersion, int personId, bool asIdPhotoIfAbsent, byte[] featurePhoto, FaceBean faceBean, string removed, Token token)
     {
       FeatureBean retval;
       retval = await Task.Run(() =>
       {
-        return addFeatureWithImage(feature, featureVersion, personId, asIdPhotoIfAbsent, featurePhoto, faceBean, token);
+        return addFeatureWithImage(feature, featureVersion, personId, asIdPhotoIfAbsent, featurePhoto, faceBean, removed, token);
       });
       return retval;
     }
 
-    public FeatureBean addFeatureWithImage(byte[] feature, string featureVersion, int personId, bool asIdPhotoIfAbsent, byte[] featurePhoto, FaceBean faceBean, Token token)
+    public FeatureBean addFeatureWithImage(byte[] feature, string featureVersion, int personId, bool asIdPhotoIfAbsent, byte[] featurePhoto, FaceBean faceBean, string removed, Token token)
     {
-      var asyncResult = Begin_addFeatureWithImage(null, null, feature, featureVersion, personId, asIdPhotoIfAbsent, featurePhoto, faceBean, token);
+      var asyncResult = Begin_addFeatureWithImage(null, null, feature, featureVersion, personId, asIdPhotoIfAbsent, featurePhoto, faceBean, removed, token);
       return End_addFeatureWithImage(asyncResult);
 
     }
-    public IAsyncResult send_addFeatureWithImage(AsyncCallback callback, object state, byte[] feature, string featureVersion, int personId, bool asIdPhotoIfAbsent, byte[] featurePhoto, FaceBean faceBean, Token token)
+    public IAsyncResult send_addFeatureWithImage(AsyncCallback callback, object state, byte[] feature, string featureVersion, int personId, bool asIdPhotoIfAbsent, byte[] featurePhoto, FaceBean faceBean, string removed, Token token)
     {
       oprot_.WriteMessageBegin(new TMessage("addFeatureWithImage", TMessageType.Call, seqid_));
       addFeatureWithImage_args args = new addFeatureWithImage_args();
@@ -891,6 +893,7 @@ public partial class IFaceLog {
       args.AsIdPhotoIfAbsent = asIdPhotoIfAbsent;
       args.FeaturePhoto = featurePhoto;
       args.FaceBean = faceBean;
+      args.Removed = removed;
       args.Token = token;
       args.Write(oprot_);
       oprot_.WriteMessageEnd();
@@ -10312,7 +10315,7 @@ public partial class IFaceLog {
       {
         try
         {
-          result.Success = await iface_.addFeatureAsync(args.Feature, args.FeatureVersion, args.PersonId.Value, args.FaecBeans, args.Token);
+          result.Success = await iface_.addFeatureAsync(args.Feature, args.FeatureVersion, args.PersonId.Value, args.FaecBeans, args.Removed, args.Token);
         }
         catch (DuplicateRecordException ex1)
         {
@@ -10351,7 +10354,7 @@ public partial class IFaceLog {
       {
         try
         {
-          result.Success = await iface_.addFeatureMultiAsync(args.Feature, args.FeatureVersion, args.PersonId.Value, args.Photos, args.Faces, args.Token);
+          result.Success = await iface_.addFeatureMultiAsync(args.Feature, args.FeatureVersion, args.PersonId.Value, args.Photos, args.Faces, args.Removed, args.Token);
         }
         catch (DuplicateRecordException ex1)
         {
@@ -10390,7 +10393,7 @@ public partial class IFaceLog {
       {
         try
         {
-          result.Success = await iface_.addFeatureWithImageAsync(args.Feature, args.FeatureVersion, args.PersonId.Value, args.AsIdPhotoIfAbsent.Value, args.FeaturePhoto, args.FaceBean, args.Token);
+          result.Success = await iface_.addFeatureWithImageAsync(args.Feature, args.FeatureVersion, args.PersonId.Value, args.AsIdPhotoIfAbsent.Value, args.FeaturePhoto, args.FaceBean, args.Removed, args.Token);
         }
         catch (DuplicateRecordException ex1)
         {
@@ -16182,7 +16185,7 @@ public partial class IFaceLog {
       {
         try
         {
-          result.Success = iface_.addFeature(args.Feature, args.FeatureVersion, args.PersonId.Value, args.FaecBeans, args.Token);
+          result.Success = iface_.addFeature(args.Feature, args.FeatureVersion, args.PersonId.Value, args.FaecBeans, args.Removed, args.Token);
         }
         catch (DuplicateRecordException ex1)
         {
@@ -16221,7 +16224,7 @@ public partial class IFaceLog {
       {
         try
         {
-          result.Success = iface_.addFeatureMulti(args.Feature, args.FeatureVersion, args.PersonId.Value, args.Photos, args.Faces, args.Token);
+          result.Success = iface_.addFeatureMulti(args.Feature, args.FeatureVersion, args.PersonId.Value, args.Photos, args.Faces, args.Removed, args.Token);
         }
         catch (DuplicateRecordException ex1)
         {
@@ -16260,7 +16263,7 @@ public partial class IFaceLog {
       {
         try
         {
-          result.Success = iface_.addFeatureWithImage(args.Feature, args.FeatureVersion, args.PersonId.Value, args.AsIdPhotoIfAbsent.Value, args.FeaturePhoto, args.FaceBean, args.Token);
+          result.Success = iface_.addFeatureWithImage(args.Feature, args.FeatureVersion, args.PersonId.Value, args.AsIdPhotoIfAbsent.Value, args.FeaturePhoto, args.FaceBean, args.Removed, args.Token);
         }
         catch (DuplicateRecordException ex1)
         {
@@ -21861,6 +21864,8 @@ public partial class IFaceLog {
 
     public List<FaceBean> FaecBeans { get; set; }
 
+    public string Removed { get; set; }
+
     public Token Token { get; set; }
 
     public addFeature_args() {
@@ -21921,6 +21926,13 @@ public partial class IFaceLog {
               }
               break;
             case 5:
+              if (field.Type == TType.String) {
+                Removed = iprot.ReadString();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 6:
               if (field.Type == TType.Struct) {
                 Token = new Token();
                 Token.Read(iprot);
@@ -21988,10 +22000,18 @@ public partial class IFaceLog {
           }
           oprot.WriteFieldEnd();
         }
+        if (Removed != null) {
+          field.Name = "removed";
+          field.Type = TType.String;
+          field.ID = 5;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteString(Removed);
+          oprot.WriteFieldEnd();
+        }
         if (Token != null) {
           field.Name = "token";
           field.Type = TType.Struct;
-          field.ID = 5;
+          field.ID = 6;
           oprot.WriteFieldBegin(field);
           Token.Write(oprot);
           oprot.WriteFieldEnd();
@@ -22031,6 +22051,12 @@ public partial class IFaceLog {
         __first = false;
         __sb.Append("FaecBeans: ");
         __sb.Append(FaecBeans);
+      }
+      if (Removed != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Removed: ");
+        __sb.Append(Removed);
       }
       if (Token != null) {
         if(!__first) { __sb.Append(", "); }
@@ -22196,6 +22222,8 @@ public partial class IFaceLog {
 
     public List<FaceBean> Faces { get; set; }
 
+    public string Removed { get; set; }
+
     public Token Token { get; set; }
 
     public addFeatureMulti_args() {
@@ -22273,6 +22301,13 @@ public partial class IFaceLog {
               }
               break;
             case 6:
+              if (field.Type == TType.String) {
+                Removed = iprot.ReadString();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 7:
               if (field.Type == TType.Struct) {
                 Token = new Token();
                 Token.Read(iprot);
@@ -22355,10 +22390,18 @@ public partial class IFaceLog {
           }
           oprot.WriteFieldEnd();
         }
+        if (Removed != null) {
+          field.Name = "removed";
+          field.Type = TType.String;
+          field.ID = 6;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteString(Removed);
+          oprot.WriteFieldEnd();
+        }
         if (Token != null) {
           field.Name = "token";
           field.Type = TType.Struct;
-          field.ID = 6;
+          field.ID = 7;
           oprot.WriteFieldBegin(field);
           Token.Write(oprot);
           oprot.WriteFieldEnd();
@@ -22404,6 +22447,12 @@ public partial class IFaceLog {
         __first = false;
         __sb.Append("Faces: ");
         __sb.Append(Faces);
+      }
+      if (Removed != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Removed: ");
+        __sb.Append(Removed);
       }
       if (Token != null) {
         if(!__first) { __sb.Append(", "); }
@@ -22571,6 +22620,8 @@ public partial class IFaceLog {
 
     public FaceBean FaceBean { get; set; }
 
+    public string Removed { get; set; }
+
     public Token Token { get; set; }
 
     public addFeatureWithImage_args() {
@@ -22641,6 +22692,13 @@ public partial class IFaceLog {
               }
               break;
             case 7:
+              if (field.Type == TType.String) {
+                Removed = iprot.ReadString();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 8:
               if (field.Type == TType.Struct) {
                 Token = new Token();
                 Token.Read(iprot);
@@ -22717,10 +22775,18 @@ public partial class IFaceLog {
           FaceBean.Write(oprot);
           oprot.WriteFieldEnd();
         }
+        if (Removed != null) {
+          field.Name = "removed";
+          field.Type = TType.String;
+          field.ID = 7;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteString(Removed);
+          oprot.WriteFieldEnd();
+        }
         if (Token != null) {
           field.Name = "token";
           field.Type = TType.Struct;
-          field.ID = 7;
+          field.ID = 8;
           oprot.WriteFieldBegin(field);
           Token.Write(oprot);
           oprot.WriteFieldEnd();
@@ -22765,6 +22831,10 @@ public partial class IFaceLog {
       if (FaceBean != null) {
         __sb.Append(", FaceBean: ");
         __sb.Append(FaceBean== null ? "<null>" : FaceBean.ToString());
+      }
+      if (Removed != null) {
+        __sb.Append(", Removed: ");
+        __sb.Append(Removed);
       }
       if (Token != null) {
         __sb.Append(", Token: ");

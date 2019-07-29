@@ -108,6 +108,7 @@ public class IFaceLogSpringController {
      * 是否用{@code featurePhoto}作为身份照片,{@code featurePhoto}为{@code null}时无效
      * @param featurePhoto 生成人脸特征的原始照片,如果不要求保留原始照片可为null
      * @param faceBean 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null
+     * @param removed 已经存在的特征记录ID(MD5),可为{@code null},不为{@code null}时会先删除指定的特征,记录不存在则抛出异常
      * @param token (设备)访问令牌
      * @return 保存的人脸特征记录{@link FeatureBean}
      * @throws DuplicateRecordException
@@ -122,7 +123,7 @@ public class IFaceLogSpringController {
     {
             Response response = responseFactory.newIFaceLogResponse();
             try{
-                response.onComplete(delegate().addFeature(args.feature,args.featureVersion,args.personId,args.asIdPhotoIfAbsent,args.featurePhoto,args.faceBean,args.token));
+                response.onComplete(delegate().addFeature(args.feature,args.featureVersion,args.personId,args.asIdPhotoIfAbsent,args.featurePhoto,args.faceBean,args.removed,args.token));
             }
             catch(Exception e){
                 logger.error(e.getMessage(),e);
@@ -132,6 +133,35 @@ public class IFaceLogSpringController {
     }
     // port-2
     /**
+     * 增加一个人脸特征记录，如果记录已经存在则抛出异常<br>
+     * {@code DEVICE_ONLY}
+     * @param feature 人脸特征数据
+     * @param featureVersion 特征(SDk)版本号
+     * @param personId 关联的人员id(fl_person.id),可为null
+     * @param faecBeans 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null
+     * @param removed 已经存在的特征记录ID(MD5),可为{@code null},不为{@code null}时会先删除指定的特征,记录不存在则抛出异常
+     * @param token (设备)访问令牌
+     * @return 保存的人脸特征记录{@link FeatureBean}
+     * @throws DuplicateRecordException
+     */
+    @ResponseBody
+    @RequestMapping(value = "/IFaceLog/addFeature", method = RequestMethod.POST)
+    @ApiOperation(value = "增加一个人脸特征记录，如果记录已经存在则抛出异常<br>\n"
++" {@code DEVICE_ONLY}",httpMethod="POST")
+    public Response addFeature( @RequestBody AddFeatureArgs args) 
+    {
+            Response response = responseFactory.newIFaceLogResponse();
+            try{
+                response.onComplete(delegate().addFeature(args.feature,args.featureVersion,args.personId,args.faecBeans,args.removed,args.token));
+            }
+            catch(Exception e){
+                logger.error(e.getMessage(),e);
+                response.onError(e);
+            }
+            return response;
+    }
+    // port-3
+    /**
      * 增加一个人脸特征记录,特征数据由faceInfo指定的多张图像合成，如果记录已经存在则抛出异常<br>
      * {@code photos}与{@code faces}为提取特征{@code feature}的人脸照片对应的人脸位置对象，必须一一对应
      * <br>{@code DEVICE_ONLY}
@@ -140,6 +170,7 @@ public class IFaceLogSpringController {
      * @param personId 关联的人员id(fl_person.id),可为null
      * @param photos 检测到人脸的照片列表
      * @param faces 检测人脸信息列表
+     * @param removed 已经存在的特征记录ID(MD5),可为{@code null},不为{@code null}时会先删除指定的特征,记录不存在则抛出异常
      * @param token (设备)访问令牌
      * @return 保存的人脸特征记录{@link FeatureBean}
      * @throws DuplicateRecordException
@@ -153,35 +184,7 @@ public class IFaceLogSpringController {
     {
             Response response = responseFactory.newIFaceLogResponse();
             try{
-                response.onComplete(delegate().addFeature(args.feature,args.featureVersion,args.personId,args.photos,args.faces,args.token));
-            }
-            catch(Exception e){
-                logger.error(e.getMessage(),e);
-                response.onError(e);
-            }
-            return response;
-    }
-    // port-3
-    /**
-     * 增加一个人脸特征记录，如果记录已经存在则抛出异常<br>
-     * {@code DEVICE_ONLY}
-     * @param feature 人脸特征数据
-     * @param featureVersion 特征(SDk)版本号
-     * @param personId 关联的人员id(fl_person.id),可为null
-     * @param faecBeans 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null
-     * @param token (设备)访问令牌
-     * @return 保存的人脸特征记录{@link FeatureBean}
-     * @throws DuplicateRecordException
-     */
-    @ResponseBody
-    @RequestMapping(value = "/IFaceLog/addFeature", method = RequestMethod.POST)
-    @ApiOperation(value = "增加一个人脸特征记录，如果记录已经存在则抛出异常<br>\n"
-+" {@code DEVICE_ONLY}",httpMethod="POST")
-    public Response addFeature( @RequestBody AddFeatureArgs args) 
-    {
-            Response response = responseFactory.newIFaceLogResponse();
-            try{
-                response.onComplete(delegate().addFeature(args.feature,args.featureVersion,args.personId,args.faecBeans,args.token));
+                response.onComplete(delegate().addFeature(args.feature,args.featureVersion,args.personId,args.photos,args.faces,args.removed,args.token));
             }
             catch(Exception e){
                 logger.error(e.getMessage(),e);
@@ -3385,9 +3388,9 @@ public class IFaceLogSpringController {
      * 保存人员信息记录
      * @param personBean {@code fl_person}表记录
      * @param idPhoto 标准照图像,可为null
-     * @param feature 用于验证的人脸特征数据,不可重复, 参见 {@link #addFeature(byte[], String, Integer, List, Token)}
+     * @param feature 用于验证的人脸特征数据,不可重复, 参见 {@link #addFeature(byte[], String, Integer, List, String, Token)}
      * @param featureVersion 特征(SDk)版本号
-     * @param faceBeans 可为{@code null},参见 {@link #addFeature(byte[], String, Integer, List, Token)}
+     * @param faceBeans 可为{@code null},参见 {@link #addFeature(byte[], String, Integer, List, String, Token)}
      * @param token 访问令牌
      * @return 保存的{@link PersonBean}
      */
@@ -3923,11 +3926,31 @@ public class IFaceLogSpringController {
         public byte[] featurePhoto;
         @ApiModelProperty(value ="生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null" ,required=true ,dataType="FaceBean")
         public FaceBean faceBean;
+        @ApiModelProperty(value ="已经存在的特征记录ID(MD5),可为{@code null},不为{@code null}时会先删除指定的特征,记录不存在则抛出异常" ,required=true ,dataType="String")
+        public String removed;
         @ApiModelProperty(value ="(设备)访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
     /**
      * argClass-2<br>
+     * wrap arguments for method {@link #addFeature(AddFeatureArgs)}
+     */
+    public static class AddFeatureArgs{
+        @ApiModelProperty(value ="人脸特征数据" ,required=true ,dataType="byte[]")
+        public byte[] feature;
+        @ApiModelProperty(value ="特征(SDk)版本号" ,required=true ,dataType="String")
+        public String featureVersion;
+        @ApiModelProperty(value ="关联的人员id(fl_person.id),可为null" ,required=true ,dataType="Integer")
+        public Integer personId;
+        @ApiModelProperty(value ="生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null" ,required=true ,dataType="List")
+        public List<FaceBean> faecBeans;
+        @ApiModelProperty(value ="已经存在的特征记录ID(MD5),可为{@code null},不为{@code null}时会先删除指定的特征,记录不存在则抛出异常" ,required=true ,dataType="String")
+        public String removed;
+        @ApiModelProperty(value ="(设备)访问令牌" ,required=true ,dataType="Token")
+        public Token token;
+    }
+    /**
+     * argClass-3<br>
      * wrap arguments for method {@link #addFeature(AddFeatureMultiArgs)}
      */
     public static class AddFeatureMultiArgs{
@@ -3941,22 +3964,8 @@ public class IFaceLogSpringController {
         public List<byte[]> photos;
         @ApiModelProperty(value ="检测人脸信息列表" ,required=true ,dataType="List")
         public List<FaceBean> faces;
-        @ApiModelProperty(value ="(设备)访问令牌" ,required=true ,dataType="Token")
-        public Token token;
-    }
-    /**
-     * argClass-3<br>
-     * wrap arguments for method {@link #addFeature(AddFeatureArgs)}
-     */
-    public static class AddFeatureArgs{
-        @ApiModelProperty(value ="人脸特征数据" ,required=true ,dataType="byte[]")
-        public byte[] feature;
-        @ApiModelProperty(value ="特征(SDk)版本号" ,required=true ,dataType="String")
-        public String featureVersion;
-        @ApiModelProperty(value ="关联的人员id(fl_person.id),可为null" ,required=true ,dataType="Integer")
-        public Integer personId;
-        @ApiModelProperty(value ="生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null" ,required=true ,dataType="List")
-        public List<FaceBean> faecBeans;
+        @ApiModelProperty(value ="已经存在的特征记录ID(MD5),可为{@code null},不为{@code null}时会先删除指定的特征,记录不存在则抛出异常" ,required=true ,dataType="String")
+        public String removed;
         @ApiModelProperty(value ="(设备)访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
@@ -5261,11 +5270,11 @@ public class IFaceLogSpringController {
         public PersonBean personBean;
         @ApiModelProperty(value ="标准照图像,可为null" ,required=true ,dataType="byte[]")
         public byte[] idPhoto;
-        @ApiModelProperty(value ="用于验证的人脸特征数据,不可重复, 参见 {@link #addFeature(byte[], String, Integer, List, Token)}" ,required=true ,dataType="byte[]")
+        @ApiModelProperty(value ="用于验证的人脸特征数据,不可重复, 参见 {@link #addFeature(byte[], String, Integer, List, String, Token)}" ,required=true ,dataType="byte[]")
         public byte[] feature;
         @ApiModelProperty(value ="特征(SDk)版本号" ,required=true ,dataType="String")
         public String featureVersion;
-        @ApiModelProperty(value ="可为{@code null},参见 {@link #addFeature(byte[], String, Integer, List, Token)}" ,required=true ,dataType="List")
+        @ApiModelProperty(value ="可为{@code null},参见 {@link #addFeature(byte[], String, Integer, List, String, Token)}" ,required=true ,dataType="List")
         public List<FaceBean> faceBeans;
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;

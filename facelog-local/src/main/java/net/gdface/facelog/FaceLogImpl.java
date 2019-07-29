@@ -785,7 +785,12 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 	}
 
 	@Override
-	public FeatureBean addFeature(final byte[] feature,final String featureVersion,final Integer personId, final List<FaceBean> faecBeans, Token token)
+	public FeatureBean addFeature(final byte[] feature,
+			final String featureVersion,
+			final Integer personId, 
+			final List<FaceBean> faecBeans, 
+			final String removed, 
+			Token token)
 			throws DuplicateRecordException{
 		try{
 			Enable.DEVICE_ONLY.check(tm, token);
@@ -794,6 +799,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 
 				@Override
 				public FeatureBean call() throws Exception {
+					dm.daoDeleteFeatureChecked(removed,true);
 					return dm.daoAddFeature(FaceUtilits.getByteBuffer(feature), 
 							featureVersion, 
 							dm.daoGetPerson(personId), 
@@ -811,7 +817,9 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 			final Integer personId,
 			final boolean asIdPhotoIfAbsent,
 			final byte[] featurePhoto,
-			final FaceBean faceBean, final Token token)throws DuplicateRecordException{
+			final FaceBean faceBean, 
+			final String removed, 
+			final Token token)throws DuplicateRecordException{
 		try{
 			Enable.DEVICE_ONLY.check(tm, token);
 			checkArgument(feature != null,"feature is null");
@@ -819,6 +827,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 			return BaseDao.daoRunAsTransaction(new Callable<FeatureBean>() {
 				@Override
 				public FeatureBean call() throws Exception {
+					dm.daoDeleteFeatureChecked(removed,true);
 					PersonBean personBean = dm.daoGetPerson(personId);
 					List<FaceBean> faceList = faceBean == null ? null : Arrays.asList(faceBean);
 					ImageBean imageBean = dm.daoAddImage(FaceUtilits.getByteBufferOrNull(featurePhoto), 
@@ -836,8 +845,13 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		} 
 	}
 	@Override
-	public FeatureBean addFeature(final byte[] feature, final String featureVersion, final Integer personId,
-			List<byte[]> photos, final List<FaceBean> faces, final Token token) throws DuplicateRecordException {
+	public FeatureBean addFeature(final byte[] feature, 
+			final String featureVersion, 
+			final Integer personId,
+			List<byte[]> photos, 
+			final List<FaceBean> faces, 
+			final String removed, 
+			final Token token) throws DuplicateRecordException {
 		try {
 			Enable.DEVICE_ONLY.check(tm, token);
 			checkArgument(feature != null,"feature is null");
@@ -846,6 +860,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 
 				@Override
 				public FeatureBean call() throws Exception {
+					dm.daoDeleteFeatureChecked(removed,true);
+
 					return dm.daoAddFeature(FaceUtilits.getByteBuffer(feature), 
 							featureVersion, dm.daoGetPerson(personId), 
 							CollectionUtils.merge(buffers, faces), 

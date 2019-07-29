@@ -73,6 +73,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         boolean asIdPhotoIfAbsent,
         byte[] featurePhoto,
         FaceBean faceBean,
+        String removed,
         Token token) 
         throws DuplicateRecordException{
         net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
@@ -87,6 +88,49 @@ public class IFaceLogThriftClient implements IFaceLog {
                     faceBean,
                     FaceBean.class,
                     net.gdface.facelog.client.thrift.FaceBean.class),
+                removed,
+                TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class)),
+                    net.gdface.facelog.client.thrift.FeatureBean.class,
+                    FeatureBean.class);
+        }
+        catch(net.gdface.facelog.client.thrift.DuplicateRecordException e){
+            throw TypeTransformer.getInstance().to(
+                    e,
+                    net.gdface.facelog.client.thrift.DuplicateRecordException.class,
+                    DuplicateRecordException.class);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch(RuntimeTApplicationException e){
+            return net.gdface.thrift.ThriftUtils.returnNull(e);
+        }
+        finally{
+            factory.releaseInstance(instance);
+        }
+    }
+    @Override
+    public FeatureBean addFeature(byte[] feature,
+        String featureVersion,
+        Integer personId,
+        List<FaceBean> faecBeans,
+        String removed,
+        Token token) 
+        throws DuplicateRecordException{
+        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        try{
+            return TypeTransformer.getInstance().to(
+                    instance.addFeature(feature,
+                featureVersion,
+                personId,
+                TypeTransformer.getInstance().to(
+                    faecBeans,
+                    FaceBean.class,
+                    net.gdface.facelog.client.thrift.FaceBean.class),
+                removed,
                 TypeTransformer.getInstance().to(
                     token,
                     Token.class,
@@ -116,6 +160,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         Integer personId,
         List<byte[]> photos,
         List<FaceBean> faces,
+        String removed,
         Token token) 
         throws DuplicateRecordException{
         net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
@@ -132,46 +177,7 @@ public class IFaceLogThriftClient implements IFaceLog {
                     faces,
                     FaceBean.class,
                     net.gdface.facelog.client.thrift.FaceBean.class),
-                TypeTransformer.getInstance().to(
-                    token,
-                    Token.class,
-                    net.gdface.facelog.client.thrift.Token.class)),
-                    net.gdface.facelog.client.thrift.FeatureBean.class,
-                    FeatureBean.class);
-        }
-        catch(net.gdface.facelog.client.thrift.DuplicateRecordException e){
-            throw TypeTransformer.getInstance().to(
-                    e,
-                    net.gdface.facelog.client.thrift.DuplicateRecordException.class,
-                    DuplicateRecordException.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch(RuntimeTApplicationException e){
-            return net.gdface.thrift.ThriftUtils.returnNull(e);
-        }
-        finally{
-            factory.releaseInstance(instance);
-        }
-    }
-    @Override
-    public FeatureBean addFeature(byte[] feature,
-        String featureVersion,
-        Integer personId,
-        List<FaceBean> faecBeans,
-        Token token) 
-        throws DuplicateRecordException{
-        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
-        try{
-            return TypeTransformer.getInstance().to(
-                    instance.addFeature(feature,
-                featureVersion,
-                personId,
-                TypeTransformer.getInstance().to(
-                    faecBeans,
-                    FaceBean.class,
-                    net.gdface.facelog.client.thrift.FaceBean.class),
+                removed,
                 TypeTransformer.getInstance().to(
                     token,
                     Token.class,

@@ -12,6 +12,7 @@ IFaceLog_addFeature_args = function(args) {
   this.featureVersion = null;
   this.personId = null;
   this.faecBeans = null;
+  this.removed = null;
   this.token = null;
   if (args) {
     if (args.feature !== undefined && args.feature !== null) {
@@ -25,6 +26,9 @@ IFaceLog_addFeature_args = function(args) {
     }
     if (args.faecBeans !== undefined && args.faecBeans !== null) {
       this.faecBeans = Thrift.copyList(args.faecBeans, [FaceBean]);
+    }
+    if (args.removed !== undefined && args.removed !== null) {
+      this.removed = args.removed;
     }
     if (args.token !== undefined && args.token !== null) {
       this.token = new Token(args.token);
@@ -88,6 +92,13 @@ IFaceLog_addFeature_args.prototype.read = function(input) {
       }
       break;
       case 5:
+      if (ftype == Thrift.Type.STRING) {
+        this.removed = input.readString().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 6:
       if (ftype == Thrift.Type.STRUCT) {
         this.token = new Token();
         this.token.read(input);
@@ -135,8 +146,13 @@ IFaceLog_addFeature_args.prototype.write = function(output) {
     output.writeListEnd();
     output.writeFieldEnd();
   }
+  if (this.removed !== null && this.removed !== undefined) {
+    output.writeFieldBegin('removed', Thrift.Type.STRING, 5);
+    output.writeString(this.removed);
+    output.writeFieldEnd();
+  }
   if (this.token !== null && this.token !== undefined) {
-    output.writeFieldBegin('token', Thrift.Type.STRUCT, 5);
+    output.writeFieldBegin('token', Thrift.Type.STRUCT, 6);
     this.token.write(output);
     output.writeFieldEnd();
   }
@@ -244,6 +260,7 @@ IFaceLog_addFeatureMulti_args = function(args) {
   this.personId = null;
   this.photos = null;
   this.faces = null;
+  this.removed = null;
   this.token = null;
   if (args) {
     if (args.feature !== undefined && args.feature !== null) {
@@ -260,6 +277,9 @@ IFaceLog_addFeatureMulti_args = function(args) {
     }
     if (args.faces !== undefined && args.faces !== null) {
       this.faces = Thrift.copyList(args.faces, [FaceBean]);
+    }
+    if (args.removed !== undefined && args.removed !== null) {
+      this.removed = args.removed;
     }
     if (args.token !== undefined && args.token !== null) {
       this.token = new Token(args.token);
@@ -343,6 +363,13 @@ IFaceLog_addFeatureMulti_args.prototype.read = function(input) {
       }
       break;
       case 6:
+      if (ftype == Thrift.Type.STRING) {
+        this.removed = input.readString().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 7:
       if (ftype == Thrift.Type.STRUCT) {
         this.token = new Token();
         this.token.read(input);
@@ -404,8 +431,13 @@ IFaceLog_addFeatureMulti_args.prototype.write = function(output) {
     output.writeListEnd();
     output.writeFieldEnd();
   }
+  if (this.removed !== null && this.removed !== undefined) {
+    output.writeFieldBegin('removed', Thrift.Type.STRING, 6);
+    output.writeString(this.removed);
+    output.writeFieldEnd();
+  }
   if (this.token !== null && this.token !== undefined) {
-    output.writeFieldBegin('token', Thrift.Type.STRUCT, 6);
+    output.writeFieldBegin('token', Thrift.Type.STRUCT, 7);
     this.token.write(output);
     output.writeFieldEnd();
   }
@@ -514,6 +546,7 @@ IFaceLog_addFeatureWithImage_args = function(args) {
   this.asIdPhotoIfAbsent = null;
   this.featurePhoto = null;
   this.faceBean = null;
+  this.removed = null;
   this.token = null;
   if (args) {
     if (args.feature !== undefined && args.feature !== null) {
@@ -535,6 +568,9 @@ IFaceLog_addFeatureWithImage_args = function(args) {
     }
     if (args.faceBean !== undefined && args.faceBean !== null) {
       this.faceBean = new FaceBean(args.faceBean);
+    }
+    if (args.removed !== undefined && args.removed !== null) {
+      this.removed = args.removed;
     }
     if (args.token !== undefined && args.token !== null) {
       this.token = new Token(args.token);
@@ -599,6 +635,13 @@ IFaceLog_addFeatureWithImage_args.prototype.read = function(input) {
       }
       break;
       case 7:
+      if (ftype == Thrift.Type.STRING) {
+        this.removed = input.readString().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 8:
       if (ftype == Thrift.Type.STRUCT) {
         this.token = new Token();
         this.token.read(input);
@@ -647,8 +690,13 @@ IFaceLog_addFeatureWithImage_args.prototype.write = function(output) {
     this.faceBean.write(output);
     output.writeFieldEnd();
   }
+  if (this.removed !== null && this.removed !== undefined) {
+    output.writeFieldBegin('removed', Thrift.Type.STRING, 7);
+    output.writeString(this.removed);
+    output.writeFieldEnd();
+  }
   if (this.token !== null && this.token !== undefined) {
-    output.writeFieldBegin('token', Thrift.Type.STRUCT, 7);
+    output.writeFieldBegin('token', Thrift.Type.STRUCT, 8);
     this.token.write(output);
     output.writeFieldEnd();
   }
@@ -24315,24 +24363,25 @@ IFaceLogClient = function(input, output) {
     this.seqid = 0;
 };
 IFaceLogClient.prototype = {};
-IFaceLogClient.prototype.addFeature = function(feature, featureVersion, personId, faecBeans, token, callback) {
+IFaceLogClient.prototype.addFeature = function(feature, featureVersion, personId, faecBeans, removed, token, callback) {
   if (callback === undefined) {
-    this.send_addFeature(feature, featureVersion, personId, faecBeans, token);
+    this.send_addFeature(feature, featureVersion, personId, faecBeans, removed, token);
     return this.recv_addFeature();
   } else {
-    var postData = this.send_addFeature(feature, featureVersion, personId, faecBeans, token, true);
+    var postData = this.send_addFeature(feature, featureVersion, personId, faecBeans, removed, token, true);
     return this.output.getTransport()
       .jqRequest(this, postData, arguments, this.recv_addFeature);
   }
 };
 
-IFaceLogClient.prototype.send_addFeature = function(feature, featureVersion, personId, faecBeans, token, callback) {
+IFaceLogClient.prototype.send_addFeature = function(feature, featureVersion, personId, faecBeans, removed, token, callback) {
   this.output.writeMessageBegin('addFeature', Thrift.MessageType.CALL, this.seqid);
   var params = {
     feature: feature,
     featureVersion: featureVersion,
     personId: personId,
     faecBeans: faecBeans,
+    removed: removed,
     token: token
   };
   var args = new IFaceLog_addFeature_args(params);
@@ -24367,18 +24416,18 @@ IFaceLogClient.prototype.recv_addFeature = function() {
   }
   throw 'addFeature failed: unknown result';
 };
-IFaceLogClient.prototype.addFeatureMulti = function(feature, featureVersion, personId, photos, faces, token, callback) {
+IFaceLogClient.prototype.addFeatureMulti = function(feature, featureVersion, personId, photos, faces, removed, token, callback) {
   if (callback === undefined) {
-    this.send_addFeatureMulti(feature, featureVersion, personId, photos, faces, token);
+    this.send_addFeatureMulti(feature, featureVersion, personId, photos, faces, removed, token);
     return this.recv_addFeatureMulti();
   } else {
-    var postData = this.send_addFeatureMulti(feature, featureVersion, personId, photos, faces, token, true);
+    var postData = this.send_addFeatureMulti(feature, featureVersion, personId, photos, faces, removed, token, true);
     return this.output.getTransport()
       .jqRequest(this, postData, arguments, this.recv_addFeatureMulti);
   }
 };
 
-IFaceLogClient.prototype.send_addFeatureMulti = function(feature, featureVersion, personId, photos, faces, token, callback) {
+IFaceLogClient.prototype.send_addFeatureMulti = function(feature, featureVersion, personId, photos, faces, removed, token, callback) {
   this.output.writeMessageBegin('addFeatureMulti', Thrift.MessageType.CALL, this.seqid);
   var params = {
     feature: feature,
@@ -24386,6 +24435,7 @@ IFaceLogClient.prototype.send_addFeatureMulti = function(feature, featureVersion
     personId: personId,
     photos: photos,
     faces: faces,
+    removed: removed,
     token: token
   };
   var args = new IFaceLog_addFeatureMulti_args(params);
@@ -24420,18 +24470,18 @@ IFaceLogClient.prototype.recv_addFeatureMulti = function() {
   }
   throw 'addFeatureMulti failed: unknown result';
 };
-IFaceLogClient.prototype.addFeatureWithImage = function(feature, featureVersion, personId, asIdPhotoIfAbsent, featurePhoto, faceBean, token, callback) {
+IFaceLogClient.prototype.addFeatureWithImage = function(feature, featureVersion, personId, asIdPhotoIfAbsent, featurePhoto, faceBean, removed, token, callback) {
   if (callback === undefined) {
-    this.send_addFeatureWithImage(feature, featureVersion, personId, asIdPhotoIfAbsent, featurePhoto, faceBean, token);
+    this.send_addFeatureWithImage(feature, featureVersion, personId, asIdPhotoIfAbsent, featurePhoto, faceBean, removed, token);
     return this.recv_addFeatureWithImage();
   } else {
-    var postData = this.send_addFeatureWithImage(feature, featureVersion, personId, asIdPhotoIfAbsent, featurePhoto, faceBean, token, true);
+    var postData = this.send_addFeatureWithImage(feature, featureVersion, personId, asIdPhotoIfAbsent, featurePhoto, faceBean, removed, token, true);
     return this.output.getTransport()
       .jqRequest(this, postData, arguments, this.recv_addFeatureWithImage);
   }
 };
 
-IFaceLogClient.prototype.send_addFeatureWithImage = function(feature, featureVersion, personId, asIdPhotoIfAbsent, featurePhoto, faceBean, token, callback) {
+IFaceLogClient.prototype.send_addFeatureWithImage = function(feature, featureVersion, personId, asIdPhotoIfAbsent, featurePhoto, faceBean, removed, token, callback) {
   this.output.writeMessageBegin('addFeatureWithImage', Thrift.MessageType.CALL, this.seqid);
   var params = {
     feature: feature,
@@ -24440,6 +24490,7 @@ IFaceLogClient.prototype.send_addFeatureWithImage = function(feature, featureVer
     asIdPhotoIfAbsent: asIdPhotoIfAbsent,
     featurePhoto: featurePhoto,
     faceBean: faceBean,
+    removed: removed,
     token: token
   };
   var args = new IFaceLog_addFeatureWithImage_args(params);

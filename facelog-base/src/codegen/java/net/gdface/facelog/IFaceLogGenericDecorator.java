@@ -29,7 +29,7 @@ public class IFaceLogGenericDecorator extends IFaceLogDecorator{
     }
     //1
     /**
-     * {@link IFaceLog#addFeature(byte[],java.lang.String,java.lang.Integer,boolean,byte[],FaceBean,Token)}对应的泛型方法<br>
+     * {@link IFaceLog#addFeature(byte[],java.lang.String,java.lang.Integer,boolean,byte[],FaceBean,java.lang.String,Token)}对应的泛型方法<br>
      * @param feature
      *            泛型参数,参见 {@link net.gdface.utils.FaceUtilits#getBytesNotEmpty(Object)}
      * @param featureVersion
@@ -38,17 +38,18 @@ public class IFaceLogGenericDecorator extends IFaceLogDecorator{
      * @param featurePhoto
      *            泛型参数,参见 {@link net.gdface.utils.FaceUtilits#getBytesNotEmpty(Object)}
      * @param faceBean
+     * @param removed
      * @param token
      * @return 
 
-     * @see IFaceLog#addFeature(byte[],java.lang.String,java.lang.Integer,boolean,byte[],FaceBean,Token)
+     * @see IFaceLog#addFeature(byte[],java.lang.String,java.lang.Integer,boolean,byte[],FaceBean,java.lang.String,Token)
      */    
-    public <T> FeatureBean addFeature (T feature,String featureVersion,Integer personId,boolean asIdPhotoIfAbsent,T featurePhoto,FaceBean faceBean,Token token) throws DuplicateRecordException,IOException{
-        return addFeature(FaceUtilits.getBytesNotEmpty(feature),featureVersion,personId,asIdPhotoIfAbsent,FaceUtilits.getBytesNotEmpty(featurePhoto),faceBean,token);
+    public <T> FeatureBean addFeature (T feature,String featureVersion,Integer personId,boolean asIdPhotoIfAbsent,T featurePhoto,FaceBean faceBean,String removed,Token token) throws DuplicateRecordException,IOException{
+        return addFeature(FaceUtilits.getBytesNotEmpty(feature),featureVersion,personId,asIdPhotoIfAbsent,FaceUtilits.getBytesNotEmpty(featurePhoto),faceBean,removed,token);
     }
     //2
     /**
-     * {@link IFaceLog#addFeature(byte[],java.lang.String,java.lang.Integer,boolean,byte[],FaceBean,Token)}泛型方法对应的unchecked方法,
+     * {@link IFaceLog#addFeature(byte[],java.lang.String,java.lang.Integer,boolean,byte[],FaceBean,java.lang.String,Token)}泛型方法对应的unchecked方法,
      * 所有显式申明的异常都被封装到{@link RuntimeException}抛出<br>
      * @param feature
      * @param featureVersion
@@ -56,12 +57,13 @@ public class IFaceLogGenericDecorator extends IFaceLogDecorator{
      * @param asIdPhotoIfAbsent
      * @param featurePhoto
      * @param faceBean
+     * @param removed
      * @param token
      * @return FeatureBean
      */
-    public <T> FeatureBean addFeatureUnchecked (T feature,String featureVersion,Integer personId,boolean asIdPhotoIfAbsent,T featurePhoto,FaceBean faceBean,Token token) {
+    public <T> FeatureBean addFeatureUnchecked (T feature,String featureVersion,Integer personId,boolean asIdPhotoIfAbsent,T featurePhoto,FaceBean faceBean,String removed,Token token) {
         try{
-            return addFeature(feature,featureVersion,personId,asIdPhotoIfAbsent,featurePhoto,faceBean,token);
+            return addFeature(feature,featureVersion,personId,asIdPhotoIfAbsent,featurePhoto,faceBean,removed,token);
         } catch(RuntimeException e){
             throw e;
         } catch(Exception e){
@@ -70,38 +72,38 @@ public class IFaceLogGenericDecorator extends IFaceLogDecorator{
     }
     //3
     /**
-     * {@link IFaceLog#addFeature(byte[],java.lang.String,java.lang.Integer,List,List,Token)}对应的泛型方法<br>
+     * {@link IFaceLog#addFeature(byte[],java.lang.String,java.lang.Integer,List,java.lang.String,Token)}对应的泛型方法<br>
      * @param feature
      *            泛型参数,参见 {@link net.gdface.utils.FaceUtilits#getBytesNotEmpty(Object)}
      * @param featureVersion
      * @param personId
-     * @param photos
-     * @param faces
+     * @param faecBeans
+     * @param removed
      * @param token
      * @return 
 
      * @throws DuplicateRecordException
      * @throws IOException
-     * @see IFaceLog#addFeature(byte[],java.lang.String,java.lang.Integer,List,List,Token)
+     * @see IFaceLog#addFeature(byte[],java.lang.String,java.lang.Integer,List,java.lang.String,Token)
      */    
-    public <T> FeatureBean addFeature (T feature,String featureVersion,Integer personId,List<byte[]> photos,List<FaceBean> faces,Token token) throws DuplicateRecordException,IOException{
-        return addFeature(FaceUtilits.getBytesNotEmpty(feature),featureVersion,personId,photos,faces,token);
+    public <T> FeatureBean addFeature (T feature,String featureVersion,Integer personId,List<FaceBean> faecBeans,String removed,Token token) throws DuplicateRecordException,IOException{
+        return addFeature(FaceUtilits.getBytesNotEmpty(feature),featureVersion,personId,faecBeans,removed,token);
     }
     //4
     /**
-     * {@link IFaceLog#addFeature(byte[],java.lang.String,java.lang.Integer,List,List,Token)}泛型方法对应的unchecked方法,
+     * {@link IFaceLog#addFeature(byte[],java.lang.String,java.lang.Integer,List,java.lang.String,Token)}泛型方法对应的unchecked方法,
      * 所有显式申明的异常都被封装到{@link RuntimeException}抛出<br>
      * @param feature
      * @param featureVersion
      * @param personId
-     * @param photos
-     * @param faces
+     * @param faecBeans
+     * @param removed
      * @param token
      * @return FeatureBean
      */
-    public <T> FeatureBean addFeatureUnchecked (T feature,String featureVersion,Integer personId,List<byte[]> photos,List<FaceBean> faces,Token token) {
+    public <T> FeatureBean addFeatureUnchecked (T feature,String featureVersion,Integer personId,List<FaceBean> faecBeans,String removed,Token token) {
         try{
-            return addFeature(feature,featureVersion,personId,photos,faces,token);
+            return addFeature(feature,featureVersion,personId,faecBeans,removed,token);
         } catch(RuntimeException e){
             throw e;
         } catch(Exception e){
@@ -110,36 +112,40 @@ public class IFaceLogGenericDecorator extends IFaceLogDecorator{
     }
     //5
     /**
-     * {@link IFaceLog#addFeature(byte[],java.lang.String,java.lang.Integer,List,Token)}对应的泛型方法<br>
+     * {@link IFaceLog#addFeature(byte[],java.lang.String,java.lang.Integer,List,List,java.lang.String,Token)}对应的泛型方法<br>
      * @param feature
      *            泛型参数,参见 {@link net.gdface.utils.FaceUtilits#getBytesNotEmpty(Object)}
      * @param featureVersion
      * @param personId
-     * @param faecBeans
+     * @param photos
+     * @param faces
+     * @param removed
      * @param token
      * @return 
 
      * @throws DuplicateRecordException
      * @throws IOException
-     * @see IFaceLog#addFeature(byte[],java.lang.String,java.lang.Integer,List,Token)
+     * @see IFaceLog#addFeature(byte[],java.lang.String,java.lang.Integer,List,List,java.lang.String,Token)
      */    
-    public <T> FeatureBean addFeature (T feature,String featureVersion,Integer personId,List<FaceBean> faecBeans,Token token) throws DuplicateRecordException,IOException{
-        return addFeature(FaceUtilits.getBytesNotEmpty(feature),featureVersion,personId,faecBeans,token);
+    public <T> FeatureBean addFeature (T feature,String featureVersion,Integer personId,List<byte[]> photos,List<FaceBean> faces,String removed,Token token) throws DuplicateRecordException,IOException{
+        return addFeature(FaceUtilits.getBytesNotEmpty(feature),featureVersion,personId,photos,faces,removed,token);
     }
     //6
     /**
-     * {@link IFaceLog#addFeature(byte[],java.lang.String,java.lang.Integer,List,Token)}泛型方法对应的unchecked方法,
+     * {@link IFaceLog#addFeature(byte[],java.lang.String,java.lang.Integer,List,List,java.lang.String,Token)}泛型方法对应的unchecked方法,
      * 所有显式申明的异常都被封装到{@link RuntimeException}抛出<br>
      * @param feature
      * @param featureVersion
      * @param personId
-     * @param faecBeans
+     * @param photos
+     * @param faces
+     * @param removed
      * @param token
      * @return FeatureBean
      */
-    public <T> FeatureBean addFeatureUnchecked (T feature,String featureVersion,Integer personId,List<FaceBean> faecBeans,Token token) {
+    public <T> FeatureBean addFeatureUnchecked (T feature,String featureVersion,Integer personId,List<byte[]> photos,List<FaceBean> faces,String removed,Token token) {
         try{
-            return addFeature(feature,featureVersion,personId,faecBeans,token);
+            return addFeature(feature,featureVersion,personId,photos,faces,removed,token);
         } catch(RuntimeException e){
             throw e;
         } catch(Exception e){

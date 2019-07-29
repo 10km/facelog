@@ -144,6 +144,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         final boolean asIdPhotoIfAbsent,
         final byte[] featurePhoto,
         final FaceBean faceBean,
+        final String removed,
         final Token token) 
         throws DuplicateRecordException{
         try{
@@ -167,7 +168,53 @@ public class IFaceLogThriftClient implements IFaceLog {
                     okio.ByteString.class),TypeTransformer.getInstance().to(
                     faceBean,
                     FaceBean.class,
-                    net.gdface.facelog.client.thrift.FaceBean.class),TypeTransformer.getInstance().to(
+                    net.gdface.facelog.client.thrift.FaceBean.class),removed,TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                }});
+        }
+        catch(net.gdface.facelog.client.thrift.DuplicateRecordException e){
+            throw TypeTransformer.getInstance().to(
+                    e,
+                    net.gdface.facelog.client.thrift.DuplicateRecordException.class,
+                    DuplicateRecordException.class);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);
+        }
+    }
+    @Override
+    public FeatureBean addFeature(final byte[] feature,
+        final String featureVersion,
+        final Integer personId,
+        final List<FaceBean> faecBeans,
+        final String removed,
+        final Token token) 
+        throws DuplicateRecordException{
+        try{
+            return syncCall(new Function<net.gdface.facelog.client.thrift.FeatureBean,FeatureBean>() {
+                @Override
+                public FeatureBean apply(net.gdface.facelog.client.thrift.FeatureBean input) {
+                    return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.FeatureBean.class,
+                    FeatureBean.class);
+                }},
+                new ServiceAsyncCall<net.gdface.facelog.client.thrift.FeatureBean>(){
+                @Override
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<net.gdface.facelog.client.thrift.FeatureBean> nativeCallback){
+                    service.addFeature(TypeTransformer.getInstance().to(
+                    feature,
+                    byte[].class,
+                    okio.ByteString.class),featureVersion,personId,TypeTransformer.getInstance().to(
+                    faecBeans,
+                    FaceBean.class,
+                    net.gdface.facelog.client.thrift.FaceBean.class),removed,TypeTransformer.getInstance().to(
                     token,
                     Token.class,
                     net.gdface.facelog.client.thrift.Token.class),nativeCallback);
@@ -193,6 +240,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         final Integer personId,
         final List<byte[]> photos,
         final List<FaceBean> faces,
+        final String removed,
         final Token token) 
         throws DuplicateRecordException{
         try{
@@ -216,52 +264,7 @@ public class IFaceLogThriftClient implements IFaceLog {
                     okio.ByteString.class),TypeTransformer.getInstance().to(
                     faces,
                     FaceBean.class,
-                    net.gdface.facelog.client.thrift.FaceBean.class),TypeTransformer.getInstance().to(
-                    token,
-                    Token.class,
-                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
-                }});
-        }
-        catch(net.gdface.facelog.client.thrift.DuplicateRecordException e){
-            throw TypeTransformer.getInstance().to(
-                    e,
-                    net.gdface.facelog.client.thrift.DuplicateRecordException.class,
-                    DuplicateRecordException.class);
-        }
-        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-        catch (Throwable e) {
-            Throwables.throwIfUnchecked(e);
-            throw new RuntimeException(e);
-        }
-    }
-    @Override
-    public FeatureBean addFeature(final byte[] feature,
-        final String featureVersion,
-        final Integer personId,
-        final List<FaceBean> faecBeans,
-        final Token token) 
-        throws DuplicateRecordException{
-        try{
-            return syncCall(new Function<net.gdface.facelog.client.thrift.FeatureBean,FeatureBean>() {
-                @Override
-                public FeatureBean apply(net.gdface.facelog.client.thrift.FeatureBean input) {
-                    return TypeTransformer.getInstance().to(
-                    input,
-                    net.gdface.facelog.client.thrift.FeatureBean.class,
-                    FeatureBean.class);
-                }},
-                new ServiceAsyncCall<net.gdface.facelog.client.thrift.FeatureBean>(){
-                @Override
-                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<net.gdface.facelog.client.thrift.FeatureBean> nativeCallback){
-                    service.addFeature(TypeTransformer.getInstance().to(
-                    feature,
-                    byte[].class,
-                    okio.ByteString.class),featureVersion,personId,TypeTransformer.getInstance().to(
-                    faecBeans,
-                    FaceBean.class,
-                    net.gdface.facelog.client.thrift.FaceBean.class),TypeTransformer.getInstance().to(
+                    net.gdface.facelog.client.thrift.FaceBean.class),removed,TypeTransformer.getInstance().to(
                     token,
                     Token.class,
                     net.gdface.facelog.client.thrift.Token.class),nativeCallback);

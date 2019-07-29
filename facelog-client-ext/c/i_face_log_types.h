@@ -714,6 +714,8 @@ struct _IFaceLogAddFeatureArgs
   gboolean __isset_personId;
   GPtrArray * faecBeans;
   gboolean __isset_faecBeans;
+  gchar * removed;
+  gboolean __isset_removed;
   Token * token;
   gboolean __isset_token;
 };
@@ -778,6 +780,8 @@ struct _IFaceLogAddFeatureMultiArgs
   gboolean __isset_photos;
   GPtrArray * faces;
   gboolean __isset_faces;
+  gchar * removed;
+  gboolean __isset_removed;
   Token * token;
   gboolean __isset_token;
 };
@@ -843,6 +847,8 @@ struct _IFaceLogAddFeatureWithImageArgs
   gboolean __isset_featurePhoto;
   FaceBean * faceBean;
   gboolean __isset_faceBean;
+  gchar * removed;
+  gboolean __isset_removed;
   Token * token;
   gboolean __isset_token;
 };

@@ -10,21 +10,21 @@
 #include "i_face_log.h"
 
 gboolean
-i_face_log_if_add_feature (IFaceLogIf *iface, FeatureBean ** _return, const GByteArray * feature, const gchar * featureVersion, const gint32 personId, const GPtrArray * faecBeans, const Token * token, DuplicateRecordException ** ex1, ServiceRuntimeException ** ex2, GError **error)
+i_face_log_if_add_feature (IFaceLogIf *iface, FeatureBean ** _return, const GByteArray * feature, const gchar * featureVersion, const gint32 personId, const GPtrArray * faecBeans, const gchar * removed, const Token * token, DuplicateRecordException ** ex1, ServiceRuntimeException ** ex2, GError **error)
 {
-  return I_FACE_LOG_IF_GET_INTERFACE (iface)->add_feature (iface, _return, feature, featureVersion, personId, faecBeans, token, ex1, ex2, error);
+  return I_FACE_LOG_IF_GET_INTERFACE (iface)->add_feature (iface, _return, feature, featureVersion, personId, faecBeans, removed, token, ex1, ex2, error);
 }
 
 gboolean
-i_face_log_if_add_feature_multi (IFaceLogIf *iface, FeatureBean ** _return, const GByteArray * feature, const gchar * featureVersion, const gint32 personId, const GPtrArray * photos, const GPtrArray * faces, const Token * token, DuplicateRecordException ** ex1, ServiceRuntimeException ** ex2, GError **error)
+i_face_log_if_add_feature_multi (IFaceLogIf *iface, FeatureBean ** _return, const GByteArray * feature, const gchar * featureVersion, const gint32 personId, const GPtrArray * photos, const GPtrArray * faces, const gchar * removed, const Token * token, DuplicateRecordException ** ex1, ServiceRuntimeException ** ex2, GError **error)
 {
-  return I_FACE_LOG_IF_GET_INTERFACE (iface)->add_feature_multi (iface, _return, feature, featureVersion, personId, photos, faces, token, ex1, ex2, error);
+  return I_FACE_LOG_IF_GET_INTERFACE (iface)->add_feature_multi (iface, _return, feature, featureVersion, personId, photos, faces, removed, token, ex1, ex2, error);
 }
 
 gboolean
-i_face_log_if_add_feature_with_image (IFaceLogIf *iface, FeatureBean ** _return, const GByteArray * feature, const gchar * featureVersion, const gint32 personId, const gboolean asIdPhotoIfAbsent, const GByteArray * featurePhoto, const FaceBean * faceBean, const Token * token, DuplicateRecordException ** ex1, ServiceRuntimeException ** ex2, GError **error)
+i_face_log_if_add_feature_with_image (IFaceLogIf *iface, FeatureBean ** _return, const GByteArray * feature, const gchar * featureVersion, const gint32 personId, const gboolean asIdPhotoIfAbsent, const GByteArray * featurePhoto, const FaceBean * faceBean, const gchar * removed, const Token * token, DuplicateRecordException ** ex1, ServiceRuntimeException ** ex2, GError **error)
 {
-  return I_FACE_LOG_IF_GET_INTERFACE (iface)->add_feature_with_image (iface, _return, feature, featureVersion, personId, asIdPhotoIfAbsent, featurePhoto, faceBean, token, ex1, ex2, error);
+  return I_FACE_LOG_IF_GET_INTERFACE (iface)->add_feature_with_image (iface, _return, feature, featureVersion, personId, asIdPhotoIfAbsent, featurePhoto, faceBean, removed, token, ex1, ex2, error);
 }
 
 gboolean
@@ -1046,7 +1046,7 @@ i_face_log_client_get_property (GObject *object, guint property_id, GValue *valu
   }
 }
 
-gboolean i_face_log_client_send_add_feature (IFaceLogIf * iface, const GByteArray * feature, const gchar * featureVersion, const gint32 personId, const GPtrArray * faecBeans, const Token * token, GError ** error)
+gboolean i_face_log_client_send_add_feature (IFaceLogIf * iface, const GByteArray * feature, const gchar * featureVersion, const gint32 personId, const GPtrArray * faecBeans, const gchar * removed, const Token * token, GError ** error)
 {
   gint32 cseqid = 0;
   ThriftProtocol * protocol = I_FACE_LOG_CLIENT (iface)->output_protocol;
@@ -1115,7 +1115,17 @@ gboolean i_face_log_client_send_add_feature (IFaceLogIf * iface, const GByteArra
     if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
       return 0;
     xfer += ret;
-    if ((ret = thrift_protocol_write_field_begin (protocol, "token", T_STRUCT, 5, error)) < 0)
+    if ((ret = thrift_protocol_write_field_begin (protocol, "removed", T_STRING, 5, error)) < 0)
+      return 0;
+    xfer += ret;
+    if ((ret = thrift_protocol_write_string (protocol, removed, error)) < 0)
+      return 0;
+    xfer += ret;
+
+    if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
+      return 0;
+    xfer += ret;
+    if ((ret = thrift_protocol_write_field_begin (protocol, "token", T_STRUCT, 6, error)) < 0)
       return 0;
     xfer += ret;
     if ((ret = thrift_struct_write (THRIFT_STRUCT (token), protocol, error)) < 0)
@@ -1322,16 +1332,16 @@ gboolean i_face_log_client_recv_add_feature (IFaceLogIf * iface, FeatureBean ** 
   return TRUE;
 }
 
-gboolean i_face_log_client_add_feature (IFaceLogIf * iface, FeatureBean ** _return, const GByteArray * feature, const gchar * featureVersion, const gint32 personId, const GPtrArray * faecBeans, const Token * token, DuplicateRecordException ** ex1, ServiceRuntimeException ** ex2, GError ** error)
+gboolean i_face_log_client_add_feature (IFaceLogIf * iface, FeatureBean ** _return, const GByteArray * feature, const gchar * featureVersion, const gint32 personId, const GPtrArray * faecBeans, const gchar * removed, const Token * token, DuplicateRecordException ** ex1, ServiceRuntimeException ** ex2, GError ** error)
 {
-  if (!i_face_log_client_send_add_feature (iface, feature, featureVersion, personId, faecBeans, token, error))
+  if (!i_face_log_client_send_add_feature (iface, feature, featureVersion, personId, faecBeans, removed, token, error))
     return FALSE;
   if (!i_face_log_client_recv_add_feature (iface, _return, ex1, ex2, error))
     return FALSE;
   return TRUE;
 }
 
-gboolean i_face_log_client_send_add_feature_multi (IFaceLogIf * iface, const GByteArray * feature, const gchar * featureVersion, const gint32 personId, const GPtrArray * photos, const GPtrArray * faces, const Token * token, GError ** error)
+gboolean i_face_log_client_send_add_feature_multi (IFaceLogIf * iface, const GByteArray * feature, const gchar * featureVersion, const gint32 personId, const GPtrArray * photos, const GPtrArray * faces, const gchar * removed, const Token * token, GError ** error)
 {
   gint32 cseqid = 0;
   ThriftProtocol * protocol = I_FACE_LOG_CLIENT (iface)->output_protocol;
@@ -1423,7 +1433,17 @@ gboolean i_face_log_client_send_add_feature_multi (IFaceLogIf * iface, const GBy
     if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
       return 0;
     xfer += ret;
-    if ((ret = thrift_protocol_write_field_begin (protocol, "token", T_STRUCT, 6, error)) < 0)
+    if ((ret = thrift_protocol_write_field_begin (protocol, "removed", T_STRING, 6, error)) < 0)
+      return 0;
+    xfer += ret;
+    if ((ret = thrift_protocol_write_string (protocol, removed, error)) < 0)
+      return 0;
+    xfer += ret;
+
+    if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
+      return 0;
+    xfer += ret;
+    if ((ret = thrift_protocol_write_field_begin (protocol, "token", T_STRUCT, 7, error)) < 0)
       return 0;
     xfer += ret;
     if ((ret = thrift_struct_write (THRIFT_STRUCT (token), protocol, error)) < 0)
@@ -1630,16 +1650,16 @@ gboolean i_face_log_client_recv_add_feature_multi (IFaceLogIf * iface, FeatureBe
   return TRUE;
 }
 
-gboolean i_face_log_client_add_feature_multi (IFaceLogIf * iface, FeatureBean ** _return, const GByteArray * feature, const gchar * featureVersion, const gint32 personId, const GPtrArray * photos, const GPtrArray * faces, const Token * token, DuplicateRecordException ** ex1, ServiceRuntimeException ** ex2, GError ** error)
+gboolean i_face_log_client_add_feature_multi (IFaceLogIf * iface, FeatureBean ** _return, const GByteArray * feature, const gchar * featureVersion, const gint32 personId, const GPtrArray * photos, const GPtrArray * faces, const gchar * removed, const Token * token, DuplicateRecordException ** ex1, ServiceRuntimeException ** ex2, GError ** error)
 {
-  if (!i_face_log_client_send_add_feature_multi (iface, feature, featureVersion, personId, photos, faces, token, error))
+  if (!i_face_log_client_send_add_feature_multi (iface, feature, featureVersion, personId, photos, faces, removed, token, error))
     return FALSE;
   if (!i_face_log_client_recv_add_feature_multi (iface, _return, ex1, ex2, error))
     return FALSE;
   return TRUE;
 }
 
-gboolean i_face_log_client_send_add_feature_with_image (IFaceLogIf * iface, const GByteArray * feature, const gchar * featureVersion, const gint32 personId, const gboolean asIdPhotoIfAbsent, const GByteArray * featurePhoto, const FaceBean * faceBean, const Token * token, GError ** error)
+gboolean i_face_log_client_send_add_feature_with_image (IFaceLogIf * iface, const GByteArray * feature, const gchar * featureVersion, const gint32 personId, const gboolean asIdPhotoIfAbsent, const GByteArray * featurePhoto, const FaceBean * faceBean, const gchar * removed, const Token * token, GError ** error)
 {
   gint32 cseqid = 0;
   ThriftProtocol * protocol = I_FACE_LOG_CLIENT (iface)->output_protocol;
@@ -1715,7 +1735,17 @@ gboolean i_face_log_client_send_add_feature_with_image (IFaceLogIf * iface, cons
     if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
       return 0;
     xfer += ret;
-    if ((ret = thrift_protocol_write_field_begin (protocol, "token", T_STRUCT, 7, error)) < 0)
+    if ((ret = thrift_protocol_write_field_begin (protocol, "removed", T_STRING, 7, error)) < 0)
+      return 0;
+    xfer += ret;
+    if ((ret = thrift_protocol_write_string (protocol, removed, error)) < 0)
+      return 0;
+    xfer += ret;
+
+    if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
+      return 0;
+    xfer += ret;
+    if ((ret = thrift_protocol_write_field_begin (protocol, "token", T_STRUCT, 8, error)) < 0)
       return 0;
     xfer += ret;
     if ((ret = thrift_struct_write (THRIFT_STRUCT (token), protocol, error)) < 0)
@@ -1922,9 +1952,9 @@ gboolean i_face_log_client_recv_add_feature_with_image (IFaceLogIf * iface, Feat
   return TRUE;
 }
 
-gboolean i_face_log_client_add_feature_with_image (IFaceLogIf * iface, FeatureBean ** _return, const GByteArray * feature, const gchar * featureVersion, const gint32 personId, const gboolean asIdPhotoIfAbsent, const GByteArray * featurePhoto, const FaceBean * faceBean, const Token * token, DuplicateRecordException ** ex1, ServiceRuntimeException ** ex2, GError ** error)
+gboolean i_face_log_client_add_feature_with_image (IFaceLogIf * iface, FeatureBean ** _return, const GByteArray * feature, const gchar * featureVersion, const gint32 personId, const gboolean asIdPhotoIfAbsent, const GByteArray * featurePhoto, const FaceBean * faceBean, const gchar * removed, const Token * token, DuplicateRecordException ** ex1, ServiceRuntimeException ** ex2, GError ** error)
 {
-  if (!i_face_log_client_send_add_feature_with_image (iface, feature, featureVersion, personId, asIdPhotoIfAbsent, featurePhoto, faceBean, token, error))
+  if (!i_face_log_client_send_add_feature_with_image (iface, feature, featureVersion, personId, asIdPhotoIfAbsent, featurePhoto, faceBean, removed, token, error))
     return FALSE;
   if (!i_face_log_client_recv_add_feature_with_image (iface, _return, ex1, ex2, error))
     return FALSE;
@@ -37302,25 +37332,25 @@ G_DEFINE_TYPE_WITH_CODE (IFaceLogHandler,
                          G_IMPLEMENT_INTERFACE (TYPE_I_FACE_LOG_IF,
                                                 i_face_log_handler_i_face_log_if_interface_init))
 
-gboolean i_face_log_handler_add_feature (IFaceLogIf * iface, FeatureBean ** _return, const GByteArray * feature, const gchar * featureVersion, const gint32 personId, const GPtrArray * faecBeans, const Token * token, DuplicateRecordException ** ex1, ServiceRuntimeException ** ex2, GError ** error)
+gboolean i_face_log_handler_add_feature (IFaceLogIf * iface, FeatureBean ** _return, const GByteArray * feature, const gchar * featureVersion, const gint32 personId, const GPtrArray * faecBeans, const gchar * removed, const Token * token, DuplicateRecordException ** ex1, ServiceRuntimeException ** ex2, GError ** error)
 {
   g_return_val_if_fail (IS_I_FACE_LOG_HANDLER (iface), FALSE);
 
-  return I_FACE_LOG_HANDLER_GET_CLASS (iface)->add_feature (iface, _return, feature, featureVersion, personId, faecBeans, token, ex1, ex2, error);
+  return I_FACE_LOG_HANDLER_GET_CLASS (iface)->add_feature (iface, _return, feature, featureVersion, personId, faecBeans, removed, token, ex1, ex2, error);
 }
 
-gboolean i_face_log_handler_add_feature_multi (IFaceLogIf * iface, FeatureBean ** _return, const GByteArray * feature, const gchar * featureVersion, const gint32 personId, const GPtrArray * photos, const GPtrArray * faces, const Token * token, DuplicateRecordException ** ex1, ServiceRuntimeException ** ex2, GError ** error)
+gboolean i_face_log_handler_add_feature_multi (IFaceLogIf * iface, FeatureBean ** _return, const GByteArray * feature, const gchar * featureVersion, const gint32 personId, const GPtrArray * photos, const GPtrArray * faces, const gchar * removed, const Token * token, DuplicateRecordException ** ex1, ServiceRuntimeException ** ex2, GError ** error)
 {
   g_return_val_if_fail (IS_I_FACE_LOG_HANDLER (iface), FALSE);
 
-  return I_FACE_LOG_HANDLER_GET_CLASS (iface)->add_feature_multi (iface, _return, feature, featureVersion, personId, photos, faces, token, ex1, ex2, error);
+  return I_FACE_LOG_HANDLER_GET_CLASS (iface)->add_feature_multi (iface, _return, feature, featureVersion, personId, photos, faces, removed, token, ex1, ex2, error);
 }
 
-gboolean i_face_log_handler_add_feature_with_image (IFaceLogIf * iface, FeatureBean ** _return, const GByteArray * feature, const gchar * featureVersion, const gint32 personId, const gboolean asIdPhotoIfAbsent, const GByteArray * featurePhoto, const FaceBean * faceBean, const Token * token, DuplicateRecordException ** ex1, ServiceRuntimeException ** ex2, GError ** error)
+gboolean i_face_log_handler_add_feature_with_image (IFaceLogIf * iface, FeatureBean ** _return, const GByteArray * feature, const gchar * featureVersion, const gint32 personId, const gboolean asIdPhotoIfAbsent, const GByteArray * featurePhoto, const FaceBean * faceBean, const gchar * removed, const Token * token, DuplicateRecordException ** ex1, ServiceRuntimeException ** ex2, GError ** error)
 {
   g_return_val_if_fail (IS_I_FACE_LOG_HANDLER (iface), FALSE);
 
-  return I_FACE_LOG_HANDLER_GET_CLASS (iface)->add_feature_with_image (iface, _return, feature, featureVersion, personId, asIdPhotoIfAbsent, featurePhoto, faceBean, token, ex1, ex2, error);
+  return I_FACE_LOG_HANDLER_GET_CLASS (iface)->add_feature_with_image (iface, _return, feature, featureVersion, personId, asIdPhotoIfAbsent, featurePhoto, faceBean, removed, token, ex1, ex2, error);
 }
 
 gboolean i_face_log_handler_add_image (IFaceLogIf * iface, ImageBean ** _return, const GByteArray * imageData, const gint32 deviceId, const FaceBean * faceBean, const gint32 personId, const Token * token, DuplicateRecordException ** ex1, ServiceRuntimeException ** ex2, GError ** error)
@@ -40408,6 +40438,7 @@ i_face_log_processor_process_add_feature (IFaceLogProcessor *self,
     gchar * featureVersion;
     gint personId;
     GPtrArray * faecBeans;
+    gchar * removed;
     Token * token;
     DuplicateRecordException * ex1 = NULL;
     ServiceRuntimeException * ex2 = NULL;
@@ -40419,6 +40450,7 @@ i_face_log_processor_process_add_feature (IFaceLogProcessor *self,
                   "featureVersion", &featureVersion,
                   "personId", &personId,
                   "faecBeans", &faecBeans,
+                  "removed", &removed,
                   "token", &token,
                   NULL);
 
@@ -40434,6 +40466,7 @@ i_face_log_processor_process_add_feature (IFaceLogProcessor *self,
                                         featureVersion,
                                         personId,
                                         faecBeans,
+                                        removed,
                                         token,
                                         &ex1,
                                         &ex2,
@@ -40522,6 +40555,8 @@ if (ex2 != NULL)
       g_free (featureVersion);
     if (faecBeans != NULL)
       g_ptr_array_unref (faecBeans);
+    if (removed != NULL)
+      g_free (removed);
     if (token != NULL)
       g_object_unref (token);
     g_object_unref (result_struct);
@@ -40565,6 +40600,7 @@ i_face_log_processor_process_add_feature_multi (IFaceLogProcessor *self,
     gint personId;
     GPtrArray * photos;
     GPtrArray * faces;
+    gchar * removed;
     Token * token;
     DuplicateRecordException * ex1 = NULL;
     ServiceRuntimeException * ex2 = NULL;
@@ -40577,6 +40613,7 @@ i_face_log_processor_process_add_feature_multi (IFaceLogProcessor *self,
                   "personId", &personId,
                   "photos", &photos,
                   "faces", &faces,
+                  "removed", &removed,
                   "token", &token,
                   NULL);
 
@@ -40593,6 +40630,7 @@ i_face_log_processor_process_add_feature_multi (IFaceLogProcessor *self,
                                               personId,
                                               photos,
                                               faces,
+                                              removed,
                                               token,
                                               &ex1,
                                               &ex2,
@@ -40683,6 +40721,8 @@ if (ex2 != NULL)
       g_ptr_array_unref (photos);
     if (faces != NULL)
       g_ptr_array_unref (faces);
+    if (removed != NULL)
+      g_free (removed);
     if (token != NULL)
       g_object_unref (token);
     g_object_unref (result_struct);
@@ -40727,6 +40767,7 @@ i_face_log_processor_process_add_feature_with_image (IFaceLogProcessor *self,
     gboolean asIdPhotoIfAbsent;
     GByteArray * featurePhoto;
     FaceBean * faceBean;
+    gchar * removed;
     Token * token;
     DuplicateRecordException * ex1 = NULL;
     ServiceRuntimeException * ex2 = NULL;
@@ -40740,6 +40781,7 @@ i_face_log_processor_process_add_feature_with_image (IFaceLogProcessor *self,
                   "asIdPhotoIfAbsent", &asIdPhotoIfAbsent,
                   "featurePhoto", &featurePhoto,
                   "faceBean", &faceBean,
+                  "removed", &removed,
                   "token", &token,
                   NULL);
 
@@ -40757,6 +40799,7 @@ i_face_log_processor_process_add_feature_with_image (IFaceLogProcessor *self,
                                                    asIdPhotoIfAbsent,
                                                    featurePhoto,
                                                    faceBean,
+                                                   removed,
                                                    token,
                                                    &ex1,
                                                    &ex2,
@@ -40847,6 +40890,8 @@ if (ex2 != NULL)
       g_byte_array_unref (featurePhoto);
     if (faceBean != NULL)
       g_object_unref (faceBean);
+    if (removed != NULL)
+      g_free (removed);
     if (token != NULL)
       g_object_unref (token);
     g_object_unref (result_struct);

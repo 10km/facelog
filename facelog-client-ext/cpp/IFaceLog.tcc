@@ -79,6 +79,14 @@ uint32_t IFaceLog_addFeature_args::read(Protocol_* iprot) {
         }
         break;
       case 5:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->removed);
+          this->__isset.removed = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 6:
         if (ftype == ::apache::thrift::protocol::T_STRUCT) {
           xfer += this->token.read(iprot);
           this->__isset.token = true;
@@ -128,7 +136,11 @@ uint32_t IFaceLog_addFeature_args::write(Protocol_* oprot) const {
   }
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("token", ::apache::thrift::protocol::T_STRUCT, 5);
+  xfer += oprot->writeFieldBegin("removed", ::apache::thrift::protocol::T_STRING, 5);
+  xfer += oprot->writeString(this->removed);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("token", ::apache::thrift::protocol::T_STRUCT, 6);
   xfer += this->token.write(oprot);
   xfer += oprot->writeFieldEnd();
 
@@ -168,7 +180,11 @@ uint32_t IFaceLog_addFeature_pargs::write(Protocol_* oprot) const {
   }
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("token", ::apache::thrift::protocol::T_STRUCT, 5);
+  xfer += oprot->writeFieldBegin("removed", ::apache::thrift::protocol::T_STRING, 5);
+  xfer += oprot->writeString((*(this->removed)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("token", ::apache::thrift::protocol::T_STRUCT, 6);
   xfer += (*(this->token)).write(oprot);
   xfer += oprot->writeFieldEnd();
 
@@ -408,6 +424,14 @@ uint32_t IFaceLog_addFeatureMulti_args::read(Protocol_* iprot) {
         }
         break;
       case 6:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->removed);
+          this->__isset.removed = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 7:
         if (ftype == ::apache::thrift::protocol::T_STRUCT) {
           xfer += this->token.read(iprot);
           this->__isset.token = true;
@@ -469,7 +493,11 @@ uint32_t IFaceLog_addFeatureMulti_args::write(Protocol_* oprot) const {
   }
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("token", ::apache::thrift::protocol::T_STRUCT, 6);
+  xfer += oprot->writeFieldBegin("removed", ::apache::thrift::protocol::T_STRING, 6);
+  xfer += oprot->writeString(this->removed);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("token", ::apache::thrift::protocol::T_STRUCT, 7);
   xfer += this->token.write(oprot);
   xfer += oprot->writeFieldEnd();
 
@@ -521,7 +549,11 @@ uint32_t IFaceLog_addFeatureMulti_pargs::write(Protocol_* oprot) const {
   }
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("token", ::apache::thrift::protocol::T_STRUCT, 6);
+  xfer += oprot->writeFieldBegin("removed", ::apache::thrift::protocol::T_STRING, 6);
+  xfer += oprot->writeString((*(this->removed)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("token", ::apache::thrift::protocol::T_STRUCT, 7);
   xfer += (*(this->token)).write(oprot);
   xfer += oprot->writeFieldEnd();
 
@@ -746,6 +778,14 @@ uint32_t IFaceLog_addFeatureWithImage_args::read(Protocol_* iprot) {
         }
         break;
       case 7:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->removed);
+          this->__isset.removed = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 8:
         if (ftype == ::apache::thrift::protocol::T_STRUCT) {
           xfer += this->token.read(iprot);
           this->__isset.token = true;
@@ -797,7 +837,11 @@ uint32_t IFaceLog_addFeatureWithImage_args::write(Protocol_* oprot) const {
   xfer += this->faceBean.write(oprot);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("token", ::apache::thrift::protocol::T_STRUCT, 7);
+  xfer += oprot->writeFieldBegin("removed", ::apache::thrift::protocol::T_STRING, 7);
+  xfer += oprot->writeString(this->removed);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("token", ::apache::thrift::protocol::T_STRUCT, 8);
   xfer += this->token.write(oprot);
   xfer += oprot->writeFieldEnd();
 
@@ -837,7 +881,11 @@ uint32_t IFaceLog_addFeatureWithImage_pargs::write(Protocol_* oprot) const {
   xfer += (*(this->faceBean)).write(oprot);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("token", ::apache::thrift::protocol::T_STRUCT, 7);
+  xfer += oprot->writeFieldBegin("removed", ::apache::thrift::protocol::T_STRING, 7);
+  xfer += oprot->writeString((*(this->removed)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("token", ::apache::thrift::protocol::T_STRUCT, 8);
   xfer += (*(this->token)).write(oprot);
   xfer += oprot->writeFieldEnd();
 
@@ -36735,14 +36783,14 @@ uint32_t IFaceLog_versionInfo_presult::read(Protocol_* iprot) {
 }
 
 template <class Protocol_>
-void IFaceLogClientT<Protocol_>::addFeature(FeatureBean& _return, const std::string& feature, const std::string& featureVersion, const int32_t personId, const std::vector<FaceBean> & faecBeans, const Token& token)
+void IFaceLogClientT<Protocol_>::addFeature(FeatureBean& _return, const std::string& feature, const std::string& featureVersion, const int32_t personId, const std::vector<FaceBean> & faecBeans, const std::string& removed, const Token& token)
 {
-  send_addFeature(feature, featureVersion, personId, faecBeans, token);
+  send_addFeature(feature, featureVersion, personId, faecBeans, removed, token);
   recv_addFeature(_return);
 }
 
 template <class Protocol_>
-void IFaceLogClientT<Protocol_>::send_addFeature(const std::string& feature, const std::string& featureVersion, const int32_t personId, const std::vector<FaceBean> & faecBeans, const Token& token)
+void IFaceLogClientT<Protocol_>::send_addFeature(const std::string& feature, const std::string& featureVersion, const int32_t personId, const std::vector<FaceBean> & faecBeans, const std::string& removed, const Token& token)
 {
   int32_t cseqid = 0;
   this->oprot_->writeMessageBegin("addFeature", ::apache::thrift::protocol::T_CALL, cseqid);
@@ -36752,6 +36800,7 @@ void IFaceLogClientT<Protocol_>::send_addFeature(const std::string& feature, con
   args.featureVersion = &featureVersion;
   args.personId = &personId;
   args.faecBeans = &faecBeans;
+  args.removed = &removed;
   args.token = &token;
   args.write(this->oprot_);
 
@@ -36806,14 +36855,14 @@ void IFaceLogClientT<Protocol_>::recv_addFeature(FeatureBean& _return)
 }
 
 template <class Protocol_>
-void IFaceLogClientT<Protocol_>::addFeatureMulti(FeatureBean& _return, const std::string& feature, const std::string& featureVersion, const int32_t personId, const std::vector<std::string> & photos, const std::vector<FaceBean> & faces, const Token& token)
+void IFaceLogClientT<Protocol_>::addFeatureMulti(FeatureBean& _return, const std::string& feature, const std::string& featureVersion, const int32_t personId, const std::vector<std::string> & photos, const std::vector<FaceBean> & faces, const std::string& removed, const Token& token)
 {
-  send_addFeatureMulti(feature, featureVersion, personId, photos, faces, token);
+  send_addFeatureMulti(feature, featureVersion, personId, photos, faces, removed, token);
   recv_addFeatureMulti(_return);
 }
 
 template <class Protocol_>
-void IFaceLogClientT<Protocol_>::send_addFeatureMulti(const std::string& feature, const std::string& featureVersion, const int32_t personId, const std::vector<std::string> & photos, const std::vector<FaceBean> & faces, const Token& token)
+void IFaceLogClientT<Protocol_>::send_addFeatureMulti(const std::string& feature, const std::string& featureVersion, const int32_t personId, const std::vector<std::string> & photos, const std::vector<FaceBean> & faces, const std::string& removed, const Token& token)
 {
   int32_t cseqid = 0;
   this->oprot_->writeMessageBegin("addFeatureMulti", ::apache::thrift::protocol::T_CALL, cseqid);
@@ -36824,6 +36873,7 @@ void IFaceLogClientT<Protocol_>::send_addFeatureMulti(const std::string& feature
   args.personId = &personId;
   args.photos = &photos;
   args.faces = &faces;
+  args.removed = &removed;
   args.token = &token;
   args.write(this->oprot_);
 
@@ -36878,14 +36928,14 @@ void IFaceLogClientT<Protocol_>::recv_addFeatureMulti(FeatureBean& _return)
 }
 
 template <class Protocol_>
-void IFaceLogClientT<Protocol_>::addFeatureWithImage(FeatureBean& _return, const std::string& feature, const std::string& featureVersion, const int32_t personId, const bool asIdPhotoIfAbsent, const std::string& featurePhoto, const FaceBean& faceBean, const Token& token)
+void IFaceLogClientT<Protocol_>::addFeatureWithImage(FeatureBean& _return, const std::string& feature, const std::string& featureVersion, const int32_t personId, const bool asIdPhotoIfAbsent, const std::string& featurePhoto, const FaceBean& faceBean, const std::string& removed, const Token& token)
 {
-  send_addFeatureWithImage(feature, featureVersion, personId, asIdPhotoIfAbsent, featurePhoto, faceBean, token);
+  send_addFeatureWithImage(feature, featureVersion, personId, asIdPhotoIfAbsent, featurePhoto, faceBean, removed, token);
   recv_addFeatureWithImage(_return);
 }
 
 template <class Protocol_>
-void IFaceLogClientT<Protocol_>::send_addFeatureWithImage(const std::string& feature, const std::string& featureVersion, const int32_t personId, const bool asIdPhotoIfAbsent, const std::string& featurePhoto, const FaceBean& faceBean, const Token& token)
+void IFaceLogClientT<Protocol_>::send_addFeatureWithImage(const std::string& feature, const std::string& featureVersion, const int32_t personId, const bool asIdPhotoIfAbsent, const std::string& featurePhoto, const FaceBean& faceBean, const std::string& removed, const Token& token)
 {
   int32_t cseqid = 0;
   this->oprot_->writeMessageBegin("addFeatureWithImage", ::apache::thrift::protocol::T_CALL, cseqid);
@@ -36897,6 +36947,7 @@ void IFaceLogClientT<Protocol_>::send_addFeatureWithImage(const std::string& fea
   args.asIdPhotoIfAbsent = &asIdPhotoIfAbsent;
   args.featurePhoto = &featurePhoto;
   args.faceBean = &faceBean;
+  args.removed = &removed;
   args.token = &token;
   args.write(this->oprot_);
 
@@ -47141,7 +47192,7 @@ void IFaceLogProcessorT<Protocol_>::process_addFeature(int32_t seqid, ::apache::
 
   IFaceLog_addFeature_result result;
   try {
-    iface_->addFeature(result.success, args.feature, args.featureVersion, args.personId, args.faecBeans, args.token);
+    iface_->addFeature(result.success, args.feature, args.featureVersion, args.personId, args.faecBeans, args.removed, args.token);
     result.__isset.success = true;
   } catch (DuplicateRecordException &ex1) {
     result.ex1 = ex1;
@@ -47202,7 +47253,7 @@ void IFaceLogProcessorT<Protocol_>::process_addFeature(int32_t seqid, Protocol_*
 
   IFaceLog_addFeature_result result;
   try {
-    iface_->addFeature(result.success, args.feature, args.featureVersion, args.personId, args.faecBeans, args.token);
+    iface_->addFeature(result.success, args.feature, args.featureVersion, args.personId, args.faecBeans, args.removed, args.token);
     result.__isset.success = true;
   } catch (DuplicateRecordException &ex1) {
     result.ex1 = ex1;
@@ -47263,7 +47314,7 @@ void IFaceLogProcessorT<Protocol_>::process_addFeatureMulti(int32_t seqid, ::apa
 
   IFaceLog_addFeatureMulti_result result;
   try {
-    iface_->addFeatureMulti(result.success, args.feature, args.featureVersion, args.personId, args.photos, args.faces, args.token);
+    iface_->addFeatureMulti(result.success, args.feature, args.featureVersion, args.personId, args.photos, args.faces, args.removed, args.token);
     result.__isset.success = true;
   } catch (DuplicateRecordException &ex1) {
     result.ex1 = ex1;
@@ -47324,7 +47375,7 @@ void IFaceLogProcessorT<Protocol_>::process_addFeatureMulti(int32_t seqid, Proto
 
   IFaceLog_addFeatureMulti_result result;
   try {
-    iface_->addFeatureMulti(result.success, args.feature, args.featureVersion, args.personId, args.photos, args.faces, args.token);
+    iface_->addFeatureMulti(result.success, args.feature, args.featureVersion, args.personId, args.photos, args.faces, args.removed, args.token);
     result.__isset.success = true;
   } catch (DuplicateRecordException &ex1) {
     result.ex1 = ex1;
@@ -47385,7 +47436,7 @@ void IFaceLogProcessorT<Protocol_>::process_addFeatureWithImage(int32_t seqid, :
 
   IFaceLog_addFeatureWithImage_result result;
   try {
-    iface_->addFeatureWithImage(result.success, args.feature, args.featureVersion, args.personId, args.asIdPhotoIfAbsent, args.featurePhoto, args.faceBean, args.token);
+    iface_->addFeatureWithImage(result.success, args.feature, args.featureVersion, args.personId, args.asIdPhotoIfAbsent, args.featurePhoto, args.faceBean, args.removed, args.token);
     result.__isset.success = true;
   } catch (DuplicateRecordException &ex1) {
     result.ex1 = ex1;
@@ -47446,7 +47497,7 @@ void IFaceLogProcessorT<Protocol_>::process_addFeatureWithImage(int32_t seqid, P
 
   IFaceLog_addFeatureWithImage_result result;
   try {
-    iface_->addFeatureWithImage(result.success, args.feature, args.featureVersion, args.personId, args.asIdPhotoIfAbsent, args.featurePhoto, args.faceBean, args.token);
+    iface_->addFeatureWithImage(result.success, args.feature, args.featureVersion, args.personId, args.asIdPhotoIfAbsent, args.featurePhoto, args.faceBean, args.removed, args.token);
     result.__isset.success = true;
   } catch (DuplicateRecordException &ex1) {
     result.ex1 = ex1;
@@ -65752,14 +65803,14 @@ template <class Protocol_>
 }
 
 template <class Protocol_>
-void IFaceLogConcurrentClientT<Protocol_>::addFeature(FeatureBean& _return, const std::string& feature, const std::string& featureVersion, const int32_t personId, const std::vector<FaceBean> & faecBeans, const Token& token)
+void IFaceLogConcurrentClientT<Protocol_>::addFeature(FeatureBean& _return, const std::string& feature, const std::string& featureVersion, const int32_t personId, const std::vector<FaceBean> & faecBeans, const std::string& removed, const Token& token)
 {
-  int32_t seqid = send_addFeature(feature, featureVersion, personId, faecBeans, token);
+  int32_t seqid = send_addFeature(feature, featureVersion, personId, faecBeans, removed, token);
   recv_addFeature(_return, seqid);
 }
 
 template <class Protocol_>
-int32_t IFaceLogConcurrentClientT<Protocol_>::send_addFeature(const std::string& feature, const std::string& featureVersion, const int32_t personId, const std::vector<FaceBean> & faecBeans, const Token& token)
+int32_t IFaceLogConcurrentClientT<Protocol_>::send_addFeature(const std::string& feature, const std::string& featureVersion, const int32_t personId, const std::vector<FaceBean> & faecBeans, const std::string& removed, const Token& token)
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
@@ -65770,6 +65821,7 @@ int32_t IFaceLogConcurrentClientT<Protocol_>::send_addFeature(const std::string&
   args.featureVersion = &featureVersion;
   args.personId = &personId;
   args.faecBeans = &faecBeans;
+  args.removed = &removed;
   args.token = &token;
   args.write(this->oprot_);
 
@@ -65851,14 +65903,14 @@ void IFaceLogConcurrentClientT<Protocol_>::recv_addFeature(FeatureBean& _return,
 }
 
 template <class Protocol_>
-void IFaceLogConcurrentClientT<Protocol_>::addFeatureMulti(FeatureBean& _return, const std::string& feature, const std::string& featureVersion, const int32_t personId, const std::vector<std::string> & photos, const std::vector<FaceBean> & faces, const Token& token)
+void IFaceLogConcurrentClientT<Protocol_>::addFeatureMulti(FeatureBean& _return, const std::string& feature, const std::string& featureVersion, const int32_t personId, const std::vector<std::string> & photos, const std::vector<FaceBean> & faces, const std::string& removed, const Token& token)
 {
-  int32_t seqid = send_addFeatureMulti(feature, featureVersion, personId, photos, faces, token);
+  int32_t seqid = send_addFeatureMulti(feature, featureVersion, personId, photos, faces, removed, token);
   recv_addFeatureMulti(_return, seqid);
 }
 
 template <class Protocol_>
-int32_t IFaceLogConcurrentClientT<Protocol_>::send_addFeatureMulti(const std::string& feature, const std::string& featureVersion, const int32_t personId, const std::vector<std::string> & photos, const std::vector<FaceBean> & faces, const Token& token)
+int32_t IFaceLogConcurrentClientT<Protocol_>::send_addFeatureMulti(const std::string& feature, const std::string& featureVersion, const int32_t personId, const std::vector<std::string> & photos, const std::vector<FaceBean> & faces, const std::string& removed, const Token& token)
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
@@ -65870,6 +65922,7 @@ int32_t IFaceLogConcurrentClientT<Protocol_>::send_addFeatureMulti(const std::st
   args.personId = &personId;
   args.photos = &photos;
   args.faces = &faces;
+  args.removed = &removed;
   args.token = &token;
   args.write(this->oprot_);
 
@@ -65951,14 +66004,14 @@ void IFaceLogConcurrentClientT<Protocol_>::recv_addFeatureMulti(FeatureBean& _re
 }
 
 template <class Protocol_>
-void IFaceLogConcurrentClientT<Protocol_>::addFeatureWithImage(FeatureBean& _return, const std::string& feature, const std::string& featureVersion, const int32_t personId, const bool asIdPhotoIfAbsent, const std::string& featurePhoto, const FaceBean& faceBean, const Token& token)
+void IFaceLogConcurrentClientT<Protocol_>::addFeatureWithImage(FeatureBean& _return, const std::string& feature, const std::string& featureVersion, const int32_t personId, const bool asIdPhotoIfAbsent, const std::string& featurePhoto, const FaceBean& faceBean, const std::string& removed, const Token& token)
 {
-  int32_t seqid = send_addFeatureWithImage(feature, featureVersion, personId, asIdPhotoIfAbsent, featurePhoto, faceBean, token);
+  int32_t seqid = send_addFeatureWithImage(feature, featureVersion, personId, asIdPhotoIfAbsent, featurePhoto, faceBean, removed, token);
   recv_addFeatureWithImage(_return, seqid);
 }
 
 template <class Protocol_>
-int32_t IFaceLogConcurrentClientT<Protocol_>::send_addFeatureWithImage(const std::string& feature, const std::string& featureVersion, const int32_t personId, const bool asIdPhotoIfAbsent, const std::string& featurePhoto, const FaceBean& faceBean, const Token& token)
+int32_t IFaceLogConcurrentClientT<Protocol_>::send_addFeatureWithImage(const std::string& feature, const std::string& featureVersion, const int32_t personId, const bool asIdPhotoIfAbsent, const std::string& featurePhoto, const FaceBean& faceBean, const std::string& removed, const Token& token)
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
@@ -65971,6 +66024,7 @@ int32_t IFaceLogConcurrentClientT<Protocol_>::send_addFeatureWithImage(const std
   args.asIdPhotoIfAbsent = &asIdPhotoIfAbsent;
   args.featurePhoto = &featurePhoto;
   args.faceBean = &faceBean;
+  args.removed = &removed;
   args.token = &token;
   args.write(this->oprot_);
 

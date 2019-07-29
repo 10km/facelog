@@ -18,6 +18,7 @@ var IFaceLog_addFeature_args = function(args) {
   this.featureVersion = null;
   this.personId = null;
   this.faecBeans = null;
+  this.removed = null;
   this.token = null;
   if (args) {
     if (args.feature !== undefined && args.feature !== null) {
@@ -31,6 +32,9 @@ var IFaceLog_addFeature_args = function(args) {
     }
     if (args.faecBeans !== undefined && args.faecBeans !== null) {
       this.faecBeans = Thrift.copyList(args.faecBeans, [ttypes.FaceBean]);
+    }
+    if (args.removed !== undefined && args.removed !== null) {
+      this.removed = args.removed;
     }
     if (args.token !== undefined && args.token !== null) {
       this.token = new ttypes.Token(args.token);
@@ -94,6 +98,13 @@ IFaceLog_addFeature_args.prototype.read = function(input) {
       }
       break;
       case 5:
+      if (ftype == Thrift.Type.STRING) {
+        this.removed = input.readString();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 6:
       if (ftype == Thrift.Type.STRUCT) {
         this.token = new ttypes.Token();
         this.token.read(input);
@@ -141,8 +152,13 @@ IFaceLog_addFeature_args.prototype.write = function(output) {
     output.writeListEnd();
     output.writeFieldEnd();
   }
+  if (this.removed !== null && this.removed !== undefined) {
+    output.writeFieldBegin('removed', Thrift.Type.STRING, 5);
+    output.writeString(this.removed);
+    output.writeFieldEnd();
+  }
   if (this.token !== null && this.token !== undefined) {
-    output.writeFieldBegin('token', Thrift.Type.STRUCT, 5);
+    output.writeFieldBegin('token', Thrift.Type.STRUCT, 6);
     this.token.write(output);
     output.writeFieldEnd();
   }
@@ -250,6 +266,7 @@ var IFaceLog_addFeatureMulti_args = function(args) {
   this.personId = null;
   this.photos = null;
   this.faces = null;
+  this.removed = null;
   this.token = null;
   if (args) {
     if (args.feature !== undefined && args.feature !== null) {
@@ -266,6 +283,9 @@ var IFaceLog_addFeatureMulti_args = function(args) {
     }
     if (args.faces !== undefined && args.faces !== null) {
       this.faces = Thrift.copyList(args.faces, [ttypes.FaceBean]);
+    }
+    if (args.removed !== undefined && args.removed !== null) {
+      this.removed = args.removed;
     }
     if (args.token !== undefined && args.token !== null) {
       this.token = new ttypes.Token(args.token);
@@ -349,6 +369,13 @@ IFaceLog_addFeatureMulti_args.prototype.read = function(input) {
       }
       break;
       case 6:
+      if (ftype == Thrift.Type.STRING) {
+        this.removed = input.readString();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 7:
       if (ftype == Thrift.Type.STRUCT) {
         this.token = new ttypes.Token();
         this.token.read(input);
@@ -410,8 +437,13 @@ IFaceLog_addFeatureMulti_args.prototype.write = function(output) {
     output.writeListEnd();
     output.writeFieldEnd();
   }
+  if (this.removed !== null && this.removed !== undefined) {
+    output.writeFieldBegin('removed', Thrift.Type.STRING, 6);
+    output.writeString(this.removed);
+    output.writeFieldEnd();
+  }
   if (this.token !== null && this.token !== undefined) {
-    output.writeFieldBegin('token', Thrift.Type.STRUCT, 6);
+    output.writeFieldBegin('token', Thrift.Type.STRUCT, 7);
     this.token.write(output);
     output.writeFieldEnd();
   }
@@ -520,6 +552,7 @@ var IFaceLog_addFeatureWithImage_args = function(args) {
   this.asIdPhotoIfAbsent = null;
   this.featurePhoto = null;
   this.faceBean = null;
+  this.removed = null;
   this.token = null;
   if (args) {
     if (args.feature !== undefined && args.feature !== null) {
@@ -541,6 +574,9 @@ var IFaceLog_addFeatureWithImage_args = function(args) {
     }
     if (args.faceBean !== undefined && args.faceBean !== null) {
       this.faceBean = new ttypes.FaceBean(args.faceBean);
+    }
+    if (args.removed !== undefined && args.removed !== null) {
+      this.removed = args.removed;
     }
     if (args.token !== undefined && args.token !== null) {
       this.token = new ttypes.Token(args.token);
@@ -605,6 +641,13 @@ IFaceLog_addFeatureWithImage_args.prototype.read = function(input) {
       }
       break;
       case 7:
+      if (ftype == Thrift.Type.STRING) {
+        this.removed = input.readString();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 8:
       if (ftype == Thrift.Type.STRUCT) {
         this.token = new ttypes.Token();
         this.token.read(input);
@@ -653,8 +696,13 @@ IFaceLog_addFeatureWithImage_args.prototype.write = function(output) {
     this.faceBean.write(output);
     output.writeFieldEnd();
   }
+  if (this.removed !== null && this.removed !== undefined) {
+    output.writeFieldBegin('removed', Thrift.Type.STRING, 7);
+    output.writeString(this.removed);
+    output.writeFieldEnd();
+  }
   if (this.token !== null && this.token !== undefined) {
-    output.writeFieldBegin('token', Thrift.Type.STRUCT, 7);
+    output.writeFieldBegin('token', Thrift.Type.STRUCT, 8);
     this.token.write(output);
     output.writeFieldEnd();
   }
@@ -24299,7 +24347,7 @@ var IFaceLogClient = exports.Client = function(output, pClass) {
 IFaceLogClient.prototype = {};
 IFaceLogClient.prototype.seqid = function() { return this._seqid; };
 IFaceLogClient.prototype.new_seqid = function() { return this._seqid += 1; };
-IFaceLogClient.prototype.addFeature = function(feature, featureVersion, personId, faecBeans, token, callback) {
+IFaceLogClient.prototype.addFeature = function(feature, featureVersion, personId, faecBeans, removed, token, callback) {
   this._seqid = this.new_seqid();
   if (callback === undefined) {
     var _defer = Q.defer();
@@ -24310,15 +24358,15 @@ IFaceLogClient.prototype.addFeature = function(feature, featureVersion, personId
         _defer.resolve(result);
       }
     };
-    this.send_addFeature(feature, featureVersion, personId, faecBeans, token);
+    this.send_addFeature(feature, featureVersion, personId, faecBeans, removed, token);
     return _defer.promise;
   } else {
     this._reqs[this.seqid()] = callback;
-    this.send_addFeature(feature, featureVersion, personId, faecBeans, token);
+    this.send_addFeature(feature, featureVersion, personId, faecBeans, removed, token);
   }
 };
 
-IFaceLogClient.prototype.send_addFeature = function(feature, featureVersion, personId, faecBeans, token) {
+IFaceLogClient.prototype.send_addFeature = function(feature, featureVersion, personId, faecBeans, removed, token) {
   var output = new this.pClass(this.output);
   output.writeMessageBegin('addFeature', Thrift.MessageType.CALL, this.seqid());
   var params = {
@@ -24326,6 +24374,7 @@ IFaceLogClient.prototype.send_addFeature = function(feature, featureVersion, per
     featureVersion: featureVersion,
     personId: personId,
     faecBeans: faecBeans,
+    removed: removed,
     token: token
   };
   var args = new IFaceLog_addFeature_args(params);
@@ -24358,7 +24407,7 @@ IFaceLogClient.prototype.recv_addFeature = function(input,mtype,rseqid) {
   }
   return callback('addFeature failed: unknown result');
 };
-IFaceLogClient.prototype.addFeatureMulti = function(feature, featureVersion, personId, photos, faces, token, callback) {
+IFaceLogClient.prototype.addFeatureMulti = function(feature, featureVersion, personId, photos, faces, removed, token, callback) {
   this._seqid = this.new_seqid();
   if (callback === undefined) {
     var _defer = Q.defer();
@@ -24369,15 +24418,15 @@ IFaceLogClient.prototype.addFeatureMulti = function(feature, featureVersion, per
         _defer.resolve(result);
       }
     };
-    this.send_addFeatureMulti(feature, featureVersion, personId, photos, faces, token);
+    this.send_addFeatureMulti(feature, featureVersion, personId, photos, faces, removed, token);
     return _defer.promise;
   } else {
     this._reqs[this.seqid()] = callback;
-    this.send_addFeatureMulti(feature, featureVersion, personId, photos, faces, token);
+    this.send_addFeatureMulti(feature, featureVersion, personId, photos, faces, removed, token);
   }
 };
 
-IFaceLogClient.prototype.send_addFeatureMulti = function(feature, featureVersion, personId, photos, faces, token) {
+IFaceLogClient.prototype.send_addFeatureMulti = function(feature, featureVersion, personId, photos, faces, removed, token) {
   var output = new this.pClass(this.output);
   output.writeMessageBegin('addFeatureMulti', Thrift.MessageType.CALL, this.seqid());
   var params = {
@@ -24386,6 +24435,7 @@ IFaceLogClient.prototype.send_addFeatureMulti = function(feature, featureVersion
     personId: personId,
     photos: photos,
     faces: faces,
+    removed: removed,
     token: token
   };
   var args = new IFaceLog_addFeatureMulti_args(params);
@@ -24418,7 +24468,7 @@ IFaceLogClient.prototype.recv_addFeatureMulti = function(input,mtype,rseqid) {
   }
   return callback('addFeatureMulti failed: unknown result');
 };
-IFaceLogClient.prototype.addFeatureWithImage = function(feature, featureVersion, personId, asIdPhotoIfAbsent, featurePhoto, faceBean, token, callback) {
+IFaceLogClient.prototype.addFeatureWithImage = function(feature, featureVersion, personId, asIdPhotoIfAbsent, featurePhoto, faceBean, removed, token, callback) {
   this._seqid = this.new_seqid();
   if (callback === undefined) {
     var _defer = Q.defer();
@@ -24429,15 +24479,15 @@ IFaceLogClient.prototype.addFeatureWithImage = function(feature, featureVersion,
         _defer.resolve(result);
       }
     };
-    this.send_addFeatureWithImage(feature, featureVersion, personId, asIdPhotoIfAbsent, featurePhoto, faceBean, token);
+    this.send_addFeatureWithImage(feature, featureVersion, personId, asIdPhotoIfAbsent, featurePhoto, faceBean, removed, token);
     return _defer.promise;
   } else {
     this._reqs[this.seqid()] = callback;
-    this.send_addFeatureWithImage(feature, featureVersion, personId, asIdPhotoIfAbsent, featurePhoto, faceBean, token);
+    this.send_addFeatureWithImage(feature, featureVersion, personId, asIdPhotoIfAbsent, featurePhoto, faceBean, removed, token);
   }
 };
 
-IFaceLogClient.prototype.send_addFeatureWithImage = function(feature, featureVersion, personId, asIdPhotoIfAbsent, featurePhoto, faceBean, token) {
+IFaceLogClient.prototype.send_addFeatureWithImage = function(feature, featureVersion, personId, asIdPhotoIfAbsent, featurePhoto, faceBean, removed, token) {
   var output = new this.pClass(this.output);
   output.writeMessageBegin('addFeatureWithImage', Thrift.MessageType.CALL, this.seqid());
   var params = {
@@ -24447,6 +24497,7 @@ IFaceLogClient.prototype.send_addFeatureWithImage = function(feature, featureVer
     asIdPhotoIfAbsent: asIdPhotoIfAbsent,
     featurePhoto: featurePhoto,
     faceBean: faceBean,
+    removed: removed,
     token: token
   };
   var args = new IFaceLog_addFeatureWithImage_args(params);
@@ -32779,8 +32830,8 @@ IFaceLogProcessor.prototype.process_addFeature = function(seqid, input, output) 
   var args = new IFaceLog_addFeature_args();
   args.read(input);
   input.readMessageEnd();
-  if (this._handler.addFeature.length === 5) {
-    Q.fcall(this._handler.addFeature.bind(this._handler), args.feature, args.featureVersion, args.personId, args.faecBeans, args.token)
+  if (this._handler.addFeature.length === 6) {
+    Q.fcall(this._handler.addFeature.bind(this._handler), args.feature, args.featureVersion, args.personId, args.faecBeans, args.removed, args.token)
       .then(function(result) {
         var result_obj = new IFaceLog_addFeature_result({success: result});
         output.writeMessageBegin("addFeature", Thrift.MessageType.REPLY, seqid);
@@ -32801,7 +32852,7 @@ IFaceLogProcessor.prototype.process_addFeature = function(seqid, input, output) 
         output.flush();
       });
   } else {
-    this._handler.addFeature(args.feature, args.featureVersion, args.personId, args.faecBeans, args.token, function (err, result) {
+    this._handler.addFeature(args.feature, args.featureVersion, args.personId, args.faecBeans, args.removed, args.token, function (err, result) {
       var result_obj;
       if ((err === null || typeof err === 'undefined') || err instanceof ttypes.DuplicateRecordException || err instanceof ttypes.ServiceRuntimeException) {
         result_obj = new IFaceLog_addFeature_result((err !== null || typeof err === 'undefined') ? err : {success: result});
@@ -32820,8 +32871,8 @@ IFaceLogProcessor.prototype.process_addFeatureMulti = function(seqid, input, out
   var args = new IFaceLog_addFeatureMulti_args();
   args.read(input);
   input.readMessageEnd();
-  if (this._handler.addFeatureMulti.length === 6) {
-    Q.fcall(this._handler.addFeatureMulti.bind(this._handler), args.feature, args.featureVersion, args.personId, args.photos, args.faces, args.token)
+  if (this._handler.addFeatureMulti.length === 7) {
+    Q.fcall(this._handler.addFeatureMulti.bind(this._handler), args.feature, args.featureVersion, args.personId, args.photos, args.faces, args.removed, args.token)
       .then(function(result) {
         var result_obj = new IFaceLog_addFeatureMulti_result({success: result});
         output.writeMessageBegin("addFeatureMulti", Thrift.MessageType.REPLY, seqid);
@@ -32842,7 +32893,7 @@ IFaceLogProcessor.prototype.process_addFeatureMulti = function(seqid, input, out
         output.flush();
       });
   } else {
-    this._handler.addFeatureMulti(args.feature, args.featureVersion, args.personId, args.photos, args.faces, args.token, function (err, result) {
+    this._handler.addFeatureMulti(args.feature, args.featureVersion, args.personId, args.photos, args.faces, args.removed, args.token, function (err, result) {
       var result_obj;
       if ((err === null || typeof err === 'undefined') || err instanceof ttypes.DuplicateRecordException || err instanceof ttypes.ServiceRuntimeException) {
         result_obj = new IFaceLog_addFeatureMulti_result((err !== null || typeof err === 'undefined') ? err : {success: result});
@@ -32861,8 +32912,8 @@ IFaceLogProcessor.prototype.process_addFeatureWithImage = function(seqid, input,
   var args = new IFaceLog_addFeatureWithImage_args();
   args.read(input);
   input.readMessageEnd();
-  if (this._handler.addFeatureWithImage.length === 7) {
-    Q.fcall(this._handler.addFeatureWithImage.bind(this._handler), args.feature, args.featureVersion, args.personId, args.asIdPhotoIfAbsent, args.featurePhoto, args.faceBean, args.token)
+  if (this._handler.addFeatureWithImage.length === 8) {
+    Q.fcall(this._handler.addFeatureWithImage.bind(this._handler), args.feature, args.featureVersion, args.personId, args.asIdPhotoIfAbsent, args.featurePhoto, args.faceBean, args.removed, args.token)
       .then(function(result) {
         var result_obj = new IFaceLog_addFeatureWithImage_result({success: result});
         output.writeMessageBegin("addFeatureWithImage", Thrift.MessageType.REPLY, seqid);
@@ -32883,7 +32934,7 @@ IFaceLogProcessor.prototype.process_addFeatureWithImage = function(seqid, input,
         output.flush();
       });
   } else {
-    this._handler.addFeatureWithImage(args.feature, args.featureVersion, args.personId, args.asIdPhotoIfAbsent, args.featurePhoto, args.faceBean, args.token, function (err, result) {
+    this._handler.addFeatureWithImage(args.feature, args.featureVersion, args.personId, args.asIdPhotoIfAbsent, args.featurePhoto, args.faceBean, args.removed, args.token, function (err, result) {
       var result_obj;
       if ((err === null || typeof err === 'undefined') || err instanceof ttypes.DuplicateRecordException || err instanceof ttypes.ServiceRuntimeException) {
         result_obj = new IFaceLog_addFeatureWithImage_result((err !== null || typeof err === 'undefined') ? err : {success: result});

@@ -219,9 +219,9 @@ exception ServiceSecurityException {
 }
 
 service IFaceLog {
-  FeatureBean addFeature(1: optional binary feature, 2: optional string featureVersion, 3: optional i32 personId, 4: optional list<FaceBean> faecBeans, 5: optional Token token) throws (1: DuplicateRecordException ex1, 2: ServiceRuntimeException ex2);
-  FeatureBean addFeatureMulti(1: optional binary feature, 2: optional string featureVersion, 3: optional i32 personId, 4: optional list<binary> photos, 5: optional list<FaceBean> faces, 6: optional Token token) throws (1: DuplicateRecordException ex1, 2: ServiceRuntimeException ex2);
-  FeatureBean addFeatureWithImage(1: optional binary feature, 2: optional string featureVersion, 3: optional i32 personId, 4: required bool asIdPhotoIfAbsent, 5: optional binary featurePhoto, 6: optional FaceBean faceBean, 7: optional Token token) throws (1: DuplicateRecordException ex1, 2: ServiceRuntimeException ex2);
+  FeatureBean addFeature(1: optional binary feature, 2: optional string featureVersion, 3: optional i32 personId, 4: optional list<FaceBean> faecBeans, 5: optional string removed, 6: optional Token token) throws (1: DuplicateRecordException ex1, 2: ServiceRuntimeException ex2);
+  FeatureBean addFeatureMulti(1: optional binary feature, 2: optional string featureVersion, 3: optional i32 personId, 4: optional list<binary> photos, 5: optional list<FaceBean> faces, 6: optional string removed, 7: optional Token token) throws (1: DuplicateRecordException ex1, 2: ServiceRuntimeException ex2);
+  FeatureBean addFeatureWithImage(1: optional binary feature, 2: optional string featureVersion, 3: optional i32 personId, 4: required bool asIdPhotoIfAbsent, 5: optional binary featurePhoto, 6: optional FaceBean faceBean, 7: optional string removed, 8: optional Token token) throws (1: DuplicateRecordException ex1, 2: ServiceRuntimeException ex2);
   ImageBean addImage(1: optional binary imageData, 2: optional i32 deviceId, 3: optional FaceBean faceBean, 4: optional i32 personId, 5: optional Token token) throws (1: DuplicateRecordException ex1, 2: ServiceRuntimeException ex2);
   void addLog(1: optional LogBean logBean, 2: optional Token token) throws (1: DuplicateRecordException ex1, 2: ServiceRuntimeException ex2);
   void addLogFull(1: optional LogBean logBean, 2: optional FaceBean faceBean, 3: optional binary featureImage, 4: optional Token token) throws (1: DuplicateRecordException ex1, 2: ServiceRuntimeException ex2);

@@ -47,7 +47,7 @@ public class IFaceLogThriftDecorator {
         return delegate;
     }
     /**
-     * @see {@link net.gdface.facelog.IFaceLog#addFeature(byte[],java.lang.String,java.lang.Integer,boolean,byte[],net.gdface.facelog.db.FaceBean,net.gdface.facelog.Token)}
+     * @see {@link net.gdface.facelog.IFaceLog#addFeature(byte[],java.lang.String,java.lang.Integer,boolean,byte[],net.gdface.facelog.db.FaceBean,java.lang.String,net.gdface.facelog.Token)}
      */
     @ThriftMethod(value = "addFeatureWithImage" ,exception = {
                 @ThriftException(type=DuplicateRecordException.class, id=1),
@@ -59,6 +59,7 @@ public class IFaceLogThriftDecorator {
         boolean asIdPhotoIfAbsent,
         ByteBuffer featurePhoto,
         FaceBean faceBean,
+        String removed,
         Token token) 
         throws DuplicateRecordException,ServiceRuntimeException{
         try{
@@ -78,6 +79,7 @@ public class IFaceLogThriftDecorator {
                     faceBean,
                     FaceBean.class,
                     FaceBean.class),
+                removed,
                 TypeTransformer.getInstance().to(
                     token,
                     Token.class,
@@ -96,7 +98,51 @@ public class IFaceLogThriftDecorator {
         }
     }
     /**
-     * @see {@link net.gdface.facelog.IFaceLog#addFeature(byte[],java.lang.String,java.lang.Integer,java.util.List,java.util.List,net.gdface.facelog.Token)}
+     * @see {@link net.gdface.facelog.IFaceLog#addFeature(byte[],java.lang.String,java.lang.Integer,java.util.List,java.lang.String,net.gdface.facelog.Token)}
+     */
+    @ThriftMethod(value = "addFeature" ,exception = {
+                @ThriftException(type=DuplicateRecordException.class, id=1),
+                @ThriftException(type=ServiceRuntimeException.class, id=2)
+                })
+    public FeatureBean addFeature(ByteBuffer feature,
+        String featureVersion,
+        Integer personId,
+        List<FaceBean> faecBeans,
+        String removed,
+        Token token) 
+        throws DuplicateRecordException,ServiceRuntimeException{
+        try{
+            return TypeTransformer.getInstance().to(
+                    delegate().addFeature(TypeTransformer.getInstance().to(
+                    feature,
+                    ByteBuffer.class,
+                    byte[].class),
+                featureVersion,
+                personId,
+                TypeTransformer.getInstance().to(
+                    faecBeans,
+                    FaceBean.class,
+                    FaceBean.class),
+                removed,
+                TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.Token.class)),
+                    FeatureBean.class,
+                    FeatureBean.class);
+        }
+        catch(net.gdface.facelog.DuplicateRecordException e){
+            throw new DuplicateRecordException(e);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
+     * @see {@link net.gdface.facelog.IFaceLog#addFeature(byte[],java.lang.String,java.lang.Integer,java.util.List,java.util.List,java.lang.String,net.gdface.facelog.Token)}
      */
     @ThriftMethod(value = "addFeatureMulti" ,exception = {
                 @ThriftException(type=DuplicateRecordException.class, id=1),
@@ -107,6 +153,7 @@ public class IFaceLogThriftDecorator {
         Integer personId,
         List<ByteBuffer> photos,
         List<FaceBean> faces,
+        String removed,
         Token token) 
         throws DuplicateRecordException,ServiceRuntimeException{
         try{
@@ -125,48 +172,7 @@ public class IFaceLogThriftDecorator {
                     faces,
                     FaceBean.class,
                     FaceBean.class),
-                TypeTransformer.getInstance().to(
-                    token,
-                    Token.class,
-                    net.gdface.facelog.Token.class)),
-                    FeatureBean.class,
-                    FeatureBean.class);
-        }
-        catch(net.gdface.facelog.DuplicateRecordException e){
-            throw new DuplicateRecordException(e);
-        }
-        catch(ServiceRuntimeException e){
-            throw e;
-        }
-        catch(RuntimeException e){
-            throw new ServiceRuntimeException(e);
-        }
-    }
-    /**
-     * @see {@link net.gdface.facelog.IFaceLog#addFeature(byte[],java.lang.String,java.lang.Integer,java.util.List,net.gdface.facelog.Token)}
-     */
-    @ThriftMethod(value = "addFeature" ,exception = {
-                @ThriftException(type=DuplicateRecordException.class, id=1),
-                @ThriftException(type=ServiceRuntimeException.class, id=2)
-                })
-    public FeatureBean addFeature(ByteBuffer feature,
-        String featureVersion,
-        Integer personId,
-        List<FaceBean> faecBeans,
-        Token token) 
-        throws DuplicateRecordException,ServiceRuntimeException{
-        try{
-            return TypeTransformer.getInstance().to(
-                    delegate().addFeature(TypeTransformer.getInstance().to(
-                    feature,
-                    ByteBuffer.class,
-                    byte[].class),
-                featureVersion,
-                personId,
-                TypeTransformer.getInstance().to(
-                    faecBeans,
-                    FaceBean.class,
-                    FaceBean.class),
+                removed,
                 TypeTransformer.getInstance().to(
                     token,
                     Token.class,

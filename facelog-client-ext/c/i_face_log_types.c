@@ -11164,6 +11164,7 @@ enum _IFaceLogAddFeatureArgsProperties
   PROP_I_FACE_LOG_ADD_FEATURE_ARGS_FEATURE_VERSION,
   PROP_I_FACE_LOG_ADD_FEATURE_ARGS_PERSON_ID,
   PROP_I_FACE_LOG_ADD_FEATURE_ARGS_FAEC_BEANS,
+  PROP_I_FACE_LOG_ADD_FEATURE_ARGS_REMOVED,
   PROP_I_FACE_LOG_ADD_FEATURE_ARGS_TOKEN
 };
 
@@ -11311,6 +11312,25 @@ i_face_log_add_feature_args_read (ThriftStruct *object, ThriftProtocol *protocol
         }
         break;
       case 5:
+        if (ftype == T_STRING)
+        {
+          if (this_object->removed != NULL)
+          {
+            g_free(this_object->removed);
+            this_object->removed = NULL;
+          }
+
+          if ((ret = thrift_protocol_read_string (protocol, &this_object->removed, error)) < 0)
+            return -1;
+          xfer += ret;
+          this_object->__isset_removed = TRUE;
+        } else {
+          if ((ret = thrift_protocol_skip (protocol, ftype, error)) < 0)
+            return -1;
+          xfer += ret;
+        }
+        break;
+      case 6:
         if (ftype == T_STRUCT)
         {
           if ((ret = thrift_struct_read (THRIFT_STRUCT (this_object->token), protocol, error)) < 0)
@@ -11407,7 +11427,17 @@ i_face_log_add_feature_args_write (ThriftStruct *object, ThriftProtocol *protoco
   if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
     return -1;
   xfer += ret;
-  if ((ret = thrift_protocol_write_field_begin (protocol, "token", T_STRUCT, 5, error)) < 0)
+  if ((ret = thrift_protocol_write_field_begin (protocol, "removed", T_STRING, 5, error)) < 0)
+    return -1;
+  xfer += ret;
+  if ((ret = thrift_protocol_write_string (protocol, this_object->removed, error)) < 0)
+    return -1;
+  xfer += ret;
+
+  if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
+    return -1;
+  xfer += ret;
+  if ((ret = thrift_protocol_write_field_begin (protocol, "token", T_STRUCT, 6, error)) < 0)
     return -1;
   xfer += ret;
   if ((ret = thrift_struct_write (THRIFT_STRUCT (this_object->token), protocol, error)) < 0)
@@ -11463,6 +11493,13 @@ i_face_log_add_feature_args_set_property (GObject *object,
       self->__isset_faecBeans = TRUE;
       break;
 
+    case PROP_I_FACE_LOG_ADD_FEATURE_ARGS_REMOVED:
+      if (self->removed != NULL)
+        g_free (self->removed);
+      self->removed = g_value_dup_string (value);
+      self->__isset_removed = TRUE;
+      break;
+
     case PROP_I_FACE_LOG_ADD_FEATURE_ARGS_TOKEN:
       if (self->token != NULL)
         g_object_unref (self->token);
@@ -11502,6 +11539,10 @@ i_face_log_add_feature_args_get_property (GObject *object,
       g_value_set_boxed (value, self->faecBeans);
       break;
 
+    case PROP_I_FACE_LOG_ADD_FEATURE_ARGS_REMOVED:
+      g_value_set_string (value, self->removed);
+      break;
+
     case PROP_I_FACE_LOG_ADD_FEATURE_ARGS_TOKEN:
       g_value_set_object (value, self->token);
       break;
@@ -11525,6 +11566,8 @@ i_face_log_add_feature_args_instance_init (IFaceLogAddFeatureArgs * object)
   object->__isset_personId = FALSE;
   object->faecBeans = g_ptr_array_new_with_free_func (g_object_unref);
   object->__isset_faecBeans = FALSE;
+  object->removed = NULL;
+  object->__isset_removed = FALSE;
   object->token = g_object_new (TYPE_TOKEN, NULL);
   object->__isset_token = FALSE;
 }
@@ -11550,6 +11593,11 @@ i_face_log_add_feature_args_finalize (GObject *object)
   {
     g_ptr_array_unref (tobject->faecBeans);
     tobject->faecBeans = NULL;
+  }
+  if (tobject->removed != NULL)
+  {
+    g_free(tobject->removed);
+    tobject->removed = NULL;
   }
   if (tobject->token != NULL)
   {
@@ -11608,6 +11656,15 @@ i_face_log_add_feature_args_class_init (IFaceLogAddFeatureArgsClass * cls)
                          NULL,
                          G_TYPE_PTR_ARRAY,
                          G_PARAM_READWRITE));
+
+  g_object_class_install_property
+    (gobject_class,
+     PROP_I_FACE_LOG_ADD_FEATURE_ARGS_REMOVED,
+     g_param_spec_string ("removed",
+                          NULL,
+                          NULL,
+                          NULL,
+                          G_PARAM_READWRITE));
 
   g_object_class_install_property
     (gobject_class,
@@ -12021,6 +12078,7 @@ enum _IFaceLogAddFeatureMultiArgsProperties
   PROP_I_FACE_LOG_ADD_FEATURE_MULTI_ARGS_PERSON_ID,
   PROP_I_FACE_LOG_ADD_FEATURE_MULTI_ARGS_PHOTOS,
   PROP_I_FACE_LOG_ADD_FEATURE_MULTI_ARGS_FACES,
+  PROP_I_FACE_LOG_ADD_FEATURE_MULTI_ARGS_REMOVED,
   PROP_I_FACE_LOG_ADD_FEATURE_MULTI_ARGS_TOKEN
 };
 
@@ -12209,6 +12267,25 @@ i_face_log_add_feature_multi_args_read (ThriftStruct *object, ThriftProtocol *pr
         }
         break;
       case 6:
+        if (ftype == T_STRING)
+        {
+          if (this_object->removed != NULL)
+          {
+            g_free(this_object->removed);
+            this_object->removed = NULL;
+          }
+
+          if ((ret = thrift_protocol_read_string (protocol, &this_object->removed, error)) < 0)
+            return -1;
+          xfer += ret;
+          this_object->__isset_removed = TRUE;
+        } else {
+          if ((ret = thrift_protocol_skip (protocol, ftype, error)) < 0)
+            return -1;
+          xfer += ret;
+        }
+        break;
+      case 7:
         if (ftype == T_STRUCT)
         {
           if ((ret = thrift_struct_read (THRIFT_STRUCT (this_object->token), protocol, error)) < 0)
@@ -12328,7 +12405,17 @@ i_face_log_add_feature_multi_args_write (ThriftStruct *object, ThriftProtocol *p
   if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
     return -1;
   xfer += ret;
-  if ((ret = thrift_protocol_write_field_begin (protocol, "token", T_STRUCT, 6, error)) < 0)
+  if ((ret = thrift_protocol_write_field_begin (protocol, "removed", T_STRING, 6, error)) < 0)
+    return -1;
+  xfer += ret;
+  if ((ret = thrift_protocol_write_string (protocol, this_object->removed, error)) < 0)
+    return -1;
+  xfer += ret;
+
+  if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
+    return -1;
+  xfer += ret;
+  if ((ret = thrift_protocol_write_field_begin (protocol, "token", T_STRUCT, 7, error)) < 0)
     return -1;
   xfer += ret;
   if ((ret = thrift_struct_write (THRIFT_STRUCT (this_object->token), protocol, error)) < 0)
@@ -12391,6 +12478,13 @@ i_face_log_add_feature_multi_args_set_property (GObject *object,
       self->__isset_faces = TRUE;
       break;
 
+    case PROP_I_FACE_LOG_ADD_FEATURE_MULTI_ARGS_REMOVED:
+      if (self->removed != NULL)
+        g_free (self->removed);
+      self->removed = g_value_dup_string (value);
+      self->__isset_removed = TRUE;
+      break;
+
     case PROP_I_FACE_LOG_ADD_FEATURE_MULTI_ARGS_TOKEN:
       if (self->token != NULL)
         g_object_unref (self->token);
@@ -12434,6 +12528,10 @@ i_face_log_add_feature_multi_args_get_property (GObject *object,
       g_value_set_boxed (value, self->faces);
       break;
 
+    case PROP_I_FACE_LOG_ADD_FEATURE_MULTI_ARGS_REMOVED:
+      g_value_set_string (value, self->removed);
+      break;
+
     case PROP_I_FACE_LOG_ADD_FEATURE_MULTI_ARGS_TOKEN:
       g_value_set_object (value, self->token);
       break;
@@ -12459,6 +12557,8 @@ i_face_log_add_feature_multi_args_instance_init (IFaceLogAddFeatureMultiArgs * o
   object->__isset_photos = FALSE;
   object->faces = g_ptr_array_new_with_free_func (g_object_unref);
   object->__isset_faces = FALSE;
+  object->removed = NULL;
+  object->__isset_removed = FALSE;
   object->token = g_object_new (TYPE_TOKEN, NULL);
   object->__isset_token = FALSE;
 }
@@ -12489,6 +12589,11 @@ i_face_log_add_feature_multi_args_finalize (GObject *object)
   {
     g_ptr_array_unref (tobject->faces);
     tobject->faces = NULL;
+  }
+  if (tobject->removed != NULL)
+  {
+    g_free(tobject->removed);
+    tobject->removed = NULL;
   }
   if (tobject->token != NULL)
   {
@@ -12556,6 +12661,15 @@ i_face_log_add_feature_multi_args_class_init (IFaceLogAddFeatureMultiArgsClass *
                          NULL,
                          G_TYPE_PTR_ARRAY,
                          G_PARAM_READWRITE));
+
+  g_object_class_install_property
+    (gobject_class,
+     PROP_I_FACE_LOG_ADD_FEATURE_MULTI_ARGS_REMOVED,
+     g_param_spec_string ("removed",
+                          NULL,
+                          NULL,
+                          NULL,
+                          G_PARAM_READWRITE));
 
   g_object_class_install_property
     (gobject_class,
@@ -12970,6 +13084,7 @@ enum _IFaceLogAddFeatureWithImageArgsProperties
   PROP_I_FACE_LOG_ADD_FEATURE_WITH_IMAGE_ARGS_AS_ID_PHOTO_IF_ABSENT,
   PROP_I_FACE_LOG_ADD_FEATURE_WITH_IMAGE_ARGS_FEATURE_PHOTO,
   PROP_I_FACE_LOG_ADD_FEATURE_WITH_IMAGE_ARGS_FACE_BEAN,
+  PROP_I_FACE_LOG_ADD_FEATURE_WITH_IMAGE_ARGS_REMOVED,
   PROP_I_FACE_LOG_ADD_FEATURE_WITH_IMAGE_ARGS_TOKEN
 };
 
@@ -13128,6 +13243,25 @@ i_face_log_add_feature_with_image_args_read (ThriftStruct *object, ThriftProtoco
         }
         break;
       case 7:
+        if (ftype == T_STRING)
+        {
+          if (this_object->removed != NULL)
+          {
+            g_free(this_object->removed);
+            this_object->removed = NULL;
+          }
+
+          if ((ret = thrift_protocol_read_string (protocol, &this_object->removed, error)) < 0)
+            return -1;
+          xfer += ret;
+          this_object->__isset_removed = TRUE;
+        } else {
+          if ((ret = thrift_protocol_skip (protocol, ftype, error)) < 0)
+            return -1;
+          xfer += ret;
+        }
+        break;
+      case 8:
         if (ftype == T_STRUCT)
         {
           if ((ret = thrift_struct_read (THRIFT_STRUCT (this_object->token), protocol, error)) < 0)
@@ -13239,7 +13373,17 @@ i_face_log_add_feature_with_image_args_write (ThriftStruct *object, ThriftProtoc
   if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
     return -1;
   xfer += ret;
-  if ((ret = thrift_protocol_write_field_begin (protocol, "token", T_STRUCT, 7, error)) < 0)
+  if ((ret = thrift_protocol_write_field_begin (protocol, "removed", T_STRING, 7, error)) < 0)
+    return -1;
+  xfer += ret;
+  if ((ret = thrift_protocol_write_string (protocol, this_object->removed, error)) < 0)
+    return -1;
+  xfer += ret;
+
+  if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
+    return -1;
+  xfer += ret;
+  if ((ret = thrift_protocol_write_field_begin (protocol, "token", T_STRUCT, 8, error)) < 0)
     return -1;
   xfer += ret;
   if ((ret = thrift_struct_write (THRIFT_STRUCT (this_object->token), protocol, error)) < 0)
@@ -13306,6 +13450,13 @@ i_face_log_add_feature_with_image_args_set_property (GObject *object,
       self->__isset_faceBean = TRUE;
       break;
 
+    case PROP_I_FACE_LOG_ADD_FEATURE_WITH_IMAGE_ARGS_REMOVED:
+      if (self->removed != NULL)
+        g_free (self->removed);
+      self->removed = g_value_dup_string (value);
+      self->__isset_removed = TRUE;
+      break;
+
     case PROP_I_FACE_LOG_ADD_FEATURE_WITH_IMAGE_ARGS_TOKEN:
       if (self->token != NULL)
         g_object_unref (self->token);
@@ -13353,6 +13504,10 @@ i_face_log_add_feature_with_image_args_get_property (GObject *object,
       g_value_set_object (value, self->faceBean);
       break;
 
+    case PROP_I_FACE_LOG_ADD_FEATURE_WITH_IMAGE_ARGS_REMOVED:
+      g_value_set_string (value, self->removed);
+      break;
+
     case PROP_I_FACE_LOG_ADD_FEATURE_WITH_IMAGE_ARGS_TOKEN:
       g_value_set_object (value, self->token);
       break;
@@ -13379,6 +13534,8 @@ i_face_log_add_feature_with_image_args_instance_init (IFaceLogAddFeatureWithImag
   object->__isset_featurePhoto = FALSE;
   object->faceBean = g_object_new (TYPE_FACE_BEAN, NULL);
   object->__isset_faceBean = FALSE;
+  object->removed = NULL;
+  object->__isset_removed = FALSE;
   object->token = g_object_new (TYPE_TOKEN, NULL);
   object->__isset_token = FALSE;
 }
@@ -13409,6 +13566,11 @@ i_face_log_add_feature_with_image_args_finalize (GObject *object)
   {
     g_object_unref(tobject->faceBean);
     tobject->faceBean = NULL;
+  }
+  if (tobject->removed != NULL)
+  {
+    g_free(tobject->removed);
+    tobject->removed = NULL;
   }
   if (tobject->token != NULL)
   {
@@ -13485,6 +13647,15 @@ i_face_log_add_feature_with_image_args_class_init (IFaceLogAddFeatureWithImageAr
                          NULL,
                          TYPE_FACE_BEAN,
                          G_PARAM_READWRITE));
+
+  g_object_class_install_property
+    (gobject_class,
+     PROP_I_FACE_LOG_ADD_FEATURE_WITH_IMAGE_ARGS_REMOVED,
+     g_param_spec_string ("removed",
+                          NULL,
+                          NULL,
+                          NULL,
+                          G_PARAM_READWRITE));
 
   g_object_class_install_property
     (gobject_class,

@@ -38,12 +38,12 @@ public class IFaceLogDecorator implements IFaceLog{
     }    
 
     @Override
-    public FeatureBean addFeature (byte[] feature,String featureVersion,Integer personId,boolean asIdPhotoIfAbsent,byte[] featurePhoto,FaceBean faceBean,Token token) throws DuplicateRecordException{
-        return delegate().addFeature(feature,featureVersion,personId,asIdPhotoIfAbsent,featurePhoto,faceBean,token);
+    public FeatureBean addFeature (byte[] feature,String featureVersion,Integer personId,boolean asIdPhotoIfAbsent,byte[] featurePhoto,FaceBean faceBean,String removed,Token token) throws DuplicateRecordException{
+        return delegate().addFeature(feature,featureVersion,personId,asIdPhotoIfAbsent,featurePhoto,faceBean,removed,token);
     }
 
     /**
-     * {@link IFaceLog#addFeature(byte[],java.lang.String,java.lang.Integer,boolean,byte[],FaceBean,Token)}对应的unchecked方法,
+     * {@link IFaceLog#addFeature(byte[],java.lang.String,java.lang.Integer,boolean,byte[],FaceBean,java.lang.String,Token)}对应的unchecked方法,
      * 所有显式申明的异常都被封装到{@link RuntimeException}抛出<br>
      * @param feature
      * @param featureVersion
@@ -51,12 +51,13 @@ public class IFaceLogDecorator implements IFaceLog{
      * @param asIdPhotoIfAbsent
      * @param featurePhoto
      * @param faceBean
+     * @param removed
      * @param token
      * @return FeatureBean
      */
-    public FeatureBean addFeatureUnchecked (byte[] feature,String featureVersion,Integer personId,boolean asIdPhotoIfAbsent,byte[] featurePhoto,FaceBean faceBean,Token token) {
+    public FeatureBean addFeatureUnchecked (byte[] feature,String featureVersion,Integer personId,boolean asIdPhotoIfAbsent,byte[] featurePhoto,FaceBean faceBean,String removed,Token token) {
         try{
-            return delegate().addFeature(feature,featureVersion,personId,asIdPhotoIfAbsent,featurePhoto,faceBean,token);
+            return delegate().addFeature(feature,featureVersion,personId,asIdPhotoIfAbsent,featurePhoto,faceBean,removed,token);
         } catch(RuntimeException e){
             throw e;
         } catch(Exception e){
@@ -65,49 +66,51 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
-    public FeatureBean addFeature (byte[] feature,String featureVersion,Integer personId,List<byte[]> photos,List<FaceBean> faces,Token token) throws DuplicateRecordException{
-        return delegate().addFeature(feature,featureVersion,personId,photos,faces,token);
+    public FeatureBean addFeature (byte[] feature,String featureVersion,Integer personId,List<FaceBean> faecBeans,String removed,Token token) throws DuplicateRecordException{
+        return delegate().addFeature(feature,featureVersion,personId,faecBeans,removed,token);
     }
 
     /**
-     * {@link IFaceLog#addFeature(byte[],java.lang.String,java.lang.Integer,List,List,Token)}对应的unchecked方法,
+     * {@link IFaceLog#addFeature(byte[],java.lang.String,java.lang.Integer,List,java.lang.String,Token)}对应的unchecked方法,
+     * 所有显式申明的异常都被封装到{@link RuntimeException}抛出<br>
+     * @param feature
+     * @param featureVersion
+     * @param personId
+     * @param faecBeans
+     * @param removed
+     * @param token
+     * @return FeatureBean
+     */
+    public FeatureBean addFeatureUnchecked (byte[] feature,String featureVersion,Integer personId,List<FaceBean> faecBeans,String removed,Token token) {
+        try{
+            return delegate().addFeature(feature,featureVersion,personId,faecBeans,removed,token);
+        } catch(RuntimeException e){
+            throw e;
+        } catch(Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public FeatureBean addFeature (byte[] feature,String featureVersion,Integer personId,List<byte[]> photos,List<FaceBean> faces,String removed,Token token) throws DuplicateRecordException{
+        return delegate().addFeature(feature,featureVersion,personId,photos,faces,removed,token);
+    }
+
+    /**
+     * {@link IFaceLog#addFeature(byte[],java.lang.String,java.lang.Integer,List,List,java.lang.String,Token)}对应的unchecked方法,
      * 所有显式申明的异常都被封装到{@link RuntimeException}抛出<br>
      * @param feature
      * @param featureVersion
      * @param personId
      * @param photos
      * @param faces
+     * @param removed
      * @param token
      * @return FeatureBean
      */
-    public FeatureBean addFeatureUnchecked (byte[] feature,String featureVersion,Integer personId,List<byte[]> photos,List<FaceBean> faces,Token token) {
+    public FeatureBean addFeatureUnchecked (byte[] feature,String featureVersion,Integer personId,List<byte[]> photos,List<FaceBean> faces,String removed,Token token) {
         try{
-            return delegate().addFeature(feature,featureVersion,personId,photos,faces,token);
-        } catch(RuntimeException e){
-            throw e;
-        } catch(Exception e){
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public FeatureBean addFeature (byte[] feature,String featureVersion,Integer personId,List<FaceBean> faecBeans,Token token) throws DuplicateRecordException{
-        return delegate().addFeature(feature,featureVersion,personId,faecBeans,token);
-    }
-
-    /**
-     * {@link IFaceLog#addFeature(byte[],java.lang.String,java.lang.Integer,List,Token)}对应的unchecked方法,
-     * 所有显式申明的异常都被封装到{@link RuntimeException}抛出<br>
-     * @param feature
-     * @param featureVersion
-     * @param personId
-     * @param faecBeans
-     * @param token
-     * @return FeatureBean
-     */
-    public FeatureBean addFeatureUnchecked (byte[] feature,String featureVersion,Integer personId,List<FaceBean> faecBeans,Token token) {
-        try{
-            return delegate().addFeature(feature,featureVersion,personId,faecBeans,token);
+            return delegate().addFeature(feature,featureVersion,personId,photos,faces,removed,token);
         } catch(RuntimeException e){
             throw e;
         } catch(Exception e){

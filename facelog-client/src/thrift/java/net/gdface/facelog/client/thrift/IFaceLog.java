@@ -23,7 +23,8 @@ public interface IFaceLog
             @ThriftField(value=2, name="featureVersion", requiredness=Requiredness.OPTIONAL) final String featureVersion,
             @ThriftField(value=3, name="personId", requiredness=Requiredness.OPTIONAL) final Integer personId,
             @ThriftField(value=4, name="faecBeans", requiredness=Requiredness.OPTIONAL) final List<FaceBean> faecBeans,
-            @ThriftField(value=5, name="token", requiredness=Requiredness.OPTIONAL) final Token token
+            @ThriftField(value=5, name="removed", requiredness=Requiredness.OPTIONAL) final String removed,
+            @ThriftField(value=6, name="token", requiredness=Requiredness.OPTIONAL) final Token token
         );
 
         @ThriftMethod(value = "addFeatureMulti",
@@ -37,7 +38,8 @@ public interface IFaceLog
             @ThriftField(value=3, name="personId", requiredness=Requiredness.OPTIONAL) final Integer personId,
             @ThriftField(value=4, name="photos", requiredness=Requiredness.OPTIONAL) final List<byte []> photos,
             @ThriftField(value=5, name="faces", requiredness=Requiredness.OPTIONAL) final List<FaceBean> faces,
-            @ThriftField(value=6, name="token", requiredness=Requiredness.OPTIONAL) final Token token
+            @ThriftField(value=6, name="removed", requiredness=Requiredness.OPTIONAL) final String removed,
+            @ThriftField(value=7, name="token", requiredness=Requiredness.OPTIONAL) final Token token
         );
 
         @ThriftMethod(value = "addFeatureWithImage",
@@ -52,7 +54,8 @@ public interface IFaceLog
             @ThriftField(value=4, name="asIdPhotoIfAbsent", requiredness=Requiredness.REQUIRED) final boolean asIdPhotoIfAbsent,
             @ThriftField(value=5, name="featurePhoto", requiredness=Requiredness.OPTIONAL) final byte [] featurePhoto,
             @ThriftField(value=6, name="faceBean", requiredness=Requiredness.OPTIONAL) final FaceBean faceBean,
-            @ThriftField(value=7, name="token", requiredness=Requiredness.OPTIONAL) final Token token
+            @ThriftField(value=7, name="removed", requiredness=Requiredness.OPTIONAL) final String removed,
+            @ThriftField(value=8, name="token", requiredness=Requiredness.OPTIONAL) final Token token
         );
 
         @ThriftMethod(value = "addImage",
@@ -1471,7 +1474,8 @@ public interface IFaceLog
         @ThriftField(value=2, name="featureVersion", requiredness=Requiredness.OPTIONAL) final String featureVersion,
         @ThriftField(value=3, name="personId", requiredness=Requiredness.OPTIONAL) final Integer personId,
         @ThriftField(value=4, name="faecBeans", requiredness=Requiredness.OPTIONAL) final List<FaceBean> faecBeans,
-        @ThriftField(value=5, name="token", requiredness=Requiredness.OPTIONAL) final Token token
+        @ThriftField(value=5, name="removed", requiredness=Requiredness.OPTIONAL) final String removed,
+        @ThriftField(value=6, name="token", requiredness=Requiredness.OPTIONAL) final Token token
     ) throws DuplicateRecordException, ServiceRuntimeException;
 
     @ThriftMethod(value = "addFeatureMulti",
@@ -1485,7 +1489,8 @@ public interface IFaceLog
         @ThriftField(value=3, name="personId", requiredness=Requiredness.OPTIONAL) final Integer personId,
         @ThriftField(value=4, name="photos", requiredness=Requiredness.OPTIONAL) final List<byte []> photos,
         @ThriftField(value=5, name="faces", requiredness=Requiredness.OPTIONAL) final List<FaceBean> faces,
-        @ThriftField(value=6, name="token", requiredness=Requiredness.OPTIONAL) final Token token
+        @ThriftField(value=6, name="removed", requiredness=Requiredness.OPTIONAL) final String removed,
+        @ThriftField(value=7, name="token", requiredness=Requiredness.OPTIONAL) final Token token
     ) throws DuplicateRecordException, ServiceRuntimeException;
 
     @ThriftMethod(value = "addFeatureWithImage",
@@ -1500,7 +1505,8 @@ public interface IFaceLog
         @ThriftField(value=4, name="asIdPhotoIfAbsent", requiredness=Requiredness.REQUIRED) final boolean asIdPhotoIfAbsent,
         @ThriftField(value=5, name="featurePhoto", requiredness=Requiredness.OPTIONAL) final byte [] featurePhoto,
         @ThriftField(value=6, name="faceBean", requiredness=Requiredness.OPTIONAL) final FaceBean faceBean,
-        @ThriftField(value=7, name="token", requiredness=Requiredness.OPTIONAL) final Token token
+        @ThriftField(value=7, name="removed", requiredness=Requiredness.OPTIONAL) final String removed,
+        @ThriftField(value=8, name="token", requiredness=Requiredness.OPTIONAL) final Token token
     ) throws DuplicateRecordException, ServiceRuntimeException;
 
     @ThriftMethod(value = "addImage",

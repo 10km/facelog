@@ -281,9 +281,9 @@ public interface IFaceLog{
 	 * 保存人员信息记录
 	 * @param personBean {@code fl_person}表记录
 	 * @param idPhoto 标准照图像,可为null
-	 * @param feature 用于验证的人脸特征数据,不可重复, 参见 {@link #addFeature(byte[], String, Integer, List, Token)}
+	 * @param feature 用于验证的人脸特征数据,不可重复, 参见 {@link #addFeature(byte[], String, Integer, List, String, Token)}
 	 * @param featureVersion 特征(SDk)版本号
-	 * @param faceBeans 可为{@code null},参见 {@link #addFeature(byte[], String, Integer, List, Token)}
+	 * @param faceBeans 可为{@code null},参见 {@link #addFeature(byte[], String, Integer, List, String, Token)}
 	 * @param token 访问令牌
 	 * @return 保存的{@link PersonBean}
 	 */
@@ -522,11 +522,12 @@ public interface IFaceLog{
 	 * @param featureVersion 特征(SDk)版本号
 	 * @param personId 关联的人员id(fl_person.id),可为null
 	 * @param faecBeans 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null
+	 * @param removed 已经存在的特征记录ID(MD5),可为{@code null},不为{@code null}时会先删除指定的特征,记录不存在则抛出异常
 	 * @param token (设备)访问令牌
 	 * @return 保存的人脸特征记录{@link FeatureBean}
 	 * @throws DuplicateRecordException 
 	 */
-	public FeatureBean addFeature(byte[] feature, String featureVersion, Integer personId, List<FaceBean> faecBeans, Token token) throws DuplicateRecordException;
+	public FeatureBean addFeature(byte[] feature, String featureVersion, Integer personId, List<FaceBean> faecBeans, String removed, Token token) throws DuplicateRecordException;
 	
 	/**
 	 * 增加一个人脸特征记录，如果记录已经存在则抛出异常<br>
@@ -539,13 +540,14 @@ public interface IFaceLog{
 	 * 是否用{@code featurePhoto}作为身份照片,{@code featurePhoto}为{@code null}时无效
 	 * @param featurePhoto 生成人脸特征的原始照片,如果不要求保留原始照片可为null
 	 * @param faceBean 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null
+	 * @param removed 已经存在的特征记录ID(MD5),可为{@code null},不为{@code null}时会先删除指定的特征,记录不存在则抛出异常
 	 * @param token (设备)访问令牌
 	 * @return 保存的人脸特征记录{@link FeatureBean}
 	 * @throws DuplicateRecordException
 	 * @since 2.1.2
 	 */
 	@DeriveMethod(methodSuffix="WithImage")
-	FeatureBean addFeature(final byte[] feature, String featureVersion, final Integer personId, final boolean asIdPhotoIfAbsent, final byte[] featurePhoto, final FaceBean faceBean, Token token)throws DuplicateRecordException;
+	FeatureBean addFeature(final byte[] feature, String featureVersion, final Integer personId, final boolean asIdPhotoIfAbsent, final byte[] featurePhoto, final FaceBean faceBean, String removed, Token token)throws DuplicateRecordException;
 
 	/**
 	 * 增加一个人脸特征记录,特征数据由faceInfo指定的多张图像合成，如果记录已经存在则抛出异常<br>
@@ -556,12 +558,13 @@ public interface IFaceLog{
 	 * @param personId 关联的人员id(fl_person.id),可为null
 	 * @param photos 检测到人脸的照片列表
 	 * @param faces 检测人脸信息列表
+	 * @param removed 已经存在的特征记录ID(MD5),可为{@code null},不为{@code null}时会先删除指定的特征,记录不存在则抛出异常
 	 * @param token (设备)访问令牌
 	 * @return 保存的人脸特征记录{@link FeatureBean}
 	 * @throws DuplicateRecordException 
 	 */
 	@DeriveMethod(methodSuffix="Multi")
-	public FeatureBean addFeature(byte[] feature, String featureVersion, Integer personId, List<byte[]> photos, List<FaceBean> faces, Token token)
+	public FeatureBean addFeature(byte[] feature, String featureVersion, Integer personId, List<byte[]> photos, List<FaceBean> faces, String removed, Token token)
 			throws DuplicateRecordException;
 
 	/**

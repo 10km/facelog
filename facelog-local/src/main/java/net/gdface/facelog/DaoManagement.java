@@ -481,6 +481,13 @@ public class DaoManagement extends BaseDao implements ServiceConstant,Constant{
 		daoDeleteFeature(featureMd5);
 		return imageKeys;
 	}
+	protected List<String> daoDeleteFeatureChecked(final String featureMd5,boolean deleteImage){
+		if(!Strings.isNullOrEmpty(featureMd5)){
+			checkArgument(daoExistsFeature(featureMd5),"INVALID feature id %s",featureMd5);
+			return daoDeleteFeature(featureMd5,true);
+		}
+		return Collections.emptyList();
+	}
 	protected int daoDeleteAllFeaturesByPersonId(Integer personId,boolean deleteImage){
 		int count = 0;
 		for(FeatureBean featureBean: daoGetFeatureBeansByPersonIdOnPerson(personId)){

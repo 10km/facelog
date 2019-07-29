@@ -149,7 +149,7 @@ public class IFaceLogThriftClientAsync {
         }
     }
     /**
-     * see also {@link net.gdface.facelog.IFaceLog#addFeature(byte[],java.lang.String,java.lang.Integer,boolean,byte[],net.gdface.facelog.db.FaceBean,net.gdface.facelog.Token)}
+     * see also {@link net.gdface.facelog.IFaceLog#addFeature(byte[],java.lang.String,java.lang.Integer,boolean,byte[],net.gdface.facelog.db.FaceBean,java.lang.String,net.gdface.facelog.Token)}
      */
     public ListenableFuture<FeatureBean> addFeature(byte[] feature,
         String featureVersion,
@@ -157,6 +157,7 @@ public class IFaceLogThriftClientAsync {
         boolean asIdPhotoIfAbsent,
         byte[] featurePhoto,
         FaceBean faceBean,
+        String removed,
         Token token){
         MethodCallback<FeatureBean,net.gdface.facelog.client.thrift.FeatureBean> nativeCallback = 
             new MethodCallback<FeatureBean,net.gdface.facelog.client.thrift.FeatureBean>(
@@ -184,6 +185,7 @@ public class IFaceLogThriftClientAsync {
                     faceBean,
                     FaceBean.class,
                     net.gdface.facelog.client.thrift.FaceBean.class),
+            removed,
             TypeTransformer.getInstance().to(
                     token,
                     Token.class,
@@ -196,18 +198,66 @@ public class IFaceLogThriftClientAsync {
         boolean asIdPhotoIfAbsent,
         byte[] featurePhoto,
         FaceBean faceBean,
+        String removed,
         Token token,
         FutureCallback<FeatureBean>callback){
-        factory.addCallback(addFeature(feature,featureVersion,personId,asIdPhotoIfAbsent,featurePhoto,faceBean,token), callback);
+        factory.addCallback(addFeature(feature,featureVersion,personId,asIdPhotoIfAbsent,featurePhoto,faceBean,removed,token), callback);
     }
     /**
-     * see also {@link net.gdface.facelog.IFaceLog#addFeature(byte[],java.lang.String,java.lang.Integer,java.util.List,java.util.List,net.gdface.facelog.Token)}
+     * see also {@link net.gdface.facelog.IFaceLog#addFeature(byte[],java.lang.String,java.lang.Integer,java.util.List,java.lang.String,net.gdface.facelog.Token)}
+     */
+    public ListenableFuture<FeatureBean> addFeature(byte[] feature,
+        String featureVersion,
+        Integer personId,
+        List<FaceBean> faecBeans,
+        String removed,
+        Token token){
+        MethodCallback<FeatureBean,net.gdface.facelog.client.thrift.FeatureBean> nativeCallback = 
+            new MethodCallback<FeatureBean,net.gdface.facelog.client.thrift.FeatureBean>(
+                new Function<net.gdface.facelog.client.thrift.FeatureBean,FeatureBean>() {
+                        @Override
+                        public FeatureBean apply(net.gdface.facelog.client.thrift.FeatureBean input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.FeatureBean.class,
+                    FeatureBean.class);
+                }});
+        nativeCallback.service.addFeature(
+                TypeTransformer.getInstance().to(
+                    feature,
+                    byte[].class,
+                    okio.ByteString.class),
+            featureVersion,
+            personId,
+            TypeTransformer.getInstance().to(
+                    faecBeans,
+                    FaceBean.class,
+                    net.gdface.facelog.client.thrift.FaceBean.class),
+            removed,
+            TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
+    }
+    public void addFeature(byte[] feature,
+        String featureVersion,
+        Integer personId,
+        List<FaceBean> faecBeans,
+        String removed,
+        Token token,
+        FutureCallback<FeatureBean>callback){
+        factory.addCallback(addFeature(feature,featureVersion,personId,faecBeans,removed,token), callback);
+    }
+    /**
+     * see also {@link net.gdface.facelog.IFaceLog#addFeature(byte[],java.lang.String,java.lang.Integer,java.util.List,java.util.List,java.lang.String,net.gdface.facelog.Token)}
      */
     public ListenableFuture<FeatureBean> addFeature(byte[] feature,
         String featureVersion,
         Integer personId,
         List<byte[]> photos,
         List<FaceBean> faces,
+        String removed,
         Token token){
         MethodCallback<FeatureBean,net.gdface.facelog.client.thrift.FeatureBean> nativeCallback = 
             new MethodCallback<FeatureBean,net.gdface.facelog.client.thrift.FeatureBean>(
@@ -234,6 +284,7 @@ public class IFaceLogThriftClientAsync {
                     faces,
                     FaceBean.class,
                     net.gdface.facelog.client.thrift.FaceBean.class),
+            removed,
             TypeTransformer.getInstance().to(
                     token,
                     Token.class,
@@ -245,52 +296,10 @@ public class IFaceLogThriftClientAsync {
         Integer personId,
         List<byte[]> photos,
         List<FaceBean> faces,
+        String removed,
         Token token,
         FutureCallback<FeatureBean>callback){
-        factory.addCallback(addFeature(feature,featureVersion,personId,photos,faces,token), callback);
-    }
-    /**
-     * see also {@link net.gdface.facelog.IFaceLog#addFeature(byte[],java.lang.String,java.lang.Integer,java.util.List,net.gdface.facelog.Token)}
-     */
-    public ListenableFuture<FeatureBean> addFeature(byte[] feature,
-        String featureVersion,
-        Integer personId,
-        List<FaceBean> faecBeans,
-        Token token){
-        MethodCallback<FeatureBean,net.gdface.facelog.client.thrift.FeatureBean> nativeCallback = 
-            new MethodCallback<FeatureBean,net.gdface.facelog.client.thrift.FeatureBean>(
-                new Function<net.gdface.facelog.client.thrift.FeatureBean,FeatureBean>() {
-                        @Override
-                        public FeatureBean apply(net.gdface.facelog.client.thrift.FeatureBean input) {
-                            return TypeTransformer.getInstance().to(
-                    input,
-                    net.gdface.facelog.client.thrift.FeatureBean.class,
-                    FeatureBean.class);
-                }});
-        nativeCallback.service.addFeature(
-                TypeTransformer.getInstance().to(
-                    feature,
-                    byte[].class,
-                    okio.ByteString.class),
-            featureVersion,
-            personId,
-            TypeTransformer.getInstance().to(
-                    faecBeans,
-                    FaceBean.class,
-                    net.gdface.facelog.client.thrift.FaceBean.class),
-            TypeTransformer.getInstance().to(
-                    token,
-                    Token.class,
-                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
-        return nativeCallback.feature;
-    }
-    public void addFeature(byte[] feature,
-        String featureVersion,
-        Integer personId,
-        List<FaceBean> faecBeans,
-        Token token,
-        FutureCallback<FeatureBean>callback){
-        factory.addCallback(addFeature(feature,featureVersion,personId,faecBeans,token), callback);
+        factory.addCallback(addFeature(feature,featureVersion,personId,photos,faces,removed,token), callback);
     }
     /**
      * see also {@link net.gdface.facelog.IFaceLog#addImage(byte[],java.lang.Integer,net.gdface.facelog.db.FaceBean,java.lang.Integer,net.gdface.facelog.Token)}

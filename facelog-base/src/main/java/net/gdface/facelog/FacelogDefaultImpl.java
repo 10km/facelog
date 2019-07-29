@@ -281,20 +281,20 @@ public class FacelogDefaultImpl implements IFaceLog {
 	}
 
 	@Override
-	public FeatureBean addFeature(byte[] feature, String featureVersion, Integer personId, List<FaceBean> faecBeans, Token token)
+	public FeatureBean addFeature(byte[] feature, String featureVersion, Integer personId, List<FaceBean> faecBeans, String removed, Token token)
 			throws DuplicateRecordException {
 		return null;
 	}
 
 	@Override
-	public FeatureBean addFeature(final byte[] feature, String featureVersion, final Integer personId, final boolean asIdPhotoIfAbsent, final byte[] featurePhoto, final FaceBean faceBean, Token token)
+	public FeatureBean addFeature(final byte[] feature, String featureVersion, final Integer personId, final boolean asIdPhotoIfAbsent, final byte[] featurePhoto, final FaceBean faceBean, String removed, Token token)
 			throws DuplicateRecordException {
 		return null;
 	}
 
 	@Override
 	public FeatureBean addFeature(byte[] feature, String featureVersion, Integer personId,
-			List<byte[]> photos, List<FaceBean> faces, Token token) throws DuplicateRecordException {
+			List<byte[]> photos, List<FaceBean> faces, String removed, Token token) throws DuplicateRecordException {
 		return null;
 	}
 	
