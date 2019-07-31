@@ -456,11 +456,21 @@ public class FacelogMenu extends RootMenu{
 			this.opt = checkNotNull(facelogMenu,"facelogMenu is null").findIntOption(OPTION__DEVICE_STATUS);
 		}
 		/**
+		 * 状态改变时调用<br>
 		 * 应用层重写此方法实现设置设备状态的业务逻辑
 		 * @param status 设备状态值
 		 * @param message 附加消息
 		 */
-		public void doSetStatus(int status, String message){
+		public void doStatusUpdate(Integer status, String message){
+			
+		}
+		/**
+		 * 命令执行时调用(状态不一定改变)<br>
+		 * 应用层重写此方法实现设置设备状态的业务逻辑
+		 * @param status 设备状态值
+		 * @param message 附加消息
+		 */
+		public void doSetStatus(Integer status, String message){
 			
 		}
 		@Override
@@ -470,7 +480,9 @@ public class FacelogMenu extends RootMenu{
 				Set<Integer> status = (Set<Integer>) input.get(CMD_SET_STATUS_PARAM1);
 				checkArgument(opt.validate(status),"INVALID STATUS VALUE");				
 				message = (String) input.get(CMD_SET_STATUS_PARAM2);
-				opt.setValue(status.toArray(new Integer[0])[0]);
+				Integer code = status.toArray(new Integer[0])[0];
+				opt.setValue(code);
+				doSetStatus(code,message);
 				return null;
 			} catch (Exception e) {
 				throw new CmdExecutionException(e);
@@ -478,7 +490,7 @@ public class FacelogMenu extends RootMenu{
 		}
 		@Override
 		protected final void doUpdate(ValueChangeEvent<BaseOption<Integer>> event) {
-			doSetStatus(event.option().getValue(), message);
+			doStatusUpdate(event.option().getValue(), message);
 		}		
 	}
 	/**
