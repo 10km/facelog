@@ -914,9 +914,9 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 	}
 
 	@Override
-	public List<FeatureBean> getFeatures(List<String> md5){
+	public List<FeatureBean> getFeatures(List<String> md5List){
 		try{
-			return dm.daoGetFeatures(md5);
+			return dm.daoGetFeatures(md5List);
 		} catch (RuntimeException e) {
 			throw wrapServiceRuntimeException(e);
 		}
@@ -942,6 +942,14 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		try{
 			Set<FeatureBean> features = dm.daoGetFeaturesPermittedOnDevice(deviceId, ignoreSchedule, sdkVersion, excludeFeatureIds, timestamp);
 			return dm.daoToPrimaryKeyListFromFeatures(Lists.newArrayList(features));
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
+	}
+	@Override
+	public List<String> getFeaturesOfImage(String imageMd5){
+		try {
+			return dm.daoGetFeaturesOfImage(imageMd5);
 		} catch (RuntimeException e) {
 			throw wrapServiceRuntimeException(e);
 		}
@@ -988,6 +996,22 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 	public FaceBean getFace(int faceId){
 		try{
 			return dm.daoGetFace(faceId);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
+	}
+	@Override
+	public List<FaceBean> getFacesOfFeature(String featureMd5){
+		try{
+			return dm.daoGetFacesOfFeature(featureMd5);
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
+	}
+	@Override
+	public List<FaceBean> getFacesOfImage(String imageMd5){
+		try{
+			return dm.daoGetFacesOfImage(imageMd5);
 		} catch (RuntimeException e) {
 			throw wrapServiceRuntimeException(e);
 		}

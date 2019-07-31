@@ -533,6 +533,22 @@ public interface IFaceLog
             @ThriftField(value=1, name="faceId", requiredness=Requiredness.REQUIRED) final int faceId
         );
 
+        @ThriftMethod(value = "getFacesOfFeature",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1)
+                      })
+        ListenableFuture<List<FaceBean>> getFacesOfFeature(
+            @ThriftField(value=1, name="featureMd5", requiredness=Requiredness.OPTIONAL) final String featureMd5
+        );
+
+        @ThriftMethod(value = "getFacesOfImage",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1)
+                      })
+        ListenableFuture<List<FaceBean>> getFacesOfImage(
+            @ThriftField(value=1, name="imageMd5", requiredness=Requiredness.OPTIONAL) final String imageMd5
+        );
+
         @ThriftMethod(value = "getFeature",
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
@@ -554,7 +570,7 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
         ListenableFuture<List<FeatureBean>> getFeatures(
-            @ThriftField(value=1, name="md5", requiredness=Requiredness.OPTIONAL) final List<String> md5
+            @ThriftField(value=1, name="md5List", requiredness=Requiredness.OPTIONAL) final List<String> md5List
         );
 
         @ThriftMethod(value = "getFeaturesByPersonIdAndSdkVersion",
@@ -564,6 +580,14 @@ public interface IFaceLog
         ListenableFuture<List<String>> getFeaturesByPersonIdAndSdkVersion(
             @ThriftField(value=1, name="personId", requiredness=Requiredness.REQUIRED) final int personId,
             @ThriftField(value=2, name="sdkVersion", requiredness=Requiredness.OPTIONAL) final String sdkVersion
+        );
+
+        @ThriftMethod(value = "getFeaturesOfImage",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1)
+                      })
+        ListenableFuture<List<String>> getFeaturesOfImage(
+            @ThriftField(value=1, name="imageMd5", requiredness=Requiredness.OPTIONAL) final String imageMd5
         );
 
         @ThriftMethod(value = "getFeaturesOfPerson",
@@ -1984,6 +2008,22 @@ public interface IFaceLog
         @ThriftField(value=1, name="faceId", requiredness=Requiredness.REQUIRED) final int faceId
     ) throws ServiceRuntimeException;
 
+    @ThriftMethod(value = "getFacesOfFeature",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1)
+                  })
+    List<FaceBean> getFacesOfFeature(
+        @ThriftField(value=1, name="featureMd5", requiredness=Requiredness.OPTIONAL) final String featureMd5
+    ) throws ServiceRuntimeException;
+
+    @ThriftMethod(value = "getFacesOfImage",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1)
+                  })
+    List<FaceBean> getFacesOfImage(
+        @ThriftField(value=1, name="imageMd5", requiredness=Requiredness.OPTIONAL) final String imageMd5
+    ) throws ServiceRuntimeException;
+
     @ThriftMethod(value = "getFeature",
                   exception = {
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
@@ -2005,7 +2045,7 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
     List<FeatureBean> getFeatures(
-        @ThriftField(value=1, name="md5", requiredness=Requiredness.OPTIONAL) final List<String> md5
+        @ThriftField(value=1, name="md5List", requiredness=Requiredness.OPTIONAL) final List<String> md5List
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "getFeaturesByPersonIdAndSdkVersion",
@@ -2015,6 +2055,14 @@ public interface IFaceLog
     List<String> getFeaturesByPersonIdAndSdkVersion(
         @ThriftField(value=1, name="personId", requiredness=Requiredness.REQUIRED) final int personId,
         @ThriftField(value=2, name="sdkVersion", requiredness=Requiredness.OPTIONAL) final String sdkVersion
+    ) throws ServiceRuntimeException;
+
+    @ThriftMethod(value = "getFeaturesOfImage",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1)
+                  })
+    List<String> getFeaturesOfImage(
+        @ThriftField(value=1, name="imageMd5", requiredness=Requiredness.OPTIONAL) final String imageMd5
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "getFeaturesOfPerson",

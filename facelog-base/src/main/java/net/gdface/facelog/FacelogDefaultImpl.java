@@ -314,7 +314,7 @@ public class FacelogDefaultImpl implements IFaceLog {
 	}
 
 	@Override
-	public List<FeatureBean> getFeatures(List<String> md5) {
+	public List<FeatureBean> getFeatures(List<String> md5List) {
 		return null;
 	}
 
@@ -333,6 +333,11 @@ public class FacelogDefaultImpl implements IFaceLog {
 		return null;
 	}
 
+	@Override
+	public List<String> getFeaturesOfImage(String imageMd5) {
+		return null;
+	}
+	
 	@Override
 	public byte[] getFeatureBytes(String md5) {
 		return null;
@@ -355,6 +360,16 @@ public class FacelogDefaultImpl implements IFaceLog {
 	
 	@Override
 	public FaceBean getFace(int faceId) {
+		return null;
+	}
+
+	@Override
+	public List<FaceBean> getFacesOfFeature(String featureMd5) {
+		return null;
+	}
+	
+	@Override
+	public List<FaceBean> getFacesOfImage(String imageMd5) {
 		return null;
 	}
 
@@ -815,4 +830,5 @@ public class FacelogDefaultImpl implements IFaceLog {
 	@Override
 	public void bindBorder(Integer personGroupId, Integer deviceGroupId, Token token) {
 	}
+
 }

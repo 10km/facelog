@@ -1630,6 +1630,50 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(getFace(faceId), callback);
     }
     /**
+     * see also {@link net.gdface.facelog.IFaceLog#getFacesOfFeature(java.lang.String)}
+     */
+    public ListenableFuture<List<FaceBean>> getFacesOfFeature(String featureMd5){
+        MethodCallback<List<FaceBean>,List<net.gdface.facelog.client.thrift.FaceBean>> nativeCallback = 
+            new MethodCallback<List<FaceBean>,List<net.gdface.facelog.client.thrift.FaceBean>>(
+                new Function<List<net.gdface.facelog.client.thrift.FaceBean>,List<FaceBean>>() {
+                        @Override
+                        public List<FaceBean> apply(List<net.gdface.facelog.client.thrift.FaceBean> input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.FaceBean.class,
+                    FaceBean.class);
+                }});
+        nativeCallback.service.getFacesOfFeature(
+                featureMd5,nativeCallback);
+        return nativeCallback.feature;
+    }
+    public void getFacesOfFeature(String featureMd5,
+        FutureCallback<List<FaceBean>>callback){
+        factory.addCallback(getFacesOfFeature(featureMd5), callback);
+    }
+    /**
+     * see also {@link net.gdface.facelog.IFaceLog#getFacesOfImage(java.lang.String)}
+     */
+    public ListenableFuture<List<FaceBean>> getFacesOfImage(String imageMd5){
+        MethodCallback<List<FaceBean>,List<net.gdface.facelog.client.thrift.FaceBean>> nativeCallback = 
+            new MethodCallback<List<FaceBean>,List<net.gdface.facelog.client.thrift.FaceBean>>(
+                new Function<List<net.gdface.facelog.client.thrift.FaceBean>,List<FaceBean>>() {
+                        @Override
+                        public List<FaceBean> apply(List<net.gdface.facelog.client.thrift.FaceBean> input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.FaceBean.class,
+                    FaceBean.class);
+                }});
+        nativeCallback.service.getFacesOfImage(
+                imageMd5,nativeCallback);
+        return nativeCallback.feature;
+    }
+    public void getFacesOfImage(String imageMd5,
+        FutureCallback<List<FaceBean>>callback){
+        factory.addCallback(getFacesOfImage(imageMd5), callback);
+    }
+    /**
      * see also {@link net.gdface.facelog.IFaceLog#getFeature(java.lang.String)}
      */
     public ListenableFuture<FeatureBean> getFeature(String md5){
@@ -1676,7 +1720,7 @@ public class IFaceLogThriftClientAsync {
     /**
      * see also {@link net.gdface.facelog.IFaceLog#getFeatures(java.util.List)}
      */
-    public ListenableFuture<List<FeatureBean>> getFeatures(List<String> md5){
+    public ListenableFuture<List<FeatureBean>> getFeatures(List<String> md5List){
         MethodCallback<List<FeatureBean>,List<net.gdface.facelog.client.thrift.FeatureBean>> nativeCallback = 
             new MethodCallback<List<FeatureBean>,List<net.gdface.facelog.client.thrift.FeatureBean>>(
                 new Function<List<net.gdface.facelog.client.thrift.FeatureBean>,List<FeatureBean>>() {
@@ -1689,14 +1733,14 @@ public class IFaceLogThriftClientAsync {
                 }});
         nativeCallback.service.getFeatures(
                 TypeTransformer.getInstance().to(
-                    md5,
+                    md5List,
                     String.class,
                     String.class),nativeCallback);
         return nativeCallback.feature;
     }
-    public void getFeatures(List<String> md5,
+    public void getFeatures(List<String> md5List,
         FutureCallback<List<FeatureBean>>callback){
-        factory.addCallback(getFeatures(md5), callback);
+        factory.addCallback(getFeatures(md5List), callback);
     }
     /**
      * see also {@link net.gdface.facelog.IFaceLog#getFeaturesByPersonIdAndSdkVersion(int,java.lang.String)}
@@ -1722,6 +1766,28 @@ public class IFaceLogThriftClientAsync {
         String sdkVersion,
         FutureCallback<List<String>>callback){
         factory.addCallback(getFeaturesByPersonIdAndSdkVersion(personId,sdkVersion), callback);
+    }
+    /**
+     * see also {@link net.gdface.facelog.IFaceLog#getFeaturesOfImage(java.lang.String)}
+     */
+    public ListenableFuture<List<String>> getFeaturesOfImage(String imageMd5){
+        MethodCallback<List<String>,List<String>> nativeCallback = 
+            new MethodCallback<List<String>,List<String>>(
+                new Function<List<String>,List<String>>() {
+                        @Override
+                        public List<String> apply(List<String> input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    String.class,
+                    String.class);
+                }});
+        nativeCallback.service.getFeaturesOfImage(
+                imageMd5,nativeCallback);
+        return nativeCallback.feature;
+    }
+    public void getFeaturesOfImage(String imageMd5,
+        FutureCallback<List<String>>callback){
+        factory.addCallback(getFeaturesOfImage(imageMd5), callback);
     }
     /**
      * see also {@link net.gdface.facelog.IFaceLog#getFeaturesOfPerson(int)}

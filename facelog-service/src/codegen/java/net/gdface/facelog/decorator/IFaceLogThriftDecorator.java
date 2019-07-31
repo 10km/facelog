@@ -1344,6 +1344,44 @@ public class IFaceLogThriftDecorator {
         }
     }
     /**
+     * @see {@link net.gdface.facelog.IFaceLog#getFacesOfFeature(java.lang.String)}
+     */
+    @ThriftMethod(value = "getFacesOfFeature" )
+    public List<FaceBean> getFacesOfFeature(String featureMd5) 
+        throws ServiceRuntimeException{
+        try{
+            return TypeTransformer.getInstance().to(
+                    delegate().getFacesOfFeature(featureMd5),
+                    FaceBean.class,
+                    FaceBean.class);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
+     * @see {@link net.gdface.facelog.IFaceLog#getFacesOfImage(java.lang.String)}
+     */
+    @ThriftMethod(value = "getFacesOfImage" )
+    public List<FaceBean> getFacesOfImage(String imageMd5) 
+        throws ServiceRuntimeException{
+        try{
+            return TypeTransformer.getInstance().to(
+                    delegate().getFacesOfImage(imageMd5),
+                    FaceBean.class,
+                    FaceBean.class);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
      * @see {@link net.gdface.facelog.IFaceLog#getFeature(java.lang.String)}
      */
     @ThriftMethod(value = "getFeature" )
@@ -1385,12 +1423,12 @@ public class IFaceLogThriftDecorator {
      * @see {@link net.gdface.facelog.IFaceLog#getFeatures(java.util.List)}
      */
     @ThriftMethod(value = "getFeatures" )
-    public List<FeatureBean> getFeatures(List<String> md5) 
+    public List<FeatureBean> getFeatures(List<String> md5List) 
         throws ServiceRuntimeException{
         try{
             return TypeTransformer.getInstance().to(
                     delegate().getFeatures(TypeTransformer.getInstance().to(
-                    md5,
+                    md5List,
                     String.class,
                     String.class)),
                     FeatureBean.class,
@@ -1414,6 +1452,25 @@ public class IFaceLogThriftDecorator {
             return TypeTransformer.getInstance().to(
                     delegate().getFeaturesByPersonIdAndSdkVersion(personId,
                 sdkVersion),
+                    String.class,
+                    String.class);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
+     * @see {@link net.gdface.facelog.IFaceLog#getFeaturesOfImage(java.lang.String)}
+     */
+    @ThriftMethod(value = "getFeaturesOfImage" )
+    public List<String> getFeaturesOfImage(String imageMd5) 
+        throws ServiceRuntimeException{
+        try{
+            return TypeTransformer.getInstance().to(
+                    delegate().getFeaturesOfImage(imageMd5),
                     String.class,
                     String.class);
         }

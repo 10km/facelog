@@ -594,10 +594,10 @@ public interface IFaceLog{
 
 	/**
 	 * 根据MD5校验码返回人脸特征数据记录
-	 * @param md5 md5列表
+	 * @param md5List md5列表
 	 * @return {@link FeatureBean}列表
 	 */
-	public List<FeatureBean> getFeatures(List<String> md5);
+	public List<FeatureBean> getFeatures(List<String> md5List);
 	/**
 	 * 返回指定人员{@code personId}关联的所有特征<br>
 	 * @param personId
@@ -624,7 +624,14 @@ public interface IFaceLog{
 	 * @return 返回 fl_feature.md5  列表
 	 */
 	public List<String> getFeaturesPermittedOnDevice(int deviceId, boolean ignoreSchedule, String sdkVersion, List<String> excludeFeatureIds, Long timestamp);
-
+	
+	/**
+	 * 获取指定人脸特征关联的人脸特征记录
+	 * @param imageMd5 图像数据的MD校验码,为空或{@code null}或记录不存在返回空表
+	 * @return 特征记录id列表
+	 */
+	public List<String> getFeaturesOfImage(String imageMd5);
+	
 	/**
 	 * 根据MD5校验码返回人脸特征数据
 	 * @param md5
@@ -659,6 +666,21 @@ public interface IFaceLog{
 	 * @return {@link FaceBean} ,如果没有对应记录则返回null
 	 */
 	public FaceBean getFace(int faceId);
+	
+	/**
+	 * 获取指定人脸特征关联的人脸记录
+	 * @param featureMd5 人脸特征记录id(MD校验码),为空或{@code null}或记录不存在返回空表
+	 * @return {@link FaceBean}列表
+	 */
+	public List<FaceBean> getFacesOfFeature(String featureMd5);
+	
+	/**
+	 * 获取指定图像关联的人脸记录
+	 * @param imageMd5 图像数据的MD校验码,为空或{@code null}或记录不存在返回空表
+	 * @return {@link FaceBean}列表
+	 */
+	public List<FaceBean> getFacesOfImage(String imageMd5);
+
 	/**
 	 * 返回featureMd5的人脸特征记录关联的设备id<br>
 	 * @param featureMd5

@@ -529,6 +529,16 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
+    public List<FaceBean> getFacesOfFeature (String featureMd5) {
+        return delegate().getFacesOfFeature(featureMd5);
+    }
+
+    @Override
+    public List<FaceBean> getFacesOfImage (String imageMd5) {
+        return delegate().getFacesOfImage(imageMd5);
+    }
+
+    @Override
     public FeatureBean getFeature (String md5) {
         return delegate().getFeature(md5);
     }
@@ -539,13 +549,18 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
-    public List<FeatureBean> getFeatures (List<String> md5) {
-        return delegate().getFeatures(md5);
+    public List<FeatureBean> getFeatures (List<String> md5List) {
+        return delegate().getFeatures(md5List);
     }
 
     @Override
     public List<String> getFeaturesByPersonIdAndSdkVersion (int personId,String sdkVersion) {
         return delegate().getFeaturesByPersonIdAndSdkVersion(personId,sdkVersion);
+    }
+
+    @Override
+    public List<String> getFeaturesOfImage (String imageMd5) {
+        return delegate().getFeaturesOfImage(imageMd5);
     }
 
     @Override

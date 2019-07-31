@@ -842,4 +842,40 @@ public class DaoManagement extends BaseDao implements ServiceConstant,Constant{
 		}
 		return daoSavePermit(permitBean);
 	}
+	/**
+	 * 获取指定人脸特征关联的人脸特征记录
+	 * @param imageMd5 图像数据的MD校验码,为空或{@code null}或记录不存在返回空表
+	 * @return 特征记录id列表
+	 */
+	protected List<String> daoGetFeaturesOfImage(String imageMd5){
+		if(Strings.isNullOrEmpty(imageMd5)){
+			return Collections.emptyList();
+		}
+		List<FaceBean> faces = daoGetFaceBeansByImageMd5OnImage(imageMd5);
+		Iterable<String> features = Iterables.filter(Lists.transform(faces, daoCastFaceToFeatureMd5),Predicates.notNull());
+		return Lists.newArrayList(features);
+	}
+	/**
+	 * 获取指定人脸特征关联的人脸记录
+	 * @param featureMd5 人脸特征记录id(MD校验码),为空或{@code null}或记录不存在返回空表
+	 * @return {@link FaceBean}列表
+	 */
+	protected List<FaceBean> daoGetFacesOfFeature(String featureMd5){
+		if(Strings.isNullOrEmpty(featureMd5)){
+			return Collections.emptyList();
+		}
+		return daoGetFaceBeansByFeatureMd5OnFeature(featureMd5);
+	}
+	/**
+	 * 获取指定图像关联的人脸记录
+	 * @param imageMd5 图像数据的MD校验码,为空或{@code null}或记录不存在返回空表
+	 * @return {@link FaceBean}列表
+	 */
+	protected List<FaceBean> daoGetFacesOfImage(String imageMd5){
+		if(Strings.isNullOrEmpty(imageMd5)){
+			return Collections.emptyList();
+		}
+		return daoGetFaceBeansByImageMd5OnImage(imageMd5);
+	}
+
 }

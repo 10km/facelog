@@ -1766,6 +1766,58 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
+    public List<FaceBean> getFacesOfFeature(final String featureMd5) 
+        {
+        try{
+            return syncCall(new Function<List<net.gdface.facelog.client.thrift.FaceBean>,List<FaceBean>>() {
+                @Override
+                public List<FaceBean> apply(List<net.gdface.facelog.client.thrift.FaceBean> input) {
+                    return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.FaceBean.class,
+                    FaceBean.class);
+                }},
+                new ServiceAsyncCall<List<net.gdface.facelog.client.thrift.FaceBean>>(){
+                @Override
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<List<net.gdface.facelog.client.thrift.FaceBean>> nativeCallback){
+                    service.getFacesOfFeature(featureMd5,nativeCallback);
+                }});
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);
+        }
+    }
+    @Override
+    public List<FaceBean> getFacesOfImage(final String imageMd5) 
+        {
+        try{
+            return syncCall(new Function<List<net.gdface.facelog.client.thrift.FaceBean>,List<FaceBean>>() {
+                @Override
+                public List<FaceBean> apply(List<net.gdface.facelog.client.thrift.FaceBean> input) {
+                    return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.FaceBean.class,
+                    FaceBean.class);
+                }},
+                new ServiceAsyncCall<List<net.gdface.facelog.client.thrift.FaceBean>>(){
+                @Override
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<List<net.gdface.facelog.client.thrift.FaceBean>> nativeCallback){
+                    service.getFacesOfImage(imageMd5,nativeCallback);
+                }});
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);
+        }
+    }
+    @Override
     public FeatureBean getFeature(final String md5) 
         {
         try{
@@ -1818,7 +1870,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
-    public List<FeatureBean> getFeatures(final List<String> md5) 
+    public List<FeatureBean> getFeatures(final List<String> md5List) 
         {
         try{
             return syncCall(new Function<List<net.gdface.facelog.client.thrift.FeatureBean>,List<FeatureBean>>() {
@@ -1833,7 +1885,7 @@ public class IFaceLogThriftClient implements IFaceLog {
                 @Override
                 public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<List<net.gdface.facelog.client.thrift.FeatureBean>> nativeCallback){
                     service.getFeatures(TypeTransformer.getInstance().to(
-                    md5,
+                    md5List,
                     String.class,
                     String.class),nativeCallback);
                 }});
@@ -1863,6 +1915,32 @@ public class IFaceLogThriftClient implements IFaceLog {
                 @Override
                 public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<List<String>> nativeCallback){
                     service.getFeaturesByPersonIdAndSdkVersion(personId,sdkVersion,nativeCallback);
+                }});
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);
+        }
+    }
+    @Override
+    public List<String> getFeaturesOfImage(final String imageMd5) 
+        {
+        try{
+            return syncCall(new Function<List<String>,List<String>>() {
+                @Override
+                public List<String> apply(List<String> input) {
+                    return TypeTransformer.getInstance().to(
+                    input,
+                    String.class,
+                    String.class);
+                }},
+                new ServiceAsyncCall<List<String>>(){
+                @Override
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<List<String>> nativeCallback){
+                    service.getFeaturesOfImage(imageMd5,nativeCallback);
                 }});
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){

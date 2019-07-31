@@ -1303,6 +1303,46 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
+    public List<FaceBean> getFacesOfFeature(String featureMd5) 
+        {
+        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        try{
+            return TypeTransformer.getInstance().to(
+                    instance.getFacesOfFeature(featureMd5),
+                    net.gdface.facelog.client.thrift.FaceBean.class,
+                    FaceBean.class);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch(RuntimeTApplicationException e){
+            return net.gdface.thrift.ThriftUtils.returnNull(e);
+        }
+        finally{
+            factory.releaseInstance(instance);
+        }
+    }
+    @Override
+    public List<FaceBean> getFacesOfImage(String imageMd5) 
+        {
+        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        try{
+            return TypeTransformer.getInstance().to(
+                    instance.getFacesOfImage(imageMd5),
+                    net.gdface.facelog.client.thrift.FaceBean.class,
+                    FaceBean.class);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch(RuntimeTApplicationException e){
+            return net.gdface.thrift.ThriftUtils.returnNull(e);
+        }
+        finally{
+            factory.releaseInstance(instance);
+        }
+    }
+    @Override
     public FeatureBean getFeature(String md5) 
         {
         net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
@@ -1340,13 +1380,13 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
-    public List<FeatureBean> getFeatures(List<String> md5) 
+    public List<FeatureBean> getFeatures(List<String> md5List) 
         {
         net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
         try{
             return TypeTransformer.getInstance().to(
                     instance.getFeatures(TypeTransformer.getInstance().to(
-                    md5,
+                    md5List,
                     String.class,
                     String.class)),
                     net.gdface.facelog.client.thrift.FeatureBean.class,
@@ -1371,6 +1411,26 @@ public class IFaceLogThriftClient implements IFaceLog {
             return TypeTransformer.getInstance().to(
                     instance.getFeaturesByPersonIdAndSdkVersion(personId,
                 sdkVersion),
+                    String.class,
+                    String.class);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch(RuntimeTApplicationException e){
+            return net.gdface.thrift.ThriftUtils.returnNull(e);
+        }
+        finally{
+            factory.releaseInstance(instance);
+        }
+    }
+    @Override
+    public List<String> getFeaturesOfImage(String imageMd5) 
+        {
+        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        try{
+            return TypeTransformer.getInstance().to(
+                    instance.getFeaturesOfImage(imageMd5),
                     String.class,
                     String.class);
         }

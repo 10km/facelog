@@ -275,10 +275,13 @@ service IFaceLog {
   list<DeviceBean> getDevices(1: optional list<i32> idList) throws (1: ServiceRuntimeException ex1);
   list<i32> getDevicesOfGroup(1: required i32 deviceGroupId) throws (1: ServiceRuntimeException ex1);
   FaceBean getFace(1: required i32 faceId) throws (1: ServiceRuntimeException ex1);
+  list<FaceBean> getFacesOfFeature(1: optional string featureMd5) throws (1: ServiceRuntimeException ex1);
+  list<FaceBean> getFacesOfImage(1: optional string imageMd5) throws (1: ServiceRuntimeException ex1);
   FeatureBean getFeature(1: optional string md5) throws (1: ServiceRuntimeException ex1);
   binary getFeatureBytes(1: optional string md5) throws (1: ServiceRuntimeException ex1);
-  list<FeatureBean> getFeatures(1: optional list<string> md5) throws (1: ServiceRuntimeException ex1);
+  list<FeatureBean> getFeatures(1: optional list<string> md5List) throws (1: ServiceRuntimeException ex1);
   list<string> getFeaturesByPersonIdAndSdkVersion(1: required i32 personId, 2: optional string sdkVersion) throws (1: ServiceRuntimeException ex1);
+  list<string> getFeaturesOfImage(1: optional string imageMd5) throws (1: ServiceRuntimeException ex1);
   list<string> getFeaturesOfPerson(1: required i32 personId) throws (1: ServiceRuntimeException ex1);
   list<string> getFeaturesPermittedOnDevice(1: required i32 deviceId, 2: required bool ignoreSchedule, 3: optional string sdkVersion, 4: optional list<string> excludeFeatureIds, 5: optional i64 timestamp) throws (1: ServiceRuntimeException ex1);
   PermitBean getGroupPermit(1: required i32 deviceId, 2: required i32 personGroupId) throws (1: ServiceRuntimeException ex1);

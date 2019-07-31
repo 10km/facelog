@@ -3708,6 +3708,110 @@ GType i_face_log_get_face_result_get_type (void);
 #define IS_I_FACE_LOG_GET_FACE_RESULT_CLASS(c) (G_TYPE_CHECK_CLASS_TYPE ((c), TYPE_I_FACE_LOG_GET_FACE_RESULT))
 #define I_FACE_LOG_GET_FACE_RESULT_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_I_FACE_LOG_GET_FACE_RESULT, IFaceLogGetFaceResultClass))
 
+/* struct IFaceLogGetFacesOfFeatureArgs */
+struct _IFaceLogGetFacesOfFeatureArgs
+{ 
+  ThriftStruct parent; 
+
+  /* public */
+  gchar * featureMd5;
+  gboolean __isset_featureMd5;
+};
+typedef struct _IFaceLogGetFacesOfFeatureArgs IFaceLogGetFacesOfFeatureArgs;
+
+struct _IFaceLogGetFacesOfFeatureArgsClass
+{
+  ThriftStructClass parent;
+};
+typedef struct _IFaceLogGetFacesOfFeatureArgsClass IFaceLogGetFacesOfFeatureArgsClass;
+
+GType i_face_log_get_faces_of_feature_args_get_type (void);
+#define TYPE_I_FACE_LOG_GET_FACES_OF_FEATURE_ARGS (i_face_log_get_faces_of_feature_args_get_type())
+#define I_FACE_LOG_GET_FACES_OF_FEATURE_ARGS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_I_FACE_LOG_GET_FACES_OF_FEATURE_ARGS, IFaceLogGetFacesOfFeatureArgs))
+#define I_FACE_LOG_GET_FACES_OF_FEATURE_ARGS_CLASS(c) (G_TYPE_CHECK_CLASS_CAST ((c), _TYPE_I_FACE_LOG_GET_FACES_OF_FEATURE_ARGS, IFaceLogGetFacesOfFeatureArgsClass))
+#define IS_I_FACE_LOG_GET_FACES_OF_FEATURE_ARGS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_I_FACE_LOG_GET_FACES_OF_FEATURE_ARGS))
+#define IS_I_FACE_LOG_GET_FACES_OF_FEATURE_ARGS_CLASS(c) (G_TYPE_CHECK_CLASS_TYPE ((c), TYPE_I_FACE_LOG_GET_FACES_OF_FEATURE_ARGS))
+#define I_FACE_LOG_GET_FACES_OF_FEATURE_ARGS_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_I_FACE_LOG_GET_FACES_OF_FEATURE_ARGS, IFaceLogGetFacesOfFeatureArgsClass))
+
+/* struct IFaceLogGetFacesOfFeatureResult */
+struct _IFaceLogGetFacesOfFeatureResult
+{ 
+  ThriftStruct parent; 
+
+  /* public */
+  GPtrArray * success;
+  gboolean __isset_success;
+  ServiceRuntimeException * ex1;
+  gboolean __isset_ex1;
+};
+typedef struct _IFaceLogGetFacesOfFeatureResult IFaceLogGetFacesOfFeatureResult;
+
+struct _IFaceLogGetFacesOfFeatureResultClass
+{
+  ThriftStructClass parent;
+};
+typedef struct _IFaceLogGetFacesOfFeatureResultClass IFaceLogGetFacesOfFeatureResultClass;
+
+GType i_face_log_get_faces_of_feature_result_get_type (void);
+#define TYPE_I_FACE_LOG_GET_FACES_OF_FEATURE_RESULT (i_face_log_get_faces_of_feature_result_get_type())
+#define I_FACE_LOG_GET_FACES_OF_FEATURE_RESULT(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_I_FACE_LOG_GET_FACES_OF_FEATURE_RESULT, IFaceLogGetFacesOfFeatureResult))
+#define I_FACE_LOG_GET_FACES_OF_FEATURE_RESULT_CLASS(c) (G_TYPE_CHECK_CLASS_CAST ((c), _TYPE_I_FACE_LOG_GET_FACES_OF_FEATURE_RESULT, IFaceLogGetFacesOfFeatureResultClass))
+#define IS_I_FACE_LOG_GET_FACES_OF_FEATURE_RESULT(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_I_FACE_LOG_GET_FACES_OF_FEATURE_RESULT))
+#define IS_I_FACE_LOG_GET_FACES_OF_FEATURE_RESULT_CLASS(c) (G_TYPE_CHECK_CLASS_TYPE ((c), TYPE_I_FACE_LOG_GET_FACES_OF_FEATURE_RESULT))
+#define I_FACE_LOG_GET_FACES_OF_FEATURE_RESULT_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_I_FACE_LOG_GET_FACES_OF_FEATURE_RESULT, IFaceLogGetFacesOfFeatureResultClass))
+
+/* struct IFaceLogGetFacesOfImageArgs */
+struct _IFaceLogGetFacesOfImageArgs
+{ 
+  ThriftStruct parent; 
+
+  /* public */
+  gchar * imageMd5;
+  gboolean __isset_imageMd5;
+};
+typedef struct _IFaceLogGetFacesOfImageArgs IFaceLogGetFacesOfImageArgs;
+
+struct _IFaceLogGetFacesOfImageArgsClass
+{
+  ThriftStructClass parent;
+};
+typedef struct _IFaceLogGetFacesOfImageArgsClass IFaceLogGetFacesOfImageArgsClass;
+
+GType i_face_log_get_faces_of_image_args_get_type (void);
+#define TYPE_I_FACE_LOG_GET_FACES_OF_IMAGE_ARGS (i_face_log_get_faces_of_image_args_get_type())
+#define I_FACE_LOG_GET_FACES_OF_IMAGE_ARGS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_I_FACE_LOG_GET_FACES_OF_IMAGE_ARGS, IFaceLogGetFacesOfImageArgs))
+#define I_FACE_LOG_GET_FACES_OF_IMAGE_ARGS_CLASS(c) (G_TYPE_CHECK_CLASS_CAST ((c), _TYPE_I_FACE_LOG_GET_FACES_OF_IMAGE_ARGS, IFaceLogGetFacesOfImageArgsClass))
+#define IS_I_FACE_LOG_GET_FACES_OF_IMAGE_ARGS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_I_FACE_LOG_GET_FACES_OF_IMAGE_ARGS))
+#define IS_I_FACE_LOG_GET_FACES_OF_IMAGE_ARGS_CLASS(c) (G_TYPE_CHECK_CLASS_TYPE ((c), TYPE_I_FACE_LOG_GET_FACES_OF_IMAGE_ARGS))
+#define I_FACE_LOG_GET_FACES_OF_IMAGE_ARGS_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_I_FACE_LOG_GET_FACES_OF_IMAGE_ARGS, IFaceLogGetFacesOfImageArgsClass))
+
+/* struct IFaceLogGetFacesOfImageResult */
+struct _IFaceLogGetFacesOfImageResult
+{ 
+  ThriftStruct parent; 
+
+  /* public */
+  GPtrArray * success;
+  gboolean __isset_success;
+  ServiceRuntimeException * ex1;
+  gboolean __isset_ex1;
+};
+typedef struct _IFaceLogGetFacesOfImageResult IFaceLogGetFacesOfImageResult;
+
+struct _IFaceLogGetFacesOfImageResultClass
+{
+  ThriftStructClass parent;
+};
+typedef struct _IFaceLogGetFacesOfImageResultClass IFaceLogGetFacesOfImageResultClass;
+
+GType i_face_log_get_faces_of_image_result_get_type (void);
+#define TYPE_I_FACE_LOG_GET_FACES_OF_IMAGE_RESULT (i_face_log_get_faces_of_image_result_get_type())
+#define I_FACE_LOG_GET_FACES_OF_IMAGE_RESULT(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_I_FACE_LOG_GET_FACES_OF_IMAGE_RESULT, IFaceLogGetFacesOfImageResult))
+#define I_FACE_LOG_GET_FACES_OF_IMAGE_RESULT_CLASS(c) (G_TYPE_CHECK_CLASS_CAST ((c), _TYPE_I_FACE_LOG_GET_FACES_OF_IMAGE_RESULT, IFaceLogGetFacesOfImageResultClass))
+#define IS_I_FACE_LOG_GET_FACES_OF_IMAGE_RESULT(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_I_FACE_LOG_GET_FACES_OF_IMAGE_RESULT))
+#define IS_I_FACE_LOG_GET_FACES_OF_IMAGE_RESULT_CLASS(c) (G_TYPE_CHECK_CLASS_TYPE ((c), TYPE_I_FACE_LOG_GET_FACES_OF_IMAGE_RESULT))
+#define I_FACE_LOG_GET_FACES_OF_IMAGE_RESULT_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_I_FACE_LOG_GET_FACES_OF_IMAGE_RESULT, IFaceLogGetFacesOfImageResultClass))
+
 /* struct IFaceLogGetFeatureArgs */
 struct _IFaceLogGetFeatureArgs
 { 
@@ -3818,8 +3922,8 @@ struct _IFaceLogGetFeaturesArgs
   ThriftStruct parent; 
 
   /* public */
-  GPtrArray * md5;
-  gboolean __isset_md5;
+  GPtrArray * md5List;
+  gboolean __isset_md5List;
 };
 typedef struct _IFaceLogGetFeaturesArgs IFaceLogGetFeaturesArgs;
 
@@ -3916,6 +4020,58 @@ GType i_face_log_get_features_by_person_id_and_sdk_version_result_get_type (void
 #define IS_I_FACE_LOG_GET_FEATURES_BY_PERSON_ID_AND_SDK_VERSION_RESULT(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_I_FACE_LOG_GET_FEATURES_BY_PERSON_ID_AND_SDK_VERSION_RESULT))
 #define IS_I_FACE_LOG_GET_FEATURES_BY_PERSON_ID_AND_SDK_VERSION_RESULT_CLASS(c) (G_TYPE_CHECK_CLASS_TYPE ((c), TYPE_I_FACE_LOG_GET_FEATURES_BY_PERSON_ID_AND_SDK_VERSION_RESULT))
 #define I_FACE_LOG_GET_FEATURES_BY_PERSON_ID_AND_SDK_VERSION_RESULT_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_I_FACE_LOG_GET_FEATURES_BY_PERSON_ID_AND_SDK_VERSION_RESULT, IFaceLogGetFeaturesByPersonIdAndSdkVersionResultClass))
+
+/* struct IFaceLogGetFeaturesOfImageArgs */
+struct _IFaceLogGetFeaturesOfImageArgs
+{ 
+  ThriftStruct parent; 
+
+  /* public */
+  gchar * imageMd5;
+  gboolean __isset_imageMd5;
+};
+typedef struct _IFaceLogGetFeaturesOfImageArgs IFaceLogGetFeaturesOfImageArgs;
+
+struct _IFaceLogGetFeaturesOfImageArgsClass
+{
+  ThriftStructClass parent;
+};
+typedef struct _IFaceLogGetFeaturesOfImageArgsClass IFaceLogGetFeaturesOfImageArgsClass;
+
+GType i_face_log_get_features_of_image_args_get_type (void);
+#define TYPE_I_FACE_LOG_GET_FEATURES_OF_IMAGE_ARGS (i_face_log_get_features_of_image_args_get_type())
+#define I_FACE_LOG_GET_FEATURES_OF_IMAGE_ARGS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_I_FACE_LOG_GET_FEATURES_OF_IMAGE_ARGS, IFaceLogGetFeaturesOfImageArgs))
+#define I_FACE_LOG_GET_FEATURES_OF_IMAGE_ARGS_CLASS(c) (G_TYPE_CHECK_CLASS_CAST ((c), _TYPE_I_FACE_LOG_GET_FEATURES_OF_IMAGE_ARGS, IFaceLogGetFeaturesOfImageArgsClass))
+#define IS_I_FACE_LOG_GET_FEATURES_OF_IMAGE_ARGS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_I_FACE_LOG_GET_FEATURES_OF_IMAGE_ARGS))
+#define IS_I_FACE_LOG_GET_FEATURES_OF_IMAGE_ARGS_CLASS(c) (G_TYPE_CHECK_CLASS_TYPE ((c), TYPE_I_FACE_LOG_GET_FEATURES_OF_IMAGE_ARGS))
+#define I_FACE_LOG_GET_FEATURES_OF_IMAGE_ARGS_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_I_FACE_LOG_GET_FEATURES_OF_IMAGE_ARGS, IFaceLogGetFeaturesOfImageArgsClass))
+
+/* struct IFaceLogGetFeaturesOfImageResult */
+struct _IFaceLogGetFeaturesOfImageResult
+{ 
+  ThriftStruct parent; 
+
+  /* public */
+  GPtrArray * success;
+  gboolean __isset_success;
+  ServiceRuntimeException * ex1;
+  gboolean __isset_ex1;
+};
+typedef struct _IFaceLogGetFeaturesOfImageResult IFaceLogGetFeaturesOfImageResult;
+
+struct _IFaceLogGetFeaturesOfImageResultClass
+{
+  ThriftStructClass parent;
+};
+typedef struct _IFaceLogGetFeaturesOfImageResultClass IFaceLogGetFeaturesOfImageResultClass;
+
+GType i_face_log_get_features_of_image_result_get_type (void);
+#define TYPE_I_FACE_LOG_GET_FEATURES_OF_IMAGE_RESULT (i_face_log_get_features_of_image_result_get_type())
+#define I_FACE_LOG_GET_FEATURES_OF_IMAGE_RESULT(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_I_FACE_LOG_GET_FEATURES_OF_IMAGE_RESULT, IFaceLogGetFeaturesOfImageResult))
+#define I_FACE_LOG_GET_FEATURES_OF_IMAGE_RESULT_CLASS(c) (G_TYPE_CHECK_CLASS_CAST ((c), _TYPE_I_FACE_LOG_GET_FEATURES_OF_IMAGE_RESULT, IFaceLogGetFeaturesOfImageResultClass))
+#define IS_I_FACE_LOG_GET_FEATURES_OF_IMAGE_RESULT(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_I_FACE_LOG_GET_FEATURES_OF_IMAGE_RESULT))
+#define IS_I_FACE_LOG_GET_FEATURES_OF_IMAGE_RESULT_CLASS(c) (G_TYPE_CHECK_CLASS_TYPE ((c), TYPE_I_FACE_LOG_GET_FEATURES_OF_IMAGE_RESULT))
+#define I_FACE_LOG_GET_FEATURES_OF_IMAGE_RESULT_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_I_FACE_LOG_GET_FEATURES_OF_IMAGE_RESULT, IFaceLogGetFeaturesOfImageResultClass))
 
 /* struct IFaceLogGetFeaturesOfPersonArgs */
 struct _IFaceLogGetFeaturesOfPersonArgs

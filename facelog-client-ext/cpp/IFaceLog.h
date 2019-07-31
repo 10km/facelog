@@ -77,10 +77,13 @@ class IFaceLogIf {
   virtual void getDevices(std::vector<DeviceBean> & _return, const std::vector<int32_t> & idList) = 0;
   virtual void getDevicesOfGroup(std::vector<int32_t> & _return, const int32_t deviceGroupId) = 0;
   virtual void getFace(FaceBean& _return, const int32_t faceId) = 0;
+  virtual void getFacesOfFeature(std::vector<FaceBean> & _return, const std::string& featureMd5) = 0;
+  virtual void getFacesOfImage(std::vector<FaceBean> & _return, const std::string& imageMd5) = 0;
   virtual void getFeature(FeatureBean& _return, const std::string& md5) = 0;
   virtual void getFeatureBytes(std::string& _return, const std::string& md5) = 0;
-  virtual void getFeatures(std::vector<FeatureBean> & _return, const std::vector<std::string> & md5) = 0;
+  virtual void getFeatures(std::vector<FeatureBean> & _return, const std::vector<std::string> & md5List) = 0;
   virtual void getFeaturesByPersonIdAndSdkVersion(std::vector<std::string> & _return, const int32_t personId, const std::string& sdkVersion) = 0;
+  virtual void getFeaturesOfImage(std::vector<std::string> & _return, const std::string& imageMd5) = 0;
   virtual void getFeaturesOfPerson(std::vector<std::string> & _return, const int32_t personId) = 0;
   virtual void getFeaturesPermittedOnDevice(std::vector<std::string> & _return, const int32_t deviceId, const bool ignoreSchedule, const std::string& sdkVersion, const std::vector<std::string> & excludeFeatureIds, const int64_t timestamp) = 0;
   virtual void getGroupPermit(PermitBean& _return, const int32_t deviceId, const int32_t personGroupId) = 0;
@@ -405,16 +408,25 @@ class IFaceLogNull : virtual public IFaceLogIf {
   void getFace(FaceBean& /* _return */, const int32_t /* faceId */) {
     return;
   }
+  void getFacesOfFeature(std::vector<FaceBean> & /* _return */, const std::string& /* featureMd5 */) {
+    return;
+  }
+  void getFacesOfImage(std::vector<FaceBean> & /* _return */, const std::string& /* imageMd5 */) {
+    return;
+  }
   void getFeature(FeatureBean& /* _return */, const std::string& /* md5 */) {
     return;
   }
   void getFeatureBytes(std::string& /* _return */, const std::string& /* md5 */) {
     return;
   }
-  void getFeatures(std::vector<FeatureBean> & /* _return */, const std::vector<std::string> & /* md5 */) {
+  void getFeatures(std::vector<FeatureBean> & /* _return */, const std::vector<std::string> & /* md5List */) {
     return;
   }
   void getFeaturesByPersonIdAndSdkVersion(std::vector<std::string> & /* _return */, const int32_t /* personId */, const std::string& /* sdkVersion */) {
+    return;
+  }
+  void getFeaturesOfImage(std::vector<std::string> & /* _return */, const std::string& /* imageMd5 */) {
     return;
   }
   void getFeaturesOfPerson(std::vector<std::string> & /* _return */, const int32_t /* personId */) {
@@ -7930,6 +7942,250 @@ class IFaceLog_getFace_presult {
 
 };
 
+typedef struct _IFaceLog_getFacesOfFeature_args__isset {
+  _IFaceLog_getFacesOfFeature_args__isset() : featureMd5(false) {}
+  bool featureMd5 :1;
+} _IFaceLog_getFacesOfFeature_args__isset;
+
+class IFaceLog_getFacesOfFeature_args {
+ public:
+
+  IFaceLog_getFacesOfFeature_args(const IFaceLog_getFacesOfFeature_args&);
+  IFaceLog_getFacesOfFeature_args(IFaceLog_getFacesOfFeature_args&&);
+  IFaceLog_getFacesOfFeature_args& operator=(const IFaceLog_getFacesOfFeature_args&);
+  IFaceLog_getFacesOfFeature_args& operator=(IFaceLog_getFacesOfFeature_args&&);
+  IFaceLog_getFacesOfFeature_args() : featureMd5() {
+  }
+
+  virtual ~IFaceLog_getFacesOfFeature_args() throw();
+  std::string featureMd5;
+
+  _IFaceLog_getFacesOfFeature_args__isset __isset;
+
+  void __set_featureMd5(const std::string& val);
+
+  bool operator == (const IFaceLog_getFacesOfFeature_args & rhs) const
+  {
+    if (!(featureMd5 == rhs.featureMd5))
+      return false;
+    return true;
+  }
+  bool operator != (const IFaceLog_getFacesOfFeature_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IFaceLog_getFacesOfFeature_args & ) const;
+
+  template <class Protocol_>
+  uint32_t read(Protocol_* iprot);
+  template <class Protocol_>
+  uint32_t write(Protocol_* oprot) const;
+
+};
+
+
+class IFaceLog_getFacesOfFeature_pargs {
+ public:
+
+
+  virtual ~IFaceLog_getFacesOfFeature_pargs() throw();
+  const std::string* featureMd5;
+
+  template <class Protocol_>
+  uint32_t write(Protocol_* oprot) const;
+
+};
+
+typedef struct _IFaceLog_getFacesOfFeature_result__isset {
+  _IFaceLog_getFacesOfFeature_result__isset() : success(false), ex1(false) {}
+  bool success :1;
+  bool ex1 :1;
+} _IFaceLog_getFacesOfFeature_result__isset;
+
+class IFaceLog_getFacesOfFeature_result {
+ public:
+
+  IFaceLog_getFacesOfFeature_result(const IFaceLog_getFacesOfFeature_result&);
+  IFaceLog_getFacesOfFeature_result(IFaceLog_getFacesOfFeature_result&&);
+  IFaceLog_getFacesOfFeature_result& operator=(const IFaceLog_getFacesOfFeature_result&);
+  IFaceLog_getFacesOfFeature_result& operator=(IFaceLog_getFacesOfFeature_result&&);
+  IFaceLog_getFacesOfFeature_result() {
+  }
+
+  virtual ~IFaceLog_getFacesOfFeature_result() throw();
+  std::vector<FaceBean>  success;
+  ServiceRuntimeException ex1;
+
+  _IFaceLog_getFacesOfFeature_result__isset __isset;
+
+  void __set_success(const std::vector<FaceBean> & val);
+
+  void __set_ex1(const ServiceRuntimeException& val);
+
+  bool operator == (const IFaceLog_getFacesOfFeature_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex1 == rhs.ex1))
+      return false;
+    return true;
+  }
+  bool operator != (const IFaceLog_getFacesOfFeature_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IFaceLog_getFacesOfFeature_result & ) const;
+
+  template <class Protocol_>
+  uint32_t read(Protocol_* iprot);
+  template <class Protocol_>
+  uint32_t write(Protocol_* oprot) const;
+
+};
+
+typedef struct _IFaceLog_getFacesOfFeature_presult__isset {
+  _IFaceLog_getFacesOfFeature_presult__isset() : success(false), ex1(false) {}
+  bool success :1;
+  bool ex1 :1;
+} _IFaceLog_getFacesOfFeature_presult__isset;
+
+class IFaceLog_getFacesOfFeature_presult {
+ public:
+
+
+  virtual ~IFaceLog_getFacesOfFeature_presult() throw();
+  std::vector<FaceBean> * success;
+  ServiceRuntimeException ex1;
+
+  _IFaceLog_getFacesOfFeature_presult__isset __isset;
+
+  template <class Protocol_>
+  uint32_t read(Protocol_* iprot);
+
+};
+
+typedef struct _IFaceLog_getFacesOfImage_args__isset {
+  _IFaceLog_getFacesOfImage_args__isset() : imageMd5(false) {}
+  bool imageMd5 :1;
+} _IFaceLog_getFacesOfImage_args__isset;
+
+class IFaceLog_getFacesOfImage_args {
+ public:
+
+  IFaceLog_getFacesOfImage_args(const IFaceLog_getFacesOfImage_args&);
+  IFaceLog_getFacesOfImage_args(IFaceLog_getFacesOfImage_args&&);
+  IFaceLog_getFacesOfImage_args& operator=(const IFaceLog_getFacesOfImage_args&);
+  IFaceLog_getFacesOfImage_args& operator=(IFaceLog_getFacesOfImage_args&&);
+  IFaceLog_getFacesOfImage_args() : imageMd5() {
+  }
+
+  virtual ~IFaceLog_getFacesOfImage_args() throw();
+  std::string imageMd5;
+
+  _IFaceLog_getFacesOfImage_args__isset __isset;
+
+  void __set_imageMd5(const std::string& val);
+
+  bool operator == (const IFaceLog_getFacesOfImage_args & rhs) const
+  {
+    if (!(imageMd5 == rhs.imageMd5))
+      return false;
+    return true;
+  }
+  bool operator != (const IFaceLog_getFacesOfImage_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IFaceLog_getFacesOfImage_args & ) const;
+
+  template <class Protocol_>
+  uint32_t read(Protocol_* iprot);
+  template <class Protocol_>
+  uint32_t write(Protocol_* oprot) const;
+
+};
+
+
+class IFaceLog_getFacesOfImage_pargs {
+ public:
+
+
+  virtual ~IFaceLog_getFacesOfImage_pargs() throw();
+  const std::string* imageMd5;
+
+  template <class Protocol_>
+  uint32_t write(Protocol_* oprot) const;
+
+};
+
+typedef struct _IFaceLog_getFacesOfImage_result__isset {
+  _IFaceLog_getFacesOfImage_result__isset() : success(false), ex1(false) {}
+  bool success :1;
+  bool ex1 :1;
+} _IFaceLog_getFacesOfImage_result__isset;
+
+class IFaceLog_getFacesOfImage_result {
+ public:
+
+  IFaceLog_getFacesOfImage_result(const IFaceLog_getFacesOfImage_result&);
+  IFaceLog_getFacesOfImage_result(IFaceLog_getFacesOfImage_result&&);
+  IFaceLog_getFacesOfImage_result& operator=(const IFaceLog_getFacesOfImage_result&);
+  IFaceLog_getFacesOfImage_result& operator=(IFaceLog_getFacesOfImage_result&&);
+  IFaceLog_getFacesOfImage_result() {
+  }
+
+  virtual ~IFaceLog_getFacesOfImage_result() throw();
+  std::vector<FaceBean>  success;
+  ServiceRuntimeException ex1;
+
+  _IFaceLog_getFacesOfImage_result__isset __isset;
+
+  void __set_success(const std::vector<FaceBean> & val);
+
+  void __set_ex1(const ServiceRuntimeException& val);
+
+  bool operator == (const IFaceLog_getFacesOfImage_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex1 == rhs.ex1))
+      return false;
+    return true;
+  }
+  bool operator != (const IFaceLog_getFacesOfImage_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IFaceLog_getFacesOfImage_result & ) const;
+
+  template <class Protocol_>
+  uint32_t read(Protocol_* iprot);
+  template <class Protocol_>
+  uint32_t write(Protocol_* oprot) const;
+
+};
+
+typedef struct _IFaceLog_getFacesOfImage_presult__isset {
+  _IFaceLog_getFacesOfImage_presult__isset() : success(false), ex1(false) {}
+  bool success :1;
+  bool ex1 :1;
+} _IFaceLog_getFacesOfImage_presult__isset;
+
+class IFaceLog_getFacesOfImage_presult {
+ public:
+
+
+  virtual ~IFaceLog_getFacesOfImage_presult() throw();
+  std::vector<FaceBean> * success;
+  ServiceRuntimeException ex1;
+
+  _IFaceLog_getFacesOfImage_presult__isset __isset;
+
+  template <class Protocol_>
+  uint32_t read(Protocol_* iprot);
+
+};
+
 typedef struct _IFaceLog_getFeature_args__isset {
   _IFaceLog_getFeature_args__isset() : md5(false) {}
   bool md5 :1;
@@ -8175,8 +8431,8 @@ class IFaceLog_getFeatureBytes_presult {
 };
 
 typedef struct _IFaceLog_getFeatures_args__isset {
-  _IFaceLog_getFeatures_args__isset() : md5(false) {}
-  bool md5 :1;
+  _IFaceLog_getFeatures_args__isset() : md5List(false) {}
+  bool md5List :1;
 } _IFaceLog_getFeatures_args__isset;
 
 class IFaceLog_getFeatures_args {
@@ -8190,15 +8446,15 @@ class IFaceLog_getFeatures_args {
   }
 
   virtual ~IFaceLog_getFeatures_args() throw();
-  std::vector<std::string>  md5;
+  std::vector<std::string>  md5List;
 
   _IFaceLog_getFeatures_args__isset __isset;
 
-  void __set_md5(const std::vector<std::string> & val);
+  void __set_md5List(const std::vector<std::string> & val);
 
   bool operator == (const IFaceLog_getFeatures_args & rhs) const
   {
-    if (!(md5 == rhs.md5))
+    if (!(md5List == rhs.md5List))
       return false;
     return true;
   }
@@ -8221,7 +8477,7 @@ class IFaceLog_getFeatures_pargs {
 
 
   virtual ~IFaceLog_getFeatures_pargs() throw();
-  const std::vector<std::string> * md5;
+  const std::vector<std::string> * md5List;
 
   template <class Protocol_>
   uint32_t write(Protocol_* oprot) const;
@@ -8418,6 +8674,128 @@ class IFaceLog_getFeaturesByPersonIdAndSdkVersion_presult {
   ServiceRuntimeException ex1;
 
   _IFaceLog_getFeaturesByPersonIdAndSdkVersion_presult__isset __isset;
+
+  template <class Protocol_>
+  uint32_t read(Protocol_* iprot);
+
+};
+
+typedef struct _IFaceLog_getFeaturesOfImage_args__isset {
+  _IFaceLog_getFeaturesOfImage_args__isset() : imageMd5(false) {}
+  bool imageMd5 :1;
+} _IFaceLog_getFeaturesOfImage_args__isset;
+
+class IFaceLog_getFeaturesOfImage_args {
+ public:
+
+  IFaceLog_getFeaturesOfImage_args(const IFaceLog_getFeaturesOfImage_args&);
+  IFaceLog_getFeaturesOfImage_args(IFaceLog_getFeaturesOfImage_args&&);
+  IFaceLog_getFeaturesOfImage_args& operator=(const IFaceLog_getFeaturesOfImage_args&);
+  IFaceLog_getFeaturesOfImage_args& operator=(IFaceLog_getFeaturesOfImage_args&&);
+  IFaceLog_getFeaturesOfImage_args() : imageMd5() {
+  }
+
+  virtual ~IFaceLog_getFeaturesOfImage_args() throw();
+  std::string imageMd5;
+
+  _IFaceLog_getFeaturesOfImage_args__isset __isset;
+
+  void __set_imageMd5(const std::string& val);
+
+  bool operator == (const IFaceLog_getFeaturesOfImage_args & rhs) const
+  {
+    if (!(imageMd5 == rhs.imageMd5))
+      return false;
+    return true;
+  }
+  bool operator != (const IFaceLog_getFeaturesOfImage_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IFaceLog_getFeaturesOfImage_args & ) const;
+
+  template <class Protocol_>
+  uint32_t read(Protocol_* iprot);
+  template <class Protocol_>
+  uint32_t write(Protocol_* oprot) const;
+
+};
+
+
+class IFaceLog_getFeaturesOfImage_pargs {
+ public:
+
+
+  virtual ~IFaceLog_getFeaturesOfImage_pargs() throw();
+  const std::string* imageMd5;
+
+  template <class Protocol_>
+  uint32_t write(Protocol_* oprot) const;
+
+};
+
+typedef struct _IFaceLog_getFeaturesOfImage_result__isset {
+  _IFaceLog_getFeaturesOfImage_result__isset() : success(false), ex1(false) {}
+  bool success :1;
+  bool ex1 :1;
+} _IFaceLog_getFeaturesOfImage_result__isset;
+
+class IFaceLog_getFeaturesOfImage_result {
+ public:
+
+  IFaceLog_getFeaturesOfImage_result(const IFaceLog_getFeaturesOfImage_result&);
+  IFaceLog_getFeaturesOfImage_result(IFaceLog_getFeaturesOfImage_result&&);
+  IFaceLog_getFeaturesOfImage_result& operator=(const IFaceLog_getFeaturesOfImage_result&);
+  IFaceLog_getFeaturesOfImage_result& operator=(IFaceLog_getFeaturesOfImage_result&&);
+  IFaceLog_getFeaturesOfImage_result() {
+  }
+
+  virtual ~IFaceLog_getFeaturesOfImage_result() throw();
+  std::vector<std::string>  success;
+  ServiceRuntimeException ex1;
+
+  _IFaceLog_getFeaturesOfImage_result__isset __isset;
+
+  void __set_success(const std::vector<std::string> & val);
+
+  void __set_ex1(const ServiceRuntimeException& val);
+
+  bool operator == (const IFaceLog_getFeaturesOfImage_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex1 == rhs.ex1))
+      return false;
+    return true;
+  }
+  bool operator != (const IFaceLog_getFeaturesOfImage_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IFaceLog_getFeaturesOfImage_result & ) const;
+
+  template <class Protocol_>
+  uint32_t read(Protocol_* iprot);
+  template <class Protocol_>
+  uint32_t write(Protocol_* oprot) const;
+
+};
+
+typedef struct _IFaceLog_getFeaturesOfImage_presult__isset {
+  _IFaceLog_getFeaturesOfImage_presult__isset() : success(false), ex1(false) {}
+  bool success :1;
+  bool ex1 :1;
+} _IFaceLog_getFeaturesOfImage_presult__isset;
+
+class IFaceLog_getFeaturesOfImage_presult {
+ public:
+
+
+  virtual ~IFaceLog_getFeaturesOfImage_presult() throw();
+  std::vector<std::string> * success;
+  ServiceRuntimeException ex1;
+
+  _IFaceLog_getFeaturesOfImage_presult__isset __isset;
 
   template <class Protocol_>
   uint32_t read(Protocol_* iprot);
@@ -21247,18 +21625,27 @@ class IFaceLogClientT : virtual public IFaceLogIf {
   void getFace(FaceBean& _return, const int32_t faceId);
   void send_getFace(const int32_t faceId);
   void recv_getFace(FaceBean& _return);
+  void getFacesOfFeature(std::vector<FaceBean> & _return, const std::string& featureMd5);
+  void send_getFacesOfFeature(const std::string& featureMd5);
+  void recv_getFacesOfFeature(std::vector<FaceBean> & _return);
+  void getFacesOfImage(std::vector<FaceBean> & _return, const std::string& imageMd5);
+  void send_getFacesOfImage(const std::string& imageMd5);
+  void recv_getFacesOfImage(std::vector<FaceBean> & _return);
   void getFeature(FeatureBean& _return, const std::string& md5);
   void send_getFeature(const std::string& md5);
   void recv_getFeature(FeatureBean& _return);
   void getFeatureBytes(std::string& _return, const std::string& md5);
   void send_getFeatureBytes(const std::string& md5);
   void recv_getFeatureBytes(std::string& _return);
-  void getFeatures(std::vector<FeatureBean> & _return, const std::vector<std::string> & md5);
-  void send_getFeatures(const std::vector<std::string> & md5);
+  void getFeatures(std::vector<FeatureBean> & _return, const std::vector<std::string> & md5List);
+  void send_getFeatures(const std::vector<std::string> & md5List);
   void recv_getFeatures(std::vector<FeatureBean> & _return);
   void getFeaturesByPersonIdAndSdkVersion(std::vector<std::string> & _return, const int32_t personId, const std::string& sdkVersion);
   void send_getFeaturesByPersonIdAndSdkVersion(const int32_t personId, const std::string& sdkVersion);
   void recv_getFeaturesByPersonIdAndSdkVersion(std::vector<std::string> & _return);
+  void getFeaturesOfImage(std::vector<std::string> & _return, const std::string& imageMd5);
+  void send_getFeaturesOfImage(const std::string& imageMd5);
+  void recv_getFeaturesOfImage(std::vector<std::string> & _return);
   void getFeaturesOfPerson(std::vector<std::string> & _return, const int32_t personId);
   void send_getFeaturesOfPerson(const int32_t personId);
   void recv_getFeaturesOfPerson(std::vector<std::string> & _return);
@@ -21699,6 +22086,10 @@ class IFaceLogProcessorT : public ::apache::thrift::TDispatchProcessorT<Protocol
   void process_getDevicesOfGroup(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext);
   void process_getFace(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_getFace(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext);
+  void process_getFacesOfFeature(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_getFacesOfFeature(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext);
+  void process_getFacesOfImage(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_getFacesOfImage(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext);
   void process_getFeature(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_getFeature(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext);
   void process_getFeatureBytes(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -21707,6 +22098,8 @@ class IFaceLogProcessorT : public ::apache::thrift::TDispatchProcessorT<Protocol
   void process_getFeatures(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext);
   void process_getFeaturesByPersonIdAndSdkVersion(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_getFeaturesByPersonIdAndSdkVersion(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext);
+  void process_getFeaturesOfImage(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_getFeaturesOfImage(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext);
   void process_getFeaturesOfPerson(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_getFeaturesOfPerson(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext);
   void process_getFeaturesPermittedOnDevice(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -22078,6 +22471,12 @@ class IFaceLogProcessorT : public ::apache::thrift::TDispatchProcessorT<Protocol
     processMap_["getFace"] = ProcessFunctions(
       &IFaceLogProcessorT::process_getFace,
       &IFaceLogProcessorT::process_getFace);
+    processMap_["getFacesOfFeature"] = ProcessFunctions(
+      &IFaceLogProcessorT::process_getFacesOfFeature,
+      &IFaceLogProcessorT::process_getFacesOfFeature);
+    processMap_["getFacesOfImage"] = ProcessFunctions(
+      &IFaceLogProcessorT::process_getFacesOfImage,
+      &IFaceLogProcessorT::process_getFacesOfImage);
     processMap_["getFeature"] = ProcessFunctions(
       &IFaceLogProcessorT::process_getFeature,
       &IFaceLogProcessorT::process_getFeature);
@@ -22090,6 +22489,9 @@ class IFaceLogProcessorT : public ::apache::thrift::TDispatchProcessorT<Protocol
     processMap_["getFeaturesByPersonIdAndSdkVersion"] = ProcessFunctions(
       &IFaceLogProcessorT::process_getFeaturesByPersonIdAndSdkVersion,
       &IFaceLogProcessorT::process_getFeaturesByPersonIdAndSdkVersion);
+    processMap_["getFeaturesOfImage"] = ProcessFunctions(
+      &IFaceLogProcessorT::process_getFeaturesOfImage,
+      &IFaceLogProcessorT::process_getFeaturesOfImage);
     processMap_["getFeaturesOfPerson"] = ProcessFunctions(
       &IFaceLogProcessorT::process_getFeaturesOfPerson,
       &IFaceLogProcessorT::process_getFeaturesOfPerson);
@@ -22949,6 +23351,26 @@ class IFaceLogMultiface : virtual public IFaceLogIf {
     return;
   }
 
+  void getFacesOfFeature(std::vector<FaceBean> & _return, const std::string& featureMd5) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->getFacesOfFeature(_return, featureMd5);
+    }
+    ifaces_[i]->getFacesOfFeature(_return, featureMd5);
+    return;
+  }
+
+  void getFacesOfImage(std::vector<FaceBean> & _return, const std::string& imageMd5) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->getFacesOfImage(_return, imageMd5);
+    }
+    ifaces_[i]->getFacesOfImage(_return, imageMd5);
+    return;
+  }
+
   void getFeature(FeatureBean& _return, const std::string& md5) {
     size_t sz = ifaces_.size();
     size_t i = 0;
@@ -22969,13 +23391,13 @@ class IFaceLogMultiface : virtual public IFaceLogIf {
     return;
   }
 
-  void getFeatures(std::vector<FeatureBean> & _return, const std::vector<std::string> & md5) {
+  void getFeatures(std::vector<FeatureBean> & _return, const std::vector<std::string> & md5List) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->getFeatures(_return, md5);
+      ifaces_[i]->getFeatures(_return, md5List);
     }
-    ifaces_[i]->getFeatures(_return, md5);
+    ifaces_[i]->getFeatures(_return, md5List);
     return;
   }
 
@@ -22986,6 +23408,16 @@ class IFaceLogMultiface : virtual public IFaceLogIf {
       ifaces_[i]->getFeaturesByPersonIdAndSdkVersion(_return, personId, sdkVersion);
     }
     ifaces_[i]->getFeaturesByPersonIdAndSdkVersion(_return, personId, sdkVersion);
+    return;
+  }
+
+  void getFeaturesOfImage(std::vector<std::string> & _return, const std::string& imageMd5) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->getFeaturesOfImage(_return, imageMd5);
+    }
+    ifaces_[i]->getFeaturesOfImage(_return, imageMd5);
     return;
   }
 
@@ -24160,18 +24592,27 @@ class IFaceLogConcurrentClientT : virtual public IFaceLogIf {
   void getFace(FaceBean& _return, const int32_t faceId);
   int32_t send_getFace(const int32_t faceId);
   void recv_getFace(FaceBean& _return, const int32_t seqid);
+  void getFacesOfFeature(std::vector<FaceBean> & _return, const std::string& featureMd5);
+  int32_t send_getFacesOfFeature(const std::string& featureMd5);
+  void recv_getFacesOfFeature(std::vector<FaceBean> & _return, const int32_t seqid);
+  void getFacesOfImage(std::vector<FaceBean> & _return, const std::string& imageMd5);
+  int32_t send_getFacesOfImage(const std::string& imageMd5);
+  void recv_getFacesOfImage(std::vector<FaceBean> & _return, const int32_t seqid);
   void getFeature(FeatureBean& _return, const std::string& md5);
   int32_t send_getFeature(const std::string& md5);
   void recv_getFeature(FeatureBean& _return, const int32_t seqid);
   void getFeatureBytes(std::string& _return, const std::string& md5);
   int32_t send_getFeatureBytes(const std::string& md5);
   void recv_getFeatureBytes(std::string& _return, const int32_t seqid);
-  void getFeatures(std::vector<FeatureBean> & _return, const std::vector<std::string> & md5);
-  int32_t send_getFeatures(const std::vector<std::string> & md5);
+  void getFeatures(std::vector<FeatureBean> & _return, const std::vector<std::string> & md5List);
+  int32_t send_getFeatures(const std::vector<std::string> & md5List);
   void recv_getFeatures(std::vector<FeatureBean> & _return, const int32_t seqid);
   void getFeaturesByPersonIdAndSdkVersion(std::vector<std::string> & _return, const int32_t personId, const std::string& sdkVersion);
   int32_t send_getFeaturesByPersonIdAndSdkVersion(const int32_t personId, const std::string& sdkVersion);
   void recv_getFeaturesByPersonIdAndSdkVersion(std::vector<std::string> & _return, const int32_t seqid);
+  void getFeaturesOfImage(std::vector<std::string> & _return, const std::string& imageMd5);
+  int32_t send_getFeaturesOfImage(const std::string& imageMd5);
+  void recv_getFeaturesOfImage(std::vector<std::string> & _return, const int32_t seqid);
   void getFeaturesOfPerson(std::vector<std::string> & _return, const int32_t personId);
   int32_t send_getFeaturesOfPerson(const int32_t personId);
   void recv_getFeaturesOfPerson(std::vector<std::string> & _return, const int32_t seqid);

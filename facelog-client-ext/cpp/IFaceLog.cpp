@@ -906,6 +906,38 @@ IFaceLog_getFace_presult::~IFaceLog_getFace_presult() throw() {
 }
 
 
+IFaceLog_getFacesOfFeature_args::~IFaceLog_getFacesOfFeature_args() throw() {
+}
+
+
+IFaceLog_getFacesOfFeature_pargs::~IFaceLog_getFacesOfFeature_pargs() throw() {
+}
+
+
+IFaceLog_getFacesOfFeature_result::~IFaceLog_getFacesOfFeature_result() throw() {
+}
+
+
+IFaceLog_getFacesOfFeature_presult::~IFaceLog_getFacesOfFeature_presult() throw() {
+}
+
+
+IFaceLog_getFacesOfImage_args::~IFaceLog_getFacesOfImage_args() throw() {
+}
+
+
+IFaceLog_getFacesOfImage_pargs::~IFaceLog_getFacesOfImage_pargs() throw() {
+}
+
+
+IFaceLog_getFacesOfImage_result::~IFaceLog_getFacesOfImage_result() throw() {
+}
+
+
+IFaceLog_getFacesOfImage_presult::~IFaceLog_getFacesOfImage_presult() throw() {
+}
+
+
 IFaceLog_getFeature_args::~IFaceLog_getFeature_args() throw() {
 }
 
@@ -967,6 +999,22 @@ IFaceLog_getFeaturesByPersonIdAndSdkVersion_result::~IFaceLog_getFeaturesByPerso
 
 
 IFaceLog_getFeaturesByPersonIdAndSdkVersion_presult::~IFaceLog_getFeaturesByPersonIdAndSdkVersion_presult() throw() {
+}
+
+
+IFaceLog_getFeaturesOfImage_args::~IFaceLog_getFeaturesOfImage_args() throw() {
+}
+
+
+IFaceLog_getFeaturesOfImage_pargs::~IFaceLog_getFeaturesOfImage_pargs() throw() {
+}
+
+
+IFaceLog_getFeaturesOfImage_result::~IFaceLog_getFeaturesOfImage_result() throw() {
+}
+
+
+IFaceLog_getFeaturesOfImage_presult::~IFaceLog_getFeaturesOfImage_presult() throw() {
 }
 
 
