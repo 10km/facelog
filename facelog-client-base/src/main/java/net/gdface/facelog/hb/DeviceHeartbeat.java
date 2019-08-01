@@ -179,6 +179,23 @@ public class DeviceHeartbeat extends BaseServiceHeartbeatListener implements Cha
 	public int getStatus() {
 		return heartBeatPackage.getStatus();
 	}
+	
+	/**
+	 * @return
+	 * @see net.gdface.facelog.DeviceHeartdbeatPackage#getFeature()
+	 */
+	public int getFeature() {
+		return heartBeatPackage.getFeature();
+	}
+	/**
+	 * 设置当前设备的工作特性
+	 * @param feature
+	 * @see net.gdface.facelog.DeviceHeartdbeatPackage#setFeature(int)
+	 */
+	public void setFeature(int feature) {
+		heartBeatPackage.setFeature(feature);
+	}
+
 	private class MonitorChannelSupplier  implements Supplier<Channel<DeviceHeartdbeatPackage>>{
 		
 		Channel<DeviceHeartdbeatPackage> channel;

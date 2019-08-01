@@ -12,6 +12,8 @@ public class DeviceHeartdbeatPackage{
     private String hostAddress;
     /** 设备当前状态,默认值0(正常状态),其他值由应用层定义 */
     private int status;
+    /** 设备运行特性,应用层定义 */
+    private int feature;
     public int getDeviceId() {
         return deviceId;
     }
@@ -39,10 +41,26 @@ public class DeviceHeartdbeatPackage{
 		this.status = status;
 	}
 
+	/**
+	 * @return feature
+	 */
+	public int getFeature() {
+		return feature;
+	}
+	/**
+	 * 设置设备的工作特性
+	 * @param feature 要设置的 feature
+	 */
+	public void setFeature(int feature) {
+		this.feature = feature;
+	}
+	/* （非 Javadoc）
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("DeviceHeadbeatPackage [deviceId=");
+		builder.append("DeviceHeartdbeatPackage [deviceId=");
 		builder.append(deviceId);
 		builder.append(", ");
 		if (hostAddress != null) {
@@ -52,6 +70,8 @@ public class DeviceHeartdbeatPackage{
 		}
 		builder.append("status=");
 		builder.append(status);
+		builder.append(", feature=");
+		builder.append(feature);
 		builder.append("]");
 		return builder.toString();
 	}
