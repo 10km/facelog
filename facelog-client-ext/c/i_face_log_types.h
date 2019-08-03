@@ -8202,8 +8202,8 @@ struct _IFaceLogSavePersonFullArgs
   gboolean __isset_featureVersion;
   GByteArray * featureImage;
   gboolean __isset_featureImage;
-  FaceBean * featureFaceBean;
-  gboolean __isset_featureFaceBean;
+  FaceBean * faceBean;
+  gboolean __isset_faceBean;
   Token * token;
   gboolean __isset_token;
 };

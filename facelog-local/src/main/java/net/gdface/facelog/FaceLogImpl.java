@@ -524,7 +524,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 
 	@Override
 	public PersonBean savePerson(final PersonBean personBean, final byte[] idPhoto, final byte[] feature,
-			final String featureVersion, final byte[] featureImage, final FaceBean featureFaceBean, final Token token) {
+			final String featureVersion, final byte[] featureImage, final FaceBean faceBean, final Token token) {
 		try{
 			Enable.ALL.check(tm, token);
 			checkArgument(null != personBean,"personBean is null");
@@ -536,7 +536,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 							FaceUtilits.getByteBufferOrNull(feature),
 							featureVersion,
 							FaceUtilits.getByteBufferOrNull(featureImage),
-							featureFaceBean, 
+							faceBean, 
 							tm.getDeviceOrNull(token));
 				}});
 		} catch (Exception e) {

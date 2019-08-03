@@ -1045,8 +1045,8 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
-    public PersonBean savePerson (PersonBean personBean,byte[] idPhoto,byte[] feature,String featureVersion,byte[] featureImage,FaceBean featureFaceBean,Token token) {
-        return delegate().savePerson(personBean,idPhoto,feature,featureVersion,featureImage,featureFaceBean,token);
+    public PersonBean savePerson (PersonBean personBean,byte[] idPhoto,byte[] feature,String featureVersion,byte[] featureImage,FaceBean faceBean,Token token) {
+        return delegate().savePerson(personBean,idPhoto,feature,featureVersion,featureImage,faceBean,token);
     }
 
     @Override

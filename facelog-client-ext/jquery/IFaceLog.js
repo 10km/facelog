@@ -21306,7 +21306,7 @@ IFaceLog_savePersonFull_args = function(args) {
   this.feature = null;
   this.featureVersion = null;
   this.featureImage = null;
-  this.featureFaceBean = null;
+  this.faceBean = null;
   this.token = null;
   if (args) {
     if (args.personBean !== undefined && args.personBean !== null) {
@@ -21324,8 +21324,8 @@ IFaceLog_savePersonFull_args = function(args) {
     if (args.featureImage !== undefined && args.featureImage !== null) {
       this.featureImage = args.featureImage;
     }
-    if (args.featureFaceBean !== undefined && args.featureFaceBean !== null) {
-      this.featureFaceBean = new FaceBean(args.featureFaceBean);
+    if (args.faceBean !== undefined && args.faceBean !== null) {
+      this.faceBean = new FaceBean(args.faceBean);
     }
     if (args.token !== undefined && args.token !== null) {
       this.token = new Token(args.token);
@@ -21384,8 +21384,8 @@ IFaceLog_savePersonFull_args.prototype.read = function(input) {
       break;
       case 6:
       if (ftype == Thrift.Type.STRUCT) {
-        this.featureFaceBean = new FaceBean();
-        this.featureFaceBean.read(input);
+        this.faceBean = new FaceBean();
+        this.faceBean.read(input);
       } else {
         input.skip(ftype);
       }
@@ -21434,9 +21434,9 @@ IFaceLog_savePersonFull_args.prototype.write = function(output) {
     output.writeBinary(this.featureImage);
     output.writeFieldEnd();
   }
-  if (this.featureFaceBean !== null && this.featureFaceBean !== undefined) {
-    output.writeFieldBegin('featureFaceBean', Thrift.Type.STRUCT, 6);
-    this.featureFaceBean.write(output);
+  if (this.faceBean !== null && this.faceBean !== undefined) {
+    output.writeFieldBegin('faceBean', Thrift.Type.STRUCT, 6);
+    this.faceBean.write(output);
     output.writeFieldEnd();
   }
   if (this.token !== null && this.token !== undefined) {
@@ -31274,18 +31274,18 @@ IFaceLogClient.prototype.recv_savePerson = function() {
   }
   throw 'savePerson failed: unknown result';
 };
-IFaceLogClient.prototype.savePersonFull = function(personBean, idPhoto, feature, featureVersion, featureImage, featureFaceBean, token, callback) {
+IFaceLogClient.prototype.savePersonFull = function(personBean, idPhoto, feature, featureVersion, featureImage, faceBean, token, callback) {
   if (callback === undefined) {
-    this.send_savePersonFull(personBean, idPhoto, feature, featureVersion, featureImage, featureFaceBean, token);
+    this.send_savePersonFull(personBean, idPhoto, feature, featureVersion, featureImage, faceBean, token);
     return this.recv_savePersonFull();
   } else {
-    var postData = this.send_savePersonFull(personBean, idPhoto, feature, featureVersion, featureImage, featureFaceBean, token, true);
+    var postData = this.send_savePersonFull(personBean, idPhoto, feature, featureVersion, featureImage, faceBean, token, true);
     return this.output.getTransport()
       .jqRequest(this, postData, arguments, this.recv_savePersonFull);
   }
 };
 
-IFaceLogClient.prototype.send_savePersonFull = function(personBean, idPhoto, feature, featureVersion, featureImage, featureFaceBean, token, callback) {
+IFaceLogClient.prototype.send_savePersonFull = function(personBean, idPhoto, feature, featureVersion, featureImage, faceBean, token, callback) {
   this.output.writeMessageBegin('savePersonFull', Thrift.MessageType.CALL, this.seqid);
   var params = {
     personBean: personBean,
@@ -31293,7 +31293,7 @@ IFaceLogClient.prototype.send_savePersonFull = function(personBean, idPhoto, fea
     feature: feature,
     featureVersion: featureVersion,
     featureImage: featureImage,
-    featureFaceBean: featureFaceBean,
+    faceBean: faceBean,
     token: token
   };
   var args = new IFaceLog_savePersonFull_args(params);

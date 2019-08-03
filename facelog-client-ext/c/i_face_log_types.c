@@ -96187,7 +96187,7 @@ enum _IFaceLogSavePersonFullArgsProperties
   PROP_I_FACE_LOG_SAVE_PERSON_FULL_ARGS_FEATURE,
   PROP_I_FACE_LOG_SAVE_PERSON_FULL_ARGS_FEATURE_VERSION,
   PROP_I_FACE_LOG_SAVE_PERSON_FULL_ARGS_FEATURE_IMAGE,
-  PROP_I_FACE_LOG_SAVE_PERSON_FULL_ARGS_FEATURE_FACE_BEAN,
+  PROP_I_FACE_LOG_SAVE_PERSON_FULL_ARGS_FACE_BEAN,
   PROP_I_FACE_LOG_SAVE_PERSON_FULL_ARGS_TOKEN
 };
 
@@ -96343,12 +96343,12 @@ i_face_log_save_person_full_args_read (ThriftStruct *object, ThriftProtocol *pro
       case 6:
         if (ftype == T_STRUCT)
         {
-          if ((ret = thrift_struct_read (THRIFT_STRUCT (this_object->featureFaceBean), protocol, error)) < 0)
+          if ((ret = thrift_struct_read (THRIFT_STRUCT (this_object->faceBean), protocol, error)) < 0)
           {
             return -1;
           }
           xfer += ret;
-          this_object->__isset_featureFaceBean = TRUE;
+          this_object->__isset_faceBean = TRUE;
         } else {
           if ((ret = thrift_protocol_skip (protocol, ftype, error)) < 0)
             return -1;
@@ -96449,10 +96449,10 @@ i_face_log_save_person_full_args_write (ThriftStruct *object, ThriftProtocol *pr
   if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
     return -1;
   xfer += ret;
-  if ((ret = thrift_protocol_write_field_begin (protocol, "featureFaceBean", T_STRUCT, 6, error)) < 0)
+  if ((ret = thrift_protocol_write_field_begin (protocol, "faceBean", T_STRUCT, 6, error)) < 0)
     return -1;
   xfer += ret;
-  if ((ret = thrift_struct_write (THRIFT_STRUCT (this_object->featureFaceBean), protocol, error)) < 0)
+  if ((ret = thrift_struct_write (THRIFT_STRUCT (this_object->faceBean), protocol, error)) < 0)
     return -1;
   xfer += ret;
 
@@ -96524,11 +96524,11 @@ i_face_log_save_person_full_args_set_property (GObject *object,
       self->__isset_featureImage = TRUE;
       break;
 
-    case PROP_I_FACE_LOG_SAVE_PERSON_FULL_ARGS_FEATURE_FACE_BEAN:
-      if (self->featureFaceBean != NULL)
-        g_object_unref (self->featureFaceBean);
-      self->featureFaceBean = g_value_dup_object (value);
-      self->__isset_featureFaceBean = TRUE;
+    case PROP_I_FACE_LOG_SAVE_PERSON_FULL_ARGS_FACE_BEAN:
+      if (self->faceBean != NULL)
+        g_object_unref (self->faceBean);
+      self->faceBean = g_value_dup_object (value);
+      self->__isset_faceBean = TRUE;
       break;
 
     case PROP_I_FACE_LOG_SAVE_PERSON_FULL_ARGS_TOKEN:
@@ -96574,8 +96574,8 @@ i_face_log_save_person_full_args_get_property (GObject *object,
       g_value_set_boxed (value, self->featureImage);
       break;
 
-    case PROP_I_FACE_LOG_SAVE_PERSON_FULL_ARGS_FEATURE_FACE_BEAN:
-      g_value_set_object (value, self->featureFaceBean);
+    case PROP_I_FACE_LOG_SAVE_PERSON_FULL_ARGS_FACE_BEAN:
+      g_value_set_object (value, self->faceBean);
       break;
 
     case PROP_I_FACE_LOG_SAVE_PERSON_FULL_ARGS_TOKEN:
@@ -96603,8 +96603,8 @@ i_face_log_save_person_full_args_instance_init (IFaceLogSavePersonFullArgs * obj
   object->__isset_featureVersion = FALSE;
   object->featureImage = NULL;
   object->__isset_featureImage = FALSE;
-  object->featureFaceBean = g_object_new (TYPE_FACE_BEAN, NULL);
-  object->__isset_featureFaceBean = FALSE;
+  object->faceBean = g_object_new (TYPE_FACE_BEAN, NULL);
+  object->__isset_faceBean = FALSE;
   object->token = g_object_new (TYPE_TOKEN, NULL);
   object->__isset_token = FALSE;
 }
@@ -96641,10 +96641,10 @@ i_face_log_save_person_full_args_finalize (GObject *object)
     thrift_string_free(tobject->featureImage);
     tobject->featureImage = NULL;
   }
-  if (tobject->featureFaceBean != NULL)
+  if (tobject->faceBean != NULL)
   {
-    g_object_unref(tobject->featureFaceBean);
-    tobject->featureFaceBean = NULL;
+    g_object_unref(tobject->faceBean);
+    tobject->faceBean = NULL;
   }
   if (tobject->token != NULL)
   {
@@ -96713,8 +96713,8 @@ i_face_log_save_person_full_args_class_init (IFaceLogSavePersonFullArgsClass * c
 
   g_object_class_install_property
     (gobject_class,
-     PROP_I_FACE_LOG_SAVE_PERSON_FULL_ARGS_FEATURE_FACE_BEAN,
-     g_param_spec_object ("featureFaceBean",
+     PROP_I_FACE_LOG_SAVE_PERSON_FULL_ARGS_FACE_BEAN,
+     g_param_spec_object ("faceBean",
                          NULL,
                          NULL,
                          TYPE_FACE_BEAN,

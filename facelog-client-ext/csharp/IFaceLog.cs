@@ -159,7 +159,7 @@ public partial class IFaceLog {
     PermitBean savePermit(PermitBean permitBean, Token token);
     PermitBean savePermitWithSchedule(int deviceGroupId, int personGroupId, string schedule, Token token);
     PersonBean savePerson(PersonBean personBean, Token token);
-    PersonBean savePersonFull(PersonBean personBean, byte[] idPhoto, byte[] feature, string featureVersion, byte[] featureImage, FaceBean featureFaceBean, Token token);
+    PersonBean savePersonFull(PersonBean personBean, byte[] idPhoto, byte[] feature, string featureVersion, byte[] featureImage, FaceBean faceBean, Token token);
     PersonGroupBean savePersonGroup(PersonGroupBean personGroupBean, Token token);
     PersonBean savePersonWithPhoto(PersonBean personBean, byte[] idPhoto, Token token);
     PersonBean savePersonWithPhotoAndFeature(PersonBean personBean, byte[] idPhoto, FeatureBean featureBean, Token token);
@@ -325,7 +325,7 @@ public partial class IFaceLog {
     Task<PermitBean> savePermitAsync(PermitBean permitBean, Token token);
     Task<PermitBean> savePermitWithScheduleAsync(int deviceGroupId, int personGroupId, string schedule, Token token);
     Task<PersonBean> savePersonAsync(PersonBean personBean, Token token);
-    Task<PersonBean> savePersonFullAsync(PersonBean personBean, byte[] idPhoto, byte[] feature, string featureVersion, byte[] featureImage, FaceBean featureFaceBean, Token token);
+    Task<PersonBean> savePersonFullAsync(PersonBean personBean, byte[] idPhoto, byte[] feature, string featureVersion, byte[] featureImage, FaceBean faceBean, Token token);
     Task<PersonGroupBean> savePersonGroupAsync(PersonGroupBean personGroupBean, Token token);
     Task<PersonBean> savePersonWithPhotoAsync(PersonBean personBean, byte[] idPhoto, Token token);
     Task<PersonBean> savePersonWithPhotoAndFeatureAsync(PersonBean personBean, byte[] idPhoto, FeatureBean featureBean, Token token);
@@ -632,7 +632,7 @@ public partial class IFaceLog {
     PermitBean End_savePermitWithSchedule(IAsyncResult asyncResult);
     IAsyncResult Begin_savePerson(AsyncCallback callback, object state, PersonBean personBean, Token token);
     PersonBean End_savePerson(IAsyncResult asyncResult);
-    IAsyncResult Begin_savePersonFull(AsyncCallback callback, object state, PersonBean personBean, byte[] idPhoto, byte[] feature, string featureVersion, byte[] featureImage, FaceBean featureFaceBean, Token token);
+    IAsyncResult Begin_savePersonFull(AsyncCallback callback, object state, PersonBean personBean, byte[] idPhoto, byte[] feature, string featureVersion, byte[] featureImage, FaceBean faceBean, Token token);
     PersonBean End_savePersonFull(IAsyncResult asyncResult);
     IAsyncResult Begin_savePersonGroup(AsyncCallback callback, object state, PersonGroupBean personGroupBean, Token token);
     PersonGroupBean End_savePersonGroup(IAsyncResult asyncResult);
@@ -9019,9 +9019,9 @@ public partial class IFaceLog {
     }
 
     
-    public IAsyncResult Begin_savePersonFull(AsyncCallback callback, object state, PersonBean personBean, byte[] idPhoto, byte[] feature, string featureVersion, byte[] featureImage, FaceBean featureFaceBean, Token token)
+    public IAsyncResult Begin_savePersonFull(AsyncCallback callback, object state, PersonBean personBean, byte[] idPhoto, byte[] feature, string featureVersion, byte[] featureImage, FaceBean faceBean, Token token)
     {
-      return send_savePersonFull(callback, state, personBean, idPhoto, feature, featureVersion, featureImage, featureFaceBean, token);
+      return send_savePersonFull(callback, state, personBean, idPhoto, feature, featureVersion, featureImage, faceBean, token);
     }
 
     public PersonBean End_savePersonFull(IAsyncResult asyncResult)
@@ -9030,23 +9030,23 @@ public partial class IFaceLog {
       return recv_savePersonFull();
     }
 
-    public async Task<PersonBean> savePersonFullAsync(PersonBean personBean, byte[] idPhoto, byte[] feature, string featureVersion, byte[] featureImage, FaceBean featureFaceBean, Token token)
+    public async Task<PersonBean> savePersonFullAsync(PersonBean personBean, byte[] idPhoto, byte[] feature, string featureVersion, byte[] featureImage, FaceBean faceBean, Token token)
     {
       PersonBean retval;
       retval = await Task.Run(() =>
       {
-        return savePersonFull(personBean, idPhoto, feature, featureVersion, featureImage, featureFaceBean, token);
+        return savePersonFull(personBean, idPhoto, feature, featureVersion, featureImage, faceBean, token);
       });
       return retval;
     }
 
-    public PersonBean savePersonFull(PersonBean personBean, byte[] idPhoto, byte[] feature, string featureVersion, byte[] featureImage, FaceBean featureFaceBean, Token token)
+    public PersonBean savePersonFull(PersonBean personBean, byte[] idPhoto, byte[] feature, string featureVersion, byte[] featureImage, FaceBean faceBean, Token token)
     {
-      var asyncResult = Begin_savePersonFull(null, null, personBean, idPhoto, feature, featureVersion, featureImage, featureFaceBean, token);
+      var asyncResult = Begin_savePersonFull(null, null, personBean, idPhoto, feature, featureVersion, featureImage, faceBean, token);
       return End_savePersonFull(asyncResult);
 
     }
-    public IAsyncResult send_savePersonFull(AsyncCallback callback, object state, PersonBean personBean, byte[] idPhoto, byte[] feature, string featureVersion, byte[] featureImage, FaceBean featureFaceBean, Token token)
+    public IAsyncResult send_savePersonFull(AsyncCallback callback, object state, PersonBean personBean, byte[] idPhoto, byte[] feature, string featureVersion, byte[] featureImage, FaceBean faceBean, Token token)
     {
       oprot_.WriteMessageBegin(new TMessage("savePersonFull", TMessageType.Call, seqid_));
       savePersonFull_args args = new savePersonFull_args();
@@ -9055,7 +9055,7 @@ public partial class IFaceLog {
       args.Feature = feature;
       args.FeatureVersion = featureVersion;
       args.FeatureImage = featureImage;
-      args.FeatureFaceBean = featureFaceBean;
+      args.FaceBean = faceBean;
       args.Token = token;
       args.Write(oprot_);
       oprot_.WriteMessageEnd();
@@ -15507,7 +15507,7 @@ public partial class IFaceLog {
       {
         try
         {
-          result.Success = await iface_.savePersonFullAsync(args.PersonBean, args.IdPhoto, args.Feature, args.FeatureVersion, args.FeatureImage, args.FeatureFaceBean, args.Token);
+          result.Success = await iface_.savePersonFullAsync(args.PersonBean, args.IdPhoto, args.Feature, args.FeatureVersion, args.FeatureImage, args.FaceBean, args.Token);
         }
         catch (ServiceRuntimeException ex1)
         {
@@ -21485,7 +21485,7 @@ public partial class IFaceLog {
       {
         try
         {
-          result.Success = iface_.savePersonFull(args.PersonBean, args.IdPhoto, args.Feature, args.FeatureVersion, args.FeatureImage, args.FeatureFaceBean, args.Token);
+          result.Success = iface_.savePersonFull(args.PersonBean, args.IdPhoto, args.Feature, args.FeatureVersion, args.FeatureImage, args.FaceBean, args.Token);
         }
         catch (ServiceRuntimeException ex1)
         {
@@ -54367,7 +54367,7 @@ public partial class IFaceLog {
 
     public byte[] FeatureImage { get; set; }
 
-    public FaceBean FeatureFaceBean { get; set; }
+    public FaceBean FaceBean { get; set; }
 
     public Token Token { get; set; }
 
@@ -54427,8 +54427,8 @@ public partial class IFaceLog {
               break;
             case 6:
               if (field.Type == TType.Struct) {
-                FeatureFaceBean = new FaceBean();
-                FeatureFaceBean.Read(iprot);
+                FaceBean = new FaceBean();
+                FaceBean.Read(iprot);
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
@@ -54502,12 +54502,12 @@ public partial class IFaceLog {
           oprot.WriteBinary(FeatureImage);
           oprot.WriteFieldEnd();
         }
-        if (FeatureFaceBean != null) {
-          field.Name = "featureFaceBean";
+        if (FaceBean != null) {
+          field.Name = "faceBean";
           field.Type = TType.Struct;
           field.ID = 6;
           oprot.WriteFieldBegin(field);
-          FeatureFaceBean.Write(oprot);
+          FaceBean.Write(oprot);
           oprot.WriteFieldEnd();
         }
         if (Token != null) {
@@ -54560,11 +54560,11 @@ public partial class IFaceLog {
         __sb.Append("FeatureImage: ");
         __sb.Append(FeatureImage);
       }
-      if (FeatureFaceBean != null) {
+      if (FaceBean != null) {
         if(!__first) { __sb.Append(", "); }
         __first = false;
-        __sb.Append("FeatureFaceBean: ");
-        __sb.Append(FeatureFaceBean== null ? "<null>" : FeatureFaceBean.ToString());
+        __sb.Append("FaceBean: ");
+        __sb.Append(FaceBean== null ? "<null>" : FaceBean.ToString());
       }
       if (Token != null) {
         if(!__first) { __sb.Append(", "); }

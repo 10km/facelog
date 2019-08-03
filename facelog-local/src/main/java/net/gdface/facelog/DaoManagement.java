@@ -563,28 +563,37 @@ public class DaoManagement extends BaseDao implements ServiceConstant,Constant{
 
 	/**
 	 * 
-	 * @param bean 人员信息对象
+	 * @param personBean 人员信息对象
 	 * @param idPhoto 标准照图像
 	 * @param feature 人脸特征数据
 	 * @param featureVersion 特征(SDk)版本号
 	 * @param featureImage 提取特征源图像,为null 时,默认使用idPhoto
-	 * @param featureFaceBean 人脸位置对象,为null 时,不保存人脸数据
+	 * @param faceBean 人脸位置对象,为null 时,不保存人脸数据,忽略featureImage
 	 * @param deviceBean featureImage来源设备对象
 	 * @return
 	 * @throws DuplicateRecordException 
 	 */
-	protected PersonBean daoSavePerson(PersonBean bean, ByteBuffer idPhoto, ByteBuffer feature,
-			String featureVersion, ByteBuffer featureImage, FaceBean featureFaceBean, DeviceBean deviceBean) throws DuplicateRecordException {
-		Map<ByteBuffer, FaceBean> faceInfo = null;
-		if (null != featureFaceBean) {
-			if (Judge.isEmpty(featureImage)){
-				featureImage = idPhoto;
-			}
-			if (!Judge.isEmpty(featureImage)) {
-				faceInfo = ImmutableMap.of(featureImage, featureFaceBean);
+	protected PersonBean daoSavePerson(PersonBean personBean, ByteBuffer idPhoto, ByteBuffer feature,
+			String featureVersion, ByteBuffer featureImage, FaceBean faceBean, DeviceBean deviceBean) throws DuplicateRecordException {
+		List<FaceBean> faceList = faceBean == null ? null : Arrays.asList(faceBean);
+		if (Judge.isEmpty(featureImage)){
+			featureImage = idPhoto;
+		}
+		if(!Judge.isEmpty(idPhoto)){
+			/** 保存标准照 */			
+			ImageBean imageBean = daoAddImage(idPhoto,deviceBean,featureImage == idPhoto ? faceList : null,null);
+			personBean.setImageMd5(imageBean.getMd5());
+		}
+		FeatureBean featureBean = null;
+		if (null != faceBean) {
+			if (!Judge.isEmpty(featureImage) && featureImage != idPhoto) {				
+				/** 保存特征的同时保存featureImage */ 
+				featureBean = daoAddFeature(feature, featureVersion, personBean, ImmutableMap.of(featureImage, faceBean), deviceBean);
+			}else{
+				featureBean = daoAddFeature(feature, featureVersion, personBean, faceList);
 			}
 		}
-		return daoSavePerson(bean, idPhoto, daoAddFeature(feature, featureVersion, bean, faceInfo, deviceBean), deviceBean);
+		return daoSavePerson(personBean, null, featureBean, deviceBean);
 	}
 	/**
 	 * 删除personId指定的人员(person)记录及关联的所有记录

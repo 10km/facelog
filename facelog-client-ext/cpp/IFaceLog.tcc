@@ -32418,8 +32418,8 @@ uint32_t IFaceLog_savePersonFull_args::read(Protocol_* iprot) {
         break;
       case 6:
         if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->featureFaceBean.read(iprot);
-          this->__isset.featureFaceBean = true;
+          xfer += this->faceBean.read(iprot);
+          this->__isset.faceBean = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -32470,8 +32470,8 @@ uint32_t IFaceLog_savePersonFull_args::write(Protocol_* oprot) const {
   xfer += oprot->writeBinary(this->featureImage);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("featureFaceBean", ::apache::thrift::protocol::T_STRUCT, 6);
-  xfer += this->featureFaceBean.write(oprot);
+  xfer += oprot->writeFieldBegin("faceBean", ::apache::thrift::protocol::T_STRUCT, 6);
+  xfer += this->faceBean.write(oprot);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("token", ::apache::thrift::protocol::T_STRUCT, 7);
@@ -32510,8 +32510,8 @@ uint32_t IFaceLog_savePersonFull_pargs::write(Protocol_* oprot) const {
   xfer += oprot->writeBinary((*(this->featureImage)));
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("featureFaceBean", ::apache::thrift::protocol::T_STRUCT, 6);
-  xfer += (*(this->featureFaceBean)).write(oprot);
+  xfer += oprot->writeFieldBegin("faceBean", ::apache::thrift::protocol::T_STRUCT, 6);
+  xfer += (*(this->faceBean)).write(oprot);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("token", ::apache::thrift::protocol::T_STRUCT, 7);
@@ -46600,14 +46600,14 @@ void IFaceLogClientT<Protocol_>::recv_savePerson(PersonBean& _return)
 }
 
 template <class Protocol_>
-void IFaceLogClientT<Protocol_>::savePersonFull(PersonBean& _return, const PersonBean& personBean, const std::string& idPhoto, const std::string& feature, const std::string& featureVersion, const std::string& featureImage, const FaceBean& featureFaceBean, const Token& token)
+void IFaceLogClientT<Protocol_>::savePersonFull(PersonBean& _return, const PersonBean& personBean, const std::string& idPhoto, const std::string& feature, const std::string& featureVersion, const std::string& featureImage, const FaceBean& faceBean, const Token& token)
 {
-  send_savePersonFull(personBean, idPhoto, feature, featureVersion, featureImage, featureFaceBean, token);
+  send_savePersonFull(personBean, idPhoto, feature, featureVersion, featureImage, faceBean, token);
   recv_savePersonFull(_return);
 }
 
 template <class Protocol_>
-void IFaceLogClientT<Protocol_>::send_savePersonFull(const PersonBean& personBean, const std::string& idPhoto, const std::string& feature, const std::string& featureVersion, const std::string& featureImage, const FaceBean& featureFaceBean, const Token& token)
+void IFaceLogClientT<Protocol_>::send_savePersonFull(const PersonBean& personBean, const std::string& idPhoto, const std::string& feature, const std::string& featureVersion, const std::string& featureImage, const FaceBean& faceBean, const Token& token)
 {
   int32_t cseqid = 0;
   this->oprot_->writeMessageBegin("savePersonFull", ::apache::thrift::protocol::T_CALL, cseqid);
@@ -46618,7 +46618,7 @@ void IFaceLogClientT<Protocol_>::send_savePersonFull(const PersonBean& personBea
   args.feature = &feature;
   args.featureVersion = &featureVersion;
   args.featureImage = &featureImage;
-  args.featureFaceBean = &featureFaceBean;
+  args.faceBean = &faceBean;
   args.token = &token;
   args.write(this->oprot_);
 
@@ -64505,7 +64505,7 @@ void IFaceLogProcessorT<Protocol_>::process_savePersonFull(int32_t seqid, ::apac
 
   IFaceLog_savePersonFull_result result;
   try {
-    iface_->savePersonFull(result.success, args.personBean, args.idPhoto, args.feature, args.featureVersion, args.featureImage, args.featureFaceBean, args.token);
+    iface_->savePersonFull(result.success, args.personBean, args.idPhoto, args.feature, args.featureVersion, args.featureImage, args.faceBean, args.token);
     result.__isset.success = true;
   } catch (ServiceRuntimeException &ex1) {
     result.ex1 = ex1;
@@ -64563,7 +64563,7 @@ void IFaceLogProcessorT<Protocol_>::process_savePersonFull(int32_t seqid, Protoc
 
   IFaceLog_savePersonFull_result result;
   try {
-    iface_->savePersonFull(result.success, args.personBean, args.idPhoto, args.feature, args.featureVersion, args.featureImage, args.featureFaceBean, args.token);
+    iface_->savePersonFull(result.success, args.personBean, args.idPhoto, args.feature, args.featureVersion, args.featureImage, args.faceBean, args.token);
     result.__isset.success = true;
   } catch (ServiceRuntimeException &ex1) {
     result.ex1 = ex1;
@@ -79972,14 +79972,14 @@ void IFaceLogConcurrentClientT<Protocol_>::recv_savePerson(PersonBean& _return, 
 }
 
 template <class Protocol_>
-void IFaceLogConcurrentClientT<Protocol_>::savePersonFull(PersonBean& _return, const PersonBean& personBean, const std::string& idPhoto, const std::string& feature, const std::string& featureVersion, const std::string& featureImage, const FaceBean& featureFaceBean, const Token& token)
+void IFaceLogConcurrentClientT<Protocol_>::savePersonFull(PersonBean& _return, const PersonBean& personBean, const std::string& idPhoto, const std::string& feature, const std::string& featureVersion, const std::string& featureImage, const FaceBean& faceBean, const Token& token)
 {
-  int32_t seqid = send_savePersonFull(personBean, idPhoto, feature, featureVersion, featureImage, featureFaceBean, token);
+  int32_t seqid = send_savePersonFull(personBean, idPhoto, feature, featureVersion, featureImage, faceBean, token);
   recv_savePersonFull(_return, seqid);
 }
 
 template <class Protocol_>
-int32_t IFaceLogConcurrentClientT<Protocol_>::send_savePersonFull(const PersonBean& personBean, const std::string& idPhoto, const std::string& feature, const std::string& featureVersion, const std::string& featureImage, const FaceBean& featureFaceBean, const Token& token)
+int32_t IFaceLogConcurrentClientT<Protocol_>::send_savePersonFull(const PersonBean& personBean, const std::string& idPhoto, const std::string& feature, const std::string& featureVersion, const std::string& featureImage, const FaceBean& faceBean, const Token& token)
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
@@ -79991,7 +79991,7 @@ int32_t IFaceLogConcurrentClientT<Protocol_>::send_savePersonFull(const PersonBe
   args.feature = &feature;
   args.featureVersion = &featureVersion;
   args.featureImage = &featureImage;
-  args.featureFaceBean = &featureFaceBean;
+  args.faceBean = &faceBean;
   args.token = &token;
   args.write(this->oprot_);
 

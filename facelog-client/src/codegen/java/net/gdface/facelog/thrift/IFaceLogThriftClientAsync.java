@@ -2824,7 +2824,7 @@ public class IFaceLogThriftClientAsync {
         byte[] feature,
         String featureVersion,
         byte[] featureImage,
-        FaceBean featureFaceBean,
+        FaceBean faceBean,
         Token token){        
         net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
         ListenableFuture<PersonBean> future = Futures.transform(
@@ -2837,7 +2837,7 @@ public class IFaceLogThriftClientAsync {
             featureVersion,
             featureImage,
             TypeTransformer.getInstance().to(
-                    featureFaceBean,
+                    faceBean,
                     FaceBean.class,
                     net.gdface.facelog.client.thrift.FaceBean.class),
             TypeTransformer.getInstance().to(
@@ -2860,10 +2860,10 @@ public class IFaceLogThriftClientAsync {
         byte[] feature,
         String featureVersion,
         byte[] featureImage,
-        FaceBean featureFaceBean,
+        FaceBean faceBean,
         Token token,
         FutureCallback<PersonBean>callback){
-        factory.addCallback(savePerson(personBean,idPhoto,feature,featureVersion,featureImage,featureFaceBean,token), callback);
+        factory.addCallback(savePerson(personBean,idPhoto,feature,featureVersion,featureImage,faceBean,token), callback);
     }
     /**
      * see also {@link net.gdface.facelog.IFaceLog#savePerson(net.gdface.facelog.db.PersonBean,byte[],byte[],java.lang.String,java.util.List,java.util.List,net.gdface.facelog.Token)}

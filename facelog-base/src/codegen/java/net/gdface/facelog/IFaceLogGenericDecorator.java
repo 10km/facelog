@@ -237,7 +237,7 @@ public class IFaceLogGenericDecorator extends IFaceLogDecorator{
      * @param featureVersion
      * @param featureImage
      *            泛型参数,参见 {@link net.gdface.utils.FaceUtilits#getBytesNotEmpty(Object)}
-     * @param featureFaceBean
+     * @param faceBean
      * @param token
      * @return 
 
@@ -245,8 +245,8 @@ public class IFaceLogGenericDecorator extends IFaceLogDecorator{
      * @throws IOException
      * @see IFaceLog#savePerson(PersonBean,byte[],byte[],java.lang.String,byte[],FaceBean,Token)
      */    
-    public <T> PersonBean savePerson (PersonBean personBean,T idPhoto,T feature,String featureVersion,T featureImage,FaceBean featureFaceBean,Token token) throws IOException{
-        return savePerson(personBean,FaceUtilits.getBytesNotEmpty(idPhoto),FaceUtilits.getBytesNotEmpty(feature),featureVersion,FaceUtilits.getBytesNotEmpty(featureImage),featureFaceBean,token);
+    public <T> PersonBean savePerson (PersonBean personBean,T idPhoto,T feature,String featureVersion,T featureImage,FaceBean faceBean,Token token) throws IOException{
+        return savePerson(personBean,FaceUtilits.getBytesNotEmpty(idPhoto),FaceUtilits.getBytesNotEmpty(feature),featureVersion,FaceUtilits.getBytesNotEmpty(featureImage),faceBean,token);
     }
     //12
     /**
@@ -257,13 +257,13 @@ public class IFaceLogGenericDecorator extends IFaceLogDecorator{
      * @param feature
      * @param featureVersion
      * @param featureImage
-     * @param featureFaceBean
+     * @param faceBean
      * @param token
      * @return PersonBean
      */
-    public <T> PersonBean savePersonUnchecked (PersonBean personBean,T idPhoto,T feature,String featureVersion,T featureImage,FaceBean featureFaceBean,Token token) {
+    public <T> PersonBean savePersonUnchecked (PersonBean personBean,T idPhoto,T feature,String featureVersion,T featureImage,FaceBean faceBean,Token token) {
         try{
-            return savePerson(personBean,idPhoto,feature,featureVersion,featureImage,featureFaceBean,token);
+            return savePerson(personBean,idPhoto,feature,featureVersion,featureImage,faceBean,token);
         } catch(RuntimeException e){
             throw e;
         } catch(Exception e){

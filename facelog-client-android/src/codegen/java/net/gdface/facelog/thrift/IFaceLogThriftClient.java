@@ -4072,7 +4072,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         final byte[] feature,
         final String featureVersion,
         final byte[] featureImage,
-        final FaceBean featureFaceBean,
+        final FaceBean faceBean,
         final Token token) 
         {
         try{
@@ -4100,7 +4100,7 @@ public class IFaceLogThriftClient implements IFaceLog {
                     featureImage,
                     byte[].class,
                     okio.ByteString.class),TypeTransformer.getInstance().to(
-                    featureFaceBean,
+                    faceBean,
                     FaceBean.class,
                     net.gdface.facelog.client.thrift.FaceBean.class),TypeTransformer.getInstance().to(
                     token,

@@ -3696,7 +3696,7 @@ public class IFaceLogThriftClientAsync {
         byte[] feature,
         String featureVersion,
         byte[] featureImage,
-        FaceBean featureFaceBean,
+        FaceBean faceBean,
         Token token){
         MethodCallback<PersonBean,net.gdface.facelog.client.thrift.PersonBean> nativeCallback = 
             new MethodCallback<PersonBean,net.gdface.facelog.client.thrift.PersonBean>(
@@ -3727,7 +3727,7 @@ public class IFaceLogThriftClientAsync {
                     byte[].class,
                     okio.ByteString.class),
             TypeTransformer.getInstance().to(
-                    featureFaceBean,
+                    faceBean,
                     FaceBean.class,
                     net.gdface.facelog.client.thrift.FaceBean.class),
             TypeTransformer.getInstance().to(
@@ -3741,10 +3741,10 @@ public class IFaceLogThriftClientAsync {
         byte[] feature,
         String featureVersion,
         byte[] featureImage,
-        FaceBean featureFaceBean,
+        FaceBean faceBean,
         Token token,
         FutureCallback<PersonBean>callback){
-        factory.addCallback(savePerson(personBean,idPhoto,feature,featureVersion,featureImage,featureFaceBean,token), callback);
+        factory.addCallback(savePerson(personBean,idPhoto,feature,featureVersion,featureImage,faceBean,token), callback);
     }
     /**
      * see also {@link net.gdface.facelog.IFaceLog#savePerson(net.gdface.facelog.db.PersonBean,byte[],byte[],java.lang.String,java.util.List,java.util.List,net.gdface.facelog.Token)}

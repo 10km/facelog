@@ -267,7 +267,8 @@ public interface IFaceLog{
 	public PersonBean savePerson(PersonBean personBean, String idPhotoMd5, String featureMd5, Token token);
 
 	/**
-	 * 保存人员信息记录
+	 * 保存人员信息记录<br>
+	 * 适用于单张人脸提取特征算法
 	 * @param personBean {@code fl_person}表记录
 	 * @param idPhoto 标准照图像,可为null
 	 * @param featureBean 用于验证的人脸特征数据对象,可为null
@@ -278,7 +279,8 @@ public interface IFaceLog{
 	public PersonBean savePerson(PersonBean personBean, byte[] idPhoto, FeatureBean featureBean, Token token);
 
 	/**
-	 * 保存人员信息记录
+	 * 保存人员信息记录<br>
+	 * 适用于多张人脸合成特征算法
 	 * @param personBean {@code fl_person}表记录
 	 * @param idPhoto 标准照图像,可为null
 	 * @param feature 用于验证的人脸特征数据,不可重复, 参见 {@link #addFeature(byte[], String, Integer, List, String, Token)}
@@ -292,6 +294,7 @@ public interface IFaceLog{
 
 	/**
 	 * 保存人员信息记录<br>
+	 * 适用于多张人脸合成特征算法<br>
 	 * {@code photos}与{@code faces}为提取特征{@code feature}的人脸照片对应的人脸位置对象，必须一一对应,
 	 * 该方法用于多张照片合成一个人脸特征的算法
 	 * @param personBean {@code fl_person}表记录
@@ -309,18 +312,19 @@ public interface IFaceLog{
 
 	/**
 	 * 保存人员信息记录<br>
+	 * 适用于单张人脸提取特征算法
 	 * @param personBean 人员信息对象,{@code fl_person}表记录
 	 * @param idPhoto 标准照图像,可以为{@code null}
 	 * @param feature 人脸特征数据,可以为{@code null}
 	 * @param featureVersion 特征(SDk)版本号
 	 * @param featureImage 提取特征源图像,为null 时,默认使用idPhoto
-	 * @param featureFaceBean 人脸位置对象,为null 时,不保存人脸数据
+	 * @param faceBean 人脸位置对象,为null 时,不保存人脸数据,忽略featureImage
 	 * @param token (设备)访问令牌
 	 * @return 保存的{@link PersonBean}
 	 */
 	@DeriveMethod(methodSuffix="Full")
 	public PersonBean savePerson(PersonBean personBean, byte[] idPhoto, byte[] feature, String featureVersion,
-			byte[] featureImage, FaceBean featureFaceBean, Token token);
+			byte[] featureImage, FaceBean faceBean, Token token);
 
 	/**
 	 * 替换personId指定的人员记录的人脸特征数据,同时删除原特征数据记录(fl_feature)及关联的fl_face表记录
@@ -1452,5 +1456,6 @@ public interface IFaceLog{
 	 * @return
 	 */
 	public boolean isLocal();
+
 
 }

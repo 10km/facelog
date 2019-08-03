@@ -1281,7 +1281,7 @@ public interface IFaceLog
             @ThriftField(value=3, name="feature", requiredness=Requiredness.OPTIONAL) final byte [] feature,
             @ThriftField(value=4, name="featureVersion", requiredness=Requiredness.OPTIONAL) final String featureVersion,
             @ThriftField(value=5, name="featureImage", requiredness=Requiredness.OPTIONAL) final byte [] featureImage,
-            @ThriftField(value=6, name="featureFaceBean", requiredness=Requiredness.OPTIONAL) final FaceBean featureFaceBean,
+            @ThriftField(value=6, name="faceBean", requiredness=Requiredness.OPTIONAL) final FaceBean faceBean,
             @ThriftField(value=7, name="token", requiredness=Requiredness.OPTIONAL) final Token token
         );
 
@@ -2756,7 +2756,7 @@ public interface IFaceLog
         @ThriftField(value=3, name="feature", requiredness=Requiredness.OPTIONAL) final byte [] feature,
         @ThriftField(value=4, name="featureVersion", requiredness=Requiredness.OPTIONAL) final String featureVersion,
         @ThriftField(value=5, name="featureImage", requiredness=Requiredness.OPTIONAL) final byte [] featureImage,
-        @ThriftField(value=6, name="featureFaceBean", requiredness=Requiredness.OPTIONAL) final FaceBean featureFaceBean,
+        @ThriftField(value=6, name="faceBean", requiredness=Requiredness.OPTIONAL) final FaceBean faceBean,
         @ThriftField(value=7, name="token", requiredness=Requiredness.OPTIONAL) final Token token
     ) throws ServiceRuntimeException;
 

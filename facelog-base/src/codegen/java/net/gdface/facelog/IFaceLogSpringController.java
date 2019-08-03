@@ -3391,23 +3391,25 @@ public class IFaceLogSpringController {
     // port-141
     /**
      * 保存人员信息记录<br>
+     * 适用于单张人脸提取特征算法
      * @param personBean 人员信息对象,{@code fl_person}表记录
      * @param idPhoto 标准照图像,可以为{@code null}
      * @param feature 人脸特征数据,可以为{@code null}
      * @param featureVersion 特征(SDk)版本号
      * @param featureImage 提取特征源图像,为null 时,默认使用idPhoto
-     * @param featureFaceBean 人脸位置对象,为null 时,不保存人脸数据
+     * @param faceBean 人脸位置对象,为null 时,不保存人脸数据,忽略featureImage
      * @param token (设备)访问令牌
      * @return 保存的{@link PersonBean}
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/savePersonFull", method = RequestMethod.POST)
-    @ApiOperation(value = "保存人员信息记录<br>",httpMethod="POST")
+    @ApiOperation(value = "保存人员信息记录<br>\n"
++" 适用于单张人脸提取特征算法",httpMethod="POST")
     public Response savePerson( @RequestBody SavePersonFullArgs args) 
     {
             Response response = responseFactory.newIFaceLogResponse();
             try{
-                response.onComplete(delegate().savePerson(args.personBean,args.idPhoto,args.feature,args.featureVersion,args.featureImage,args.featureFaceBean,args.token));
+                response.onComplete(delegate().savePerson(args.personBean,args.idPhoto,args.feature,args.featureVersion,args.featureImage,args.faceBean,args.token));
             }
             catch(Exception e){
                 logger.error(e.getMessage(),e);
@@ -3418,6 +3420,7 @@ public class IFaceLogSpringController {
     // port-142
     /**
      * 保存人员信息记录<br>
+     * 适用于多张人脸合成特征算法<br>
      * {@code photos}与{@code faces}为提取特征{@code feature}的人脸照片对应的人脸位置对象，必须一一对应,
      * 该方法用于多张照片合成一个人脸特征的算法
      * @param personBean {@code fl_person}表记录
@@ -3432,6 +3435,7 @@ public class IFaceLogSpringController {
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/savePersonWithPhotoAndFeatureMultiImage", method = RequestMethod.POST)
     @ApiOperation(value = "保存人员信息记录<br>\n"
++" 适用于多张人脸合成特征算法<br>\n"
 +" {@code photos}与{@code faces}为提取特征{@code feature}的人脸照片对应的人脸位置对象，必须一一对应,\n"
 +" 该方法用于多张照片合成一个人脸特征的算法",httpMethod="POST")
     public Response savePerson( @RequestBody SavePersonWithPhotoAndFeatureMultiImageArgs args) 
@@ -3448,7 +3452,8 @@ public class IFaceLogSpringController {
     }
     // port-143
     /**
-     * 保存人员信息记录
+     * 保存人员信息记录<br>
+     * 适用于多张人脸合成特征算法
      * @param personBean {@code fl_person}表记录
      * @param idPhoto 标准照图像,可为null
      * @param feature 用于验证的人脸特征数据,不可重复, 参见 {@link #addFeature(byte[], String, Integer, List, String, Token)}
@@ -3459,7 +3464,8 @@ public class IFaceLogSpringController {
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/savePersonWithPhotoAndFeatureMultiFaces", method = RequestMethod.POST)
-    @ApiOperation(value = "保存人员信息记录",httpMethod="POST")
+    @ApiOperation(value = "保存人员信息记录<br>\n"
++" 适用于多张人脸合成特征算法",httpMethod="POST")
     public Response savePerson( @RequestBody SavePersonWithPhotoAndFeatureMultiFacesArgs args) 
     {
             Response response = responseFactory.newIFaceLogResponse();
@@ -3497,7 +3503,8 @@ public class IFaceLogSpringController {
     }
     // port-145
     /**
-     * 保存人员信息记录
+     * 保存人员信息记录<br>
+     * 适用于单张人脸提取特征算法
      * @param personBean {@code fl_person}表记录
      * @param idPhoto 标准照图像,可为null
      * @param featureBean 用于验证的人脸特征数据对象,可为null
@@ -3506,7 +3513,8 @@ public class IFaceLogSpringController {
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/savePersonWithPhotoAndFeature", method = RequestMethod.POST)
-    @ApiOperation(value = "保存人员信息记录",httpMethod="POST")
+    @ApiOperation(value = "保存人员信息记录<br>\n"
++" 适用于单张人脸提取特征算法",httpMethod="POST")
     public Response savePerson( @RequestBody SavePersonWithPhotoAndFeatureArgs args) 
     {
             Response response = responseFactory.newIFaceLogResponse();
@@ -5323,8 +5331,8 @@ public class IFaceLogSpringController {
         public String featureVersion;
         @ApiModelProperty(value ="提取特征源图像,为null 时,默认使用idPhoto" ,required=true ,dataType="byte[]")
         public byte[] featureImage;
-        @ApiModelProperty(value ="人脸位置对象,为null 时,不保存人脸数据" ,required=true ,dataType="FaceBean")
-        public FaceBean featureFaceBean;
+        @ApiModelProperty(value ="人脸位置对象,为null 时,不保存人脸数据,忽略featureImage" ,required=true ,dataType="FaceBean")
+        public FaceBean faceBean;
         @ApiModelProperty(value ="(设备)访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }

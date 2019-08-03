@@ -856,9 +856,9 @@ i_face_log_if_save_person (IFaceLogIf *iface, PersonBean ** _return, const Perso
 }
 
 gboolean
-i_face_log_if_save_person_full (IFaceLogIf *iface, PersonBean ** _return, const PersonBean * personBean, const GByteArray * idPhoto, const GByteArray * feature, const gchar * featureVersion, const GByteArray * featureImage, const FaceBean * featureFaceBean, const Token * token, ServiceRuntimeException ** ex1, GError **error)
+i_face_log_if_save_person_full (IFaceLogIf *iface, PersonBean ** _return, const PersonBean * personBean, const GByteArray * idPhoto, const GByteArray * feature, const gchar * featureVersion, const GByteArray * featureImage, const FaceBean * faceBean, const Token * token, ServiceRuntimeException ** ex1, GError **error)
 {
-  return I_FACE_LOG_IF_GET_INTERFACE (iface)->save_person_full (iface, _return, personBean, idPhoto, feature, featureVersion, featureImage, featureFaceBean, token, ex1, error);
+  return I_FACE_LOG_IF_GET_INTERFACE (iface)->save_person_full (iface, _return, personBean, idPhoto, feature, featureVersion, featureImage, faceBean, token, ex1, error);
 }
 
 gboolean
@@ -32829,7 +32829,7 @@ gboolean i_face_log_client_save_person (IFaceLogIf * iface, PersonBean ** _retur
   return TRUE;
 }
 
-gboolean i_face_log_client_send_save_person_full (IFaceLogIf * iface, const PersonBean * personBean, const GByteArray * idPhoto, const GByteArray * feature, const gchar * featureVersion, const GByteArray * featureImage, const FaceBean * featureFaceBean, const Token * token, GError ** error)
+gboolean i_face_log_client_send_save_person_full (IFaceLogIf * iface, const PersonBean * personBean, const GByteArray * idPhoto, const GByteArray * feature, const gchar * featureVersion, const GByteArray * featureImage, const FaceBean * faceBean, const Token * token, GError ** error)
 {
   gint32 cseqid = 0;
   ThriftProtocol * protocol = I_FACE_LOG_CLIENT (iface)->output_protocol;
@@ -32895,10 +32895,10 @@ gboolean i_face_log_client_send_save_person_full (IFaceLogIf * iface, const Pers
     if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
       return 0;
     xfer += ret;
-    if ((ret = thrift_protocol_write_field_begin (protocol, "featureFaceBean", T_STRUCT, 6, error)) < 0)
+    if ((ret = thrift_protocol_write_field_begin (protocol, "faceBean", T_STRUCT, 6, error)) < 0)
       return 0;
     xfer += ret;
-    if ((ret = thrift_struct_write (THRIFT_STRUCT (featureFaceBean), protocol, error)) < 0)
+    if ((ret = thrift_struct_write (THRIFT_STRUCT (faceBean), protocol, error)) < 0)
       return 0;
     xfer += ret;
 
@@ -33085,9 +33085,9 @@ gboolean i_face_log_client_recv_save_person_full (IFaceLogIf * iface, PersonBean
   return TRUE;
 }
 
-gboolean i_face_log_client_save_person_full (IFaceLogIf * iface, PersonBean ** _return, const PersonBean * personBean, const GByteArray * idPhoto, const GByteArray * feature, const gchar * featureVersion, const GByteArray * featureImage, const FaceBean * featureFaceBean, const Token * token, ServiceRuntimeException ** ex1, GError ** error)
+gboolean i_face_log_client_save_person_full (IFaceLogIf * iface, PersonBean ** _return, const PersonBean * personBean, const GByteArray * idPhoto, const GByteArray * feature, const gchar * featureVersion, const GByteArray * featureImage, const FaceBean * faceBean, const Token * token, ServiceRuntimeException ** ex1, GError ** error)
 {
-  if (!i_face_log_client_send_save_person_full (iface, personBean, idPhoto, feature, featureVersion, featureImage, featureFaceBean, token, error))
+  if (!i_face_log_client_send_save_person_full (iface, personBean, idPhoto, feature, featureVersion, featureImage, faceBean, token, error))
     return FALSE;
   if (!i_face_log_client_recv_save_person_full (iface, _return, ex1, error))
     return FALSE;
@@ -39028,11 +39028,11 @@ gboolean i_face_log_handler_save_person (IFaceLogIf * iface, PersonBean ** _retu
   return I_FACE_LOG_HANDLER_GET_CLASS (iface)->save_person (iface, _return, personBean, token, ex1, error);
 }
 
-gboolean i_face_log_handler_save_person_full (IFaceLogIf * iface, PersonBean ** _return, const PersonBean * personBean, const GByteArray * idPhoto, const GByteArray * feature, const gchar * featureVersion, const GByteArray * featureImage, const FaceBean * featureFaceBean, const Token * token, ServiceRuntimeException ** ex1, GError ** error)
+gboolean i_face_log_handler_save_person_full (IFaceLogIf * iface, PersonBean ** _return, const PersonBean * personBean, const GByteArray * idPhoto, const GByteArray * feature, const gchar * featureVersion, const GByteArray * featureImage, const FaceBean * faceBean, const Token * token, ServiceRuntimeException ** ex1, GError ** error)
 {
   g_return_val_if_fail (IS_I_FACE_LOG_HANDLER (iface), FALSE);
 
-  return I_FACE_LOG_HANDLER_GET_CLASS (iface)->save_person_full (iface, _return, personBean, idPhoto, feature, featureVersion, featureImage, featureFaceBean, token, ex1, error);
+  return I_FACE_LOG_HANDLER_GET_CLASS (iface)->save_person_full (iface, _return, personBean, idPhoto, feature, featureVersion, featureImage, faceBean, token, ex1, error);
 }
 
 gboolean i_face_log_handler_save_person_group (IFaceLogIf * iface, PersonGroupBean ** _return, const PersonGroupBean * personGroupBean, const Token * token, ServiceRuntimeException ** ex1, GError ** error)
@@ -58514,7 +58514,7 @@ i_face_log_processor_process_save_person_full (IFaceLogProcessor *self,
     GByteArray * feature;
     gchar * featureVersion;
     GByteArray * featureImage;
-    FaceBean * featureFaceBean;
+    FaceBean * faceBean;
     Token * token;
     ServiceRuntimeException * ex1 = NULL;
     PersonBean * return_value;
@@ -58526,7 +58526,7 @@ i_face_log_processor_process_save_person_full (IFaceLogProcessor *self,
                   "feature", &feature,
                   "featureVersion", &featureVersion,
                   "featureImage", &featureImage,
-                  "featureFaceBean", &featureFaceBean,
+                  "faceBean", &faceBean,
                   "token", &token,
                   NULL);
 
@@ -58543,7 +58543,7 @@ i_face_log_processor_process_save_person_full (IFaceLogProcessor *self,
                                              feature,
                                              featureVersion,
                                              featureImage,
-                                             featureFaceBean,
+                                             faceBean,
                                              token,
                                              &ex1,
                                              error) == TRUE)
@@ -58618,8 +58618,8 @@ i_face_log_processor_process_save_person_full (IFaceLogProcessor *self,
       g_free (featureVersion);
     if (featureImage != NULL)
       g_byte_array_unref (featureImage);
-    if (featureFaceBean != NULL)
-      g_object_unref (featureFaceBean);
+    if (faceBean != NULL)
+      g_object_unref (faceBean);
     if (token != NULL)
       g_object_unref (token);
     g_object_unref (result_struct);

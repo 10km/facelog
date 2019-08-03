@@ -3139,7 +3139,7 @@ public class IFaceLogThriftDecorator {
         ByteBuffer feature,
         String featureVersion,
         ByteBuffer featureImage,
-        FaceBean featureFaceBean,
+        FaceBean faceBean,
         Token token) 
         throws ServiceRuntimeException{
         try{
@@ -3162,7 +3162,7 @@ public class IFaceLogThriftDecorator {
                     ByteBuffer.class,
                     byte[].class),
                 TypeTransformer.getInstance().to(
-                    featureFaceBean,
+                    faceBean,
                     FaceBean.class,
                     FaceBean.class),
                 TypeTransformer.getInstance().to(

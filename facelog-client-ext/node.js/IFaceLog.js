@@ -21297,7 +21297,7 @@ var IFaceLog_savePersonFull_args = function(args) {
   this.feature = null;
   this.featureVersion = null;
   this.featureImage = null;
-  this.featureFaceBean = null;
+  this.faceBean = null;
   this.token = null;
   if (args) {
     if (args.personBean !== undefined && args.personBean !== null) {
@@ -21315,8 +21315,8 @@ var IFaceLog_savePersonFull_args = function(args) {
     if (args.featureImage !== undefined && args.featureImage !== null) {
       this.featureImage = args.featureImage;
     }
-    if (args.featureFaceBean !== undefined && args.featureFaceBean !== null) {
-      this.featureFaceBean = new ttypes.FaceBean(args.featureFaceBean);
+    if (args.faceBean !== undefined && args.faceBean !== null) {
+      this.faceBean = new ttypes.FaceBean(args.faceBean);
     }
     if (args.token !== undefined && args.token !== null) {
       this.token = new ttypes.Token(args.token);
@@ -21375,8 +21375,8 @@ IFaceLog_savePersonFull_args.prototype.read = function(input) {
       break;
       case 6:
       if (ftype == Thrift.Type.STRUCT) {
-        this.featureFaceBean = new ttypes.FaceBean();
-        this.featureFaceBean.read(input);
+        this.faceBean = new ttypes.FaceBean();
+        this.faceBean.read(input);
       } else {
         input.skip(ftype);
       }
@@ -21425,9 +21425,9 @@ IFaceLog_savePersonFull_args.prototype.write = function(output) {
     output.writeBinary(this.featureImage);
     output.writeFieldEnd();
   }
-  if (this.featureFaceBean !== null && this.featureFaceBean !== undefined) {
-    output.writeFieldBegin('featureFaceBean', Thrift.Type.STRUCT, 6);
-    this.featureFaceBean.write(output);
+  if (this.faceBean !== null && this.faceBean !== undefined) {
+    output.writeFieldBegin('faceBean', Thrift.Type.STRUCT, 6);
+    this.faceBean.write(output);
     output.writeFieldEnd();
   }
   if (this.token !== null && this.token !== undefined) {
@@ -32245,7 +32245,7 @@ IFaceLogClient.prototype.recv_savePerson = function(input,mtype,rseqid) {
   }
   return callback('savePerson failed: unknown result');
 };
-IFaceLogClient.prototype.savePersonFull = function(personBean, idPhoto, feature, featureVersion, featureImage, featureFaceBean, token, callback) {
+IFaceLogClient.prototype.savePersonFull = function(personBean, idPhoto, feature, featureVersion, featureImage, faceBean, token, callback) {
   this._seqid = this.new_seqid();
   if (callback === undefined) {
     var _defer = Q.defer();
@@ -32256,15 +32256,15 @@ IFaceLogClient.prototype.savePersonFull = function(personBean, idPhoto, feature,
         _defer.resolve(result);
       }
     };
-    this.send_savePersonFull(personBean, idPhoto, feature, featureVersion, featureImage, featureFaceBean, token);
+    this.send_savePersonFull(personBean, idPhoto, feature, featureVersion, featureImage, faceBean, token);
     return _defer.promise;
   } else {
     this._reqs[this.seqid()] = callback;
-    this.send_savePersonFull(personBean, idPhoto, feature, featureVersion, featureImage, featureFaceBean, token);
+    this.send_savePersonFull(personBean, idPhoto, feature, featureVersion, featureImage, faceBean, token);
   }
 };
 
-IFaceLogClient.prototype.send_savePersonFull = function(personBean, idPhoto, feature, featureVersion, featureImage, featureFaceBean, token) {
+IFaceLogClient.prototype.send_savePersonFull = function(personBean, idPhoto, feature, featureVersion, featureImage, faceBean, token) {
   var output = new this.pClass(this.output);
   output.writeMessageBegin('savePersonFull', Thrift.MessageType.CALL, this.seqid());
   var params = {
@@ -32273,7 +32273,7 @@ IFaceLogClient.prototype.send_savePersonFull = function(personBean, idPhoto, fea
     feature: feature,
     featureVersion: featureVersion,
     featureImage: featureImage,
-    featureFaceBean: featureFaceBean,
+    faceBean: faceBean,
     token: token
   };
   var args = new IFaceLog_savePersonFull_args(params);
@@ -39208,7 +39208,7 @@ IFaceLogProcessor.prototype.process_savePersonFull = function(seqid, input, outp
   args.read(input);
   input.readMessageEnd();
   if (this._handler.savePersonFull.length === 7) {
-    Q.fcall(this._handler.savePersonFull.bind(this._handler), args.personBean, args.idPhoto, args.feature, args.featureVersion, args.featureImage, args.featureFaceBean, args.token)
+    Q.fcall(this._handler.savePersonFull.bind(this._handler), args.personBean, args.idPhoto, args.feature, args.featureVersion, args.featureImage, args.faceBean, args.token)
       .then(function(result) {
         var result_obj = new IFaceLog_savePersonFull_result({success: result});
         output.writeMessageBegin("savePersonFull", Thrift.MessageType.REPLY, seqid);
@@ -39229,7 +39229,7 @@ IFaceLogProcessor.prototype.process_savePersonFull = function(seqid, input, outp
         output.flush();
       });
   } else {
-    this._handler.savePersonFull(args.personBean, args.idPhoto, args.feature, args.featureVersion, args.featureImage, args.featureFaceBean, args.token, function (err, result) {
+    this._handler.savePersonFull(args.personBean, args.idPhoto, args.feature, args.featureVersion, args.featureImage, args.faceBean, args.token, function (err, result) {
       var result_obj;
       if ((err === null || typeof err === 'undefined') || err instanceof ttypes.ServiceRuntimeException) {
         result_obj = new IFaceLog_savePersonFull_result((err !== null || typeof err === 'undefined') ? err : {success: result});

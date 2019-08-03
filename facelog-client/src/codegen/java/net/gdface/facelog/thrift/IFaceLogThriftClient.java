@@ -3118,7 +3118,7 @@ public class IFaceLogThriftClient implements IFaceLog {
         byte[] feature,
         String featureVersion,
         byte[] featureImage,
-        FaceBean featureFaceBean,
+        FaceBean faceBean,
         Token token) 
         {
         net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
@@ -3133,7 +3133,7 @@ public class IFaceLogThriftClient implements IFaceLog {
                 featureVersion,
                 featureImage,
                 TypeTransformer.getInstance().to(
-                    featureFaceBean,
+                    faceBean,
                     FaceBean.class,
                     net.gdface.facelog.client.thrift.FaceBean.class),
                 TypeTransformer.getInstance().to(
