@@ -84,7 +84,7 @@ CREATE TABLE IF NOT EXISTS fl_device (
   `used_sdks`   varchar(128)DEFAULT NULL COMMENT '支持的特征码(算法)版本号列表(逗号分隔),特征版本号用于区分不同人脸识别算法生成的特征数据(SDK版本号命名允许字母,数字,-,.,_符号)',
   `serial_no`   varchar(32) DEFAULT NULL UNIQUE COMMENT '设备序列号',
   `mac`         char(12) DEFAULT NULL UNIQUE COMMENT '6字节MAC地址(HEX)',
-  `direction`   int(11) NOT NULL DEFAULT 0 COMMENT '通行方向,0:入口,1:出口,默认0',
+  `direction`   int(11) DEFAULT NULL COMMENT '通行方向,NULL,0:入口,1:出口,默认0',
   `remark`      varchar(256) DEFAULT NULL COMMENT '备注',
   `ext_bin`     blob DEFAULT NULL COMMENT '应用项目自定义二进制扩展字段(最大64KB)',
   `ext_txt`     text DEFAULT NULL COMMENT '应用项目自定义文本扩展字段(最大64KB)',

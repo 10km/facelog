@@ -79,8 +79,8 @@ public final class DeviceBean
     @ApiModelProperty(value = "6字节MAC地址(HEX)"  ,dataType="String")
     private String mac;
 
-    /** comments:通行方向,0:入口,1:出口,默认0 */
-    @ApiModelProperty(value = "通行方向,0:入口,1:出口,默认0"  ,dataType="Integer")
+    /** comments:通行方向,NULL,0:入口,1:出口,默认0 */
+    @ApiModelProperty(value = "通行方向,NULL,0:入口,1:出口,默认0"  ,dataType="Integer")
     private Integer direction;
 
     /** comments:备注 */
@@ -1078,9 +1078,7 @@ public final class DeviceBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_device.direction</li>
-     * <li>comments: 通行方向,0:入口,1:出口,默认0</li>
-     * <li>default value: '0'</li>
-     * <li>NOT NULL</li>
+     * <li>comments: 通行方向,NULL,0:入口,1:出口,默认0</li>
      * <li>column size: 10</li>
      * <li>JDBC type returned by the driver: Types.INTEGER</li>
      * </ul>
@@ -1097,7 +1095,7 @@ public final class DeviceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value( NOT NULL) to be assigned to direction
+     * @param newVal the new value to be assigned to direction
      */
     public void setDirection(Integer newVal)
     {
@@ -1725,8 +1723,7 @@ public final class DeviceBean
         this.usedSdks = null;
         this.serialNo = null;
         this.mac = null;
-        /* DEFAULT:'0'*/
-        this.direction = new Integer(0);
+        this.direction = null;
         this.remark = null;
         this.extBin = null;
         this.extTxt = null;
@@ -1736,7 +1733,7 @@ public final class DeviceBean
         this.updateTime = null;
         this.isNew = true;
         this.modified = 0;
-        this.initialized = (FL_DEVICE_ID_GROUP_ID_MASK | FL_DEVICE_ID_DIRECTION_MASK);
+        this.initialized = (FL_DEVICE_ID_GROUP_ID_MASK);
     }
     @Override
     public boolean equals(Object object)
@@ -2436,7 +2433,7 @@ public final class DeviceBean
         }
         /** 
          * fill the field : fl_device.direction
-         * @param direction 通行方向,0:入口,1:出口,默认0
+         * @param direction 通行方向,NULL,0:入口,1:出口,默认0
          * @see DeviceBean#getDirection()
          * @see DeviceBean#setDirection(Integer)
          */
