@@ -353,7 +353,7 @@ class BaseDao implements CommonConstant,Constant {
      * 删除唯一键指定的记录
      * 
      * @param mac 6字节MAC地址(HEX)
-     * @return 返回删除的记录条数,输入参数为{@code null}或记录不存在返回0
+     * @return 返回删除的记录条数(1),输入参数为{@code null}或记录不存在返回0
      * @see #daoDeleteDevice(Integer)
      * @throws RuntimeDaoException
      */
@@ -368,7 +368,7 @@ class BaseDao implements CommonConstant,Constant {
      * 删除唯一键指定的记录
      * 
      * @param serialNo 设备序列号
-     * @return 返回删除的记录条数,输入参数为{@code null}或记录不存在返回0
+     * @return 返回删除的记录条数(1),输入参数为{@code null}或记录不存在返回0
      * @see #daoDeleteDevice(Integer)
      * @throws RuntimeDaoException
      */
@@ -1572,7 +1572,7 @@ class BaseDao implements CommonConstant,Constant {
      * 删除唯一键指定的记录
      * 
      * @param imageMd5 用户默认照片(证件照,标准照)的md5校验码,外键
-     * @return 返回删除的记录条数,输入参数为{@code null}或记录不存在返回0
+     * @return 返回删除的记录条数(1),输入参数为{@code null}或记录不存在返回0
      * @see #daoDeletePerson(Integer)
      * @throws RuntimeDaoException
      */
@@ -1587,7 +1587,7 @@ class BaseDao implements CommonConstant,Constant {
      * 删除唯一键指定的记录
      * 
      * @param mobilePhone 手机号码
-     * @return 返回删除的记录条数,输入参数为{@code null}或记录不存在返回0
+     * @return 返回删除的记录条数(1),输入参数为{@code null}或记录不存在返回0
      * @see #daoDeletePerson(Integer)
      * @throws RuntimeDaoException
      */
@@ -1602,7 +1602,7 @@ class BaseDao implements CommonConstant,Constant {
      * 删除唯一键指定的记录
      * 
      * @param papersNum 证件号码
-     * @return 返回删除的记录条数,输入参数为{@code null}或记录不存在返回0
+     * @return 返回删除的记录条数(1),输入参数为{@code null}或记录不存在返回0
      * @see #daoDeletePerson(Integer)
      * @throws RuntimeDaoException
      */
