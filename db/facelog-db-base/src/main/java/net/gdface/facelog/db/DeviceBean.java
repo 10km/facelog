@@ -79,6 +79,10 @@ public final class DeviceBean
     @ApiModelProperty(value = "6字节MAC地址(HEX)"  ,dataType="String")
     private String mac;
 
+    /** comments:通行方向,0:入口,1:出口,默认0 */
+    @ApiModelProperty(value = "通行方向,0:入口,1:出口,默认0"  ,dataType="Integer")
+    private Integer direction;
+
     /** comments:备注 */
     @ApiModelProperty(value = "备注"  ,dataType="String")
     private String remark;
@@ -1070,6 +1074,85 @@ public final class DeviceBean
         return 0L !=  (initialized & FL_DEVICE_ID_MAC_MASK);
     }
     /**
+     * Getter method for {@link #direction}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_device.direction</li>
+     * <li>comments: 通行方向,0:入口,1:出口,默认0</li>
+     * <li>default value: '0'</li>
+     * <li>NOT NULL</li>
+     * <li>column size: 10</li>
+     * <li>JDBC type returned by the driver: Types.INTEGER</li>
+     * </ul>
+     *
+     * @return the value of direction
+     */
+    @ThriftField(value=16)
+    public Integer getDirection(){
+        return direction;
+    }
+    /**
+     * Setter method for {@link #direction}.<br>
+     * The new value is set only if equals() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value( NOT NULL) to be assigned to direction
+     */
+    public void setDirection(Integer newVal)
+    {
+        checkMutable();
+
+        modified |= FL_DEVICE_ID_DIRECTION_MASK;
+        initialized |= FL_DEVICE_ID_DIRECTION_MASK;
+
+        if (Objects.equals(newVal, direction)) {
+            return;
+        }
+        direction = newVal;
+    }
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "direction")
+    public void writeDirection(Integer newVal){
+        checkMutable();
+        direction = newVal;
+    }
+    /**
+     * Setter method for {@link #direction}.<br>
+     * Convenient for those who do not want to deal with Objects for primary types.
+     *
+     * @param newVal the new value to be assigned to direction
+     */
+    public void setDirection(int newVal)
+    {
+        setDirection(new Integer(newVal));
+    }
+    /**
+     * Determines if the direction has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkDirectionModified()
+    {
+        return 0L !=  (modified & FL_DEVICE_ID_DIRECTION_MASK);
+    }
+
+    /**
+     * Determines if the direction has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkDirectionInitialized()
+    {
+        return 0L !=  (initialized & FL_DEVICE_ID_DIRECTION_MASK);
+    }
+    /**
      * Getter method for {@link #remark}.<br>
      * Meta Data Information (in progress):
      * <ul>
@@ -1081,7 +1164,7 @@ public final class DeviceBean
      *
      * @return the value of remark
      */
-    @ThriftField(value=16)
+    @ThriftField(value=17)
     public String getRemark(){
         return remark;
     }
@@ -1148,7 +1231,7 @@ public final class DeviceBean
      *
      * @return the value of extBin
      */
-    @ThriftField(value=17)
+    @ThriftField(value=18)
     public java.nio.ByteBuffer getExtBin(){
         return extBin;
     }
@@ -1215,7 +1298,7 @@ public final class DeviceBean
      *
      * @return the value of extTxt
      */
-    @ThriftField(value=18)
+    @ThriftField(value=19)
     public String getExtTxt(){
         return extTxt;
     }
@@ -1290,7 +1373,7 @@ public final class DeviceBean
      * use Long to represent date type for thrift:swift support 
      * @see #getCreateTime()
      */
-    @ThriftField(name = "createTime",value = 19)
+    @ThriftField(name = "createTime",value = 20)
     public Long readCreateTime(){
         return null == createTime ? null:createTime.getTime();
     }
@@ -1383,7 +1466,7 @@ public final class DeviceBean
      * use Long to represent date type for thrift:swift support 
      * @see #getUpdateTime()
      */
-    @ThriftField(name = "updateTime",value = 20)
+    @ThriftField(name = "updateTime",value = 21)
     public Long readUpdateTime(){
         return null == updateTime ? null:updateTime.getTime();
     }
@@ -1513,6 +1596,8 @@ public final class DeviceBean
             return checkSerialNoModified();
         case FL_DEVICE_ID_MAC:
             return checkMacModified();
+        case FL_DEVICE_ID_DIRECTION:
+            return checkDirectionModified();
         case FL_DEVICE_ID_REMARK:
             return checkRemarkModified();
         case FL_DEVICE_ID_EXT_BIN:
@@ -1555,6 +1640,8 @@ public final class DeviceBean
             return checkSerialNoInitialized();
         case FL_DEVICE_ID_MAC:
             return checkMacInitialized();
+        case FL_DEVICE_ID_DIRECTION:
+            return checkDirectionInitialized();
         case FL_DEVICE_ID_REMARK:
             return checkRemarkInitialized();
         case FL_DEVICE_ID_EXT_BIN:
@@ -1608,6 +1695,7 @@ public final class DeviceBean
             FL_DEVICE_ID_USED_SDKS_MASK |
             FL_DEVICE_ID_SERIAL_NO_MASK |
             FL_DEVICE_ID_MAC_MASK |
+            FL_DEVICE_ID_DIRECTION_MASK |
             FL_DEVICE_ID_REMARK_MASK |
             FL_DEVICE_ID_EXT_BIN_MASK |
             FL_DEVICE_ID_EXT_TXT_MASK |
@@ -1637,6 +1725,8 @@ public final class DeviceBean
         this.usedSdks = null;
         this.serialNo = null;
         this.mac = null;
+        /* DEFAULT:'0'*/
+        this.direction = new Integer(0);
         this.remark = null;
         this.extBin = null;
         this.extTxt = null;
@@ -1646,7 +1736,7 @@ public final class DeviceBean
         this.updateTime = null;
         this.isNew = true;
         this.modified = 0;
-        this.initialized = (FL_DEVICE_ID_GROUP_ID_MASK);
+        this.initialized = (FL_DEVICE_ID_GROUP_ID_MASK | FL_DEVICE_ID_DIRECTION_MASK);
     }
     @Override
     public boolean equals(Object object)
@@ -1669,6 +1759,7 @@ public final class DeviceBean
             .append(getUsedSdks(), obj.getUsedSdks())
             .append(getSerialNo(), obj.getSerialNo())
             .append(getMac(), obj.getMac())
+            .append(getDirection(), obj.getDirection())
             .append(getRemark(), obj.getRemark())
             .append(getExtBin(), obj.getExtBin())
             .append(getExtTxt(), obj.getExtTxt())
@@ -1846,6 +1937,15 @@ public final class DeviceBean
                 append(builder,fullIfStringOrBytes,getMac());
             }
         }
+        if(checkDirectionInitialized()){
+            if(!notNull || null != getDirection()){
+                if(count++ >0){
+                    builder.append(",");
+                }
+                builder.append("direction=");
+                append(builder,fullIfStringOrBytes,getDirection());
+            }
+        }
         if(checkRemarkInitialized()){
             if(!notNull || null != getRemark()){
                 if(count++ >0){
@@ -1909,6 +2009,7 @@ public final class DeviceBean
             .append(getUsedSdks(), object.getUsedSdks())
             .append(getSerialNo(), object.getSerialNo())
             .append(getMac(), object.getMac())
+            .append(getDirection(), object.getDirection())
             .append(getRemark(), object.getRemark())
             .append(getExtBin(), object.getExtBin())
             .append(getExtTxt(), object.getExtTxt())
@@ -1946,6 +2047,7 @@ public final class DeviceBean
         setUsedSdks((String)null);
         setSerialNo((String)null);
         setMac((String)null);
+        setDirection((Integer)null);
         setRemark((String)null);
         setExtBin((java.nio.ByteBuffer)null);
         setExtTxt((String)null);
@@ -2002,7 +2104,7 @@ public final class DeviceBean
     public DeviceBean copy(DeviceBean bean, int... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length){
-            fieldList = new int[]{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16};
+            fieldList = new int[]{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17};
         }
         for (int i = 0; i < fieldList.length; ++i) {
             if( bean.isInitialized(fieldList[i]) && !Objects.deepEquals(bean.getValue(fieldList[i]), getValue(fieldList[i]))){
@@ -2058,6 +2160,8 @@ public final class DeviceBean
             return (T)getSerialNo();        
         case FL_DEVICE_ID_MAC: 
             return (T)getMac();        
+        case FL_DEVICE_ID_DIRECTION: 
+            return (T)getDirection();        
         case FL_DEVICE_ID_REMARK: 
             return (T)getRemark();        
         case FL_DEVICE_ID_EXT_BIN: 
@@ -2112,6 +2216,9 @@ public final class DeviceBean
             break;
         case FL_DEVICE_ID_MAC:
             setMac((String)value);
+            break;
+        case FL_DEVICE_ID_DIRECTION:
+            setDirection((Integer)value);
             break;
         case FL_DEVICE_ID_REMARK:
             setRemark((String)value);
@@ -2325,6 +2432,16 @@ public final class DeviceBean
          */
         public Builder mac(String mac){
             TEMPLATE.get().setMac(mac);
+            return this;
+        }
+        /** 
+         * fill the field : fl_device.direction
+         * @param direction 通行方向,0:入口,1:出口,默认0
+         * @see DeviceBean#getDirection()
+         * @see DeviceBean#setDirection(Integer)
+         */
+        public Builder direction(Integer direction){
+            TEMPLATE.get().setDirection(direction);
             return this;
         }
         /** 

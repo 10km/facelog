@@ -227,6 +227,14 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
                 dirtyCount++;
             }
 
+            if (bean.checkDirectionModified()) {
+                if (dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("direction");
+                dirtyCount++;
+            }
+
             sql.append(") values (");
             if(dirtyCount > 0) {
                 sql.append("?");
@@ -344,6 +352,15 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
                     useComma=true;
                 }
                 sql.append("verify_time=?");
+            }
+
+            if (bean.checkDirectionModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("direction=?");
             }
             sql.append("");
             // System.out.println("update : " + sql.toString());
@@ -682,6 +699,14 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("verify_time = ?");
                 }
             }
+            if (bean.checkDirectionModified()) {
+                dirtyCount ++;
+                if (bean.getDirection() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("direction IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("direction = ?");
+                }
+            }
         }
         finally
         {
@@ -766,6 +791,10 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
             if (bean.checkVerifyTimeModified()) {
                 // System.out.println("Setting for " + dirtyCount + " [" + bean.getVerifyTime() + "]");
                 if (bean.getVerifyTime() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.TIMESTAMP);} } else { ps.setTimestamp(++dirtyCount, new java.sql.Timestamp(bean.getVerifyTime().getTime())); }
+            }
+            if (bean.checkDirectionModified()) {
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getDirection() + "]");
+                if (bean.getDirection() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.INTEGER);} } else { Manager.setInteger(ps, ++dirtyCount, bean.getDirection()); }
             }
         }
         catch(SQLException e)
@@ -890,6 +919,7 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
             bean.setPapersType(Manager.getInteger(rs, 4));
             bean.setPapersNum(rs.getString(5));
             bean.setVerifyTime(rs.getTimestamp(6));
+            bean.setDirection(Manager.getInteger(rs, 7));
         }
         catch(SQLException e)
         {
@@ -946,6 +976,10 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
                         ++pos;
                         bean.setVerifyTime(rs.getTimestamp(pos));
                         break;
+                    case FL_LOG_LIGHT_ID_DIRECTION:
+                        ++pos;
+                        bean.setDirection(Manager.getInteger(rs, pos));
+                        break;
                     default:
                         throw new DaoException("Unknown field id " + fieldList[i]);
                 }
@@ -980,6 +1014,7 @@ public class FlLogLightManager extends TableManager.BaseAdapter<FlLogLightBean>
             bean.setPapersType(Manager.getInteger(rs, "papers_type"));
             bean.setPapersNum(rs.getString("papers_num"));
             bean.setVerifyTime(rs.getTimestamp("verify_time"));
+            bean.setDirection(Manager.getInteger(rs, "direction"));
         }
         catch(SQLException e)
         {

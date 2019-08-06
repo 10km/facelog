@@ -44,6 +44,7 @@ public class FlLogComparator implements Comparator<FlLogBean>,Constant
      *   <li>{@link Constant#FL_LOG_ID_COMPARE_FACE}
      *   <li>{@link Constant#FL_LOG_ID_VERIFY_STATUS}
      *   <li>{@link Constant#FL_LOG_ID_SIMILARTY}
+     *   <li>{@link Constant#FL_LOG_ID_DIRECTION}
      *   <li>{@link Constant#FL_LOG_ID_VERIFY_TIME}
      *   <li>{@link Constant#FL_LOG_ID_CREATE_TIME}
      * </ul>
@@ -71,6 +72,7 @@ public class FlLogComparator implements Comparator<FlLogBean>,Constant
      *   <li>{@link Constant#FL_LOG_ID_COMPARE_FACE})
      *   <li>{@link Constant#FL_LOG_ID_VERIFY_STATUS})
      *   <li>{@link Constant#FL_LOG_ID_SIMILARTY})
+     *   <li>{@link Constant#FL_LOG_ID_DIRECTION})
      *   <li>{@link Constant#FL_LOG_ID_VERIFY_TIME})
      *   <li>{@link Constant#FL_LOG_ID_CREATE_TIME})
      * </ul>
@@ -164,6 +166,17 @@ public class FlLogComparator implements Comparator<FlLogBean>,Constant
                     iReturn = 1;
                 } else {
                     iReturn = b1.getSimilarty().compareTo(b2.getSimilarty());
+                }
+                break;
+            case FL_LOG_ID_DIRECTION:
+                if (b1.getDirection() == null && b2.getDirection() != null) {
+                    iReturn = -1;
+                } else if (b1.getDirection() == null && b2.getDirection() == null) {
+                    iReturn = 0;
+                } else if (b1.getDirection() != null && b2.getDirection() == null) {
+                    iReturn = 1;
+                } else {
+                    iReturn = b1.getDirection().compareTo(b2.getDirection());
                 }
                 break;
             case FL_LOG_ID_VERIFY_TIME:

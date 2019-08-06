@@ -42,6 +42,7 @@ public class LogLightComparator implements Comparator<LogLightBean>,Constant
      *   <li>{@link Constant#FL_LOG_LIGHT_ID_PAPERS_TYPE}
      *   <li>{@link Constant#FL_LOG_LIGHT_ID_PAPERS_NUM}
      *   <li>{@link Constant#FL_LOG_LIGHT_ID_VERIFY_TIME}
+     *   <li>{@link Constant#FL_LOG_LIGHT_ID_DIRECTION}
      * </ul>
      */
     public LogLightComparator(int iType)
@@ -66,6 +67,7 @@ public class LogLightComparator implements Comparator<LogLightBean>,Constant
      *   <li>{@link Constant#FL_LOG_LIGHT_ID_PAPERS_TYPE})
      *   <li>{@link Constant#FL_LOG_LIGHT_ID_PAPERS_NUM})
      *   <li>{@link Constant#FL_LOG_LIGHT_ID_VERIFY_TIME})
+     *   <li>{@link Constant#FL_LOG_LIGHT_ID_DIRECTION})
      * </ul>
      *
      * @param bReverse set this value to true, if you want to reverse the sorting results
@@ -146,6 +148,17 @@ public class LogLightComparator implements Comparator<LogLightBean>,Constant
                     iReturn = 1;
                 } else {
                     iReturn = b1.getVerifyTime().compareTo(b2.getVerifyTime());
+                }
+                break;
+            case FL_LOG_LIGHT_ID_DIRECTION:
+                if (b1.getDirection() == null && b2.getDirection() != null) {
+                    iReturn = -1;
+                } else if (b1.getDirection() == null && b2.getDirection() == null) {
+                    iReturn = 0;
+                } else if (b1.getDirection() != null && b2.getDirection() == null) {
+                    iReturn = 1;
+                } else {
+                    iReturn = b1.getDirection().compareTo(b2.getDirection());
                 }
                 break;
             default:

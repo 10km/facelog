@@ -65,6 +65,9 @@ public  class FlDeviceBean
     /** comments:6字节MAC地址(HEX) */
     private String mac;
 
+    /** comments:通行方向,0:入口,1:出口,默认0 */
+    private Integer direction;
+
     /** comments:备注 */
     private String remark;
 
@@ -873,6 +876,64 @@ public  class FlDeviceBean
         return 0L !=  (initialized & FL_DEVICE_ID_MAC_MASK);
     }
     /**
+     * Getter method for {@link #direction}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_device.direction</li>
+     * <li>comments: 通行方向,0:入口,1:出口,默认0</li>
+     * <li>default value: '0'</li>
+     * <li>NOT NULL</li>
+     * <li>column size: 10</li>
+     * <li>JDBC type returned by the driver: Types.INTEGER</li>
+     * </ul>
+     *
+     * @return the value of direction
+     */
+    public Integer getDirection(){
+        return direction;
+    }
+    /**
+     * Setter method for {@link #direction}.<br>
+     * The new value is set only if equals() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value( NOT NULL) to be assigned to direction
+     */
+    public void setDirection(Integer newVal)
+    {
+        checkMutable();
+
+        modified |= FL_DEVICE_ID_DIRECTION_MASK;
+        initialized |= FL_DEVICE_ID_DIRECTION_MASK;
+
+        if (Objects.equals(newVal, direction)) {
+            return;
+        }
+        direction = newVal;
+    }
+    /**
+     * Determines if the direction has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkDirectionModified()
+    {
+        return 0L !=  (modified & FL_DEVICE_ID_DIRECTION_MASK);
+    }
+
+    /**
+     * Determines if the direction has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkDirectionInitialized()
+    {
+        return 0L !=  (initialized & FL_DEVICE_ID_DIRECTION_MASK);
+    }
+    /**
      * Getter method for {@link #remark}.<br>
      * Meta Data Information (in progress):
      * <ul>
@@ -1226,6 +1287,8 @@ public  class FlDeviceBean
             return checkSerialNoModified();
         case FL_DEVICE_ID_MAC:
             return checkMacModified();
+        case FL_DEVICE_ID_DIRECTION:
+            return checkDirectionModified();
         case FL_DEVICE_ID_REMARK:
             return checkRemarkModified();
         case FL_DEVICE_ID_EXT_BIN:
@@ -1268,6 +1331,8 @@ public  class FlDeviceBean
             return checkSerialNoInitialized();
         case FL_DEVICE_ID_MAC:
             return checkMacInitialized();
+        case FL_DEVICE_ID_DIRECTION:
+            return checkDirectionInitialized();
         case FL_DEVICE_ID_REMARK:
             return checkRemarkInitialized();
         case FL_DEVICE_ID_EXT_BIN:
@@ -1321,6 +1386,7 @@ public  class FlDeviceBean
             FL_DEVICE_ID_USED_SDKS_MASK |
             FL_DEVICE_ID_SERIAL_NO_MASK |
             FL_DEVICE_ID_MAC_MASK |
+            FL_DEVICE_ID_DIRECTION_MASK |
             FL_DEVICE_ID_REMARK_MASK |
             FL_DEVICE_ID_EXT_BIN_MASK |
             FL_DEVICE_ID_EXT_TXT_MASK |
@@ -1350,6 +1416,8 @@ public  class FlDeviceBean
         this.usedSdks = null;
         this.serialNo = null;
         this.mac = null;
+        /* DEFAULT:'0'*/
+        this.direction = new Integer(0);
         this.remark = null;
         this.extBin = null;
         this.extTxt = null;
@@ -1359,7 +1427,7 @@ public  class FlDeviceBean
         this.updateTime = null;
         this.isNew = true;
         this.modified = 0;
-        this.initialized = (FL_DEVICE_ID_GROUP_ID_MASK);
+        this.initialized = (FL_DEVICE_ID_GROUP_ID_MASK | FL_DEVICE_ID_DIRECTION_MASK);
     }
     @Override
     public boolean equals(Object object)
@@ -1382,6 +1450,7 @@ public  class FlDeviceBean
             .append(getUsedSdks(), obj.getUsedSdks())
             .append(getSerialNo(), obj.getSerialNo())
             .append(getMac(), obj.getMac())
+            .append(getDirection(), obj.getDirection())
             .append(getRemark(), obj.getRemark())
             .append(getExtBin(), obj.getExtBin())
             .append(getExtTxt(), obj.getExtTxt())
@@ -1559,6 +1628,15 @@ public  class FlDeviceBean
                 append(builder,fullIfStringOrBytes,getMac());
             }
         }
+        if(checkDirectionInitialized()){
+            if(!notNull || null != getDirection()){
+                if(count++ >0){
+                    builder.append(",");
+                }
+                builder.append("direction=");
+                append(builder,fullIfStringOrBytes,getDirection());
+            }
+        }
         if(checkRemarkInitialized()){
             if(!notNull || null != getRemark()){
                 if(count++ >0){
@@ -1622,6 +1700,7 @@ public  class FlDeviceBean
             .append(getUsedSdks(), object.getUsedSdks())
             .append(getSerialNo(), object.getSerialNo())
             .append(getMac(), object.getMac())
+            .append(getDirection(), object.getDirection())
             .append(getRemark(), object.getRemark())
             .append(getExtBin(), object.getExtBin())
             .append(getExtTxt(), object.getExtTxt())
@@ -1659,6 +1738,7 @@ public  class FlDeviceBean
         setUsedSdks((String)null);
         setSerialNo((String)null);
         setMac((String)null);
+        setDirection((Integer)null);
         setRemark((String)null);
         setExtBin((java.nio.ByteBuffer)null);
         setExtTxt((String)null);
@@ -1715,7 +1795,7 @@ public  class FlDeviceBean
     public FlDeviceBean copy(FlDeviceBean bean, int... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length){
-            fieldList = new int[]{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16};
+            fieldList = new int[]{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17};
         }
         for (int i = 0; i < fieldList.length; ++i) {
             if( bean.isInitialized(fieldList[i]) && !Objects.deepEquals(bean.getValue(fieldList[i]), getValue(fieldList[i]))){
@@ -1771,6 +1851,8 @@ public  class FlDeviceBean
             return (T)getSerialNo();        
         case FL_DEVICE_ID_MAC: 
             return (T)getMac();        
+        case FL_DEVICE_ID_DIRECTION: 
+            return (T)getDirection();        
         case FL_DEVICE_ID_REMARK: 
             return (T)getRemark();        
         case FL_DEVICE_ID_EXT_BIN: 
@@ -1825,6 +1907,9 @@ public  class FlDeviceBean
             break;
         case FL_DEVICE_ID_MAC:
             setMac((String)value);
+            break;
+        case FL_DEVICE_ID_DIRECTION:
+            setDirection((Integer)value);
             break;
         case FL_DEVICE_ID_REMARK:
             setRemark((String)value);
@@ -2038,6 +2123,16 @@ public  class FlDeviceBean
          */
         public Builder mac(String mac){
             TEMPLATE.get().setMac(mac);
+            return this;
+        }
+        /** 
+         * fill the field : fl_device.direction
+         * @param direction 通行方向,0:入口,1:出口,默认0
+         * @see FlDeviceBean#getDirection()
+         * @see FlDeviceBean#setDirection(Integer)
+         */
+        public Builder direction(Integer direction){
+            TEMPLATE.get().setDirection(direction);
             return this;
         }
         /** 

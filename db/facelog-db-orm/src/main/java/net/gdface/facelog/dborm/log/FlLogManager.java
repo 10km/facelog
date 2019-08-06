@@ -906,6 +906,14 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
                 dirtyCount++;
             }
 
+            if (bean.checkDirectionModified()) {
+                if (dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("direction");
+                dirtyCount++;
+            }
+
             if (bean.checkVerifyTimeModified()) {
                 if (dirtyCount>0) {
                     sql.append(",");
@@ -1064,6 +1072,15 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
                     useComma=true;
                 }
                 sql.append("similarty=?");
+            }
+
+            if (bean.checkDirectionModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("direction=?");
             }
 
             if (bean.checkVerifyTimeModified()) {
@@ -1719,6 +1736,14 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("similarty = ?");
                 }
             }
+            if (bean.checkDirectionModified()) {
+                dirtyCount ++;
+                if (bean.getDirection() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("direction IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("direction = ?");
+                }
+            }
             if (bean.checkVerifyTimeModified()) {
                 dirtyCount ++;
                 if (bean.getVerifyTime() == null) {
@@ -1805,6 +1830,10 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
             if (bean.checkSimilartyModified()) {
                 // System.out.println("Setting for " + dirtyCount + " [" + bean.getSimilarty() + "]");
                 if (bean.getSimilarty() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.DOUBLE);} } else { Manager.setDouble(ps, ++dirtyCount, bean.getSimilarty()); }
+            }
+            if (bean.checkDirectionModified()) {
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getDirection() + "]");
+                if (bean.getDirection() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.INTEGER);} } else { Manager.setInteger(ps, ++dirtyCount, bean.getDirection()); }
             }
             if (bean.checkVerifyTimeModified()) {
                 // System.out.println("Setting for " + dirtyCount + " [" + bean.getVerifyTime() + "]");
@@ -1938,8 +1967,9 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
             bean.setCompareFace(Manager.getInteger(rs, 5));
             bean.setVerifyStatus(Manager.getInteger(rs, 6));
             bean.setSimilarty(Manager.getDouble(rs, 7));
-            bean.setVerifyTime(rs.getTimestamp(8));
-            bean.setCreateTime(rs.getTimestamp(9));
+            bean.setDirection(Manager.getInteger(rs, 8));
+            bean.setVerifyTime(rs.getTimestamp(9));
+            bean.setCreateTime(rs.getTimestamp(10));
         }
         catch(SQLException e)
         {
@@ -2000,6 +2030,10 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
                         ++pos;
                         bean.setSimilarty(Manager.getDouble(rs, pos));
                         break;
+                    case FL_LOG_ID_DIRECTION:
+                        ++pos;
+                        bean.setDirection(Manager.getInteger(rs, pos));
+                        break;
                     case FL_LOG_ID_VERIFY_TIME:
                         ++pos;
                         bean.setVerifyTime(rs.getTimestamp(pos));
@@ -2043,6 +2077,7 @@ public class FlLogManager extends TableManager.BaseAdapter<FlLogBean>
             bean.setCompareFace(Manager.getInteger(rs, "compare_face"));
             bean.setVerifyStatus(Manager.getInteger(rs, "verify_status"));
             bean.setSimilarty(Manager.getDouble(rs, "similarty"));
+            bean.setDirection(Manager.getInteger(rs, "direction"));
             bean.setVerifyTime(rs.getTimestamp("verify_time"));
             bean.setCreateTime(rs.getTimestamp("create_time"));
         }

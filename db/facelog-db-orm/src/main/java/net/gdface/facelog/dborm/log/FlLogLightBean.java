@@ -47,6 +47,9 @@ public  class FlLogLightBean
     /** comments:验证时间(可能由前端设备提供时间) */
     private java.util.Date verifyTime;
 
+    /** comments:通行方向,NULL,0:入口,1:出口,默认0 */
+    private Integer direction;
+
     /** flag whether {@code this} can be modified */
     private Boolean immutable;
     /** columns modified flag */
@@ -497,6 +500,62 @@ public  class FlLogLightBean
     {
         return 0L !=  (initialized & FL_LOG_LIGHT_ID_VERIFY_TIME_MASK);
     }
+    /**
+     * Getter method for {@link #direction}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_log_light.direction</li>
+     * <li>comments: 通行方向,NULL,0:入口,1:出口,默认0</li>
+     * <li>column size: 10</li>
+     * <li>JDBC type returned by the driver: Types.INTEGER</li>
+     * </ul>
+     *
+     * @return the value of direction
+     */
+    public Integer getDirection(){
+        return direction;
+    }
+    /**
+     * Setter method for {@link #direction}.<br>
+     * The new value is set only if equals() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to direction
+     */
+    public void setDirection(Integer newVal)
+    {
+        checkMutable();
+
+        modified |= FL_LOG_LIGHT_ID_DIRECTION_MASK;
+        initialized |= FL_LOG_LIGHT_ID_DIRECTION_MASK;
+
+        if (Objects.equals(newVal, direction)) {
+            return;
+        }
+        direction = newVal;
+    }
+    /**
+     * Determines if the direction has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkDirectionModified()
+    {
+        return 0L !=  (modified & FL_LOG_LIGHT_ID_DIRECTION_MASK);
+    }
+
+    /**
+     * Determines if the direction has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkDirectionInitialized()
+    {
+        return 0L !=  (initialized & FL_LOG_LIGHT_ID_DIRECTION_MASK);
+    }
 
     @Override
     public boolean isModified()
@@ -519,6 +578,8 @@ public  class FlLogLightBean
             return checkPapersNumModified();
         case FL_LOG_LIGHT_ID_VERIFY_TIME:
             return checkVerifyTimeModified();
+        case FL_LOG_LIGHT_ID_DIRECTION:
+            return checkDirectionModified();
         default:
             return false;
         }        
@@ -539,6 +600,8 @@ public  class FlLogLightBean
             return checkPapersNumInitialized();
         case FL_LOG_LIGHT_ID_VERIFY_TIME:
             return checkVerifyTimeInitialized();
+        case FL_LOG_LIGHT_ID_DIRECTION:
+            return checkDirectionInitialized();
         default:
             return false;
         }
@@ -576,7 +639,8 @@ public  class FlLogLightBean
             FL_LOG_LIGHT_ID_NAME_MASK |
             FL_LOG_LIGHT_ID_PAPERS_TYPE_MASK |
             FL_LOG_LIGHT_ID_PAPERS_NUM_MASK |
-            FL_LOG_LIGHT_ID_VERIFY_TIME_MASK));
+            FL_LOG_LIGHT_ID_VERIFY_TIME_MASK |
+            FL_LOG_LIGHT_ID_DIRECTION_MASK));
     }
     /**
      * Resets the object initialization status to 'not initialized'.
@@ -597,6 +661,7 @@ public  class FlLogLightBean
         this.papersNum = null;
         /* DEFAULT:'0000-00-00 00:00:00'*/
         this.verifyTime = null;
+        this.direction = null;
         this.isNew = true;
         this.modified = 0;
         this.initialized = (FL_LOG_LIGHT_ID_ID_MASK | FL_LOG_LIGHT_ID_PERSON_ID_MASK);
@@ -616,6 +681,7 @@ public  class FlLogLightBean
             .append(getPapersType(), obj.getPapersType())
             .append(getPapersNum(), obj.getPapersNum())
             .append(getVerifyTime(), obj.getVerifyTime())
+            .append(getDirection(), obj.getDirection())
             .isEquals();
     }
 
@@ -629,6 +695,7 @@ public  class FlLogLightBean
             .append(getPapersType())
             .append(getPapersNum())
             .append(getVerifyTime())
+            .append(getDirection())
             .toHashCode();
     }
 
@@ -739,6 +806,15 @@ public  class FlLogLightBean
                 append(builder,fullIfStringOrBytes,getVerifyTime());
             }
         }
+        if(checkDirectionInitialized()){
+            if(!notNull || null != getDirection()){
+                if(count++ >0){
+                    builder.append(",");
+                }
+                builder.append("direction=");
+                append(builder,fullIfStringOrBytes,getDirection());
+            }
+        }
         builder.append("]");
         return builder.toString();
     }
@@ -751,6 +827,7 @@ public  class FlLogLightBean
             .append(getPapersType(), object.getPapersType())
             .append(getPapersNum(), object.getPapersNum())
             .append(getVerifyTime(), object.getVerifyTime())
+            .append(getDirection(), object.getDirection())
             .toComparison();
     }
     @Override
@@ -777,6 +854,7 @@ public  class FlLogLightBean
         setPapersType((Integer)null);
         setPapersNum((String)null);
         setVerifyTime((java.util.Date)null);
+        setDirection((Integer)null);
         isNew(true);
         resetInitialized();
         resetIsModified();
@@ -828,7 +906,7 @@ public  class FlLogLightBean
     public FlLogLightBean copy(FlLogLightBean bean, int... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length){
-            fieldList = new int[]{0,1,2,3,4,5};
+            fieldList = new int[]{0,1,2,3,4,5,6};
         }
         for (int i = 0; i < fieldList.length; ++i) {
             if( bean.isInitialized(fieldList[i]) && !Objects.deepEquals(bean.getValue(fieldList[i]), getValue(fieldList[i]))){
@@ -872,6 +950,8 @@ public  class FlLogLightBean
             return (T)getPapersNum();        
         case FL_LOG_LIGHT_ID_VERIFY_TIME: 
             return (T)getVerifyTime();        
+        case FL_LOG_LIGHT_ID_DIRECTION: 
+            return (T)getDirection();        
         default:
             return null;
         }
@@ -898,6 +978,9 @@ public  class FlLogLightBean
             break;
         case FL_LOG_LIGHT_ID_VERIFY_TIME:
             setVerifyTime((java.util.Date)value);
+            break;
+        case FL_LOG_LIGHT_ID_DIRECTION:
+            setDirection((Integer)value);
             break;
         default:
             break;
@@ -1036,6 +1119,16 @@ public  class FlLogLightBean
          */
         public Builder verifyTime(java.util.Date verifyTime){
             TEMPLATE.get().setVerifyTime(verifyTime);
+            return this;
+        }
+        /** 
+         * fill the field : fl_log_light.direction
+         * @param direction 通行方向,NULL,0:入口,1:出口,默认0
+         * @see FlLogLightBean#getDirection()
+         * @see FlLogLightBean#setDirection(Integer)
+         */
+        public Builder direction(Integer direction){
+            TEMPLATE.get().setDirection(direction);
             return this;
         }
     }

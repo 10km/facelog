@@ -59,6 +59,10 @@ public final class LogBean
     @ApiModelProperty(value = "验证相似度"  ,dataType="Double")
     private Double similarty;
 
+    /** comments:通行方向,NULL,0:入口,1:出口,默认0 */
+    @ApiModelProperty(value = "通行方向,NULL,0:入口,1:出口,默认0"  ,dataType="Integer")
+    private Integer direction;
+
     /** comments:验证时间(可能由前端设备提供时间) */
     @ApiModelProperty(value = "验证时间(可能由前端设备提供时间)"  ,dataType="Date")
     private java.util.Date verifyTime;
@@ -720,6 +724,83 @@ public final class LogBean
         return 0L !=  (initialized & FL_LOG_ID_SIMILARTY_MASK);
     }
     /**
+     * Getter method for {@link #direction}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_log.direction</li>
+     * <li>comments: 通行方向,NULL,0:入口,1:出口,默认0</li>
+     * <li>column size: 10</li>
+     * <li>JDBC type returned by the driver: Types.INTEGER</li>
+     * </ul>
+     *
+     * @return the value of direction
+     */
+    @ThriftField(value=11)
+    public Integer getDirection(){
+        return direction;
+    }
+    /**
+     * Setter method for {@link #direction}.<br>
+     * The new value is set only if equals() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to direction
+     */
+    public void setDirection(Integer newVal)
+    {
+        checkMutable();
+
+        modified |= FL_LOG_ID_DIRECTION_MASK;
+        initialized |= FL_LOG_ID_DIRECTION_MASK;
+
+        if (Objects.equals(newVal, direction)) {
+            return;
+        }
+        direction = newVal;
+    }
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "direction")
+    public void writeDirection(Integer newVal){
+        checkMutable();
+        direction = newVal;
+    }
+    /**
+     * Setter method for {@link #direction}.<br>
+     * Convenient for those who do not want to deal with Objects for primary types.
+     *
+     * @param newVal the new value to be assigned to direction
+     */
+    public void setDirection(int newVal)
+    {
+        setDirection(new Integer(newVal));
+    }
+    /**
+     * Determines if the direction has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkDirectionModified()
+    {
+        return 0L !=  (modified & FL_LOG_ID_DIRECTION_MASK);
+    }
+
+    /**
+     * Determines if the direction has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkDirectionInitialized()
+    {
+        return 0L !=  (initialized & FL_LOG_ID_DIRECTION_MASK);
+    }
+    /**
      * Getter method for {@link #verifyTime}.<br>
      * Meta Data Information (in progress):
      * <ul>
@@ -740,7 +821,7 @@ public final class LogBean
      * use Long to represent date type for thrift:swift support 
      * @see #getVerifyTime()
      */
-    @ThriftField(name = "verifyTime",value = 11)
+    @ThriftField(name = "verifyTime",value = 12)
     public Long readVerifyTime(){
         return null == verifyTime ? null:verifyTime.getTime();
     }
@@ -833,7 +914,7 @@ public final class LogBean
      * use Long to represent date type for thrift:swift support 
      * @see #getCreateTime()
      */
-    @ThriftField(name = "createTime",value = 12)
+    @ThriftField(name = "createTime",value = 13)
     public Long readCreateTime(){
         return null == createTime ? null:createTime.getTime();
     }
@@ -1013,6 +1094,8 @@ public final class LogBean
             return checkVerifyStatusModified();
         case FL_LOG_ID_SIMILARTY:
             return checkSimilartyModified();
+        case FL_LOG_ID_DIRECTION:
+            return checkDirectionModified();
         case FL_LOG_ID_VERIFY_TIME:
             return checkVerifyTimeModified();
         case FL_LOG_ID_CREATE_TIME:
@@ -1039,6 +1122,8 @@ public final class LogBean
             return checkVerifyStatusInitialized();
         case FL_LOG_ID_SIMILARTY:
             return checkSimilartyInitialized();
+        case FL_LOG_ID_DIRECTION:
+            return checkDirectionInitialized();
         case FL_LOG_ID_VERIFY_TIME:
             return checkVerifyTimeInitialized();
         case FL_LOG_ID_CREATE_TIME:
@@ -1081,6 +1166,7 @@ public final class LogBean
             FL_LOG_ID_COMPARE_FACE_MASK |
             FL_LOG_ID_VERIFY_STATUS_MASK |
             FL_LOG_ID_SIMILARTY_MASK |
+            FL_LOG_ID_DIRECTION_MASK |
             FL_LOG_ID_VERIFY_TIME_MASK |
             FL_LOG_ID_CREATE_TIME_MASK));
     }
@@ -1101,6 +1187,7 @@ public final class LogBean
         this.compareFace = null;
         this.verifyStatus = null;
         this.similarty = null;
+        this.direction = null;
         /* DEFAULT:'CURRENT_TIMESTAMP'*/
         this.verifyTime = null;
         /* DEFAULT:'CURRENT_TIMESTAMP'*/
@@ -1125,6 +1212,7 @@ public final class LogBean
             .append(getCompareFace(), obj.getCompareFace())
             .append(getVerifyStatus(), obj.getVerifyStatus())
             .append(getSimilarty(), obj.getSimilarty())
+            .append(getDirection(), obj.getDirection())
             .append(getVerifyTime(), obj.getVerifyTime())
             .append(getCreateTime(), obj.getCreateTime())
             .isEquals();
@@ -1254,6 +1342,15 @@ public final class LogBean
                 append(builder,fullIfStringOrBytes,getSimilarty());
             }
         }
+        if(checkDirectionInitialized()){
+            if(!notNull || null != getDirection()){
+                if(count++ >0){
+                    builder.append(",");
+                }
+                builder.append("direction=");
+                append(builder,fullIfStringOrBytes,getDirection());
+            }
+        }
         if(checkVerifyTimeInitialized()){
             if(!notNull || null != getVerifyTime()){
                 if(count++ >0){
@@ -1285,6 +1382,7 @@ public final class LogBean
             .append(getCompareFace(), object.getCompareFace())
             .append(getVerifyStatus(), object.getVerifyStatus())
             .append(getSimilarty(), object.getSimilarty())
+            .append(getDirection(), object.getDirection())
             .append(getVerifyTime(), object.getVerifyTime())
             .append(getCreateTime(), object.getCreateTime())
             .toComparison();
@@ -1314,6 +1412,7 @@ public final class LogBean
         setCompareFace((Integer)null);
         setVerifyStatus((Integer)null);
         setSimilarty((Double)null);
+        setDirection((Integer)null);
         setVerifyTime((java.util.Date)null);
         setCreateTime((java.util.Date)null);
         isNew(true);
@@ -1367,7 +1466,7 @@ public final class LogBean
     public LogBean copy(LogBean bean, int... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length){
-            fieldList = new int[]{0,1,2,3,4,5,6,7,8};
+            fieldList = new int[]{0,1,2,3,4,5,6,7,8,9};
         }
         for (int i = 0; i < fieldList.length; ++i) {
             if( bean.isInitialized(fieldList[i]) && !Objects.deepEquals(bean.getValue(fieldList[i]), getValue(fieldList[i]))){
@@ -1413,6 +1512,8 @@ public final class LogBean
             return (T)getVerifyStatus();        
         case FL_LOG_ID_SIMILARTY: 
             return (T)getSimilarty();        
+        case FL_LOG_ID_DIRECTION: 
+            return (T)getDirection();        
         case FL_LOG_ID_VERIFY_TIME: 
             return (T)getVerifyTime();        
         case FL_LOG_ID_CREATE_TIME: 
@@ -1446,6 +1547,9 @@ public final class LogBean
             break;
         case FL_LOG_ID_SIMILARTY:
             setSimilarty((Double)value);
+            break;
+        case FL_LOG_ID_DIRECTION:
+            setDirection((Integer)value);
             break;
         case FL_LOG_ID_VERIFY_TIME:
             setVerifyTime((java.util.Date)value);
@@ -1600,6 +1704,16 @@ public final class LogBean
          */
         public Builder similarty(Double similarty){
             TEMPLATE.get().setSimilarty(similarty);
+            return this;
+        }
+        /** 
+         * fill the field : fl_log.direction
+         * @param direction 通行方向,NULL,0:入口,1:出口,默认0
+         * @see LogBean#getDirection()
+         * @see LogBean#setDirection(Integer)
+         */
+        public Builder direction(Integer direction){
+            TEMPLATE.get().setDirection(direction);
             return this;
         }
         /** 

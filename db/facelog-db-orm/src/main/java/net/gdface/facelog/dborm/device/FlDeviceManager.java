@@ -1153,6 +1153,14 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
                 dirtyCount++;
             }
 
+            if (bean.checkDirectionModified()) {
+                if (dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("direction");
+                dirtyCount++;
+            }
+
             if (bean.checkRemarkModified()) {
                 if (dirtyCount>0) {
                     sql.append(",");
@@ -1380,6 +1388,15 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
                     useComma=true;
                 }
                 sql.append("mac=?");
+            }
+
+            if (bean.checkDirectionModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("direction=?");
             }
 
             if (bean.checkRemarkModified()) {
@@ -2222,6 +2239,14 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("mac ").append(sqlEqualsOperation).append("?");
                 }
             }
+            if (bean.checkDirectionModified()) {
+                dirtyCount ++;
+                if (bean.getDirection() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("direction IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("direction = ?");
+                }
+            }
             if (bean.checkRemarkModified()) {
                 dirtyCount ++;
                 if (bean.getRemark() == null) {
@@ -2497,6 +2522,10 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
                         throw new DaoException("Unknown search type " + searchType);
                 }
             }
+            if (bean.checkDirectionModified()) {
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getDirection() + "]");
+                if (bean.getDirection() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.INTEGER);} } else { Manager.setInteger(ps, ++dirtyCount, bean.getDirection()); }
+            }
             if (bean.checkRemarkModified()) {
                 switch (searchType) {
                     case SEARCH_EXACT:
@@ -2682,11 +2711,12 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
             bean.setUsedSdks(rs.getString(10));
             bean.setSerialNo(rs.getString(11));
             bean.setMac(rs.getString(12));
-            bean.setRemark(rs.getString(13));
-            bean.setExtBin(Manager.getBytes(rs, 14));
-            bean.setExtTxt(rs.getString(15));
-            bean.setCreateTime(rs.getTimestamp(16));
-            bean.setUpdateTime(rs.getTimestamp(17));
+            bean.setDirection(Manager.getInteger(rs, 13));
+            bean.setRemark(rs.getString(14));
+            bean.setExtBin(Manager.getBytes(rs, 15));
+            bean.setExtTxt(rs.getString(16));
+            bean.setCreateTime(rs.getTimestamp(17));
+            bean.setUpdateTime(rs.getTimestamp(18));
         }
         catch(SQLException e)
         {
@@ -2767,6 +2797,10 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
                         ++pos;
                         bean.setMac(rs.getString(pos));
                         break;
+                    case FL_DEVICE_ID_DIRECTION:
+                        ++pos;
+                        bean.setDirection(Manager.getInteger(rs, pos));
+                        break;
                     case FL_DEVICE_ID_REMARK:
                         ++pos;
                         bean.setRemark(rs.getString(pos));
@@ -2827,6 +2861,7 @@ public class FlDeviceManager extends TableManager.BaseAdapter<FlDeviceBean>
             bean.setUsedSdks(rs.getString("used_sdks"));
             bean.setSerialNo(rs.getString("serial_no"));
             bean.setMac(rs.getString("mac"));
+            bean.setDirection(Manager.getInteger(rs, "direction"));
             bean.setRemark(rs.getString("remark"));
             bean.setExtBin(Manager.getBytes(rs, "ext_bin"));
             bean.setExtTxt(rs.getString("ext_txt"));

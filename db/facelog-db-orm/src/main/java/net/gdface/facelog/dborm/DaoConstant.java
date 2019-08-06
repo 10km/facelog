@@ -49,7 +49,7 @@ public interface DaoConstant {
     public static interface DeviceConst{
         public static final String TABLENAME = "fl_device";
         /** column count for fl_device table */
-        public static final int COLUMN_COUNT = 17;
+        public static final int COLUMN_COUNT = 18;
         /** primary keys count for fl_device table */
         public static final int PRIMARY_KEY_COUNT = 1;
         /** foreign keys count for fl_device table */
@@ -71,6 +71,7 @@ public interface DaoConstant {
                             + ",fl_device.used_sdks"
                             + ",fl_device.serial_no"
                             + ",fl_device.mac"
+                            + ",fl_device.direction"
                             + ",fl_device.remark"
                             + ",fl_device.ext_bin"
                             + ",fl_device.ext_txt"
@@ -89,6 +90,7 @@ public interface DaoConstant {
                             + ",used_sdks"
                             + ",serial_no"
                             + ",mac"
+                            + ",direction"
                             + ",remark"
                             + ",ext_bin"
                             + ",ext_txt"
@@ -109,6 +111,7 @@ public interface DaoConstant {
                             + ",usedSdks"
                             + ",serialNo"
                             + ",mac"
+                            + ",direction"
                             + ",remark"
                             + ",extBin"
                             + ",extTxt"
@@ -154,16 +157,18 @@ public interface DaoConstant {
             serialNo("fl_device","serial_no",11,"getSerialNo","setSerialNo"),
             /** constant for fl_device.mac  */
             mac("fl_device","mac",12,"getMac","setMac"),
+            /** constant for fl_device.direction  */
+            direction("fl_device","direction",13,"getDirection","setDirection"),
             /** constant for fl_device.remark  */
-            remark("fl_device","remark",13,"getRemark","setRemark"),
+            remark("fl_device","remark",14,"getRemark","setRemark"),
             /** constant for fl_device.ext_bin  */
-            extBin("fl_device","ext_bin",14,"getExtBin","setExtBin"),
+            extBin("fl_device","ext_bin",15,"getExtBin","setExtBin"),
             /** constant for fl_device.ext_txt  */
-            extTxt("fl_device","ext_txt",15,"getExtTxt","setExtTxt"),
+            extTxt("fl_device","ext_txt",16,"getExtTxt","setExtTxt"),
             /** constant for fl_device.create_time  */
-            createTime("fl_device","create_time",16,"getCreateTime","setCreateTime"),
+            createTime("fl_device","create_time",17,"getCreateTime","setCreateTime"),
             /** constant for fl_device.update_time  */
-            updateTime("fl_device","update_time",17,"getUpdateTime","setUpdateTime");
+            updateTime("fl_device","update_time",18,"getUpdateTime","setUpdateTime");
             final ColumnMeta meta;
             private Column(String table,String field,int ordinal,String getter,String setter){
                 meta = new ColumnMeta(table,field,ordinal,getter,setter);
@@ -544,7 +549,7 @@ public interface DaoConstant {
     public static interface LogConst{
         public static final String TABLENAME = "fl_log";
         /** column count for fl_log table */
-        public static final int COLUMN_COUNT = 9;
+        public static final int COLUMN_COUNT = 10;
         /** primary keys count for fl_log table */
         public static final int PRIMARY_KEY_COUNT = 1;
         /** foreign keys count for fl_log table */
@@ -561,6 +566,7 @@ public interface DaoConstant {
                             + ",fl_log.compare_face"
                             + ",fl_log.verify_status"
                             + ",fl_log.similarty"
+                            + ",fl_log.direction"
                             + ",fl_log.verify_time"
                             + ",fl_log.create_time";
         /** Field that contains the comma separated fields of the fl_log table. */
@@ -571,6 +577,7 @@ public interface DaoConstant {
                             + ",compare_face"
                             + ",verify_status"
                             + ",similarty"
+                            + ",direction"
                             + ",verify_time"
                             + ",create_time";
         /** immutable list of {@link #FIELDS} */
@@ -583,6 +590,7 @@ public interface DaoConstant {
                             + ",compareFace"
                             + ",verifyStatus"
                             + ",similarty"
+                            + ",direction"
                             + ",verifyTime"
                             + ",createTime";
         /** immutable list of {@link #JAVA_FIELDS} */
@@ -618,10 +626,12 @@ public interface DaoConstant {
             verifyStatus("fl_log","verify_status",6,"getVerifyStatus","setVerifyStatus"),
             /** constant for fl_log.similarty  */
             similarty("fl_log","similarty",7,"getSimilarty","setSimilarty"),
+            /** constant for fl_log.direction  */
+            direction("fl_log","direction",8,"getDirection","setDirection"),
             /** constant for fl_log.verify_time  */
-            verifyTime("fl_log","verify_time",8,"getVerifyTime","setVerifyTime"),
+            verifyTime("fl_log","verify_time",9,"getVerifyTime","setVerifyTime"),
             /** constant for fl_log.create_time  */
-            createTime("fl_log","create_time",9,"getCreateTime","setCreateTime");
+            createTime("fl_log","create_time",10,"getCreateTime","setCreateTime");
             final ColumnMeta meta;
             private Column(String table,String field,int ordinal,String getter,String setter){
                 meta = new ColumnMeta(table,field,ordinal,getter,setter);
@@ -974,7 +984,7 @@ public interface DaoConstant {
     public static interface LogLightConst{
         public static final String TABLENAME = "fl_log_light";
         /** column count for fl_log_light table */
-        public static final int COLUMN_COUNT = 6;
+        public static final int COLUMN_COUNT = 7;
         /** primary keys count for fl_log_light table */
         public static final int PRIMARY_KEY_COUNT = 0;
         /** foreign keys count for fl_log_light table */
@@ -989,14 +999,16 @@ public interface DaoConstant {
                             + ",fl_log_light.name"
                             + ",fl_log_light.papers_type"
                             + ",fl_log_light.papers_num"
-                            + ",fl_log_light.verify_time";
+                            + ",fl_log_light.verify_time"
+                            + ",fl_log_light.direction";
         /** Field that contains the comma separated fields of the fl_log_light table. */
         public static final String FIELDS = "id"
                             + ",person_id"
                             + ",name"
                             + ",papers_type"
                             + ",papers_num"
-                            + ",verify_time";
+                            + ",verify_time"
+                            + ",direction";
         /** immutable list of {@link #FIELDS} */
         public static final java.util.List<String> FIELDS_LIST = java.util.Collections.unmodifiableList(java.util.Arrays.asList(FIELDS.split(",")));
         /** Field that contains the comma separated java fields of the fl_log_light table. */
@@ -1005,7 +1017,8 @@ public interface DaoConstant {
                             + ",name"
                             + ",papersType"
                             + ",papersNum"
-                            + ",verifyTime";
+                            + ",verifyTime"
+                            + ",direction";
         /** immutable list of {@link #JAVA_FIELDS} */
         public static final java.util.List<String> JAVA_FIELDS_LIST = java.util.Collections.unmodifiableList(java.util.Arrays.asList(JAVA_FIELDS.split(",")));
         public static enum Fk{
@@ -1030,7 +1043,9 @@ public interface DaoConstant {
             /** constant for fl_log_light.papers_num  */
             papersNum("fl_log_light","papers_num",5,"getPapersNum","setPapersNum"),
             /** constant for fl_log_light.verify_time  */
-            verifyTime("fl_log_light","verify_time",6,"getVerifyTime","setVerifyTime");
+            verifyTime("fl_log_light","verify_time",6,"getVerifyTime","setVerifyTime"),
+            /** constant for fl_log_light.direction  */
+            direction("fl_log_light","direction",7,"getDirection","setDirection");
             final ColumnMeta meta;
             private Column(String table,String field,int ordinal,String getter,String setter){
                 meta = new ColumnMeta(table,field,ordinal,getter,setter);

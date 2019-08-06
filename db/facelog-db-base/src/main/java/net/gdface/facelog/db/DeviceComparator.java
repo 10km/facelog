@@ -48,6 +48,7 @@ public class DeviceComparator implements Comparator<DeviceBean>,Constant
      *   <li>{@link Constant#FL_DEVICE_ID_USED_SDKS}
      *   <li>{@link Constant#FL_DEVICE_ID_SERIAL_NO}
      *   <li>{@link Constant#FL_DEVICE_ID_MAC}
+     *   <li>{@link Constant#FL_DEVICE_ID_DIRECTION}
      *   <li>{@link Constant#FL_DEVICE_ID_REMARK}
      *   <li>{@link Constant#FL_DEVICE_ID_EXT_BIN}
      *   <li>{@link Constant#FL_DEVICE_ID_EXT_TXT}
@@ -83,6 +84,7 @@ public class DeviceComparator implements Comparator<DeviceBean>,Constant
      *   <li>{@link Constant#FL_DEVICE_ID_USED_SDKS})
      *   <li>{@link Constant#FL_DEVICE_ID_SERIAL_NO})
      *   <li>{@link Constant#FL_DEVICE_ID_MAC})
+     *   <li>{@link Constant#FL_DEVICE_ID_DIRECTION})
      *   <li>{@link Constant#FL_DEVICE_ID_REMARK})
      *   <li>{@link Constant#FL_DEVICE_ID_EXT_BIN})
      *   <li>{@link Constant#FL_DEVICE_ID_EXT_TXT})
@@ -234,6 +236,17 @@ public class DeviceComparator implements Comparator<DeviceBean>,Constant
                     iReturn = 1;
                 } else {
                     iReturn = b1.getMac().compareTo(b2.getMac());
+                }
+                break;
+            case FL_DEVICE_ID_DIRECTION:
+                if (b1.getDirection() == null && b2.getDirection() != null) {
+                    iReturn = -1;
+                } else if (b1.getDirection() == null && b2.getDirection() == null) {
+                    iReturn = 0;
+                } else if (b1.getDirection() != null && b2.getDirection() == null) {
+                    iReturn = 1;
+                } else {
+                    iReturn = b1.getDirection().compareTo(b2.getDirection());
                 }
                 break;
             case FL_DEVICE_ID_REMARK:

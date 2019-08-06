@@ -80,6 +80,9 @@ public class DbConverter implements IDbConverter<
             if(right.checkMacInitialized()){
                 left.setMac(right.getMac());
             }
+            if(right.checkDirectionInitialized()){
+                left.setDirection(right.getDirection());
+            }
             if(right.checkRemarkInitialized()){
                 left.setRemark(right.getRemark());
             }
@@ -137,6 +140,9 @@ public class DbConverter implements IDbConverter<
             }
             if(left.checkMacInitialized() ){
                 right.setMac(left.getMac());
+            }
+            if(left.checkDirectionInitialized() ){
+                right.setDirection(left.getDirection());
             }
             if(left.checkRemarkInitialized() ){
                 right.setRemark(left.getRemark());
@@ -510,6 +516,9 @@ public class DbConverter implements IDbConverter<
             if(right.checkSimilartyInitialized()){
                 left.setSimilarty(right.getSimilarty());
             }
+            if(right.checkDirectionInitialized()){
+                left.setDirection(right.getDirection());
+            }
             if(right.checkVerifyTimeInitialized()){
                 left.setVerifyTime(right.getVerifyTime());
             }
@@ -543,6 +552,9 @@ public class DbConverter implements IDbConverter<
             }
             if(left.checkSimilartyInitialized() ){
                 right.setSimilarty(left.getSimilarty());
+            }
+            if(left.checkDirectionInitialized() ){
+                right.setDirection(left.getDirection());
             }
             if(left.checkVerifyTimeInitialized() ){
                 right.setVerifyTime(left.getVerifyTime());
@@ -869,6 +881,9 @@ public class DbConverter implements IDbConverter<
             if(right.checkVerifyTimeInitialized()){
                 left.setVerifyTime(right.getVerifyTime());
             }
+            if(right.checkDirectionInitialized()){
+                left.setDirection(right.getDirection());
+            }
             left.setNew(right.isNew());
             left.setModified(right.getModified());
             left.setInitialized(right.getInitialized());
@@ -893,6 +908,9 @@ public class DbConverter implements IDbConverter<
             }
             if(left.checkVerifyTimeInitialized() ){
                 right.setVerifyTime(left.getVerifyTime());
+            }
+            if(left.checkDirectionInitialized() ){
+                right.setDirection(left.getDirection());
             }
             right.setNew(left.isNew());
             right.setModified(left.getModified());

@@ -84,13 +84,16 @@ CREATE TABLE IF NOT EXISTS fl_device (
   `used_sdks`   varchar(128)DEFAULT NULL COMMENT '支持的特征码(算法)版本号列表(逗号分隔),特征版本号用于区分不同人脸识别算法生成的特征数据(SDK版本号命名允许字母,数字,-,.,_符号)',
   `serial_no`   varchar(32) DEFAULT NULL UNIQUE COMMENT '设备序列号',
   `mac`         char(12) DEFAULT NULL UNIQUE COMMENT '6字节MAC地址(HEX)',
+  `direction`   int(11) NOT NULL DEFAULT 0 COMMENT '通行方向,0:入口,1:出口,默认0',
   `remark`      varchar(256) DEFAULT NULL COMMENT '备注',
   `ext_bin`     blob DEFAULT NULL COMMENT '应用项目自定义二进制扩展字段(最大64KB)',
   `ext_txt`     text DEFAULT NULL COMMENT '应用项目自定义文本扩展字段(最大64KB)',
   `create_time` timestamp DEFAULT CURRENT_TIMESTAMP,
   `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (group_id)  REFERENCES fl_device_group(id) ON DELETE SET NULL,
-  INDEX `group_id` (`group_id` ASC)
+  INDEX `group_id` (`group_id` ASC),
+  # 验证 direction 字段有效性
+  CHECK(direction>=0 AND direction<=1)
 ) COMMENT '前端设备基本信息' DEFAULT CHARSET=utf8;
 
 /*
@@ -198,6 +201,7 @@ CREATE TABLE IF NOT EXISTS fl_log (
   `compare_face`    int(11) DEFAULT NULL COMMENT '外键,现场采集的人脸信息记录id',
   `verify_status`   tinyint(1) DEFAULT NULL COMMENT '验证状态,NULL,0:允许通过,其他:拒绝',
   `similarty`	    double  DEFAULT NULL COMMENT '验证相似度',
+  `direction`       int(11) DEFAULT NULL COMMENT '通行方向,NULL,0:入口,1:出口,默认0',
   `verify_time`     timestamp NOT NULL COMMENT '验证时间(可能由前端设备提供时间)',
   `create_time`     timestamp DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (person_id)       REFERENCES fl_person(id)   ON DELETE CASCADE,
@@ -212,7 +216,8 @@ CREATE VIEW fl_log_light AS SELECT log.id,
     person.name,
     person.papers_type,
     person.papers_num,
-    log.verify_time 
+    log.verify_time,
+    log.direction
     FROM fl_log AS log JOIN fl_person AS person ON log.person_id = person.id;
 
 # 创建默认的设备组和人员组

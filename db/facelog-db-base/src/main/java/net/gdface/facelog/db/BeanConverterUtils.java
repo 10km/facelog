@@ -162,6 +162,7 @@ public class BeanConverterUtils implements Constant {
             usedSdks("getUsedSdks","setUsedSdks"),
             serialNo("getSerialNo","setSerialNo"),
             mac("getMac","setMac"),
+            direction("getDirection","setDirection"),
             remark("getRemark","setRemark"),
             extBin("getExtBin","setExtBin"),
             extTxt("getExtTxt","setExtTxt"),
@@ -289,6 +290,8 @@ public class BeanConverterUtils implements Constant {
             getSetterNoThrow(Column.serialNo.setter,String.class); 
             getGetter(Column.mac.getter);
             getSetterNoThrow(Column.mac.setter,String.class); 
+            getGetter(Column.direction.getter);
+            getSetterNoThrow(Column.direction.setter,Integer.class,int.class);                    
             getGetter(Column.remark.getter);
             getSetterNoThrow(Column.remark.setter,String.class); 
             getGetter(Column.extBin.getter);
@@ -385,6 +388,12 @@ public class BeanConverterUtils implements Constant {
                     left.setMac(cast(String.class,getterMethod.invoke(right)));
                     if(bitCheck(Column.mac.name(),modified)){
                         selfModified |= FL_DEVICE_ID_MAC_MASK;
+                    }
+                }
+                if( bitCheck(Column.direction.name(),initialized) && (null != (getterMethod = methods.get(Column.direction.getter)))){
+                    left.setDirection(cast(Integer.class,getterMethod.invoke(right)));
+                    if(bitCheck(Column.direction.name(),modified)){
+                        selfModified |= FL_DEVICE_ID_DIRECTION_MASK;
                     }
                 }
                 if( bitCheck(Column.remark.name(),initialized) && (null != (getterMethod = methods.get(Column.remark.getter)))){
@@ -539,6 +548,15 @@ public class BeanConverterUtils implements Constant {
                         bitOR(Column.mac.name(),initialized);
                         if(left.checkMacModified()){
                             bitOR(Column.mac.name(),modified);
+                        }
+                    }catch(NullCastPrimitiveException e){}
+                }
+                if(null != (setterMethod = methods.get(Column.direction.setter)) && left.checkDirectionInitialized()){
+                    try{
+                        setterMethod.invoke(right,cast(setterParams.get(Column.direction.setter),left.getDirection()));
+                        bitOR(Column.direction.name(),initialized);
+                        if(left.checkDirectionModified()){
+                            bitOR(Column.direction.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
@@ -2067,6 +2085,7 @@ public class BeanConverterUtils implements Constant {
             compareFace("getCompareFace","setCompareFace"),
             verifyStatus("getVerifyStatus","setVerifyStatus"),
             similarty("getSimilarty","setSimilarty"),
+            direction("getDirection","setDirection"),
             verifyTime("getVerifyTime","setVerifyTime"),
             createTime("getCreateTime","setCreateTime");
             final String getter;
@@ -2181,6 +2200,8 @@ public class BeanConverterUtils implements Constant {
             getSetterNoThrow(Column.verifyStatus.setter,Integer.class,int.class);                    
             getGetter(Column.similarty.getter);
             getSetterNoThrow(Column.similarty.setter,Double.class,double.class);                    
+            getGetter(Column.direction.getter);
+            getSetterNoThrow(Column.direction.setter,Integer.class,int.class);                    
             getGetter(Column.verifyTime.getter);
             getSetterNoThrow(Column.verifyTime.setter,java.util.Date.class,Long.class,long.class);  
             getGetter(Column.createTime.getter);
@@ -2241,6 +2262,12 @@ public class BeanConverterUtils implements Constant {
                     left.setSimilarty(cast(Double.class,getterMethod.invoke(right)));
                     if(bitCheck(Column.similarty.name(),modified)){
                         selfModified |= FL_LOG_ID_SIMILARTY_MASK;
+                    }
+                }
+                if( bitCheck(Column.direction.name(),initialized) && (null != (getterMethod = methods.get(Column.direction.getter)))){
+                    left.setDirection(cast(Integer.class,getterMethod.invoke(right)));
+                    if(bitCheck(Column.direction.name(),modified)){
+                        selfModified |= FL_LOG_ID_DIRECTION_MASK;
                     }
                 }
                 if( bitCheck(Column.verifyTime.name(),initialized) && (null != (getterMethod = methods.get(Column.verifyTime.getter)))){
@@ -2332,6 +2359,15 @@ public class BeanConverterUtils implements Constant {
                         bitOR(Column.similarty.name(),initialized);
                         if(left.checkSimilartyModified()){
                             bitOR(Column.similarty.name(),modified);
+                        }
+                    }catch(NullCastPrimitiveException e){}
+                }
+                if(null != (setterMethod = methods.get(Column.direction.setter)) && left.checkDirectionInitialized()){
+                    try{
+                        setterMethod.invoke(right,cast(setterParams.get(Column.direction.setter),left.getDirection()));
+                        bitOR(Column.direction.name(),initialized);
+                        if(left.checkDirectionModified()){
+                            bitOR(Column.direction.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
@@ -3726,7 +3762,8 @@ public class BeanConverterUtils implements Constant {
             name("getName","setName"),
             papersType("getPapersType","setPapersType"),
             papersNum("getPapersNum","setPapersNum"),
-            verifyTime("getVerifyTime","setVerifyTime");
+            verifyTime("getVerifyTime","setVerifyTime"),
+            direction("getDirection","setDirection");
             final String getter;
             final String setter;
             Column(String getter,String setter){
@@ -3837,6 +3874,8 @@ public class BeanConverterUtils implements Constant {
             getSetterNoThrow(Column.papersNum.setter,String.class); 
             getGetter(Column.verifyTime.getter);
             getSetterNoThrow(Column.verifyTime.setter,java.util.Date.class,Long.class,long.class);  
+            getGetter(Column.direction.getter);
+            getSetterNoThrow(Column.direction.setter,Integer.class,int.class);                    
         }
         @Override
         protected void doFromRight(LogLightBean left, R_LOGLIGHT right) {
@@ -3887,6 +3926,12 @@ public class BeanConverterUtils implements Constant {
                     left.setVerifyTime(cast(java.util.Date.class,getterMethod.invoke(right)));
                     if(bitCheck(Column.verifyTime.name(),modified)){
                         selfModified |= FL_LOG_LIGHT_ID_VERIFY_TIME_MASK;
+                    }
+                }
+                if( bitCheck(Column.direction.name(),initialized) && (null != (getterMethod = methods.get(Column.direction.getter)))){
+                    left.setDirection(cast(Integer.class,getterMethod.invoke(right)));
+                    if(bitCheck(Column.direction.name(),modified)){
+                        selfModified |= FL_LOG_LIGHT_ID_DIRECTION_MASK;
                     }
                 }
                 left.isNew((Boolean)methods.get(IS_NEW).invoke(right));
@@ -3957,6 +4002,15 @@ public class BeanConverterUtils implements Constant {
                         bitOR(Column.verifyTime.name(),initialized);
                         if(left.checkVerifyTimeModified()){
                             bitOR(Column.verifyTime.name(),modified);
+                        }
+                    }catch(NullCastPrimitiveException e){}
+                }
+                if(null != (setterMethod = methods.get(Column.direction.setter)) && left.checkDirectionInitialized()){
+                    try{
+                        setterMethod.invoke(right,cast(setterParams.get(Column.direction.setter),left.getDirection()));
+                        bitOR(Column.direction.name(),initialized);
+                        if(left.checkDirectionModified()){
+                            bitOR(Column.direction.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }

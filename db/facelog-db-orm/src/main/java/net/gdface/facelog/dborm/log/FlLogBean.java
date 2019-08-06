@@ -54,6 +54,9 @@ public  class FlLogBean
     /** comments:验证相似度 */
     private Double similarty;
 
+    /** comments:通行方向,NULL,0:入口,1:出口,默认0 */
+    private Integer direction;
+
     /** comments:验证时间(可能由前端设备提供时间) */
     private java.util.Date verifyTime;
 
@@ -567,6 +570,62 @@ public  class FlLogBean
         return 0L !=  (initialized & FL_LOG_ID_SIMILARTY_MASK);
     }
     /**
+     * Getter method for {@link #direction}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_log.direction</li>
+     * <li>comments: 通行方向,NULL,0:入口,1:出口,默认0</li>
+     * <li>column size: 10</li>
+     * <li>JDBC type returned by the driver: Types.INTEGER</li>
+     * </ul>
+     *
+     * @return the value of direction
+     */
+    public Integer getDirection(){
+        return direction;
+    }
+    /**
+     * Setter method for {@link #direction}.<br>
+     * The new value is set only if equals() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to direction
+     */
+    public void setDirection(Integer newVal)
+    {
+        checkMutable();
+
+        modified |= FL_LOG_ID_DIRECTION_MASK;
+        initialized |= FL_LOG_ID_DIRECTION_MASK;
+
+        if (Objects.equals(newVal, direction)) {
+            return;
+        }
+        direction = newVal;
+    }
+    /**
+     * Determines if the direction has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkDirectionModified()
+    {
+        return 0L !=  (modified & FL_LOG_ID_DIRECTION_MASK);
+    }
+
+    /**
+     * Determines if the direction has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkDirectionInitialized()
+    {
+        return 0L !=  (initialized & FL_LOG_ID_DIRECTION_MASK);
+    }
+    /**
      * Getter method for {@link #verifyTime}.<br>
      * Meta Data Information (in progress):
      * <ul>
@@ -800,6 +859,8 @@ public  class FlLogBean
             return checkVerifyStatusModified();
         case FL_LOG_ID_SIMILARTY:
             return checkSimilartyModified();
+        case FL_LOG_ID_DIRECTION:
+            return checkDirectionModified();
         case FL_LOG_ID_VERIFY_TIME:
             return checkVerifyTimeModified();
         case FL_LOG_ID_CREATE_TIME:
@@ -826,6 +887,8 @@ public  class FlLogBean
             return checkVerifyStatusInitialized();
         case FL_LOG_ID_SIMILARTY:
             return checkSimilartyInitialized();
+        case FL_LOG_ID_DIRECTION:
+            return checkDirectionInitialized();
         case FL_LOG_ID_VERIFY_TIME:
             return checkVerifyTimeInitialized();
         case FL_LOG_ID_CREATE_TIME:
@@ -868,6 +931,7 @@ public  class FlLogBean
             FL_LOG_ID_COMPARE_FACE_MASK |
             FL_LOG_ID_VERIFY_STATUS_MASK |
             FL_LOG_ID_SIMILARTY_MASK |
+            FL_LOG_ID_DIRECTION_MASK |
             FL_LOG_ID_VERIFY_TIME_MASK |
             FL_LOG_ID_CREATE_TIME_MASK));
     }
@@ -888,6 +952,7 @@ public  class FlLogBean
         this.compareFace = null;
         this.verifyStatus = null;
         this.similarty = null;
+        this.direction = null;
         /* DEFAULT:'CURRENT_TIMESTAMP'*/
         this.verifyTime = null;
         /* DEFAULT:'CURRENT_TIMESTAMP'*/
@@ -912,6 +977,7 @@ public  class FlLogBean
             .append(getCompareFace(), obj.getCompareFace())
             .append(getVerifyStatus(), obj.getVerifyStatus())
             .append(getSimilarty(), obj.getSimilarty())
+            .append(getDirection(), obj.getDirection())
             .append(getVerifyTime(), obj.getVerifyTime())
             .append(getCreateTime(), obj.getCreateTime())
             .isEquals();
@@ -1041,6 +1107,15 @@ public  class FlLogBean
                 append(builder,fullIfStringOrBytes,getSimilarty());
             }
         }
+        if(checkDirectionInitialized()){
+            if(!notNull || null != getDirection()){
+                if(count++ >0){
+                    builder.append(",");
+                }
+                builder.append("direction=");
+                append(builder,fullIfStringOrBytes,getDirection());
+            }
+        }
         if(checkVerifyTimeInitialized()){
             if(!notNull || null != getVerifyTime()){
                 if(count++ >0){
@@ -1072,6 +1147,7 @@ public  class FlLogBean
             .append(getCompareFace(), object.getCompareFace())
             .append(getVerifyStatus(), object.getVerifyStatus())
             .append(getSimilarty(), object.getSimilarty())
+            .append(getDirection(), object.getDirection())
             .append(getVerifyTime(), object.getVerifyTime())
             .append(getCreateTime(), object.getCreateTime())
             .toComparison();
@@ -1101,6 +1177,7 @@ public  class FlLogBean
         setCompareFace((Integer)null);
         setVerifyStatus((Integer)null);
         setSimilarty((Double)null);
+        setDirection((Integer)null);
         setVerifyTime((java.util.Date)null);
         setCreateTime((java.util.Date)null);
         isNew(true);
@@ -1154,7 +1231,7 @@ public  class FlLogBean
     public FlLogBean copy(FlLogBean bean, int... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length){
-            fieldList = new int[]{0,1,2,3,4,5,6,7,8};
+            fieldList = new int[]{0,1,2,3,4,5,6,7,8,9};
         }
         for (int i = 0; i < fieldList.length; ++i) {
             if( bean.isInitialized(fieldList[i]) && !Objects.deepEquals(bean.getValue(fieldList[i]), getValue(fieldList[i]))){
@@ -1200,6 +1277,8 @@ public  class FlLogBean
             return (T)getVerifyStatus();        
         case FL_LOG_ID_SIMILARTY: 
             return (T)getSimilarty();        
+        case FL_LOG_ID_DIRECTION: 
+            return (T)getDirection();        
         case FL_LOG_ID_VERIFY_TIME: 
             return (T)getVerifyTime();        
         case FL_LOG_ID_CREATE_TIME: 
@@ -1233,6 +1312,9 @@ public  class FlLogBean
             break;
         case FL_LOG_ID_SIMILARTY:
             setSimilarty((Double)value);
+            break;
+        case FL_LOG_ID_DIRECTION:
+            setDirection((Integer)value);
             break;
         case FL_LOG_ID_VERIFY_TIME:
             setVerifyTime((java.util.Date)value);
@@ -1387,6 +1469,16 @@ public  class FlLogBean
          */
         public Builder similarty(Double similarty){
             TEMPLATE.get().setSimilarty(similarty);
+            return this;
+        }
+        /** 
+         * fill the field : fl_log.direction
+         * @param direction 通行方向,NULL,0:入口,1:出口,默认0
+         * @see FlLogBean#getDirection()
+         * @see FlLogBean#setDirection(Integer)
+         */
+        public Builder direction(Integer direction){
+            TEMPLATE.get().setDirection(direction);
             return this;
         }
         /** 

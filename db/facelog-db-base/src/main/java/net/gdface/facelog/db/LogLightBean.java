@@ -55,6 +55,10 @@ public final class LogLightBean
     @ApiModelProperty(value = "验证时间(可能由前端设备提供时间)"  ,dataType="Date")
     private java.util.Date verifyTime;
 
+    /** comments:通行方向,NULL,0:入口,1:出口,默认0 */
+    @ApiModelProperty(value = "通行方向,NULL,0:入口,1:出口,默认0"  ,dataType="Integer")
+    private Integer direction;
+
     /** flag whether {@code this} can be modified */
     private Boolean immutable;
     /** columns modified flag */
@@ -627,6 +631,83 @@ public final class LogLightBean
     {
         return 0L !=  (initialized & FL_LOG_LIGHT_ID_VERIFY_TIME_MASK);
     }
+    /**
+     * Getter method for {@link #direction}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_log_light.direction</li>
+     * <li>comments: 通行方向,NULL,0:入口,1:出口,默认0</li>
+     * <li>column size: 10</li>
+     * <li>JDBC type returned by the driver: Types.INTEGER</li>
+     * </ul>
+     *
+     * @return the value of direction
+     */
+    @ThriftField(value=10)
+    public Integer getDirection(){
+        return direction;
+    }
+    /**
+     * Setter method for {@link #direction}.<br>
+     * The new value is set only if equals() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to direction
+     */
+    public void setDirection(Integer newVal)
+    {
+        checkMutable();
+
+        modified |= FL_LOG_LIGHT_ID_DIRECTION_MASK;
+        initialized |= FL_LOG_LIGHT_ID_DIRECTION_MASK;
+
+        if (Objects.equals(newVal, direction)) {
+            return;
+        }
+        direction = newVal;
+    }
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "direction")
+    public void writeDirection(Integer newVal){
+        checkMutable();
+        direction = newVal;
+    }
+    /**
+     * Setter method for {@link #direction}.<br>
+     * Convenient for those who do not want to deal with Objects for primary types.
+     *
+     * @param newVal the new value to be assigned to direction
+     */
+    public void setDirection(int newVal)
+    {
+        setDirection(new Integer(newVal));
+    }
+    /**
+     * Determines if the direction has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkDirectionModified()
+    {
+        return 0L !=  (modified & FL_LOG_LIGHT_ID_DIRECTION_MASK);
+    }
+
+    /**
+     * Determines if the direction has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkDirectionInitialized()
+    {
+        return 0L !=  (initialized & FL_LOG_LIGHT_ID_DIRECTION_MASK);
+    }
 
     @Override
     public boolean isModified()
@@ -649,6 +730,8 @@ public final class LogLightBean
             return checkPapersNumModified();
         case FL_LOG_LIGHT_ID_VERIFY_TIME:
             return checkVerifyTimeModified();
+        case FL_LOG_LIGHT_ID_DIRECTION:
+            return checkDirectionModified();
         default:
             return false;
         }        
@@ -669,6 +752,8 @@ public final class LogLightBean
             return checkPapersNumInitialized();
         case FL_LOG_LIGHT_ID_VERIFY_TIME:
             return checkVerifyTimeInitialized();
+        case FL_LOG_LIGHT_ID_DIRECTION:
+            return checkDirectionInitialized();
         default:
             return false;
         }
@@ -706,7 +791,8 @@ public final class LogLightBean
             FL_LOG_LIGHT_ID_NAME_MASK |
             FL_LOG_LIGHT_ID_PAPERS_TYPE_MASK |
             FL_LOG_LIGHT_ID_PAPERS_NUM_MASK |
-            FL_LOG_LIGHT_ID_VERIFY_TIME_MASK));
+            FL_LOG_LIGHT_ID_VERIFY_TIME_MASK |
+            FL_LOG_LIGHT_ID_DIRECTION_MASK));
     }
     /**
      * Resets the object initialization status to 'not initialized'.
@@ -727,6 +813,7 @@ public final class LogLightBean
         this.papersNum = null;
         /* DEFAULT:'0000-00-00 00:00:00'*/
         this.verifyTime = null;
+        this.direction = null;
         this.isNew = true;
         this.modified = 0;
         this.initialized = (FL_LOG_LIGHT_ID_ID_MASK | FL_LOG_LIGHT_ID_PERSON_ID_MASK);
@@ -746,6 +833,7 @@ public final class LogLightBean
             .append(getPapersType(), obj.getPapersType())
             .append(getPapersNum(), obj.getPapersNum())
             .append(getVerifyTime(), obj.getVerifyTime())
+            .append(getDirection(), obj.getDirection())
             .isEquals();
     }
 
@@ -759,6 +847,7 @@ public final class LogLightBean
             .append(getPapersType())
             .append(getPapersNum())
             .append(getVerifyTime())
+            .append(getDirection())
             .toHashCode();
     }
 
@@ -869,6 +958,15 @@ public final class LogLightBean
                 append(builder,fullIfStringOrBytes,getVerifyTime());
             }
         }
+        if(checkDirectionInitialized()){
+            if(!notNull || null != getDirection()){
+                if(count++ >0){
+                    builder.append(",");
+                }
+                builder.append("direction=");
+                append(builder,fullIfStringOrBytes,getDirection());
+            }
+        }
         builder.append("]");
         return builder.toString();
     }
@@ -881,6 +979,7 @@ public final class LogLightBean
             .append(getPapersType(), object.getPapersType())
             .append(getPapersNum(), object.getPapersNum())
             .append(getVerifyTime(), object.getVerifyTime())
+            .append(getDirection(), object.getDirection())
             .toComparison();
     }
     @Override
@@ -907,6 +1006,7 @@ public final class LogLightBean
         setPapersType((Integer)null);
         setPapersNum((String)null);
         setVerifyTime((java.util.Date)null);
+        setDirection((Integer)null);
         isNew(true);
         resetInitialized();
         resetIsModified();
@@ -958,7 +1058,7 @@ public final class LogLightBean
     public LogLightBean copy(LogLightBean bean, int... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length){
-            fieldList = new int[]{0,1,2,3,4,5};
+            fieldList = new int[]{0,1,2,3,4,5,6};
         }
         for (int i = 0; i < fieldList.length; ++i) {
             if( bean.isInitialized(fieldList[i]) && !Objects.deepEquals(bean.getValue(fieldList[i]), getValue(fieldList[i]))){
@@ -1002,6 +1102,8 @@ public final class LogLightBean
             return (T)getPapersNum();        
         case FL_LOG_LIGHT_ID_VERIFY_TIME: 
             return (T)getVerifyTime();        
+        case FL_LOG_LIGHT_ID_DIRECTION: 
+            return (T)getDirection();        
         default:
             return null;
         }
@@ -1028,6 +1130,9 @@ public final class LogLightBean
             break;
         case FL_LOG_LIGHT_ID_VERIFY_TIME:
             setVerifyTime((java.util.Date)value);
+            break;
+        case FL_LOG_LIGHT_ID_DIRECTION:
+            setDirection((Integer)value);
             break;
         default:
             break;
@@ -1166,6 +1271,16 @@ public final class LogLightBean
          */
         public Builder verifyTime(java.util.Date verifyTime){
             TEMPLATE.get().setVerifyTime(verifyTime);
+            return this;
+        }
+        /** 
+         * fill the field : fl_log_light.direction
+         * @param direction 通行方向,NULL,0:入口,1:出口,默认0
+         * @see LogLightBean#getDirection()
+         * @see LogLightBean#setDirection(Integer)
+         */
+        public Builder direction(Integer direction){
+            TEMPLATE.get().setDirection(direction);
             return this;
         }
     }

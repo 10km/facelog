@@ -65,7 +65,7 @@ public interface Constant {
     // COLUMN COLUMN CONSTANT
     //////////////////////////////////////    
     
-    public static final int FL_DEVICE_COLUMN_COUNT = 17;
+    public static final int FL_DEVICE_COLUMN_COUNT = 18;
     public static final int FL_DEVICE_PK_COUNT = 1;
     public static final int FL_DEVICE_GROUP_COLUMN_COUNT = 11;
     public static final int FL_DEVICE_GROUP_PK_COUNT = 1;
@@ -75,7 +75,7 @@ public interface Constant {
     public static final int FL_FEATURE_PK_COUNT = 1;
     public static final int FL_IMAGE_COLUMN_COUNT = 8;
     public static final int FL_IMAGE_PK_COUNT = 1;
-    public static final int FL_LOG_COLUMN_COUNT = 9;
+    public static final int FL_LOG_COLUMN_COUNT = 10;
     public static final int FL_LOG_PK_COUNT = 1;
     public static final int FL_PERMIT_COLUMN_COUNT = 7;
     public static final int FL_PERMIT_PK_COUNT = 2;
@@ -85,7 +85,7 @@ public interface Constant {
     public static final int FL_PERSON_GROUP_PK_COUNT = 1;
     public static final int FL_STORE_COLUMN_COUNT = 3;
     public static final int FL_STORE_PK_COUNT = 1;
-    public static final int FL_LOG_LIGHT_COLUMN_COUNT = 6;
+    public static final int FL_LOG_LIGHT_COLUMN_COUNT = 7;
     public static final int FL_LOG_LIGHT_PK_COUNT = 0;
     //////////////////////////////////////
     // FOREIGN KEY INDEX DECLARE
@@ -233,21 +233,24 @@ public interface Constant {
     /** Identify the fl_device.mac field (ordinal:12). */
     public static final int FL_DEVICE_ID_MAC = 11;
     public static final int FL_DEVICE_ID_MAC_MASK = 1 << 11;
-    /** Identify the fl_device.remark field (ordinal:13). */
-    public static final int FL_DEVICE_ID_REMARK = 12;
-    public static final int FL_DEVICE_ID_REMARK_MASK = 1 << 12;
-    /** Identify the fl_device.ext_bin field (ordinal:14). */
-    public static final int FL_DEVICE_ID_EXT_BIN = 13;
-    public static final int FL_DEVICE_ID_EXT_BIN_MASK = 1 << 13;
-    /** Identify the fl_device.ext_txt field (ordinal:15). */
-    public static final int FL_DEVICE_ID_EXT_TXT = 14;
-    public static final int FL_DEVICE_ID_EXT_TXT_MASK = 1 << 14;
-    /** Identify the fl_device.create_time field (ordinal:16). */
-    public static final int FL_DEVICE_ID_CREATE_TIME = 15;
-    public static final int FL_DEVICE_ID_CREATE_TIME_MASK = 1 << 15;
-    /** Identify the fl_device.update_time field (ordinal:17). */
-    public static final int FL_DEVICE_ID_UPDATE_TIME = 16;
-    public static final int FL_DEVICE_ID_UPDATE_TIME_MASK = 1 << 16;
+    /** Identify the fl_device.direction field (ordinal:13). */
+    public static final int FL_DEVICE_ID_DIRECTION = 12;
+    public static final int FL_DEVICE_ID_DIRECTION_MASK = 1 << 12;
+    /** Identify the fl_device.remark field (ordinal:14). */
+    public static final int FL_DEVICE_ID_REMARK = 13;
+    public static final int FL_DEVICE_ID_REMARK_MASK = 1 << 13;
+    /** Identify the fl_device.ext_bin field (ordinal:15). */
+    public static final int FL_DEVICE_ID_EXT_BIN = 14;
+    public static final int FL_DEVICE_ID_EXT_BIN_MASK = 1 << 14;
+    /** Identify the fl_device.ext_txt field (ordinal:16). */
+    public static final int FL_DEVICE_ID_EXT_TXT = 15;
+    public static final int FL_DEVICE_ID_EXT_TXT_MASK = 1 << 15;
+    /** Identify the fl_device.create_time field (ordinal:17). */
+    public static final int FL_DEVICE_ID_CREATE_TIME = 16;
+    public static final int FL_DEVICE_ID_CREATE_TIME_MASK = 1 << 16;
+    /** Identify the fl_device.update_time field (ordinal:18). */
+    public static final int FL_DEVICE_ID_UPDATE_TIME = 17;
+    public static final int FL_DEVICE_ID_UPDATE_TIME_MASK = 1 << 17;
     /** Identify the fl_device_group.id field (ordinal:1). */
     public static final int FL_DEVICE_GROUP_ID_ID = 0;
     public static final int FL_DEVICE_GROUP_ID_ID_MASK = 1 << 0;
@@ -398,12 +401,15 @@ public interface Constant {
     /** Identify the fl_log.similarty field (ordinal:7). */
     public static final int FL_LOG_ID_SIMILARTY = 6;
     public static final int FL_LOG_ID_SIMILARTY_MASK = 1 << 6;
-    /** Identify the fl_log.verify_time field (ordinal:8). */
-    public static final int FL_LOG_ID_VERIFY_TIME = 7;
-    public static final int FL_LOG_ID_VERIFY_TIME_MASK = 1 << 7;
-    /** Identify the fl_log.create_time field (ordinal:9). */
-    public static final int FL_LOG_ID_CREATE_TIME = 8;
-    public static final int FL_LOG_ID_CREATE_TIME_MASK = 1 << 8;
+    /** Identify the fl_log.direction field (ordinal:8). */
+    public static final int FL_LOG_ID_DIRECTION = 7;
+    public static final int FL_LOG_ID_DIRECTION_MASK = 1 << 7;
+    /** Identify the fl_log.verify_time field (ordinal:9). */
+    public static final int FL_LOG_ID_VERIFY_TIME = 8;
+    public static final int FL_LOG_ID_VERIFY_TIME_MASK = 1 << 8;
+    /** Identify the fl_log.create_time field (ordinal:10). */
+    public static final int FL_LOG_ID_CREATE_TIME = 9;
+    public static final int FL_LOG_ID_CREATE_TIME_MASK = 1 << 9;
     /** Identify the fl_permit.device_group_id field (ordinal:1). */
     public static final int FL_PERMIT_ID_DEVICE_GROUP_ID = 0;
     public static final int FL_PERMIT_ID_DEVICE_GROUP_ID_MASK = 1 << 0;
@@ -533,6 +539,9 @@ public interface Constant {
     /** Identify the fl_log_light.verify_time field (ordinal:6). */
     public static final int FL_LOG_LIGHT_ID_VERIFY_TIME = 5;
     public static final int FL_LOG_LIGHT_ID_VERIFY_TIME_MASK = 1 << 5;
+    /** Identify the fl_log_light.direction field (ordinal:7). */
+    public static final int FL_LOG_LIGHT_ID_DIRECTION = 6;
+    public static final int FL_LOG_LIGHT_ID_DIRECTION_MASK = 1 << 6;
     //////////////////////////////////////
     // COLUMN NAME DECLARE
     //////////////////////////////////////    
@@ -550,6 +559,7 @@ public interface Constant {
                             + ",fl_device.used_sdks"
                             + ",fl_device.serial_no"
                             + ",fl_device.mac"
+                            + ",fl_device.direction"
                             + ",fl_device.remark"
                             + ",fl_device.ext_bin"
                             + ",fl_device.ext_txt"
@@ -568,6 +578,7 @@ public interface Constant {
                             + ",used_sdks"
                             + ",serial_no"
                             + ",mac"
+                            + ",direction"
                             + ",remark"
                             + ",ext_bin"
                             + ",ext_txt"
@@ -587,6 +598,7 @@ public interface Constant {
                             + ",usedSdks"
                             + ",serialNo"
                             + ",mac"
+                            + ",direction"
                             + ",remark"
                             + ",extBin"
                             + ",extTxt"
@@ -608,6 +620,7 @@ public interface Constant {
         String.class,
         String.class,
         String.class,
+        Integer.class,
         String.class,
         java.nio.ByteBuffer.class,
         String.class,
@@ -830,6 +843,7 @@ public interface Constant {
                             + ",fl_log.compare_face"
                             + ",fl_log.verify_status"
                             + ",fl_log.similarty"
+                            + ",fl_log.direction"
                             + ",fl_log.verify_time"
                             + ",fl_log.create_time";
     /** Field that contains the comma separated fields of the fl_log table. */
@@ -840,6 +854,7 @@ public interface Constant {
                             + ",compare_face"
                             + ",verify_status"
                             + ",similarty"
+                            + ",direction"
                             + ",verify_time"
                             + ",create_time";
     public static final java.util.List<String> FL_LOG_FIELDS_LIST = java.util.Arrays.asList(FL_LOG_FIELDS.split(","));
@@ -851,6 +866,7 @@ public interface Constant {
                             + ",compareFace"
                             + ",verifyStatus"
                             + ",similarty"
+                            + ",direction"
                             + ",verifyTime"
                             + ",createTime";
     public static final java.util.List<String> FL_LOG_JAVA_FIELDS_LIST = java.util.Arrays.asList(FL_LOG_JAVA_FIELDS.split(","));
@@ -864,6 +880,7 @@ public interface Constant {
         Integer.class,
         Integer.class,
         Double.class,
+        Integer.class,
         java.util.Date.class,
         java.util.Date.class};
     /////////////////// fl_permit ////////////
@@ -1057,14 +1074,16 @@ public interface Constant {
                             + ",fl_log_light.name"
                             + ",fl_log_light.papers_type"
                             + ",fl_log_light.papers_num"
-                            + ",fl_log_light.verify_time";
+                            + ",fl_log_light.verify_time"
+                            + ",fl_log_light.direction";
     /** Field that contains the comma separated fields of the fl_log_light table. */
     public static final String FL_LOG_LIGHT_FIELDS = "id"
                             + ",person_id"
                             + ",name"
                             + ",papers_type"
                             + ",papers_num"
-                            + ",verify_time";
+                            + ",verify_time"
+                            + ",direction";
     public static final java.util.List<String> FL_LOG_LIGHT_FIELDS_LIST = java.util.Arrays.asList(FL_LOG_LIGHT_FIELDS.split(","));
     /** Field that contains the comma separated java fields of the fl_log_light table. */
     public static final String FL_LOG_LIGHT_JAVA_FIELDS = "id"
@@ -1072,7 +1091,8 @@ public interface Constant {
                             + ",name"
                             + ",papersType"
                             + ",papersNum"
-                            + ",verifyTime";
+                            + ",verifyTime"
+                            + ",direction";
     public static final java.util.List<String> FL_LOG_LIGHT_JAVA_FIELDS_LIST = java.util.Arrays.asList(FL_LOG_LIGHT_JAVA_FIELDS.split(","));
     
     /** Field java types of the fl_log_light table. */
@@ -1082,5 +1102,6 @@ public interface Constant {
         String.class,
         Integer.class,
         String.class,
-        java.util.Date.class};
+        java.util.Date.class,
+        Integer.class};
 }
