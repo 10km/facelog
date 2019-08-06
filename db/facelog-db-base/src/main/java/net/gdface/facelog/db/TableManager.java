@@ -9,7 +9,7 @@ package net.gdface.facelog.db;
 import java.util.List;
 import java.util.LinkedList;
 import java.lang.reflect.Array;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.Callable;
 import net.gdface.facelog.db.exception.RuntimeDaoException;
@@ -319,19 +319,22 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
                 throw new IllegalArgumentException(String.format("INVALID column name %s",column));
             }
             String fieldName = columnNameOf(columnId);
-            String sql = String.format("SELECT %s " + fieldName + " from %s",
+            String sql = String.format("SELECT %s " + fieldName + " from %s %s",
                     distinct ? "DISTINCT" : "",
                     getTableName(),
                     where == null ? "" : where);
             ListAction action = new ListAction();
             loadBySqlForAction(sql, null, new int[]{columnId}, startRow, numRows, action);
             List<B> beans = action.getList();
-            @SuppressWarnings("unchecked")
-            T[] array = (T[]) Array.newInstance(typeOf(columnId), beans.size());
+            List<T> values=new ArrayList<>(beans.size());
+            T v;
+            B b;
             for(int i = 0 ; i < beans.size(); ++ i){
-                array[i] = beans.get(i).<T>getValue(columnId);
+                if((b = beans.get(i)) != null && (v = b.<T>getValue(columnId)) != null){
+                    values.add(v);
+                }
             }
-            return Arrays.asList(array);
+            return values;
         }
         /**
          * generate SQL query(SELECT) statement,such as: 'SELECT id,name from mytable WHERE id=1'
