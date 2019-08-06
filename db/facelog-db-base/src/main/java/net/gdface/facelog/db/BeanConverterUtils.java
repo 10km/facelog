@@ -2427,6 +2427,7 @@ public class BeanConverterUtils implements Constant {
             deviceGroupId("getDeviceGroupId","setDeviceGroupId"),
             personGroupId("getPersonGroupId","setPersonGroupId"),
             schedule("getSchedule","setSchedule"),
+            limit("getLimit","setLimit"),
             remark("getRemark","setRemark"),
             extBin("getExtBin","setExtBin"),
             extTxt("getExtTxt","setExtTxt"),
@@ -2535,6 +2536,8 @@ public class BeanConverterUtils implements Constant {
             getSetterNoThrow(Column.personGroupId.setter,Integer.class,int.class);                    
             getGetter(Column.schedule.getter);
             getSetterNoThrow(Column.schedule.setter,String.class); 
+            getGetter(Column.limit.getter);
+            getSetterNoThrow(Column.limit.setter,String.class); 
             getGetter(Column.remark.getter);
             getSetterNoThrow(Column.remark.setter,String.class); 
             getGetter(Column.extBin.getter);
@@ -2575,6 +2578,12 @@ public class BeanConverterUtils implements Constant {
                     left.setSchedule(cast(String.class,getterMethod.invoke(right)));
                     if(bitCheck(Column.schedule.name(),modified)){
                         selfModified |= FL_PERMIT_ID_SCHEDULE_MASK;
+                    }
+                }
+                if( bitCheck(Column.limit.name(),initialized) && (null != (getterMethod = methods.get(Column.limit.getter)))){
+                    left.setLimit(cast(String.class,getterMethod.invoke(right)));
+                    if(bitCheck(Column.limit.name(),modified)){
+                        selfModified |= FL_PERMIT_ID_LIMIT_MASK;
                     }
                 }
                 if( bitCheck(Column.remark.name(),initialized) && (null != (getterMethod = methods.get(Column.remark.getter)))){
@@ -2642,6 +2651,15 @@ public class BeanConverterUtils implements Constant {
                         bitOR(Column.schedule.name(),initialized);
                         if(left.checkScheduleModified()){
                             bitOR(Column.schedule.name(),modified);
+                        }
+                    }catch(NullCastPrimitiveException e){}
+                }
+                if(null != (setterMethod = methods.get(Column.limit.setter)) && left.checkLimitInitialized()){
+                    try{
+                        setterMethod.invoke(right,cast(setterParams.get(Column.limit.setter),left.getLimit()));
+                        bitOR(Column.limit.name(),initialized);
+                        if(left.checkLimitModified()){
+                            bitOR(Column.limit.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }

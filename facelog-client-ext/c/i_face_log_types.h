@@ -311,6 +311,8 @@ struct _LogBean
   gboolean __isset_verifyStatus;
   gdouble similarty;
   gboolean __isset_similarty;
+  gint32 direction;
+  gboolean __isset_direction;
   gint64 verifyTime;
   gboolean __isset_verifyTime;
   gint64 createTime;
@@ -365,6 +367,8 @@ struct _DeviceBean
   gboolean __isset_serialNo;
   gchar * mac;
   gboolean __isset_mac;
+  gint32 direction;
+  gboolean __isset_direction;
   gchar * remark;
   gboolean __isset_remark;
   GByteArray * extBin;
@@ -455,6 +459,8 @@ struct _PermitBean
   gboolean __isset_personGroupId;
   gchar * schedule;
   gboolean __isset_schedule;
+  gchar * limit;
+  gboolean __isset_limit;
   gchar * remark;
   gboolean __isset_remark;
   GByteArray * extBin;
@@ -607,6 +613,8 @@ struct _LogLightBean
   gboolean __isset_papersNum;
   gint64 verifyTime;
   gboolean __isset_verifyTime;
+  gint32 direction;
+  gboolean __isset_direction;
 };
 typedef struct _LogLightBean LogLightBean;
 

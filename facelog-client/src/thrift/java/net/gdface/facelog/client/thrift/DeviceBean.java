@@ -132,9 +132,17 @@ public final class DeviceBean
     @ThriftField
     public void setMac(final String mac) { this.mac = mac; }
 
+    private Integer direction;
+
+    @ThriftField(value=16, name="direction", requiredness=Requiredness.OPTIONAL)
+    public Integer getDirection() { return direction; }
+
+    @ThriftField
+    public void setDirection(final Integer direction) { this.direction = direction; }
+
     private String remark;
 
-    @ThriftField(value=16, name="remark", requiredness=Requiredness.OPTIONAL)
+    @ThriftField(value=17, name="remark", requiredness=Requiredness.OPTIONAL)
     public String getRemark() { return remark; }
 
     @ThriftField
@@ -142,7 +150,7 @@ public final class DeviceBean
 
     private byte [] extBin;
 
-    @ThriftField(value=17, name="extBin", requiredness=Requiredness.OPTIONAL)
+    @ThriftField(value=18, name="extBin", requiredness=Requiredness.OPTIONAL)
     public byte [] getExtBin() { return extBin; }
 
     @ThriftField
@@ -150,7 +158,7 @@ public final class DeviceBean
 
     private String extTxt;
 
-    @ThriftField(value=18, name="extTxt", requiredness=Requiredness.OPTIONAL)
+    @ThriftField(value=19, name="extTxt", requiredness=Requiredness.OPTIONAL)
     public String getExtTxt() { return extTxt; }
 
     @ThriftField
@@ -158,7 +166,7 @@ public final class DeviceBean
 
     private Long createTime;
 
-    @ThriftField(value=19, name="createTime", requiredness=Requiredness.OPTIONAL)
+    @ThriftField(value=20, name="createTime", requiredness=Requiredness.OPTIONAL)
     public Long getCreateTime() { return createTime; }
 
     @ThriftField
@@ -166,7 +174,7 @@ public final class DeviceBean
 
     private Long updateTime;
 
-    @ThriftField(value=20, name="updateTime", requiredness=Requiredness.OPTIONAL)
+    @ThriftField(value=21, name="updateTime", requiredness=Requiredness.OPTIONAL)
     public Long getUpdateTime() { return updateTime; }
 
     @ThriftField
@@ -191,6 +199,7 @@ public final class DeviceBean
             .add("usedSdks", usedSdks)
             .add("serialNo", serialNo)
             .add("mac", mac)
+            .add("direction", direction)
             .add("remark", remark)
             .add("extBin", extBin)
             .add("extTxt", extTxt)

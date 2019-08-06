@@ -92,8 +92,9 @@ struct LogBean {
   8: optional i32 compareFace;
   9: optional i32 verifyStatus;
   10: optional double similarty;
-  11: optional i64 verifyTime;
-  12: optional i64 createTime;
+  11: optional i32 direction;
+  12: optional i64 verifyTime;
+  13: optional i64 createTime;
 }
 
 struct DeviceBean {
@@ -112,11 +113,12 @@ struct DeviceBean {
   13: optional string usedSdks;
   14: optional string serialNo;
   15: optional string mac;
-  16: optional string remark;
-  17: optional binary extBin;
-  18: optional string extTxt;
-  19: optional i64 createTime;
-  20: optional i64 updateTime;
+  16: optional i32 direction;
+  17: optional string remark;
+  18: optional binary extBin;
+  19: optional string extTxt;
+  20: optional i64 createTime;
+  21: optional i64 updateTime;
 }
 
 struct DeviceGroupBean {
@@ -143,10 +145,11 @@ struct PermitBean {
   4: optional i32 deviceGroupId;
   5: optional i32 personGroupId;
   6: optional string schedule;
-  7: optional string remark;
-  8: optional binary extBin;
-  9: optional string extTxt;
-  10: optional i64 createTime;
+  7: optional string limit;
+  8: optional string remark;
+  9: optional binary extBin;
+  10: optional string extTxt;
+  11: optional i64 createTime;
 }
 
 struct PersonBean {
@@ -198,6 +201,7 @@ struct LogLightBean {
   7: optional i32 papersType;
   8: optional string papersNum;
   9: optional i64 verifyTime;
+  10: optional i32 direction;
 }
 
 struct Token {

@@ -675,7 +675,7 @@ void swap(ImageBean &a, ImageBean &b);
 std::ostream& operator<<(std::ostream& out, const ImageBean& obj);
 
 typedef struct _LogBean__isset {
-  _LogBean__isset() : id(false), personId(false), deviceId(false), verifyFeature(false), compareFace(false), verifyStatus(false), similarty(false), verifyTime(false), createTime(false) {}
+  _LogBean__isset() : id(false), personId(false), deviceId(false), verifyFeature(false), compareFace(false), verifyStatus(false), similarty(false), direction(false), verifyTime(false), createTime(false) {}
   bool id :1;
   bool personId :1;
   bool deviceId :1;
@@ -683,6 +683,7 @@ typedef struct _LogBean__isset {
   bool compareFace :1;
   bool verifyStatus :1;
   bool similarty :1;
+  bool direction :1;
   bool verifyTime :1;
   bool createTime :1;
 } _LogBean__isset;
@@ -694,7 +695,7 @@ class LogBean {
   LogBean(LogBean&&);
   LogBean& operator=(const LogBean&);
   LogBean& operator=(LogBean&&);
-  LogBean() : _new(0), modified(0), initialized(0), id(0), personId(0), deviceId(0), verifyFeature(), compareFace(0), verifyStatus(0), similarty(0), verifyTime(0), createTime(0) {
+  LogBean() : _new(0), modified(0), initialized(0), id(0), personId(0), deviceId(0), verifyFeature(), compareFace(0), verifyStatus(0), similarty(0), direction(0), verifyTime(0), createTime(0) {
   }
 
   virtual ~LogBean() throw();
@@ -708,6 +709,7 @@ class LogBean {
   int32_t compareFace;
   int32_t verifyStatus;
   double similarty;
+  int32_t direction;
   int64_t verifyTime;
   int64_t createTime;
 
@@ -732,6 +734,8 @@ class LogBean {
   void __set_verifyStatus(const int32_t val);
 
   void __set_similarty(const double val);
+
+  void __set_direction(const int32_t val);
 
   void __set_verifyTime(const int64_t val);
 
@@ -773,6 +777,10 @@ class LogBean {
       return false;
     else if (__isset.similarty && !(similarty == rhs.similarty))
       return false;
+    if (__isset.direction != rhs.__isset.direction)
+      return false;
+    else if (__isset.direction && !(direction == rhs.direction))
+      return false;
     if (__isset.verifyTime != rhs.__isset.verifyTime)
       return false;
     else if (__isset.verifyTime && !(verifyTime == rhs.verifyTime))
@@ -802,7 +810,7 @@ void swap(LogBean &a, LogBean &b);
 std::ostream& operator<<(std::ostream& out, const LogBean& obj);
 
 typedef struct _DeviceBean__isset {
-  _DeviceBean__isset() : id(false), groupId(false), name(false), productName(false), model(false), vendor(false), manufacturer(false), madeDate(false), version(false), usedSdks(false), serialNo(false), mac(false), remark(false), extBin(false), extTxt(false), createTime(false), updateTime(false) {}
+  _DeviceBean__isset() : id(false), groupId(false), name(false), productName(false), model(false), vendor(false), manufacturer(false), madeDate(false), version(false), usedSdks(false), serialNo(false), mac(false), direction(false), remark(false), extBin(false), extTxt(false), createTime(false), updateTime(false) {}
   bool id :1;
   bool groupId :1;
   bool name :1;
@@ -815,6 +823,7 @@ typedef struct _DeviceBean__isset {
   bool usedSdks :1;
   bool serialNo :1;
   bool mac :1;
+  bool direction :1;
   bool remark :1;
   bool extBin :1;
   bool extTxt :1;
@@ -829,7 +838,7 @@ class DeviceBean {
   DeviceBean(DeviceBean&&);
   DeviceBean& operator=(const DeviceBean&);
   DeviceBean& operator=(DeviceBean&&);
-  DeviceBean() : _new(0), modified(0), initialized(0), id(0), groupId(0), name(), productName(), model(), vendor(), manufacturer(), madeDate(0), version(), usedSdks(), serialNo(), mac(), remark(), extBin(), extTxt(), createTime(0), updateTime(0) {
+  DeviceBean() : _new(0), modified(0), initialized(0), id(0), groupId(0), name(), productName(), model(), vendor(), manufacturer(), madeDate(0), version(), usedSdks(), serialNo(), mac(), direction(0), remark(), extBin(), extTxt(), createTime(0), updateTime(0) {
   }
 
   virtual ~DeviceBean() throw();
@@ -848,6 +857,7 @@ class DeviceBean {
   std::string usedSdks;
   std::string serialNo;
   std::string mac;
+  int32_t direction;
   std::string remark;
   std::string extBin;
   std::string extTxt;
@@ -885,6 +895,8 @@ class DeviceBean {
   void __set_serialNo(const std::string& val);
 
   void __set_mac(const std::string& val);
+
+  void __set_direction(const int32_t val);
 
   void __set_remark(const std::string& val);
 
@@ -951,6 +963,10 @@ class DeviceBean {
     if (__isset.mac != rhs.__isset.mac)
       return false;
     else if (__isset.mac && !(mac == rhs.mac))
+      return false;
+    if (__isset.direction != rhs.__isset.direction)
+      return false;
+    else if (__isset.direction && !(direction == rhs.direction))
       return false;
     if (__isset.remark != rhs.__isset.remark)
       return false;
@@ -1136,10 +1152,11 @@ void swap(DeviceGroupBean &a, DeviceGroupBean &b);
 std::ostream& operator<<(std::ostream& out, const DeviceGroupBean& obj);
 
 typedef struct _PermitBean__isset {
-  _PermitBean__isset() : deviceGroupId(false), personGroupId(false), schedule(false), remark(false), extBin(false), extTxt(false), createTime(false) {}
+  _PermitBean__isset() : deviceGroupId(false), personGroupId(false), schedule(false), limit(false), remark(false), extBin(false), extTxt(false), createTime(false) {}
   bool deviceGroupId :1;
   bool personGroupId :1;
   bool schedule :1;
+  bool limit :1;
   bool remark :1;
   bool extBin :1;
   bool extTxt :1;
@@ -1153,7 +1170,7 @@ class PermitBean {
   PermitBean(PermitBean&&);
   PermitBean& operator=(const PermitBean&);
   PermitBean& operator=(PermitBean&&);
-  PermitBean() : _new(0), modified(0), initialized(0), deviceGroupId(0), personGroupId(0), schedule(), remark(), extBin(), extTxt(), createTime(0) {
+  PermitBean() : _new(0), modified(0), initialized(0), deviceGroupId(0), personGroupId(0), schedule(), limit(), remark(), extBin(), extTxt(), createTime(0) {
   }
 
   virtual ~PermitBean() throw();
@@ -1163,6 +1180,7 @@ class PermitBean {
   int32_t deviceGroupId;
   int32_t personGroupId;
   std::string schedule;
+  std::string limit;
   std::string remark;
   std::string extBin;
   std::string extTxt;
@@ -1181,6 +1199,8 @@ class PermitBean {
   void __set_personGroupId(const int32_t val);
 
   void __set_schedule(const std::string& val);
+
+  void __set_limit(const std::string& val);
 
   void __set_remark(const std::string& val);
 
@@ -1209,6 +1229,10 @@ class PermitBean {
     if (__isset.schedule != rhs.__isset.schedule)
       return false;
     else if (__isset.schedule && !(schedule == rhs.schedule))
+      return false;
+    if (__isset.limit != rhs.__isset.limit)
+      return false;
+    else if (__isset.limit && !(limit == rhs.limit))
       return false;
     if (__isset.remark != rhs.__isset.remark)
       return false;
@@ -1573,13 +1597,14 @@ void swap(PersonGroupBean &a, PersonGroupBean &b);
 std::ostream& operator<<(std::ostream& out, const PersonGroupBean& obj);
 
 typedef struct _LogLightBean__isset {
-  _LogLightBean__isset() : id(false), personId(false), name(false), papersType(false), papersNum(false), verifyTime(false) {}
+  _LogLightBean__isset() : id(false), personId(false), name(false), papersType(false), papersNum(false), verifyTime(false), direction(false) {}
   bool id :1;
   bool personId :1;
   bool name :1;
   bool papersType :1;
   bool papersNum :1;
   bool verifyTime :1;
+  bool direction :1;
 } _LogLightBean__isset;
 
 class LogLightBean {
@@ -1589,7 +1614,7 @@ class LogLightBean {
   LogLightBean(LogLightBean&&);
   LogLightBean& operator=(const LogLightBean&);
   LogLightBean& operator=(LogLightBean&&);
-  LogLightBean() : _new(0), modified(0), initialized(0), id(0), personId(0), name(), papersType(0), papersNum(), verifyTime(0) {
+  LogLightBean() : _new(0), modified(0), initialized(0), id(0), personId(0), name(), papersType(0), papersNum(), verifyTime(0), direction(0) {
   }
 
   virtual ~LogLightBean() throw();
@@ -1602,6 +1627,7 @@ class LogLightBean {
   int32_t papersType;
   std::string papersNum;
   int64_t verifyTime;
+  int32_t direction;
 
   _LogLightBean__isset __isset;
 
@@ -1622,6 +1648,8 @@ class LogLightBean {
   void __set_papersNum(const std::string& val);
 
   void __set_verifyTime(const int64_t val);
+
+  void __set_direction(const int32_t val);
 
   bool operator == (const LogLightBean & rhs) const
   {
@@ -1654,6 +1682,10 @@ class LogLightBean {
     if (__isset.verifyTime != rhs.__isset.verifyTime)
       return false;
     else if (__isset.verifyTime && !(verifyTime == rhs.verifyTime))
+      return false;
+    if (__isset.direction != rhs.__isset.direction)
+      return false;
+    else if (__isset.direction && !(direction == rhs.direction))
       return false;
     return true;
   }

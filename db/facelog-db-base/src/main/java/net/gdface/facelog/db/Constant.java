@@ -78,7 +78,7 @@ public interface Constant {
     public static final int FL_IMAGE_PK_COUNT = 1;
     public static final int FL_LOG_COLUMN_COUNT = 10;
     public static final int FL_LOG_PK_COUNT = 1;
-    public static final int FL_PERMIT_COLUMN_COUNT = 7;
+    public static final int FL_PERMIT_COLUMN_COUNT = 8;
     public static final int FL_PERMIT_PK_COUNT = 2;
     public static final int FL_PERSON_COLUMN_COUNT = 17;
     public static final int FL_PERSON_PK_COUNT = 1;
@@ -420,18 +420,21 @@ public interface Constant {
     /** Identify the fl_permit.schedule field (ordinal:3). */
     public static final int FL_PERMIT_ID_SCHEDULE = 2;
     public static final int FL_PERMIT_ID_SCHEDULE_MASK = 1 << 2;
-    /** Identify the fl_permit.remark field (ordinal:4). */
-    public static final int FL_PERMIT_ID_REMARK = 3;
-    public static final int FL_PERMIT_ID_REMARK_MASK = 1 << 3;
-    /** Identify the fl_permit.ext_bin field (ordinal:5). */
-    public static final int FL_PERMIT_ID_EXT_BIN = 4;
-    public static final int FL_PERMIT_ID_EXT_BIN_MASK = 1 << 4;
-    /** Identify the fl_permit.ext_txt field (ordinal:6). */
-    public static final int FL_PERMIT_ID_EXT_TXT = 5;
-    public static final int FL_PERMIT_ID_EXT_TXT_MASK = 1 << 5;
-    /** Identify the fl_permit.create_time field (ordinal:7). */
-    public static final int FL_PERMIT_ID_CREATE_TIME = 6;
-    public static final int FL_PERMIT_ID_CREATE_TIME_MASK = 1 << 6;
+    /** Identify the fl_permit.limit field (ordinal:4). */
+    public static final int FL_PERMIT_ID_LIMIT = 3;
+    public static final int FL_PERMIT_ID_LIMIT_MASK = 1 << 3;
+    /** Identify the fl_permit.remark field (ordinal:5). */
+    public static final int FL_PERMIT_ID_REMARK = 4;
+    public static final int FL_PERMIT_ID_REMARK_MASK = 1 << 4;
+    /** Identify the fl_permit.ext_bin field (ordinal:6). */
+    public static final int FL_PERMIT_ID_EXT_BIN = 5;
+    public static final int FL_PERMIT_ID_EXT_BIN_MASK = 1 << 5;
+    /** Identify the fl_permit.ext_txt field (ordinal:7). */
+    public static final int FL_PERMIT_ID_EXT_TXT = 6;
+    public static final int FL_PERMIT_ID_EXT_TXT_MASK = 1 << 6;
+    /** Identify the fl_permit.create_time field (ordinal:8). */
+    public static final int FL_PERMIT_ID_CREATE_TIME = 7;
+    public static final int FL_PERMIT_ID_CREATE_TIME_MASK = 1 << 7;
     /** Identify the fl_person.id field (ordinal:1). */
     public static final int FL_PERSON_ID_ID = 0;
     public static final int FL_PERSON_ID_ID_MASK = 1 << 0;
@@ -889,6 +892,7 @@ public interface Constant {
     public static final String FL_PERMIT_FULL_FIELDS ="fl_permit.device_group_id"
                             + ",fl_permit.person_group_id"
                             + ",fl_permit.schedule"
+                            + ",fl_permit.limit"
                             + ",fl_permit.remark"
                             + ",fl_permit.ext_bin"
                             + ",fl_permit.ext_txt"
@@ -897,6 +901,7 @@ public interface Constant {
     public static final String FL_PERMIT_FIELDS = "device_group_id"
                             + ",person_group_id"
                             + ",schedule"
+                            + ",limit"
                             + ",remark"
                             + ",ext_bin"
                             + ",ext_txt"
@@ -906,6 +911,7 @@ public interface Constant {
     public static final String FL_PERMIT_JAVA_FIELDS = "deviceGroupId"
                             + ",personGroupId"
                             + ",schedule"
+                            + ",limit"
                             + ",remark"
                             + ",extBin"
                             + ",extTxt"
@@ -916,6 +922,7 @@ public interface Constant {
     public static final Class<?>[] FL_PERMIT_FIELD_TYPES = new Class<?>[]{
         Integer.class,
         Integer.class,
+        String.class,
         String.class,
         String.class,
         java.nio.ByteBuffer.class,

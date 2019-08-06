@@ -60,9 +60,17 @@ public final class PermitBean
     @ThriftField
     public void setSchedule(final String schedule) { this.schedule = schedule; }
 
+    private String limit;
+
+    @ThriftField(value=7, name="limit", requiredness=Requiredness.OPTIONAL)
+    public String getLimit() { return limit; }
+
+    @ThriftField
+    public void setLimit(final String limit) { this.limit = limit; }
+
     private String remark;
 
-    @ThriftField(value=7, name="remark", requiredness=Requiredness.OPTIONAL)
+    @ThriftField(value=8, name="remark", requiredness=Requiredness.OPTIONAL)
     public String getRemark() { return remark; }
 
     @ThriftField
@@ -70,7 +78,7 @@ public final class PermitBean
 
     private byte [] extBin;
 
-    @ThriftField(value=8, name="extBin", requiredness=Requiredness.OPTIONAL)
+    @ThriftField(value=9, name="extBin", requiredness=Requiredness.OPTIONAL)
     public byte [] getExtBin() { return extBin; }
 
     @ThriftField
@@ -78,7 +86,7 @@ public final class PermitBean
 
     private String extTxt;
 
-    @ThriftField(value=9, name="extTxt", requiredness=Requiredness.OPTIONAL)
+    @ThriftField(value=10, name="extTxt", requiredness=Requiredness.OPTIONAL)
     public String getExtTxt() { return extTxt; }
 
     @ThriftField
@@ -86,7 +94,7 @@ public final class PermitBean
 
     private Long createTime;
 
-    @ThriftField(value=10, name="createTime", requiredness=Requiredness.OPTIONAL)
+    @ThriftField(value=11, name="createTime", requiredness=Requiredness.OPTIONAL)
     public Long getCreateTime() { return createTime; }
 
     @ThriftField
@@ -102,6 +110,7 @@ public final class PermitBean
             .add("deviceGroupId", deviceGroupId)
             .add("personGroupId", personGroupId)
             .add("schedule", schedule)
+            .add("limit", limit)
             .add("remark", remark)
             .add("extBin", extBin)
             .add("extTxt", extTxt)

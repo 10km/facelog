@@ -642,7 +642,7 @@ public interface DaoConstant {
     public static interface PermitConst{
         public static final String TABLENAME = "fl_permit";
         /** column count for fl_permit table */
-        public static final int COLUMN_COUNT = 7;
+        public static final int COLUMN_COUNT = 8;
         /** primary keys count for fl_permit table */
         public static final int PRIMARY_KEY_COUNT = 2;
         /** foreign keys count for fl_permit table */
@@ -655,6 +655,7 @@ public interface DaoConstant {
         public static final String FULL_FIELDS ="fl_permit.device_group_id"
                             + ",fl_permit.person_group_id"
                             + ",fl_permit.schedule"
+                            + ",fl_permit.limit"
                             + ",fl_permit.remark"
                             + ",fl_permit.ext_bin"
                             + ",fl_permit.ext_txt"
@@ -663,6 +664,7 @@ public interface DaoConstant {
         public static final String FIELDS = "device_group_id"
                             + ",person_group_id"
                             + ",schedule"
+                            + ",limit"
                             + ",remark"
                             + ",ext_bin"
                             + ",ext_txt"
@@ -673,6 +675,7 @@ public interface DaoConstant {
         public static final String JAVA_FIELDS = "deviceGroupId"
                             + ",personGroupId"
                             + ",schedule"
+                            + ",limit"
                             + ",remark"
                             + ",extBin"
                             + ",extTxt"
@@ -697,14 +700,16 @@ public interface DaoConstant {
             personGroupId("fl_permit","person_group_id",2,"getPersonGroupId","setPersonGroupId"),
             /** constant for fl_permit.schedule  */
             schedule("fl_permit","schedule",3,"getSchedule","setSchedule"),
+            /** constant for fl_permit.limit  */
+            limit("fl_permit","limit",4,"getLimit","setLimit"),
             /** constant for fl_permit.remark  */
-            remark("fl_permit","remark",4,"getRemark","setRemark"),
+            remark("fl_permit","remark",5,"getRemark","setRemark"),
             /** constant for fl_permit.ext_bin  */
-            extBin("fl_permit","ext_bin",5,"getExtBin","setExtBin"),
+            extBin("fl_permit","ext_bin",6,"getExtBin","setExtBin"),
             /** constant for fl_permit.ext_txt  */
-            extTxt("fl_permit","ext_txt",6,"getExtTxt","setExtTxt"),
+            extTxt("fl_permit","ext_txt",7,"getExtTxt","setExtTxt"),
             /** constant for fl_permit.create_time  */
-            createTime("fl_permit","create_time",7,"getCreateTime","setCreateTime");
+            createTime("fl_permit","create_time",8,"getCreateTime","setCreateTime");
             final ColumnMeta meta;
             private Column(String table,String field,int ordinal,String getter,String setter){
                 meta = new ColumnMeta(table,field,ordinal,getter,setter);

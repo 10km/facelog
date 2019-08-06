@@ -1012,6 +1012,14 @@ uint32_t LogBean::read(Protocol_* iprot) {
         }
         break;
       case 11:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->direction);
+          this->__isset.direction = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 12:
         if (ftype == ::apache::thrift::protocol::T_I64) {
           xfer += iprot->readI64(this->verifyTime);
           this->__isset.verifyTime = true;
@@ -1019,7 +1027,7 @@ uint32_t LogBean::read(Protocol_* iprot) {
           xfer += iprot->skip(ftype);
         }
         break;
-      case 12:
+      case 13:
         if (ftype == ::apache::thrift::protocol::T_I64) {
           xfer += iprot->readI64(this->createTime);
           this->__isset.createTime = true;
@@ -1098,13 +1106,18 @@ uint32_t LogBean::write(Protocol_* oprot) const {
     xfer += oprot->writeDouble(this->similarty);
     xfer += oprot->writeFieldEnd();
   }
+  if (this->__isset.direction) {
+    xfer += oprot->writeFieldBegin("direction", ::apache::thrift::protocol::T_I32, 11);
+    xfer += oprot->writeI32(this->direction);
+    xfer += oprot->writeFieldEnd();
+  }
   if (this->__isset.verifyTime) {
-    xfer += oprot->writeFieldBegin("verifyTime", ::apache::thrift::protocol::T_I64, 11);
+    xfer += oprot->writeFieldBegin("verifyTime", ::apache::thrift::protocol::T_I64, 12);
     xfer += oprot->writeI64(this->verifyTime);
     xfer += oprot->writeFieldEnd();
   }
   if (this->__isset.createTime) {
-    xfer += oprot->writeFieldBegin("createTime", ::apache::thrift::protocol::T_I64, 12);
+    xfer += oprot->writeFieldBegin("createTime", ::apache::thrift::protocol::T_I64, 13);
     xfer += oprot->writeI64(this->createTime);
     xfer += oprot->writeFieldEnd();
   }
@@ -1259,6 +1272,14 @@ uint32_t DeviceBean::read(Protocol_* iprot) {
         }
         break;
       case 16:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->direction);
+          this->__isset.direction = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 17:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
           xfer += iprot->readString(this->remark);
           this->__isset.remark = true;
@@ -1266,7 +1287,7 @@ uint32_t DeviceBean::read(Protocol_* iprot) {
           xfer += iprot->skip(ftype);
         }
         break;
-      case 17:
+      case 18:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
           xfer += iprot->readBinary(this->extBin);
           this->__isset.extBin = true;
@@ -1274,7 +1295,7 @@ uint32_t DeviceBean::read(Protocol_* iprot) {
           xfer += iprot->skip(ftype);
         }
         break;
-      case 18:
+      case 19:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
           xfer += iprot->readString(this->extTxt);
           this->__isset.extTxt = true;
@@ -1282,7 +1303,7 @@ uint32_t DeviceBean::read(Protocol_* iprot) {
           xfer += iprot->skip(ftype);
         }
         break;
-      case 19:
+      case 20:
         if (ftype == ::apache::thrift::protocol::T_I64) {
           xfer += iprot->readI64(this->createTime);
           this->__isset.createTime = true;
@@ -1290,7 +1311,7 @@ uint32_t DeviceBean::read(Protocol_* iprot) {
           xfer += iprot->skip(ftype);
         }
         break;
-      case 20:
+      case 21:
         if (ftype == ::apache::thrift::protocol::T_I64) {
           xfer += iprot->readI64(this->updateTime);
           this->__isset.updateTime = true;
@@ -1394,28 +1415,33 @@ uint32_t DeviceBean::write(Protocol_* oprot) const {
     xfer += oprot->writeString(this->mac);
     xfer += oprot->writeFieldEnd();
   }
+  if (this->__isset.direction) {
+    xfer += oprot->writeFieldBegin("direction", ::apache::thrift::protocol::T_I32, 16);
+    xfer += oprot->writeI32(this->direction);
+    xfer += oprot->writeFieldEnd();
+  }
   if (this->__isset.remark) {
-    xfer += oprot->writeFieldBegin("remark", ::apache::thrift::protocol::T_STRING, 16);
+    xfer += oprot->writeFieldBegin("remark", ::apache::thrift::protocol::T_STRING, 17);
     xfer += oprot->writeString(this->remark);
     xfer += oprot->writeFieldEnd();
   }
   if (this->__isset.extBin) {
-    xfer += oprot->writeFieldBegin("extBin", ::apache::thrift::protocol::T_STRING, 17);
+    xfer += oprot->writeFieldBegin("extBin", ::apache::thrift::protocol::T_STRING, 18);
     xfer += oprot->writeBinary(this->extBin);
     xfer += oprot->writeFieldEnd();
   }
   if (this->__isset.extTxt) {
-    xfer += oprot->writeFieldBegin("extTxt", ::apache::thrift::protocol::T_STRING, 18);
+    xfer += oprot->writeFieldBegin("extTxt", ::apache::thrift::protocol::T_STRING, 19);
     xfer += oprot->writeString(this->extTxt);
     xfer += oprot->writeFieldEnd();
   }
   if (this->__isset.createTime) {
-    xfer += oprot->writeFieldBegin("createTime", ::apache::thrift::protocol::T_I64, 19);
+    xfer += oprot->writeFieldBegin("createTime", ::apache::thrift::protocol::T_I64, 20);
     xfer += oprot->writeI64(this->createTime);
     xfer += oprot->writeFieldEnd();
   }
   if (this->__isset.updateTime) {
-    xfer += oprot->writeFieldBegin("updateTime", ::apache::thrift::protocol::T_I64, 20);
+    xfer += oprot->writeFieldBegin("updateTime", ::apache::thrift::protocol::T_I64, 21);
     xfer += oprot->writeI64(this->updateTime);
     xfer += oprot->writeFieldEnd();
   }
@@ -1732,13 +1758,21 @@ uint32_t PermitBean::read(Protocol_* iprot) {
         break;
       case 7:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->limit);
+          this->__isset.limit = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 8:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
           xfer += iprot->readString(this->remark);
           this->__isset.remark = true;
         } else {
           xfer += iprot->skip(ftype);
         }
         break;
-      case 8:
+      case 9:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
           xfer += iprot->readBinary(this->extBin);
           this->__isset.extBin = true;
@@ -1746,7 +1780,7 @@ uint32_t PermitBean::read(Protocol_* iprot) {
           xfer += iprot->skip(ftype);
         }
         break;
-      case 9:
+      case 10:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
           xfer += iprot->readString(this->extTxt);
           this->__isset.extTxt = true;
@@ -1754,7 +1788,7 @@ uint32_t PermitBean::read(Protocol_* iprot) {
           xfer += iprot->skip(ftype);
         }
         break;
-      case 10:
+      case 11:
         if (ftype == ::apache::thrift::protocol::T_I64) {
           xfer += iprot->readI64(this->createTime);
           this->__isset.createTime = true;
@@ -1813,23 +1847,28 @@ uint32_t PermitBean::write(Protocol_* oprot) const {
     xfer += oprot->writeString(this->schedule);
     xfer += oprot->writeFieldEnd();
   }
+  if (this->__isset.limit) {
+    xfer += oprot->writeFieldBegin("limit", ::apache::thrift::protocol::T_STRING, 7);
+    xfer += oprot->writeString(this->limit);
+    xfer += oprot->writeFieldEnd();
+  }
   if (this->__isset.remark) {
-    xfer += oprot->writeFieldBegin("remark", ::apache::thrift::protocol::T_STRING, 7);
+    xfer += oprot->writeFieldBegin("remark", ::apache::thrift::protocol::T_STRING, 8);
     xfer += oprot->writeString(this->remark);
     xfer += oprot->writeFieldEnd();
   }
   if (this->__isset.extBin) {
-    xfer += oprot->writeFieldBegin("extBin", ::apache::thrift::protocol::T_STRING, 8);
+    xfer += oprot->writeFieldBegin("extBin", ::apache::thrift::protocol::T_STRING, 9);
     xfer += oprot->writeBinary(this->extBin);
     xfer += oprot->writeFieldEnd();
   }
   if (this->__isset.extTxt) {
-    xfer += oprot->writeFieldBegin("extTxt", ::apache::thrift::protocol::T_STRING, 9);
+    xfer += oprot->writeFieldBegin("extTxt", ::apache::thrift::protocol::T_STRING, 10);
     xfer += oprot->writeString(this->extTxt);
     xfer += oprot->writeFieldEnd();
   }
   if (this->__isset.createTime) {
-    xfer += oprot->writeFieldBegin("createTime", ::apache::thrift::protocol::T_I64, 10);
+    xfer += oprot->writeFieldBegin("createTime", ::apache::thrift::protocol::T_I64, 11);
     xfer += oprot->writeI64(this->createTime);
     xfer += oprot->writeFieldEnd();
   }
@@ -2466,6 +2505,14 @@ uint32_t LogLightBean::read(Protocol_* iprot) {
           xfer += iprot->skip(ftype);
         }
         break;
+      case 10:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->direction);
+          this->__isset.direction = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -2530,6 +2577,11 @@ uint32_t LogLightBean::write(Protocol_* oprot) const {
   if (this->__isset.verifyTime) {
     xfer += oprot->writeFieldBegin("verifyTime", ::apache::thrift::protocol::T_I64, 9);
     xfer += oprot->writeI64(this->verifyTime);
+    xfer += oprot->writeFieldEnd();
+  }
+  if (this->__isset.direction) {
+    xfer += oprot->writeFieldBegin("direction", ::apache::thrift::protocol::T_I32, 10);
+    xfer += oprot->writeI32(this->direction);
     xfer += oprot->writeFieldEnd();
   }
   xfer += oprot->writeFieldStop();

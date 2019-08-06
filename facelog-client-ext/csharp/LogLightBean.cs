@@ -41,6 +41,8 @@ public partial class LogLightBean : TBase
 
   public long? VerifyTime { get; set; }
 
+  public int? Direction { get; set; }
+
   public LogLightBean() {
   }
 
@@ -130,6 +132,13 @@ public partial class LogLightBean : TBase
           case 9:
             if (field.Type == TType.I64) {
               VerifyTime = iprot.ReadI64();
+            } else { 
+              TProtocolUtil.Skip(iprot, field.Type);
+            }
+            break;
+          case 10:
+            if (field.Type == TType.I32) {
+              Direction = iprot.ReadI32();
             } else { 
               TProtocolUtil.Skip(iprot, field.Type);
             }
@@ -227,6 +236,14 @@ public partial class LogLightBean : TBase
         oprot.WriteI64(VerifyTime.Value);
         oprot.WriteFieldEnd();
       }
+      if (Direction != null) {
+        field.Name = "direction";
+        field.Type = TType.I32;
+        field.ID = 10;
+        oprot.WriteFieldBegin(field);
+        oprot.WriteI32(Direction.Value);
+        oprot.WriteFieldEnd();
+      }
       oprot.WriteFieldStop();
       oprot.WriteStructEnd();
     }
@@ -267,6 +284,10 @@ public partial class LogLightBean : TBase
     if (VerifyTime != null) {
       __sb.Append(", VerifyTime: ");
       __sb.Append(VerifyTime);
+    }
+    if (Direction != null) {
+      __sb.Append(", Direction: ");
+      __sb.Append(Direction);
     }
     __sb.Append(")");
     return __sb.ToString();

@@ -43,6 +43,10 @@ public final class PermitBean
     @ApiModelProperty(value = "允许通行时间表,为null或空为7x24小时工作,格式为JSON,参见开发手册"  ,dataType="String")
     private String schedule;
 
+    /** comments:通行次/天数限制定义,为null或空不限制,JSON格式字符串,参见开发手册 */
+    @ApiModelProperty(value = "通行次/天数限制定义,为null或空不限制,JSON格式字符串,参见开发手册"  ,dataType="String")
+    private String limit;
+
     /** comments:备注 */
     @ApiModelProperty(value = "备注"  ,dataType="String")
     private String remark;
@@ -404,6 +408,73 @@ public final class PermitBean
         return 0L !=  (initialized & FL_PERMIT_ID_SCHEDULE_MASK);
     }
     /**
+     * Getter method for {@link #limit}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_permit.limit</li>
+     * <li>comments: 通行次/天数限制定义,为null或空不限制,JSON格式字符串,参见开发手册</li>
+     * <li>column size: 512</li>
+     * <li>JDBC type returned by the driver: Types.VARCHAR</li>
+     * </ul>
+     *
+     * @return the value of limit
+     */
+    @ThriftField(value=7)
+    public String getLimit(){
+        return limit;
+    }
+    /**
+     * Setter method for {@link #limit}.<br>
+     * The new value is set only if equals() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to limit
+     */
+    public void setLimit(String newVal)
+    {
+        checkMutable();
+
+        modified |= FL_PERMIT_ID_LIMIT_MASK;
+        initialized |= FL_PERMIT_ID_LIMIT_MASK;
+
+        if (Objects.equals(newVal, limit)) {
+            return;
+        }
+        limit = newVal;
+    }
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified} and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "limit")
+    public void writeLimit(String newVal){
+        checkMutable();
+        limit = newVal;
+    }
+    /**
+     * Determines if the limit has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkLimitModified()
+    {
+        return 0L !=  (modified & FL_PERMIT_ID_LIMIT_MASK);
+    }
+
+    /**
+     * Determines if the limit has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkLimitInitialized()
+    {
+        return 0L !=  (initialized & FL_PERMIT_ID_LIMIT_MASK);
+    }
+    /**
      * Getter method for {@link #remark}.<br>
      * Meta Data Information (in progress):
      * <ul>
@@ -415,7 +486,7 @@ public final class PermitBean
      *
      * @return the value of remark
      */
-    @ThriftField(value=7)
+    @ThriftField(value=8)
     public String getRemark(){
         return remark;
     }
@@ -482,7 +553,7 @@ public final class PermitBean
      *
      * @return the value of extBin
      */
-    @ThriftField(value=8)
+    @ThriftField(value=9)
     public java.nio.ByteBuffer getExtBin(){
         return extBin;
     }
@@ -549,7 +620,7 @@ public final class PermitBean
      *
      * @return the value of extTxt
      */
-    @ThriftField(value=9)
+    @ThriftField(value=10)
     public String getExtTxt(){
         return extTxt;
     }
@@ -624,7 +695,7 @@ public final class PermitBean
      * use Long to represent date type for thrift:swift support 
      * @see #getCreateTime()
      */
-    @ThriftField(name = "createTime",value = 10)
+    @ThriftField(name = "createTime",value = 11)
     public Long readCreateTime(){
         return null == createTime ? null:createTime.getTime();
     }
@@ -756,6 +827,8 @@ public final class PermitBean
             return checkPersonGroupIdModified();
         case FL_PERMIT_ID_SCHEDULE:
             return checkScheduleModified();
+        case FL_PERMIT_ID_LIMIT:
+            return checkLimitModified();
         case FL_PERMIT_ID_REMARK:
             return checkRemarkModified();
         case FL_PERMIT_ID_EXT_BIN:
@@ -778,6 +851,8 @@ public final class PermitBean
             return checkPersonGroupIdInitialized();
         case FL_PERMIT_ID_SCHEDULE:
             return checkScheduleInitialized();
+        case FL_PERMIT_ID_LIMIT:
+            return checkLimitInitialized();
         case FL_PERMIT_ID_REMARK:
             return checkRemarkInitialized();
         case FL_PERMIT_ID_EXT_BIN:
@@ -820,6 +895,7 @@ public final class PermitBean
     public void resetModifiedExceptPrimaryKeys()
     {
         modified &= (~(FL_PERMIT_ID_SCHEDULE_MASK |
+            FL_PERMIT_ID_LIMIT_MASK |
             FL_PERMIT_ID_REMARK_MASK |
             FL_PERMIT_ID_EXT_BIN_MASK |
             FL_PERMIT_ID_EXT_TXT_MASK |
@@ -838,6 +914,7 @@ public final class PermitBean
         this.deviceGroupId = null;
         this.personGroupId = null;
         this.schedule = null;
+        this.limit = null;
         this.remark = null;
         this.extBin = null;
         this.extTxt = null;
@@ -859,6 +936,7 @@ public final class PermitBean
             .append(getDeviceGroupId(), obj.getDeviceGroupId())
             .append(getPersonGroupId(), obj.getPersonGroupId())
             .append(getSchedule(), obj.getSchedule())
+            .append(getLimit(), obj.getLimit())
             .append(getRemark(), obj.getRemark())
             .append(getExtBin(), obj.getExtBin())
             .append(getExtTxt(), obj.getExtTxt())
@@ -955,6 +1033,15 @@ public final class PermitBean
                 append(builder,fullIfStringOrBytes,getSchedule());
             }
         }
+        if(checkLimitInitialized()){
+            if(!notNull || null != getLimit()){
+                if(count++ >0){
+                    builder.append(",");
+                }
+                builder.append("limit=");
+                append(builder,fullIfStringOrBytes,getLimit());
+            }
+        }
         if(checkRemarkInitialized()){
             if(!notNull || null != getRemark()){
                 if(count++ >0){
@@ -1000,6 +1087,7 @@ public final class PermitBean
             .append(getDeviceGroupId(), object.getDeviceGroupId())
             .append(getPersonGroupId(), object.getPersonGroupId())
             .append(getSchedule(), object.getSchedule())
+            .append(getLimit(), object.getLimit())
             .append(getRemark(), object.getRemark())
             .append(getExtBin(), object.getExtBin())
             .append(getExtTxt(), object.getExtTxt())
@@ -1027,6 +1115,7 @@ public final class PermitBean
         setDeviceGroupId((Integer)null);
         setPersonGroupId((Integer)null);
         setSchedule((String)null);
+        setLimit((String)null);
         setRemark((String)null);
         setExtBin((java.nio.ByteBuffer)null);
         setExtTxt((String)null);
@@ -1082,7 +1171,7 @@ public final class PermitBean
     public PermitBean copy(PermitBean bean, int... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length){
-            fieldList = new int[]{0,1,2,3,4,5,6};
+            fieldList = new int[]{0,1,2,3,4,5,6,7};
         }
         for (int i = 0; i < fieldList.length; ++i) {
             if( bean.isInitialized(fieldList[i]) && !Objects.deepEquals(bean.getValue(fieldList[i]), getValue(fieldList[i]))){
@@ -1120,6 +1209,8 @@ public final class PermitBean
             return (T)getPersonGroupId();        
         case FL_PERMIT_ID_SCHEDULE: 
             return (T)getSchedule();        
+        case FL_PERMIT_ID_LIMIT: 
+            return (T)getLimit();        
         case FL_PERMIT_ID_REMARK: 
             return (T)getRemark();        
         case FL_PERMIT_ID_EXT_BIN: 
@@ -1145,6 +1236,9 @@ public final class PermitBean
             break;
         case FL_PERMIT_ID_SCHEDULE:
             setSchedule((String)value);
+            break;
+        case FL_PERMIT_ID_LIMIT:
+            setLimit((String)value);
             break;
         case FL_PERMIT_ID_REMARK:
             setRemark((String)value);
@@ -1265,6 +1359,16 @@ public final class PermitBean
          */
         public Builder schedule(String schedule){
             TEMPLATE.get().setSchedule(schedule);
+            return this;
+        }
+        /** 
+         * fill the field : fl_permit.limit
+         * @param limit 通行次/天数限制定义,为null或空不限制,JSON格式字符串,参见开发手册
+         * @see PermitBean#getLimit()
+         * @see PermitBean#setLimit(String)
+         */
+        public Builder limit(String limit){
+            TEMPLATE.get().setLimit(limit);
             return this;
         }
         /** 

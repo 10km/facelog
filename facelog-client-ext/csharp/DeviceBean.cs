@@ -53,6 +53,8 @@ public partial class DeviceBean : TBase
 
   public string Mac { get; set; }
 
+  public int? Direction { get; set; }
+
   public string Remark { get; set; }
 
   public byte[] ExtBin { get; set; }
@@ -199,34 +201,41 @@ public partial class DeviceBean : TBase
             }
             break;
           case 16:
-            if (field.Type == TType.String) {
-              Remark = iprot.ReadString();
+            if (field.Type == TType.I32) {
+              Direction = iprot.ReadI32();
             } else { 
               TProtocolUtil.Skip(iprot, field.Type);
             }
             break;
           case 17:
             if (field.Type == TType.String) {
-              ExtBin = iprot.ReadBinary();
+              Remark = iprot.ReadString();
             } else { 
               TProtocolUtil.Skip(iprot, field.Type);
             }
             break;
           case 18:
             if (field.Type == TType.String) {
-              ExtTxt = iprot.ReadString();
+              ExtBin = iprot.ReadBinary();
             } else { 
               TProtocolUtil.Skip(iprot, field.Type);
             }
             break;
           case 19:
+            if (field.Type == TType.String) {
+              ExtTxt = iprot.ReadString();
+            } else { 
+              TProtocolUtil.Skip(iprot, field.Type);
+            }
+            break;
+          case 20:
             if (field.Type == TType.I64) {
               CreateTime = iprot.ReadI64();
             } else { 
               TProtocolUtil.Skip(iprot, field.Type);
             }
             break;
-          case 20:
+          case 21:
             if (field.Type == TType.I64) {
               UpdateTime = iprot.ReadI64();
             } else { 
@@ -374,10 +383,18 @@ public partial class DeviceBean : TBase
         oprot.WriteString(Mac);
         oprot.WriteFieldEnd();
       }
+      if (Direction != null) {
+        field.Name = "direction";
+        field.Type = TType.I32;
+        field.ID = 16;
+        oprot.WriteFieldBegin(field);
+        oprot.WriteI32(Direction.Value);
+        oprot.WriteFieldEnd();
+      }
       if (Remark != null) {
         field.Name = "remark";
         field.Type = TType.String;
-        field.ID = 16;
+        field.ID = 17;
         oprot.WriteFieldBegin(field);
         oprot.WriteString(Remark);
         oprot.WriteFieldEnd();
@@ -385,7 +402,7 @@ public partial class DeviceBean : TBase
       if (ExtBin != null) {
         field.Name = "extBin";
         field.Type = TType.String;
-        field.ID = 17;
+        field.ID = 18;
         oprot.WriteFieldBegin(field);
         oprot.WriteBinary(ExtBin);
         oprot.WriteFieldEnd();
@@ -393,7 +410,7 @@ public partial class DeviceBean : TBase
       if (ExtTxt != null) {
         field.Name = "extTxt";
         field.Type = TType.String;
-        field.ID = 18;
+        field.ID = 19;
         oprot.WriteFieldBegin(field);
         oprot.WriteString(ExtTxt);
         oprot.WriteFieldEnd();
@@ -401,7 +418,7 @@ public partial class DeviceBean : TBase
       if (CreateTime != null) {
         field.Name = "createTime";
         field.Type = TType.I64;
-        field.ID = 19;
+        field.ID = 20;
         oprot.WriteFieldBegin(field);
         oprot.WriteI64(CreateTime.Value);
         oprot.WriteFieldEnd();
@@ -409,7 +426,7 @@ public partial class DeviceBean : TBase
       if (UpdateTime != null) {
         field.Name = "updateTime";
         field.Type = TType.I64;
-        field.ID = 20;
+        field.ID = 21;
         oprot.WriteFieldBegin(field);
         oprot.WriteI64(UpdateTime.Value);
         oprot.WriteFieldEnd();
@@ -478,6 +495,10 @@ public partial class DeviceBean : TBase
     if (Mac != null) {
       __sb.Append(", Mac: ");
       __sb.Append(Mac);
+    }
+    if (Direction != null) {
+      __sb.Append(", Direction: ");
+      __sb.Append(Direction);
     }
     if (Remark != null) {
       __sb.Append(", Remark: ");

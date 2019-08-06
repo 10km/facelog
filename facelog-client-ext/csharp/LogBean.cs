@@ -43,6 +43,8 @@ public partial class LogBean : TBase
 
   public double? Similarty { get; set; }
 
+  public int? Direction { get; set; }
+
   public long? VerifyTime { get; set; }
 
   public long? CreateTime { get; set; }
@@ -148,13 +150,20 @@ public partial class LogBean : TBase
             }
             break;
           case 11:
+            if (field.Type == TType.I32) {
+              Direction = iprot.ReadI32();
+            } else { 
+              TProtocolUtil.Skip(iprot, field.Type);
+            }
+            break;
+          case 12:
             if (field.Type == TType.I64) {
               VerifyTime = iprot.ReadI64();
             } else { 
               TProtocolUtil.Skip(iprot, field.Type);
             }
             break;
-          case 12:
+          case 13:
             if (field.Type == TType.I64) {
               CreateTime = iprot.ReadI64();
             } else { 
@@ -262,10 +271,18 @@ public partial class LogBean : TBase
         oprot.WriteDouble(Similarty.Value);
         oprot.WriteFieldEnd();
       }
+      if (Direction != null) {
+        field.Name = "direction";
+        field.Type = TType.I32;
+        field.ID = 11;
+        oprot.WriteFieldBegin(field);
+        oprot.WriteI32(Direction.Value);
+        oprot.WriteFieldEnd();
+      }
       if (VerifyTime != null) {
         field.Name = "verifyTime";
         field.Type = TType.I64;
-        field.ID = 11;
+        field.ID = 12;
         oprot.WriteFieldBegin(field);
         oprot.WriteI64(VerifyTime.Value);
         oprot.WriteFieldEnd();
@@ -273,7 +290,7 @@ public partial class LogBean : TBase
       if (CreateTime != null) {
         field.Name = "createTime";
         field.Type = TType.I64;
-        field.ID = 12;
+        field.ID = 13;
         oprot.WriteFieldBegin(field);
         oprot.WriteI64(CreateTime.Value);
         oprot.WriteFieldEnd();
@@ -322,6 +339,10 @@ public partial class LogBean : TBase
     if (Similarty != null) {
       __sb.Append(", Similarty: ");
       __sb.Append(Similarty);
+    }
+    if (Direction != null) {
+      __sb.Append(", Direction: ");
+      __sb.Append(Direction);
     }
     if (VerifyTime != null) {
       __sb.Append(", VerifyTime: ");

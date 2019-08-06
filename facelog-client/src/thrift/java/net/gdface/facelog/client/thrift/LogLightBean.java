@@ -84,6 +84,14 @@ public final class LogLightBean
     @ThriftField
     public void setVerifyTime(final Long verifyTime) { this.verifyTime = verifyTime; }
 
+    private Integer direction;
+
+    @ThriftField(value=10, name="direction", requiredness=Requiredness.OPTIONAL)
+    public Integer getDirection() { return direction; }
+
+    @ThriftField
+    public void setDirection(final Integer direction) { this.direction = direction; }
+
     @Override
     public String toString()
     {
@@ -97,6 +105,7 @@ public final class LogLightBean
             .add("papersType", papersType)
             .add("papersNum", papersNum)
             .add("verifyTime", verifyTime)
+            .add("direction", direction)
             .toString();
     }
 }

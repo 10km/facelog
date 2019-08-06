@@ -581,6 +581,9 @@ public class DbConverter implements IDbConverter<
             if(right.checkScheduleInitialized()){
                 left.setSchedule(right.getSchedule());
             }
+            if(right.checkLimitInitialized()){
+                left.setLimit(right.getLimit());
+            }
             if(right.checkRemarkInitialized()){
                 left.setRemark(right.getRemark());
             }
@@ -608,6 +611,9 @@ public class DbConverter implements IDbConverter<
             }
             if(left.checkScheduleInitialized() ){
                 right.setSchedule(left.getSchedule());
+            }
+            if(left.checkLimitInitialized() ){
+                right.setLimit(left.getLimit());
             }
             if(left.checkRemarkInitialized() ){
                 right.setRemark(left.getRemark());

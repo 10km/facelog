@@ -92,9 +92,17 @@ public final class LogBean
     @ThriftField
     public void setSimilarty(final Double similarty) { this.similarty = similarty; }
 
+    private Integer direction;
+
+    @ThriftField(value=11, name="direction", requiredness=Requiredness.OPTIONAL)
+    public Integer getDirection() { return direction; }
+
+    @ThriftField
+    public void setDirection(final Integer direction) { this.direction = direction; }
+
     private Long verifyTime;
 
-    @ThriftField(value=11, name="verifyTime", requiredness=Requiredness.OPTIONAL)
+    @ThriftField(value=12, name="verifyTime", requiredness=Requiredness.OPTIONAL)
     public Long getVerifyTime() { return verifyTime; }
 
     @ThriftField
@@ -102,7 +110,7 @@ public final class LogBean
 
     private Long createTime;
 
-    @ThriftField(value=12, name="createTime", requiredness=Requiredness.OPTIONAL)
+    @ThriftField(value=13, name="createTime", requiredness=Requiredness.OPTIONAL)
     public Long getCreateTime() { return createTime; }
 
     @ThriftField
@@ -122,6 +130,7 @@ public final class LogBean
             .add("compareFace", compareFace)
             .add("verifyStatus", verifyStatus)
             .add("similarty", similarty)
+            .add("direction", direction)
             .add("verifyTime", verifyTime)
             .add("createTime", createTime)
             .toString();

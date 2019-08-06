@@ -35,6 +35,8 @@ public partial class PermitBean : TBase
 
   public string Schedule { get; set; }
 
+  public string Limit { get; set; }
+
   public string Remark { get; set; }
 
   public byte[] ExtBin { get; set; }
@@ -117,26 +119,33 @@ public partial class PermitBean : TBase
             break;
           case 7:
             if (field.Type == TType.String) {
-              Remark = iprot.ReadString();
+              Limit = iprot.ReadString();
             } else { 
               TProtocolUtil.Skip(iprot, field.Type);
             }
             break;
           case 8:
             if (field.Type == TType.String) {
-              ExtBin = iprot.ReadBinary();
+              Remark = iprot.ReadString();
             } else { 
               TProtocolUtil.Skip(iprot, field.Type);
             }
             break;
           case 9:
             if (field.Type == TType.String) {
-              ExtTxt = iprot.ReadString();
+              ExtBin = iprot.ReadBinary();
             } else { 
               TProtocolUtil.Skip(iprot, field.Type);
             }
             break;
           case 10:
+            if (field.Type == TType.String) {
+              ExtTxt = iprot.ReadString();
+            } else { 
+              TProtocolUtil.Skip(iprot, field.Type);
+            }
+            break;
+          case 11:
             if (field.Type == TType.I64) {
               CreateTime = iprot.ReadI64();
             } else { 
@@ -212,10 +221,18 @@ public partial class PermitBean : TBase
         oprot.WriteString(Schedule);
         oprot.WriteFieldEnd();
       }
+      if (Limit != null) {
+        field.Name = "limit";
+        field.Type = TType.String;
+        field.ID = 7;
+        oprot.WriteFieldBegin(field);
+        oprot.WriteString(Limit);
+        oprot.WriteFieldEnd();
+      }
       if (Remark != null) {
         field.Name = "remark";
         field.Type = TType.String;
-        field.ID = 7;
+        field.ID = 8;
         oprot.WriteFieldBegin(field);
         oprot.WriteString(Remark);
         oprot.WriteFieldEnd();
@@ -223,7 +240,7 @@ public partial class PermitBean : TBase
       if (ExtBin != null) {
         field.Name = "extBin";
         field.Type = TType.String;
-        field.ID = 8;
+        field.ID = 9;
         oprot.WriteFieldBegin(field);
         oprot.WriteBinary(ExtBin);
         oprot.WriteFieldEnd();
@@ -231,7 +248,7 @@ public partial class PermitBean : TBase
       if (ExtTxt != null) {
         field.Name = "extTxt";
         field.Type = TType.String;
-        field.ID = 9;
+        field.ID = 10;
         oprot.WriteFieldBegin(field);
         oprot.WriteString(ExtTxt);
         oprot.WriteFieldEnd();
@@ -239,7 +256,7 @@ public partial class PermitBean : TBase
       if (CreateTime != null) {
         field.Name = "createTime";
         field.Type = TType.I64;
-        field.ID = 10;
+        field.ID = 11;
         oprot.WriteFieldBegin(field);
         oprot.WriteI64(CreateTime.Value);
         oprot.WriteFieldEnd();
@@ -272,6 +289,10 @@ public partial class PermitBean : TBase
     if (Schedule != null) {
       __sb.Append(", Schedule: ");
       __sb.Append(Schedule);
+    }
+    if (Limit != null) {
+      __sb.Append(", Limit: ");
+      __sb.Append(Limit);
     }
     if (Remark != null) {
       __sb.Append(", Remark: ");

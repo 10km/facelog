@@ -39,6 +39,7 @@ public class PermitComparator implements Comparator<PermitBean>,Constant
      *   <li>{@link Constant#FL_PERMIT_ID_DEVICE_GROUP_ID}
      *   <li>{@link Constant#FL_PERMIT_ID_PERSON_GROUP_ID}
      *   <li>{@link Constant#FL_PERMIT_ID_SCHEDULE}
+     *   <li>{@link Constant#FL_PERMIT_ID_LIMIT}
      *   <li>{@link Constant#FL_PERMIT_ID_REMARK}
      *   <li>{@link Constant#FL_PERMIT_ID_EXT_BIN}
      *   <li>{@link Constant#FL_PERMIT_ID_EXT_TXT}
@@ -64,6 +65,7 @@ public class PermitComparator implements Comparator<PermitBean>,Constant
      *   <li>{@link Constant#FL_PERMIT_ID_DEVICE_GROUP_ID})
      *   <li>{@link Constant#FL_PERMIT_ID_PERSON_GROUP_ID})
      *   <li>{@link Constant#FL_PERMIT_ID_SCHEDULE})
+     *   <li>{@link Constant#FL_PERMIT_ID_LIMIT})
      *   <li>{@link Constant#FL_PERMIT_ID_REMARK})
      *   <li>{@link Constant#FL_PERMIT_ID_EXT_BIN})
      *   <li>{@link Constant#FL_PERMIT_ID_EXT_TXT})
@@ -115,6 +117,17 @@ public class PermitComparator implements Comparator<PermitBean>,Constant
                     iReturn = 1;
                 } else {
                     iReturn = b1.getSchedule().compareTo(b2.getSchedule());
+                }
+                break;
+            case FL_PERMIT_ID_LIMIT:
+                if (b1.getLimit() == null && b2.getLimit() != null) {
+                    iReturn = -1;
+                } else if (b1.getLimit() == null && b2.getLimit() == null) {
+                    iReturn = 0;
+                } else if (b1.getLimit() != null && b2.getLimit() == null) {
+                    iReturn = 1;
+                } else {
+                    iReturn = b1.getLimit().compareTo(b2.getLimit());
                 }
                 break;
             case FL_PERMIT_ID_REMARK:

@@ -905,6 +905,11 @@ void LogBean::__set_similarty(const double val) {
 __isset.similarty = true;
 }
 
+void LogBean::__set_direction(const int32_t val) {
+  this->direction = val;
+__isset.direction = true;
+}
+
 void LogBean::__set_verifyTime(const int64_t val) {
   this->verifyTime = val;
 __isset.verifyTime = true;
@@ -933,6 +938,7 @@ void swap(LogBean &a, LogBean &b) {
   swap(a.compareFace, b.compareFace);
   swap(a.verifyStatus, b.verifyStatus);
   swap(a.similarty, b.similarty);
+  swap(a.direction, b.direction);
   swap(a.verifyTime, b.verifyTime);
   swap(a.createTime, b.createTime);
   swap(a.__isset, b.__isset);
@@ -949,6 +955,7 @@ LogBean::LogBean(const LogBean& other20) {
   compareFace = other20.compareFace;
   verifyStatus = other20.verifyStatus;
   similarty = other20.similarty;
+  direction = other20.direction;
   verifyTime = other20.verifyTime;
   createTime = other20.createTime;
   __isset = other20.__isset;
@@ -964,6 +971,7 @@ LogBean::LogBean( LogBean&& other21) {
   compareFace = std::move(other21.compareFace);
   verifyStatus = std::move(other21.verifyStatus);
   similarty = std::move(other21.similarty);
+  direction = std::move(other21.direction);
   verifyTime = std::move(other21.verifyTime);
   createTime = std::move(other21.createTime);
   __isset = std::move(other21.__isset);
@@ -979,6 +987,7 @@ LogBean& LogBean::operator=(const LogBean& other22) {
   compareFace = other22.compareFace;
   verifyStatus = other22.verifyStatus;
   similarty = other22.similarty;
+  direction = other22.direction;
   verifyTime = other22.verifyTime;
   createTime = other22.createTime;
   __isset = other22.__isset;
@@ -995,6 +1004,7 @@ LogBean& LogBean::operator=(LogBean&& other23) {
   compareFace = std::move(other23.compareFace);
   verifyStatus = std::move(other23.verifyStatus);
   similarty = std::move(other23.similarty);
+  direction = std::move(other23.direction);
   verifyTime = std::move(other23.verifyTime);
   createTime = std::move(other23.createTime);
   __isset = std::move(other23.__isset);
@@ -1013,6 +1023,7 @@ void LogBean::printTo(std::ostream& out) const {
   out << ", " << "compareFace="; (__isset.compareFace ? (out << to_string(compareFace)) : (out << "<null>"));
   out << ", " << "verifyStatus="; (__isset.verifyStatus ? (out << to_string(verifyStatus)) : (out << "<null>"));
   out << ", " << "similarty="; (__isset.similarty ? (out << to_string(similarty)) : (out << "<null>"));
+  out << ", " << "direction="; (__isset.direction ? (out << to_string(direction)) : (out << "<null>"));
   out << ", " << "verifyTime="; (__isset.verifyTime ? (out << to_string(verifyTime)) : (out << "<null>"));
   out << ", " << "createTime="; (__isset.createTime ? (out << to_string(createTime)) : (out << "<null>"));
   out << ")";
@@ -1095,6 +1106,11 @@ void DeviceBean::__set_mac(const std::string& val) {
 __isset.mac = true;
 }
 
+void DeviceBean::__set_direction(const int32_t val) {
+  this->direction = val;
+__isset.direction = true;
+}
+
 void DeviceBean::__set_remark(const std::string& val) {
   this->remark = val;
 __isset.remark = true;
@@ -1143,6 +1159,7 @@ void swap(DeviceBean &a, DeviceBean &b) {
   swap(a.usedSdks, b.usedSdks);
   swap(a.serialNo, b.serialNo);
   swap(a.mac, b.mac);
+  swap(a.direction, b.direction);
   swap(a.remark, b.remark);
   swap(a.extBin, b.extBin);
   swap(a.extTxt, b.extTxt);
@@ -1167,6 +1184,7 @@ DeviceBean::DeviceBean(const DeviceBean& other24) {
   usedSdks = other24.usedSdks;
   serialNo = other24.serialNo;
   mac = other24.mac;
+  direction = other24.direction;
   remark = other24.remark;
   extBin = other24.extBin;
   extTxt = other24.extTxt;
@@ -1190,6 +1208,7 @@ DeviceBean::DeviceBean( DeviceBean&& other25) {
   usedSdks = std::move(other25.usedSdks);
   serialNo = std::move(other25.serialNo);
   mac = std::move(other25.mac);
+  direction = std::move(other25.direction);
   remark = std::move(other25.remark);
   extBin = std::move(other25.extBin);
   extTxt = std::move(other25.extTxt);
@@ -1213,6 +1232,7 @@ DeviceBean& DeviceBean::operator=(const DeviceBean& other26) {
   usedSdks = other26.usedSdks;
   serialNo = other26.serialNo;
   mac = other26.mac;
+  direction = other26.direction;
   remark = other26.remark;
   extBin = other26.extBin;
   extTxt = other26.extTxt;
@@ -1237,6 +1257,7 @@ DeviceBean& DeviceBean::operator=(DeviceBean&& other27) {
   usedSdks = std::move(other27.usedSdks);
   serialNo = std::move(other27.serialNo);
   mac = std::move(other27.mac);
+  direction = std::move(other27.direction);
   remark = std::move(other27.remark);
   extBin = std::move(other27.extBin);
   extTxt = std::move(other27.extTxt);
@@ -1263,6 +1284,7 @@ void DeviceBean::printTo(std::ostream& out) const {
   out << ", " << "usedSdks="; (__isset.usedSdks ? (out << to_string(usedSdks)) : (out << "<null>"));
   out << ", " << "serialNo="; (__isset.serialNo ? (out << to_string(serialNo)) : (out << "<null>"));
   out << ", " << "mac="; (__isset.mac ? (out << to_string(mac)) : (out << "<null>"));
+  out << ", " << "direction="; (__isset.direction ? (out << to_string(direction)) : (out << "<null>"));
   out << ", " << "remark="; (__isset.remark ? (out << to_string(remark)) : (out << "<null>"));
   out << ", " << "extBin="; (__isset.extBin ? (out << to_string(extBin)) : (out << "<null>"));
   out << ", " << "extTxt="; (__isset.extTxt ? (out << to_string(extTxt)) : (out << "<null>"));
@@ -1490,6 +1512,11 @@ void PermitBean::__set_schedule(const std::string& val) {
 __isset.schedule = true;
 }
 
+void PermitBean::__set_limit(const std::string& val) {
+  this->limit = val;
+__isset.limit = true;
+}
+
 void PermitBean::__set_remark(const std::string& val) {
   this->remark = val;
 __isset.remark = true;
@@ -1524,6 +1551,7 @@ void swap(PermitBean &a, PermitBean &b) {
   swap(a.deviceGroupId, b.deviceGroupId);
   swap(a.personGroupId, b.personGroupId);
   swap(a.schedule, b.schedule);
+  swap(a.limit, b.limit);
   swap(a.remark, b.remark);
   swap(a.extBin, b.extBin);
   swap(a.extTxt, b.extTxt);
@@ -1538,6 +1566,7 @@ PermitBean::PermitBean(const PermitBean& other32) {
   deviceGroupId = other32.deviceGroupId;
   personGroupId = other32.personGroupId;
   schedule = other32.schedule;
+  limit = other32.limit;
   remark = other32.remark;
   extBin = other32.extBin;
   extTxt = other32.extTxt;
@@ -1551,6 +1580,7 @@ PermitBean::PermitBean( PermitBean&& other33) {
   deviceGroupId = std::move(other33.deviceGroupId);
   personGroupId = std::move(other33.personGroupId);
   schedule = std::move(other33.schedule);
+  limit = std::move(other33.limit);
   remark = std::move(other33.remark);
   extBin = std::move(other33.extBin);
   extTxt = std::move(other33.extTxt);
@@ -1564,6 +1594,7 @@ PermitBean& PermitBean::operator=(const PermitBean& other34) {
   deviceGroupId = other34.deviceGroupId;
   personGroupId = other34.personGroupId;
   schedule = other34.schedule;
+  limit = other34.limit;
   remark = other34.remark;
   extBin = other34.extBin;
   extTxt = other34.extTxt;
@@ -1578,6 +1609,7 @@ PermitBean& PermitBean::operator=(PermitBean&& other35) {
   deviceGroupId = std::move(other35.deviceGroupId);
   personGroupId = std::move(other35.personGroupId);
   schedule = std::move(other35.schedule);
+  limit = std::move(other35.limit);
   remark = std::move(other35.remark);
   extBin = std::move(other35.extBin);
   extTxt = std::move(other35.extTxt);
@@ -1594,6 +1626,7 @@ void PermitBean::printTo(std::ostream& out) const {
   out << ", " << "deviceGroupId="; (__isset.deviceGroupId ? (out << to_string(deviceGroupId)) : (out << "<null>"));
   out << ", " << "personGroupId="; (__isset.personGroupId ? (out << to_string(personGroupId)) : (out << "<null>"));
   out << ", " << "schedule="; (__isset.schedule ? (out << to_string(schedule)) : (out << "<null>"));
+  out << ", " << "limit="; (__isset.limit ? (out << to_string(limit)) : (out << "<null>"));
   out << ", " << "remark="; (__isset.remark ? (out << to_string(remark)) : (out << "<null>"));
   out << ", " << "extBin="; (__isset.extBin ? (out << to_string(extBin)) : (out << "<null>"));
   out << ", " << "extTxt="; (__isset.extTxt ? (out << to_string(extTxt)) : (out << "<null>"));
@@ -2076,6 +2109,11 @@ void LogLightBean::__set_verifyTime(const int64_t val) {
   this->verifyTime = val;
 __isset.verifyTime = true;
 }
+
+void LogLightBean::__set_direction(const int32_t val) {
+  this->direction = val;
+__isset.direction = true;
+}
 std::ostream& operator<<(std::ostream& out, const LogLightBean& obj)
 {
   obj.printTo(out);
@@ -2094,6 +2132,7 @@ void swap(LogLightBean &a, LogLightBean &b) {
   swap(a.papersType, b.papersType);
   swap(a.papersNum, b.papersNum);
   swap(a.verifyTime, b.verifyTime);
+  swap(a.direction, b.direction);
   swap(a.__isset, b.__isset);
 }
 
@@ -2107,6 +2146,7 @@ LogLightBean::LogLightBean(const LogLightBean& other44) {
   papersType = other44.papersType;
   papersNum = other44.papersNum;
   verifyTime = other44.verifyTime;
+  direction = other44.direction;
   __isset = other44.__isset;
 }
 LogLightBean::LogLightBean( LogLightBean&& other45) {
@@ -2119,6 +2159,7 @@ LogLightBean::LogLightBean( LogLightBean&& other45) {
   papersType = std::move(other45.papersType);
   papersNum = std::move(other45.papersNum);
   verifyTime = std::move(other45.verifyTime);
+  direction = std::move(other45.direction);
   __isset = std::move(other45.__isset);
 }
 LogLightBean& LogLightBean::operator=(const LogLightBean& other46) {
@@ -2131,6 +2172,7 @@ LogLightBean& LogLightBean::operator=(const LogLightBean& other46) {
   papersType = other46.papersType;
   papersNum = other46.papersNum;
   verifyTime = other46.verifyTime;
+  direction = other46.direction;
   __isset = other46.__isset;
   return *this;
 }
@@ -2144,6 +2186,7 @@ LogLightBean& LogLightBean::operator=(LogLightBean&& other47) {
   papersType = std::move(other47.papersType);
   papersNum = std::move(other47.papersNum);
   verifyTime = std::move(other47.verifyTime);
+  direction = std::move(other47.direction);
   __isset = std::move(other47.__isset);
   return *this;
 }
@@ -2159,6 +2202,7 @@ void LogLightBean::printTo(std::ostream& out) const {
   out << ", " << "papersType="; (__isset.papersType ? (out << to_string(papersType)) : (out << "<null>"));
   out << ", " << "papersNum="; (__isset.papersNum ? (out << to_string(papersNum)) : (out << "<null>"));
   out << ", " << "verifyTime="; (__isset.verifyTime ? (out << to_string(verifyTime)) : (out << "<null>"));
+  out << ", " << "direction="; (__isset.direction ? (out << to_string(direction)) : (out << "<null>"));
   out << ")";
 }
 

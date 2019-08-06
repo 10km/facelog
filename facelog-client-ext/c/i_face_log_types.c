@@ -3651,6 +3651,7 @@ enum _LogBeanProperties
   PROP_LOG_BEAN_COMPARE_FACE,
   PROP_LOG_BEAN_VERIFY_STATUS,
   PROP_LOG_BEAN_SIMILARTY,
+  PROP_LOG_BEAN_DIRECTION,
   PROP_LOG_BEAN_VERIFY_TIME,
   PROP_LOG_BEAN_CREATE_TIME
 };
@@ -3844,6 +3845,19 @@ log_bean_read (ThriftStruct *object, ThriftProtocol *protocol, GError **error)
         }
         break;
       case 11:
+        if (ftype == T_I32)
+        {
+          if ((ret = thrift_protocol_read_i32 (protocol, &this_object->direction, error)) < 0)
+            return -1;
+          xfer += ret;
+          this_object->__isset_direction = TRUE;
+        } else {
+          if ((ret = thrift_protocol_skip (protocol, ftype, error)) < 0)
+            return -1;
+          xfer += ret;
+        }
+        break;
+      case 12:
         if (ftype == T_I64)
         {
           if ((ret = thrift_protocol_read_i64 (protocol, &this_object->verifyTime, error)) < 0)
@@ -3856,7 +3870,7 @@ log_bean_read (ThriftStruct *object, ThriftProtocol *protocol, GError **error)
           xfer += ret;
         }
         break;
-      case 12:
+      case 13:
         if (ftype == T_I64)
         {
           if ((ret = thrift_protocol_read_i64 (protocol, &this_object->createTime, error)) < 0)
@@ -4036,8 +4050,20 @@ log_bean_write (ThriftStruct *object, ThriftProtocol *protocol, GError **error)
       return -1;
     xfer += ret;
   }
+  if (this_object->__isset_direction == TRUE) {
+    if ((ret = thrift_protocol_write_field_begin (protocol, "direction", T_I32, 11, error)) < 0)
+      return -1;
+    xfer += ret;
+    if ((ret = thrift_protocol_write_i32 (protocol, this_object->direction, error)) < 0)
+      return -1;
+    xfer += ret;
+
+    if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
+      return -1;
+    xfer += ret;
+  }
   if (this_object->__isset_verifyTime == TRUE) {
-    if ((ret = thrift_protocol_write_field_begin (protocol, "verifyTime", T_I64, 11, error)) < 0)
+    if ((ret = thrift_protocol_write_field_begin (protocol, "verifyTime", T_I64, 12, error)) < 0)
       return -1;
     xfer += ret;
     if ((ret = thrift_protocol_write_i64 (protocol, this_object->verifyTime, error)) < 0)
@@ -4049,7 +4075,7 @@ log_bean_write (ThriftStruct *object, ThriftProtocol *protocol, GError **error)
     xfer += ret;
   }
   if (this_object->__isset_createTime == TRUE) {
-    if ((ret = thrift_protocol_write_field_begin (protocol, "createTime", T_I64, 12, error)) < 0)
+    if ((ret = thrift_protocol_write_field_begin (protocol, "createTime", T_I64, 13, error)) < 0)
       return -1;
     xfer += ret;
     if ((ret = thrift_protocol_write_i64 (protocol, this_object->createTime, error)) < 0)
@@ -4129,6 +4155,11 @@ log_bean_set_property (GObject *object,
       self->__isset_similarty = TRUE;
       break;
 
+    case PROP_LOG_BEAN_DIRECTION:
+      self->direction = g_value_get_int (value);
+      self->__isset_direction = TRUE;
+      break;
+
     case PROP_LOG_BEAN_VERIFY_TIME:
       self->verifyTime = g_value_get_int64 (value);
       self->__isset_verifyTime = TRUE;
@@ -4195,6 +4226,10 @@ log_bean_get_property (GObject *object,
       g_value_set_double (value, self->similarty);
       break;
 
+    case PROP_LOG_BEAN_DIRECTION:
+      g_value_set_int (value, self->direction);
+      break;
+
     case PROP_LOG_BEAN_VERIFY_TIME:
       g_value_set_int64 (value, self->verifyTime);
       break;
@@ -4231,6 +4266,8 @@ log_bean_instance_init (LogBean * object)
   object->__isset_verifyStatus = FALSE;
   object->similarty = 0;
   object->__isset_similarty = FALSE;
+  object->direction = 0;
+  object->__isset_direction = FALSE;
   object->verifyTime = 0;
   object->__isset_verifyTime = FALSE;
   object->createTime = 0;
@@ -4372,6 +4409,17 @@ log_bean_class_init (LogBeanClass * cls)
 
   g_object_class_install_property
     (gobject_class,
+     PROP_LOG_BEAN_DIRECTION,
+     g_param_spec_int ("direction",
+                       NULL,
+                       NULL,
+                       G_MININT32,
+                       G_MAXINT32,
+                       0,
+                       G_PARAM_READWRITE));
+
+  g_object_class_install_property
+    (gobject_class,
      PROP_LOG_BEAN_VERIFY_TIME,
      g_param_spec_int64 ("verifyTime",
                          NULL,
@@ -4440,6 +4488,7 @@ enum _DeviceBeanProperties
   PROP_DEVICE_BEAN_USED_SDKS,
   PROP_DEVICE_BEAN_SERIAL_NO,
   PROP_DEVICE_BEAN_MAC,
+  PROP_DEVICE_BEAN_DIRECTION,
   PROP_DEVICE_BEAN_REMARK,
   PROP_DEVICE_BEAN_EXT_BIN,
   PROP_DEVICE_BEAN_EXT_TXT,
@@ -4749,6 +4798,19 @@ device_bean_read (ThriftStruct *object, ThriftProtocol *protocol, GError **error
         }
         break;
       case 16:
+        if (ftype == T_I32)
+        {
+          if ((ret = thrift_protocol_read_i32 (protocol, &this_object->direction, error)) < 0)
+            return -1;
+          xfer += ret;
+          this_object->__isset_direction = TRUE;
+        } else {
+          if ((ret = thrift_protocol_skip (protocol, ftype, error)) < 0)
+            return -1;
+          xfer += ret;
+        }
+        break;
+      case 17:
         if (ftype == T_STRING)
         {
           if (this_object->remark != NULL)
@@ -4767,7 +4829,7 @@ device_bean_read (ThriftStruct *object, ThriftProtocol *protocol, GError **error
           xfer += ret;
         }
         break;
-      case 17:
+      case 18:
         if (ftype == T_STRING)
         {
           if (this_object->extBin != NULL)
@@ -4789,7 +4851,7 @@ device_bean_read (ThriftStruct *object, ThriftProtocol *protocol, GError **error
           xfer += ret;
         }
         break;
-      case 18:
+      case 19:
         if (ftype == T_STRING)
         {
           if (this_object->extTxt != NULL)
@@ -4808,7 +4870,7 @@ device_bean_read (ThriftStruct *object, ThriftProtocol *protocol, GError **error
           xfer += ret;
         }
         break;
-      case 19:
+      case 20:
         if (ftype == T_I64)
         {
           if ((ret = thrift_protocol_read_i64 (protocol, &this_object->createTime, error)) < 0)
@@ -4821,7 +4883,7 @@ device_bean_read (ThriftStruct *object, ThriftProtocol *protocol, GError **error
           xfer += ret;
         }
         break;
-      case 20:
+      case 21:
         if (ftype == T_I64)
         {
           if ((ret = thrift_protocol_read_i64 (protocol, &this_object->updateTime, error)) < 0)
@@ -5061,8 +5123,20 @@ device_bean_write (ThriftStruct *object, ThriftProtocol *protocol, GError **erro
       return -1;
     xfer += ret;
   }
+  if (this_object->__isset_direction == TRUE) {
+    if ((ret = thrift_protocol_write_field_begin (protocol, "direction", T_I32, 16, error)) < 0)
+      return -1;
+    xfer += ret;
+    if ((ret = thrift_protocol_write_i32 (protocol, this_object->direction, error)) < 0)
+      return -1;
+    xfer += ret;
+
+    if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
+      return -1;
+    xfer += ret;
+  }
   if (this_object->__isset_remark == TRUE) {
-    if ((ret = thrift_protocol_write_field_begin (protocol, "remark", T_STRING, 16, error)) < 0)
+    if ((ret = thrift_protocol_write_field_begin (protocol, "remark", T_STRING, 17, error)) < 0)
       return -1;
     xfer += ret;
     if ((ret = thrift_protocol_write_string (protocol, this_object->remark, error)) < 0)
@@ -5074,7 +5148,7 @@ device_bean_write (ThriftStruct *object, ThriftProtocol *protocol, GError **erro
     xfer += ret;
   }
   if (this_object->__isset_extBin == TRUE) {
-    if ((ret = thrift_protocol_write_field_begin (protocol, "extBin", T_STRING, 17, error)) < 0)
+    if ((ret = thrift_protocol_write_field_begin (protocol, "extBin", T_STRING, 18, error)) < 0)
       return -1;
     xfer += ret;
     if ((ret = thrift_protocol_write_binary (protocol, this_object->extBin ? ((GByteArray *) this_object->extBin)->data : NULL, this_object->extBin ? ((GByteArray *) this_object->extBin)->len : 0, error)) < 0)
@@ -5086,7 +5160,7 @@ device_bean_write (ThriftStruct *object, ThriftProtocol *protocol, GError **erro
     xfer += ret;
   }
   if (this_object->__isset_extTxt == TRUE) {
-    if ((ret = thrift_protocol_write_field_begin (protocol, "extTxt", T_STRING, 18, error)) < 0)
+    if ((ret = thrift_protocol_write_field_begin (protocol, "extTxt", T_STRING, 19, error)) < 0)
       return -1;
     xfer += ret;
     if ((ret = thrift_protocol_write_string (protocol, this_object->extTxt, error)) < 0)
@@ -5098,7 +5172,7 @@ device_bean_write (ThriftStruct *object, ThriftProtocol *protocol, GError **erro
     xfer += ret;
   }
   if (this_object->__isset_createTime == TRUE) {
-    if ((ret = thrift_protocol_write_field_begin (protocol, "createTime", T_I64, 19, error)) < 0)
+    if ((ret = thrift_protocol_write_field_begin (protocol, "createTime", T_I64, 20, error)) < 0)
       return -1;
     xfer += ret;
     if ((ret = thrift_protocol_write_i64 (protocol, this_object->createTime, error)) < 0)
@@ -5110,7 +5184,7 @@ device_bean_write (ThriftStruct *object, ThriftProtocol *protocol, GError **erro
     xfer += ret;
   }
   if (this_object->__isset_updateTime == TRUE) {
-    if ((ret = thrift_protocol_write_field_begin (protocol, "updateTime", T_I64, 20, error)) < 0)
+    if ((ret = thrift_protocol_write_field_begin (protocol, "updateTime", T_I64, 21, error)) < 0)
       return -1;
     xfer += ret;
     if ((ret = thrift_protocol_write_i64 (protocol, this_object->updateTime, error)) < 0)
@@ -5231,6 +5305,11 @@ device_bean_set_property (GObject *object,
       self->__isset_mac = TRUE;
       break;
 
+    case PROP_DEVICE_BEAN_DIRECTION:
+      self->direction = g_value_get_int (value);
+      self->__isset_direction = TRUE;
+      break;
+
     case PROP_DEVICE_BEAN_REMARK:
       if (self->remark != NULL)
         g_free (self->remark);
@@ -5338,6 +5417,10 @@ device_bean_get_property (GObject *object,
       g_value_set_string (value, self->mac);
       break;
 
+    case PROP_DEVICE_BEAN_DIRECTION:
+      g_value_set_int (value, self->direction);
+      break;
+
     case PROP_DEVICE_BEAN_REMARK:
       g_value_set_string (value, self->remark);
       break;
@@ -5396,6 +5479,8 @@ device_bean_instance_init (DeviceBean * object)
   object->__isset_serialNo = FALSE;
   object->mac = NULL;
   object->__isset_mac = FALSE;
+  object->direction = 0;
+  object->__isset_direction = FALSE;
   object->remark = NULL;
   object->__isset_remark = FALSE;
   object->extBin = NULL;
@@ -5634,6 +5719,17 @@ device_bean_class_init (DeviceBeanClass * cls)
                           NULL,
                           NULL,
                           G_PARAM_READWRITE));
+
+  g_object_class_install_property
+    (gobject_class,
+     PROP_DEVICE_BEAN_DIRECTION,
+     g_param_spec_int ("direction",
+                       NULL,
+                       NULL,
+                       G_MININT32,
+                       G_MAXINT32,
+                       0,
+                       G_PARAM_READWRITE));
 
   g_object_class_install_property
     (gobject_class,
@@ -6650,6 +6746,7 @@ enum _PermitBeanProperties
   PROP_PERMIT_BEAN_DEVICE_GROUP_ID,
   PROP_PERMIT_BEAN_PERSON_GROUP_ID,
   PROP_PERMIT_BEAN_SCHEDULE,
+  PROP_PERMIT_BEAN_LIMIT,
   PROP_PERMIT_BEAN_REMARK,
   PROP_PERMIT_BEAN_EXT_BIN,
   PROP_PERMIT_BEAN_EXT_TXT,
@@ -6795,6 +6892,25 @@ permit_bean_read (ThriftStruct *object, ThriftProtocol *protocol, GError **error
       case 7:
         if (ftype == T_STRING)
         {
+          if (this_object->limit != NULL)
+          {
+            g_free(this_object->limit);
+            this_object->limit = NULL;
+          }
+
+          if ((ret = thrift_protocol_read_string (protocol, &this_object->limit, error)) < 0)
+            return -1;
+          xfer += ret;
+          this_object->__isset_limit = TRUE;
+        } else {
+          if ((ret = thrift_protocol_skip (protocol, ftype, error)) < 0)
+            return -1;
+          xfer += ret;
+        }
+        break;
+      case 8:
+        if (ftype == T_STRING)
+        {
           if (this_object->remark != NULL)
           {
             g_free(this_object->remark);
@@ -6811,7 +6927,7 @@ permit_bean_read (ThriftStruct *object, ThriftProtocol *protocol, GError **error
           xfer += ret;
         }
         break;
-      case 8:
+      case 9:
         if (ftype == T_STRING)
         {
           if (this_object->extBin != NULL)
@@ -6833,7 +6949,7 @@ permit_bean_read (ThriftStruct *object, ThriftProtocol *protocol, GError **error
           xfer += ret;
         }
         break;
-      case 9:
+      case 10:
         if (ftype == T_STRING)
         {
           if (this_object->extTxt != NULL)
@@ -6852,7 +6968,7 @@ permit_bean_read (ThriftStruct *object, ThriftProtocol *protocol, GError **error
           xfer += ret;
         }
         break;
-      case 10:
+      case 11:
         if (ftype == T_I64)
         {
           if ((ret = thrift_protocol_read_i64 (protocol, &this_object->createTime, error)) < 0)
@@ -6984,8 +7100,20 @@ permit_bean_write (ThriftStruct *object, ThriftProtocol *protocol, GError **erro
       return -1;
     xfer += ret;
   }
+  if (this_object->__isset_limit == TRUE) {
+    if ((ret = thrift_protocol_write_field_begin (protocol, "limit", T_STRING, 7, error)) < 0)
+      return -1;
+    xfer += ret;
+    if ((ret = thrift_protocol_write_string (protocol, this_object->limit, error)) < 0)
+      return -1;
+    xfer += ret;
+
+    if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
+      return -1;
+    xfer += ret;
+  }
   if (this_object->__isset_remark == TRUE) {
-    if ((ret = thrift_protocol_write_field_begin (protocol, "remark", T_STRING, 7, error)) < 0)
+    if ((ret = thrift_protocol_write_field_begin (protocol, "remark", T_STRING, 8, error)) < 0)
       return -1;
     xfer += ret;
     if ((ret = thrift_protocol_write_string (protocol, this_object->remark, error)) < 0)
@@ -6997,7 +7125,7 @@ permit_bean_write (ThriftStruct *object, ThriftProtocol *protocol, GError **erro
     xfer += ret;
   }
   if (this_object->__isset_extBin == TRUE) {
-    if ((ret = thrift_protocol_write_field_begin (protocol, "extBin", T_STRING, 8, error)) < 0)
+    if ((ret = thrift_protocol_write_field_begin (protocol, "extBin", T_STRING, 9, error)) < 0)
       return -1;
     xfer += ret;
     if ((ret = thrift_protocol_write_binary (protocol, this_object->extBin ? ((GByteArray *) this_object->extBin)->data : NULL, this_object->extBin ? ((GByteArray *) this_object->extBin)->len : 0, error)) < 0)
@@ -7009,7 +7137,7 @@ permit_bean_write (ThriftStruct *object, ThriftProtocol *protocol, GError **erro
     xfer += ret;
   }
   if (this_object->__isset_extTxt == TRUE) {
-    if ((ret = thrift_protocol_write_field_begin (protocol, "extTxt", T_STRING, 9, error)) < 0)
+    if ((ret = thrift_protocol_write_field_begin (protocol, "extTxt", T_STRING, 10, error)) < 0)
       return -1;
     xfer += ret;
     if ((ret = thrift_protocol_write_string (protocol, this_object->extTxt, error)) < 0)
@@ -7021,7 +7149,7 @@ permit_bean_write (ThriftStruct *object, ThriftProtocol *protocol, GError **erro
     xfer += ret;
   }
   if (this_object->__isset_createTime == TRUE) {
-    if ((ret = thrift_protocol_write_field_begin (protocol, "createTime", T_I64, 10, error)) < 0)
+    if ((ret = thrift_protocol_write_field_begin (protocol, "createTime", T_I64, 11, error)) < 0)
       return -1;
     xfer += ret;
     if ((ret = thrift_protocol_write_i64 (protocol, this_object->createTime, error)) < 0)
@@ -7079,6 +7207,13 @@ permit_bean_set_property (GObject *object,
         g_free (self->schedule);
       self->schedule = g_value_dup_string (value);
       self->__isset_schedule = TRUE;
+      break;
+
+    case PROP_PERMIT_BEAN_LIMIT:
+      if (self->limit != NULL)
+        g_free (self->limit);
+      self->limit = g_value_dup_string (value);
+      self->__isset_limit = TRUE;
       break;
 
     case PROP_PERMIT_BEAN_REMARK:
@@ -7147,6 +7282,10 @@ permit_bean_get_property (GObject *object,
       g_value_set_string (value, self->schedule);
       break;
 
+    case PROP_PERMIT_BEAN_LIMIT:
+      g_value_set_string (value, self->limit);
+      break;
+
     case PROP_PERMIT_BEAN_REMARK:
       g_value_set_string (value, self->remark);
       break;
@@ -7183,6 +7322,8 @@ permit_bean_instance_init (PermitBean * object)
   object->__isset_personGroupId = FALSE;
   object->schedule = NULL;
   object->__isset_schedule = FALSE;
+  object->limit = NULL;
+  object->__isset_limit = FALSE;
   object->remark = NULL;
   object->__isset_remark = FALSE;
   object->extBin = NULL;
@@ -7204,6 +7345,11 @@ permit_bean_finalize (GObject *object)
   {
     g_free(tobject->schedule);
     tobject->schedule = NULL;
+  }
+  if (tobject->limit != NULL)
+  {
+    g_free(tobject->limit);
+    tobject->limit = NULL;
   }
   if (tobject->remark != NULL)
   {
@@ -7292,6 +7438,15 @@ permit_bean_class_init (PermitBeanClass * cls)
     (gobject_class,
      PROP_PERMIT_BEAN_SCHEDULE,
      g_param_spec_string ("schedule",
+                          NULL,
+                          NULL,
+                          NULL,
+                          G_PARAM_READWRITE));
+
+  g_object_class_install_property
+    (gobject_class,
+     PROP_PERMIT_BEAN_LIMIT,
+     g_param_spec_string ("limit",
                           NULL,
                           NULL,
                           NULL,
@@ -9492,7 +9647,8 @@ enum _LogLightBeanProperties
   PROP_LOG_LIGHT_BEAN_NAME,
   PROP_LOG_LIGHT_BEAN_PAPERS_TYPE,
   PROP_LOG_LIGHT_BEAN_PAPERS_NUM,
-  PROP_LOG_LIGHT_BEAN_VERIFY_TIME
+  PROP_LOG_LIGHT_BEAN_VERIFY_TIME,
+  PROP_LOG_LIGHT_BEAN_DIRECTION
 };
 
 /* reads a log_light_bean object */
@@ -9676,6 +9832,19 @@ log_light_bean_read (ThriftStruct *object, ThriftProtocol *protocol, GError **er
           xfer += ret;
         }
         break;
+      case 10:
+        if (ftype == T_I32)
+        {
+          if ((ret = thrift_protocol_read_i32 (protocol, &this_object->direction, error)) < 0)
+            return -1;
+          xfer += ret;
+          this_object->__isset_direction = TRUE;
+        } else {
+          if ((ret = thrift_protocol_skip (protocol, ftype, error)) < 0)
+            return -1;
+          xfer += ret;
+        }
+        break;
       default:
         if ((ret = thrift_protocol_skip (protocol, ftype, error)) < 0)
           return -1;
@@ -9831,6 +10000,18 @@ log_light_bean_write (ThriftStruct *object, ThriftProtocol *protocol, GError **e
       return -1;
     xfer += ret;
   }
+  if (this_object->__isset_direction == TRUE) {
+    if ((ret = thrift_protocol_write_field_begin (protocol, "direction", T_I32, 10, error)) < 0)
+      return -1;
+    xfer += ret;
+    if ((ret = thrift_protocol_write_i32 (protocol, this_object->direction, error)) < 0)
+      return -1;
+    xfer += ret;
+
+    if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
+      return -1;
+    xfer += ret;
+  }
   if ((ret = thrift_protocol_write_field_stop (protocol, error)) < 0)
     return -1;
   xfer += ret;
@@ -9897,6 +10078,11 @@ log_light_bean_set_property (GObject *object,
       self->__isset_verifyTime = TRUE;
       break;
 
+    case PROP_LOG_LIGHT_BEAN_DIRECTION:
+      self->direction = g_value_get_int (value);
+      self->__isset_direction = TRUE;
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -9949,6 +10135,10 @@ log_light_bean_get_property (GObject *object,
       g_value_set_int64 (value, self->verifyTime);
       break;
 
+    case PROP_LOG_LIGHT_BEAN_DIRECTION:
+      g_value_set_int (value, self->direction);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -9975,6 +10165,8 @@ log_light_bean_instance_init (LogLightBean * object)
   object->__isset_papersNum = FALSE;
   object->verifyTime = 0;
   object->__isset_verifyTime = FALSE;
+  object->direction = 0;
+  object->__isset_direction = FALSE;
 }
 
 static void 
@@ -10101,6 +10293,17 @@ log_light_bean_class_init (LogLightBeanClass * cls)
                          G_MAXINT64,
                          0,
                          G_PARAM_READWRITE));
+
+  g_object_class_install_property
+    (gobject_class,
+     PROP_LOG_LIGHT_BEAN_DIRECTION,
+     g_param_spec_int ("direction",
+                       NULL,
+                       NULL,
+                       G_MININT32,
+                       G_MAXINT32,
+                       0,
+                       G_PARAM_READWRITE));
 }
 
 GType

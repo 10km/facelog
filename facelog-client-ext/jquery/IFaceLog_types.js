@@ -1039,6 +1039,7 @@ LogBean = function(args) {
   this.compareFace = null;
   this.verifyStatus = null;
   this.similarty = null;
+  this.direction = null;
   this.verifyTime = null;
   this.createTime = null;
   if (args) {
@@ -1077,6 +1078,9 @@ LogBean = function(args) {
     }
     if (args.similarty !== undefined && args.similarty !== null) {
       this.similarty = args.similarty;
+    }
+    if (args.direction !== undefined && args.direction !== null) {
+      this.direction = args.direction;
     }
     if (args.verifyTime !== undefined && args.verifyTime !== null) {
       this.verifyTime = args.verifyTime;
@@ -1171,13 +1175,20 @@ LogBean.prototype.read = function(input) {
       }
       break;
       case 11:
+      if (ftype == Thrift.Type.I32) {
+        this.direction = input.readI32().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 12:
       if (ftype == Thrift.Type.I64) {
         this.verifyTime = input.readI64().value;
       } else {
         input.skip(ftype);
       }
       break;
-      case 12:
+      case 13:
       if (ftype == Thrift.Type.I64) {
         this.createTime = input.readI64().value;
       } else {
@@ -1245,13 +1256,18 @@ LogBean.prototype.write = function(output) {
     output.writeDouble(this.similarty);
     output.writeFieldEnd();
   }
+  if (this.direction !== null && this.direction !== undefined) {
+    output.writeFieldBegin('direction', Thrift.Type.I32, 11);
+    output.writeI32(this.direction);
+    output.writeFieldEnd();
+  }
   if (this.verifyTime !== null && this.verifyTime !== undefined) {
-    output.writeFieldBegin('verifyTime', Thrift.Type.I64, 11);
+    output.writeFieldBegin('verifyTime', Thrift.Type.I64, 12);
     output.writeI64(this.verifyTime);
     output.writeFieldEnd();
   }
   if (this.createTime !== null && this.createTime !== undefined) {
-    output.writeFieldBegin('createTime', Thrift.Type.I64, 12);
+    output.writeFieldBegin('createTime', Thrift.Type.I64, 13);
     output.writeI64(this.createTime);
     output.writeFieldEnd();
   }
@@ -1276,6 +1292,7 @@ DeviceBean = function(args) {
   this.usedSdks = null;
   this.serialNo = null;
   this.mac = null;
+  this.direction = null;
   this.remark = null;
   this.extBin = null;
   this.extTxt = null;
@@ -1332,6 +1349,9 @@ DeviceBean = function(args) {
     }
     if (args.mac !== undefined && args.mac !== null) {
       this.mac = args.mac;
+    }
+    if (args.direction !== undefined && args.direction !== null) {
+      this.direction = args.direction;
     }
     if (args.remark !== undefined && args.remark !== null) {
       this.remark = args.remark;
@@ -1470,34 +1490,41 @@ DeviceBean.prototype.read = function(input) {
       }
       break;
       case 16:
-      if (ftype == Thrift.Type.STRING) {
-        this.remark = input.readString().value;
+      if (ftype == Thrift.Type.I32) {
+        this.direction = input.readI32().value;
       } else {
         input.skip(ftype);
       }
       break;
       case 17:
       if (ftype == Thrift.Type.STRING) {
-        this.extBin = input.readBinary().value;
+        this.remark = input.readString().value;
       } else {
         input.skip(ftype);
       }
       break;
       case 18:
       if (ftype == Thrift.Type.STRING) {
-        this.extTxt = input.readString().value;
+        this.extBin = input.readBinary().value;
       } else {
         input.skip(ftype);
       }
       break;
       case 19:
+      if (ftype == Thrift.Type.STRING) {
+        this.extTxt = input.readString().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 20:
       if (ftype == Thrift.Type.I64) {
         this.createTime = input.readI64().value;
       } else {
         input.skip(ftype);
       }
       break;
-      case 20:
+      case 21:
       if (ftype == Thrift.Type.I64) {
         this.updateTime = input.readI64().value;
       } else {
@@ -1590,28 +1617,33 @@ DeviceBean.prototype.write = function(output) {
     output.writeString(this.mac);
     output.writeFieldEnd();
   }
+  if (this.direction !== null && this.direction !== undefined) {
+    output.writeFieldBegin('direction', Thrift.Type.I32, 16);
+    output.writeI32(this.direction);
+    output.writeFieldEnd();
+  }
   if (this.remark !== null && this.remark !== undefined) {
-    output.writeFieldBegin('remark', Thrift.Type.STRING, 16);
+    output.writeFieldBegin('remark', Thrift.Type.STRING, 17);
     output.writeString(this.remark);
     output.writeFieldEnd();
   }
   if (this.extBin !== null && this.extBin !== undefined) {
-    output.writeFieldBegin('extBin', Thrift.Type.STRING, 17);
+    output.writeFieldBegin('extBin', Thrift.Type.STRING, 18);
     output.writeBinary(this.extBin);
     output.writeFieldEnd();
   }
   if (this.extTxt !== null && this.extTxt !== undefined) {
-    output.writeFieldBegin('extTxt', Thrift.Type.STRING, 18);
+    output.writeFieldBegin('extTxt', Thrift.Type.STRING, 19);
     output.writeString(this.extTxt);
     output.writeFieldEnd();
   }
   if (this.createTime !== null && this.createTime !== undefined) {
-    output.writeFieldBegin('createTime', Thrift.Type.I64, 19);
+    output.writeFieldBegin('createTime', Thrift.Type.I64, 20);
     output.writeI64(this.createTime);
     output.writeFieldEnd();
   }
   if (this.updateTime !== null && this.updateTime !== undefined) {
-    output.writeFieldBegin('updateTime', Thrift.Type.I64, 20);
+    output.writeFieldBegin('updateTime', Thrift.Type.I64, 21);
     output.writeI64(this.updateTime);
     output.writeFieldEnd();
   }
@@ -1891,6 +1923,7 @@ PermitBean = function(args) {
   this.deviceGroupId = null;
   this.personGroupId = null;
   this.schedule = null;
+  this.limit = null;
   this.remark = null;
   this.extBin = null;
   this.extTxt = null;
@@ -1919,6 +1952,9 @@ PermitBean = function(args) {
     }
     if (args.schedule !== undefined && args.schedule !== null) {
       this.schedule = args.schedule;
+    }
+    if (args.limit !== undefined && args.limit !== null) {
+      this.limit = args.limit;
     }
     if (args.remark !== undefined && args.remark !== null) {
       this.remark = args.remark;
@@ -1992,26 +2028,33 @@ PermitBean.prototype.read = function(input) {
       break;
       case 7:
       if (ftype == Thrift.Type.STRING) {
-        this.remark = input.readString().value;
+        this.limit = input.readString().value;
       } else {
         input.skip(ftype);
       }
       break;
       case 8:
       if (ftype == Thrift.Type.STRING) {
-        this.extBin = input.readBinary().value;
+        this.remark = input.readString().value;
       } else {
         input.skip(ftype);
       }
       break;
       case 9:
       if (ftype == Thrift.Type.STRING) {
-        this.extTxt = input.readString().value;
+        this.extBin = input.readBinary().value;
       } else {
         input.skip(ftype);
       }
       break;
       case 10:
+      if (ftype == Thrift.Type.STRING) {
+        this.extTxt = input.readString().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 11:
       if (ftype == Thrift.Type.I64) {
         this.createTime = input.readI64().value;
       } else {
@@ -2059,23 +2102,28 @@ PermitBean.prototype.write = function(output) {
     output.writeString(this.schedule);
     output.writeFieldEnd();
   }
+  if (this.limit !== null && this.limit !== undefined) {
+    output.writeFieldBegin('limit', Thrift.Type.STRING, 7);
+    output.writeString(this.limit);
+    output.writeFieldEnd();
+  }
   if (this.remark !== null && this.remark !== undefined) {
-    output.writeFieldBegin('remark', Thrift.Type.STRING, 7);
+    output.writeFieldBegin('remark', Thrift.Type.STRING, 8);
     output.writeString(this.remark);
     output.writeFieldEnd();
   }
   if (this.extBin !== null && this.extBin !== undefined) {
-    output.writeFieldBegin('extBin', Thrift.Type.STRING, 8);
+    output.writeFieldBegin('extBin', Thrift.Type.STRING, 9);
     output.writeBinary(this.extBin);
     output.writeFieldEnd();
   }
   if (this.extTxt !== null && this.extTxt !== undefined) {
-    output.writeFieldBegin('extTxt', Thrift.Type.STRING, 9);
+    output.writeFieldBegin('extTxt', Thrift.Type.STRING, 10);
     output.writeString(this.extTxt);
     output.writeFieldEnd();
   }
   if (this.createTime !== null && this.createTime !== undefined) {
-    output.writeFieldBegin('createTime', Thrift.Type.I64, 10);
+    output.writeFieldBegin('createTime', Thrift.Type.I64, 11);
     output.writeI64(this.createTime);
     output.writeFieldEnd();
   }
@@ -2702,6 +2750,7 @@ LogLightBean = function(args) {
   this.papersType = null;
   this.papersNum = null;
   this.verifyTime = null;
+  this.direction = null;
   if (args) {
     if (args._new !== undefined && args._new !== null) {
       this._new = args._new;
@@ -2735,6 +2784,9 @@ LogLightBean = function(args) {
     }
     if (args.verifyTime !== undefined && args.verifyTime !== null) {
       this.verifyTime = args.verifyTime;
+    }
+    if (args.direction !== undefined && args.direction !== null) {
+      this.direction = args.direction;
     }
   }
 };
@@ -2815,6 +2867,13 @@ LogLightBean.prototype.read = function(input) {
         input.skip(ftype);
       }
       break;
+      case 10:
+      if (ftype == Thrift.Type.I32) {
+        this.direction = input.readI32().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
       default:
         input.skip(ftype);
     }
@@ -2869,6 +2928,11 @@ LogLightBean.prototype.write = function(output) {
   if (this.verifyTime !== null && this.verifyTime !== undefined) {
     output.writeFieldBegin('verifyTime', Thrift.Type.I64, 9);
     output.writeI64(this.verifyTime);
+    output.writeFieldEnd();
+  }
+  if (this.direction !== null && this.direction !== undefined) {
+    output.writeFieldBegin('direction', Thrift.Type.I32, 10);
+    output.writeI32(this.direction);
     output.writeFieldEnd();
   }
   output.writeFieldStop();
