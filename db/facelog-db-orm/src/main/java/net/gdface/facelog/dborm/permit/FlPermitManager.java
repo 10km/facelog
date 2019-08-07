@@ -753,11 +753,11 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
                 dirtyCount++;
             }
 
-            if (bean.checkLimitModified()) {
+            if (bean.checkPassLimitModified()) {
                 if (dirtyCount>0) {
                     sql.append(",");
                 }
-                sql.append("limit");
+                sql.append("pass_limit");
                 dirtyCount++;
             }
 
@@ -884,13 +884,13 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
                 sql.append("schedule=?");
             }
 
-            if (bean.checkLimitModified()) {
+            if (bean.checkPassLimitModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
                     useComma=true;
                 }
-                sql.append("limit=?");
+                sql.append("pass_limit=?");
             }
 
             if (bean.checkRemarkModified()) {
@@ -1247,12 +1247,12 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("schedule ").append(sqlEqualsOperation).append("?");
                 }
             }
-            if (bean.checkLimitModified()) {
+            if (bean.checkPassLimitModified()) {
                 dirtyCount ++;
-                if (bean.getLimit() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("limit IS NULL");
+                if (bean.getPassLimit() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("pass_limit IS NULL");
                 } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("limit ").append(sqlEqualsOperation).append("?");
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("pass_limit ").append(sqlEqualsOperation).append("?");
                 }
             }
             if (bean.checkRemarkModified()) {
@@ -1342,23 +1342,23 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
                         throw new DaoException("Unknown search type " + searchType);
                 }
             }
-            if (bean.checkLimitModified()) {
+            if (bean.checkPassLimitModified()) {
                 switch (searchType) {
                     case SEARCH_EXACT:
-                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getLimit() + "]");
-                        if (bean.getLimit() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getLimit()); }
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getPassLimit() + "]");
+                        if (bean.getPassLimit() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getPassLimit()); }
                         break;
                     case SEARCH_LIKE:
-                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getLimit() + "%]");
-                        if ( bean.getLimit()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getLimit() + SQL_LIKE_WILDCARD); }
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getPassLimit() + "%]");
+                        if ( bean.getPassLimit()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getPassLimit() + SQL_LIKE_WILDCARD); }
                         break;
                     case SEARCH_STARTING_LIKE:
-                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getLimit() + "]");
-                        if ( bean.getLimit() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getLimit()); }
+                        // System.out.println("Setting for " + dirtyCount + " [%" + bean.getPassLimit() + "]");
+                        if ( bean.getPassLimit() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, SQL_LIKE_WILDCARD + bean.getPassLimit()); }
                         break;
                     case SEARCH_ENDING_LIKE:
-                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getLimit() + "%]");
-                        if (bean.getLimit()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getLimit() + SQL_LIKE_WILDCARD); }
+                        // System.out.println("Setting for " + dirtyCount + " [" + bean.getPassLimit() + "%]");
+                        if (bean.getPassLimit()  == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.VARCHAR);} } else { ps.setString(++dirtyCount, bean.getPassLimit() + SQL_LIKE_WILDCARD); }
                         break;
                     default:
                         throw new DaoException("Unknown search type " + searchType);
@@ -1536,7 +1536,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
             bean.setDeviceGroupId(Manager.getInteger(rs, 1));
             bean.setPersonGroupId(Manager.getInteger(rs, 2));
             bean.setSchedule(rs.getString(3));
-            bean.setLimit(rs.getString(4));
+            bean.setPassLimit(rs.getString(4));
             bean.setRemark(rs.getString(5));
             bean.setExtBin(Manager.getBytes(rs, 6));
             bean.setExtTxt(rs.getString(7));
@@ -1585,9 +1585,9 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
                         ++pos;
                         bean.setSchedule(rs.getString(pos));
                         break;
-                    case FL_PERMIT_ID_LIMIT:
+                    case FL_PERMIT_ID_PASS_LIMIT:
                         ++pos;
-                        bean.setLimit(rs.getString(pos));
+                        bean.setPassLimit(rs.getString(pos));
                         break;
                     case FL_PERMIT_ID_REMARK:
                         ++pos;
@@ -1636,7 +1636,7 @@ public class FlPermitManager extends TableManager.BaseAdapter<FlPermitBean>
             bean.setDeviceGroupId(Manager.getInteger(rs, "device_group_id"));
             bean.setPersonGroupId(Manager.getInteger(rs, "person_group_id"));
             bean.setSchedule(rs.getString("schedule"));
-            bean.setLimit(rs.getString("limit"));
+            bean.setPassLimit(rs.getString("pass_limit"));
             bean.setRemark(rs.getString("remark"));
             bean.setExtBin(Manager.getBytes(rs, "ext_bin"));
             bean.setExtTxt(rs.getString("ext_txt"));

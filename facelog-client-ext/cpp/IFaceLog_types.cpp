@@ -1512,9 +1512,9 @@ void PermitBean::__set_schedule(const std::string& val) {
 __isset.schedule = true;
 }
 
-void PermitBean::__set_limit(const std::string& val) {
-  this->limit = val;
-__isset.limit = true;
+void PermitBean::__set_passLimit(const std::string& val) {
+  this->passLimit = val;
+__isset.passLimit = true;
 }
 
 void PermitBean::__set_remark(const std::string& val) {
@@ -1551,7 +1551,7 @@ void swap(PermitBean &a, PermitBean &b) {
   swap(a.deviceGroupId, b.deviceGroupId);
   swap(a.personGroupId, b.personGroupId);
   swap(a.schedule, b.schedule);
-  swap(a.limit, b.limit);
+  swap(a.passLimit, b.passLimit);
   swap(a.remark, b.remark);
   swap(a.extBin, b.extBin);
   swap(a.extTxt, b.extTxt);
@@ -1566,7 +1566,7 @@ PermitBean::PermitBean(const PermitBean& other32) {
   deviceGroupId = other32.deviceGroupId;
   personGroupId = other32.personGroupId;
   schedule = other32.schedule;
-  limit = other32.limit;
+  passLimit = other32.passLimit;
   remark = other32.remark;
   extBin = other32.extBin;
   extTxt = other32.extTxt;
@@ -1580,7 +1580,7 @@ PermitBean::PermitBean( PermitBean&& other33) {
   deviceGroupId = std::move(other33.deviceGroupId);
   personGroupId = std::move(other33.personGroupId);
   schedule = std::move(other33.schedule);
-  limit = std::move(other33.limit);
+  passLimit = std::move(other33.passLimit);
   remark = std::move(other33.remark);
   extBin = std::move(other33.extBin);
   extTxt = std::move(other33.extTxt);
@@ -1594,7 +1594,7 @@ PermitBean& PermitBean::operator=(const PermitBean& other34) {
   deviceGroupId = other34.deviceGroupId;
   personGroupId = other34.personGroupId;
   schedule = other34.schedule;
-  limit = other34.limit;
+  passLimit = other34.passLimit;
   remark = other34.remark;
   extBin = other34.extBin;
   extTxt = other34.extTxt;
@@ -1609,7 +1609,7 @@ PermitBean& PermitBean::operator=(PermitBean&& other35) {
   deviceGroupId = std::move(other35.deviceGroupId);
   personGroupId = std::move(other35.personGroupId);
   schedule = std::move(other35.schedule);
-  limit = std::move(other35.limit);
+  passLimit = std::move(other35.passLimit);
   remark = std::move(other35.remark);
   extBin = std::move(other35.extBin);
   extTxt = std::move(other35.extTxt);
@@ -1626,7 +1626,7 @@ void PermitBean::printTo(std::ostream& out) const {
   out << ", " << "deviceGroupId="; (__isset.deviceGroupId ? (out << to_string(deviceGroupId)) : (out << "<null>"));
   out << ", " << "personGroupId="; (__isset.personGroupId ? (out << to_string(personGroupId)) : (out << "<null>"));
   out << ", " << "schedule="; (__isset.schedule ? (out << to_string(schedule)) : (out << "<null>"));
-  out << ", " << "limit="; (__isset.limit ? (out << to_string(limit)) : (out << "<null>"));
+  out << ", " << "passLimit="; (__isset.passLimit ? (out << to_string(passLimit)) : (out << "<null>"));
   out << ", " << "remark="; (__isset.remark ? (out << to_string(remark)) : (out << "<null>"));
   out << ", " << "extBin="; (__isset.extBin ? (out << to_string(extBin)) : (out << "<null>"));
   out << ", " << "extTxt="; (__isset.extTxt ? (out << to_string(extTxt)) : (out << "<null>"));

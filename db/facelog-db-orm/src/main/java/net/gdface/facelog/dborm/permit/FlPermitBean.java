@@ -41,7 +41,7 @@ public  class FlPermitBean
     private String schedule;
 
     /** comments:通行次/天数限制定义,为null或空不限制,JSON格式字符串,参见开发手册 */
-    private String limit;
+    private String passLimit;
 
     /** comments:备注 */
     private String remark;
@@ -338,60 +338,60 @@ public  class FlPermitBean
         return 0L !=  (initialized & FL_PERMIT_ID_SCHEDULE_MASK);
     }
     /**
-     * Getter method for {@link #limit}.<br>
+     * Getter method for {@link #passLimit}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_permit.limit</li>
+     * <li>full name: fl_permit.pass_limit</li>
      * <li>comments: 通行次/天数限制定义,为null或空不限制,JSON格式字符串,参见开发手册</li>
      * <li>column size: 512</li>
      * <li>JDBC type returned by the driver: Types.VARCHAR</li>
      * </ul>
      *
-     * @return the value of limit
+     * @return the value of passLimit
      */
-    public String getLimit(){
-        return limit;
+    public String getPassLimit(){
+        return passLimit;
     }
     /**
-     * Setter method for {@link #limit}.<br>
+     * Setter method for {@link #passLimit}.<br>
      * The new value is set only if equals() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to limit
+     * @param newVal the new value to be assigned to passLimit
      */
-    public void setLimit(String newVal)
+    public void setPassLimit(String newVal)
     {
         checkMutable();
 
-        modified |= FL_PERMIT_ID_LIMIT_MASK;
-        initialized |= FL_PERMIT_ID_LIMIT_MASK;
+        modified |= FL_PERMIT_ID_PASS_LIMIT_MASK;
+        initialized |= FL_PERMIT_ID_PASS_LIMIT_MASK;
 
-        if (Objects.equals(newVal, limit)) {
+        if (Objects.equals(newVal, passLimit)) {
             return;
         }
-        limit = newVal;
+        passLimit = newVal;
     }
     /**
-     * Determines if the limit has been modified.
+     * Determines if the passLimit has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean checkLimitModified()
+    public boolean checkPassLimitModified()
     {
-        return 0L !=  (modified & FL_PERMIT_ID_LIMIT_MASK);
+        return 0L !=  (modified & FL_PERMIT_ID_PASS_LIMIT_MASK);
     }
 
     /**
-     * Determines if the limit has been initialized.<br>
+     * Determines if the passLimit has been initialized.<br>
      *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean checkLimitInitialized()
+    public boolean checkPassLimitInitialized()
     {
-        return 0L !=  (initialized & FL_PERMIT_ID_LIMIT_MASK);
+        return 0L !=  (initialized & FL_PERMIT_ID_PASS_LIMIT_MASK);
     }
     /**
      * Getter method for {@link #remark}.<br>
@@ -683,8 +683,8 @@ public  class FlPermitBean
             return checkPersonGroupIdModified();
         case FL_PERMIT_ID_SCHEDULE:
             return checkScheduleModified();
-        case FL_PERMIT_ID_LIMIT:
-            return checkLimitModified();
+        case FL_PERMIT_ID_PASS_LIMIT:
+            return checkPassLimitModified();
         case FL_PERMIT_ID_REMARK:
             return checkRemarkModified();
         case FL_PERMIT_ID_EXT_BIN:
@@ -707,8 +707,8 @@ public  class FlPermitBean
             return checkPersonGroupIdInitialized();
         case FL_PERMIT_ID_SCHEDULE:
             return checkScheduleInitialized();
-        case FL_PERMIT_ID_LIMIT:
-            return checkLimitInitialized();
+        case FL_PERMIT_ID_PASS_LIMIT:
+            return checkPassLimitInitialized();
         case FL_PERMIT_ID_REMARK:
             return checkRemarkInitialized();
         case FL_PERMIT_ID_EXT_BIN:
@@ -751,7 +751,7 @@ public  class FlPermitBean
     public void resetModifiedExceptPrimaryKeys()
     {
         modified &= (~(FL_PERMIT_ID_SCHEDULE_MASK |
-            FL_PERMIT_ID_LIMIT_MASK |
+            FL_PERMIT_ID_PASS_LIMIT_MASK |
             FL_PERMIT_ID_REMARK_MASK |
             FL_PERMIT_ID_EXT_BIN_MASK |
             FL_PERMIT_ID_EXT_TXT_MASK |
@@ -770,7 +770,7 @@ public  class FlPermitBean
         this.deviceGroupId = null;
         this.personGroupId = null;
         this.schedule = null;
-        this.limit = null;
+        this.passLimit = null;
         this.remark = null;
         this.extBin = null;
         this.extTxt = null;
@@ -792,7 +792,7 @@ public  class FlPermitBean
             .append(getDeviceGroupId(), obj.getDeviceGroupId())
             .append(getPersonGroupId(), obj.getPersonGroupId())
             .append(getSchedule(), obj.getSchedule())
-            .append(getLimit(), obj.getLimit())
+            .append(getPassLimit(), obj.getPassLimit())
             .append(getRemark(), obj.getRemark())
             .append(getExtBin(), obj.getExtBin())
             .append(getExtTxt(), obj.getExtTxt())
@@ -889,13 +889,13 @@ public  class FlPermitBean
                 append(builder,fullIfStringOrBytes,getSchedule());
             }
         }
-        if(checkLimitInitialized()){
-            if(!notNull || null != getLimit()){
+        if(checkPassLimitInitialized()){
+            if(!notNull || null != getPassLimit()){
                 if(count++ >0){
                     builder.append(",");
                 }
-                builder.append("limit=");
-                append(builder,fullIfStringOrBytes,getLimit());
+                builder.append("pass_limit=");
+                append(builder,fullIfStringOrBytes,getPassLimit());
             }
         }
         if(checkRemarkInitialized()){
@@ -943,7 +943,7 @@ public  class FlPermitBean
             .append(getDeviceGroupId(), object.getDeviceGroupId())
             .append(getPersonGroupId(), object.getPersonGroupId())
             .append(getSchedule(), object.getSchedule())
-            .append(getLimit(), object.getLimit())
+            .append(getPassLimit(), object.getPassLimit())
             .append(getRemark(), object.getRemark())
             .append(getExtBin(), object.getExtBin())
             .append(getExtTxt(), object.getExtTxt())
@@ -971,7 +971,7 @@ public  class FlPermitBean
         setDeviceGroupId((Integer)null);
         setPersonGroupId((Integer)null);
         setSchedule((String)null);
-        setLimit((String)null);
+        setPassLimit((String)null);
         setRemark((String)null);
         setExtBin((java.nio.ByteBuffer)null);
         setExtTxt((String)null);
@@ -1065,8 +1065,8 @@ public  class FlPermitBean
             return (T)getPersonGroupId();        
         case FL_PERMIT_ID_SCHEDULE: 
             return (T)getSchedule();        
-        case FL_PERMIT_ID_LIMIT: 
-            return (T)getLimit();        
+        case FL_PERMIT_ID_PASS_LIMIT: 
+            return (T)getPassLimit();        
         case FL_PERMIT_ID_REMARK: 
             return (T)getRemark();        
         case FL_PERMIT_ID_EXT_BIN: 
@@ -1093,8 +1093,8 @@ public  class FlPermitBean
         case FL_PERMIT_ID_SCHEDULE:
             setSchedule((String)value);
             break;
-        case FL_PERMIT_ID_LIMIT:
-            setLimit((String)value);
+        case FL_PERMIT_ID_PASS_LIMIT:
+            setPassLimit((String)value);
             break;
         case FL_PERMIT_ID_REMARK:
             setRemark((String)value);
@@ -1218,13 +1218,13 @@ public  class FlPermitBean
             return this;
         }
         /** 
-         * fill the field : fl_permit.limit
-         * @param limit 通行次/天数限制定义,为null或空不限制,JSON格式字符串,参见开发手册
-         * @see FlPermitBean#getLimit()
-         * @see FlPermitBean#setLimit(String)
+         * fill the field : fl_permit.pass_limit
+         * @param passLimit 通行次/天数限制定义,为null或空不限制,JSON格式字符串,参见开发手册
+         * @see FlPermitBean#getPassLimit()
+         * @see FlPermitBean#setPassLimit(String)
          */
-        public Builder limit(String limit){
-            TEMPLATE.get().setLimit(limit);
+        public Builder passLimit(String passLimit){
+            TEMPLATE.get().setPassLimit(passLimit);
             return this;
         }
         /** 

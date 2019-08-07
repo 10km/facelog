@@ -419,9 +419,9 @@ public interface Constant {
     /** Identify the fl_permit.schedule field (ordinal:3). */
     public static final int FL_PERMIT_ID_SCHEDULE = 2;
     public static final int FL_PERMIT_ID_SCHEDULE_MASK = 1 << 2;
-    /** Identify the fl_permit.limit field (ordinal:4). */
-    public static final int FL_PERMIT_ID_LIMIT = 3;
-    public static final int FL_PERMIT_ID_LIMIT_MASK = 1 << 3;
+    /** Identify the fl_permit.pass_limit field (ordinal:4). */
+    public static final int FL_PERMIT_ID_PASS_LIMIT = 3;
+    public static final int FL_PERMIT_ID_PASS_LIMIT_MASK = 1 << 3;
     /** Identify the fl_permit.remark field (ordinal:5). */
     public static final int FL_PERMIT_ID_REMARK = 4;
     public static final int FL_PERMIT_ID_REMARK_MASK = 1 << 4;
@@ -891,7 +891,7 @@ public interface Constant {
     public static final String FL_PERMIT_FULL_FIELDS ="fl_permit.device_group_id"
                             + ",fl_permit.person_group_id"
                             + ",fl_permit.schedule"
-                            + ",fl_permit.limit"
+                            + ",fl_permit.pass_limit"
                             + ",fl_permit.remark"
                             + ",fl_permit.ext_bin"
                             + ",fl_permit.ext_txt"
@@ -900,7 +900,7 @@ public interface Constant {
     public static final String FL_PERMIT_FIELDS = "device_group_id"
                             + ",person_group_id"
                             + ",schedule"
-                            + ",limit"
+                            + ",pass_limit"
                             + ",remark"
                             + ",ext_bin"
                             + ",ext_txt"
@@ -910,7 +910,7 @@ public interface Constant {
     public static final String FL_PERMIT_JAVA_FIELDS = "deviceGroupId"
                             + ",personGroupId"
                             + ",schedule"
-                            + ",limit"
+                            + ",passLimit"
                             + ",remark"
                             + ",extBin"
                             + ",extTxt"

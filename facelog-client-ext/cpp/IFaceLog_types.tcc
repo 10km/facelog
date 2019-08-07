@@ -1758,8 +1758,8 @@ uint32_t PermitBean::read(Protocol_* iprot) {
         break;
       case 7:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readString(this->limit);
-          this->__isset.limit = true;
+          xfer += iprot->readString(this->passLimit);
+          this->__isset.passLimit = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -1847,9 +1847,9 @@ uint32_t PermitBean::write(Protocol_* oprot) const {
     xfer += oprot->writeString(this->schedule);
     xfer += oprot->writeFieldEnd();
   }
-  if (this->__isset.limit) {
-    xfer += oprot->writeFieldBegin("limit", ::apache::thrift::protocol::T_STRING, 7);
-    xfer += oprot->writeString(this->limit);
+  if (this->__isset.passLimit) {
+    xfer += oprot->writeFieldBegin("passLimit", ::apache::thrift::protocol::T_STRING, 7);
+    xfer += oprot->writeString(this->passLimit);
     xfer += oprot->writeFieldEnd();
   }
   if (this->__isset.remark) {

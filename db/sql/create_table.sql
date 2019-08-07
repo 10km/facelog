@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS fl_permit (
   `device_group_id`   int(11) NOT NULL COMMENT '外键,设备组id',
   `person_group_id`    int(11) NOT NULL COMMENT '外键,人员组id',
   `schedule`    varchar(4096) DEFAULT NULL COMMENT '允许通行时间表,为null或空为7x24小时工作,格式为JSON,参见开发手册',
-  `limit`       varchar(512) DEFAULT NULL COMMENT '通行次/天数限制定义,为null或空不限制,JSON格式字符串,参见开发手册',
+  `pass_limit`       varchar(512) DEFAULT NULL COMMENT '通行次/天数限制定义,为null或空不限制,JSON格式字符串,参见开发手册',
   `remark`      varchar(256) DEFAULT NULL COMMENT '备注',
   `ext_bin`     blob DEFAULT NULL COMMENT '应用项目自定义二进制扩展字段(最大64KB)',
   `ext_txt`     text DEFAULT NULL COMMENT '应用项目自定义文本扩展字段(最大64KB)',

@@ -1309,6 +1309,23 @@ public class DeviceCmdTest implements ChannelConstant{
 
 <p><a href="../facelog-base/src/main/java/net/gdface/facelog/IDateTimeFilter.java">IDateTimeFilter</a>定义了时间过滤器接口，</p>
 <p><a href="../facelog-base/src/main/java/net/gdface/facelog/DateTimeJsonFilter.java">DateTimeJsonFilter</a>按上述规则实现了过滤器接口。</p>
+<h3>通行次数限制</h3>
+<p><code>fl_permit</code>表有<code>pass_limit</code>字段用于限制用户通行的次数或天数，该字段为String类型，保存JSON格式的限制描述：</p>
+<pre><code>{   
+    // bool类型，为true时 passLimit 字段为限制天数，且忽略 passLimitPerDay 的限制
+    dayLimit:
+    // integer类型，用户有效期内可以的通行总次数(或总天数)限制,为 null不限制
+    passLimit:
+    // integer类型，每天通行次总数限制,为{@code null}不限制
+    passLimitPerDay:
+    // bool类型，
+    // 当因为网络异常或其他错误造成设备端无法统计通行次数判断是否允许该用户通行时,
+    // 设置为{@code true}就允许通行,
+    // 设置为{@code false}就不允许通行
+    permitOnException:
+}
+</code></pre>
+
 <h3>服务端异常</h3>
 <p>调用 facelog 服务时有可能抛出以下异常:</p>
 <ul>

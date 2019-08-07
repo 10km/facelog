@@ -1152,11 +1152,11 @@ void swap(DeviceGroupBean &a, DeviceGroupBean &b);
 std::ostream& operator<<(std::ostream& out, const DeviceGroupBean& obj);
 
 typedef struct _PermitBean__isset {
-  _PermitBean__isset() : deviceGroupId(false), personGroupId(false), schedule(false), limit(false), remark(false), extBin(false), extTxt(false), createTime(false) {}
+  _PermitBean__isset() : deviceGroupId(false), personGroupId(false), schedule(false), passLimit(false), remark(false), extBin(false), extTxt(false), createTime(false) {}
   bool deviceGroupId :1;
   bool personGroupId :1;
   bool schedule :1;
-  bool limit :1;
+  bool passLimit :1;
   bool remark :1;
   bool extBin :1;
   bool extTxt :1;
@@ -1170,7 +1170,7 @@ class PermitBean {
   PermitBean(PermitBean&&);
   PermitBean& operator=(const PermitBean&);
   PermitBean& operator=(PermitBean&&);
-  PermitBean() : _new(0), modified(0), initialized(0), deviceGroupId(0), personGroupId(0), schedule(), limit(), remark(), extBin(), extTxt(), createTime(0) {
+  PermitBean() : _new(0), modified(0), initialized(0), deviceGroupId(0), personGroupId(0), schedule(), passLimit(), remark(), extBin(), extTxt(), createTime(0) {
   }
 
   virtual ~PermitBean() throw();
@@ -1180,7 +1180,7 @@ class PermitBean {
   int32_t deviceGroupId;
   int32_t personGroupId;
   std::string schedule;
-  std::string limit;
+  std::string passLimit;
   std::string remark;
   std::string extBin;
   std::string extTxt;
@@ -1200,7 +1200,7 @@ class PermitBean {
 
   void __set_schedule(const std::string& val);
 
-  void __set_limit(const std::string& val);
+  void __set_passLimit(const std::string& val);
 
   void __set_remark(const std::string& val);
 
@@ -1230,9 +1230,9 @@ class PermitBean {
       return false;
     else if (__isset.schedule && !(schedule == rhs.schedule))
       return false;
-    if (__isset.limit != rhs.__isset.limit)
+    if (__isset.passLimit != rhs.__isset.passLimit)
       return false;
-    else if (__isset.limit && !(limit == rhs.limit))
+    else if (__isset.passLimit && !(passLimit == rhs.passLimit))
       return false;
     if (__isset.remark != rhs.__isset.remark)
       return false;

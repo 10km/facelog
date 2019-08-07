@@ -2427,7 +2427,7 @@ public class BeanConverterUtils implements Constant {
             deviceGroupId("getDeviceGroupId","setDeviceGroupId"),
             personGroupId("getPersonGroupId","setPersonGroupId"),
             schedule("getSchedule","setSchedule"),
-            limit("getLimit","setLimit"),
+            passLimit("getPassLimit","setPassLimit"),
             remark("getRemark","setRemark"),
             extBin("getExtBin","setExtBin"),
             extTxt("getExtTxt","setExtTxt"),
@@ -2536,8 +2536,8 @@ public class BeanConverterUtils implements Constant {
             getSetterNoThrow(Column.personGroupId.setter,Integer.class,int.class);                    
             getGetter(Column.schedule.getter);
             getSetterNoThrow(Column.schedule.setter,String.class); 
-            getGetter(Column.limit.getter);
-            getSetterNoThrow(Column.limit.setter,String.class); 
+            getGetter(Column.passLimit.getter);
+            getSetterNoThrow(Column.passLimit.setter,String.class); 
             getGetter(Column.remark.getter);
             getSetterNoThrow(Column.remark.setter,String.class); 
             getGetter(Column.extBin.getter);
@@ -2580,10 +2580,10 @@ public class BeanConverterUtils implements Constant {
                         selfModified |= FL_PERMIT_ID_SCHEDULE_MASK;
                     }
                 }
-                if( bitCheck(Column.limit.name(),initialized) && (null != (getterMethod = methods.get(Column.limit.getter)))){
-                    left.setLimit(cast(String.class,getterMethod.invoke(right)));
-                    if(bitCheck(Column.limit.name(),modified)){
-                        selfModified |= FL_PERMIT_ID_LIMIT_MASK;
+                if( bitCheck(Column.passLimit.name(),initialized) && (null != (getterMethod = methods.get(Column.passLimit.getter)))){
+                    left.setPassLimit(cast(String.class,getterMethod.invoke(right)));
+                    if(bitCheck(Column.passLimit.name(),modified)){
+                        selfModified |= FL_PERMIT_ID_PASS_LIMIT_MASK;
                     }
                 }
                 if( bitCheck(Column.remark.name(),initialized) && (null != (getterMethod = methods.get(Column.remark.getter)))){
@@ -2654,12 +2654,12 @@ public class BeanConverterUtils implements Constant {
                         }
                     }catch(NullCastPrimitiveException e){}
                 }
-                if(null != (setterMethod = methods.get(Column.limit.setter)) && left.checkLimitInitialized()){
+                if(null != (setterMethod = methods.get(Column.passLimit.setter)) && left.checkPassLimitInitialized()){
                     try{
-                        setterMethod.invoke(right,cast(setterParams.get(Column.limit.setter),left.getLimit()));
-                        bitOR(Column.limit.name(),initialized);
-                        if(left.checkLimitModified()){
-                            bitOR(Column.limit.name(),modified);
+                        setterMethod.invoke(right,cast(setterParams.get(Column.passLimit.setter),left.getPassLimit()));
+                        bitOR(Column.passLimit.name(),initialized);
+                        if(left.checkPassLimitModified()){
+                            bitOR(Column.passLimit.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }

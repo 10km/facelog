@@ -935,7 +935,7 @@ facelog 基于[dtalk](https://gitee.com/l0km/dtalk)框架实现设备命令定�
 
 ### 通行次数限制
 
-`fl_permit`表有`limit`字段用于限制用户通行的次数或天数，该字段为String类型，保存JSON格式的限制描述：
+`fl_permit`表有`pass_limit`字段用于限制用户通行的次数或天数，该字段为String类型，保存JSON格式的限制描述：
 	
 	{	
 		// bool类型，为true时 passLimit 字段为限制天数，且忽略 passLimitPerDay 的限制

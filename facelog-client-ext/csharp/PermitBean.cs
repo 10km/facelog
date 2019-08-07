@@ -35,7 +35,7 @@ public partial class PermitBean : TBase
 
   public string Schedule { get; set; }
 
-  public string Limit { get; set; }
+  public string PassLimit { get; set; }
 
   public string Remark { get; set; }
 
@@ -119,7 +119,7 @@ public partial class PermitBean : TBase
             break;
           case 7:
             if (field.Type == TType.String) {
-              Limit = iprot.ReadString();
+              PassLimit = iprot.ReadString();
             } else { 
               TProtocolUtil.Skip(iprot, field.Type);
             }
@@ -221,12 +221,12 @@ public partial class PermitBean : TBase
         oprot.WriteString(Schedule);
         oprot.WriteFieldEnd();
       }
-      if (Limit != null) {
-        field.Name = "limit";
+      if (PassLimit != null) {
+        field.Name = "passLimit";
         field.Type = TType.String;
         field.ID = 7;
         oprot.WriteFieldBegin(field);
-        oprot.WriteString(Limit);
+        oprot.WriteString(PassLimit);
         oprot.WriteFieldEnd();
       }
       if (Remark != null) {
@@ -290,9 +290,9 @@ public partial class PermitBean : TBase
       __sb.Append(", Schedule: ");
       __sb.Append(Schedule);
     }
-    if (Limit != null) {
-      __sb.Append(", Limit: ");
-      __sb.Append(Limit);
+    if (PassLimit != null) {
+      __sb.Append(", PassLimit: ");
+      __sb.Append(PassLimit);
     }
     if (Remark != null) {
       __sb.Append(", Remark: ");

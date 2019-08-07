@@ -145,7 +145,7 @@ struct PermitBean {
   4: optional i32 deviceGroupId;
   5: optional i32 personGroupId;
   6: optional string schedule;
-  7: optional string limit;
+  7: optional string passLimit;
   8: optional string remark;
   9: optional binary extBin;
   10: optional string extTxt;

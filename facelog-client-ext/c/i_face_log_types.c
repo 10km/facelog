@@ -6746,7 +6746,7 @@ enum _PermitBeanProperties
   PROP_PERMIT_BEAN_DEVICE_GROUP_ID,
   PROP_PERMIT_BEAN_PERSON_GROUP_ID,
   PROP_PERMIT_BEAN_SCHEDULE,
-  PROP_PERMIT_BEAN_LIMIT,
+  PROP_PERMIT_BEAN_PASS_LIMIT,
   PROP_PERMIT_BEAN_REMARK,
   PROP_PERMIT_BEAN_EXT_BIN,
   PROP_PERMIT_BEAN_EXT_TXT,
@@ -6892,16 +6892,16 @@ permit_bean_read (ThriftStruct *object, ThriftProtocol *protocol, GError **error
       case 7:
         if (ftype == T_STRING)
         {
-          if (this_object->limit != NULL)
+          if (this_object->passLimit != NULL)
           {
-            g_free(this_object->limit);
-            this_object->limit = NULL;
+            g_free(this_object->passLimit);
+            this_object->passLimit = NULL;
           }
 
-          if ((ret = thrift_protocol_read_string (protocol, &this_object->limit, error)) < 0)
+          if ((ret = thrift_protocol_read_string (protocol, &this_object->passLimit, error)) < 0)
             return -1;
           xfer += ret;
-          this_object->__isset_limit = TRUE;
+          this_object->__isset_passLimit = TRUE;
         } else {
           if ((ret = thrift_protocol_skip (protocol, ftype, error)) < 0)
             return -1;
@@ -7100,11 +7100,11 @@ permit_bean_write (ThriftStruct *object, ThriftProtocol *protocol, GError **erro
       return -1;
     xfer += ret;
   }
-  if (this_object->__isset_limit == TRUE) {
-    if ((ret = thrift_protocol_write_field_begin (protocol, "limit", T_STRING, 7, error)) < 0)
+  if (this_object->__isset_passLimit == TRUE) {
+    if ((ret = thrift_protocol_write_field_begin (protocol, "passLimit", T_STRING, 7, error)) < 0)
       return -1;
     xfer += ret;
-    if ((ret = thrift_protocol_write_string (protocol, this_object->limit, error)) < 0)
+    if ((ret = thrift_protocol_write_string (protocol, this_object->passLimit, error)) < 0)
       return -1;
     xfer += ret;
 
@@ -7209,11 +7209,11 @@ permit_bean_set_property (GObject *object,
       self->__isset_schedule = TRUE;
       break;
 
-    case PROP_PERMIT_BEAN_LIMIT:
-      if (self->limit != NULL)
-        g_free (self->limit);
-      self->limit = g_value_dup_string (value);
-      self->__isset_limit = TRUE;
+    case PROP_PERMIT_BEAN_PASS_LIMIT:
+      if (self->passLimit != NULL)
+        g_free (self->passLimit);
+      self->passLimit = g_value_dup_string (value);
+      self->__isset_passLimit = TRUE;
       break;
 
     case PROP_PERMIT_BEAN_REMARK:
@@ -7282,8 +7282,8 @@ permit_bean_get_property (GObject *object,
       g_value_set_string (value, self->schedule);
       break;
 
-    case PROP_PERMIT_BEAN_LIMIT:
-      g_value_set_string (value, self->limit);
+    case PROP_PERMIT_BEAN_PASS_LIMIT:
+      g_value_set_string (value, self->passLimit);
       break;
 
     case PROP_PERMIT_BEAN_REMARK:
@@ -7322,8 +7322,8 @@ permit_bean_instance_init (PermitBean * object)
   object->__isset_personGroupId = FALSE;
   object->schedule = NULL;
   object->__isset_schedule = FALSE;
-  object->limit = NULL;
-  object->__isset_limit = FALSE;
+  object->passLimit = NULL;
+  object->__isset_passLimit = FALSE;
   object->remark = NULL;
   object->__isset_remark = FALSE;
   object->extBin = NULL;
@@ -7346,10 +7346,10 @@ permit_bean_finalize (GObject *object)
     g_free(tobject->schedule);
     tobject->schedule = NULL;
   }
-  if (tobject->limit != NULL)
+  if (tobject->passLimit != NULL)
   {
-    g_free(tobject->limit);
-    tobject->limit = NULL;
+    g_free(tobject->passLimit);
+    tobject->passLimit = NULL;
   }
   if (tobject->remark != NULL)
   {
@@ -7445,8 +7445,8 @@ permit_bean_class_init (PermitBeanClass * cls)
 
   g_object_class_install_property
     (gobject_class,
-     PROP_PERMIT_BEAN_LIMIT,
-     g_param_spec_string ("limit",
+     PROP_PERMIT_BEAN_PASS_LIMIT,
+     g_param_spec_string ("passLimit",
                           NULL,
                           NULL,
                           NULL,

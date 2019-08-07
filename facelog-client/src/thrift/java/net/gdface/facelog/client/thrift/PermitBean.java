@@ -60,13 +60,13 @@ public final class PermitBean
     @ThriftField
     public void setSchedule(final String schedule) { this.schedule = schedule; }
 
-    private String limit;
+    private String passLimit;
 
-    @ThriftField(value=7, name="limit", requiredness=Requiredness.OPTIONAL)
-    public String getLimit() { return limit; }
+    @ThriftField(value=7, name="passLimit", requiredness=Requiredness.OPTIONAL)
+    public String getPassLimit() { return passLimit; }
 
     @ThriftField
-    public void setLimit(final String limit) { this.limit = limit; }
+    public void setPassLimit(final String passLimit) { this.passLimit = passLimit; }
 
     private String remark;
 
@@ -110,7 +110,7 @@ public final class PermitBean
             .add("deviceGroupId", deviceGroupId)
             .add("personGroupId", personGroupId)
             .add("schedule", schedule)
-            .add("limit", limit)
+            .add("passLimit", passLimit)
             .add("remark", remark)
             .add("extBin", extBin)
             .add("extTxt", extTxt)

@@ -1923,7 +1923,7 @@ PermitBean = function(args) {
   this.deviceGroupId = null;
   this.personGroupId = null;
   this.schedule = null;
-  this.limit = null;
+  this.passLimit = null;
   this.remark = null;
   this.extBin = null;
   this.extTxt = null;
@@ -1953,8 +1953,8 @@ PermitBean = function(args) {
     if (args.schedule !== undefined && args.schedule !== null) {
       this.schedule = args.schedule;
     }
-    if (args.limit !== undefined && args.limit !== null) {
-      this.limit = args.limit;
+    if (args.passLimit !== undefined && args.passLimit !== null) {
+      this.passLimit = args.passLimit;
     }
     if (args.remark !== undefined && args.remark !== null) {
       this.remark = args.remark;
@@ -2028,7 +2028,7 @@ PermitBean.prototype.read = function(input) {
       break;
       case 7:
       if (ftype == Thrift.Type.STRING) {
-        this.limit = input.readString().value;
+        this.passLimit = input.readString().value;
       } else {
         input.skip(ftype);
       }
@@ -2102,9 +2102,9 @@ PermitBean.prototype.write = function(output) {
     output.writeString(this.schedule);
     output.writeFieldEnd();
   }
-  if (this.limit !== null && this.limit !== undefined) {
-    output.writeFieldBegin('limit', Thrift.Type.STRING, 7);
-    output.writeString(this.limit);
+  if (this.passLimit !== null && this.passLimit !== undefined) {
+    output.writeFieldBegin('passLimit', Thrift.Type.STRING, 7);
+    output.writeString(this.passLimit);
     output.writeFieldEnd();
   }
   if (this.remark !== null && this.remark !== undefined) {

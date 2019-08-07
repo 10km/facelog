@@ -655,7 +655,7 @@ public interface DaoConstant {
         public static final String FULL_FIELDS ="fl_permit.device_group_id"
                             + ",fl_permit.person_group_id"
                             + ",fl_permit.schedule"
-                            + ",fl_permit.limit"
+                            + ",fl_permit.pass_limit"
                             + ",fl_permit.remark"
                             + ",fl_permit.ext_bin"
                             + ",fl_permit.ext_txt"
@@ -664,7 +664,7 @@ public interface DaoConstant {
         public static final String FIELDS = "device_group_id"
                             + ",person_group_id"
                             + ",schedule"
-                            + ",limit"
+                            + ",pass_limit"
                             + ",remark"
                             + ",ext_bin"
                             + ",ext_txt"
@@ -675,7 +675,7 @@ public interface DaoConstant {
         public static final String JAVA_FIELDS = "deviceGroupId"
                             + ",personGroupId"
                             + ",schedule"
-                            + ",limit"
+                            + ",passLimit"
                             + ",remark"
                             + ",extBin"
                             + ",extTxt"
@@ -700,8 +700,8 @@ public interface DaoConstant {
             personGroupId("fl_permit","person_group_id",2,"getPersonGroupId","setPersonGroupId"),
             /** constant for fl_permit.schedule  */
             schedule("fl_permit","schedule",3,"getSchedule","setSchedule"),
-            /** constant for fl_permit.limit  */
-            limit("fl_permit","limit",4,"getLimit","setLimit"),
+            /** constant for fl_permit.pass_limit  */
+            passLimit("fl_permit","pass_limit",4,"getPassLimit","setPassLimit"),
             /** constant for fl_permit.remark  */
             remark("fl_permit","remark",5,"getRemark","setRemark"),
             /** constant for fl_permit.ext_bin  */

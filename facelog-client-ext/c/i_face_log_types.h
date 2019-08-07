@@ -459,8 +459,8 @@ struct _PermitBean
   gboolean __isset_personGroupId;
   gchar * schedule;
   gboolean __isset_schedule;
-  gchar * limit;
-  gboolean __isset_limit;
+  gchar * passLimit;
+  gboolean __isset_passLimit;
   gchar * remark;
   gboolean __isset_remark;
   GByteArray * extBin;
