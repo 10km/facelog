@@ -528,6 +528,9 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		try{
 			Enable.ALL.check(tm, token);
 			checkArgument(null != personBean,"personBean is null");
+			// 避免idPhoto,featureImage相同抛出异常
+			final byte[] fimg=(idPhoto != null && featureImage != null && Arrays.equals(idPhoto, featureImage)) 
+										? null : featureImage;
 			return BaseDao.daoRunAsTransaction(new Callable<PersonBean>(){
 				@Override
 				public PersonBean call() throws Exception {
@@ -535,7 +538,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 							FaceUtilits.getByteBufferOrNull(idPhoto),
 							FaceUtilits.getByteBufferOrNull(feature),
 							featureVersion,
-							FaceUtilits.getByteBufferOrNull(featureImage),
+							FaceUtilits.getByteBufferOrNull(fimg),
 							faceBean, 
 							tm.getDeviceOrNull(token));
 				}});
