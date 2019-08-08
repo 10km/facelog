@@ -913,23 +913,23 @@ public class DaoManagement extends BaseDao implements ServiceConstant,Constant{
 	/**
 	 * 按天统计指定用户的通行次数<br>
 	 * @param personId
-	 * @param start 统计起始日期,可为{@code null}
-	 * @param end 统计结束日期,可为{@code null}
+	 * @param startDate 统计起始日期,可为{@code null}
+	 * @param endDate 统计结束日期,可为{@code null}
 	 * @return 返回统计结果，即每个有通行记录的日期(格式:yyyy-MM-dd)的通行次数
 	 */
-	protected Map<String, Integer> daoCountPersonLog(int personId,Date start,Date end){
+	protected Map<String, Integer> daoCountPersonLog(int personId,Date startDate,Date endDate){
 		SimpleDateFormat formatter = new SimpleDateFormat(DATE_FORMATTER_STR);
 		StringBuffer buffer = new StringBuffer("WHERE");
 		buffer.append(" person_id=").append(personId);
-		checkArgument(null == start || null == end || start.equals(end) || start.before(end),"start must <= end");
-		if(start != null){
-			buffer.append(String.format(" date(verify_time)>='%s'",formatter.format(start)));
+		checkArgument(null == startDate || null == endDate || startDate.equals(endDate) || startDate.before(endDate),"start must <= end");
+		if(startDate != null){
+			buffer.append(String.format(" date(verify_time)>='%s'",formatter.format(startDate)));
 		}
-		if(start != null && start != null){
+		if(startDate != null && startDate != null){
 			buffer.append(" and ");
 		}
-		if(start != null){
-			buffer.append(String.format(" date(verify_time)>='%s'",formatter.format(start)));
+		if(startDate != null){
+			buffer.append(String.format(" date(verify_time)>='%s'",formatter.format(startDate)));
 		}
 
 		List<LogBean> logList = daoLoadLogByWhere(buffer.toString(), 1, -1);
