@@ -374,6 +374,16 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
+    public Map<String, Integer> countPersonLog (int personId,Long startDate,Long endDate) {
+        return delegate().countPersonLog(personId,startDate,endDate);
+    }
+
+    @Override
+    public Map<String, Integer> countPersonLog (int personId,String startDate,String endDate) {
+        return delegate().countPersonLog(personId,startDate,endDate);
+    }
+
+    @Override
     public int deleteAllFeaturesByPersonId (int personId,boolean deleteImage,Token token) {
         return delegate().deleteAllFeaturesByPersonId(personId,deleteImage,token);
     }

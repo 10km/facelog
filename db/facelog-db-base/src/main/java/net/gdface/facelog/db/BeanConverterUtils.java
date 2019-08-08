@@ -2746,6 +2746,7 @@ public class BeanConverterUtils implements Constant {
             papersNum("getPapersNum","setPapersNum"),
             imageMd5("getImageMd5","setImageMd5"),
             expiryDate("getExpiryDate","setExpiryDate"),
+            activatedDate("getActivatedDate","setActivatedDate"),
             remark("getRemark","setRemark"),
             extBin("getExtBin","setExtBin"),
             extTxt("getExtTxt","setExtTxt"),
@@ -2873,6 +2874,8 @@ public class BeanConverterUtils implements Constant {
             getSetterNoThrow(Column.imageMd5.setter,String.class); 
             getGetter(Column.expiryDate.getter);
             getSetterNoThrow(Column.expiryDate.setter,java.util.Date.class,Long.class,long.class);  
+            getGetter(Column.activatedDate.getter);
+            getSetterNoThrow(Column.activatedDate.setter,java.util.Date.class,Long.class,long.class);  
             getGetter(Column.remark.getter);
             getSetterNoThrow(Column.remark.setter,String.class); 
             getGetter(Column.extBin.getter);
@@ -2969,6 +2972,12 @@ public class BeanConverterUtils implements Constant {
                     left.setExpiryDate(cast(java.util.Date.class,getterMethod.invoke(right)));
                     if(bitCheck(Column.expiryDate.name(),modified)){
                         selfModified |= FL_PERSON_ID_EXPIRY_DATE_MASK;
+                    }
+                }
+                if( bitCheck(Column.activatedDate.name(),initialized) && (null != (getterMethod = methods.get(Column.activatedDate.getter)))){
+                    left.setActivatedDate(cast(java.util.Date.class,getterMethod.invoke(right)));
+                    if(bitCheck(Column.activatedDate.name(),modified)){
+                        selfModified |= FL_PERSON_ID_ACTIVATED_DATE_MASK;
                     }
                 }
                 if( bitCheck(Column.remark.name(),initialized) && (null != (getterMethod = methods.get(Column.remark.getter)))){
@@ -3123,6 +3132,15 @@ public class BeanConverterUtils implements Constant {
                         bitOR(Column.expiryDate.name(),initialized);
                         if(left.checkExpiryDateModified()){
                             bitOR(Column.expiryDate.name(),modified);
+                        }
+                    }catch(NullCastPrimitiveException e){}
+                }
+                if(null != (setterMethod = methods.get(Column.activatedDate.setter)) && left.checkActivatedDateInitialized()){
+                    try{
+                        setterMethod.invoke(right,cast(setterParams.get(Column.activatedDate.setter),left.getActivatedDate()));
+                        bitOR(Column.activatedDate.name(),initialized);
+                        if(left.checkActivatedDateModified()){
+                            bitOR(Column.activatedDate.name(),modified);
                         }
                     }catch(NullCastPrimitiveException e){}
                 }

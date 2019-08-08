@@ -132,6 +132,7 @@ CREATE TABLE IF NOT EXISTS fl_person (
   `papers_num`  varchar(32) DEFAULT NULL UNIQUE COMMENT '证件号码' ,
   `image_md5`   char(32)    DEFAULT NULL UNIQUE COMMENT '用户默认照片(证件照,标准照)的md5校验码,外键',
   `expiry_date` date DEFAULT '2050-12-31' COMMENT '验证有效期限(超过期限不能通过验证),为NULL永久有效',
+  `activated_date` date DEFAULT NULL COMMENT '帐户激活日期,为NULL时,create_time字段即为激活日期',
   `remark`      varchar(256) DEFAULT NULL COMMENT '备注',
   `ext_bin`     blob DEFAULT NULL COMMENT '应用项目自定义二进制扩展字段(最大64KB)',
   `ext_txt`     text DEFAULT NULL COMMENT '应用项目自定义文本扩展字段(最大64KB)',

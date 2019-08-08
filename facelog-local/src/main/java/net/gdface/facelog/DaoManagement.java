@@ -4,7 +4,9 @@ import static com.google.common.base.Preconditions.*;
 import static net.gdface.facelog.FeatureConfig.*;
 
 import java.nio.ByteBuffer;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -28,6 +30,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 import net.gdface.facelog.db.Constant;
@@ -886,5 +889,61 @@ public class DaoManagement extends BaseDao implements ServiceConstant,Constant{
 		}
 		return daoGetFaceBeansByImageMd5OnImage(imageMd5);
 	}
+	private static final Function<LogBean, LogBean> dateCaster = new Function<LogBean,LogBean>(){
 
+		@Override
+		public LogBean apply(LogBean bean) {
+			if(null == bean){
+				return null;
+			}				
+			Date input = bean.getVerifyTime(); 
+			if(input != null){
+				input = bean.getCreateTime();
+			}
+			if(input != null){
+				Calendar calendar=Calendar.getInstance();
+				calendar.setTime(input);
+				calendar.set(Calendar.HOUR_OF_DAY, 0);
+				calendar.set(Calendar.MINUTE, 0);
+				calendar.set(Calendar.SECOND, 0);
+				bean.setVerifyTime(calendar.getTime());					
+			}
+			return bean;
+		}};
+	/**
+	 * 按天统计指定用户的通行次数<br>
+	 * @param personId
+	 * @param start 统计起始日期,可为{@code null}
+	 * @param end 统计结束日期,可为{@code null}
+	 * @return 返回统计结果，即每个有通行记录的日期(格式:yyyy-MM-dd)的通行次数
+	 */
+	protected Map<String, Integer> daoCountPersonLog(int personId,Date start,Date end){
+		SimpleDateFormat formatter = new SimpleDateFormat(DATE_FORMATTER_STR);
+		StringBuffer buffer = new StringBuffer("WHERE");
+		buffer.append(" person_id=").append(personId);
+		checkArgument(null == start || null == end || start.equals(end) || start.before(end),"start must <= end");
+		if(start != null){
+			buffer.append(String.format(" date(verify_time)>='%s'",formatter.format(start)));
+		}
+		if(start != null && start != null){
+			buffer.append(" and ");
+		}
+		if(start != null){
+			buffer.append(String.format(" date(verify_time)>='%s'",formatter.format(start)));
+		}
+
+		List<LogBean> logList = daoLoadLogByWhere(buffer.toString(), 1, -1);
+		Lists.transform(logList, dateCaster);
+		Map<String, Integer>stat=Maps.newHashMap();
+		
+		for(LogBean log:logList){
+			Date d = log.getVerifyTime();			
+			if(d != null){
+				String key = formatter.format(d);
+				Integer c = MoreObjects.firstNonNull(stat.get(key), 0);
+				stat.put(key, c + 1);
+			}
+		}
+		return stat;
+	}
 }

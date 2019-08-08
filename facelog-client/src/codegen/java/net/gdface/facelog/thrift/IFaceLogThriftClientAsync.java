@@ -666,6 +666,42 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(countPersonGroupByWhere(where), callback);
     }
     /**
+     * see also {@link net.gdface.facelog.IFaceLog#countPersonLog(int,java.lang.Long,java.lang.Long)}
+     */
+    public ListenableFuture<Map<String, Integer>> countPersonLog(int personId,
+        Long startDate,
+        Long endDate){        
+        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
+        ListenableFuture<Map<String, Integer>> future = async.countPersonLog(personId,
+            startDate,
+            endDate);
+        return factory.wrap(async,future);
+    }
+    public void countPersonLog(int personId,
+        Long startDate,
+        Long endDate,
+        FutureCallback<Map<String, Integer>>callback){
+        factory.addCallback(countPersonLog(personId,startDate,endDate), callback);
+    }
+    /**
+     * see also {@link net.gdface.facelog.IFaceLog#countPersonLog(int,java.lang.String,java.lang.String)}
+     */
+    public ListenableFuture<Map<String, Integer>> countPersonLog(int personId,
+        String startDate,
+        String endDate){        
+        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
+        ListenableFuture<Map<String, Integer>> future = async.countPersonLogTimeStr(personId,
+            startDate,
+            endDate);
+        return factory.wrap(async,future);
+    }
+    public void countPersonLog(int personId,
+        String startDate,
+        String endDate,
+        FutureCallback<Map<String, Integer>>callback){
+        factory.addCallback(countPersonLog(personId,startDate,endDate), callback);
+    }
+    /**
      * see also {@link net.gdface.facelog.IFaceLog#deleteAllFeaturesByPersonId(int,boolean,net.gdface.facelog.Token)}
      */
     public ListenableFuture<Integer> deleteAllFeaturesByPersonId(int personId,

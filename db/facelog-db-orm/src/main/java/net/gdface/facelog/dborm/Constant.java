@@ -79,7 +79,7 @@ public interface Constant {
     public static final int FL_LOG_PK_COUNT = 1;
     public static final int FL_PERMIT_COLUMN_COUNT = 8;
     public static final int FL_PERMIT_PK_COUNT = 2;
-    public static final int FL_PERSON_COLUMN_COUNT = 17;
+    public static final int FL_PERSON_COLUMN_COUNT = 18;
     public static final int FL_PERSON_PK_COUNT = 1;
     public static final int FL_PERSON_GROUP_COLUMN_COUNT = 10;
     public static final int FL_PERSON_GROUP_PK_COUNT = 1;
@@ -470,21 +470,24 @@ public interface Constant {
     /** Identify the fl_person.expiry_date field (ordinal:12). */
     public static final int FL_PERSON_ID_EXPIRY_DATE = 11;
     public static final int FL_PERSON_ID_EXPIRY_DATE_MASK = 1 << 11;
-    /** Identify the fl_person.remark field (ordinal:13). */
-    public static final int FL_PERSON_ID_REMARK = 12;
-    public static final int FL_PERSON_ID_REMARK_MASK = 1 << 12;
-    /** Identify the fl_person.ext_bin field (ordinal:14). */
-    public static final int FL_PERSON_ID_EXT_BIN = 13;
-    public static final int FL_PERSON_ID_EXT_BIN_MASK = 1 << 13;
-    /** Identify the fl_person.ext_txt field (ordinal:15). */
-    public static final int FL_PERSON_ID_EXT_TXT = 14;
-    public static final int FL_PERSON_ID_EXT_TXT_MASK = 1 << 14;
-    /** Identify the fl_person.create_time field (ordinal:16). */
-    public static final int FL_PERSON_ID_CREATE_TIME = 15;
-    public static final int FL_PERSON_ID_CREATE_TIME_MASK = 1 << 15;
-    /** Identify the fl_person.update_time field (ordinal:17). */
-    public static final int FL_PERSON_ID_UPDATE_TIME = 16;
-    public static final int FL_PERSON_ID_UPDATE_TIME_MASK = 1 << 16;
+    /** Identify the fl_person.activated_date field (ordinal:13). */
+    public static final int FL_PERSON_ID_ACTIVATED_DATE = 12;
+    public static final int FL_PERSON_ID_ACTIVATED_DATE_MASK = 1 << 12;
+    /** Identify the fl_person.remark field (ordinal:14). */
+    public static final int FL_PERSON_ID_REMARK = 13;
+    public static final int FL_PERSON_ID_REMARK_MASK = 1 << 13;
+    /** Identify the fl_person.ext_bin field (ordinal:15). */
+    public static final int FL_PERSON_ID_EXT_BIN = 14;
+    public static final int FL_PERSON_ID_EXT_BIN_MASK = 1 << 14;
+    /** Identify the fl_person.ext_txt field (ordinal:16). */
+    public static final int FL_PERSON_ID_EXT_TXT = 15;
+    public static final int FL_PERSON_ID_EXT_TXT_MASK = 1 << 15;
+    /** Identify the fl_person.create_time field (ordinal:17). */
+    public static final int FL_PERSON_ID_CREATE_TIME = 16;
+    public static final int FL_PERSON_ID_CREATE_TIME_MASK = 1 << 16;
+    /** Identify the fl_person.update_time field (ordinal:18). */
+    public static final int FL_PERSON_ID_UPDATE_TIME = 17;
+    public static final int FL_PERSON_ID_UPDATE_TIME_MASK = 1 << 17;
     /** Identify the fl_person_group.id field (ordinal:1). */
     public static final int FL_PERSON_GROUP_ID_ID = 0;
     public static final int FL_PERSON_GROUP_ID_ID_MASK = 1 << 0;
@@ -941,6 +944,7 @@ public interface Constant {
                             + ",fl_person.papers_num"
                             + ",fl_person.image_md5"
                             + ",fl_person.expiry_date"
+                            + ",fl_person.activated_date"
                             + ",fl_person.remark"
                             + ",fl_person.ext_bin"
                             + ",fl_person.ext_txt"
@@ -959,6 +963,7 @@ public interface Constant {
                             + ",papers_num"
                             + ",image_md5"
                             + ",expiry_date"
+                            + ",activated_date"
                             + ",remark"
                             + ",ext_bin"
                             + ",ext_txt"
@@ -978,6 +983,7 @@ public interface Constant {
                             + ",papersNum"
                             + ",imageMd5"
                             + ",expiryDate"
+                            + ",activatedDate"
                             + ",remark"
                             + ",extBin"
                             + ",extTxt"
@@ -998,6 +1004,7 @@ public interface Constant {
         Integer.class,
         String.class,
         String.class,
+        java.util.Date.class,
         java.util.Date.class,
         String.class,
         java.nio.ByteBuffer.class,

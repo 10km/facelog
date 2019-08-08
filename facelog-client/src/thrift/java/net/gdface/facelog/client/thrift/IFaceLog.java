@@ -262,6 +262,26 @@ public interface IFaceLog
             @ThriftField(value=1, name="where", requiredness=Requiredness.OPTIONAL) final String where
         );
 
+        @ThriftMethod(value = "countPersonLog",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1)
+                      })
+        ListenableFuture<Map<String, Integer>> countPersonLog(
+            @ThriftField(value=1, name="personId", requiredness=Requiredness.REQUIRED) final int personId,
+            @ThriftField(value=2, name="startDate", requiredness=Requiredness.OPTIONAL) final Long startDate,
+            @ThriftField(value=3, name="endDate", requiredness=Requiredness.OPTIONAL) final Long endDate
+        );
+
+        @ThriftMethod(value = "countPersonLogTimeStr",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1)
+                      })
+        ListenableFuture<Map<String, Integer>> countPersonLogTimeStr(
+            @ThriftField(value=1, name="personId", requiredness=Requiredness.REQUIRED) final int personId,
+            @ThriftField(value=2, name="startDate", requiredness=Requiredness.OPTIONAL) final String startDate,
+            @ThriftField(value=3, name="endDate", requiredness=Requiredness.OPTIONAL) final String endDate
+        );
+
         @ThriftMethod(value = "deleteAllFeaturesByPersonId",
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
@@ -1735,6 +1755,26 @@ public interface IFaceLog
                   })
     int countPersonGroupByWhere(
         @ThriftField(value=1, name="where", requiredness=Requiredness.OPTIONAL) final String where
+    ) throws ServiceRuntimeException;
+
+    @ThriftMethod(value = "countPersonLog",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1)
+                  })
+    Map<String, Integer> countPersonLog(
+        @ThriftField(value=1, name="personId", requiredness=Requiredness.REQUIRED) final int personId,
+        @ThriftField(value=2, name="startDate", requiredness=Requiredness.OPTIONAL) final Long startDate,
+        @ThriftField(value=3, name="endDate", requiredness=Requiredness.OPTIONAL) final Long endDate
+    ) throws ServiceRuntimeException;
+
+    @ThriftMethod(value = "countPersonLogTimeStr",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1)
+                  })
+    Map<String, Integer> countPersonLogTimeStr(
+        @ThriftField(value=1, name="personId", requiredness=Requiredness.REQUIRED) final int personId,
+        @ThriftField(value=2, name="startDate", requiredness=Requiredness.OPTIONAL) final String startDate,
+        @ThriftField(value=3, name="endDate", requiredness=Requiredness.OPTIONAL) final String endDate
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "deleteAllFeaturesByPersonId",

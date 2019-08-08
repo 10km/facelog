@@ -519,6 +519,8 @@ struct _PersonBean
   gboolean __isset_imageMd5;
   gint64 expiryDate;
   gboolean __isset_expiryDate;
+  gint64 activatedDate;
+  gboolean __isset_activatedDate;
   gchar * remark;
   gboolean __isset_remark;
   GByteArray * extBin;
@@ -2085,6 +2087,116 @@ GType i_face_log_count_person_group_by_where_result_get_type (void);
 #define IS_I_FACE_LOG_COUNT_PERSON_GROUP_BY_WHERE_RESULT(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_I_FACE_LOG_COUNT_PERSON_GROUP_BY_WHERE_RESULT))
 #define IS_I_FACE_LOG_COUNT_PERSON_GROUP_BY_WHERE_RESULT_CLASS(c) (G_TYPE_CHECK_CLASS_TYPE ((c), TYPE_I_FACE_LOG_COUNT_PERSON_GROUP_BY_WHERE_RESULT))
 #define I_FACE_LOG_COUNT_PERSON_GROUP_BY_WHERE_RESULT_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_I_FACE_LOG_COUNT_PERSON_GROUP_BY_WHERE_RESULT, IFaceLogCountPersonGroupByWhereResultClass))
+
+/* struct IFaceLogCountPersonLogArgs */
+struct _IFaceLogCountPersonLogArgs
+{ 
+  ThriftStruct parent; 
+
+  /* public */
+  gint32 personId;
+  gint64 startDate;
+  gboolean __isset_startDate;
+  gint64 endDate;
+  gboolean __isset_endDate;
+};
+typedef struct _IFaceLogCountPersonLogArgs IFaceLogCountPersonLogArgs;
+
+struct _IFaceLogCountPersonLogArgsClass
+{
+  ThriftStructClass parent;
+};
+typedef struct _IFaceLogCountPersonLogArgsClass IFaceLogCountPersonLogArgsClass;
+
+GType i_face_log_count_person_log_args_get_type (void);
+#define TYPE_I_FACE_LOG_COUNT_PERSON_LOG_ARGS (i_face_log_count_person_log_args_get_type())
+#define I_FACE_LOG_COUNT_PERSON_LOG_ARGS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_I_FACE_LOG_COUNT_PERSON_LOG_ARGS, IFaceLogCountPersonLogArgs))
+#define I_FACE_LOG_COUNT_PERSON_LOG_ARGS_CLASS(c) (G_TYPE_CHECK_CLASS_CAST ((c), _TYPE_I_FACE_LOG_COUNT_PERSON_LOG_ARGS, IFaceLogCountPersonLogArgsClass))
+#define IS_I_FACE_LOG_COUNT_PERSON_LOG_ARGS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_I_FACE_LOG_COUNT_PERSON_LOG_ARGS))
+#define IS_I_FACE_LOG_COUNT_PERSON_LOG_ARGS_CLASS(c) (G_TYPE_CHECK_CLASS_TYPE ((c), TYPE_I_FACE_LOG_COUNT_PERSON_LOG_ARGS))
+#define I_FACE_LOG_COUNT_PERSON_LOG_ARGS_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_I_FACE_LOG_COUNT_PERSON_LOG_ARGS, IFaceLogCountPersonLogArgsClass))
+
+/* struct IFaceLogCountPersonLogResult */
+struct _IFaceLogCountPersonLogResult
+{ 
+  ThriftStruct parent; 
+
+  /* public */
+  GHashTable * success;
+  gboolean __isset_success;
+  ServiceRuntimeException * ex1;
+  gboolean __isset_ex1;
+};
+typedef struct _IFaceLogCountPersonLogResult IFaceLogCountPersonLogResult;
+
+struct _IFaceLogCountPersonLogResultClass
+{
+  ThriftStructClass parent;
+};
+typedef struct _IFaceLogCountPersonLogResultClass IFaceLogCountPersonLogResultClass;
+
+GType i_face_log_count_person_log_result_get_type (void);
+#define TYPE_I_FACE_LOG_COUNT_PERSON_LOG_RESULT (i_face_log_count_person_log_result_get_type())
+#define I_FACE_LOG_COUNT_PERSON_LOG_RESULT(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_I_FACE_LOG_COUNT_PERSON_LOG_RESULT, IFaceLogCountPersonLogResult))
+#define I_FACE_LOG_COUNT_PERSON_LOG_RESULT_CLASS(c) (G_TYPE_CHECK_CLASS_CAST ((c), _TYPE_I_FACE_LOG_COUNT_PERSON_LOG_RESULT, IFaceLogCountPersonLogResultClass))
+#define IS_I_FACE_LOG_COUNT_PERSON_LOG_RESULT(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_I_FACE_LOG_COUNT_PERSON_LOG_RESULT))
+#define IS_I_FACE_LOG_COUNT_PERSON_LOG_RESULT_CLASS(c) (G_TYPE_CHECK_CLASS_TYPE ((c), TYPE_I_FACE_LOG_COUNT_PERSON_LOG_RESULT))
+#define I_FACE_LOG_COUNT_PERSON_LOG_RESULT_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_I_FACE_LOG_COUNT_PERSON_LOG_RESULT, IFaceLogCountPersonLogResultClass))
+
+/* struct IFaceLogCountPersonLogTimeStrArgs */
+struct _IFaceLogCountPersonLogTimeStrArgs
+{ 
+  ThriftStruct parent; 
+
+  /* public */
+  gint32 personId;
+  gchar * startDate;
+  gboolean __isset_startDate;
+  gchar * endDate;
+  gboolean __isset_endDate;
+};
+typedef struct _IFaceLogCountPersonLogTimeStrArgs IFaceLogCountPersonLogTimeStrArgs;
+
+struct _IFaceLogCountPersonLogTimeStrArgsClass
+{
+  ThriftStructClass parent;
+};
+typedef struct _IFaceLogCountPersonLogTimeStrArgsClass IFaceLogCountPersonLogTimeStrArgsClass;
+
+GType i_face_log_count_person_log_time_str_args_get_type (void);
+#define TYPE_I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_ARGS (i_face_log_count_person_log_time_str_args_get_type())
+#define I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_ARGS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_ARGS, IFaceLogCountPersonLogTimeStrArgs))
+#define I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_ARGS_CLASS(c) (G_TYPE_CHECK_CLASS_CAST ((c), _TYPE_I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_ARGS, IFaceLogCountPersonLogTimeStrArgsClass))
+#define IS_I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_ARGS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_ARGS))
+#define IS_I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_ARGS_CLASS(c) (G_TYPE_CHECK_CLASS_TYPE ((c), TYPE_I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_ARGS))
+#define I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_ARGS_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_ARGS, IFaceLogCountPersonLogTimeStrArgsClass))
+
+/* struct IFaceLogCountPersonLogTimeStrResult */
+struct _IFaceLogCountPersonLogTimeStrResult
+{ 
+  ThriftStruct parent; 
+
+  /* public */
+  GHashTable * success;
+  gboolean __isset_success;
+  ServiceRuntimeException * ex1;
+  gboolean __isset_ex1;
+};
+typedef struct _IFaceLogCountPersonLogTimeStrResult IFaceLogCountPersonLogTimeStrResult;
+
+struct _IFaceLogCountPersonLogTimeStrResultClass
+{
+  ThriftStructClass parent;
+};
+typedef struct _IFaceLogCountPersonLogTimeStrResultClass IFaceLogCountPersonLogTimeStrResultClass;
+
+GType i_face_log_count_person_log_time_str_result_get_type (void);
+#define TYPE_I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_RESULT (i_face_log_count_person_log_time_str_result_get_type())
+#define I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_RESULT(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_RESULT, IFaceLogCountPersonLogTimeStrResult))
+#define I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_RESULT_CLASS(c) (G_TYPE_CHECK_CLASS_CAST ((c), _TYPE_I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_RESULT, IFaceLogCountPersonLogTimeStrResultClass))
+#define IS_I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_RESULT(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_RESULT))
+#define IS_I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_RESULT_CLASS(c) (G_TYPE_CHECK_CLASS_TYPE ((c), TYPE_I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_RESULT))
+#define I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_RESULT_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_RESULT, IFaceLogCountPersonLogTimeStrResultClass))
 
 /* struct IFaceLogDeleteAllFeaturesByPersonIdArgs */
 struct _IFaceLogDeleteAllFeaturesByPersonIdArgs

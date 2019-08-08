@@ -245,6 +245,16 @@ public class FacelogDefaultImpl implements IFaceLog {
 	}
 
 	@Override
+	public Map<String, Integer> countPersonLog(int personId, Long startDate, Long endDate) {
+		return null;
+	}
+
+	@Override
+	public Map<String, Integer> countPersonLog(int personId, String startDate, String endDate) {
+		return null;
+	}
+
+	@Override
 	public List<LogLightBean> loadLogLightByVerifyTime(long timestamp, int startRow, int numRows) {
 		return null;
 	}

@@ -7538,6 +7538,7 @@ enum _PersonBeanProperties
   PROP_PERSON_BEAN_PAPERS_NUM,
   PROP_PERSON_BEAN_IMAGE_MD5,
   PROP_PERSON_BEAN_EXPIRY_DATE,
+  PROP_PERSON_BEAN_ACTIVATED_DATE,
   PROP_PERSON_BEAN_REMARK,
   PROP_PERSON_BEAN_EXT_BIN,
   PROP_PERSON_BEAN_EXT_TXT,
@@ -7823,6 +7824,19 @@ person_bean_read (ThriftStruct *object, ThriftProtocol *protocol, GError **error
         }
         break;
       case 16:
+        if (ftype == T_I64)
+        {
+          if ((ret = thrift_protocol_read_i64 (protocol, &this_object->activatedDate, error)) < 0)
+            return -1;
+          xfer += ret;
+          this_object->__isset_activatedDate = TRUE;
+        } else {
+          if ((ret = thrift_protocol_skip (protocol, ftype, error)) < 0)
+            return -1;
+          xfer += ret;
+        }
+        break;
+      case 17:
         if (ftype == T_STRING)
         {
           if (this_object->remark != NULL)
@@ -7841,7 +7855,7 @@ person_bean_read (ThriftStruct *object, ThriftProtocol *protocol, GError **error
           xfer += ret;
         }
         break;
-      case 17:
+      case 18:
         if (ftype == T_STRING)
         {
           if (this_object->extBin != NULL)
@@ -7863,7 +7877,7 @@ person_bean_read (ThriftStruct *object, ThriftProtocol *protocol, GError **error
           xfer += ret;
         }
         break;
-      case 18:
+      case 19:
         if (ftype == T_STRING)
         {
           if (this_object->extTxt != NULL)
@@ -7882,7 +7896,7 @@ person_bean_read (ThriftStruct *object, ThriftProtocol *protocol, GError **error
           xfer += ret;
         }
         break;
-      case 19:
+      case 20:
         if (ftype == T_I64)
         {
           if ((ret = thrift_protocol_read_i64 (protocol, &this_object->createTime, error)) < 0)
@@ -7895,7 +7909,7 @@ person_bean_read (ThriftStruct *object, ThriftProtocol *protocol, GError **error
           xfer += ret;
         }
         break;
-      case 20:
+      case 21:
         if (ftype == T_I64)
         {
           if ((ret = thrift_protocol_read_i64 (protocol, &this_object->updateTime, error)) < 0)
@@ -8135,8 +8149,20 @@ person_bean_write (ThriftStruct *object, ThriftProtocol *protocol, GError **erro
       return -1;
     xfer += ret;
   }
+  if (this_object->__isset_activatedDate == TRUE) {
+    if ((ret = thrift_protocol_write_field_begin (protocol, "activatedDate", T_I64, 16, error)) < 0)
+      return -1;
+    xfer += ret;
+    if ((ret = thrift_protocol_write_i64 (protocol, this_object->activatedDate, error)) < 0)
+      return -1;
+    xfer += ret;
+
+    if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
+      return -1;
+    xfer += ret;
+  }
   if (this_object->__isset_remark == TRUE) {
-    if ((ret = thrift_protocol_write_field_begin (protocol, "remark", T_STRING, 16, error)) < 0)
+    if ((ret = thrift_protocol_write_field_begin (protocol, "remark", T_STRING, 17, error)) < 0)
       return -1;
     xfer += ret;
     if ((ret = thrift_protocol_write_string (protocol, this_object->remark, error)) < 0)
@@ -8148,7 +8174,7 @@ person_bean_write (ThriftStruct *object, ThriftProtocol *protocol, GError **erro
     xfer += ret;
   }
   if (this_object->__isset_extBin == TRUE) {
-    if ((ret = thrift_protocol_write_field_begin (protocol, "extBin", T_STRING, 17, error)) < 0)
+    if ((ret = thrift_protocol_write_field_begin (protocol, "extBin", T_STRING, 18, error)) < 0)
       return -1;
     xfer += ret;
     if ((ret = thrift_protocol_write_binary (protocol, this_object->extBin ? ((GByteArray *) this_object->extBin)->data : NULL, this_object->extBin ? ((GByteArray *) this_object->extBin)->len : 0, error)) < 0)
@@ -8160,7 +8186,7 @@ person_bean_write (ThriftStruct *object, ThriftProtocol *protocol, GError **erro
     xfer += ret;
   }
   if (this_object->__isset_extTxt == TRUE) {
-    if ((ret = thrift_protocol_write_field_begin (protocol, "extTxt", T_STRING, 18, error)) < 0)
+    if ((ret = thrift_protocol_write_field_begin (protocol, "extTxt", T_STRING, 19, error)) < 0)
       return -1;
     xfer += ret;
     if ((ret = thrift_protocol_write_string (protocol, this_object->extTxt, error)) < 0)
@@ -8172,7 +8198,7 @@ person_bean_write (ThriftStruct *object, ThriftProtocol *protocol, GError **erro
     xfer += ret;
   }
   if (this_object->__isset_createTime == TRUE) {
-    if ((ret = thrift_protocol_write_field_begin (protocol, "createTime", T_I64, 19, error)) < 0)
+    if ((ret = thrift_protocol_write_field_begin (protocol, "createTime", T_I64, 20, error)) < 0)
       return -1;
     xfer += ret;
     if ((ret = thrift_protocol_write_i64 (protocol, this_object->createTime, error)) < 0)
@@ -8184,7 +8210,7 @@ person_bean_write (ThriftStruct *object, ThriftProtocol *protocol, GError **erro
     xfer += ret;
   }
   if (this_object->__isset_updateTime == TRUE) {
-    if ((ret = thrift_protocol_write_field_begin (protocol, "updateTime", T_I64, 20, error)) < 0)
+    if ((ret = thrift_protocol_write_field_begin (protocol, "updateTime", T_I64, 21, error)) < 0)
       return -1;
     xfer += ret;
     if ((ret = thrift_protocol_write_i64 (protocol, this_object->updateTime, error)) < 0)
@@ -8297,6 +8323,11 @@ person_bean_set_property (GObject *object,
       self->__isset_expiryDate = TRUE;
       break;
 
+    case PROP_PERSON_BEAN_ACTIVATED_DATE:
+      self->activatedDate = g_value_get_int64 (value);
+      self->__isset_activatedDate = TRUE;
+      break;
+
     case PROP_PERSON_BEAN_REMARK:
       if (self->remark != NULL)
         g_free (self->remark);
@@ -8404,6 +8435,10 @@ person_bean_get_property (GObject *object,
       g_value_set_int64 (value, self->expiryDate);
       break;
 
+    case PROP_PERSON_BEAN_ACTIVATED_DATE:
+      g_value_set_int64 (value, self->activatedDate);
+      break;
+
     case PROP_PERSON_BEAN_REMARK:
       g_value_set_string (value, self->remark);
       break;
@@ -8462,6 +8497,8 @@ person_bean_instance_init (PersonBean * object)
   object->__isset_imageMd5 = FALSE;
   object->expiryDate = 0;
   object->__isset_expiryDate = FALSE;
+  object->activatedDate = 0;
+  object->__isset_activatedDate = FALSE;
   object->remark = NULL;
   object->__isset_remark = FALSE;
   object->extBin = NULL;
@@ -8682,6 +8719,17 @@ person_bean_class_init (PersonBeanClass * cls)
     (gobject_class,
      PROP_PERSON_BEAN_EXPIRY_DATE,
      g_param_spec_int64 ("expiryDate",
+                         NULL,
+                         NULL,
+                         G_MININT64,
+                         G_MAXINT64,
+                         0,
+                         G_PARAM_READWRITE));
+
+  g_object_class_install_property
+    (gobject_class,
+     PROP_PERSON_BEAN_ACTIVATED_DATE,
+     g_param_spec_int64 ("activatedDate",
                          NULL,
                          NULL,
                          G_MININT64,
@@ -27589,6 +27637,1418 @@ i_face_log_count_person_group_by_where_result_get_type (void)
   return type;
 }
 
+enum _IFaceLogCountPersonLogArgsProperties
+{
+  PROP_I_FACE_LOG_COUNT_PERSON_LOG_ARGS_0,
+  PROP_I_FACE_LOG_COUNT_PERSON_LOG_ARGS_PERSON_ID,
+  PROP_I_FACE_LOG_COUNT_PERSON_LOG_ARGS_START_DATE,
+  PROP_I_FACE_LOG_COUNT_PERSON_LOG_ARGS_END_DATE
+};
+
+/* reads a i_face_log_count_person_log_args object */
+static gint32
+i_face_log_count_person_log_args_read (ThriftStruct *object, ThriftProtocol *protocol, GError **error)
+{
+  gint32 ret;
+  gint32 xfer = 0;
+  gchar *name = NULL;
+  ThriftType ftype;
+  gint16 fid;
+  guint32 len = 0;
+  gpointer data = NULL;
+  IFaceLogCountPersonLogArgs * this_object = I_FACE_LOG_COUNT_PERSON_LOG_ARGS(object);
+  gboolean isset_personId = FALSE;
+
+  /* satisfy -Wall in case these aren't used */
+  THRIFT_UNUSED_VAR (len);
+  THRIFT_UNUSED_VAR (data);
+  THRIFT_UNUSED_VAR (this_object);
+
+  /* read the struct begin marker */
+  if ((ret = thrift_protocol_read_struct_begin (protocol, &name, error)) < 0)
+  {
+    if (name) g_free (name);
+    return -1;
+  }
+  xfer += ret;
+  if (name) g_free (name);
+  name = NULL;
+
+  /* read the struct fields */
+  while (1)
+  {
+    /* read the beginning of a field */
+    if ((ret = thrift_protocol_read_field_begin (protocol, &name, &ftype, &fid, error)) < 0)
+    {
+      if (name) g_free (name);
+      return -1;
+    }
+    xfer += ret;
+    if (name) g_free (name);
+    name = NULL;
+
+    /* break if we get a STOP field */
+    if (ftype == T_STOP)
+    {
+      break;
+    }
+
+    switch (fid)
+    {
+      case 1:
+        if (ftype == T_I32)
+        {
+          if ((ret = thrift_protocol_read_i32 (protocol, &this_object->personId, error)) < 0)
+            return -1;
+          xfer += ret;
+          isset_personId = TRUE;
+        } else {
+          if ((ret = thrift_protocol_skip (protocol, ftype, error)) < 0)
+            return -1;
+          xfer += ret;
+        }
+        break;
+      case 2:
+        if (ftype == T_I64)
+        {
+          if ((ret = thrift_protocol_read_i64 (protocol, &this_object->startDate, error)) < 0)
+            return -1;
+          xfer += ret;
+          this_object->__isset_startDate = TRUE;
+        } else {
+          if ((ret = thrift_protocol_skip (protocol, ftype, error)) < 0)
+            return -1;
+          xfer += ret;
+        }
+        break;
+      case 3:
+        if (ftype == T_I64)
+        {
+          if ((ret = thrift_protocol_read_i64 (protocol, &this_object->endDate, error)) < 0)
+            return -1;
+          xfer += ret;
+          this_object->__isset_endDate = TRUE;
+        } else {
+          if ((ret = thrift_protocol_skip (protocol, ftype, error)) < 0)
+            return -1;
+          xfer += ret;
+        }
+        break;
+      default:
+        if ((ret = thrift_protocol_skip (protocol, ftype, error)) < 0)
+          return -1;
+        xfer += ret;
+        break;
+    }
+    if ((ret = thrift_protocol_read_field_end (protocol, error)) < 0)
+      return -1;
+    xfer += ret;
+  }
+
+  if ((ret = thrift_protocol_read_struct_end (protocol, error)) < 0)
+    return -1;
+  xfer += ret;
+
+  if (!isset_personId)
+  {
+    g_set_error (error, THRIFT_PROTOCOL_ERROR,
+                 THRIFT_PROTOCOL_ERROR_INVALID_DATA,
+                 "missing field");
+    return -1;
+  }
+
+  return xfer;
+}
+
+static gint32
+i_face_log_count_person_log_args_write (ThriftStruct *object, ThriftProtocol *protocol, GError **error)
+{
+  gint32 ret;
+  gint32 xfer = 0;
+
+  IFaceLogCountPersonLogArgs * this_object = I_FACE_LOG_COUNT_PERSON_LOG_ARGS(object);
+  THRIFT_UNUSED_VAR (this_object);
+  if ((ret = thrift_protocol_write_struct_begin (protocol, "IFaceLogCountPersonLogArgs", error)) < 0)
+    return -1;
+  xfer += ret;
+  if ((ret = thrift_protocol_write_field_begin (protocol, "personId", T_I32, 1, error)) < 0)
+    return -1;
+  xfer += ret;
+  if ((ret = thrift_protocol_write_i32 (protocol, this_object->personId, error)) < 0)
+    return -1;
+  xfer += ret;
+
+  if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
+    return -1;
+  xfer += ret;
+  if ((ret = thrift_protocol_write_field_begin (protocol, "startDate", T_I64, 2, error)) < 0)
+    return -1;
+  xfer += ret;
+  if ((ret = thrift_protocol_write_i64 (protocol, this_object->startDate, error)) < 0)
+    return -1;
+  xfer += ret;
+
+  if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
+    return -1;
+  xfer += ret;
+  if ((ret = thrift_protocol_write_field_begin (protocol, "endDate", T_I64, 3, error)) < 0)
+    return -1;
+  xfer += ret;
+  if ((ret = thrift_protocol_write_i64 (protocol, this_object->endDate, error)) < 0)
+    return -1;
+  xfer += ret;
+
+  if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
+    return -1;
+  xfer += ret;
+  if ((ret = thrift_protocol_write_field_stop (protocol, error)) < 0)
+    return -1;
+  xfer += ret;
+  if ((ret = thrift_protocol_write_struct_end (protocol, error)) < 0)
+    return -1;
+  xfer += ret;
+
+  return xfer;
+}
+
+static void
+i_face_log_count_person_log_args_set_property (GObject *object,
+                                               guint property_id,
+                                               const GValue *value,
+                                               GParamSpec *pspec)
+{
+  IFaceLogCountPersonLogArgs *self = I_FACE_LOG_COUNT_PERSON_LOG_ARGS (object);
+
+  switch (property_id)
+  {
+    case PROP_I_FACE_LOG_COUNT_PERSON_LOG_ARGS_PERSON_ID:
+      self->personId = g_value_get_int (value);
+      break;
+
+    case PROP_I_FACE_LOG_COUNT_PERSON_LOG_ARGS_START_DATE:
+      self->startDate = g_value_get_int64 (value);
+      self->__isset_startDate = TRUE;
+      break;
+
+    case PROP_I_FACE_LOG_COUNT_PERSON_LOG_ARGS_END_DATE:
+      self->endDate = g_value_get_int64 (value);
+      self->__isset_endDate = TRUE;
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+      break;
+  }
+}
+
+static void
+i_face_log_count_person_log_args_get_property (GObject *object,
+                                               guint property_id,
+                                               GValue *value,
+                                               GParamSpec *pspec)
+{
+  IFaceLogCountPersonLogArgs *self = I_FACE_LOG_COUNT_PERSON_LOG_ARGS (object);
+
+  switch (property_id)
+  {
+    case PROP_I_FACE_LOG_COUNT_PERSON_LOG_ARGS_PERSON_ID:
+      g_value_set_int (value, self->personId);
+      break;
+
+    case PROP_I_FACE_LOG_COUNT_PERSON_LOG_ARGS_START_DATE:
+      g_value_set_int64 (value, self->startDate);
+      break;
+
+    case PROP_I_FACE_LOG_COUNT_PERSON_LOG_ARGS_END_DATE:
+      g_value_set_int64 (value, self->endDate);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+      break;
+  }
+}
+
+static void 
+i_face_log_count_person_log_args_instance_init (IFaceLogCountPersonLogArgs * object)
+{
+  /* satisfy -Wall */
+  THRIFT_UNUSED_VAR (object);
+  object->personId = 0;
+  object->startDate = 0;
+  object->__isset_startDate = FALSE;
+  object->endDate = 0;
+  object->__isset_endDate = FALSE;
+}
+
+static void 
+i_face_log_count_person_log_args_finalize (GObject *object)
+{
+  IFaceLogCountPersonLogArgs *tobject = I_FACE_LOG_COUNT_PERSON_LOG_ARGS (object);
+
+  /* satisfy -Wall in case we don't use tobject */
+  THRIFT_UNUSED_VAR (tobject);
+}
+
+static void
+i_face_log_count_person_log_args_class_init (IFaceLogCountPersonLogArgsClass * cls)
+{
+  GObjectClass *gobject_class = G_OBJECT_CLASS (cls);
+  ThriftStructClass *struct_class = THRIFT_STRUCT_CLASS (cls);
+
+  struct_class->read = i_face_log_count_person_log_args_read;
+  struct_class->write = i_face_log_count_person_log_args_write;
+
+  gobject_class->finalize = i_face_log_count_person_log_args_finalize;
+  gobject_class->get_property = i_face_log_count_person_log_args_get_property;
+  gobject_class->set_property = i_face_log_count_person_log_args_set_property;
+
+  g_object_class_install_property
+    (gobject_class,
+     PROP_I_FACE_LOG_COUNT_PERSON_LOG_ARGS_PERSON_ID,
+     g_param_spec_int ("personId",
+                       NULL,
+                       NULL,
+                       G_MININT32,
+                       G_MAXINT32,
+                       0,
+                       G_PARAM_READWRITE));
+
+  g_object_class_install_property
+    (gobject_class,
+     PROP_I_FACE_LOG_COUNT_PERSON_LOG_ARGS_START_DATE,
+     g_param_spec_int64 ("startDate",
+                         NULL,
+                         NULL,
+                         G_MININT64,
+                         G_MAXINT64,
+                         0,
+                         G_PARAM_READWRITE));
+
+  g_object_class_install_property
+    (gobject_class,
+     PROP_I_FACE_LOG_COUNT_PERSON_LOG_ARGS_END_DATE,
+     g_param_spec_int64 ("endDate",
+                         NULL,
+                         NULL,
+                         G_MININT64,
+                         G_MAXINT64,
+                         0,
+                         G_PARAM_READWRITE));
+}
+
+GType
+i_face_log_count_person_log_args_get_type (void)
+{
+  static GType type = 0;
+
+  if (type == 0) 
+  {
+    static const GTypeInfo type_info = 
+    {
+      sizeof (IFaceLogCountPersonLogArgsClass),
+      NULL, /* base_init */
+      NULL, /* base_finalize */
+      (GClassInitFunc) i_face_log_count_person_log_args_class_init,
+      NULL, /* class_finalize */
+      NULL, /* class_data */
+      sizeof (IFaceLogCountPersonLogArgs),
+      0, /* n_preallocs */
+      (GInstanceInitFunc) i_face_log_count_person_log_args_instance_init,
+      NULL, /* value_table */
+    };
+
+    type = g_type_register_static (THRIFT_TYPE_STRUCT, 
+                                   "IFaceLogCountPersonLogArgsType",
+                                   &type_info, 0);
+  }
+
+  return type;
+}
+
+enum _IFaceLogCountPersonLogResultProperties
+{
+  PROP_I_FACE_LOG_COUNT_PERSON_LOG_RESULT_0,
+  PROP_I_FACE_LOG_COUNT_PERSON_LOG_RESULT_SUCCESS,
+  PROP_I_FACE_LOG_COUNT_PERSON_LOG_RESULT_EX1
+};
+
+/* reads a i_face_log_count_person_log_result object */
+static gint32
+i_face_log_count_person_log_result_read (ThriftStruct *object, ThriftProtocol *protocol, GError **error)
+{
+  gint32 ret;
+  gint32 xfer = 0;
+  gchar *name = NULL;
+  ThriftType ftype;
+  gint16 fid;
+  guint32 len = 0;
+  gpointer data = NULL;
+  IFaceLogCountPersonLogResult * this_object = I_FACE_LOG_COUNT_PERSON_LOG_RESULT(object);
+
+  /* satisfy -Wall in case these aren't used */
+  THRIFT_UNUSED_VAR (len);
+  THRIFT_UNUSED_VAR (data);
+  THRIFT_UNUSED_VAR (this_object);
+
+  /* read the struct begin marker */
+  if ((ret = thrift_protocol_read_struct_begin (protocol, &name, error)) < 0)
+  {
+    if (name) g_free (name);
+    return -1;
+  }
+  xfer += ret;
+  if (name) g_free (name);
+  name = NULL;
+
+  /* read the struct fields */
+  while (1)
+  {
+    /* read the beginning of a field */
+    if ((ret = thrift_protocol_read_field_begin (protocol, &name, &ftype, &fid, error)) < 0)
+    {
+      if (name) g_free (name);
+      return -1;
+    }
+    xfer += ret;
+    if (name) g_free (name);
+    name = NULL;
+
+    /* break if we get a STOP field */
+    if (ftype == T_STOP)
+    {
+      break;
+    }
+
+    switch (fid)
+    {
+      case 0:
+        if (ftype == T_MAP)
+        {
+          {
+            guint32 size;
+            guint32 i;
+            ThriftType key_type;
+            ThriftType value_type;
+
+            /* read the map begin marker */
+            if ((ret = thrift_protocol_read_map_begin (protocol, &key_type, &value_type, &size, error)) < 0)
+              return -1;
+            xfer += ret;
+
+            /* iterate through each of the map's fields */
+            for (i = 0; i < size; i++)
+            {
+              gchar * key20 = NULL;
+              gint32* val21 = g_new (gint32, 1);
+              if (key20 != NULL)
+              {
+                g_free(key20);
+                key20 = NULL;
+              }
+
+              if ((ret = thrift_protocol_read_string (protocol, &key20, error)) < 0)
+                return -1;
+              xfer += ret;
+              if ((ret = thrift_protocol_read_i32 (protocol, &*val21, error)) < 0)
+                return -1;
+              xfer += ret;
+              if (this_object->success && key20)
+                g_hash_table_insert ((GHashTable *)this_object->success, (gpointer) key20, (gpointer) val21);
+            }
+
+            /* read the map end marker */
+            if ((ret = thrift_protocol_read_map_end (protocol, error)) < 0)
+              return -1;
+            xfer += ret;
+          }
+          this_object->__isset_success = TRUE;
+        } else {
+          if ((ret = thrift_protocol_skip (protocol, ftype, error)) < 0)
+            return -1;
+          xfer += ret;
+        }
+        break;
+      case 1:
+        if (ftype == T_STRUCT)
+        {
+          /* This struct is an exception */
+          if ( this_object->ex1 != NULL)
+          {
+            g_object_unref (this_object->ex1);
+          }
+          this_object->ex1 = g_object_new (TYPE_SERVICE_RUNTIME_EXCEPTION, NULL);
+          if ((ret = thrift_struct_read (THRIFT_STRUCT (this_object->ex1), protocol, error)) < 0)
+          {
+            g_object_unref (this_object->ex1);
+            this_object->ex1 = NULL;
+            return -1;
+          }
+          xfer += ret;
+          this_object->__isset_ex1 = TRUE;
+        } else {
+          if ((ret = thrift_protocol_skip (protocol, ftype, error)) < 0)
+            return -1;
+          xfer += ret;
+        }
+        break;
+      default:
+        if ((ret = thrift_protocol_skip (protocol, ftype, error)) < 0)
+          return -1;
+        xfer += ret;
+        break;
+    }
+    if ((ret = thrift_protocol_read_field_end (protocol, error)) < 0)
+      return -1;
+    xfer += ret;
+  }
+
+  if ((ret = thrift_protocol_read_struct_end (protocol, error)) < 0)
+    return -1;
+  xfer += ret;
+
+  return xfer;
+}
+
+static gint32
+i_face_log_count_person_log_result_write (ThriftStruct *object, ThriftProtocol *protocol, GError **error)
+{
+  gint32 ret;
+  gint32 xfer = 0;
+
+  IFaceLogCountPersonLogResult * this_object = I_FACE_LOG_COUNT_PERSON_LOG_RESULT(object);
+  THRIFT_UNUSED_VAR (this_object);
+  if ((ret = thrift_protocol_write_struct_begin (protocol, "IFaceLogCountPersonLogResult", error)) < 0)
+    return -1;
+  xfer += ret;
+  if (this_object->__isset_success == TRUE) {
+    if ((ret = thrift_protocol_write_field_begin (protocol, "success", T_MAP, 0, error)) < 0)
+      return -1;
+    xfer += ret;
+    {
+      gchar * key22 = NULL;
+      gint32* val23 = NULL;
+      GList *key_list = NULL, *iter = NULL;
+      gchar ** keys;
+      int i = 0, key_count;
+
+      if ((ret = thrift_protocol_write_map_begin (protocol, T_STRING, T_I32, this_object->success ? (gint32) g_hash_table_size ((GHashTable *) this_object->success) : 0, error)) < 0)
+        return -1;
+      xfer += ret;
+      if (this_object->success)
+        g_hash_table_foreach ((GHashTable *) this_object->success, thrift_hash_table_get_keys, &key_list);
+      key_count = g_list_length (key_list);
+      keys = g_newa (gchar *, key_count);
+      for (iter = g_list_first (key_list); iter; iter = iter->next)
+        keys[i++] = (gchar *) iter->data;
+      g_list_free (key_list);
+
+      for (i = 0; i < key_count; ++i)
+      {
+        key22 = keys[i];
+        val23 = (gint32*) g_hash_table_lookup (((GHashTable *) this_object->success), (gpointer) key22);
+
+        if ((ret = thrift_protocol_write_string (protocol,  key22, error)) < 0)
+          return -1;
+        xfer += ret;
+
+        if ((ret = thrift_protocol_write_i32 (protocol, * val23, error)) < 0)
+          return -1;
+        xfer += ret;
+
+      }
+      if ((ret = thrift_protocol_write_map_end (protocol, error)) < 0)
+        return -1;
+      xfer += ret;
+    }
+    if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
+      return -1;
+    xfer += ret;
+  }
+  if (this_object->__isset_ex1 == TRUE) {
+    if ((ret = thrift_protocol_write_field_begin (protocol, "ex1", T_STRUCT, 1, error)) < 0)
+      return -1;
+    xfer += ret;
+    if ((ret = thrift_struct_write (THRIFT_STRUCT (this_object->ex1), protocol, error)) < 0)
+      return -1;
+    xfer += ret;
+
+    if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
+      return -1;
+    xfer += ret;
+  }
+  if ((ret = thrift_protocol_write_field_stop (protocol, error)) < 0)
+    return -1;
+  xfer += ret;
+  if ((ret = thrift_protocol_write_struct_end (protocol, error)) < 0)
+    return -1;
+  xfer += ret;
+
+  return xfer;
+}
+
+static void
+i_face_log_count_person_log_result_set_property (GObject *object,
+                                                 guint property_id,
+                                                 const GValue *value,
+                                                 GParamSpec *pspec)
+{
+  IFaceLogCountPersonLogResult *self = I_FACE_LOG_COUNT_PERSON_LOG_RESULT (object);
+
+  switch (property_id)
+  {
+    case PROP_I_FACE_LOG_COUNT_PERSON_LOG_RESULT_SUCCESS:
+      if (self->success != NULL)
+        g_hash_table_unref (self->success);
+      self->success = g_value_dup_boxed (value);
+      self->__isset_success = TRUE;
+      break;
+
+    case PROP_I_FACE_LOG_COUNT_PERSON_LOG_RESULT_EX1:
+      if (self->ex1 != NULL)
+        g_object_unref (self->ex1);
+      self->ex1 = g_value_dup_object (value);
+      self->__isset_ex1 = TRUE;
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+      break;
+  }
+}
+
+static void
+i_face_log_count_person_log_result_get_property (GObject *object,
+                                                 guint property_id,
+                                                 GValue *value,
+                                                 GParamSpec *pspec)
+{
+  IFaceLogCountPersonLogResult *self = I_FACE_LOG_COUNT_PERSON_LOG_RESULT (object);
+
+  switch (property_id)
+  {
+    case PROP_I_FACE_LOG_COUNT_PERSON_LOG_RESULT_SUCCESS:
+      g_value_set_boxed (value, self->success);
+      break;
+
+    case PROP_I_FACE_LOG_COUNT_PERSON_LOG_RESULT_EX1:
+      g_value_set_object (value, self->ex1);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+      break;
+  }
+}
+
+static void 
+i_face_log_count_person_log_result_instance_init (IFaceLogCountPersonLogResult * object)
+{
+  /* satisfy -Wall */
+  THRIFT_UNUSED_VAR (object);
+  object->success = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
+  object->__isset_success = FALSE;
+  object->ex1 = NULL;
+  object->__isset_ex1 = FALSE;
+}
+
+static void 
+i_face_log_count_person_log_result_finalize (GObject *object)
+{
+  IFaceLogCountPersonLogResult *tobject = I_FACE_LOG_COUNT_PERSON_LOG_RESULT (object);
+
+  /* satisfy -Wall in case we don't use tobject */
+  THRIFT_UNUSED_VAR (tobject);
+  if (tobject->success != NULL)
+  {
+    g_hash_table_destroy (tobject->success);
+    tobject->success = NULL;
+  }
+  if (tobject->ex1 != NULL)
+  {
+    g_object_unref(tobject->ex1);
+    tobject->ex1 = NULL;
+  }
+}
+
+static void
+i_face_log_count_person_log_result_class_init (IFaceLogCountPersonLogResultClass * cls)
+{
+  GObjectClass *gobject_class = G_OBJECT_CLASS (cls);
+  ThriftStructClass *struct_class = THRIFT_STRUCT_CLASS (cls);
+
+  struct_class->read = i_face_log_count_person_log_result_read;
+  struct_class->write = i_face_log_count_person_log_result_write;
+
+  gobject_class->finalize = i_face_log_count_person_log_result_finalize;
+  gobject_class->get_property = i_face_log_count_person_log_result_get_property;
+  gobject_class->set_property = i_face_log_count_person_log_result_set_property;
+
+  g_object_class_install_property
+    (gobject_class,
+     PROP_I_FACE_LOG_COUNT_PERSON_LOG_RESULT_SUCCESS,
+     g_param_spec_boxed ("success",
+                         NULL,
+                         NULL,
+                         G_TYPE_HASH_TABLE,
+                         G_PARAM_READWRITE));
+
+  g_object_class_install_property
+    (gobject_class,
+     PROP_I_FACE_LOG_COUNT_PERSON_LOG_RESULT_EX1,
+     g_param_spec_object ("ex1",
+                         NULL,
+                         NULL,
+                         TYPE_SERVICE_RUNTIME_EXCEPTION,
+                         G_PARAM_READWRITE));
+}
+
+GType
+i_face_log_count_person_log_result_get_type (void)
+{
+  static GType type = 0;
+
+  if (type == 0) 
+  {
+    static const GTypeInfo type_info = 
+    {
+      sizeof (IFaceLogCountPersonLogResultClass),
+      NULL, /* base_init */
+      NULL, /* base_finalize */
+      (GClassInitFunc) i_face_log_count_person_log_result_class_init,
+      NULL, /* class_finalize */
+      NULL, /* class_data */
+      sizeof (IFaceLogCountPersonLogResult),
+      0, /* n_preallocs */
+      (GInstanceInitFunc) i_face_log_count_person_log_result_instance_init,
+      NULL, /* value_table */
+    };
+
+    type = g_type_register_static (THRIFT_TYPE_STRUCT, 
+                                   "IFaceLogCountPersonLogResultType",
+                                   &type_info, 0);
+  }
+
+  return type;
+}
+
+enum _IFaceLogCountPersonLogTimeStrArgsProperties
+{
+  PROP_I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_ARGS_0,
+  PROP_I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_ARGS_PERSON_ID,
+  PROP_I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_ARGS_START_DATE,
+  PROP_I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_ARGS_END_DATE
+};
+
+/* reads a i_face_log_count_person_log_time_str_args object */
+static gint32
+i_face_log_count_person_log_time_str_args_read (ThriftStruct *object, ThriftProtocol *protocol, GError **error)
+{
+  gint32 ret;
+  gint32 xfer = 0;
+  gchar *name = NULL;
+  ThriftType ftype;
+  gint16 fid;
+  guint32 len = 0;
+  gpointer data = NULL;
+  IFaceLogCountPersonLogTimeStrArgs * this_object = I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_ARGS(object);
+  gboolean isset_personId = FALSE;
+
+  /* satisfy -Wall in case these aren't used */
+  THRIFT_UNUSED_VAR (len);
+  THRIFT_UNUSED_VAR (data);
+  THRIFT_UNUSED_VAR (this_object);
+
+  /* read the struct begin marker */
+  if ((ret = thrift_protocol_read_struct_begin (protocol, &name, error)) < 0)
+  {
+    if (name) g_free (name);
+    return -1;
+  }
+  xfer += ret;
+  if (name) g_free (name);
+  name = NULL;
+
+  /* read the struct fields */
+  while (1)
+  {
+    /* read the beginning of a field */
+    if ((ret = thrift_protocol_read_field_begin (protocol, &name, &ftype, &fid, error)) < 0)
+    {
+      if (name) g_free (name);
+      return -1;
+    }
+    xfer += ret;
+    if (name) g_free (name);
+    name = NULL;
+
+    /* break if we get a STOP field */
+    if (ftype == T_STOP)
+    {
+      break;
+    }
+
+    switch (fid)
+    {
+      case 1:
+        if (ftype == T_I32)
+        {
+          if ((ret = thrift_protocol_read_i32 (protocol, &this_object->personId, error)) < 0)
+            return -1;
+          xfer += ret;
+          isset_personId = TRUE;
+        } else {
+          if ((ret = thrift_protocol_skip (protocol, ftype, error)) < 0)
+            return -1;
+          xfer += ret;
+        }
+        break;
+      case 2:
+        if (ftype == T_STRING)
+        {
+          if (this_object->startDate != NULL)
+          {
+            g_free(this_object->startDate);
+            this_object->startDate = NULL;
+          }
+
+          if ((ret = thrift_protocol_read_string (protocol, &this_object->startDate, error)) < 0)
+            return -1;
+          xfer += ret;
+          this_object->__isset_startDate = TRUE;
+        } else {
+          if ((ret = thrift_protocol_skip (protocol, ftype, error)) < 0)
+            return -1;
+          xfer += ret;
+        }
+        break;
+      case 3:
+        if (ftype == T_STRING)
+        {
+          if (this_object->endDate != NULL)
+          {
+            g_free(this_object->endDate);
+            this_object->endDate = NULL;
+          }
+
+          if ((ret = thrift_protocol_read_string (protocol, &this_object->endDate, error)) < 0)
+            return -1;
+          xfer += ret;
+          this_object->__isset_endDate = TRUE;
+        } else {
+          if ((ret = thrift_protocol_skip (protocol, ftype, error)) < 0)
+            return -1;
+          xfer += ret;
+        }
+        break;
+      default:
+        if ((ret = thrift_protocol_skip (protocol, ftype, error)) < 0)
+          return -1;
+        xfer += ret;
+        break;
+    }
+    if ((ret = thrift_protocol_read_field_end (protocol, error)) < 0)
+      return -1;
+    xfer += ret;
+  }
+
+  if ((ret = thrift_protocol_read_struct_end (protocol, error)) < 0)
+    return -1;
+  xfer += ret;
+
+  if (!isset_personId)
+  {
+    g_set_error (error, THRIFT_PROTOCOL_ERROR,
+                 THRIFT_PROTOCOL_ERROR_INVALID_DATA,
+                 "missing field");
+    return -1;
+  }
+
+  return xfer;
+}
+
+static gint32
+i_face_log_count_person_log_time_str_args_write (ThriftStruct *object, ThriftProtocol *protocol, GError **error)
+{
+  gint32 ret;
+  gint32 xfer = 0;
+
+  IFaceLogCountPersonLogTimeStrArgs * this_object = I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_ARGS(object);
+  THRIFT_UNUSED_VAR (this_object);
+  if ((ret = thrift_protocol_write_struct_begin (protocol, "IFaceLogCountPersonLogTimeStrArgs", error)) < 0)
+    return -1;
+  xfer += ret;
+  if ((ret = thrift_protocol_write_field_begin (protocol, "personId", T_I32, 1, error)) < 0)
+    return -1;
+  xfer += ret;
+  if ((ret = thrift_protocol_write_i32 (protocol, this_object->personId, error)) < 0)
+    return -1;
+  xfer += ret;
+
+  if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
+    return -1;
+  xfer += ret;
+  if ((ret = thrift_protocol_write_field_begin (protocol, "startDate", T_STRING, 2, error)) < 0)
+    return -1;
+  xfer += ret;
+  if ((ret = thrift_protocol_write_string (protocol, this_object->startDate, error)) < 0)
+    return -1;
+  xfer += ret;
+
+  if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
+    return -1;
+  xfer += ret;
+  if ((ret = thrift_protocol_write_field_begin (protocol, "endDate", T_STRING, 3, error)) < 0)
+    return -1;
+  xfer += ret;
+  if ((ret = thrift_protocol_write_string (protocol, this_object->endDate, error)) < 0)
+    return -1;
+  xfer += ret;
+
+  if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
+    return -1;
+  xfer += ret;
+  if ((ret = thrift_protocol_write_field_stop (protocol, error)) < 0)
+    return -1;
+  xfer += ret;
+  if ((ret = thrift_protocol_write_struct_end (protocol, error)) < 0)
+    return -1;
+  xfer += ret;
+
+  return xfer;
+}
+
+static void
+i_face_log_count_person_log_time_str_args_set_property (GObject *object,
+                                                        guint property_id,
+                                                        const GValue *value,
+                                                        GParamSpec *pspec)
+{
+  IFaceLogCountPersonLogTimeStrArgs *self = I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_ARGS (object);
+
+  switch (property_id)
+  {
+    case PROP_I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_ARGS_PERSON_ID:
+      self->personId = g_value_get_int (value);
+      break;
+
+    case PROP_I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_ARGS_START_DATE:
+      if (self->startDate != NULL)
+        g_free (self->startDate);
+      self->startDate = g_value_dup_string (value);
+      self->__isset_startDate = TRUE;
+      break;
+
+    case PROP_I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_ARGS_END_DATE:
+      if (self->endDate != NULL)
+        g_free (self->endDate);
+      self->endDate = g_value_dup_string (value);
+      self->__isset_endDate = TRUE;
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+      break;
+  }
+}
+
+static void
+i_face_log_count_person_log_time_str_args_get_property (GObject *object,
+                                                        guint property_id,
+                                                        GValue *value,
+                                                        GParamSpec *pspec)
+{
+  IFaceLogCountPersonLogTimeStrArgs *self = I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_ARGS (object);
+
+  switch (property_id)
+  {
+    case PROP_I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_ARGS_PERSON_ID:
+      g_value_set_int (value, self->personId);
+      break;
+
+    case PROP_I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_ARGS_START_DATE:
+      g_value_set_string (value, self->startDate);
+      break;
+
+    case PROP_I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_ARGS_END_DATE:
+      g_value_set_string (value, self->endDate);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+      break;
+  }
+}
+
+static void 
+i_face_log_count_person_log_time_str_args_instance_init (IFaceLogCountPersonLogTimeStrArgs * object)
+{
+  /* satisfy -Wall */
+  THRIFT_UNUSED_VAR (object);
+  object->personId = 0;
+  object->startDate = NULL;
+  object->__isset_startDate = FALSE;
+  object->endDate = NULL;
+  object->__isset_endDate = FALSE;
+}
+
+static void 
+i_face_log_count_person_log_time_str_args_finalize (GObject *object)
+{
+  IFaceLogCountPersonLogTimeStrArgs *tobject = I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_ARGS (object);
+
+  /* satisfy -Wall in case we don't use tobject */
+  THRIFT_UNUSED_VAR (tobject);
+  if (tobject->startDate != NULL)
+  {
+    g_free(tobject->startDate);
+    tobject->startDate = NULL;
+  }
+  if (tobject->endDate != NULL)
+  {
+    g_free(tobject->endDate);
+    tobject->endDate = NULL;
+  }
+}
+
+static void
+i_face_log_count_person_log_time_str_args_class_init (IFaceLogCountPersonLogTimeStrArgsClass * cls)
+{
+  GObjectClass *gobject_class = G_OBJECT_CLASS (cls);
+  ThriftStructClass *struct_class = THRIFT_STRUCT_CLASS (cls);
+
+  struct_class->read = i_face_log_count_person_log_time_str_args_read;
+  struct_class->write = i_face_log_count_person_log_time_str_args_write;
+
+  gobject_class->finalize = i_face_log_count_person_log_time_str_args_finalize;
+  gobject_class->get_property = i_face_log_count_person_log_time_str_args_get_property;
+  gobject_class->set_property = i_face_log_count_person_log_time_str_args_set_property;
+
+  g_object_class_install_property
+    (gobject_class,
+     PROP_I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_ARGS_PERSON_ID,
+     g_param_spec_int ("personId",
+                       NULL,
+                       NULL,
+                       G_MININT32,
+                       G_MAXINT32,
+                       0,
+                       G_PARAM_READWRITE));
+
+  g_object_class_install_property
+    (gobject_class,
+     PROP_I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_ARGS_START_DATE,
+     g_param_spec_string ("startDate",
+                          NULL,
+                          NULL,
+                          NULL,
+                          G_PARAM_READWRITE));
+
+  g_object_class_install_property
+    (gobject_class,
+     PROP_I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_ARGS_END_DATE,
+     g_param_spec_string ("endDate",
+                          NULL,
+                          NULL,
+                          NULL,
+                          G_PARAM_READWRITE));
+}
+
+GType
+i_face_log_count_person_log_time_str_args_get_type (void)
+{
+  static GType type = 0;
+
+  if (type == 0) 
+  {
+    static const GTypeInfo type_info = 
+    {
+      sizeof (IFaceLogCountPersonLogTimeStrArgsClass),
+      NULL, /* base_init */
+      NULL, /* base_finalize */
+      (GClassInitFunc) i_face_log_count_person_log_time_str_args_class_init,
+      NULL, /* class_finalize */
+      NULL, /* class_data */
+      sizeof (IFaceLogCountPersonLogTimeStrArgs),
+      0, /* n_preallocs */
+      (GInstanceInitFunc) i_face_log_count_person_log_time_str_args_instance_init,
+      NULL, /* value_table */
+    };
+
+    type = g_type_register_static (THRIFT_TYPE_STRUCT, 
+                                   "IFaceLogCountPersonLogTimeStrArgsType",
+                                   &type_info, 0);
+  }
+
+  return type;
+}
+
+enum _IFaceLogCountPersonLogTimeStrResultProperties
+{
+  PROP_I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_RESULT_0,
+  PROP_I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_RESULT_SUCCESS,
+  PROP_I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_RESULT_EX1
+};
+
+/* reads a i_face_log_count_person_log_time_str_result object */
+static gint32
+i_face_log_count_person_log_time_str_result_read (ThriftStruct *object, ThriftProtocol *protocol, GError **error)
+{
+  gint32 ret;
+  gint32 xfer = 0;
+  gchar *name = NULL;
+  ThriftType ftype;
+  gint16 fid;
+  guint32 len = 0;
+  gpointer data = NULL;
+  IFaceLogCountPersonLogTimeStrResult * this_object = I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_RESULT(object);
+
+  /* satisfy -Wall in case these aren't used */
+  THRIFT_UNUSED_VAR (len);
+  THRIFT_UNUSED_VAR (data);
+  THRIFT_UNUSED_VAR (this_object);
+
+  /* read the struct begin marker */
+  if ((ret = thrift_protocol_read_struct_begin (protocol, &name, error)) < 0)
+  {
+    if (name) g_free (name);
+    return -1;
+  }
+  xfer += ret;
+  if (name) g_free (name);
+  name = NULL;
+
+  /* read the struct fields */
+  while (1)
+  {
+    /* read the beginning of a field */
+    if ((ret = thrift_protocol_read_field_begin (protocol, &name, &ftype, &fid, error)) < 0)
+    {
+      if (name) g_free (name);
+      return -1;
+    }
+    xfer += ret;
+    if (name) g_free (name);
+    name = NULL;
+
+    /* break if we get a STOP field */
+    if (ftype == T_STOP)
+    {
+      break;
+    }
+
+    switch (fid)
+    {
+      case 0:
+        if (ftype == T_MAP)
+        {
+          {
+            guint32 size;
+            guint32 i;
+            ThriftType key_type;
+            ThriftType value_type;
+
+            /* read the map begin marker */
+            if ((ret = thrift_protocol_read_map_begin (protocol, &key_type, &value_type, &size, error)) < 0)
+              return -1;
+            xfer += ret;
+
+            /* iterate through each of the map's fields */
+            for (i = 0; i < size; i++)
+            {
+              gchar * key24 = NULL;
+              gint32* val25 = g_new (gint32, 1);
+              if (key24 != NULL)
+              {
+                g_free(key24);
+                key24 = NULL;
+              }
+
+              if ((ret = thrift_protocol_read_string (protocol, &key24, error)) < 0)
+                return -1;
+              xfer += ret;
+              if ((ret = thrift_protocol_read_i32 (protocol, &*val25, error)) < 0)
+                return -1;
+              xfer += ret;
+              if (this_object->success && key24)
+                g_hash_table_insert ((GHashTable *)this_object->success, (gpointer) key24, (gpointer) val25);
+            }
+
+            /* read the map end marker */
+            if ((ret = thrift_protocol_read_map_end (protocol, error)) < 0)
+              return -1;
+            xfer += ret;
+          }
+          this_object->__isset_success = TRUE;
+        } else {
+          if ((ret = thrift_protocol_skip (protocol, ftype, error)) < 0)
+            return -1;
+          xfer += ret;
+        }
+        break;
+      case 1:
+        if (ftype == T_STRUCT)
+        {
+          /* This struct is an exception */
+          if ( this_object->ex1 != NULL)
+          {
+            g_object_unref (this_object->ex1);
+          }
+          this_object->ex1 = g_object_new (TYPE_SERVICE_RUNTIME_EXCEPTION, NULL);
+          if ((ret = thrift_struct_read (THRIFT_STRUCT (this_object->ex1), protocol, error)) < 0)
+          {
+            g_object_unref (this_object->ex1);
+            this_object->ex1 = NULL;
+            return -1;
+          }
+          xfer += ret;
+          this_object->__isset_ex1 = TRUE;
+        } else {
+          if ((ret = thrift_protocol_skip (protocol, ftype, error)) < 0)
+            return -1;
+          xfer += ret;
+        }
+        break;
+      default:
+        if ((ret = thrift_protocol_skip (protocol, ftype, error)) < 0)
+          return -1;
+        xfer += ret;
+        break;
+    }
+    if ((ret = thrift_protocol_read_field_end (protocol, error)) < 0)
+      return -1;
+    xfer += ret;
+  }
+
+  if ((ret = thrift_protocol_read_struct_end (protocol, error)) < 0)
+    return -1;
+  xfer += ret;
+
+  return xfer;
+}
+
+static gint32
+i_face_log_count_person_log_time_str_result_write (ThriftStruct *object, ThriftProtocol *protocol, GError **error)
+{
+  gint32 ret;
+  gint32 xfer = 0;
+
+  IFaceLogCountPersonLogTimeStrResult * this_object = I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_RESULT(object);
+  THRIFT_UNUSED_VAR (this_object);
+  if ((ret = thrift_protocol_write_struct_begin (protocol, "IFaceLogCountPersonLogTimeStrResult", error)) < 0)
+    return -1;
+  xfer += ret;
+  if (this_object->__isset_success == TRUE) {
+    if ((ret = thrift_protocol_write_field_begin (protocol, "success", T_MAP, 0, error)) < 0)
+      return -1;
+    xfer += ret;
+    {
+      gchar * key26 = NULL;
+      gint32* val27 = NULL;
+      GList *key_list = NULL, *iter = NULL;
+      gchar ** keys;
+      int i = 0, key_count;
+
+      if ((ret = thrift_protocol_write_map_begin (protocol, T_STRING, T_I32, this_object->success ? (gint32) g_hash_table_size ((GHashTable *) this_object->success) : 0, error)) < 0)
+        return -1;
+      xfer += ret;
+      if (this_object->success)
+        g_hash_table_foreach ((GHashTable *) this_object->success, thrift_hash_table_get_keys, &key_list);
+      key_count = g_list_length (key_list);
+      keys = g_newa (gchar *, key_count);
+      for (iter = g_list_first (key_list); iter; iter = iter->next)
+        keys[i++] = (gchar *) iter->data;
+      g_list_free (key_list);
+
+      for (i = 0; i < key_count; ++i)
+      {
+        key26 = keys[i];
+        val27 = (gint32*) g_hash_table_lookup (((GHashTable *) this_object->success), (gpointer) key26);
+
+        if ((ret = thrift_protocol_write_string (protocol,  key26, error)) < 0)
+          return -1;
+        xfer += ret;
+
+        if ((ret = thrift_protocol_write_i32 (protocol, * val27, error)) < 0)
+          return -1;
+        xfer += ret;
+
+      }
+      if ((ret = thrift_protocol_write_map_end (protocol, error)) < 0)
+        return -1;
+      xfer += ret;
+    }
+    if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
+      return -1;
+    xfer += ret;
+  }
+  if (this_object->__isset_ex1 == TRUE) {
+    if ((ret = thrift_protocol_write_field_begin (protocol, "ex1", T_STRUCT, 1, error)) < 0)
+      return -1;
+    xfer += ret;
+    if ((ret = thrift_struct_write (THRIFT_STRUCT (this_object->ex1), protocol, error)) < 0)
+      return -1;
+    xfer += ret;
+
+    if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
+      return -1;
+    xfer += ret;
+  }
+  if ((ret = thrift_protocol_write_field_stop (protocol, error)) < 0)
+    return -1;
+  xfer += ret;
+  if ((ret = thrift_protocol_write_struct_end (protocol, error)) < 0)
+    return -1;
+  xfer += ret;
+
+  return xfer;
+}
+
+static void
+i_face_log_count_person_log_time_str_result_set_property (GObject *object,
+                                                          guint property_id,
+                                                          const GValue *value,
+                                                          GParamSpec *pspec)
+{
+  IFaceLogCountPersonLogTimeStrResult *self = I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_RESULT (object);
+
+  switch (property_id)
+  {
+    case PROP_I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_RESULT_SUCCESS:
+      if (self->success != NULL)
+        g_hash_table_unref (self->success);
+      self->success = g_value_dup_boxed (value);
+      self->__isset_success = TRUE;
+      break;
+
+    case PROP_I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_RESULT_EX1:
+      if (self->ex1 != NULL)
+        g_object_unref (self->ex1);
+      self->ex1 = g_value_dup_object (value);
+      self->__isset_ex1 = TRUE;
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+      break;
+  }
+}
+
+static void
+i_face_log_count_person_log_time_str_result_get_property (GObject *object,
+                                                          guint property_id,
+                                                          GValue *value,
+                                                          GParamSpec *pspec)
+{
+  IFaceLogCountPersonLogTimeStrResult *self = I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_RESULT (object);
+
+  switch (property_id)
+  {
+    case PROP_I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_RESULT_SUCCESS:
+      g_value_set_boxed (value, self->success);
+      break;
+
+    case PROP_I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_RESULT_EX1:
+      g_value_set_object (value, self->ex1);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+      break;
+  }
+}
+
+static void 
+i_face_log_count_person_log_time_str_result_instance_init (IFaceLogCountPersonLogTimeStrResult * object)
+{
+  /* satisfy -Wall */
+  THRIFT_UNUSED_VAR (object);
+  object->success = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
+  object->__isset_success = FALSE;
+  object->ex1 = NULL;
+  object->__isset_ex1 = FALSE;
+}
+
+static void 
+i_face_log_count_person_log_time_str_result_finalize (GObject *object)
+{
+  IFaceLogCountPersonLogTimeStrResult *tobject = I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_RESULT (object);
+
+  /* satisfy -Wall in case we don't use tobject */
+  THRIFT_UNUSED_VAR (tobject);
+  if (tobject->success != NULL)
+  {
+    g_hash_table_destroy (tobject->success);
+    tobject->success = NULL;
+  }
+  if (tobject->ex1 != NULL)
+  {
+    g_object_unref(tobject->ex1);
+    tobject->ex1 = NULL;
+  }
+}
+
+static void
+i_face_log_count_person_log_time_str_result_class_init (IFaceLogCountPersonLogTimeStrResultClass * cls)
+{
+  GObjectClass *gobject_class = G_OBJECT_CLASS (cls);
+  ThriftStructClass *struct_class = THRIFT_STRUCT_CLASS (cls);
+
+  struct_class->read = i_face_log_count_person_log_time_str_result_read;
+  struct_class->write = i_face_log_count_person_log_time_str_result_write;
+
+  gobject_class->finalize = i_face_log_count_person_log_time_str_result_finalize;
+  gobject_class->get_property = i_face_log_count_person_log_time_str_result_get_property;
+  gobject_class->set_property = i_face_log_count_person_log_time_str_result_set_property;
+
+  g_object_class_install_property
+    (gobject_class,
+     PROP_I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_RESULT_SUCCESS,
+     g_param_spec_boxed ("success",
+                         NULL,
+                         NULL,
+                         G_TYPE_HASH_TABLE,
+                         G_PARAM_READWRITE));
+
+  g_object_class_install_property
+    (gobject_class,
+     PROP_I_FACE_LOG_COUNT_PERSON_LOG_TIME_STR_RESULT_EX1,
+     g_param_spec_object ("ex1",
+                         NULL,
+                         NULL,
+                         TYPE_SERVICE_RUNTIME_EXCEPTION,
+                         G_PARAM_READWRITE));
+}
+
+GType
+i_face_log_count_person_log_time_str_result_get_type (void)
+{
+  static GType type = 0;
+
+  if (type == 0) 
+  {
+    static const GTypeInfo type_info = 
+    {
+      sizeof (IFaceLogCountPersonLogTimeStrResultClass),
+      NULL, /* base_init */
+      NULL, /* base_finalize */
+      (GClassInitFunc) i_face_log_count_person_log_time_str_result_class_init,
+      NULL, /* class_finalize */
+      NULL, /* class_data */
+      sizeof (IFaceLogCountPersonLogTimeStrResult),
+      0, /* n_preallocs */
+      (GInstanceInitFunc) i_face_log_count_person_log_time_str_result_instance_init,
+      NULL, /* value_table */
+    };
+
+    type = g_type_register_static (THRIFT_TYPE_STRUCT, 
+                                   "IFaceLogCountPersonLogTimeStrResultType",
+                                   &type_info, 0);
+  }
+
+  return type;
+}
+
 enum _IFaceLogDeleteAllFeaturesByPersonIdArgsProperties
 {
   PROP_I_FACE_LOG_DELETE_ALL_FEATURES_BY_PERSON_ID_ARGS_0,
@@ -30396,17 +31856,17 @@ i_face_log_delete_feature_result_read (ThriftStruct *object, ThriftProtocol *pro
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              gchar * _elem20 = NULL;
-              if (_elem20 != NULL)
+              gchar * _elem28 = NULL;
+              if (_elem28 != NULL)
               {
-                g_free(_elem20);
-                _elem20 = NULL;
+                g_free(_elem28);
+                _elem28 = NULL;
               }
 
-              if ((ret = thrift_protocol_read_string (protocol, &_elem20, error)) < 0)
+              if ((ret = thrift_protocol_read_string (protocol, &_elem28, error)) < 0)
                 return -1;
               xfer += ret;
-              g_ptr_array_add (this_object->success, _elem20);
+              g_ptr_array_add (this_object->success, _elem28);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -30476,14 +31936,14 @@ i_face_log_delete_feature_result_write (ThriftStruct *object, ThriftProtocol *pr
       return -1;
     xfer += ret;
     {
-      guint i21;
+      guint i29;
 
       if ((ret = thrift_protocol_write_list_begin (protocol, T_STRING, (gint32) (this_object->success ? this_object->success->len : 0), error)) < 0)
         return -1;
       xfer += ret;
-      for (i21 = 0; i21 < (this_object->success ? this_object->success->len : 0); i21++)
+      for (i29 = 0; i29 < (this_object->success ? this_object->success->len : 0); i29++)
       {
-        if ((ret = thrift_protocol_write_string (protocol, ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->success, i21)), error)) < 0)
+        if ((ret = thrift_protocol_write_string (protocol, ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->success, i29)), error)) < 0)
           return -1;
         xfer += ret;
 
@@ -34890,11 +36350,11 @@ i_face_log_delete_persons_args_read (ThriftStruct *object, ThriftProtocol *proto
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              gint32* _elem22 = g_new (gint32, 1);
-              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem22, error)) < 0)
+              gint32* _elem30 = g_new (gint32, 1);
+              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem30, error)) < 0)
                 return -1;
               xfer += ret;
-              g_array_append_vals (this_object->personIdList, _elem22, 1);
+              g_array_append_vals (this_object->personIdList, _elem30, 1);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -34955,14 +36415,14 @@ i_face_log_delete_persons_args_write (ThriftStruct *object, ThriftProtocol *prot
     return -1;
   xfer += ret;
   {
-    guint i23;
+    guint i31;
 
     if ((ret = thrift_protocol_write_list_begin (protocol, T_I32, (gint32) (this_object->personIdList ? this_object->personIdList->len : 0), error)) < 0)
       return -1;
     xfer += ret;
-    for (i23 = 0; i23 < (this_object->personIdList ? this_object->personIdList->len : 0); i23++)
+    for (i31 = 0; i31 < (this_object->personIdList ? this_object->personIdList->len : 0); i31++)
     {
-      if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->personIdList, gint32, i23)), error)) < 0)
+      if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->personIdList, gint32, i31)), error)) < 0)
         return -1;
       xfer += ret;
 
@@ -35505,17 +36965,17 @@ i_face_log_delete_persons_by_papers_num_args_read (ThriftStruct *object, ThriftP
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              gchar * _elem24 = NULL;
-              if (_elem24 != NULL)
+              gchar * _elem32 = NULL;
+              if (_elem32 != NULL)
               {
-                g_free(_elem24);
-                _elem24 = NULL;
+                g_free(_elem32);
+                _elem32 = NULL;
               }
 
-              if ((ret = thrift_protocol_read_string (protocol, &_elem24, error)) < 0)
+              if ((ret = thrift_protocol_read_string (protocol, &_elem32, error)) < 0)
                 return -1;
               xfer += ret;
-              g_ptr_array_add (this_object->papersNumlist, _elem24);
+              g_ptr_array_add (this_object->papersNumlist, _elem32);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -35576,14 +37036,14 @@ i_face_log_delete_persons_by_papers_num_args_write (ThriftStruct *object, Thrift
     return -1;
   xfer += ret;
   {
-    guint i25;
+    guint i33;
 
     if ((ret = thrift_protocol_write_list_begin (protocol, T_STRING, (gint32) (this_object->papersNumlist ? this_object->papersNumlist->len : 0), error)) < 0)
       return -1;
     xfer += ret;
-    for (i25 = 0; i25 < (this_object->papersNumlist ? this_object->papersNumlist->len : 0); i25++)
+    for (i33 = 0; i33 < (this_object->papersNumlist ? this_object->papersNumlist->len : 0); i33++)
     {
-      if ((ret = thrift_protocol_write_string (protocol, ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->papersNumlist, i25)), error)) < 0)
+      if ((ret = thrift_protocol_write_string (protocol, ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->papersNumlist, i33)), error)) < 0)
         return -1;
       xfer += ret;
 
@@ -36862,11 +38322,11 @@ i_face_log_disable_person_list_args_read (ThriftStruct *object, ThriftProtocol *
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              gint32* _elem26 = g_new (gint32, 1);
-              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem26, error)) < 0)
+              gint32* _elem34 = g_new (gint32, 1);
+              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem34, error)) < 0)
                 return -1;
               xfer += ret;
-              g_array_append_vals (this_object->personIdList, _elem26, 1);
+              g_array_append_vals (this_object->personIdList, _elem34, 1);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -36927,14 +38387,14 @@ i_face_log_disable_person_list_args_write (ThriftStruct *object, ThriftProtocol 
     return -1;
   xfer += ret;
   {
-    guint i27;
+    guint i35;
 
     if ((ret = thrift_protocol_write_list_begin (protocol, T_I32, (gint32) (this_object->personIdList ? this_object->personIdList->len : 0), error)) < 0)
       return -1;
     xfer += ret;
-    for (i27 = 0; i27 < (this_object->personIdList ? this_object->personIdList->len : 0); i27++)
+    for (i35 = 0; i35 < (this_object->personIdList ? this_object->personIdList->len : 0); i35++)
     {
-      if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->personIdList, gint32, i27)), error)) < 0)
+      if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->personIdList, gint32, i35)), error)) < 0)
         return -1;
       xfer += ret;
 
@@ -41177,11 +42637,11 @@ i_face_log_get_device_groups_args_read (ThriftStruct *object, ThriftProtocol *pr
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              gint32* _elem28 = g_new (gint32, 1);
-              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem28, error)) < 0)
+              gint32* _elem36 = g_new (gint32, 1);
+              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem36, error)) < 0)
                 return -1;
               xfer += ret;
-              g_array_append_vals (this_object->groupIdList, _elem28, 1);
+              g_array_append_vals (this_object->groupIdList, _elem36, 1);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -41227,14 +42687,14 @@ i_face_log_get_device_groups_args_write (ThriftStruct *object, ThriftProtocol *p
     return -1;
   xfer += ret;
   {
-    guint i29;
+    guint i37;
 
     if ((ret = thrift_protocol_write_list_begin (protocol, T_I32, (gint32) (this_object->groupIdList ? this_object->groupIdList->len : 0), error)) < 0)
       return -1;
     xfer += ret;
-    for (i29 = 0; i29 < (this_object->groupIdList ? this_object->groupIdList->len : 0); i29++)
+    for (i37 = 0; i37 < (this_object->groupIdList ? this_object->groupIdList->len : 0); i37++)
     {
-      if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->groupIdList, gint32, i29)), error)) < 0)
+      if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->groupIdList, gint32, i37)), error)) < 0)
         return -1;
       xfer += ret;
 
@@ -41445,19 +42905,19 @@ i_face_log_get_device_groups_result_read (ThriftStruct *object, ThriftProtocol *
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              DeviceGroupBean * _elem30 = NULL;
-              if ( _elem30 != NULL)
+              DeviceGroupBean * _elem38 = NULL;
+              if ( _elem38 != NULL)
               {
-                g_object_unref (_elem30);
+                g_object_unref (_elem38);
               }
-              _elem30 = g_object_new (TYPE_DEVICE_GROUP_BEAN, NULL);
-              if ((ret = thrift_struct_read (THRIFT_STRUCT (_elem30), protocol, error)) < 0)
+              _elem38 = g_object_new (TYPE_DEVICE_GROUP_BEAN, NULL);
+              if ((ret = thrift_struct_read (THRIFT_STRUCT (_elem38), protocol, error)) < 0)
               {
-                g_object_unref (_elem30);
+                g_object_unref (_elem38);
                 return -1;
               }
               xfer += ret;
-              g_ptr_array_add (this_object->success, _elem30);
+              g_ptr_array_add (this_object->success, _elem38);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -41527,14 +42987,14 @@ i_face_log_get_device_groups_result_write (ThriftStruct *object, ThriftProtocol 
       return -1;
     xfer += ret;
     {
-      guint i31;
+      guint i39;
 
       if ((ret = thrift_protocol_write_list_begin (protocol, T_STRUCT, (gint32) (this_object->success ? this_object->success->len : 0), error)) < 0)
         return -1;
       xfer += ret;
-      for (i31 = 0; i31 < (this_object->success ? this_object->success->len : 0); i31++)
+      for (i39 = 0; i39 < (this_object->success ? this_object->success->len : 0); i39++)
       {
-        if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) this_object->success, i31))), protocol, error)) < 0)
+        if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) this_object->success, i39))), protocol, error)) < 0)
           return -1;
         xfer += ret;
 
@@ -42022,11 +43482,11 @@ i_face_log_get_device_groups_belongs_result_read (ThriftStruct *object, ThriftPr
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              gint32* _elem32 = g_new (gint32, 1);
-              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem32, error)) < 0)
+              gint32* _elem40 = g_new (gint32, 1);
+              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem40, error)) < 0)
                 return -1;
               xfer += ret;
-              g_array_append_vals (this_object->success, _elem32, 1);
+              g_array_append_vals (this_object->success, _elem40, 1);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -42096,14 +43556,14 @@ i_face_log_get_device_groups_belongs_result_write (ThriftStruct *object, ThriftP
       return -1;
     xfer += ret;
     {
-      guint i33;
+      guint i41;
 
       if ((ret = thrift_protocol_write_list_begin (protocol, T_I32, (gint32) (this_object->success ? this_object->success->len : 0), error)) < 0)
         return -1;
       xfer += ret;
-      for (i33 = 0; i33 < (this_object->success ? this_object->success->len : 0); i33++)
+      for (i41 = 0; i41 < (this_object->success ? this_object->success->len : 0); i41++)
       {
-        if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->success, gint32, i33)), error)) < 0)
+        if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->success, gint32, i41)), error)) < 0)
           return -1;
         xfer += ret;
 
@@ -42591,11 +44051,11 @@ i_face_log_get_device_groups_permit_result_read (ThriftStruct *object, ThriftPro
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              gint32* _elem34 = g_new (gint32, 1);
-              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem34, error)) < 0)
+              gint32* _elem42 = g_new (gint32, 1);
+              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem42, error)) < 0)
                 return -1;
               xfer += ret;
-              g_array_append_vals (this_object->success, _elem34, 1);
+              g_array_append_vals (this_object->success, _elem42, 1);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -42665,14 +44125,14 @@ i_face_log_get_device_groups_permit_result_write (ThriftStruct *object, ThriftPr
       return -1;
     xfer += ret;
     {
-      guint i35;
+      guint i43;
 
       if ((ret = thrift_protocol_write_list_begin (protocol, T_I32, (gint32) (this_object->success ? this_object->success->len : 0), error)) < 0)
         return -1;
       xfer += ret;
-      for (i35 = 0; i35 < (this_object->success ? this_object->success->len : 0); i35++)
+      for (i43 = 0; i43 < (this_object->success ? this_object->success->len : 0); i43++)
       {
-        if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->success, gint32, i35)), error)) < 0)
+        if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->success, gint32, i43)), error)) < 0)
           return -1;
         xfer += ret;
 
@@ -43160,11 +44620,11 @@ i_face_log_get_device_groups_permitted_by_result_read (ThriftStruct *object, Thr
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              gint32* _elem36 = g_new (gint32, 1);
-              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem36, error)) < 0)
+              gint32* _elem44 = g_new (gint32, 1);
+              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem44, error)) < 0)
                 return -1;
               xfer += ret;
-              g_array_append_vals (this_object->success, _elem36, 1);
+              g_array_append_vals (this_object->success, _elem44, 1);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -43234,14 +44694,14 @@ i_face_log_get_device_groups_permitted_by_result_write (ThriftStruct *object, Th
       return -1;
     xfer += ret;
     {
-      guint i37;
+      guint i45;
 
       if ((ret = thrift_protocol_write_list_begin (protocol, T_I32, (gint32) (this_object->success ? this_object->success->len : 0), error)) < 0)
         return -1;
       xfer += ret;
-      for (i37 = 0; i37 < (this_object->success ? this_object->success->len : 0); i37++)
+      for (i45 = 0; i45 < (this_object->success ? this_object->success->len : 0); i45++)
       {
-        if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->success, gint32, i37)), error)) < 0)
+        if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->success, gint32, i45)), error)) < 0)
           return -1;
         xfer += ret;
 
@@ -44027,11 +45487,11 @@ i_face_log_get_devices_args_read (ThriftStruct *object, ThriftProtocol *protocol
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              gint32* _elem38 = g_new (gint32, 1);
-              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem38, error)) < 0)
+              gint32* _elem46 = g_new (gint32, 1);
+              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem46, error)) < 0)
                 return -1;
               xfer += ret;
-              g_array_append_vals (this_object->idList, _elem38, 1);
+              g_array_append_vals (this_object->idList, _elem46, 1);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -44077,14 +45537,14 @@ i_face_log_get_devices_args_write (ThriftStruct *object, ThriftProtocol *protoco
     return -1;
   xfer += ret;
   {
-    guint i39;
+    guint i47;
 
     if ((ret = thrift_protocol_write_list_begin (protocol, T_I32, (gint32) (this_object->idList ? this_object->idList->len : 0), error)) < 0)
       return -1;
     xfer += ret;
-    for (i39 = 0; i39 < (this_object->idList ? this_object->idList->len : 0); i39++)
+    for (i47 = 0; i47 < (this_object->idList ? this_object->idList->len : 0); i47++)
     {
-      if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->idList, gint32, i39)), error)) < 0)
+      if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->idList, gint32, i47)), error)) < 0)
         return -1;
       xfer += ret;
 
@@ -44295,19 +45755,19 @@ i_face_log_get_devices_result_read (ThriftStruct *object, ThriftProtocol *protoc
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              DeviceBean * _elem40 = NULL;
-              if ( _elem40 != NULL)
+              DeviceBean * _elem48 = NULL;
+              if ( _elem48 != NULL)
               {
-                g_object_unref (_elem40);
+                g_object_unref (_elem48);
               }
-              _elem40 = g_object_new (TYPE_DEVICE_BEAN, NULL);
-              if ((ret = thrift_struct_read (THRIFT_STRUCT (_elem40), protocol, error)) < 0)
+              _elem48 = g_object_new (TYPE_DEVICE_BEAN, NULL);
+              if ((ret = thrift_struct_read (THRIFT_STRUCT (_elem48), protocol, error)) < 0)
               {
-                g_object_unref (_elem40);
+                g_object_unref (_elem48);
                 return -1;
               }
               xfer += ret;
-              g_ptr_array_add (this_object->success, _elem40);
+              g_ptr_array_add (this_object->success, _elem48);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -44377,14 +45837,14 @@ i_face_log_get_devices_result_write (ThriftStruct *object, ThriftProtocol *proto
       return -1;
     xfer += ret;
     {
-      guint i41;
+      guint i49;
 
       if ((ret = thrift_protocol_write_list_begin (protocol, T_STRUCT, (gint32) (this_object->success ? this_object->success->len : 0), error)) < 0)
         return -1;
       xfer += ret;
-      for (i41 = 0; i41 < (this_object->success ? this_object->success->len : 0); i41++)
+      for (i49 = 0; i49 < (this_object->success ? this_object->success->len : 0); i49++)
       {
-        if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) this_object->success, i41))), protocol, error)) < 0)
+        if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) this_object->success, i49))), protocol, error)) < 0)
           return -1;
         xfer += ret;
 
@@ -44872,11 +46332,11 @@ i_face_log_get_devices_of_group_result_read (ThriftStruct *object, ThriftProtoco
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              gint32* _elem42 = g_new (gint32, 1);
-              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem42, error)) < 0)
+              gint32* _elem50 = g_new (gint32, 1);
+              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem50, error)) < 0)
                 return -1;
               xfer += ret;
-              g_array_append_vals (this_object->success, _elem42, 1);
+              g_array_append_vals (this_object->success, _elem50, 1);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -44946,14 +46406,14 @@ i_face_log_get_devices_of_group_result_write (ThriftStruct *object, ThriftProtoc
       return -1;
     xfer += ret;
     {
-      guint i43;
+      guint i51;
 
       if ((ret = thrift_protocol_write_list_begin (protocol, T_I32, (gint32) (this_object->success ? this_object->success->len : 0), error)) < 0)
         return -1;
       xfer += ret;
-      for (i43 = 0; i43 < (this_object->success ? this_object->success->len : 0); i43++)
+      for (i51 = 0; i51 < (this_object->success ? this_object->success->len : 0); i51++)
       {
-        if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->success, gint32, i43)), error)) < 0)
+        if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->success, gint32, i51)), error)) < 0)
           return -1;
         xfer += ret;
 
@@ -45984,19 +47444,19 @@ i_face_log_get_faces_of_feature_result_read (ThriftStruct *object, ThriftProtoco
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              FaceBean * _elem44 = NULL;
-              if ( _elem44 != NULL)
+              FaceBean * _elem52 = NULL;
+              if ( _elem52 != NULL)
               {
-                g_object_unref (_elem44);
+                g_object_unref (_elem52);
               }
-              _elem44 = g_object_new (TYPE_FACE_BEAN, NULL);
-              if ((ret = thrift_struct_read (THRIFT_STRUCT (_elem44), protocol, error)) < 0)
+              _elem52 = g_object_new (TYPE_FACE_BEAN, NULL);
+              if ((ret = thrift_struct_read (THRIFT_STRUCT (_elem52), protocol, error)) < 0)
               {
-                g_object_unref (_elem44);
+                g_object_unref (_elem52);
                 return -1;
               }
               xfer += ret;
-              g_ptr_array_add (this_object->success, _elem44);
+              g_ptr_array_add (this_object->success, _elem52);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -46066,14 +47526,14 @@ i_face_log_get_faces_of_feature_result_write (ThriftStruct *object, ThriftProtoc
       return -1;
     xfer += ret;
     {
-      guint i45;
+      guint i53;
 
       if ((ret = thrift_protocol_write_list_begin (protocol, T_STRUCT, (gint32) (this_object->success ? this_object->success->len : 0), error)) < 0)
         return -1;
       xfer += ret;
-      for (i45 = 0; i45 < (this_object->success ? this_object->success->len : 0); i45++)
+      for (i53 = 0; i53 < (this_object->success ? this_object->success->len : 0); i53++)
       {
-        if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) this_object->success, i45))), protocol, error)) < 0)
+        if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) this_object->success, i53))), protocol, error)) < 0)
           return -1;
         xfer += ret;
 
@@ -46565,19 +48025,19 @@ i_face_log_get_faces_of_image_result_read (ThriftStruct *object, ThriftProtocol 
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              FaceBean * _elem46 = NULL;
-              if ( _elem46 != NULL)
+              FaceBean * _elem54 = NULL;
+              if ( _elem54 != NULL)
               {
-                g_object_unref (_elem46);
+                g_object_unref (_elem54);
               }
-              _elem46 = g_object_new (TYPE_FACE_BEAN, NULL);
-              if ((ret = thrift_struct_read (THRIFT_STRUCT (_elem46), protocol, error)) < 0)
+              _elem54 = g_object_new (TYPE_FACE_BEAN, NULL);
+              if ((ret = thrift_struct_read (THRIFT_STRUCT (_elem54), protocol, error)) < 0)
               {
-                g_object_unref (_elem46);
+                g_object_unref (_elem54);
                 return -1;
               }
               xfer += ret;
-              g_ptr_array_add (this_object->success, _elem46);
+              g_ptr_array_add (this_object->success, _elem54);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -46647,14 +48107,14 @@ i_face_log_get_faces_of_image_result_write (ThriftStruct *object, ThriftProtocol
       return -1;
     xfer += ret;
     {
-      guint i47;
+      guint i55;
 
       if ((ret = thrift_protocol_write_list_begin (protocol, T_STRUCT, (gint32) (this_object->success ? this_object->success->len : 0), error)) < 0)
         return -1;
       xfer += ret;
-      for (i47 = 0; i47 < (this_object->success ? this_object->success->len : 0); i47++)
+      for (i55 = 0; i55 < (this_object->success ? this_object->success->len : 0); i55++)
       {
-        if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) this_object->success, i47))), protocol, error)) < 0)
+        if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) this_object->success, i55))), protocol, error)) < 0)
           return -1;
         xfer += ret;
 
@@ -47997,17 +49457,17 @@ i_face_log_get_features_args_read (ThriftStruct *object, ThriftProtocol *protoco
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              gchar * _elem48 = NULL;
-              if (_elem48 != NULL)
+              gchar * _elem56 = NULL;
+              if (_elem56 != NULL)
               {
-                g_free(_elem48);
-                _elem48 = NULL;
+                g_free(_elem56);
+                _elem56 = NULL;
               }
 
-              if ((ret = thrift_protocol_read_string (protocol, &_elem48, error)) < 0)
+              if ((ret = thrift_protocol_read_string (protocol, &_elem56, error)) < 0)
                 return -1;
               xfer += ret;
-              g_ptr_array_add (this_object->md5List, _elem48);
+              g_ptr_array_add (this_object->md5List, _elem56);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -48053,14 +49513,14 @@ i_face_log_get_features_args_write (ThriftStruct *object, ThriftProtocol *protoc
     return -1;
   xfer += ret;
   {
-    guint i49;
+    guint i57;
 
     if ((ret = thrift_protocol_write_list_begin (protocol, T_STRING, (gint32) (this_object->md5List ? this_object->md5List->len : 0), error)) < 0)
       return -1;
     xfer += ret;
-    for (i49 = 0; i49 < (this_object->md5List ? this_object->md5List->len : 0); i49++)
+    for (i57 = 0; i57 < (this_object->md5List ? this_object->md5List->len : 0); i57++)
     {
-      if ((ret = thrift_protocol_write_string (protocol, ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->md5List, i49)), error)) < 0)
+      if ((ret = thrift_protocol_write_string (protocol, ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->md5List, i57)), error)) < 0)
         return -1;
       xfer += ret;
 
@@ -48271,19 +49731,19 @@ i_face_log_get_features_result_read (ThriftStruct *object, ThriftProtocol *proto
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              FeatureBean * _elem50 = NULL;
-              if ( _elem50 != NULL)
+              FeatureBean * _elem58 = NULL;
+              if ( _elem58 != NULL)
               {
-                g_object_unref (_elem50);
+                g_object_unref (_elem58);
               }
-              _elem50 = g_object_new (TYPE_FEATURE_BEAN, NULL);
-              if ((ret = thrift_struct_read (THRIFT_STRUCT (_elem50), protocol, error)) < 0)
+              _elem58 = g_object_new (TYPE_FEATURE_BEAN, NULL);
+              if ((ret = thrift_struct_read (THRIFT_STRUCT (_elem58), protocol, error)) < 0)
               {
-                g_object_unref (_elem50);
+                g_object_unref (_elem58);
                 return -1;
               }
               xfer += ret;
-              g_ptr_array_add (this_object->success, _elem50);
+              g_ptr_array_add (this_object->success, _elem58);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -48353,14 +49813,14 @@ i_face_log_get_features_result_write (ThriftStruct *object, ThriftProtocol *prot
       return -1;
     xfer += ret;
     {
-      guint i51;
+      guint i59;
 
       if ((ret = thrift_protocol_write_list_begin (protocol, T_STRUCT, (gint32) (this_object->success ? this_object->success->len : 0), error)) < 0)
         return -1;
       xfer += ret;
-      for (i51 = 0; i51 < (this_object->success ? this_object->success->len : 0); i51++)
+      for (i59 = 0; i59 < (this_object->success ? this_object->success->len : 0); i59++)
       {
-        if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) this_object->success, i51))), protocol, error)) < 0)
+        if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) this_object->success, i59))), protocol, error)) < 0)
           return -1;
         xfer += ret;
 
@@ -48905,17 +50365,17 @@ i_face_log_get_features_by_person_id_and_sdk_version_result_read (ThriftStruct *
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              gchar * _elem52 = NULL;
-              if (_elem52 != NULL)
+              gchar * _elem60 = NULL;
+              if (_elem60 != NULL)
               {
-                g_free(_elem52);
-                _elem52 = NULL;
+                g_free(_elem60);
+                _elem60 = NULL;
               }
 
-              if ((ret = thrift_protocol_read_string (protocol, &_elem52, error)) < 0)
+              if ((ret = thrift_protocol_read_string (protocol, &_elem60, error)) < 0)
                 return -1;
               xfer += ret;
-              g_ptr_array_add (this_object->success, _elem52);
+              g_ptr_array_add (this_object->success, _elem60);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -48985,14 +50445,14 @@ i_face_log_get_features_by_person_id_and_sdk_version_result_write (ThriftStruct 
       return -1;
     xfer += ret;
     {
-      guint i53;
+      guint i61;
 
       if ((ret = thrift_protocol_write_list_begin (protocol, T_STRING, (gint32) (this_object->success ? this_object->success->len : 0), error)) < 0)
         return -1;
       xfer += ret;
-      for (i53 = 0; i53 < (this_object->success ? this_object->success->len : 0); i53++)
+      for (i61 = 0; i61 < (this_object->success ? this_object->success->len : 0); i61++)
       {
-        if ((ret = thrift_protocol_write_string (protocol, ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->success, i53)), error)) < 0)
+        if ((ret = thrift_protocol_write_string (protocol, ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->success, i61)), error)) < 0)
           return -1;
         xfer += ret;
 
@@ -49484,17 +50944,17 @@ i_face_log_get_features_of_image_result_read (ThriftStruct *object, ThriftProtoc
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              gchar * _elem54 = NULL;
-              if (_elem54 != NULL)
+              gchar * _elem62 = NULL;
+              if (_elem62 != NULL)
               {
-                g_free(_elem54);
-                _elem54 = NULL;
+                g_free(_elem62);
+                _elem62 = NULL;
               }
 
-              if ((ret = thrift_protocol_read_string (protocol, &_elem54, error)) < 0)
+              if ((ret = thrift_protocol_read_string (protocol, &_elem62, error)) < 0)
                 return -1;
               xfer += ret;
-              g_ptr_array_add (this_object->success, _elem54);
+              g_ptr_array_add (this_object->success, _elem62);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -49564,14 +51024,14 @@ i_face_log_get_features_of_image_result_write (ThriftStruct *object, ThriftProto
       return -1;
     xfer += ret;
     {
-      guint i55;
+      guint i63;
 
       if ((ret = thrift_protocol_write_list_begin (protocol, T_STRING, (gint32) (this_object->success ? this_object->success->len : 0), error)) < 0)
         return -1;
       xfer += ret;
-      for (i55 = 0; i55 < (this_object->success ? this_object->success->len : 0); i55++)
+      for (i63 = 0; i63 < (this_object->success ? this_object->success->len : 0); i63++)
       {
-        if ((ret = thrift_protocol_write_string (protocol, ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->success, i55)), error)) < 0)
+        if ((ret = thrift_protocol_write_string (protocol, ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->success, i63)), error)) < 0)
           return -1;
         xfer += ret;
 
@@ -50059,17 +51519,17 @@ i_face_log_get_features_of_person_result_read (ThriftStruct *object, ThriftProto
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              gchar * _elem56 = NULL;
-              if (_elem56 != NULL)
+              gchar * _elem64 = NULL;
+              if (_elem64 != NULL)
               {
-                g_free(_elem56);
-                _elem56 = NULL;
+                g_free(_elem64);
+                _elem64 = NULL;
               }
 
-              if ((ret = thrift_protocol_read_string (protocol, &_elem56, error)) < 0)
+              if ((ret = thrift_protocol_read_string (protocol, &_elem64, error)) < 0)
                 return -1;
               xfer += ret;
-              g_ptr_array_add (this_object->success, _elem56);
+              g_ptr_array_add (this_object->success, _elem64);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -50139,14 +51599,14 @@ i_face_log_get_features_of_person_result_write (ThriftStruct *object, ThriftProt
       return -1;
     xfer += ret;
     {
-      guint i57;
+      guint i65;
 
       if ((ret = thrift_protocol_write_list_begin (protocol, T_STRING, (gint32) (this_object->success ? this_object->success->len : 0), error)) < 0)
         return -1;
       xfer += ret;
-      for (i57 = 0; i57 < (this_object->success ? this_object->success->len : 0); i57++)
+      for (i65 = 0; i65 < (this_object->success ? this_object->success->len : 0); i65++)
       {
-        if ((ret = thrift_protocol_write_string (protocol, ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->success, i57)), error)) < 0)
+        if ((ret = thrift_protocol_write_string (protocol, ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->success, i65)), error)) < 0)
           return -1;
         xfer += ret;
 
@@ -50447,17 +51907,17 @@ i_face_log_get_features_permitted_on_device_args_read (ThriftStruct *object, Thr
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              gchar * _elem58 = NULL;
-              if (_elem58 != NULL)
+              gchar * _elem66 = NULL;
+              if (_elem66 != NULL)
               {
-                g_free(_elem58);
-                _elem58 = NULL;
+                g_free(_elem66);
+                _elem66 = NULL;
               }
 
-              if ((ret = thrift_protocol_read_string (protocol, &_elem58, error)) < 0)
+              if ((ret = thrift_protocol_read_string (protocol, &_elem66, error)) < 0)
                 return -1;
               xfer += ret;
-              g_ptr_array_add (this_object->excludeFeatureIds, _elem58);
+              g_ptr_array_add (this_object->excludeFeatureIds, _elem66);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -50562,14 +52022,14 @@ i_face_log_get_features_permitted_on_device_args_write (ThriftStruct *object, Th
     return -1;
   xfer += ret;
   {
-    guint i59;
+    guint i67;
 
     if ((ret = thrift_protocol_write_list_begin (protocol, T_STRING, (gint32) (this_object->excludeFeatureIds ? this_object->excludeFeatureIds->len : 0), error)) < 0)
       return -1;
     xfer += ret;
-    for (i59 = 0; i59 < (this_object->excludeFeatureIds ? this_object->excludeFeatureIds->len : 0); i59++)
+    for (i67 = 0; i67 < (this_object->excludeFeatureIds ? this_object->excludeFeatureIds->len : 0); i67++)
     {
-      if ((ret = thrift_protocol_write_string (protocol, ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->excludeFeatureIds, i59)), error)) < 0)
+      if ((ret = thrift_protocol_write_string (protocol, ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->excludeFeatureIds, i67)), error)) < 0)
         return -1;
       xfer += ret;
 
@@ -50877,17 +52337,17 @@ i_face_log_get_features_permitted_on_device_result_read (ThriftStruct *object, T
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              gchar * _elem60 = NULL;
-              if (_elem60 != NULL)
+              gchar * _elem68 = NULL;
+              if (_elem68 != NULL)
               {
-                g_free(_elem60);
-                _elem60 = NULL;
+                g_free(_elem68);
+                _elem68 = NULL;
               }
 
-              if ((ret = thrift_protocol_read_string (protocol, &_elem60, error)) < 0)
+              if ((ret = thrift_protocol_read_string (protocol, &_elem68, error)) < 0)
                 return -1;
               xfer += ret;
-              g_ptr_array_add (this_object->success, _elem60);
+              g_ptr_array_add (this_object->success, _elem68);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -50957,14 +52417,14 @@ i_face_log_get_features_permitted_on_device_result_write (ThriftStruct *object, 
       return -1;
     xfer += ret;
     {
-      guint i61;
+      guint i69;
 
       if ((ret = thrift_protocol_write_list_begin (protocol, T_STRING, (gint32) (this_object->success ? this_object->success->len : 0), error)) < 0)
         return -1;
       xfer += ret;
-      for (i61 = 0; i61 < (this_object->success ? this_object->success->len : 0); i61++)
+      for (i69 = 0; i69 < (this_object->success ? this_object->success->len : 0); i69++)
       {
-        if ((ret = thrift_protocol_write_string (protocol, ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->success, i61)), error)) < 0)
+        if ((ret = thrift_protocol_write_string (protocol, ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->success, i69)), error)) < 0)
           return -1;
         xfer += ret;
 
@@ -52413,11 +53873,11 @@ i_face_log_get_group_permits_args_read (ThriftStruct *object, ThriftProtocol *pr
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              gint32* _elem62 = g_new (gint32, 1);
-              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem62, error)) < 0)
+              gint32* _elem70 = g_new (gint32, 1);
+              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem70, error)) < 0)
                 return -1;
               xfer += ret;
-              g_array_append_vals (this_object->personGroupIdList, _elem62, 1);
+              g_array_append_vals (this_object->personGroupIdList, _elem70, 1);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -52481,14 +53941,14 @@ i_face_log_get_group_permits_args_write (ThriftStruct *object, ThriftProtocol *p
     return -1;
   xfer += ret;
   {
-    guint i63;
+    guint i71;
 
     if ((ret = thrift_protocol_write_list_begin (protocol, T_I32, (gint32) (this_object->personGroupIdList ? this_object->personGroupIdList->len : 0), error)) < 0)
       return -1;
     xfer += ret;
-    for (i63 = 0; i63 < (this_object->personGroupIdList ? this_object->personGroupIdList->len : 0); i63++)
+    for (i71 = 0; i71 < (this_object->personGroupIdList ? this_object->personGroupIdList->len : 0); i71++)
     {
-      if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->personGroupIdList, gint32, i63)), error)) < 0)
+      if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->personGroupIdList, gint32, i71)), error)) < 0)
         return -1;
       xfer += ret;
 
@@ -52719,19 +54179,19 @@ i_face_log_get_group_permits_result_read (ThriftStruct *object, ThriftProtocol *
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              PermitBean * _elem64 = NULL;
-              if ( _elem64 != NULL)
+              PermitBean * _elem72 = NULL;
+              if ( _elem72 != NULL)
               {
-                g_object_unref (_elem64);
+                g_object_unref (_elem72);
               }
-              _elem64 = g_object_new (TYPE_PERMIT_BEAN, NULL);
-              if ((ret = thrift_struct_read (THRIFT_STRUCT (_elem64), protocol, error)) < 0)
+              _elem72 = g_object_new (TYPE_PERMIT_BEAN, NULL);
+              if ((ret = thrift_struct_read (THRIFT_STRUCT (_elem72), protocol, error)) < 0)
               {
-                g_object_unref (_elem64);
+                g_object_unref (_elem72);
                 return -1;
               }
               xfer += ret;
-              g_ptr_array_add (this_object->success, _elem64);
+              g_ptr_array_add (this_object->success, _elem72);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -52801,14 +54261,14 @@ i_face_log_get_group_permits_result_write (ThriftStruct *object, ThriftProtocol 
       return -1;
     xfer += ret;
     {
-      guint i65;
+      guint i73;
 
       if ((ret = thrift_protocol_write_list_begin (protocol, T_STRUCT, (gint32) (this_object->success ? this_object->success->len : 0), error)) < 0)
         return -1;
       xfer += ret;
-      for (i65 = 0; i65 < (this_object->success ? this_object->success->len : 0); i65++)
+      for (i73 = 0; i73 < (this_object->success ? this_object->success->len : 0); i73++)
       {
-        if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) this_object->success, i65))), protocol, error)) < 0)
+        if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) this_object->success, i73))), protocol, error)) < 0)
           return -1;
         xfer += ret;
 
@@ -54393,17 +55853,17 @@ i_face_log_get_images_associated_by_feature_result_read (ThriftStruct *object, T
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              gchar * _elem66 = NULL;
-              if (_elem66 != NULL)
+              gchar * _elem74 = NULL;
+              if (_elem74 != NULL)
               {
-                g_free(_elem66);
-                _elem66 = NULL;
+                g_free(_elem74);
+                _elem74 = NULL;
               }
 
-              if ((ret = thrift_protocol_read_string (protocol, &_elem66, error)) < 0)
+              if ((ret = thrift_protocol_read_string (protocol, &_elem74, error)) < 0)
                 return -1;
               xfer += ret;
-              g_ptr_array_add (this_object->success, _elem66);
+              g_ptr_array_add (this_object->success, _elem74);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -54473,14 +55933,14 @@ i_face_log_get_images_associated_by_feature_result_write (ThriftStruct *object, 
       return -1;
     xfer += ret;
     {
-      guint i67;
+      guint i75;
 
       if ((ret = thrift_protocol_write_list_begin (protocol, T_STRING, (gint32) (this_object->success ? this_object->success->len : 0), error)) < 0)
         return -1;
       xfer += ret;
-      for (i67 = 0; i67 < (this_object->success ? this_object->success->len : 0); i67++)
+      for (i75 = 0; i75 < (this_object->success ? this_object->success->len : 0); i75++)
       {
-        if ((ret = thrift_protocol_write_string (protocol, ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->success, i67)), error)) < 0)
+        if ((ret = thrift_protocol_write_string (protocol, ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->success, i75)), error)) < 0)
           return -1;
         xfer += ret;
 
@@ -54968,19 +56428,19 @@ i_face_log_get_log_beans_by_person_id_result_read (ThriftStruct *object, ThriftP
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              LogBean * _elem68 = NULL;
-              if ( _elem68 != NULL)
+              LogBean * _elem76 = NULL;
+              if ( _elem76 != NULL)
               {
-                g_object_unref (_elem68);
+                g_object_unref (_elem76);
               }
-              _elem68 = g_object_new (TYPE_LOG_BEAN, NULL);
-              if ((ret = thrift_struct_read (THRIFT_STRUCT (_elem68), protocol, error)) < 0)
+              _elem76 = g_object_new (TYPE_LOG_BEAN, NULL);
+              if ((ret = thrift_struct_read (THRIFT_STRUCT (_elem76), protocol, error)) < 0)
               {
-                g_object_unref (_elem68);
+                g_object_unref (_elem76);
                 return -1;
               }
               xfer += ret;
-              g_ptr_array_add (this_object->success, _elem68);
+              g_ptr_array_add (this_object->success, _elem76);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -55050,14 +56510,14 @@ i_face_log_get_log_beans_by_person_id_result_write (ThriftStruct *object, Thrift
       return -1;
     xfer += ret;
     {
-      guint i69;
+      guint i77;
 
       if ((ret = thrift_protocol_write_list_begin (protocol, T_STRUCT, (gint32) (this_object->success ? this_object->success->len : 0), error)) < 0)
         return -1;
       xfer += ret;
-      for (i69 = 0; i69 < (this_object->success ? this_object->success->len : 0); i69++)
+      for (i77 = 0; i77 < (this_object->success ? this_object->success->len : 0); i77++)
       {
-        if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) this_object->success, i69))), protocol, error)) < 0)
+        if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) this_object->success, i77))), protocol, error)) < 0)
           return -1;
         xfer += ret;
 
@@ -57471,11 +58931,11 @@ i_face_log_get_person_groups_args_read (ThriftStruct *object, ThriftProtocol *pr
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              gint32* _elem70 = g_new (gint32, 1);
-              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem70, error)) < 0)
+              gint32* _elem78 = g_new (gint32, 1);
+              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem78, error)) < 0)
                 return -1;
               xfer += ret;
-              g_array_append_vals (this_object->groupIdList, _elem70, 1);
+              g_array_append_vals (this_object->groupIdList, _elem78, 1);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -57521,14 +58981,14 @@ i_face_log_get_person_groups_args_write (ThriftStruct *object, ThriftProtocol *p
     return -1;
   xfer += ret;
   {
-    guint i71;
+    guint i79;
 
     if ((ret = thrift_protocol_write_list_begin (protocol, T_I32, (gint32) (this_object->groupIdList ? this_object->groupIdList->len : 0), error)) < 0)
       return -1;
     xfer += ret;
-    for (i71 = 0; i71 < (this_object->groupIdList ? this_object->groupIdList->len : 0); i71++)
+    for (i79 = 0; i79 < (this_object->groupIdList ? this_object->groupIdList->len : 0); i79++)
     {
-      if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->groupIdList, gint32, i71)), error)) < 0)
+      if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->groupIdList, gint32, i79)), error)) < 0)
         return -1;
       xfer += ret;
 
@@ -57739,19 +59199,19 @@ i_face_log_get_person_groups_result_read (ThriftStruct *object, ThriftProtocol *
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              PersonGroupBean * _elem72 = NULL;
-              if ( _elem72 != NULL)
+              PersonGroupBean * _elem80 = NULL;
+              if ( _elem80 != NULL)
               {
-                g_object_unref (_elem72);
+                g_object_unref (_elem80);
               }
-              _elem72 = g_object_new (TYPE_PERSON_GROUP_BEAN, NULL);
-              if ((ret = thrift_struct_read (THRIFT_STRUCT (_elem72), protocol, error)) < 0)
+              _elem80 = g_object_new (TYPE_PERSON_GROUP_BEAN, NULL);
+              if ((ret = thrift_struct_read (THRIFT_STRUCT (_elem80), protocol, error)) < 0)
               {
-                g_object_unref (_elem72);
+                g_object_unref (_elem80);
                 return -1;
               }
               xfer += ret;
-              g_ptr_array_add (this_object->success, _elem72);
+              g_ptr_array_add (this_object->success, _elem80);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -57821,14 +59281,14 @@ i_face_log_get_person_groups_result_write (ThriftStruct *object, ThriftProtocol 
       return -1;
     xfer += ret;
     {
-      guint i73;
+      guint i81;
 
       if ((ret = thrift_protocol_write_list_begin (protocol, T_STRUCT, (gint32) (this_object->success ? this_object->success->len : 0), error)) < 0)
         return -1;
       xfer += ret;
-      for (i73 = 0; i73 < (this_object->success ? this_object->success->len : 0); i73++)
+      for (i81 = 0; i81 < (this_object->success ? this_object->success->len : 0); i81++)
       {
-        if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) this_object->success, i73))), protocol, error)) < 0)
+        if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) this_object->success, i81))), protocol, error)) < 0)
           return -1;
         xfer += ret;
 
@@ -58316,11 +59776,11 @@ i_face_log_get_person_groups_belongs_result_read (ThriftStruct *object, ThriftPr
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              gint32* _elem74 = g_new (gint32, 1);
-              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem74, error)) < 0)
+              gint32* _elem82 = g_new (gint32, 1);
+              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem82, error)) < 0)
                 return -1;
               xfer += ret;
-              g_array_append_vals (this_object->success, _elem74, 1);
+              g_array_append_vals (this_object->success, _elem82, 1);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -58390,14 +59850,14 @@ i_face_log_get_person_groups_belongs_result_write (ThriftStruct *object, ThriftP
       return -1;
     xfer += ret;
     {
-      guint i75;
+      guint i83;
 
       if ((ret = thrift_protocol_write_list_begin (protocol, T_I32, (gint32) (this_object->success ? this_object->success->len : 0), error)) < 0)
         return -1;
       xfer += ret;
-      for (i75 = 0; i75 < (this_object->success ? this_object->success->len : 0); i75++)
+      for (i83 = 0; i83 < (this_object->success ? this_object->success->len : 0); i83++)
       {
-        if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->success, gint32, i75)), error)) < 0)
+        if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->success, gint32, i83)), error)) < 0)
           return -1;
         xfer += ret;
 
@@ -58885,11 +60345,11 @@ i_face_log_get_person_groups_permitted_by_result_read (ThriftStruct *object, Thr
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              gint32* _elem76 = g_new (gint32, 1);
-              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem76, error)) < 0)
+              gint32* _elem84 = g_new (gint32, 1);
+              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem84, error)) < 0)
                 return -1;
               xfer += ret;
-              g_array_append_vals (this_object->success, _elem76, 1);
+              g_array_append_vals (this_object->success, _elem84, 1);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -58959,14 +60419,14 @@ i_face_log_get_person_groups_permitted_by_result_write (ThriftStruct *object, Th
       return -1;
     xfer += ret;
     {
-      guint i77;
+      guint i85;
 
       if ((ret = thrift_protocol_write_list_begin (protocol, T_I32, (gint32) (this_object->success ? this_object->success->len : 0), error)) < 0)
         return -1;
       xfer += ret;
-      for (i77 = 0; i77 < (this_object->success ? this_object->success->len : 0); i77++)
+      for (i85 = 0; i85 < (this_object->success ? this_object->success->len : 0); i85++)
       {
-        if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->success, gint32, i77)), error)) < 0)
+        if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->success, gint32, i85)), error)) < 0)
           return -1;
         xfer += ret;
 
@@ -59823,11 +61283,11 @@ i_face_log_get_person_permits_args_read (ThriftStruct *object, ThriftProtocol *p
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              gint32* _elem78 = g_new (gint32, 1);
-              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem78, error)) < 0)
+              gint32* _elem86 = g_new (gint32, 1);
+              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem86, error)) < 0)
                 return -1;
               xfer += ret;
-              g_array_append_vals (this_object->personIdList, _elem78, 1);
+              g_array_append_vals (this_object->personIdList, _elem86, 1);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -59891,14 +61351,14 @@ i_face_log_get_person_permits_args_write (ThriftStruct *object, ThriftProtocol *
     return -1;
   xfer += ret;
   {
-    guint i79;
+    guint i87;
 
     if ((ret = thrift_protocol_write_list_begin (protocol, T_I32, (gint32) (this_object->personIdList ? this_object->personIdList->len : 0), error)) < 0)
       return -1;
     xfer += ret;
-    for (i79 = 0; i79 < (this_object->personIdList ? this_object->personIdList->len : 0); i79++)
+    for (i87 = 0; i87 < (this_object->personIdList ? this_object->personIdList->len : 0); i87++)
     {
-      if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->personIdList, gint32, i79)), error)) < 0)
+      if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->personIdList, gint32, i87)), error)) < 0)
         return -1;
       xfer += ret;
 
@@ -60129,19 +61589,19 @@ i_face_log_get_person_permits_result_read (ThriftStruct *object, ThriftProtocol 
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              PermitBean * _elem80 = NULL;
-              if ( _elem80 != NULL)
+              PermitBean * _elem88 = NULL;
+              if ( _elem88 != NULL)
               {
-                g_object_unref (_elem80);
+                g_object_unref (_elem88);
               }
-              _elem80 = g_object_new (TYPE_PERMIT_BEAN, NULL);
-              if ((ret = thrift_struct_read (THRIFT_STRUCT (_elem80), protocol, error)) < 0)
+              _elem88 = g_object_new (TYPE_PERMIT_BEAN, NULL);
+              if ((ret = thrift_struct_read (THRIFT_STRUCT (_elem88), protocol, error)) < 0)
               {
-                g_object_unref (_elem80);
+                g_object_unref (_elem88);
                 return -1;
               }
               xfer += ret;
-              g_ptr_array_add (this_object->success, _elem80);
+              g_ptr_array_add (this_object->success, _elem88);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -60211,14 +61671,14 @@ i_face_log_get_person_permits_result_write (ThriftStruct *object, ThriftProtocol
       return -1;
     xfer += ret;
     {
-      guint i81;
+      guint i89;
 
       if ((ret = thrift_protocol_write_list_begin (protocol, T_STRUCT, (gint32) (this_object->success ? this_object->success->len : 0), error)) < 0)
         return -1;
       xfer += ret;
-      for (i81 = 0; i81 < (this_object->success ? this_object->success->len : 0); i81++)
+      for (i89 = 0; i89 < (this_object->success ? this_object->success->len : 0); i89++)
       {
-        if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) this_object->success, i81))), protocol, error)) < 0)
+        if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) this_object->success, i89))), protocol, error)) < 0)
           return -1;
         xfer += ret;
 
@@ -60468,11 +61928,11 @@ i_face_log_get_persons_args_read (ThriftStruct *object, ThriftProtocol *protocol
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              gint32* _elem82 = g_new (gint32, 1);
-              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem82, error)) < 0)
+              gint32* _elem90 = g_new (gint32, 1);
+              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem90, error)) < 0)
                 return -1;
               xfer += ret;
-              g_array_append_vals (this_object->idList, _elem82, 1);
+              g_array_append_vals (this_object->idList, _elem90, 1);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -60518,14 +61978,14 @@ i_face_log_get_persons_args_write (ThriftStruct *object, ThriftProtocol *protoco
     return -1;
   xfer += ret;
   {
-    guint i83;
+    guint i91;
 
     if ((ret = thrift_protocol_write_list_begin (protocol, T_I32, (gint32) (this_object->idList ? this_object->idList->len : 0), error)) < 0)
       return -1;
     xfer += ret;
-    for (i83 = 0; i83 < (this_object->idList ? this_object->idList->len : 0); i83++)
+    for (i91 = 0; i91 < (this_object->idList ? this_object->idList->len : 0); i91++)
     {
-      if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->idList, gint32, i83)), error)) < 0)
+      if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->idList, gint32, i91)), error)) < 0)
         return -1;
       xfer += ret;
 
@@ -60736,19 +62196,19 @@ i_face_log_get_persons_result_read (ThriftStruct *object, ThriftProtocol *protoc
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              PersonBean * _elem84 = NULL;
-              if ( _elem84 != NULL)
+              PersonBean * _elem92 = NULL;
+              if ( _elem92 != NULL)
               {
-                g_object_unref (_elem84);
+                g_object_unref (_elem92);
               }
-              _elem84 = g_object_new (TYPE_PERSON_BEAN, NULL);
-              if ((ret = thrift_struct_read (THRIFT_STRUCT (_elem84), protocol, error)) < 0)
+              _elem92 = g_object_new (TYPE_PERSON_BEAN, NULL);
+              if ((ret = thrift_struct_read (THRIFT_STRUCT (_elem92), protocol, error)) < 0)
               {
-                g_object_unref (_elem84);
+                g_object_unref (_elem92);
                 return -1;
               }
               xfer += ret;
-              g_ptr_array_add (this_object->success, _elem84);
+              g_ptr_array_add (this_object->success, _elem92);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -60818,14 +62278,14 @@ i_face_log_get_persons_result_write (ThriftStruct *object, ThriftProtocol *proto
       return -1;
     xfer += ret;
     {
-      guint i85;
+      guint i93;
 
       if ((ret = thrift_protocol_write_list_begin (protocol, T_STRUCT, (gint32) (this_object->success ? this_object->success->len : 0), error)) < 0)
         return -1;
       xfer += ret;
-      for (i85 = 0; i85 < (this_object->success ? this_object->success->len : 0); i85++)
+      for (i93 = 0; i93 < (this_object->success ? this_object->success->len : 0); i93++)
       {
-        if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) this_object->success, i85))), protocol, error)) < 0)
+        if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) this_object->success, i93))), protocol, error)) < 0)
           return -1;
         xfer += ret;
 
@@ -61313,11 +62773,11 @@ i_face_log_get_persons_of_group_result_read (ThriftStruct *object, ThriftProtoco
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              gint32* _elem86 = g_new (gint32, 1);
-              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem86, error)) < 0)
+              gint32* _elem94 = g_new (gint32, 1);
+              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem94, error)) < 0)
                 return -1;
               xfer += ret;
-              g_array_append_vals (this_object->success, _elem86, 1);
+              g_array_append_vals (this_object->success, _elem94, 1);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -61387,14 +62847,14 @@ i_face_log_get_persons_of_group_result_write (ThriftStruct *object, ThriftProtoc
       return -1;
     xfer += ret;
     {
-      guint i87;
+      guint i95;
 
       if ((ret = thrift_protocol_write_list_begin (protocol, T_I32, (gint32) (this_object->success ? this_object->success->len : 0), error)) < 0)
         return -1;
       xfer += ret;
-      for (i87 = 0; i87 < (this_object->success ? this_object->success->len : 0); i87++)
+      for (i95 = 0; i95 < (this_object->success ? this_object->success->len : 0); i95++)
       {
-        if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->success, gint32, i87)), error)) < 0)
+        if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->success, gint32, i95)), error)) < 0)
           return -1;
         xfer += ret;
 
@@ -61675,11 +63135,11 @@ i_face_log_get_persons_permitted_on_device_args_read (ThriftStruct *object, Thri
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              gint32* _elem88 = g_new (gint32, 1);
-              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem88, error)) < 0)
+              gint32* _elem96 = g_new (gint32, 1);
+              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem96, error)) < 0)
                 return -1;
               xfer += ret;
-              g_array_append_vals (this_object->excludePersonIds, _elem88, 1);
+              g_array_append_vals (this_object->excludePersonIds, _elem96, 1);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -61774,14 +63234,14 @@ i_face_log_get_persons_permitted_on_device_args_write (ThriftStruct *object, Thr
     return -1;
   xfer += ret;
   {
-    guint i89;
+    guint i97;
 
     if ((ret = thrift_protocol_write_list_begin (protocol, T_I32, (gint32) (this_object->excludePersonIds ? this_object->excludePersonIds->len : 0), error)) < 0)
       return -1;
     xfer += ret;
-    for (i89 = 0; i89 < (this_object->excludePersonIds ? this_object->excludePersonIds->len : 0); i89++)
+    for (i97 = 0; i97 < (this_object->excludePersonIds ? this_object->excludePersonIds->len : 0); i97++)
     {
-      if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->excludePersonIds, gint32, i89)), error)) < 0)
+      if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->excludePersonIds, gint32, i97)), error)) < 0)
         return -1;
       xfer += ret;
 
@@ -62062,11 +63522,11 @@ i_face_log_get_persons_permitted_on_device_result_read (ThriftStruct *object, Th
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              gint32* _elem90 = g_new (gint32, 1);
-              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem90, error)) < 0)
+              gint32* _elem98 = g_new (gint32, 1);
+              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem98, error)) < 0)
                 return -1;
               xfer += ret;
-              g_array_append_vals (this_object->success, _elem90, 1);
+              g_array_append_vals (this_object->success, _elem98, 1);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -62136,14 +63596,14 @@ i_face_log_get_persons_permitted_on_device_result_write (ThriftStruct *object, T
       return -1;
     xfer += ret;
     {
-      guint i91;
+      guint i99;
 
       if ((ret = thrift_protocol_write_list_begin (protocol, T_I32, (gint32) (this_object->success ? this_object->success->len : 0), error)) < 0)
         return -1;
       xfer += ret;
-      for (i91 = 0; i91 < (this_object->success ? this_object->success->len : 0); i91++)
+      for (i99 = 0; i99 < (this_object->success ? this_object->success->len : 0); i99++)
       {
-        if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->success, gint32, i91)), error)) < 0)
+        if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->success, gint32, i99)), error)) < 0)
           return -1;
         xfer += ret;
 
@@ -62690,28 +64150,28 @@ i_face_log_get_properties_result_read (ThriftStruct *object, ThriftProtocol *pro
             /* iterate through each of the map's fields */
             for (i = 0; i < size; i++)
             {
-              gchar * key92 = NULL;
-              gchar * val93 = NULL;
-              if (key92 != NULL)
+              gchar * key100 = NULL;
+              gchar * val101 = NULL;
+              if (key100 != NULL)
               {
-                g_free(key92);
-                key92 = NULL;
+                g_free(key100);
+                key100 = NULL;
               }
 
-              if ((ret = thrift_protocol_read_string (protocol, &key92, error)) < 0)
+              if ((ret = thrift_protocol_read_string (protocol, &key100, error)) < 0)
                 return -1;
               xfer += ret;
-              if (val93 != NULL)
+              if (val101 != NULL)
               {
-                g_free(val93);
-                val93 = NULL;
+                g_free(val101);
+                val101 = NULL;
               }
 
-              if ((ret = thrift_protocol_read_string (protocol, &val93, error)) < 0)
+              if ((ret = thrift_protocol_read_string (protocol, &val101, error)) < 0)
                 return -1;
               xfer += ret;
-              if (this_object->success && key92)
-                g_hash_table_insert ((GHashTable *)this_object->success, (gpointer) key92, (gpointer) val93);
+              if (this_object->success && key100)
+                g_hash_table_insert ((GHashTable *)this_object->success, (gpointer) key100, (gpointer) val101);
             }
 
             /* read the map end marker */
@@ -62783,8 +64243,8 @@ i_face_log_get_properties_result_write (ThriftStruct *object, ThriftProtocol *pr
       return -1;
     xfer += ret;
     {
-      gchar * key94 = NULL;
-      gchar * val95 = NULL;
+      gchar * key102 = NULL;
+      gchar * val103 = NULL;
       GList *key_list = NULL, *iter = NULL;
       gchar ** keys;
       int i = 0, key_count;
@@ -62802,14 +64262,14 @@ i_face_log_get_properties_result_write (ThriftStruct *object, ThriftProtocol *pr
 
       for (i = 0; i < key_count; ++i)
       {
-        key94 = keys[i];
-        val95 = (gchar *) g_hash_table_lookup (((GHashTable *) this_object->success), (gpointer) key94);
+        key102 = keys[i];
+        val103 = (gchar *) g_hash_table_lookup (((GHashTable *) this_object->success), (gpointer) key102);
 
-        if ((ret = thrift_protocol_write_string (protocol,  key94, error)) < 0)
+        if ((ret = thrift_protocol_write_string (protocol,  key102, error)) < 0)
           return -1;
         xfer += ret;
 
-        if ((ret = thrift_protocol_write_string (protocol,  val95, error)) < 0)
+        if ((ret = thrift_protocol_write_string (protocol,  val103, error)) < 0)
           return -1;
         xfer += ret;
 
@@ -63899,24 +65359,24 @@ i_face_log_get_redis_parameters_result_read (ThriftStruct *object, ThriftProtoco
             /* iterate through each of the map's fields */
             for (i = 0; i < size; i++)
             {
-              MQParam key96;
-              gchar * val97 = NULL;
-              gint32 ecast98;
-              if ((ret = thrift_protocol_read_i32 (protocol, &ecast98, error)) < 0)
+              MQParam key104;
+              gchar * val105 = NULL;
+              gint32 ecast106;
+              if ((ret = thrift_protocol_read_i32 (protocol, &ecast106, error)) < 0)
                 return -1;
               xfer += ret;
-              key96 = (MQParam)ecast98;
-              if (val97 != NULL)
+              key104 = (MQParam)ecast106;
+              if (val105 != NULL)
               {
-                g_free(val97);
-                val97 = NULL;
+                g_free(val105);
+                val105 = NULL;
               }
 
-              if ((ret = thrift_protocol_read_string (protocol, &val97, error)) < 0)
+              if ((ret = thrift_protocol_read_string (protocol, &val105, error)) < 0)
                 return -1;
               xfer += ret;
-              if (this_object->success && key96)
-                g_hash_table_insert ((GHashTable *)this_object->success, (gpointer) key96, (gpointer) val97);
+              if (this_object->success && key104)
+                g_hash_table_insert ((GHashTable *)this_object->success, (gpointer) key104, (gpointer) val105);
             }
 
             /* read the map end marker */
@@ -63988,8 +65448,8 @@ i_face_log_get_redis_parameters_result_write (ThriftStruct *object, ThriftProtoc
       return -1;
     xfer += ret;
     {
-      MQParam key99;
-      gchar * val100 = NULL;
+      MQParam key107;
+      gchar * val108 = NULL;
       GList *key_list = NULL, *iter = NULL;
       MQParam* keys;
       int i = 0, key_count;
@@ -64007,14 +65467,14 @@ i_face_log_get_redis_parameters_result_write (ThriftStruct *object, ThriftProtoc
 
       for (i = 0; i < key_count; ++i)
       {
-        key99 = keys[i];
-        val100 = (gchar *) g_hash_table_lookup (((GHashTable *) this_object->success), (gpointer) key99);
+        key107 = keys[i];
+        val108 = (gchar *) g_hash_table_lookup (((GHashTable *) this_object->success), (gpointer) key107);
 
-        if ((ret = thrift_protocol_write_i32 (protocol, (gint32)  key99, error)) < 0)
+        if ((ret = thrift_protocol_write_i32 (protocol, (gint32)  key107, error)) < 0)
           return -1;
         xfer += ret;
 
-        if ((ret = thrift_protocol_write_string (protocol,  val100, error)) < 0)
+        if ((ret = thrift_protocol_write_string (protocol,  val108, error)) < 0)
           return -1;
         xfer += ret;
 
@@ -64504,28 +65964,28 @@ i_face_log_get_service_config_result_read (ThriftStruct *object, ThriftProtocol 
             /* iterate through each of the map's fields */
             for (i = 0; i < size; i++)
             {
-              gchar * key101 = NULL;
-              gchar * val102 = NULL;
-              if (key101 != NULL)
+              gchar * key109 = NULL;
+              gchar * val110 = NULL;
+              if (key109 != NULL)
               {
-                g_free(key101);
-                key101 = NULL;
+                g_free(key109);
+                key109 = NULL;
               }
 
-              if ((ret = thrift_protocol_read_string (protocol, &key101, error)) < 0)
+              if ((ret = thrift_protocol_read_string (protocol, &key109, error)) < 0)
                 return -1;
               xfer += ret;
-              if (val102 != NULL)
+              if (val110 != NULL)
               {
-                g_free(val102);
-                val102 = NULL;
+                g_free(val110);
+                val110 = NULL;
               }
 
-              if ((ret = thrift_protocol_read_string (protocol, &val102, error)) < 0)
+              if ((ret = thrift_protocol_read_string (protocol, &val110, error)) < 0)
                 return -1;
               xfer += ret;
-              if (this_object->success && key101)
-                g_hash_table_insert ((GHashTable *)this_object->success, (gpointer) key101, (gpointer) val102);
+              if (this_object->success && key109)
+                g_hash_table_insert ((GHashTable *)this_object->success, (gpointer) key109, (gpointer) val110);
             }
 
             /* read the map end marker */
@@ -64597,8 +66057,8 @@ i_face_log_get_service_config_result_write (ThriftStruct *object, ThriftProtocol
       return -1;
     xfer += ret;
     {
-      gchar * key103 = NULL;
-      gchar * val104 = NULL;
+      gchar * key111 = NULL;
+      gchar * val112 = NULL;
       GList *key_list = NULL, *iter = NULL;
       gchar ** keys;
       int i = 0, key_count;
@@ -64616,14 +66076,14 @@ i_face_log_get_service_config_result_write (ThriftStruct *object, ThriftProtocol
 
       for (i = 0; i < key_count; ++i)
       {
-        key103 = keys[i];
-        val104 = (gchar *) g_hash_table_lookup (((GHashTable *) this_object->success), (gpointer) key103);
+        key111 = keys[i];
+        val112 = (gchar *) g_hash_table_lookup (((GHashTable *) this_object->success), (gpointer) key111);
 
-        if ((ret = thrift_protocol_write_string (protocol,  key103, error)) < 0)
+        if ((ret = thrift_protocol_write_string (protocol,  key111, error)) < 0)
           return -1;
         xfer += ret;
 
-        if ((ret = thrift_protocol_write_string (protocol,  val104, error)) < 0)
+        if ((ret = thrift_protocol_write_string (protocol,  val112, error)) < 0)
           return -1;
         xfer += ret;
 
@@ -65111,11 +66571,11 @@ i_face_log_get_sub_device_group_result_read (ThriftStruct *object, ThriftProtoco
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              gint32* _elem105 = g_new (gint32, 1);
-              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem105, error)) < 0)
+              gint32* _elem113 = g_new (gint32, 1);
+              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem113, error)) < 0)
                 return -1;
               xfer += ret;
-              g_array_append_vals (this_object->success, _elem105, 1);
+              g_array_append_vals (this_object->success, _elem113, 1);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -65185,14 +66645,14 @@ i_face_log_get_sub_device_group_result_write (ThriftStruct *object, ThriftProtoc
       return -1;
     xfer += ret;
     {
-      guint i106;
+      guint i114;
 
       if ((ret = thrift_protocol_write_list_begin (protocol, T_I32, (gint32) (this_object->success ? this_object->success->len : 0), error)) < 0)
         return -1;
       xfer += ret;
-      for (i106 = 0; i106 < (this_object->success ? this_object->success->len : 0); i106++)
+      for (i114 = 0; i114 < (this_object->success ? this_object->success->len : 0); i114++)
       {
-        if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->success, gint32, i106)), error)) < 0)
+        if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->success, gint32, i114)), error)) < 0)
           return -1;
         xfer += ret;
 
@@ -65680,11 +67140,11 @@ i_face_log_get_sub_person_group_result_read (ThriftStruct *object, ThriftProtoco
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              gint32* _elem107 = g_new (gint32, 1);
-              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem107, error)) < 0)
+              gint32* _elem115 = g_new (gint32, 1);
+              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem115, error)) < 0)
                 return -1;
               xfer += ret;
-              g_array_append_vals (this_object->success, _elem107, 1);
+              g_array_append_vals (this_object->success, _elem115, 1);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -65754,14 +67214,14 @@ i_face_log_get_sub_person_group_result_write (ThriftStruct *object, ThriftProtoc
       return -1;
     xfer += ret;
     {
-      guint i108;
+      guint i116;
 
       if ((ret = thrift_protocol_write_list_begin (protocol, T_I32, (gint32) (this_object->success ? this_object->success->len : 0), error)) < 0)
         return -1;
       xfer += ret;
-      for (i108 = 0; i108 < (this_object->success ? this_object->success->len : 0); i108++)
+      for (i116 = 0; i116 < (this_object->success ? this_object->success->len : 0); i116++)
       {
-        if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->success, gint32, i108)), error)) < 0)
+        if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->success, gint32, i116)), error)) < 0)
           return -1;
         xfer += ret;
 
@@ -71573,11 +73033,11 @@ i_face_log_list_of_parent_for_device_group_result_read (ThriftStruct *object, Th
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              gint32* _elem109 = g_new (gint32, 1);
-              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem109, error)) < 0)
+              gint32* _elem117 = g_new (gint32, 1);
+              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem117, error)) < 0)
                 return -1;
               xfer += ret;
-              g_array_append_vals (this_object->success, _elem109, 1);
+              g_array_append_vals (this_object->success, _elem117, 1);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -71647,14 +73107,14 @@ i_face_log_list_of_parent_for_device_group_result_write (ThriftStruct *object, T
       return -1;
     xfer += ret;
     {
-      guint i110;
+      guint i118;
 
       if ((ret = thrift_protocol_write_list_begin (protocol, T_I32, (gint32) (this_object->success ? this_object->success->len : 0), error)) < 0)
         return -1;
       xfer += ret;
-      for (i110 = 0; i110 < (this_object->success ? this_object->success->len : 0); i110++)
+      for (i118 = 0; i118 < (this_object->success ? this_object->success->len : 0); i118++)
       {
-        if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->success, gint32, i110)), error)) < 0)
+        if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->success, gint32, i118)), error)) < 0)
           return -1;
         xfer += ret;
 
@@ -72142,11 +73602,11 @@ i_face_log_list_of_parent_for_person_group_result_read (ThriftStruct *object, Th
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              gint32* _elem111 = g_new (gint32, 1);
-              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem111, error)) < 0)
+              gint32* _elem119 = g_new (gint32, 1);
+              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem119, error)) < 0)
                 return -1;
               xfer += ret;
-              g_array_append_vals (this_object->success, _elem111, 1);
+              g_array_append_vals (this_object->success, _elem119, 1);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -72216,14 +73676,14 @@ i_face_log_list_of_parent_for_person_group_result_write (ThriftStruct *object, T
       return -1;
     xfer += ret;
     {
-      guint i112;
+      guint i120;
 
       if ((ret = thrift_protocol_write_list_begin (protocol, T_I32, (gint32) (this_object->success ? this_object->success->len : 0), error)) < 0)
         return -1;
       xfer += ret;
-      for (i112 = 0; i112 < (this_object->success ? this_object->success->len : 0); i112++)
+      for (i120 = 0; i120 < (this_object->success ? this_object->success->len : 0); i120++)
       {
-        if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->success, gint32, i112)), error)) < 0)
+        if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->success, gint32, i120)), error)) < 0)
           return -1;
         xfer += ret;
 
@@ -72619,11 +74079,11 @@ i_face_log_load_all_person_result_read (ThriftStruct *object, ThriftProtocol *pr
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              gint32* _elem113 = g_new (gint32, 1);
-              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem113, error)) < 0)
+              gint32* _elem121 = g_new (gint32, 1);
+              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem121, error)) < 0)
                 return -1;
               xfer += ret;
-              g_array_append_vals (this_object->success, _elem113, 1);
+              g_array_append_vals (this_object->success, _elem121, 1);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -72693,14 +74153,14 @@ i_face_log_load_all_person_result_write (ThriftStruct *object, ThriftProtocol *p
       return -1;
     xfer += ret;
     {
-      guint i114;
+      guint i122;
 
       if ((ret = thrift_protocol_write_list_begin (protocol, T_I32, (gint32) (this_object->success ? this_object->success->len : 0), error)) < 0)
         return -1;
       xfer += ret;
-      for (i114 = 0; i114 < (this_object->success ? this_object->success->len : 0); i114++)
+      for (i122 = 0; i122 < (this_object->success ? this_object->success->len : 0); i122++)
       {
-        if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->success, gint32, i114)), error)) < 0)
+        if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->success, gint32, i122)), error)) < 0)
           return -1;
         xfer += ret;
 
@@ -73298,19 +74758,19 @@ i_face_log_load_device_by_where_result_read (ThriftStruct *object, ThriftProtoco
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              DeviceBean * _elem115 = NULL;
-              if ( _elem115 != NULL)
+              DeviceBean * _elem123 = NULL;
+              if ( _elem123 != NULL)
               {
-                g_object_unref (_elem115);
+                g_object_unref (_elem123);
               }
-              _elem115 = g_object_new (TYPE_DEVICE_BEAN, NULL);
-              if ((ret = thrift_struct_read (THRIFT_STRUCT (_elem115), protocol, error)) < 0)
+              _elem123 = g_object_new (TYPE_DEVICE_BEAN, NULL);
+              if ((ret = thrift_struct_read (THRIFT_STRUCT (_elem123), protocol, error)) < 0)
               {
-                g_object_unref (_elem115);
+                g_object_unref (_elem123);
                 return -1;
               }
               xfer += ret;
-              g_ptr_array_add (this_object->success, _elem115);
+              g_ptr_array_add (this_object->success, _elem123);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -73380,14 +74840,14 @@ i_face_log_load_device_by_where_result_write (ThriftStruct *object, ThriftProtoc
       return -1;
     xfer += ret;
     {
-      guint i116;
+      guint i124;
 
       if ((ret = thrift_protocol_write_list_begin (protocol, T_STRUCT, (gint32) (this_object->success ? this_object->success->len : 0), error)) < 0)
         return -1;
       xfer += ret;
-      for (i116 = 0; i116 < (this_object->success ? this_object->success->len : 0); i116++)
+      for (i124 = 0; i124 < (this_object->success ? this_object->success->len : 0); i124++)
       {
-        if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) this_object->success, i116))), protocol, error)) < 0)
+        if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) this_object->success, i124))), protocol, error)) < 0)
           return -1;
         xfer += ret;
 
@@ -73985,11 +75445,11 @@ i_face_log_load_device_group_by_where_result_read (ThriftStruct *object, ThriftP
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              gint32* _elem117 = g_new (gint32, 1);
-              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem117, error)) < 0)
+              gint32* _elem125 = g_new (gint32, 1);
+              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem125, error)) < 0)
                 return -1;
               xfer += ret;
-              g_array_append_vals (this_object->success, _elem117, 1);
+              g_array_append_vals (this_object->success, _elem125, 1);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -74059,14 +75519,14 @@ i_face_log_load_device_group_by_where_result_write (ThriftStruct *object, Thrift
       return -1;
     xfer += ret;
     {
-      guint i118;
+      guint i126;
 
       if ((ret = thrift_protocol_write_list_begin (protocol, T_I32, (gint32) (this_object->success ? this_object->success->len : 0), error)) < 0)
         return -1;
       xfer += ret;
-      for (i118 = 0; i118 < (this_object->success ? this_object->success->len : 0); i118++)
+      for (i126 = 0; i126 < (this_object->success ? this_object->success->len : 0); i126++)
       {
-        if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->success, gint32, i118)), error)) < 0)
+        if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->success, gint32, i126)), error)) < 0)
           return -1;
         xfer += ret;
 
@@ -74558,11 +76018,11 @@ i_face_log_load_device_group_id_by_where_result_read (ThriftStruct *object, Thri
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              gint32* _elem119 = g_new (gint32, 1);
-              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem119, error)) < 0)
+              gint32* _elem127 = g_new (gint32, 1);
+              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem127, error)) < 0)
                 return -1;
               xfer += ret;
-              g_array_append_vals (this_object->success, _elem119, 1);
+              g_array_append_vals (this_object->success, _elem127, 1);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -74632,14 +76092,14 @@ i_face_log_load_device_group_id_by_where_result_write (ThriftStruct *object, Thr
       return -1;
     xfer += ret;
     {
-      guint i120;
+      guint i128;
 
       if ((ret = thrift_protocol_write_list_begin (protocol, T_I32, (gint32) (this_object->success ? this_object->success->len : 0), error)) < 0)
         return -1;
       xfer += ret;
-      for (i120 = 0; i120 < (this_object->success ? this_object->success->len : 0); i120++)
+      for (i128 = 0; i128 < (this_object->success ? this_object->success->len : 0); i128++)
       {
-        if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->success, gint32, i120)), error)) < 0)
+        if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->success, gint32, i128)), error)) < 0)
           return -1;
         xfer += ret;
 
@@ -75131,11 +76591,11 @@ i_face_log_load_device_id_by_where_result_read (ThriftStruct *object, ThriftProt
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              gint32* _elem121 = g_new (gint32, 1);
-              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem121, error)) < 0)
+              gint32* _elem129 = g_new (gint32, 1);
+              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem129, error)) < 0)
                 return -1;
               xfer += ret;
-              g_array_append_vals (this_object->success, _elem121, 1);
+              g_array_append_vals (this_object->success, _elem129, 1);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -75205,14 +76665,14 @@ i_face_log_load_device_id_by_where_result_write (ThriftStruct *object, ThriftPro
       return -1;
     xfer += ret;
     {
-      guint i122;
+      guint i130;
 
       if ((ret = thrift_protocol_write_list_begin (protocol, T_I32, (gint32) (this_object->success ? this_object->success->len : 0), error)) < 0)
         return -1;
       xfer += ret;
-      for (i122 = 0; i122 < (this_object->success ? this_object->success->len : 0); i122++)
+      for (i130 = 0; i130 < (this_object->success ? this_object->success->len : 0); i130++)
       {
-        if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->success, gint32, i122)), error)) < 0)
+        if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->success, gint32, i130)), error)) < 0)
           return -1;
         xfer += ret;
 
@@ -75818,11 +77278,11 @@ i_face_log_load_distinct_integer_column_result_read (ThriftStruct *object, Thrif
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              gint32* _elem123 = g_new (gint32, 1);
-              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem123, error)) < 0)
+              gint32* _elem131 = g_new (gint32, 1);
+              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem131, error)) < 0)
                 return -1;
               xfer += ret;
-              g_array_append_vals (this_object->success, _elem123, 1);
+              g_array_append_vals (this_object->success, _elem131, 1);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -75892,14 +77352,14 @@ i_face_log_load_distinct_integer_column_result_write (ThriftStruct *object, Thri
       return -1;
     xfer += ret;
     {
-      guint i124;
+      guint i132;
 
       if ((ret = thrift_protocol_write_list_begin (protocol, T_I32, (gint32) (this_object->success ? this_object->success->len : 0), error)) < 0)
         return -1;
       xfer += ret;
-      for (i124 = 0; i124 < (this_object->success ? this_object->success->len : 0); i124++)
+      for (i132 = 0; i132 < (this_object->success ? this_object->success->len : 0); i132++)
       {
-        if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->success, gint32, i124)), error)) < 0)
+        if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->success, gint32, i132)), error)) < 0)
           return -1;
         xfer += ret;
 
@@ -76505,17 +77965,17 @@ i_face_log_load_distinct_string_column_result_read (ThriftStruct *object, Thrift
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              gchar * _elem125 = NULL;
-              if (_elem125 != NULL)
+              gchar * _elem133 = NULL;
+              if (_elem133 != NULL)
               {
-                g_free(_elem125);
-                _elem125 = NULL;
+                g_free(_elem133);
+                _elem133 = NULL;
               }
 
-              if ((ret = thrift_protocol_read_string (protocol, &_elem125, error)) < 0)
+              if ((ret = thrift_protocol_read_string (protocol, &_elem133, error)) < 0)
                 return -1;
               xfer += ret;
-              g_ptr_array_add (this_object->success, _elem125);
+              g_ptr_array_add (this_object->success, _elem133);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -76585,14 +78045,14 @@ i_face_log_load_distinct_string_column_result_write (ThriftStruct *object, Thrif
       return -1;
     xfer += ret;
     {
-      guint i126;
+      guint i134;
 
       if ((ret = thrift_protocol_write_list_begin (protocol, T_STRING, (gint32) (this_object->success ? this_object->success->len : 0), error)) < 0)
         return -1;
       xfer += ret;
-      for (i126 = 0; i126 < (this_object->success ? this_object->success->len : 0); i126++)
+      for (i134 = 0; i134 < (this_object->success ? this_object->success->len : 0); i134++)
       {
-        if ((ret = thrift_protocol_write_string (protocol, ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->success, i126)), error)) < 0)
+        if ((ret = thrift_protocol_write_string (protocol, ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->success, i134)), error)) < 0)
           return -1;
         xfer += ret;
 
@@ -77080,17 +78540,17 @@ i_face_log_load_feature_md5_by_update_result_read (ThriftStruct *object, ThriftP
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              gchar * _elem127 = NULL;
-              if (_elem127 != NULL)
+              gchar * _elem135 = NULL;
+              if (_elem135 != NULL)
               {
-                g_free(_elem127);
-                _elem127 = NULL;
+                g_free(_elem135);
+                _elem135 = NULL;
               }
 
-              if ((ret = thrift_protocol_read_string (protocol, &_elem127, error)) < 0)
+              if ((ret = thrift_protocol_read_string (protocol, &_elem135, error)) < 0)
                 return -1;
               xfer += ret;
-              g_ptr_array_add (this_object->success, _elem127);
+              g_ptr_array_add (this_object->success, _elem135);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -77160,14 +78620,14 @@ i_face_log_load_feature_md5_by_update_result_write (ThriftStruct *object, Thrift
       return -1;
     xfer += ret;
     {
-      guint i128;
+      guint i136;
 
       if ((ret = thrift_protocol_write_list_begin (protocol, T_STRING, (gint32) (this_object->success ? this_object->success->len : 0), error)) < 0)
         return -1;
       xfer += ret;
-      for (i128 = 0; i128 < (this_object->success ? this_object->success->len : 0); i128++)
+      for (i136 = 0; i136 < (this_object->success ? this_object->success->len : 0); i136++)
       {
-        if ((ret = thrift_protocol_write_string (protocol, ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->success, i128)), error)) < 0)
+        if ((ret = thrift_protocol_write_string (protocol, ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->success, i136)), error)) < 0)
           return -1;
         xfer += ret;
 
@@ -77659,17 +79119,17 @@ i_face_log_load_feature_md5_by_update_time_str_result_read (ThriftStruct *object
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              gchar * _elem129 = NULL;
-              if (_elem129 != NULL)
+              gchar * _elem137 = NULL;
+              if (_elem137 != NULL)
               {
-                g_free(_elem129);
-                _elem129 = NULL;
+                g_free(_elem137);
+                _elem137 = NULL;
               }
 
-              if ((ret = thrift_protocol_read_string (protocol, &_elem129, error)) < 0)
+              if ((ret = thrift_protocol_read_string (protocol, &_elem137, error)) < 0)
                 return -1;
               xfer += ret;
-              g_ptr_array_add (this_object->success, _elem129);
+              g_ptr_array_add (this_object->success, _elem137);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -77739,14 +79199,14 @@ i_face_log_load_feature_md5_by_update_time_str_result_write (ThriftStruct *objec
       return -1;
     xfer += ret;
     {
-      guint i130;
+      guint i138;
 
       if ((ret = thrift_protocol_write_list_begin (protocol, T_STRING, (gint32) (this_object->success ? this_object->success->len : 0), error)) < 0)
         return -1;
       xfer += ret;
-      for (i130 = 0; i130 < (this_object->success ? this_object->success->len : 0); i130++)
+      for (i138 = 0; i138 < (this_object->success ? this_object->success->len : 0); i138++)
       {
-        if ((ret = thrift_protocol_write_string (protocol, ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->success, i130)), error)) < 0)
+        if ((ret = thrift_protocol_write_string (protocol, ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->success, i138)), error)) < 0)
           return -1;
         xfer += ret;
 
@@ -78344,19 +79804,19 @@ i_face_log_load_log_by_where_result_read (ThriftStruct *object, ThriftProtocol *
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              LogBean * _elem131 = NULL;
-              if ( _elem131 != NULL)
+              LogBean * _elem139 = NULL;
+              if ( _elem139 != NULL)
               {
-                g_object_unref (_elem131);
+                g_object_unref (_elem139);
               }
-              _elem131 = g_object_new (TYPE_LOG_BEAN, NULL);
-              if ((ret = thrift_struct_read (THRIFT_STRUCT (_elem131), protocol, error)) < 0)
+              _elem139 = g_object_new (TYPE_LOG_BEAN, NULL);
+              if ((ret = thrift_struct_read (THRIFT_STRUCT (_elem139), protocol, error)) < 0)
               {
-                g_object_unref (_elem131);
+                g_object_unref (_elem139);
                 return -1;
               }
               xfer += ret;
-              g_ptr_array_add (this_object->success, _elem131);
+              g_ptr_array_add (this_object->success, _elem139);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -78426,14 +79886,14 @@ i_face_log_load_log_by_where_result_write (ThriftStruct *object, ThriftProtocol 
       return -1;
     xfer += ret;
     {
-      guint i132;
+      guint i140;
 
       if ((ret = thrift_protocol_write_list_begin (protocol, T_STRUCT, (gint32) (this_object->success ? this_object->success->len : 0), error)) < 0)
         return -1;
       xfer += ret;
-      for (i132 = 0; i132 < (this_object->success ? this_object->success->len : 0); i132++)
+      for (i140 = 0; i140 < (this_object->success ? this_object->success->len : 0); i140++)
       {
-        if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) this_object->success, i132))), protocol, error)) < 0)
+        if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) this_object->success, i140))), protocol, error)) < 0)
           return -1;
         xfer += ret;
 
@@ -79027,19 +80487,19 @@ i_face_log_load_log_light_by_verify_time_result_read (ThriftStruct *object, Thri
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              LogLightBean * _elem133 = NULL;
-              if ( _elem133 != NULL)
+              LogLightBean * _elem141 = NULL;
+              if ( _elem141 != NULL)
               {
-                g_object_unref (_elem133);
+                g_object_unref (_elem141);
               }
-              _elem133 = g_object_new (TYPE_LOG_LIGHT_BEAN, NULL);
-              if ((ret = thrift_struct_read (THRIFT_STRUCT (_elem133), protocol, error)) < 0)
+              _elem141 = g_object_new (TYPE_LOG_LIGHT_BEAN, NULL);
+              if ((ret = thrift_struct_read (THRIFT_STRUCT (_elem141), protocol, error)) < 0)
               {
-                g_object_unref (_elem133);
+                g_object_unref (_elem141);
                 return -1;
               }
               xfer += ret;
-              g_ptr_array_add (this_object->success, _elem133);
+              g_ptr_array_add (this_object->success, _elem141);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -79109,14 +80569,14 @@ i_face_log_load_log_light_by_verify_time_result_write (ThriftStruct *object, Thr
       return -1;
     xfer += ret;
     {
-      guint i134;
+      guint i142;
 
       if ((ret = thrift_protocol_write_list_begin (protocol, T_STRUCT, (gint32) (this_object->success ? this_object->success->len : 0), error)) < 0)
         return -1;
       xfer += ret;
-      for (i134 = 0; i134 < (this_object->success ? this_object->success->len : 0); i134++)
+      for (i142 = 0; i142 < (this_object->success ? this_object->success->len : 0); i142++)
       {
-        if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) this_object->success, i134))), protocol, error)) < 0)
+        if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) this_object->success, i142))), protocol, error)) < 0)
           return -1;
         xfer += ret;
 
@@ -79714,19 +81174,19 @@ i_face_log_load_log_light_by_verify_time_timestr_result_read (ThriftStruct *obje
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              LogLightBean * _elem135 = NULL;
-              if ( _elem135 != NULL)
+              LogLightBean * _elem143 = NULL;
+              if ( _elem143 != NULL)
               {
-                g_object_unref (_elem135);
+                g_object_unref (_elem143);
               }
-              _elem135 = g_object_new (TYPE_LOG_LIGHT_BEAN, NULL);
-              if ((ret = thrift_struct_read (THRIFT_STRUCT (_elem135), protocol, error)) < 0)
+              _elem143 = g_object_new (TYPE_LOG_LIGHT_BEAN, NULL);
+              if ((ret = thrift_struct_read (THRIFT_STRUCT (_elem143), protocol, error)) < 0)
               {
-                g_object_unref (_elem135);
+                g_object_unref (_elem143);
                 return -1;
               }
               xfer += ret;
-              g_ptr_array_add (this_object->success, _elem135);
+              g_ptr_array_add (this_object->success, _elem143);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -79796,14 +81256,14 @@ i_face_log_load_log_light_by_verify_time_timestr_result_write (ThriftStruct *obj
       return -1;
     xfer += ret;
     {
-      guint i136;
+      guint i144;
 
       if ((ret = thrift_protocol_write_list_begin (protocol, T_STRUCT, (gint32) (this_object->success ? this_object->success->len : 0), error)) < 0)
         return -1;
       xfer += ret;
-      for (i136 = 0; i136 < (this_object->success ? this_object->success->len : 0); i136++)
+      for (i144 = 0; i144 < (this_object->success ? this_object->success->len : 0); i144++)
       {
-        if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) this_object->success, i136))), protocol, error)) < 0)
+        if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) this_object->success, i144))), protocol, error)) < 0)
           return -1;
         xfer += ret;
 
@@ -80401,19 +81861,19 @@ i_face_log_load_log_light_by_where_result_read (ThriftStruct *object, ThriftProt
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              LogLightBean * _elem137 = NULL;
-              if ( _elem137 != NULL)
+              LogLightBean * _elem145 = NULL;
+              if ( _elem145 != NULL)
               {
-                g_object_unref (_elem137);
+                g_object_unref (_elem145);
               }
-              _elem137 = g_object_new (TYPE_LOG_LIGHT_BEAN, NULL);
-              if ((ret = thrift_struct_read (THRIFT_STRUCT (_elem137), protocol, error)) < 0)
+              _elem145 = g_object_new (TYPE_LOG_LIGHT_BEAN, NULL);
+              if ((ret = thrift_struct_read (THRIFT_STRUCT (_elem145), protocol, error)) < 0)
               {
-                g_object_unref (_elem137);
+                g_object_unref (_elem145);
                 return -1;
               }
               xfer += ret;
-              g_ptr_array_add (this_object->success, _elem137);
+              g_ptr_array_add (this_object->success, _elem145);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -80483,14 +81943,14 @@ i_face_log_load_log_light_by_where_result_write (ThriftStruct *object, ThriftPro
       return -1;
     xfer += ret;
     {
-      guint i138;
+      guint i146;
 
       if ((ret = thrift_protocol_write_list_begin (protocol, T_STRUCT, (gint32) (this_object->success ? this_object->success->len : 0), error)) < 0)
         return -1;
       xfer += ret;
-      for (i138 = 0; i138 < (this_object->success ? this_object->success->len : 0); i138++)
+      for (i146 = 0; i146 < (this_object->success ? this_object->success->len : 0); i146++)
       {
-        if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) this_object->success, i138))), protocol, error)) < 0)
+        if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) this_object->success, i146))), protocol, error)) < 0)
           return -1;
         xfer += ret;
 
@@ -80978,19 +82438,19 @@ i_face_log_load_permit_by_update_result_read (ThriftStruct *object, ThriftProtoc
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              PermitBean * _elem139 = NULL;
-              if ( _elem139 != NULL)
+              PermitBean * _elem147 = NULL;
+              if ( _elem147 != NULL)
               {
-                g_object_unref (_elem139);
+                g_object_unref (_elem147);
               }
-              _elem139 = g_object_new (TYPE_PERMIT_BEAN, NULL);
-              if ((ret = thrift_struct_read (THRIFT_STRUCT (_elem139), protocol, error)) < 0)
+              _elem147 = g_object_new (TYPE_PERMIT_BEAN, NULL);
+              if ((ret = thrift_struct_read (THRIFT_STRUCT (_elem147), protocol, error)) < 0)
               {
-                g_object_unref (_elem139);
+                g_object_unref (_elem147);
                 return -1;
               }
               xfer += ret;
-              g_ptr_array_add (this_object->success, _elem139);
+              g_ptr_array_add (this_object->success, _elem147);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -81060,14 +82520,14 @@ i_face_log_load_permit_by_update_result_write (ThriftStruct *object, ThriftProto
       return -1;
     xfer += ret;
     {
-      guint i140;
+      guint i148;
 
       if ((ret = thrift_protocol_write_list_begin (protocol, T_STRUCT, (gint32) (this_object->success ? this_object->success->len : 0), error)) < 0)
         return -1;
       xfer += ret;
-      for (i140 = 0; i140 < (this_object->success ? this_object->success->len : 0); i140++)
+      for (i148 = 0; i148 < (this_object->success ? this_object->success->len : 0); i148++)
       {
-        if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) this_object->success, i140))), protocol, error)) < 0)
+        if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) this_object->success, i148))), protocol, error)) < 0)
           return -1;
         xfer += ret;
 
@@ -81559,19 +83019,19 @@ i_face_log_load_permit_by_update_timestr_result_read (ThriftStruct *object, Thri
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              PermitBean * _elem141 = NULL;
-              if ( _elem141 != NULL)
+              PermitBean * _elem149 = NULL;
+              if ( _elem149 != NULL)
               {
-                g_object_unref (_elem141);
+                g_object_unref (_elem149);
               }
-              _elem141 = g_object_new (TYPE_PERMIT_BEAN, NULL);
-              if ((ret = thrift_struct_read (THRIFT_STRUCT (_elem141), protocol, error)) < 0)
+              _elem149 = g_object_new (TYPE_PERMIT_BEAN, NULL);
+              if ((ret = thrift_struct_read (THRIFT_STRUCT (_elem149), protocol, error)) < 0)
               {
-                g_object_unref (_elem141);
+                g_object_unref (_elem149);
                 return -1;
               }
               xfer += ret;
-              g_ptr_array_add (this_object->success, _elem141);
+              g_ptr_array_add (this_object->success, _elem149);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -81641,14 +83101,14 @@ i_face_log_load_permit_by_update_timestr_result_write (ThriftStruct *object, Thr
       return -1;
     xfer += ret;
     {
-      guint i142;
+      guint i150;
 
       if ((ret = thrift_protocol_write_list_begin (protocol, T_STRUCT, (gint32) (this_object->success ? this_object->success->len : 0), error)) < 0)
         return -1;
       xfer += ret;
-      for (i142 = 0; i142 < (this_object->success ? this_object->success->len : 0); i142++)
+      for (i150 = 0; i150 < (this_object->success ? this_object->success->len : 0); i150++)
       {
-        if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) this_object->success, i142))), protocol, error)) < 0)
+        if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) this_object->success, i150))), protocol, error)) < 0)
           return -1;
         xfer += ret;
 
@@ -82246,19 +83706,19 @@ i_face_log_load_person_by_where_result_read (ThriftStruct *object, ThriftProtoco
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              PersonBean * _elem143 = NULL;
-              if ( _elem143 != NULL)
+              PersonBean * _elem151 = NULL;
+              if ( _elem151 != NULL)
               {
-                g_object_unref (_elem143);
+                g_object_unref (_elem151);
               }
-              _elem143 = g_object_new (TYPE_PERSON_BEAN, NULL);
-              if ((ret = thrift_struct_read (THRIFT_STRUCT (_elem143), protocol, error)) < 0)
+              _elem151 = g_object_new (TYPE_PERSON_BEAN, NULL);
+              if ((ret = thrift_struct_read (THRIFT_STRUCT (_elem151), protocol, error)) < 0)
               {
-                g_object_unref (_elem143);
+                g_object_unref (_elem151);
                 return -1;
               }
               xfer += ret;
-              g_ptr_array_add (this_object->success, _elem143);
+              g_ptr_array_add (this_object->success, _elem151);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -82328,14 +83788,14 @@ i_face_log_load_person_by_where_result_write (ThriftStruct *object, ThriftProtoc
       return -1;
     xfer += ret;
     {
-      guint i144;
+      guint i152;
 
       if ((ret = thrift_protocol_write_list_begin (protocol, T_STRUCT, (gint32) (this_object->success ? this_object->success->len : 0), error)) < 0)
         return -1;
       xfer += ret;
-      for (i144 = 0; i144 < (this_object->success ? this_object->success->len : 0); i144++)
+      for (i152 = 0; i152 < (this_object->success ? this_object->success->len : 0); i152++)
       {
-        if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) this_object->success, i144))), protocol, error)) < 0)
+        if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) this_object->success, i152))), protocol, error)) < 0)
           return -1;
         xfer += ret;
 
@@ -82933,11 +84393,11 @@ i_face_log_load_person_group_by_where_result_read (ThriftStruct *object, ThriftP
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              gint32* _elem145 = g_new (gint32, 1);
-              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem145, error)) < 0)
+              gint32* _elem153 = g_new (gint32, 1);
+              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem153, error)) < 0)
                 return -1;
               xfer += ret;
-              g_array_append_vals (this_object->success, _elem145, 1);
+              g_array_append_vals (this_object->success, _elem153, 1);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -83007,14 +84467,14 @@ i_face_log_load_person_group_by_where_result_write (ThriftStruct *object, Thrift
       return -1;
     xfer += ret;
     {
-      guint i146;
+      guint i154;
 
       if ((ret = thrift_protocol_write_list_begin (protocol, T_I32, (gint32) (this_object->success ? this_object->success->len : 0), error)) < 0)
         return -1;
       xfer += ret;
-      for (i146 = 0; i146 < (this_object->success ? this_object->success->len : 0); i146++)
+      for (i154 = 0; i154 < (this_object->success ? this_object->success->len : 0); i154++)
       {
-        if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->success, gint32, i146)), error)) < 0)
+        if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->success, gint32, i154)), error)) < 0)
           return -1;
         xfer += ret;
 
@@ -83506,11 +84966,11 @@ i_face_log_load_person_group_id_by_where_result_read (ThriftStruct *object, Thri
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              gint32* _elem147 = g_new (gint32, 1);
-              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem147, error)) < 0)
+              gint32* _elem155 = g_new (gint32, 1);
+              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem155, error)) < 0)
                 return -1;
               xfer += ret;
-              g_array_append_vals (this_object->success, _elem147, 1);
+              g_array_append_vals (this_object->success, _elem155, 1);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -83580,14 +85040,14 @@ i_face_log_load_person_group_id_by_where_result_write (ThriftStruct *object, Thr
       return -1;
     xfer += ret;
     {
-      guint i148;
+      guint i156;
 
       if ((ret = thrift_protocol_write_list_begin (protocol, T_I32, (gint32) (this_object->success ? this_object->success->len : 0), error)) < 0)
         return -1;
       xfer += ret;
-      for (i148 = 0; i148 < (this_object->success ? this_object->success->len : 0); i148++)
+      for (i156 = 0; i156 < (this_object->success ? this_object->success->len : 0); i156++)
       {
-        if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->success, gint32, i148)), error)) < 0)
+        if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->success, gint32, i156)), error)) < 0)
           return -1;
         xfer += ret;
 
@@ -84075,11 +85535,11 @@ i_face_log_load_person_id_by_update_time_result_read (ThriftStruct *object, Thri
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              gint32* _elem149 = g_new (gint32, 1);
-              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem149, error)) < 0)
+              gint32* _elem157 = g_new (gint32, 1);
+              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem157, error)) < 0)
                 return -1;
               xfer += ret;
-              g_array_append_vals (this_object->success, _elem149, 1);
+              g_array_append_vals (this_object->success, _elem157, 1);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -84149,14 +85609,14 @@ i_face_log_load_person_id_by_update_time_result_write (ThriftStruct *object, Thr
       return -1;
     xfer += ret;
     {
-      guint i150;
+      guint i158;
 
       if ((ret = thrift_protocol_write_list_begin (protocol, T_I32, (gint32) (this_object->success ? this_object->success->len : 0), error)) < 0)
         return -1;
       xfer += ret;
-      for (i150 = 0; i150 < (this_object->success ? this_object->success->len : 0); i150++)
+      for (i158 = 0; i158 < (this_object->success ? this_object->success->len : 0); i158++)
       {
-        if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->success, gint32, i150)), error)) < 0)
+        if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->success, gint32, i158)), error)) < 0)
           return -1;
         xfer += ret;
 
@@ -84648,11 +86108,11 @@ i_face_log_load_person_id_by_update_time_time_str_result_read (ThriftStruct *obj
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              gint32* _elem151 = g_new (gint32, 1);
-              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem151, error)) < 0)
+              gint32* _elem159 = g_new (gint32, 1);
+              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem159, error)) < 0)
                 return -1;
               xfer += ret;
-              g_array_append_vals (this_object->success, _elem151, 1);
+              g_array_append_vals (this_object->success, _elem159, 1);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -84722,14 +86182,14 @@ i_face_log_load_person_id_by_update_time_time_str_result_write (ThriftStruct *ob
       return -1;
     xfer += ret;
     {
-      guint i152;
+      guint i160;
 
       if ((ret = thrift_protocol_write_list_begin (protocol, T_I32, (gint32) (this_object->success ? this_object->success->len : 0), error)) < 0)
         return -1;
       xfer += ret;
-      for (i152 = 0; i152 < (this_object->success ? this_object->success->len : 0); i152++)
+      for (i160 = 0; i160 < (this_object->success ? this_object->success->len : 0); i160++)
       {
-        if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->success, gint32, i152)), error)) < 0)
+        if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->success, gint32, i160)), error)) < 0)
           return -1;
         xfer += ret;
 
@@ -85221,11 +86681,11 @@ i_face_log_load_person_id_by_where_result_read (ThriftStruct *object, ThriftProt
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              gint32* _elem153 = g_new (gint32, 1);
-              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem153, error)) < 0)
+              gint32* _elem161 = g_new (gint32, 1);
+              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem161, error)) < 0)
                 return -1;
               xfer += ret;
-              g_array_append_vals (this_object->success, _elem153, 1);
+              g_array_append_vals (this_object->success, _elem161, 1);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -85295,14 +86755,14 @@ i_face_log_load_person_id_by_where_result_write (ThriftStruct *object, ThriftPro
       return -1;
     xfer += ret;
     {
-      guint i154;
+      guint i162;
 
       if ((ret = thrift_protocol_write_list_begin (protocol, T_I32, (gint32) (this_object->success ? this_object->success->len : 0), error)) < 0)
         return -1;
       xfer += ret;
-      for (i154 = 0; i154 < (this_object->success ? this_object->success->len : 0); i154++)
+      for (i162 = 0; i162 < (this_object->success ? this_object->success->len : 0); i162++)
       {
-        if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->success, gint32, i154)), error)) < 0)
+        if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->success, gint32, i162)), error)) < 0)
           return -1;
         xfer += ret;
 
@@ -85790,11 +87250,11 @@ i_face_log_load_updated_persons_result_read (ThriftStruct *object, ThriftProtoco
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              gint32* _elem155 = g_new (gint32, 1);
-              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem155, error)) < 0)
+              gint32* _elem163 = g_new (gint32, 1);
+              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem163, error)) < 0)
                 return -1;
               xfer += ret;
-              g_array_append_vals (this_object->success, _elem155, 1);
+              g_array_append_vals (this_object->success, _elem163, 1);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -85864,14 +87324,14 @@ i_face_log_load_updated_persons_result_write (ThriftStruct *object, ThriftProtoc
       return -1;
     xfer += ret;
     {
-      guint i156;
+      guint i164;
 
       if ((ret = thrift_protocol_write_list_begin (protocol, T_I32, (gint32) (this_object->success ? this_object->success->len : 0), error)) < 0)
         return -1;
       xfer += ret;
-      for (i156 = 0; i156 < (this_object->success ? this_object->success->len : 0); i156++)
+      for (i164 = 0; i164 < (this_object->success ? this_object->success->len : 0); i164++)
       {
-        if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->success, gint32, i156)), error)) < 0)
+        if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->success, gint32, i164)), error)) < 0)
           return -1;
         xfer += ret;
 
@@ -86363,11 +87823,11 @@ i_face_log_load_updated_persons_timestr_result_read (ThriftStruct *object, Thrif
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              gint32* _elem157 = g_new (gint32, 1);
-              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem157, error)) < 0)
+              gint32* _elem165 = g_new (gint32, 1);
+              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem165, error)) < 0)
                 return -1;
               xfer += ret;
-              g_array_append_vals (this_object->success, _elem157, 1);
+              g_array_append_vals (this_object->success, _elem165, 1);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -86437,14 +87897,14 @@ i_face_log_load_updated_persons_timestr_result_write (ThriftStruct *object, Thri
       return -1;
     xfer += ret;
     {
-      guint i158;
+      guint i166;
 
       if ((ret = thrift_protocol_write_list_begin (protocol, T_I32, (gint32) (this_object->success ? this_object->success->len : 0), error)) < 0)
         return -1;
       xfer += ret;
-      for (i158 = 0; i158 < (this_object->success ? this_object->success->len : 0); i158++)
+      for (i166 = 0; i166 < (this_object->success ? this_object->success->len : 0); i166++)
       {
-        if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->success, gint32, i158)), error)) < 0)
+        if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->success, gint32, i166)), error)) < 0)
           return -1;
         xfer += ret;
 
@@ -91780,11 +93240,11 @@ i_face_log_run_cmd_args_read (ThriftStruct *object, ThriftProtocol *protocol, GE
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              gint32* _elem159 = g_new (gint32, 1);
-              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem159, error)) < 0)
+              gint32* _elem167 = g_new (gint32, 1);
+              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem167, error)) < 0)
                 return -1;
               xfer += ret;
-              g_array_append_vals (this_object->target, _elem159, 1);
+              g_array_append_vals (this_object->target, _elem167, 1);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -91923,14 +93383,14 @@ i_face_log_run_cmd_args_write (ThriftStruct *object, ThriftProtocol *protocol, G
     return -1;
   xfer += ret;
   {
-    guint i160;
+    guint i168;
 
     if ((ret = thrift_protocol_write_list_begin (protocol, T_I32, (gint32) (this_object->target ? this_object->target->len : 0), error)) < 0)
       return -1;
     xfer += ret;
-    for (i160 = 0; i160 < (this_object->target ? this_object->target->len : 0); i160++)
+    for (i168 = 0; i168 < (this_object->target ? this_object->target->len : 0); i168++)
     {
-      if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->target, gint32, i160)), error)) < 0)
+      if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->target, gint32, i168)), error)) < 0)
         return -1;
       xfer += ret;
 
@@ -99366,19 +100826,19 @@ i_face_log_save_person_with_photo_and_feature_multi_faces_args_read (ThriftStruc
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              FaceBean * _elem161 = NULL;
-              if ( _elem161 != NULL)
+              FaceBean * _elem169 = NULL;
+              if ( _elem169 != NULL)
               {
-                g_object_unref (_elem161);
+                g_object_unref (_elem169);
               }
-              _elem161 = g_object_new (TYPE_FACE_BEAN, NULL);
-              if ((ret = thrift_struct_read (THRIFT_STRUCT (_elem161), protocol, error)) < 0)
+              _elem169 = g_object_new (TYPE_FACE_BEAN, NULL);
+              if ((ret = thrift_struct_read (THRIFT_STRUCT (_elem169), protocol, error)) < 0)
               {
-                g_object_unref (_elem161);
+                g_object_unref (_elem169);
                 return -1;
               }
               xfer += ret;
-              g_ptr_array_add (this_object->faceBeans, _elem161);
+              g_ptr_array_add (this_object->faceBeans, _elem169);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -99479,14 +100939,14 @@ i_face_log_save_person_with_photo_and_feature_multi_faces_args_write (ThriftStru
     return -1;
   xfer += ret;
   {
-    guint i162;
+    guint i170;
 
     if ((ret = thrift_protocol_write_list_begin (protocol, T_STRUCT, (gint32) (this_object->faceBeans ? this_object->faceBeans->len : 0), error)) < 0)
       return -1;
     xfer += ret;
-    for (i162 = 0; i162 < (this_object->faceBeans ? this_object->faceBeans->len : 0); i162++)
+    for (i170 = 0; i170 < (this_object->faceBeans ? this_object->faceBeans->len : 0); i170++)
     {
-      if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) this_object->faceBeans, i162))), protocol, error)) < 0)
+      if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) this_object->faceBeans, i170))), protocol, error)) < 0)
         return -1;
       xfer += ret;
 
@@ -100227,20 +101687,20 @@ i_face_log_save_person_with_photo_and_feature_multi_image_args_read (ThriftStruc
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              GByteArray * _elem163 = NULL;
-              if (_elem163 != NULL)
+              GByteArray * _elem171 = NULL;
+              if (_elem171 != NULL)
               {
-                g_free(_elem163);
-                _elem163 = NULL;
+                g_free(_elem171);
+                _elem171 = NULL;
               }
 
               if ((ret = thrift_protocol_read_binary (protocol, &data, &len, error)) < 0)
                 return -1;
               xfer += ret;
-              _elem163 = g_byte_array_new();
-              g_byte_array_append (_elem163, (guint8 *) data, (guint) len);
+              _elem171 = g_byte_array_new();
+              g_byte_array_append (_elem171, (guint8 *) data, (guint) len);
               g_free (data);
-              g_ptr_array_add (this_object->photos, _elem163);
+              g_ptr_array_add (this_object->photos, _elem171);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -100268,19 +101728,19 @@ i_face_log_save_person_with_photo_and_feature_multi_image_args_read (ThriftStruc
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              FaceBean * _elem164 = NULL;
-              if ( _elem164 != NULL)
+              FaceBean * _elem172 = NULL;
+              if ( _elem172 != NULL)
               {
-                g_object_unref (_elem164);
+                g_object_unref (_elem172);
               }
-              _elem164 = g_object_new (TYPE_FACE_BEAN, NULL);
-              if ((ret = thrift_struct_read (THRIFT_STRUCT (_elem164), protocol, error)) < 0)
+              _elem172 = g_object_new (TYPE_FACE_BEAN, NULL);
+              if ((ret = thrift_struct_read (THRIFT_STRUCT (_elem172), protocol, error)) < 0)
               {
-                g_object_unref (_elem164);
+                g_object_unref (_elem172);
                 return -1;
               }
               xfer += ret;
-              g_ptr_array_add (this_object->faces, _elem164);
+              g_ptr_array_add (this_object->faces, _elem172);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -100381,14 +101841,14 @@ i_face_log_save_person_with_photo_and_feature_multi_image_args_write (ThriftStru
     return -1;
   xfer += ret;
   {
-    guint i165;
+    guint i173;
 
     if ((ret = thrift_protocol_write_list_begin (protocol, T_STRING, (gint32) (this_object->photos ? this_object->photos->len : 0), error)) < 0)
       return -1;
     xfer += ret;
-    for (i165 = 0; i165 < (this_object->photos ? this_object->photos->len : 0); i165++)
+    for (i173 = 0; i173 < (this_object->photos ? this_object->photos->len : 0); i173++)
     {
-      if ((ret = thrift_protocol_write_binary (protocol, ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->photos, i165)) ? ((GByteArray *) ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->photos, i165)))->data : NULL, ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->photos, i165)) ? ((GByteArray *) ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->photos, i165)))->len : 0, error)) < 0)
+      if ((ret = thrift_protocol_write_binary (protocol, ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->photos, i173)) ? ((GByteArray *) ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->photos, i173)))->data : NULL, ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->photos, i173)) ? ((GByteArray *) ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->photos, i173)))->len : 0, error)) < 0)
         return -1;
       xfer += ret;
 
@@ -100404,14 +101864,14 @@ i_face_log_save_person_with_photo_and_feature_multi_image_args_write (ThriftStru
     return -1;
   xfer += ret;
   {
-    guint i166;
+    guint i174;
 
     if ((ret = thrift_protocol_write_list_begin (protocol, T_STRUCT, (gint32) (this_object->faces ? this_object->faces->len : 0), error)) < 0)
       return -1;
     xfer += ret;
-    for (i166 = 0; i166 < (this_object->faces ? this_object->faces->len : 0); i166++)
+    for (i174 = 0; i174 < (this_object->faces ? this_object->faces->len : 0); i174++)
     {
-      if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) this_object->faces, i166))), protocol, error)) < 0)
+      if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) this_object->faces, i174))), protocol, error)) < 0)
         return -1;
       xfer += ret;
 
@@ -101802,19 +103262,19 @@ i_face_log_save_persons_args_read (ThriftStruct *object, ThriftProtocol *protoco
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              PersonBean * _elem167 = NULL;
-              if ( _elem167 != NULL)
+              PersonBean * _elem175 = NULL;
+              if ( _elem175 != NULL)
               {
-                g_object_unref (_elem167);
+                g_object_unref (_elem175);
               }
-              _elem167 = g_object_new (TYPE_PERSON_BEAN, NULL);
-              if ((ret = thrift_struct_read (THRIFT_STRUCT (_elem167), protocol, error)) < 0)
+              _elem175 = g_object_new (TYPE_PERSON_BEAN, NULL);
+              if ((ret = thrift_struct_read (THRIFT_STRUCT (_elem175), protocol, error)) < 0)
               {
-                g_object_unref (_elem167);
+                g_object_unref (_elem175);
                 return -1;
               }
               xfer += ret;
-              g_ptr_array_add (this_object->persons, _elem167);
+              g_ptr_array_add (this_object->persons, _elem175);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -101875,14 +103335,14 @@ i_face_log_save_persons_args_write (ThriftStruct *object, ThriftProtocol *protoc
     return -1;
   xfer += ret;
   {
-    guint i168;
+    guint i176;
 
     if ((ret = thrift_protocol_write_list_begin (protocol, T_STRUCT, (gint32) (this_object->persons ? this_object->persons->len : 0), error)) < 0)
       return -1;
     xfer += ret;
-    for (i168 = 0; i168 < (this_object->persons ? this_object->persons->len : 0); i168++)
+    for (i176 = 0; i176 < (this_object->persons ? this_object->persons->len : 0); i176++)
     {
-      if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) this_object->persons, i168))), protocol, error)) < 0)
+      if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) this_object->persons, i176))), protocol, error)) < 0)
         return -1;
       xfer += ret;
 
@@ -102378,20 +103838,20 @@ i_face_log_save_persons_with_photo_args_read (ThriftStruct *object, ThriftProtoc
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              GByteArray * _elem169 = NULL;
-              if (_elem169 != NULL)
+              GByteArray * _elem177 = NULL;
+              if (_elem177 != NULL)
               {
-                g_free(_elem169);
-                _elem169 = NULL;
+                g_free(_elem177);
+                _elem177 = NULL;
               }
 
               if ((ret = thrift_protocol_read_binary (protocol, &data, &len, error)) < 0)
                 return -1;
               xfer += ret;
-              _elem169 = g_byte_array_new();
-              g_byte_array_append (_elem169, (guint8 *) data, (guint) len);
+              _elem177 = g_byte_array_new();
+              g_byte_array_append (_elem177, (guint8 *) data, (guint) len);
               g_free (data);
-              g_ptr_array_add (this_object->photos, _elem169);
+              g_ptr_array_add (this_object->photos, _elem177);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -102419,19 +103879,19 @@ i_face_log_save_persons_with_photo_args_read (ThriftStruct *object, ThriftProtoc
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              PersonBean * _elem170 = NULL;
-              if ( _elem170 != NULL)
+              PersonBean * _elem178 = NULL;
+              if ( _elem178 != NULL)
               {
-                g_object_unref (_elem170);
+                g_object_unref (_elem178);
               }
-              _elem170 = g_object_new (TYPE_PERSON_BEAN, NULL);
-              if ((ret = thrift_struct_read (THRIFT_STRUCT (_elem170), protocol, error)) < 0)
+              _elem178 = g_object_new (TYPE_PERSON_BEAN, NULL);
+              if ((ret = thrift_struct_read (THRIFT_STRUCT (_elem178), protocol, error)) < 0)
               {
-                g_object_unref (_elem170);
+                g_object_unref (_elem178);
                 return -1;
               }
               xfer += ret;
-              g_ptr_array_add (this_object->persons, _elem170);
+              g_ptr_array_add (this_object->persons, _elem178);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -102492,14 +103952,14 @@ i_face_log_save_persons_with_photo_args_write (ThriftStruct *object, ThriftProto
     return -1;
   xfer += ret;
   {
-    guint i171;
+    guint i179;
 
     if ((ret = thrift_protocol_write_list_begin (protocol, T_STRING, (gint32) (this_object->photos ? this_object->photos->len : 0), error)) < 0)
       return -1;
     xfer += ret;
-    for (i171 = 0; i171 < (this_object->photos ? this_object->photos->len : 0); i171++)
+    for (i179 = 0; i179 < (this_object->photos ? this_object->photos->len : 0); i179++)
     {
-      if ((ret = thrift_protocol_write_binary (protocol, ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->photos, i171)) ? ((GByteArray *) ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->photos, i171)))->data : NULL, ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->photos, i171)) ? ((GByteArray *) ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->photos, i171)))->len : 0, error)) < 0)
+      if ((ret = thrift_protocol_write_binary (protocol, ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->photos, i179)) ? ((GByteArray *) ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->photos, i179)))->data : NULL, ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->photos, i179)) ? ((GByteArray *) ((gchar*)g_ptr_array_index ((GPtrArray *) this_object->photos, i179)))->len : 0, error)) < 0)
         return -1;
       xfer += ret;
 
@@ -102515,14 +103975,14 @@ i_face_log_save_persons_with_photo_args_write (ThriftStruct *object, ThriftProto
     return -1;
   xfer += ret;
   {
-    guint i172;
+    guint i180;
 
     if ((ret = thrift_protocol_write_list_begin (protocol, T_STRUCT, (gint32) (this_object->persons ? this_object->persons->len : 0), error)) < 0)
       return -1;
     xfer += ret;
-    for (i172 = 0; i172 < (this_object->persons ? this_object->persons->len : 0); i172++)
+    for (i180 = 0; i180 < (this_object->persons ? this_object->persons->len : 0); i180++)
     {
-      if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) this_object->persons, i172))), protocol, error)) < 0)
+      if ((ret = thrift_struct_write (THRIFT_STRUCT ((g_ptr_array_index ((GPtrArray *) this_object->persons, i180))), protocol, error)) < 0)
         return -1;
       xfer += ret;
 
@@ -104825,11 +106285,11 @@ i_face_log_set_person_expiry_date_list_args_read (ThriftStruct *object, ThriftPr
             /* iterate through list elements */
             for (i = 0; i < size; i++)
             {
-              gint32* _elem173 = g_new (gint32, 1);
-              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem173, error)) < 0)
+              gint32* _elem181 = g_new (gint32, 1);
+              if ((ret = thrift_protocol_read_i32 (protocol, &*_elem181, error)) < 0)
                 return -1;
               xfer += ret;
-              g_array_append_vals (this_object->personIdList, _elem173, 1);
+              g_array_append_vals (this_object->personIdList, _elem181, 1);
             }
             if ((ret = thrift_protocol_read_list_end (protocol, error)) < 0)
               return -1;
@@ -104911,14 +106371,14 @@ i_face_log_set_person_expiry_date_list_args_write (ThriftStruct *object, ThriftP
     return -1;
   xfer += ret;
   {
-    guint i174;
+    guint i182;
 
     if ((ret = thrift_protocol_write_list_begin (protocol, T_I32, (gint32) (this_object->personIdList ? this_object->personIdList->len : 0), error)) < 0)
       return -1;
     xfer += ret;
-    for (i174 = 0; i174 < (this_object->personIdList ? this_object->personIdList->len : 0); i174++)
+    for (i182 = 0; i182 < (this_object->personIdList ? this_object->personIdList->len : 0); i182++)
     {
-      if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->personIdList, gint32, i174)), error)) < 0)
+      if ((ret = thrift_protocol_write_i32 (protocol, (g_array_index (this_object->personIdList, gint32, i182)), error)) < 0)
         return -1;
       xfer += ret;
 
@@ -106039,28 +107499,28 @@ i_face_log_set_properties_args_read (ThriftStruct *object, ThriftProtocol *proto
             /* iterate through each of the map's fields */
             for (i = 0; i < size; i++)
             {
-              gchar * key175 = NULL;
-              gchar * val176 = NULL;
-              if (key175 != NULL)
+              gchar * key183 = NULL;
+              gchar * val184 = NULL;
+              if (key183 != NULL)
               {
-                g_free(key175);
-                key175 = NULL;
+                g_free(key183);
+                key183 = NULL;
               }
 
-              if ((ret = thrift_protocol_read_string (protocol, &key175, error)) < 0)
+              if ((ret = thrift_protocol_read_string (protocol, &key183, error)) < 0)
                 return -1;
               xfer += ret;
-              if (val176 != NULL)
+              if (val184 != NULL)
               {
-                g_free(val176);
-                val176 = NULL;
+                g_free(val184);
+                val184 = NULL;
               }
 
-              if ((ret = thrift_protocol_read_string (protocol, &val176, error)) < 0)
+              if ((ret = thrift_protocol_read_string (protocol, &val184, error)) < 0)
                 return -1;
               xfer += ret;
-              if (this_object->config && key175)
-                g_hash_table_insert ((GHashTable *)this_object->config, (gpointer) key175, (gpointer) val176);
+              if (this_object->config && key183)
+                g_hash_table_insert ((GHashTable *)this_object->config, (gpointer) key183, (gpointer) val184);
             }
 
             /* read the map end marker */
@@ -106123,8 +107583,8 @@ i_face_log_set_properties_args_write (ThriftStruct *object, ThriftProtocol *prot
     return -1;
   xfer += ret;
   {
-    gchar * key177 = NULL;
-    gchar * val178 = NULL;
+    gchar * key185 = NULL;
+    gchar * val186 = NULL;
     GList *key_list = NULL, *iter = NULL;
     gchar ** keys;
     int i = 0, key_count;
@@ -106142,14 +107602,14 @@ i_face_log_set_properties_args_write (ThriftStruct *object, ThriftProtocol *prot
 
     for (i = 0; i < key_count; ++i)
     {
-      key177 = keys[i];
-      val178 = (gchar *) g_hash_table_lookup (((GHashTable *) this_object->config), (gpointer) key177);
+      key185 = keys[i];
+      val186 = (gchar *) g_hash_table_lookup (((GHashTable *) this_object->config), (gpointer) key185);
 
-      if ((ret = thrift_protocol_write_string (protocol,  key177, error)) < 0)
+      if ((ret = thrift_protocol_write_string (protocol,  key185, error)) < 0)
         return -1;
       xfer += ret;
 
-      if ((ret = thrift_protocol_write_string (protocol,  val178, error)) < 0)
+      if ((ret = thrift_protocol_write_string (protocol,  val186, error)) < 0)
         return -1;
       xfer += ret;
 
@@ -110155,28 +111615,28 @@ i_face_log_version_info_result_read (ThriftStruct *object, ThriftProtocol *proto
             /* iterate through each of the map's fields */
             for (i = 0; i < size; i++)
             {
-              gchar * key179 = NULL;
-              gchar * val180 = NULL;
-              if (key179 != NULL)
+              gchar * key187 = NULL;
+              gchar * val188 = NULL;
+              if (key187 != NULL)
               {
-                g_free(key179);
-                key179 = NULL;
+                g_free(key187);
+                key187 = NULL;
               }
 
-              if ((ret = thrift_protocol_read_string (protocol, &key179, error)) < 0)
+              if ((ret = thrift_protocol_read_string (protocol, &key187, error)) < 0)
                 return -1;
               xfer += ret;
-              if (val180 != NULL)
+              if (val188 != NULL)
               {
-                g_free(val180);
-                val180 = NULL;
+                g_free(val188);
+                val188 = NULL;
               }
 
-              if ((ret = thrift_protocol_read_string (protocol, &val180, error)) < 0)
+              if ((ret = thrift_protocol_read_string (protocol, &val188, error)) < 0)
                 return -1;
               xfer += ret;
-              if (this_object->success && key179)
-                g_hash_table_insert ((GHashTable *)this_object->success, (gpointer) key179, (gpointer) val180);
+              if (this_object->success && key187)
+                g_hash_table_insert ((GHashTable *)this_object->success, (gpointer) key187, (gpointer) val188);
             }
 
             /* read the map end marker */
@@ -110248,8 +111708,8 @@ i_face_log_version_info_result_write (ThriftStruct *object, ThriftProtocol *prot
       return -1;
     xfer += ret;
     {
-      gchar * key181 = NULL;
-      gchar * val182 = NULL;
+      gchar * key189 = NULL;
+      gchar * val190 = NULL;
       GList *key_list = NULL, *iter = NULL;
       gchar ** keys;
       int i = 0, key_count;
@@ -110267,14 +111727,14 @@ i_face_log_version_info_result_write (ThriftStruct *object, ThriftProtocol *prot
 
       for (i = 0; i < key_count; ++i)
       {
-        key181 = keys[i];
-        val182 = (gchar *) g_hash_table_lookup (((GHashTable *) this_object->success), (gpointer) key181);
+        key189 = keys[i];
+        val190 = (gchar *) g_hash_table_lookup (((GHashTable *) this_object->success), (gpointer) key189);
 
-        if ((ret = thrift_protocol_write_string (protocol,  key181, error)) < 0)
+        if ((ret = thrift_protocol_write_string (protocol,  key189, error)) < 0)
           return -1;
         xfer += ret;
 
-        if ((ret = thrift_protocol_write_string (protocol,  val182, error)) < 0)
+        if ((ret = thrift_protocol_write_string (protocol,  val190, error)) < 0)
           return -1;
         xfer += ret;
 

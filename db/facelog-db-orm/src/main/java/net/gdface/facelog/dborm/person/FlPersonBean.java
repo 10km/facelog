@@ -66,6 +66,9 @@ public  class FlPersonBean
     /** comments:验证有效期限(超过期限不能通过验证),为NULL永久有效 */
     private java.util.Date expiryDate;
 
+    /** comments:帐户激活日期,为NULL时,create_time字段即为激活日期 */
+    private java.util.Date activatedDate;
+
     /** comments:备注 */
     private String remark;
 
@@ -885,6 +888,70 @@ public  class FlPersonBean
         return 0L !=  (initialized & FL_PERSON_ID_EXPIRY_DATE_MASK);
     }
     /**
+     * Getter method for {@link #activatedDate}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_person.activated_date</li>
+     * <li>comments: 帐户激活日期,为NULL时,create_time字段即为激活日期</li>
+     * <li>column size: 10</li>
+     * <li>JDBC type returned by the driver: Types.DATE</li>
+     * </ul>
+     *
+     * @return the value of activatedDate
+     */
+    public java.util.Date getActivatedDate(){
+        return activatedDate;
+    }
+    /**
+     * Setter method for {@link #activatedDate}.<br>
+     * The new value is set only if equals() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to activatedDate
+     */
+    public void setActivatedDate(java.util.Date newVal)
+    {
+        checkMutable();
+
+        modified |= FL_PERSON_ID_ACTIVATED_DATE_MASK;
+        initialized |= FL_PERSON_ID_ACTIVATED_DATE_MASK;
+
+        if (Objects.equals(newVal, activatedDate)) {
+            return;
+        }
+        activatedDate = newVal;
+    }
+    /**
+     * Setter method for {@link #activatedDate}.<br>
+     * @param newVal the number of milliseconds since January 1, 1970, 00:00:00 GMT represented by this Date object.
+     */
+    public void setActivatedDate(Long newVal)
+    {
+        setActivatedDate(null == newVal ? null : new java.util.Date(newVal));
+    }
+    /**
+     * Determines if the activatedDate has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkActivatedDateModified()
+    {
+        return 0L !=  (modified & FL_PERSON_ID_ACTIVATED_DATE_MASK);
+    }
+
+    /**
+     * Determines if the activatedDate has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkActivatedDateInitialized()
+    {
+        return 0L !=  (initialized & FL_PERSON_ID_ACTIVATED_DATE_MASK);
+    }
+    /**
      * Getter method for {@link #remark}.<br>
      * Meta Data Information (in progress):
      * <ul>
@@ -1257,6 +1324,8 @@ public  class FlPersonBean
             return checkImageMd5Modified();
         case FL_PERSON_ID_EXPIRY_DATE:
             return checkExpiryDateModified();
+        case FL_PERSON_ID_ACTIVATED_DATE:
+            return checkActivatedDateModified();
         case FL_PERSON_ID_REMARK:
             return checkRemarkModified();
         case FL_PERSON_ID_EXT_BIN:
@@ -1299,6 +1368,8 @@ public  class FlPersonBean
             return checkImageMd5Initialized();
         case FL_PERSON_ID_EXPIRY_DATE:
             return checkExpiryDateInitialized();
+        case FL_PERSON_ID_ACTIVATED_DATE:
+            return checkActivatedDateInitialized();
         case FL_PERSON_ID_REMARK:
             return checkRemarkInitialized();
         case FL_PERSON_ID_EXT_BIN:
@@ -1352,6 +1423,7 @@ public  class FlPersonBean
             FL_PERSON_ID_PAPERS_NUM_MASK |
             FL_PERSON_ID_IMAGE_MD5_MASK |
             FL_PERSON_ID_EXPIRY_DATE_MASK |
+            FL_PERSON_ID_ACTIVATED_DATE_MASK |
             FL_PERSON_ID_REMARK_MASK |
             FL_PERSON_ID_EXT_BIN_MASK |
             FL_PERSON_ID_EXT_TXT_MASK |
@@ -1382,6 +1454,7 @@ public  class FlPersonBean
         this.imageMd5 = null;
         /* DEFAULT:'2050-12-31'*/
         this.expiryDate = new java.text.SimpleDateFormat("yyyy-MM-dd").parse("2050-12-31",new java.text.ParsePosition(0));
+        this.activatedDate = null;
         this.remark = null;
         this.extBin = null;
         this.extTxt = null;
@@ -1414,6 +1487,7 @@ public  class FlPersonBean
             .append(getPapersNum(), obj.getPapersNum())
             .append(getImageMd5(), obj.getImageMd5())
             .append(getExpiryDate(), obj.getExpiryDate())
+            .append(getActivatedDate(), obj.getActivatedDate())
             .append(getRemark(), obj.getRemark())
             .append(getExtBin(), obj.getExtBin())
             .append(getExtTxt(), obj.getExtTxt())
@@ -1591,6 +1665,15 @@ public  class FlPersonBean
                 append(builder,fullIfStringOrBytes,getExpiryDate());
             }
         }
+        if(checkActivatedDateInitialized()){
+            if(!notNull || null != getActivatedDate()){
+                if(count++ >0){
+                    builder.append(",");
+                }
+                builder.append("activated_date=");
+                append(builder,fullIfStringOrBytes,getActivatedDate());
+            }
+        }
         if(checkRemarkInitialized()){
             if(!notNull || null != getRemark()){
                 if(count++ >0){
@@ -1654,6 +1737,7 @@ public  class FlPersonBean
             .append(getPapersNum(), object.getPapersNum())
             .append(getImageMd5(), object.getImageMd5())
             .append(getExpiryDate(), object.getExpiryDate())
+            .append(getActivatedDate(), object.getActivatedDate())
             .append(getRemark(), object.getRemark())
             .append(getExtBin(), object.getExtBin())
             .append(getExtTxt(), object.getExtTxt())
@@ -1691,6 +1775,7 @@ public  class FlPersonBean
         setPapersNum((String)null);
         setImageMd5((String)null);
         setExpiryDate((java.util.Date)null);
+        setActivatedDate((java.util.Date)null);
         setRemark((String)null);
         setExtBin((java.nio.ByteBuffer)null);
         setExtTxt((String)null);
@@ -1747,7 +1832,7 @@ public  class FlPersonBean
     public FlPersonBean copy(FlPersonBean bean, int... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length){
-            fieldList = new int[]{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16};
+            fieldList = new int[]{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17};
         }
         for (int i = 0; i < fieldList.length; ++i) {
             if( bean.isInitialized(fieldList[i]) && !Objects.deepEquals(bean.getValue(fieldList[i]), getValue(fieldList[i]))){
@@ -1803,6 +1888,8 @@ public  class FlPersonBean
             return (T)getImageMd5();        
         case FL_PERSON_ID_EXPIRY_DATE: 
             return (T)getExpiryDate();        
+        case FL_PERSON_ID_ACTIVATED_DATE: 
+            return (T)getActivatedDate();        
         case FL_PERSON_ID_REMARK: 
             return (T)getRemark();        
         case FL_PERSON_ID_EXT_BIN: 
@@ -1857,6 +1944,9 @@ public  class FlPersonBean
             break;
         case FL_PERSON_ID_EXPIRY_DATE:
             setExpiryDate((java.util.Date)value);
+            break;
+        case FL_PERSON_ID_ACTIVATED_DATE:
+            setActivatedDate((java.util.Date)value);
             break;
         case FL_PERSON_ID_REMARK:
             setRemark((String)value);
@@ -2070,6 +2160,16 @@ public  class FlPersonBean
          */
         public Builder expiryDate(java.util.Date expiryDate){
             TEMPLATE.get().setExpiryDate(expiryDate);
+            return this;
+        }
+        /** 
+         * fill the field : fl_person.activated_date
+         * @param activatedDate 帐户激活日期,为NULL时,create_time字段即为激活日期
+         * @see FlPersonBean#getActivatedDate()
+         * @see FlPersonBean#setActivatedDate(java.util.Date)
+         */
+        public Builder activatedDate(java.util.Date activatedDate){
+            TEMPLATE.get().setActivatedDate(activatedDate);
             return this;
         }
         /** 

@@ -410,6 +410,38 @@ IFaceLog_countPersonGroupByWhere_presult::~IFaceLog_countPersonGroupByWhere_pres
 }
 
 
+IFaceLog_countPersonLog_args::~IFaceLog_countPersonLog_args() throw() {
+}
+
+
+IFaceLog_countPersonLog_pargs::~IFaceLog_countPersonLog_pargs() throw() {
+}
+
+
+IFaceLog_countPersonLog_result::~IFaceLog_countPersonLog_result() throw() {
+}
+
+
+IFaceLog_countPersonLog_presult::~IFaceLog_countPersonLog_presult() throw() {
+}
+
+
+IFaceLog_countPersonLogTimeStr_args::~IFaceLog_countPersonLogTimeStr_args() throw() {
+}
+
+
+IFaceLog_countPersonLogTimeStr_pargs::~IFaceLog_countPersonLogTimeStr_pargs() throw() {
+}
+
+
+IFaceLog_countPersonLogTimeStr_result::~IFaceLog_countPersonLogTimeStr_result() throw() {
+}
+
+
+IFaceLog_countPersonLogTimeStr_presult::~IFaceLog_countPersonLogTimeStr_presult() throw() {
+}
+
+
 IFaceLog_deleteAllFeaturesByPersonId_args::~IFaceLog_deleteAllFeaturesByPersonId_args() throw() {
 }
 

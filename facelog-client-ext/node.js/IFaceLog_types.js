@@ -2158,6 +2158,7 @@ var PersonBean = module.exports.PersonBean = function(args) {
   this.papersNum = null;
   this.imageMd5 = null;
   this.expiryDate = null;
+  this.activatedDate = null;
   this.remark = null;
   this.extBin = null;
   this.extTxt = null;
@@ -2214,6 +2215,9 @@ var PersonBean = module.exports.PersonBean = function(args) {
     }
     if (args.expiryDate !== undefined && args.expiryDate !== null) {
       this.expiryDate = args.expiryDate;
+    }
+    if (args.activatedDate !== undefined && args.activatedDate !== null) {
+      this.activatedDate = args.activatedDate;
     }
     if (args.remark !== undefined && args.remark !== null) {
       this.remark = args.remark;
@@ -2352,34 +2356,41 @@ PersonBean.prototype.read = function(input) {
       }
       break;
       case 16:
-      if (ftype == Thrift.Type.STRING) {
-        this.remark = input.readString();
+      if (ftype == Thrift.Type.I64) {
+        this.activatedDate = input.readI64();
       } else {
         input.skip(ftype);
       }
       break;
       case 17:
       if (ftype == Thrift.Type.STRING) {
-        this.extBin = input.readBinary();
+        this.remark = input.readString();
       } else {
         input.skip(ftype);
       }
       break;
       case 18:
       if (ftype == Thrift.Type.STRING) {
-        this.extTxt = input.readString();
+        this.extBin = input.readBinary();
       } else {
         input.skip(ftype);
       }
       break;
       case 19:
+      if (ftype == Thrift.Type.STRING) {
+        this.extTxt = input.readString();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 20:
       if (ftype == Thrift.Type.I64) {
         this.createTime = input.readI64();
       } else {
         input.skip(ftype);
       }
       break;
-      case 20:
+      case 21:
       if (ftype == Thrift.Type.I64) {
         this.updateTime = input.readI64();
       } else {
@@ -2472,28 +2483,33 @@ PersonBean.prototype.write = function(output) {
     output.writeI64(this.expiryDate);
     output.writeFieldEnd();
   }
+  if (this.activatedDate !== null && this.activatedDate !== undefined) {
+    output.writeFieldBegin('activatedDate', Thrift.Type.I64, 16);
+    output.writeI64(this.activatedDate);
+    output.writeFieldEnd();
+  }
   if (this.remark !== null && this.remark !== undefined) {
-    output.writeFieldBegin('remark', Thrift.Type.STRING, 16);
+    output.writeFieldBegin('remark', Thrift.Type.STRING, 17);
     output.writeString(this.remark);
     output.writeFieldEnd();
   }
   if (this.extBin !== null && this.extBin !== undefined) {
-    output.writeFieldBegin('extBin', Thrift.Type.STRING, 17);
+    output.writeFieldBegin('extBin', Thrift.Type.STRING, 18);
     output.writeBinary(this.extBin);
     output.writeFieldEnd();
   }
   if (this.extTxt !== null && this.extTxt !== undefined) {
-    output.writeFieldBegin('extTxt', Thrift.Type.STRING, 18);
+    output.writeFieldBegin('extTxt', Thrift.Type.STRING, 19);
     output.writeString(this.extTxt);
     output.writeFieldEnd();
   }
   if (this.createTime !== null && this.createTime !== undefined) {
-    output.writeFieldBegin('createTime', Thrift.Type.I64, 19);
+    output.writeFieldBegin('createTime', Thrift.Type.I64, 20);
     output.writeI64(this.createTime);
     output.writeFieldEnd();
   }
   if (this.updateTime !== null && this.updateTime !== undefined) {
-    output.writeFieldBegin('updateTime', Thrift.Type.I64, 20);
+    output.writeFieldBegin('updateTime', Thrift.Type.I64, 21);
     output.writeI64(this.updateTime);
     output.writeFieldEnd();
   }

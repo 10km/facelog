@@ -43,6 +43,8 @@ struct _IFaceLogIfInterface
   gboolean (*count_log_light_by_where) (IFaceLogIf *iface, gint32* _return, const gchar * where, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*count_person_by_where) (IFaceLogIf *iface, gint32* _return, const gchar * where, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*count_person_group_by_where) (IFaceLogIf *iface, gint32* _return, const gchar * where, ServiceRuntimeException ** ex1, GError **error);
+  gboolean (*count_person_log) (IFaceLogIf *iface, GHashTable ** _return, const gint32 personId, const gint64 startDate, const gint64 endDate, ServiceRuntimeException ** ex1, GError **error);
+  gboolean (*count_person_log_time_str) (IFaceLogIf *iface, GHashTable ** _return, const gint32 personId, const gchar * startDate, const gchar * endDate, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*delete_all_features_by_person_id) (IFaceLogIf *iface, gint32* _return, const gint32 personId, const gboolean deleteImage, const Token * token, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*delete_device) (IFaceLogIf *iface, gboolean* _return, const gint32 id, const Token * token, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*delete_device_by_mac) (IFaceLogIf *iface, gboolean* _return, const gchar * mac, const Token * token, ServiceRuntimeException ** ex1, GError **error);
@@ -215,6 +217,8 @@ gboolean i_face_log_if_count_log_light_by_verify_time_timestr (IFaceLogIf *iface
 gboolean i_face_log_if_count_log_light_by_where (IFaceLogIf *iface, gint32* _return, const gchar * where, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_if_count_person_by_where (IFaceLogIf *iface, gint32* _return, const gchar * where, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_if_count_person_group_by_where (IFaceLogIf *iface, gint32* _return, const gchar * where, ServiceRuntimeException ** ex1, GError **error);
+gboolean i_face_log_if_count_person_log (IFaceLogIf *iface, GHashTable ** _return, const gint32 personId, const gint64 startDate, const gint64 endDate, ServiceRuntimeException ** ex1, GError **error);
+gboolean i_face_log_if_count_person_log_time_str (IFaceLogIf *iface, GHashTable ** _return, const gint32 personId, const gchar * startDate, const gchar * endDate, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_if_delete_all_features_by_person_id (IFaceLogIf *iface, gint32* _return, const gint32 personId, const gboolean deleteImage, const Token * token, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_if_delete_device (IFaceLogIf *iface, gboolean* _return, const gint32 id, const Token * token, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_if_delete_device_by_mac (IFaceLogIf *iface, gboolean* _return, const gchar * mac, const Token * token, ServiceRuntimeException ** ex1, GError **error);
@@ -453,6 +457,12 @@ gboolean i_face_log_client_recv_count_person_by_where (IFaceLogIf * iface, gint3
 gboolean i_face_log_client_count_person_group_by_where (IFaceLogIf * iface, gint32* _return, const gchar * where, ServiceRuntimeException ** ex1, GError ** error);
 gboolean i_face_log_client_send_count_person_group_by_where (IFaceLogIf * iface, const gchar * where, GError ** error);
 gboolean i_face_log_client_recv_count_person_group_by_where (IFaceLogIf * iface, gint32* _return, ServiceRuntimeException ** ex1, GError ** error);
+gboolean i_face_log_client_count_person_log (IFaceLogIf * iface, GHashTable ** _return, const gint32 personId, const gint64 startDate, const gint64 endDate, ServiceRuntimeException ** ex1, GError ** error);
+gboolean i_face_log_client_send_count_person_log (IFaceLogIf * iface, const gint32 personId, const gint64 startDate, const gint64 endDate, GError ** error);
+gboolean i_face_log_client_recv_count_person_log (IFaceLogIf * iface, GHashTable ** _return, ServiceRuntimeException ** ex1, GError ** error);
+gboolean i_face_log_client_count_person_log_time_str (IFaceLogIf * iface, GHashTable ** _return, const gint32 personId, const gchar * startDate, const gchar * endDate, ServiceRuntimeException ** ex1, GError ** error);
+gboolean i_face_log_client_send_count_person_log_time_str (IFaceLogIf * iface, const gint32 personId, const gchar * startDate, const gchar * endDate, GError ** error);
+gboolean i_face_log_client_recv_count_person_log_time_str (IFaceLogIf * iface, GHashTable ** _return, ServiceRuntimeException ** ex1, GError ** error);
 gboolean i_face_log_client_delete_all_features_by_person_id (IFaceLogIf * iface, gint32* _return, const gint32 personId, const gboolean deleteImage, const Token * token, ServiceRuntimeException ** ex1, GError ** error);
 gboolean i_face_log_client_send_delete_all_features_by_person_id (IFaceLogIf * iface, const gint32 personId, const gboolean deleteImage, const Token * token, GError ** error);
 gboolean i_face_log_client_recv_delete_all_features_by_person_id (IFaceLogIf * iface, gint32* _return, ServiceRuntimeException ** ex1, GError ** error);
@@ -906,6 +916,8 @@ struct _IFaceLogHandlerClass
   gboolean (*count_log_light_by_where) (IFaceLogIf *iface, gint32* _return, const gchar * where, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*count_person_by_where) (IFaceLogIf *iface, gint32* _return, const gchar * where, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*count_person_group_by_where) (IFaceLogIf *iface, gint32* _return, const gchar * where, ServiceRuntimeException ** ex1, GError **error);
+  gboolean (*count_person_log) (IFaceLogIf *iface, GHashTable ** _return, const gint32 personId, const gint64 startDate, const gint64 endDate, ServiceRuntimeException ** ex1, GError **error);
+  gboolean (*count_person_log_time_str) (IFaceLogIf *iface, GHashTable ** _return, const gint32 personId, const gchar * startDate, const gchar * endDate, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*delete_all_features_by_person_id) (IFaceLogIf *iface, gint32* _return, const gint32 personId, const gboolean deleteImage, const Token * token, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*delete_device) (IFaceLogIf *iface, gboolean* _return, const gint32 id, const Token * token, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*delete_device_by_mac) (IFaceLogIf *iface, gboolean* _return, const gchar * mac, const Token * token, ServiceRuntimeException ** ex1, GError **error);
@@ -1080,6 +1092,8 @@ gboolean i_face_log_handler_count_log_light_by_verify_time_timestr (IFaceLogIf *
 gboolean i_face_log_handler_count_log_light_by_where (IFaceLogIf *iface, gint32* _return, const gchar * where, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_handler_count_person_by_where (IFaceLogIf *iface, gint32* _return, const gchar * where, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_handler_count_person_group_by_where (IFaceLogIf *iface, gint32* _return, const gchar * where, ServiceRuntimeException ** ex1, GError **error);
+gboolean i_face_log_handler_count_person_log (IFaceLogIf *iface, GHashTable ** _return, const gint32 personId, const gint64 startDate, const gint64 endDate, ServiceRuntimeException ** ex1, GError **error);
+gboolean i_face_log_handler_count_person_log_time_str (IFaceLogIf *iface, GHashTable ** _return, const gint32 personId, const gchar * startDate, const gchar * endDate, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_handler_delete_all_features_by_person_id (IFaceLogIf *iface, gint32* _return, const gint32 personId, const gboolean deleteImage, const Token * token, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_handler_delete_device (IFaceLogIf *iface, gboolean* _return, const gint32 id, const Token * token, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_handler_delete_device_by_mac (IFaceLogIf *iface, gboolean* _return, const gchar * mac, const Token * token, ServiceRuntimeException ** ex1, GError **error);

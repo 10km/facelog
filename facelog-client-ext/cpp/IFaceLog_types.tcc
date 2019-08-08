@@ -2023,6 +2023,14 @@ uint32_t PersonBean::read(Protocol_* iprot) {
         }
         break;
       case 16:
+        if (ftype == ::apache::thrift::protocol::T_I64) {
+          xfer += iprot->readI64(this->activatedDate);
+          this->__isset.activatedDate = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 17:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
           xfer += iprot->readString(this->remark);
           this->__isset.remark = true;
@@ -2030,7 +2038,7 @@ uint32_t PersonBean::read(Protocol_* iprot) {
           xfer += iprot->skip(ftype);
         }
         break;
-      case 17:
+      case 18:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
           xfer += iprot->readBinary(this->extBin);
           this->__isset.extBin = true;
@@ -2038,7 +2046,7 @@ uint32_t PersonBean::read(Protocol_* iprot) {
           xfer += iprot->skip(ftype);
         }
         break;
-      case 18:
+      case 19:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
           xfer += iprot->readString(this->extTxt);
           this->__isset.extTxt = true;
@@ -2046,7 +2054,7 @@ uint32_t PersonBean::read(Protocol_* iprot) {
           xfer += iprot->skip(ftype);
         }
         break;
-      case 19:
+      case 20:
         if (ftype == ::apache::thrift::protocol::T_I64) {
           xfer += iprot->readI64(this->createTime);
           this->__isset.createTime = true;
@@ -2054,7 +2062,7 @@ uint32_t PersonBean::read(Protocol_* iprot) {
           xfer += iprot->skip(ftype);
         }
         break;
-      case 20:
+      case 21:
         if (ftype == ::apache::thrift::protocol::T_I64) {
           xfer += iprot->readI64(this->updateTime);
           this->__isset.updateTime = true;
@@ -2158,28 +2166,33 @@ uint32_t PersonBean::write(Protocol_* oprot) const {
     xfer += oprot->writeI64(this->expiryDate);
     xfer += oprot->writeFieldEnd();
   }
+  if (this->__isset.activatedDate) {
+    xfer += oprot->writeFieldBegin("activatedDate", ::apache::thrift::protocol::T_I64, 16);
+    xfer += oprot->writeI64(this->activatedDate);
+    xfer += oprot->writeFieldEnd();
+  }
   if (this->__isset.remark) {
-    xfer += oprot->writeFieldBegin("remark", ::apache::thrift::protocol::T_STRING, 16);
+    xfer += oprot->writeFieldBegin("remark", ::apache::thrift::protocol::T_STRING, 17);
     xfer += oprot->writeString(this->remark);
     xfer += oprot->writeFieldEnd();
   }
   if (this->__isset.extBin) {
-    xfer += oprot->writeFieldBegin("extBin", ::apache::thrift::protocol::T_STRING, 17);
+    xfer += oprot->writeFieldBegin("extBin", ::apache::thrift::protocol::T_STRING, 18);
     xfer += oprot->writeBinary(this->extBin);
     xfer += oprot->writeFieldEnd();
   }
   if (this->__isset.extTxt) {
-    xfer += oprot->writeFieldBegin("extTxt", ::apache::thrift::protocol::T_STRING, 18);
+    xfer += oprot->writeFieldBegin("extTxt", ::apache::thrift::protocol::T_STRING, 19);
     xfer += oprot->writeString(this->extTxt);
     xfer += oprot->writeFieldEnd();
   }
   if (this->__isset.createTime) {
-    xfer += oprot->writeFieldBegin("createTime", ::apache::thrift::protocol::T_I64, 19);
+    xfer += oprot->writeFieldBegin("createTime", ::apache::thrift::protocol::T_I64, 20);
     xfer += oprot->writeI64(this->createTime);
     xfer += oprot->writeFieldEnd();
   }
   if (this->__isset.updateTime) {
-    xfer += oprot->writeFieldBegin("updateTime", ::apache::thrift::protocol::T_I64, 20);
+    xfer += oprot->writeFieldBegin("updateTime", ::apache::thrift::protocol::T_I64, 21);
     xfer += oprot->writeI64(this->updateTime);
     xfer += oprot->writeFieldEnd();
   }

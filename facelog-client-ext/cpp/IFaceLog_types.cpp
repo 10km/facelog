@@ -1711,6 +1711,11 @@ void PersonBean::__set_expiryDate(const int64_t val) {
 __isset.expiryDate = true;
 }
 
+void PersonBean::__set_activatedDate(const int64_t val) {
+  this->activatedDate = val;
+__isset.activatedDate = true;
+}
+
 void PersonBean::__set_remark(const std::string& val) {
   this->remark = val;
 __isset.remark = true;
@@ -1759,6 +1764,7 @@ void swap(PersonBean &a, PersonBean &b) {
   swap(a.papersNum, b.papersNum);
   swap(a.imageMd5, b.imageMd5);
   swap(a.expiryDate, b.expiryDate);
+  swap(a.activatedDate, b.activatedDate);
   swap(a.remark, b.remark);
   swap(a.extBin, b.extBin);
   swap(a.extTxt, b.extTxt);
@@ -1783,6 +1789,7 @@ PersonBean::PersonBean(const PersonBean& other36) {
   papersNum = other36.papersNum;
   imageMd5 = other36.imageMd5;
   expiryDate = other36.expiryDate;
+  activatedDate = other36.activatedDate;
   remark = other36.remark;
   extBin = other36.extBin;
   extTxt = other36.extTxt;
@@ -1806,6 +1813,7 @@ PersonBean::PersonBean( PersonBean&& other37) {
   papersNum = std::move(other37.papersNum);
   imageMd5 = std::move(other37.imageMd5);
   expiryDate = std::move(other37.expiryDate);
+  activatedDate = std::move(other37.activatedDate);
   remark = std::move(other37.remark);
   extBin = std::move(other37.extBin);
   extTxt = std::move(other37.extTxt);
@@ -1829,6 +1837,7 @@ PersonBean& PersonBean::operator=(const PersonBean& other38) {
   papersNum = other38.papersNum;
   imageMd5 = other38.imageMd5;
   expiryDate = other38.expiryDate;
+  activatedDate = other38.activatedDate;
   remark = other38.remark;
   extBin = other38.extBin;
   extTxt = other38.extTxt;
@@ -1853,6 +1862,7 @@ PersonBean& PersonBean::operator=(PersonBean&& other39) {
   papersNum = std::move(other39.papersNum);
   imageMd5 = std::move(other39.imageMd5);
   expiryDate = std::move(other39.expiryDate);
+  activatedDate = std::move(other39.activatedDate);
   remark = std::move(other39.remark);
   extBin = std::move(other39.extBin);
   extTxt = std::move(other39.extTxt);
@@ -1879,6 +1889,7 @@ void PersonBean::printTo(std::ostream& out) const {
   out << ", " << "papersNum="; (__isset.papersNum ? (out << to_string(papersNum)) : (out << "<null>"));
   out << ", " << "imageMd5="; (__isset.imageMd5 ? (out << to_string(imageMd5)) : (out << "<null>"));
   out << ", " << "expiryDate="; (__isset.expiryDate ? (out << to_string(expiryDate)) : (out << "<null>"));
+  out << ", " << "activatedDate="; (__isset.activatedDate ? (out << to_string(activatedDate)) : (out << "<null>"));
   out << ", " << "remark="; (__isset.remark ? (out << to_string(remark)) : (out << "<null>"));
   out << ", " << "extBin="; (__isset.extBin ? (out << to_string(extBin)) : (out << "<null>"));
   out << ", " << "extTxt="; (__isset.extTxt ? (out << to_string(extTxt)) : (out << "<null>"));

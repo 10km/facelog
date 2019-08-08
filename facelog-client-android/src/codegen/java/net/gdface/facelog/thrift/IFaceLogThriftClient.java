@@ -934,6 +934,66 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
+    public Map<String, Integer> countPersonLog(final int personId,
+        final Long startDate,
+        final Long endDate) 
+        {
+        try{
+            return syncCall(new Function<Map<String,Integer>,Map<String, Integer>>() {
+                @Override
+                public Map<String, Integer> apply(Map<String,Integer> input) {
+                    return TypeTransformer.getInstance().to(
+                    input,
+                    String.class,
+                    Integer.class,
+                    String.class,
+                    Integer.class);
+                }},
+                new ServiceAsyncCall<Map<String,Integer>>(){
+                @Override
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<Map<String,Integer>> nativeCallback){
+                    service.countPersonLog(personId,startDate,endDate,nativeCallback);
+                }});
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);
+        }
+    }
+    @Override
+    public Map<String, Integer> countPersonLog(final int personId,
+        final String startDate,
+        final String endDate) 
+        {
+        try{
+            return syncCall(new Function<Map<String,Integer>,Map<String, Integer>>() {
+                @Override
+                public Map<String, Integer> apply(Map<String,Integer> input) {
+                    return TypeTransformer.getInstance().to(
+                    input,
+                    String.class,
+                    Integer.class,
+                    String.class,
+                    Integer.class);
+                }},
+                new ServiceAsyncCall<Map<String,Integer>>(){
+                @Override
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<Map<String,Integer>> nativeCallback){
+                    service.countPersonLogTimeStr(personId,startDate,endDate,nativeCallback);
+                }});
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);
+        }
+    }
+    @Override
     public int deleteAllFeaturesByPersonId(final int personId,
         final boolean deleteImage,
         final Token token) 

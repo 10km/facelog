@@ -706,6 +706,56 @@ public class IFaceLogThriftDecorator {
         }
     }
     /**
+     * @see {@link net.gdface.facelog.IFaceLog#countPersonLog(int,java.lang.Long,java.lang.Long)}
+     */
+    @ThriftMethod(value = "countPersonLog" )
+    public Map<String,Integer> countPersonLog(int personId,
+        Long startDate,
+        Long endDate) 
+        throws ServiceRuntimeException{
+        try{
+            return TypeTransformer.getInstance().to(
+                    delegate().countPersonLog(personId,
+                startDate,
+                endDate),
+                    String.class,
+                    Integer.class,
+                    String.class,
+                    Integer.class);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
+     * @see {@link net.gdface.facelog.IFaceLog#countPersonLog(int,java.lang.String,java.lang.String)}
+     */
+    @ThriftMethod(value = "countPersonLogTimeStr" )
+    public Map<String,Integer> countPersonLogTimeStr(int personId,
+        String startDate,
+        String endDate) 
+        throws ServiceRuntimeException{
+        try{
+            return TypeTransformer.getInstance().to(
+                    delegate().countPersonLog(personId,
+                startDate,
+                endDate),
+                    String.class,
+                    Integer.class,
+                    String.class,
+                    Integer.class);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
      * @see {@link net.gdface.facelog.IFaceLog#deleteAllFeaturesByPersonId(int,boolean,net.gdface.facelog.Token)}
      */
     @ThriftMethod(value = "deleteAllFeaturesByPersonId" )

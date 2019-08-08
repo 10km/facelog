@@ -691,6 +691,58 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
+    public Map<String, Integer> countPersonLog(int personId,
+        Long startDate,
+        Long endDate) 
+        {
+        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        try{
+            return TypeTransformer.getInstance().to(
+                    instance.countPersonLog(personId,
+                startDate,
+                endDate),
+                    String.class,
+                    Integer.class,
+                    String.class,
+                    Integer.class);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch(RuntimeTApplicationException e){
+            return net.gdface.thrift.ThriftUtils.returnNull(e);
+        }
+        finally{
+            factory.releaseInstance(instance);
+        }
+    }
+    @Override
+    public Map<String, Integer> countPersonLog(int personId,
+        String startDate,
+        String endDate) 
+        {
+        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        try{
+            return TypeTransformer.getInstance().to(
+                    instance.countPersonLogTimeStr(personId,
+                startDate,
+                endDate),
+                    String.class,
+                    Integer.class,
+                    String.class,
+                    Integer.class);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch(RuntimeTApplicationException e){
+            return net.gdface.thrift.ThriftUtils.returnNull(e);
+        }
+        finally{
+            factory.releaseInstance(instance);
+        }
+    }
+    @Override
     public int deleteAllFeaturesByPersonId(int personId,
         boolean deleteImage,
         Token token) 

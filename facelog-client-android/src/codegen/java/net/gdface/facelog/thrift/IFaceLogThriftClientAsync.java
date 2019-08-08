@@ -870,6 +870,66 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(countPersonGroupByWhere(where), callback);
     }
     /**
+     * see also {@link net.gdface.facelog.IFaceLog#countPersonLog(int,java.lang.Long,java.lang.Long)}
+     */
+    public ListenableFuture<Map<String, Integer>> countPersonLog(int personId,
+        Long startDate,
+        Long endDate){
+        MethodCallback<Map<String, Integer>,Map<String,Integer>> nativeCallback = 
+            new MethodCallback<Map<String, Integer>,Map<String,Integer>>(
+                new Function<Map<String,Integer>,Map<String, Integer>>() {
+                        @Override
+                        public Map<String, Integer> apply(Map<String,Integer> input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    String.class,
+                    Integer.class,
+                    String.class,
+                    Integer.class);
+                }});
+        nativeCallback.service.countPersonLog(
+                personId,
+            startDate,
+            endDate,nativeCallback);
+        return nativeCallback.feature;
+    }
+    public void countPersonLog(int personId,
+        Long startDate,
+        Long endDate,
+        FutureCallback<Map<String, Integer>>callback){
+        factory.addCallback(countPersonLog(personId,startDate,endDate), callback);
+    }
+    /**
+     * see also {@link net.gdface.facelog.IFaceLog#countPersonLog(int,java.lang.String,java.lang.String)}
+     */
+    public ListenableFuture<Map<String, Integer>> countPersonLog(int personId,
+        String startDate,
+        String endDate){
+        MethodCallback<Map<String, Integer>,Map<String,Integer>> nativeCallback = 
+            new MethodCallback<Map<String, Integer>,Map<String,Integer>>(
+                new Function<Map<String,Integer>,Map<String, Integer>>() {
+                        @Override
+                        public Map<String, Integer> apply(Map<String,Integer> input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    String.class,
+                    Integer.class,
+                    String.class,
+                    Integer.class);
+                }});
+        nativeCallback.service.countPersonLogTimeStr(
+                personId,
+            startDate,
+            endDate,nativeCallback);
+        return nativeCallback.feature;
+    }
+    public void countPersonLog(int personId,
+        String startDate,
+        String endDate,
+        FutureCallback<Map<String, Integer>>callback){
+        factory.addCallback(countPersonLog(personId,startDate,endDate), callback);
+    }
+    /**
      * see also {@link net.gdface.facelog.IFaceLog#deleteAllFeaturesByPersonId(int,boolean,net.gdface.facelog.Token)}
      */
     public ListenableFuture<Integer> deleteAllFeaturesByPersonId(int personId,

@@ -46,6 +46,8 @@ class IFaceLogIf {
   virtual int32_t countLogLightByWhere(const std::string& where) = 0;
   virtual int32_t countPersonByWhere(const std::string& where) = 0;
   virtual int32_t countPersonGroupByWhere(const std::string& where) = 0;
+  virtual void countPersonLog(std::map<std::string, int32_t> & _return, const int32_t personId, const int64_t startDate, const int64_t endDate) = 0;
+  virtual void countPersonLogTimeStr(std::map<std::string, int32_t> & _return, const int32_t personId, const std::string& startDate, const std::string& endDate) = 0;
   virtual int32_t deleteAllFeaturesByPersonId(const int32_t personId, const bool deleteImage, const Token& token) = 0;
   virtual bool deleteDevice(const int32_t id, const Token& token) = 0;
   virtual bool deleteDeviceByMac(const std::string& mac, const Token& token) = 0;
@@ -296,6 +298,12 @@ class IFaceLogNull : virtual public IFaceLogIf {
   int32_t countPersonGroupByWhere(const std::string& /* where */) {
     int32_t _return = 0;
     return _return;
+  }
+  void countPersonLog(std::map<std::string, int32_t> & /* _return */, const int32_t /* personId */, const int64_t /* startDate */, const int64_t /* endDate */) {
+    return;
+  }
+  void countPersonLogTimeStr(std::map<std::string, int32_t> & /* _return */, const int32_t /* personId */, const std::string& /* startDate */, const std::string& /* endDate */) {
+    return;
   }
   int32_t deleteAllFeaturesByPersonId(const int32_t /* personId */, const bool /* deleteImage */, const Token& /* token */) {
     int32_t _return = 0;
@@ -4078,6 +4086,276 @@ class IFaceLog_countPersonGroupByWhere_presult {
   ServiceRuntimeException ex1;
 
   _IFaceLog_countPersonGroupByWhere_presult__isset __isset;
+
+  template <class Protocol_>
+  uint32_t read(Protocol_* iprot);
+
+};
+
+typedef struct _IFaceLog_countPersonLog_args__isset {
+  _IFaceLog_countPersonLog_args__isset() : startDate(false), endDate(false) {}
+  bool startDate :1;
+  bool endDate :1;
+} _IFaceLog_countPersonLog_args__isset;
+
+class IFaceLog_countPersonLog_args {
+ public:
+
+  IFaceLog_countPersonLog_args(const IFaceLog_countPersonLog_args&);
+  IFaceLog_countPersonLog_args(IFaceLog_countPersonLog_args&&);
+  IFaceLog_countPersonLog_args& operator=(const IFaceLog_countPersonLog_args&);
+  IFaceLog_countPersonLog_args& operator=(IFaceLog_countPersonLog_args&&);
+  IFaceLog_countPersonLog_args() : personId(0), startDate(0), endDate(0) {
+  }
+
+  virtual ~IFaceLog_countPersonLog_args() throw();
+  int32_t personId;
+  int64_t startDate;
+  int64_t endDate;
+
+  _IFaceLog_countPersonLog_args__isset __isset;
+
+  void __set_personId(const int32_t val);
+
+  void __set_startDate(const int64_t val);
+
+  void __set_endDate(const int64_t val);
+
+  bool operator == (const IFaceLog_countPersonLog_args & rhs) const
+  {
+    if (!(personId == rhs.personId))
+      return false;
+    if (!(startDate == rhs.startDate))
+      return false;
+    if (!(endDate == rhs.endDate))
+      return false;
+    return true;
+  }
+  bool operator != (const IFaceLog_countPersonLog_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IFaceLog_countPersonLog_args & ) const;
+
+  template <class Protocol_>
+  uint32_t read(Protocol_* iprot);
+  template <class Protocol_>
+  uint32_t write(Protocol_* oprot) const;
+
+};
+
+
+class IFaceLog_countPersonLog_pargs {
+ public:
+
+
+  virtual ~IFaceLog_countPersonLog_pargs() throw();
+  const int32_t* personId;
+  const int64_t* startDate;
+  const int64_t* endDate;
+
+  template <class Protocol_>
+  uint32_t write(Protocol_* oprot) const;
+
+};
+
+typedef struct _IFaceLog_countPersonLog_result__isset {
+  _IFaceLog_countPersonLog_result__isset() : success(false), ex1(false) {}
+  bool success :1;
+  bool ex1 :1;
+} _IFaceLog_countPersonLog_result__isset;
+
+class IFaceLog_countPersonLog_result {
+ public:
+
+  IFaceLog_countPersonLog_result(const IFaceLog_countPersonLog_result&);
+  IFaceLog_countPersonLog_result(IFaceLog_countPersonLog_result&&);
+  IFaceLog_countPersonLog_result& operator=(const IFaceLog_countPersonLog_result&);
+  IFaceLog_countPersonLog_result& operator=(IFaceLog_countPersonLog_result&&);
+  IFaceLog_countPersonLog_result() {
+  }
+
+  virtual ~IFaceLog_countPersonLog_result() throw();
+  std::map<std::string, int32_t>  success;
+  ServiceRuntimeException ex1;
+
+  _IFaceLog_countPersonLog_result__isset __isset;
+
+  void __set_success(const std::map<std::string, int32_t> & val);
+
+  void __set_ex1(const ServiceRuntimeException& val);
+
+  bool operator == (const IFaceLog_countPersonLog_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex1 == rhs.ex1))
+      return false;
+    return true;
+  }
+  bool operator != (const IFaceLog_countPersonLog_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IFaceLog_countPersonLog_result & ) const;
+
+  template <class Protocol_>
+  uint32_t read(Protocol_* iprot);
+  template <class Protocol_>
+  uint32_t write(Protocol_* oprot) const;
+
+};
+
+typedef struct _IFaceLog_countPersonLog_presult__isset {
+  _IFaceLog_countPersonLog_presult__isset() : success(false), ex1(false) {}
+  bool success :1;
+  bool ex1 :1;
+} _IFaceLog_countPersonLog_presult__isset;
+
+class IFaceLog_countPersonLog_presult {
+ public:
+
+
+  virtual ~IFaceLog_countPersonLog_presult() throw();
+  std::map<std::string, int32_t> * success;
+  ServiceRuntimeException ex1;
+
+  _IFaceLog_countPersonLog_presult__isset __isset;
+
+  template <class Protocol_>
+  uint32_t read(Protocol_* iprot);
+
+};
+
+typedef struct _IFaceLog_countPersonLogTimeStr_args__isset {
+  _IFaceLog_countPersonLogTimeStr_args__isset() : startDate(false), endDate(false) {}
+  bool startDate :1;
+  bool endDate :1;
+} _IFaceLog_countPersonLogTimeStr_args__isset;
+
+class IFaceLog_countPersonLogTimeStr_args {
+ public:
+
+  IFaceLog_countPersonLogTimeStr_args(const IFaceLog_countPersonLogTimeStr_args&);
+  IFaceLog_countPersonLogTimeStr_args(IFaceLog_countPersonLogTimeStr_args&&);
+  IFaceLog_countPersonLogTimeStr_args& operator=(const IFaceLog_countPersonLogTimeStr_args&);
+  IFaceLog_countPersonLogTimeStr_args& operator=(IFaceLog_countPersonLogTimeStr_args&&);
+  IFaceLog_countPersonLogTimeStr_args() : personId(0), startDate(), endDate() {
+  }
+
+  virtual ~IFaceLog_countPersonLogTimeStr_args() throw();
+  int32_t personId;
+  std::string startDate;
+  std::string endDate;
+
+  _IFaceLog_countPersonLogTimeStr_args__isset __isset;
+
+  void __set_personId(const int32_t val);
+
+  void __set_startDate(const std::string& val);
+
+  void __set_endDate(const std::string& val);
+
+  bool operator == (const IFaceLog_countPersonLogTimeStr_args & rhs) const
+  {
+    if (!(personId == rhs.personId))
+      return false;
+    if (!(startDate == rhs.startDate))
+      return false;
+    if (!(endDate == rhs.endDate))
+      return false;
+    return true;
+  }
+  bool operator != (const IFaceLog_countPersonLogTimeStr_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IFaceLog_countPersonLogTimeStr_args & ) const;
+
+  template <class Protocol_>
+  uint32_t read(Protocol_* iprot);
+  template <class Protocol_>
+  uint32_t write(Protocol_* oprot) const;
+
+};
+
+
+class IFaceLog_countPersonLogTimeStr_pargs {
+ public:
+
+
+  virtual ~IFaceLog_countPersonLogTimeStr_pargs() throw();
+  const int32_t* personId;
+  const std::string* startDate;
+  const std::string* endDate;
+
+  template <class Protocol_>
+  uint32_t write(Protocol_* oprot) const;
+
+};
+
+typedef struct _IFaceLog_countPersonLogTimeStr_result__isset {
+  _IFaceLog_countPersonLogTimeStr_result__isset() : success(false), ex1(false) {}
+  bool success :1;
+  bool ex1 :1;
+} _IFaceLog_countPersonLogTimeStr_result__isset;
+
+class IFaceLog_countPersonLogTimeStr_result {
+ public:
+
+  IFaceLog_countPersonLogTimeStr_result(const IFaceLog_countPersonLogTimeStr_result&);
+  IFaceLog_countPersonLogTimeStr_result(IFaceLog_countPersonLogTimeStr_result&&);
+  IFaceLog_countPersonLogTimeStr_result& operator=(const IFaceLog_countPersonLogTimeStr_result&);
+  IFaceLog_countPersonLogTimeStr_result& operator=(IFaceLog_countPersonLogTimeStr_result&&);
+  IFaceLog_countPersonLogTimeStr_result() {
+  }
+
+  virtual ~IFaceLog_countPersonLogTimeStr_result() throw();
+  std::map<std::string, int32_t>  success;
+  ServiceRuntimeException ex1;
+
+  _IFaceLog_countPersonLogTimeStr_result__isset __isset;
+
+  void __set_success(const std::map<std::string, int32_t> & val);
+
+  void __set_ex1(const ServiceRuntimeException& val);
+
+  bool operator == (const IFaceLog_countPersonLogTimeStr_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex1 == rhs.ex1))
+      return false;
+    return true;
+  }
+  bool operator != (const IFaceLog_countPersonLogTimeStr_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IFaceLog_countPersonLogTimeStr_result & ) const;
+
+  template <class Protocol_>
+  uint32_t read(Protocol_* iprot);
+  template <class Protocol_>
+  uint32_t write(Protocol_* oprot) const;
+
+};
+
+typedef struct _IFaceLog_countPersonLogTimeStr_presult__isset {
+  _IFaceLog_countPersonLogTimeStr_presult__isset() : success(false), ex1(false) {}
+  bool success :1;
+  bool ex1 :1;
+} _IFaceLog_countPersonLogTimeStr_presult__isset;
+
+class IFaceLog_countPersonLogTimeStr_presult {
+ public:
+
+
+  virtual ~IFaceLog_countPersonLogTimeStr_presult() throw();
+  std::map<std::string, int32_t> * success;
+  ServiceRuntimeException ex1;
+
+  _IFaceLog_countPersonLogTimeStr_presult__isset __isset;
 
   template <class Protocol_>
   uint32_t read(Protocol_* iprot);
@@ -21532,6 +21810,12 @@ class IFaceLogClientT : virtual public IFaceLogIf {
   int32_t countPersonGroupByWhere(const std::string& where);
   void send_countPersonGroupByWhere(const std::string& where);
   int32_t recv_countPersonGroupByWhere();
+  void countPersonLog(std::map<std::string, int32_t> & _return, const int32_t personId, const int64_t startDate, const int64_t endDate);
+  void send_countPersonLog(const int32_t personId, const int64_t startDate, const int64_t endDate);
+  void recv_countPersonLog(std::map<std::string, int32_t> & _return);
+  void countPersonLogTimeStr(std::map<std::string, int32_t> & _return, const int32_t personId, const std::string& startDate, const std::string& endDate);
+  void send_countPersonLogTimeStr(const int32_t personId, const std::string& startDate, const std::string& endDate);
+  void recv_countPersonLogTimeStr(std::map<std::string, int32_t> & _return);
   int32_t deleteAllFeaturesByPersonId(const int32_t personId, const bool deleteImage, const Token& token);
   void send_deleteAllFeaturesByPersonId(const int32_t personId, const bool deleteImage, const Token& token);
   int32_t recv_deleteAllFeaturesByPersonId();
@@ -22024,6 +22308,10 @@ class IFaceLogProcessorT : public ::apache::thrift::TDispatchProcessorT<Protocol
   void process_countPersonByWhere(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext);
   void process_countPersonGroupByWhere(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_countPersonGroupByWhere(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext);
+  void process_countPersonLog(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_countPersonLog(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext);
+  void process_countPersonLogTimeStr(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_countPersonLogTimeStr(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext);
   void process_deleteAllFeaturesByPersonId(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_deleteAllFeaturesByPersonId(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext);
   void process_deleteDevice(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -22378,6 +22666,12 @@ class IFaceLogProcessorT : public ::apache::thrift::TDispatchProcessorT<Protocol
     processMap_["countPersonGroupByWhere"] = ProcessFunctions(
       &IFaceLogProcessorT::process_countPersonGroupByWhere,
       &IFaceLogProcessorT::process_countPersonGroupByWhere);
+    processMap_["countPersonLog"] = ProcessFunctions(
+      &IFaceLogProcessorT::process_countPersonLog,
+      &IFaceLogProcessorT::process_countPersonLog);
+    processMap_["countPersonLogTimeStr"] = ProcessFunctions(
+      &IFaceLogProcessorT::process_countPersonLogTimeStr,
+      &IFaceLogProcessorT::process_countPersonLogTimeStr);
     processMap_["deleteAllFeaturesByPersonId"] = ProcessFunctions(
       &IFaceLogProcessorT::process_deleteAllFeaturesByPersonId,
       &IFaceLogProcessorT::process_deleteAllFeaturesByPersonId);
@@ -23059,6 +23353,26 @@ class IFaceLogMultiface : virtual public IFaceLogIf {
       ifaces_[i]->countPersonGroupByWhere(where);
     }
     return ifaces_[i]->countPersonGroupByWhere(where);
+  }
+
+  void countPersonLog(std::map<std::string, int32_t> & _return, const int32_t personId, const int64_t startDate, const int64_t endDate) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->countPersonLog(_return, personId, startDate, endDate);
+    }
+    ifaces_[i]->countPersonLog(_return, personId, startDate, endDate);
+    return;
+  }
+
+  void countPersonLogTimeStr(std::map<std::string, int32_t> & _return, const int32_t personId, const std::string& startDate, const std::string& endDate) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->countPersonLogTimeStr(_return, personId, startDate, endDate);
+    }
+    ifaces_[i]->countPersonLogTimeStr(_return, personId, startDate, endDate);
+    return;
   }
 
   int32_t deleteAllFeaturesByPersonId(const int32_t personId, const bool deleteImage, const Token& token) {
@@ -24499,6 +24813,12 @@ class IFaceLogConcurrentClientT : virtual public IFaceLogIf {
   int32_t countPersonGroupByWhere(const std::string& where);
   int32_t send_countPersonGroupByWhere(const std::string& where);
   int32_t recv_countPersonGroupByWhere(const int32_t seqid);
+  void countPersonLog(std::map<std::string, int32_t> & _return, const int32_t personId, const int64_t startDate, const int64_t endDate);
+  int32_t send_countPersonLog(const int32_t personId, const int64_t startDate, const int64_t endDate);
+  void recv_countPersonLog(std::map<std::string, int32_t> & _return, const int32_t seqid);
+  void countPersonLogTimeStr(std::map<std::string, int32_t> & _return, const int32_t personId, const std::string& startDate, const std::string& endDate);
+  int32_t send_countPersonLogTimeStr(const int32_t personId, const std::string& startDate, const std::string& endDate);
+  void recv_countPersonLogTimeStr(std::map<std::string, int32_t> & _return, const int32_t seqid);
   int32_t deleteAllFeaturesByPersonId(const int32_t personId, const bool deleteImage, const Token& token);
   int32_t send_deleteAllFeaturesByPersonId(const int32_t personId, const bool deleteImage, const Token& token);
   int32_t recv_deleteAllFeaturesByPersonId(const int32_t seqid);

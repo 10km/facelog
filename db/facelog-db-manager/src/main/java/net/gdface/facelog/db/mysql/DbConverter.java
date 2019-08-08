@@ -673,6 +673,9 @@ public class DbConverter implements IDbConverter<
             if(right.checkExpiryDateInitialized()){
                 left.setExpiryDate(right.getExpiryDate());
             }
+            if(right.checkActivatedDateInitialized()){
+                left.setActivatedDate(right.getActivatedDate());
+            }
             if(right.checkRemarkInitialized()){
                 left.setRemark(right.getRemark());
             }
@@ -730,6 +733,9 @@ public class DbConverter implements IDbConverter<
             }
             if(left.checkExpiryDateInitialized() ){
                 right.setExpiryDate(left.getExpiryDate());
+            }
+            if(left.checkActivatedDateInitialized() ){
+                right.setActivatedDate(left.getActivatedDate());
             }
             if(left.checkRemarkInitialized() ){
                 right.setRemark(left.getRemark());

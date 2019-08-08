@@ -719,6 +719,22 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		} 
 	}
 	@Override
+	public Map<String, Integer> countPersonLog(int personId,Long startDate,Long endDate)  {
+		try{
+			return dm.daoCountPersonLog(personId,startDate == null ? null : new Date(startDate),endDate == null ? null : new Date(endDate));
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		} 
+	}
+	@Override
+	public Map<String, Integer> countPersonLog(int personId,String startDate,String endDate)  {
+		try{
+			return dm.daoCountPersonLog(personId,toDate(startDate),toDate(endDate));
+		} catch (Exception e) {
+			throw wrapServiceRuntimeException(e);
+		}
+	}
+	@Override
     public List<LogLightBean> loadLogLightByVerifyTime(long timestamp,int startRow, int numRows){
 		try{
 			return dm.daoLoadLogLightByVerifyTime(new Date(timestamp),startRow,numRows);

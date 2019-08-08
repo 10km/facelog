@@ -132,9 +132,17 @@ public final class PersonBean
     @ThriftField
     public void setExpiryDate(final Long expiryDate) { this.expiryDate = expiryDate; }
 
+    private Long activatedDate;
+
+    @ThriftField(value=16, name="activatedDate", requiredness=Requiredness.OPTIONAL)
+    public Long getActivatedDate() { return activatedDate; }
+
+    @ThriftField
+    public void setActivatedDate(final Long activatedDate) { this.activatedDate = activatedDate; }
+
     private String remark;
 
-    @ThriftField(value=16, name="remark", requiredness=Requiredness.OPTIONAL)
+    @ThriftField(value=17, name="remark", requiredness=Requiredness.OPTIONAL)
     public String getRemark() { return remark; }
 
     @ThriftField
@@ -142,7 +150,7 @@ public final class PersonBean
 
     private byte [] extBin;
 
-    @ThriftField(value=17, name="extBin", requiredness=Requiredness.OPTIONAL)
+    @ThriftField(value=18, name="extBin", requiredness=Requiredness.OPTIONAL)
     public byte [] getExtBin() { return extBin; }
 
     @ThriftField
@@ -150,7 +158,7 @@ public final class PersonBean
 
     private String extTxt;
 
-    @ThriftField(value=18, name="extTxt", requiredness=Requiredness.OPTIONAL)
+    @ThriftField(value=19, name="extTxt", requiredness=Requiredness.OPTIONAL)
     public String getExtTxt() { return extTxt; }
 
     @ThriftField
@@ -158,7 +166,7 @@ public final class PersonBean
 
     private Long createTime;
 
-    @ThriftField(value=19, name="createTime", requiredness=Requiredness.OPTIONAL)
+    @ThriftField(value=20, name="createTime", requiredness=Requiredness.OPTIONAL)
     public Long getCreateTime() { return createTime; }
 
     @ThriftField
@@ -166,7 +174,7 @@ public final class PersonBean
 
     private Long updateTime;
 
-    @ThriftField(value=20, name="updateTime", requiredness=Requiredness.OPTIONAL)
+    @ThriftField(value=21, name="updateTime", requiredness=Requiredness.OPTIONAL)
     public Long getUpdateTime() { return updateTime; }
 
     @ThriftField
@@ -191,6 +199,7 @@ public final class PersonBean
             .add("papersNum", papersNum)
             .add("imageMd5", imageMd5)
             .add("expiryDate", expiryDate)
+            .add("activatedDate", activatedDate)
             .add("remark", remark)
             .add("extBin", extBin)
             .add("extTxt", extTxt)

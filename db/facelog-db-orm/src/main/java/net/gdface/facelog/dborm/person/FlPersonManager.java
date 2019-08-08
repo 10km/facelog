@@ -1220,6 +1220,14 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
                 dirtyCount++;
             }
 
+            if (bean.checkActivatedDateModified()) {
+                if (dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("activated_date");
+                dirtyCount++;
+            }
+
             if (bean.checkRemarkModified()) {
                 if (dirtyCount>0) {
                     sql.append(",");
@@ -1447,6 +1455,15 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
                     useComma=true;
                 }
                 sql.append("expiry_date=?");
+            }
+
+            if (bean.checkActivatedDateModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("activated_date=?");
             }
 
             if (bean.checkRemarkModified()) {
@@ -2499,6 +2516,14 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("expiry_date = ?");
                 }
             }
+            if (bean.checkActivatedDateModified()) {
+                dirtyCount ++;
+                if (bean.getActivatedDate() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("activated_date IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("activated_date = ?");
+                }
+            }
             if (bean.checkRemarkModified()) {
                 dirtyCount ++;
                 if (bean.getRemark() == null) {
@@ -2702,6 +2727,10 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
                 // System.out.println("Setting for " + dirtyCount + " [" + bean.getExpiryDate() + "]");
                 if (bean.getExpiryDate() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.DATE);} } else { ps.setDate(++dirtyCount, new java.sql.Date(bean.getExpiryDate().getTime())); }
             }
+            if (bean.checkActivatedDateModified()) {
+                // System.out.println("Setting for " + dirtyCount + " [" + bean.getActivatedDate() + "]");
+                if (bean.getActivatedDate() == null) {if(fillNull){ ps.setNull(++dirtyCount, Types.DATE);} } else { ps.setDate(++dirtyCount, new java.sql.Date(bean.getActivatedDate().getTime())); }
+            }
             if (bean.checkRemarkModified()) {
                 switch (searchType) {
                     case SEARCH_EXACT:
@@ -2887,11 +2916,12 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
             bean.setPapersNum(rs.getString(10));
             bean.setImageMd5(rs.getString(11));
             bean.setExpiryDate(rs.getDate(12));
-            bean.setRemark(rs.getString(13));
-            bean.setExtBin(Manager.getBytes(rs, 14));
-            bean.setExtTxt(rs.getString(15));
-            bean.setCreateTime(rs.getTimestamp(16));
-            bean.setUpdateTime(rs.getTimestamp(17));
+            bean.setActivatedDate(rs.getDate(13));
+            bean.setRemark(rs.getString(14));
+            bean.setExtBin(Manager.getBytes(rs, 15));
+            bean.setExtTxt(rs.getString(16));
+            bean.setCreateTime(rs.getTimestamp(17));
+            bean.setUpdateTime(rs.getTimestamp(18));
         }
         catch(SQLException e)
         {
@@ -2972,6 +3002,10 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
                         ++pos;
                         bean.setExpiryDate(rs.getDate(pos));
                         break;
+                    case FL_PERSON_ID_ACTIVATED_DATE:
+                        ++pos;
+                        bean.setActivatedDate(rs.getDate(pos));
+                        break;
                     case FL_PERSON_ID_REMARK:
                         ++pos;
                         bean.setRemark(rs.getString(pos));
@@ -3032,6 +3066,7 @@ public class FlPersonManager extends TableManager.BaseAdapter<FlPersonBean>
             bean.setPapersNum(rs.getString("papers_num"));
             bean.setImageMd5(rs.getString("image_md5"));
             bean.setExpiryDate(rs.getDate("expiry_date"));
+            bean.setActivatedDate(rs.getDate("activated_date"));
             bean.setRemark(rs.getString("remark"));
             bean.setExtBin(Manager.getBytes(rs, "ext_bin"));
             bean.setExtTxt(rs.getString("ext_txt"));

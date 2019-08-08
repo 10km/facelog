@@ -458,7 +458,27 @@ public interface IFaceLog{
 	 * @return 返回满足{@code where}条件的日志记录(fl_log)数目
 	 */
 	public int countLogByWhere(String where);
-    /**
+	/**
+	 * 按天统计指定用户的通行次数<br>
+	 * startDate,endDate日期格式为,{@code yyyy-MM-dd}或{@code yyyy-MM-dd HH:mm:ss}或{@code yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}(ISO8601)格式日期字符串
+	 * @param personId
+	 * @param startDate 统计起始日期,可为{@code null}
+	 * @param endDate 统计结束日期,可为{@code null}
+	 * @return 返回统计结果，即每个有通行记录的日期(格式:yyyy-MM-dd)的通行次数
+	 */
+	public Map<String, Integer> countPersonLog(int personId, Long startDate, Long endDate);
+
+	/**
+	 * 按天统计指定用户的通行次数<br>
+	 * startDate,endDate日期格式为,{@code yyyy-MM-dd}或{@code yyyy-MM-dd HH:mm:ss}或{@code yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}(ISO8601)格式日期字符串
+	 * @param personId
+	 * @param startDate 统计起始日期,可为{@code null},日期格式为
+	 * @param endDate 统计结束日期,可为{@code null}
+	 * @return 返回统计结果，即每个有通行记录的日期(格式:yyyy-MM-dd)的通行次数
+	 */
+	@DeriveMethod(methodSuffix="TimeStr")
+	public Map<String, Integer> countPersonLog(int personId, String startDate, String endDate);
+	/**
      * (主动更新机制实现)<br>
      * 返回 fl_log_light.verify_time 字段大于指定时间戳({@code timestamp})的所有记录
 	 * @param timestamp 时间戳,{@code yyyy-MM-dd}或{@code yyyy-MM-dd HH:mm:ss}或{@code yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}(ISO8601)格式日期字符串
@@ -1456,6 +1476,7 @@ public interface IFaceLog{
 	 * @return
 	 */
 	public boolean isLocal();
+
 
 
 }

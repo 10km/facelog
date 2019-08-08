@@ -1271,7 +1271,7 @@ void swap(PermitBean &a, PermitBean &b);
 std::ostream& operator<<(std::ostream& out, const PermitBean& obj);
 
 typedef struct _PersonBean__isset {
-  _PersonBean__isset() : id(false), groupId(false), name(false), sex(false), rank(false), password(false), birthdate(false), mobilePhone(false), papersType(false), papersNum(false), imageMd5(false), expiryDate(false), remark(false), extBin(false), extTxt(false), createTime(false), updateTime(false) {}
+  _PersonBean__isset() : id(false), groupId(false), name(false), sex(false), rank(false), password(false), birthdate(false), mobilePhone(false), papersType(false), papersNum(false), imageMd5(false), expiryDate(false), activatedDate(false), remark(false), extBin(false), extTxt(false), createTime(false), updateTime(false) {}
   bool id :1;
   bool groupId :1;
   bool name :1;
@@ -1284,6 +1284,7 @@ typedef struct _PersonBean__isset {
   bool papersNum :1;
   bool imageMd5 :1;
   bool expiryDate :1;
+  bool activatedDate :1;
   bool remark :1;
   bool extBin :1;
   bool extTxt :1;
@@ -1298,7 +1299,7 @@ class PersonBean {
   PersonBean(PersonBean&&);
   PersonBean& operator=(const PersonBean&);
   PersonBean& operator=(PersonBean&&);
-  PersonBean() : _new(0), modified(0), initialized(0), id(0), groupId(0), name(), sex(0), rank(0), password(), birthdate(0), mobilePhone(), papersType(0), papersNum(), imageMd5(), expiryDate(0), remark(), extBin(), extTxt(), createTime(0), updateTime(0) {
+  PersonBean() : _new(0), modified(0), initialized(0), id(0), groupId(0), name(), sex(0), rank(0), password(), birthdate(0), mobilePhone(), papersType(0), papersNum(), imageMd5(), expiryDate(0), activatedDate(0), remark(), extBin(), extTxt(), createTime(0), updateTime(0) {
   }
 
   virtual ~PersonBean() throw();
@@ -1317,6 +1318,7 @@ class PersonBean {
   std::string papersNum;
   std::string imageMd5;
   int64_t expiryDate;
+  int64_t activatedDate;
   std::string remark;
   std::string extBin;
   std::string extTxt;
@@ -1354,6 +1356,8 @@ class PersonBean {
   void __set_imageMd5(const std::string& val);
 
   void __set_expiryDate(const int64_t val);
+
+  void __set_activatedDate(const int64_t val);
 
   void __set_remark(const std::string& val);
 
@@ -1420,6 +1424,10 @@ class PersonBean {
     if (__isset.expiryDate != rhs.__isset.expiryDate)
       return false;
     else if (__isset.expiryDate && !(expiryDate == rhs.expiryDate))
+      return false;
+    if (__isset.activatedDate != rhs.__isset.activatedDate)
+      return false;
+    else if (__isset.activatedDate && !(activatedDate == rhs.activatedDate))
       return false;
     if (__isset.remark != rhs.__isset.remark)
       return false;

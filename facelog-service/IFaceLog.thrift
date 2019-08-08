@@ -168,11 +168,12 @@ struct PersonBean {
   13: optional string papersNum;
   14: optional string imageMd5;
   15: optional i64 expiryDate;
-  16: optional string remark;
-  17: optional binary extBin;
-  18: optional string extTxt;
-  19: optional i64 createTime;
-  20: optional i64 updateTime;
+  16: optional i64 activatedDate;
+  17: optional string remark;
+  18: optional binary extBin;
+  19: optional string extTxt;
+  20: optional i64 createTime;
+  21: optional i64 updateTime;
 }
 
 struct PersonGroupBean {
@@ -248,6 +249,8 @@ service IFaceLog {
   i32 countLogLightByWhere(1: optional string where) throws (1: ServiceRuntimeException ex1);
   i32 countPersonByWhere(1: optional string where) throws (1: ServiceRuntimeException ex1);
   i32 countPersonGroupByWhere(1: optional string where) throws (1: ServiceRuntimeException ex1);
+  map<string, i32> countPersonLog(1: required i32 personId, 2: optional i64 startDate, 3: optional i64 endDate) throws (1: ServiceRuntimeException ex1);
+  map<string, i32> countPersonLogTimeStr(1: required i32 personId, 2: optional string startDate, 3: optional string endDate) throws (1: ServiceRuntimeException ex1);
   i32 deleteAllFeaturesByPersonId(1: required i32 personId, 2: required bool deleteImage, 3: optional Token token) throws (1: ServiceRuntimeException ex1);
   bool deleteDevice(1: required i32 id, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
   bool deleteDeviceByMac(1: optional string mac, 2: optional Token token) throws (1: ServiceRuntimeException ex1);

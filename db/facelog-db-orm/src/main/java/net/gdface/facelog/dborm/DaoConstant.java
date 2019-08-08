@@ -720,7 +720,7 @@ public interface DaoConstant {
     public static interface PersonConst{
         public static final String TABLENAME = "fl_person";
         /** column count for fl_person table */
-        public static final int COLUMN_COUNT = 17;
+        public static final int COLUMN_COUNT = 18;
         /** primary keys count for fl_person table */
         public static final int PRIMARY_KEY_COUNT = 1;
         /** foreign keys count for fl_person table */
@@ -742,6 +742,7 @@ public interface DaoConstant {
                             + ",fl_person.papers_num"
                             + ",fl_person.image_md5"
                             + ",fl_person.expiry_date"
+                            + ",fl_person.activated_date"
                             + ",fl_person.remark"
                             + ",fl_person.ext_bin"
                             + ",fl_person.ext_txt"
@@ -760,6 +761,7 @@ public interface DaoConstant {
                             + ",papers_num"
                             + ",image_md5"
                             + ",expiry_date"
+                            + ",activated_date"
                             + ",remark"
                             + ",ext_bin"
                             + ",ext_txt"
@@ -780,6 +782,7 @@ public interface DaoConstant {
                             + ",papersNum"
                             + ",imageMd5"
                             + ",expiryDate"
+                            + ",activatedDate"
                             + ",remark"
                             + ",extBin"
                             + ",extTxt"
@@ -828,16 +831,18 @@ public interface DaoConstant {
             imageMd5("fl_person","image_md5",11,"getImageMd5","setImageMd5"),
             /** constant for fl_person.expiry_date  */
             expiryDate("fl_person","expiry_date",12,"getExpiryDate","setExpiryDate"),
+            /** constant for fl_person.activated_date  */
+            activatedDate("fl_person","activated_date",13,"getActivatedDate","setActivatedDate"),
             /** constant for fl_person.remark  */
-            remark("fl_person","remark",13,"getRemark","setRemark"),
+            remark("fl_person","remark",14,"getRemark","setRemark"),
             /** constant for fl_person.ext_bin  */
-            extBin("fl_person","ext_bin",14,"getExtBin","setExtBin"),
+            extBin("fl_person","ext_bin",15,"getExtBin","setExtBin"),
             /** constant for fl_person.ext_txt  */
-            extTxt("fl_person","ext_txt",15,"getExtTxt","setExtTxt"),
+            extTxt("fl_person","ext_txt",16,"getExtTxt","setExtTxt"),
             /** constant for fl_person.create_time  */
-            createTime("fl_person","create_time",16,"getCreateTime","setCreateTime"),
+            createTime("fl_person","create_time",17,"getCreateTime","setCreateTime"),
             /** constant for fl_person.update_time  */
-            updateTime("fl_person","update_time",17,"getUpdateTime","setUpdateTime");
+            updateTime("fl_person","update_time",18,"getUpdateTime","setUpdateTime");
             final ColumnMeta meta;
             private Column(String table,String field,int ordinal,String getter,String setter){
                 meta = new ColumnMeta(table,field,ordinal,getter,setter);

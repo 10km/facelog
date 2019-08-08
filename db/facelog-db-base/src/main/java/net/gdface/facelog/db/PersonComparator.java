@@ -48,6 +48,7 @@ public class PersonComparator implements Comparator<PersonBean>,Constant
      *   <li>{@link Constant#FL_PERSON_ID_PAPERS_NUM}
      *   <li>{@link Constant#FL_PERSON_ID_IMAGE_MD5}
      *   <li>{@link Constant#FL_PERSON_ID_EXPIRY_DATE}
+     *   <li>{@link Constant#FL_PERSON_ID_ACTIVATED_DATE}
      *   <li>{@link Constant#FL_PERSON_ID_REMARK}
      *   <li>{@link Constant#FL_PERSON_ID_EXT_BIN}
      *   <li>{@link Constant#FL_PERSON_ID_EXT_TXT}
@@ -83,6 +84,7 @@ public class PersonComparator implements Comparator<PersonBean>,Constant
      *   <li>{@link Constant#FL_PERSON_ID_PAPERS_NUM})
      *   <li>{@link Constant#FL_PERSON_ID_IMAGE_MD5})
      *   <li>{@link Constant#FL_PERSON_ID_EXPIRY_DATE})
+     *   <li>{@link Constant#FL_PERSON_ID_ACTIVATED_DATE})
      *   <li>{@link Constant#FL_PERSON_ID_REMARK})
      *   <li>{@link Constant#FL_PERSON_ID_EXT_BIN})
      *   <li>{@link Constant#FL_PERSON_ID_EXT_TXT})
@@ -234,6 +236,17 @@ public class PersonComparator implements Comparator<PersonBean>,Constant
                     iReturn = 1;
                 } else {
                     iReturn = b1.getExpiryDate().compareTo(b2.getExpiryDate());
+                }
+                break;
+            case FL_PERSON_ID_ACTIVATED_DATE:
+                if (b1.getActivatedDate() == null && b2.getActivatedDate() != null) {
+                    iReturn = -1;
+                } else if (b1.getActivatedDate() == null && b2.getActivatedDate() == null) {
+                    iReturn = 0;
+                } else if (b1.getActivatedDate() != null && b2.getActivatedDate() == null) {
+                    iReturn = 1;
+                } else {
+                    iReturn = b1.getActivatedDate().compareTo(b2.getActivatedDate());
                 }
                 break;
             case FL_PERSON_ID_REMARK:
