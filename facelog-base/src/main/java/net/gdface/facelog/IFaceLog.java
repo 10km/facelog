@@ -460,7 +460,6 @@ public interface IFaceLog{
 	public int countLogByWhere(String where);
 	/**
 	 * 按天统计指定用户的通行次数<br>
-	 * startDate,endDate日期格式为,{@code yyyy-MM-dd}或{@code yyyy-MM-dd HH:mm:ss}或{@code yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}(ISO8601)格式日期字符串
 	 * @param personId
 	 * @param startDate 统计起始日期,可为{@code null}
 	 * @param endDate 统计结束日期,可为{@code null}
