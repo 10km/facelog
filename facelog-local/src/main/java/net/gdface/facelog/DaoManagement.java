@@ -921,7 +921,7 @@ public class DaoManagement extends BaseDao implements ServiceConstant,Constant{
 		SimpleDateFormat formatter = new SimpleDateFormat(DATE_FORMATTER_STR);
 		StringBuffer buffer = new StringBuffer("WHERE");
 		buffer.append(" person_id=").append(personId);
-		checkArgument(null == startDate || null == endDate || startDate.equals(endDate) || startDate.before(endDate),"start must <= end");
+		checkArgument(null == startDate || null == endDate || startDate.getTime() <=endDate.getTime(),"start must <= end");
 		if(startDate != null){
 			buffer.append(String.format(" date(verify_time)>='%s'",formatter.format(startDate)));
 		}
