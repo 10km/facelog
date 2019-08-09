@@ -896,13 +896,13 @@ public class DaoManagement extends BaseDao implements ServiceConstant,Constant{
 			if(null == bean){
 				return null;
 			}				
-			Date input = bean.getVerifyTime(); 
-			if(input != null){
-				input = bean.getCreateTime();
+			Date v = bean.getVerifyTime(); 
+			if(v != null){
+				v = bean.getCreateTime();
 			}
-			if(input != null){
+			if(v != null){
 				Calendar calendar=Calendar.getInstance();
-				calendar.setTime(input);
+				calendar.setTime(v);
 				calendar.set(Calendar.HOUR_OF_DAY, 0);
 				calendar.set(Calendar.MINUTE, 0);
 				calendar.set(Calendar.SECOND, 0);
@@ -923,13 +923,12 @@ public class DaoManagement extends BaseDao implements ServiceConstant,Constant{
 		buffer.append(" person_id=").append(personId);
 		checkArgument(null == startDate || null == endDate || startDate.getTime() <=endDate.getTime(),"start must <= end");
 		if(startDate != null){
+			buffer.append(" and");
 			buffer.append(String.format(" date(verify_time)>='%s'",formatter.format(startDate)));
 		}
-		if(startDate != null && startDate != null){
-			buffer.append(" and ");
-		}
-		if(startDate != null){
-			buffer.append(String.format(" date(verify_time)>='%s'",formatter.format(startDate)));
+		if(endDate != null){
+			buffer.append(" and");
+			buffer.append(String.format(" date(verify_time)>='%s'",formatter.format(endDate)));
 		}
 
 		List<LogBean> logList = daoLoadLogByWhere(buffer.toString(), 1, -1);
