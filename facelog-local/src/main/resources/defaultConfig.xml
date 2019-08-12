@@ -75,6 +75,16 @@
 	<feature description="特征参数配置">
 		<sdkVersion description="SDK版本号">
 			<whitelist description="允许的SDK版本号(白名单),逗号分隔">MTFSDKARM512,CASSDKARM4096,GFIR10472</whitelist>
+			<default readonly="true" description="默认的SDK版本号,在不指定SDK版本号的场合默认适用的SDK版本号">MTFSDKARM512</default>
+			<MTFSDKARM512 readonly="true" description="MTFSDKARM512 算法的特性描述" >
+				<imageCountRequired description="提取特征需要的人脸照片数量">1</imageCountRequired>
+			</MTFSDKARM512>
+			<CASSDKARM4096 readonly="true" description="CASSDKARM4096 算法的特性描述" >
+				<imageCountRequired description="提取特征需要的人脸照片数量">1</imageCountRequired>
+			</CASSDKARM4096>		
+			<GFIR10472 readonly="true" description="GFIR10472 算法的特性描述" >
+				<imageCountRequired description="提取特征需要的人脸照片数量">8</imageCountRequired>
+			</GFIR10472>		
 		</sdkVersion>
 		<person>
 			<update >
