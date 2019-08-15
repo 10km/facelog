@@ -127,10 +127,16 @@ public class GlobalConfig implements ServiceConstant{
 		if(CONFIG.containsKey(REDIS_URI)){
 			params.put(PropName.uri, CONFIG.get(URI.class,REDIS_URI));
 		}else{
-			params.put(PropName.host, CONFIG.getString(REDIS_HOST,null));
+			String host = CONFIG.getString(REDIS_HOST,null);
+			if(!Strings.isNullOrEmpty(host)){
+				params.put(PropName.host, host);
+			}
 			params.put(PropName.port, CONFIG.getInteger(REDIS_PORT,null));
 			params.put(PropName.database, CONFIG.getInteger(REDIS_DATABASE,null));
-			params.put(PropName.password, CONFIG.getString(REDIS_PASSWORD,null));
+			String pwd = CONFIG.getString(REDIS_PASSWORD,null);
+			if(!Strings.isNullOrEmpty(pwd)){
+				params.put(PropName.password, pwd);
+			}
 		}
 		params.put(PropName.timeout, CONFIG.getInteger(REDIS_TIMEOUT,null));
 
