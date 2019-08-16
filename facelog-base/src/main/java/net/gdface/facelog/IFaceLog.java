@@ -540,7 +540,6 @@ public interface IFaceLog{
 
 	/**
 	 * 增加一个人脸特征记录，如果记录已经存在则抛出异常<br>
-	 * {@code DEVICE_ONLY}
 	 * @param feature 人脸特征数据
 	 * @param featureVersion 特征(SDk)版本号
 	 * @param personId 关联的人员id(fl_person.id),可为null
@@ -555,7 +554,6 @@ public interface IFaceLog{
 	/**
 	 * 增加一个人脸特征记录，如果记录已经存在则抛出异常<br>
 	 * 适用于一张人脸图像提取一个人脸特征的算法<br>
-	 * {@code DEVICE_ONLY}
 	 * @param feature 特征数据
 	 * @param featureVersion 特征(SDk)版本号
 	 * @param personId 关联的人员id(fl_person.id),可为null
@@ -575,7 +573,6 @@ public interface IFaceLog{
 	/**
 	 * 增加一个人脸特征记录,特征数据由faceInfo指定的多张图像合成，如果记录已经存在则抛出异常<br>
 	 * {@code photos}与{@code faces}为提取特征{@code feature}的人脸照片对应的人脸位置对象，必须一一对应
-	 * <br>{@code DEVICE_ONLY}
 	 * @param feature 特征数据
 	 * @param featureVersion 特征(SDk)版本号
 	 * @param personId 关联的人员id(fl_person.id),可为null

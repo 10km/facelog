@@ -812,7 +812,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 			Token token)
 			throws DuplicateRecordException{
 		try{
-			Enable.DEVICE_ONLY.check(tm, token);
+			Enable.ALL.check(tm, token);
 			checkArgument( null != feature,"feature is null");
 			return BaseDao.daoRunAsTransaction(new Callable<FeatureBean>() {
 
@@ -840,7 +840,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 			final String removed, 
 			final Token token)throws DuplicateRecordException{
 		try{
-			Enable.DEVICE_ONLY.check(tm, token);
+			Enable.ALL.check(tm, token);
 			checkArgument(feature != null,"feature is null");
 
 			return BaseDao.daoRunAsTransaction(new Callable<FeatureBean>() {
@@ -872,7 +872,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 			final String removed, 
 			final Token token) throws DuplicateRecordException {
 		try {
-			Enable.DEVICE_ONLY.check(tm, token);
+			Enable.ALL.check(tm, token);
 			checkArgument(feature != null,"feature is null");
 			final List<ByteBuffer> buffers = Lists.transform(photos, typeTransformer.getTransformer(byte[].class, ByteBuffer.class));
 			return BaseDao.daoRunAsTransaction(new Callable<FeatureBean>() {

@@ -100,7 +100,6 @@ public class IFaceLogSpringController {
     /**
      * 增加一个人脸特征记录，如果记录已经存在则抛出异常<br>
      * 适用于一张人脸图像提取一个人脸特征的算法<br>
-     * {@code DEVICE_ONLY}
      * @param feature 特征数据
      * @param featureVersion 特征(SDk)版本号
      * @param personId 关联的人员id(fl_person.id),可为null
@@ -117,8 +116,7 @@ public class IFaceLogSpringController {
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/addFeatureWithImage", method = RequestMethod.POST)
     @ApiOperation(value = "增加一个人脸特征记录，如果记录已经存在则抛出异常<br>\n"
-+" 适用于一张人脸图像提取一个人脸特征的算法<br>\n"
-+" {@code DEVICE_ONLY}",httpMethod="POST")
++" 适用于一张人脸图像提取一个人脸特征的算法<br>",httpMethod="POST")
     public Response addFeature( @RequestBody AddFeatureWithImageArgs args) 
     {
             Response response = responseFactory.newIFaceLogResponse();
@@ -134,7 +132,6 @@ public class IFaceLogSpringController {
     // port-2
     /**
      * 增加一个人脸特征记录，如果记录已经存在则抛出异常<br>
-     * {@code DEVICE_ONLY}
      * @param feature 人脸特征数据
      * @param featureVersion 特征(SDk)版本号
      * @param personId 关联的人员id(fl_person.id),可为null
@@ -146,8 +143,7 @@ public class IFaceLogSpringController {
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/addFeature", method = RequestMethod.POST)
-    @ApiOperation(value = "增加一个人脸特征记录，如果记录已经存在则抛出异常<br>\n"
-+" {@code DEVICE_ONLY}",httpMethod="POST")
+    @ApiOperation(value = "增加一个人脸特征记录，如果记录已经存在则抛出异常<br>",httpMethod="POST")
     public Response addFeature( @RequestBody AddFeatureArgs args) 
     {
             Response response = responseFactory.newIFaceLogResponse();
@@ -164,7 +160,6 @@ public class IFaceLogSpringController {
     /**
      * 增加一个人脸特征记录,特征数据由faceInfo指定的多张图像合成，如果记录已经存在则抛出异常<br>
      * {@code photos}与{@code faces}为提取特征{@code feature}的人脸照片对应的人脸位置对象，必须一一对应
-     * <br>{@code DEVICE_ONLY}
      * @param feature 特征数据
      * @param featureVersion 特征(SDk)版本号
      * @param personId 关联的人员id(fl_person.id),可为null
@@ -178,8 +173,7 @@ public class IFaceLogSpringController {
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/addFeatureMulti", method = RequestMethod.POST)
     @ApiOperation(value = "增加一个人脸特征记录,特征数据由faceInfo指定的多张图像合成，如果记录已经存在则抛出异常<br>\n"
-+" {@code photos}与{@code faces}为提取特征{@code feature}的人脸照片对应的人脸位置对象，必须一一对应\n"
-+" <br>{@code DEVICE_ONLY}",httpMethod="POST")
++" {@code photos}与{@code faces}为提取特征{@code feature}的人脸照片对应的人脸位置对象，必须一一对应",httpMethod="POST")
     public Response addFeature( @RequestBody AddFeatureMultiArgs args) 
     {
             Response response = responseFactory.newIFaceLogResponse();
