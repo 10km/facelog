@@ -1015,17 +1015,18 @@ public interface IFaceLog{
 	 */
 	public PermitBean savePermit(PermitBean permitBean, Token token);
 	/**
+	 * 修改指定记录的的字段值(String类型)<br>
 	 * 如果记录不存在则创建deviceGroupId和personGroupId之间的MANY TO MANY 联接表(fl_permit)记录,
-	 * 否则修改指定记录的通行时间安排表<br>
 	 * <br>{@code PERSON_ONLY}
      * @param deviceGroupId 设备组id
-     * @param personGroupId 人员组id
-     * @param schedule 通行时间安排表,为{@code null}则不限制通行时间
-     * @param token 访问令牌
+	 * @param personGroupId 人员组id
+	 * @param column 字段名，允许的字段名为'schedule','pass_limit'
+	 * @param value 字段值
+	 * @param token 访问令牌
      * @return (fl_permit)记录
      */
-	@DeriveMethod(methodSuffix="WithSchedule")
-	public PermitBean savePermit(int deviceGroupId,int personGroupId, String schedule, Token token);
+	@DeriveMethod(methodSuffix="WithColumn")
+	public PermitBean savePermit(int deviceGroupId,int personGroupId, String column, String value, Token token);
 	/**
 	 * 删除fl_device_group和fl_person_group之间的MANY TO MANY 联接表(fl_permit)记录<br>
 	 * @param deviceGroupId 设备组id

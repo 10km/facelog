@@ -834,24 +834,31 @@ public class DaoManagement extends BaseDao implements ServiceConstant,Constant{
 			daoDeleteLogBeansByPersonIdOnPerson(personId);
 		}
 	}
+	/** 允许修改的fl_permit表字段ID */
+	private static final HashSet<Integer> allowedPermitColumns=Sets.newHashSet(FL_PERMIT_ID_SCHEDULE,
+			FL_PERMIT_ID_PASS_LIMIT);
 	/**
+	 * 修改指定记录的的字段值<br>
 	 * 如果记录不存在则创建deviceGroupId和personGroupId之间的MANY TO MANY 联接表(fl_permit)记录,
-	 * 否则修改指定记录的通行时间安排表<br>
      * @param deviceGroupId 设备组id
-     * @param personGroupId 人员组id
-     * @param schedule 通行时间安排表,为{@code null}则不限制通行时间
+	 * @param personGroupId 人员组id
+	 * @param column 字段名，允许的字段名为'schedule','pass_limit'
+	 * @param value 字段值
      * @return (fl_permit)记录
      */
-	protected PermitBean daoSavePermit(int deviceGroupId,int personGroupId,String schedule){
+	protected PermitBean daoSavePermit(int deviceGroupId,int personGroupId,String column, String value){
+		int columnID=PermitBean.columnIDOf(column);
+		checkArgument(columnID>=0,"invalid column name %s",column);
+		checkArgument(allowedPermitColumns.contains(columnID),"column %s can't be modify",column);
 		PermitBean permitBean = daoGetPermit(deviceGroupId, personGroupId);
 		if(permitBean == null){
 			permitBean = PermitBean.builder()
 				.deviceGroupId(deviceGroupId)
 				.personGroupId(personGroupId)
-				.schedule(schedule).build();
-		}else{
-			permitBean.setSchedule(schedule);
+				.build();
 		}
+		permitBean.setValue(columnID, value);
+
 		return daoSavePermit(permitBean);
 	}
 	/**

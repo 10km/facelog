@@ -1271,15 +1271,16 @@ public interface IFaceLog
             @ThriftField(value=2, name="token", requiredness=Requiredness.OPTIONAL) final Token token
         );
 
-        @ThriftMethod(value = "savePermitWithSchedule",
+        @ThriftMethod(value = "savePermitWithColumn",
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
-        ListenableFuture<PermitBean> savePermitWithSchedule(
+        ListenableFuture<PermitBean> savePermitWithColumn(
             @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.REQUIRED) final int deviceGroupId,
             @ThriftField(value=2, name="personGroupId", requiredness=Requiredness.REQUIRED) final int personGroupId,
-            @ThriftField(value=3, name="schedule", requiredness=Requiredness.OPTIONAL) final String schedule,
-            @ThriftField(value=4, name="token", requiredness=Requiredness.OPTIONAL) final Token token
+            @ThriftField(value=3, name="column", requiredness=Requiredness.OPTIONAL) final String column,
+            @ThriftField(value=4, name="value", requiredness=Requiredness.OPTIONAL) final String value,
+            @ThriftField(value=5, name="token", requiredness=Requiredness.OPTIONAL) final Token token
         );
 
         @ThriftMethod(value = "savePerson",
@@ -2766,15 +2767,16 @@ public interface IFaceLog
         @ThriftField(value=2, name="token", requiredness=Requiredness.OPTIONAL) final Token token
     ) throws ServiceRuntimeException;
 
-    @ThriftMethod(value = "savePermitWithSchedule",
+    @ThriftMethod(value = "savePermitWithColumn",
                   exception = {
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
-    PermitBean savePermitWithSchedule(
+    PermitBean savePermitWithColumn(
         @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.REQUIRED) final int deviceGroupId,
         @ThriftField(value=2, name="personGroupId", requiredness=Requiredness.REQUIRED) final int personGroupId,
-        @ThriftField(value=3, name="schedule", requiredness=Requiredness.OPTIONAL) final String schedule,
-        @ThriftField(value=4, name="token", requiredness=Requiredness.OPTIONAL) final Token token
+        @ThriftField(value=3, name="column", requiredness=Requiredness.OPTIONAL) final String column,
+        @ThriftField(value=4, name="value", requiredness=Requiredness.OPTIONAL) final String value,
+        @ThriftField(value=5, name="token", requiredness=Requiredness.OPTIONAL) final Token token
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "savePerson",

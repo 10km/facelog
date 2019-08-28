@@ -159,7 +159,7 @@ public partial class IFaceLog {
     DeviceBean saveDevice(DeviceBean deviceBean, Token token);
     DeviceGroupBean saveDeviceGroup(DeviceGroupBean deviceGroupBean, Token token);
     PermitBean savePermit(PermitBean permitBean, Token token);
-    PermitBean savePermitWithSchedule(int deviceGroupId, int personGroupId, string schedule, Token token);
+    PermitBean savePermitWithColumn(int deviceGroupId, int personGroupId, string column, string @value, Token token);
     PersonBean savePerson(PersonBean personBean, Token token);
     PersonBean savePersonFull(PersonBean personBean, byte[] idPhoto, byte[] feature, string featureVersion, byte[] featureImage, FaceBean faceBean, Token token);
     PersonGroupBean savePersonGroup(PersonGroupBean personGroupBean, Token token);
@@ -327,7 +327,7 @@ public partial class IFaceLog {
     Task<DeviceBean> saveDeviceAsync(DeviceBean deviceBean, Token token);
     Task<DeviceGroupBean> saveDeviceGroupAsync(DeviceGroupBean deviceGroupBean, Token token);
     Task<PermitBean> savePermitAsync(PermitBean permitBean, Token token);
-    Task<PermitBean> savePermitWithScheduleAsync(int deviceGroupId, int personGroupId, string schedule, Token token);
+    Task<PermitBean> savePermitWithColumnAsync(int deviceGroupId, int personGroupId, string column, string @value, Token token);
     Task<PersonBean> savePersonAsync(PersonBean personBean, Token token);
     Task<PersonBean> savePersonFullAsync(PersonBean personBean, byte[] idPhoto, byte[] feature, string featureVersion, byte[] featureImage, FaceBean faceBean, Token token);
     Task<PersonGroupBean> savePersonGroupAsync(PersonGroupBean personGroupBean, Token token);
@@ -636,8 +636,8 @@ public partial class IFaceLog {
     DeviceGroupBean End_saveDeviceGroup(IAsyncResult asyncResult);
     IAsyncResult Begin_savePermit(AsyncCallback callback, object state, PermitBean permitBean, Token token);
     PermitBean End_savePermit(IAsyncResult asyncResult);
-    IAsyncResult Begin_savePermitWithSchedule(AsyncCallback callback, object state, int deviceGroupId, int personGroupId, string schedule, Token token);
-    PermitBean End_savePermitWithSchedule(IAsyncResult asyncResult);
+    IAsyncResult Begin_savePermitWithColumn(AsyncCallback callback, object state, int deviceGroupId, int personGroupId, string column, string @value, Token token);
+    PermitBean End_savePermitWithColumn(IAsyncResult asyncResult);
     IAsyncResult Begin_savePerson(AsyncCallback callback, object state, PersonBean personBean, Token token);
     PersonBean End_savePerson(IAsyncResult asyncResult);
     IAsyncResult Begin_savePersonFull(AsyncCallback callback, object state, PersonBean personBean, byte[] idPhoto, byte[] feature, string featureVersion, byte[] featureImage, FaceBean faceBean, Token token);
@@ -9027,47 +9027,48 @@ public partial class IFaceLog {
     }
 
     
-    public IAsyncResult Begin_savePermitWithSchedule(AsyncCallback callback, object state, int deviceGroupId, int personGroupId, string schedule, Token token)
+    public IAsyncResult Begin_savePermitWithColumn(AsyncCallback callback, object state, int deviceGroupId, int personGroupId, string column, string @value, Token token)
     {
-      return send_savePermitWithSchedule(callback, state, deviceGroupId, personGroupId, schedule, token);
+      return send_savePermitWithColumn(callback, state, deviceGroupId, personGroupId, column, @value, token);
     }
 
-    public PermitBean End_savePermitWithSchedule(IAsyncResult asyncResult)
+    public PermitBean End_savePermitWithColumn(IAsyncResult asyncResult)
     {
       oprot_.Transport.EndFlush(asyncResult);
-      return recv_savePermitWithSchedule();
+      return recv_savePermitWithColumn();
     }
 
-    public async Task<PermitBean> savePermitWithScheduleAsync(int deviceGroupId, int personGroupId, string schedule, Token token)
+    public async Task<PermitBean> savePermitWithColumnAsync(int deviceGroupId, int personGroupId, string column, string @value, Token token)
     {
       PermitBean retval;
       retval = await Task.Run(() =>
       {
-        return savePermitWithSchedule(deviceGroupId, personGroupId, schedule, token);
+        return savePermitWithColumn(deviceGroupId, personGroupId, column, value, token);
       });
       return retval;
     }
 
-    public PermitBean savePermitWithSchedule(int deviceGroupId, int personGroupId, string schedule, Token token)
+    public PermitBean savePermitWithColumn(int deviceGroupId, int personGroupId, string column, string @value, Token token)
     {
-      var asyncResult = Begin_savePermitWithSchedule(null, null, deviceGroupId, personGroupId, schedule, token);
-      return End_savePermitWithSchedule(asyncResult);
+      var asyncResult = Begin_savePermitWithColumn(null, null, deviceGroupId, personGroupId, column, @value, token);
+      return End_savePermitWithColumn(asyncResult);
 
     }
-    public IAsyncResult send_savePermitWithSchedule(AsyncCallback callback, object state, int deviceGroupId, int personGroupId, string schedule, Token token)
+    public IAsyncResult send_savePermitWithColumn(AsyncCallback callback, object state, int deviceGroupId, int personGroupId, string column, string @value, Token token)
     {
-      oprot_.WriteMessageBegin(new TMessage("savePermitWithSchedule", TMessageType.Call, seqid_));
-      savePermitWithSchedule_args args = new savePermitWithSchedule_args();
+      oprot_.WriteMessageBegin(new TMessage("savePermitWithColumn", TMessageType.Call, seqid_));
+      savePermitWithColumn_args args = new savePermitWithColumn_args();
       args.DeviceGroupId = deviceGroupId;
       args.PersonGroupId = personGroupId;
-      args.Schedule = schedule;
+      args.Column = column;
+      args.Value = @value;
       args.Token = token;
       args.Write(oprot_);
       oprot_.WriteMessageEnd();
       return oprot_.Transport.BeginFlush(callback, state);
     }
 
-    public PermitBean recv_savePermitWithSchedule()
+    public PermitBean recv_savePermitWithColumn()
     {
       TMessage msg = iprot_.ReadMessageBegin();
       if (msg.Type == TMessageType.Exception) {
@@ -9075,7 +9076,7 @@ public partial class IFaceLog {
         iprot_.ReadMessageEnd();
         throw x;
       }
-      savePermitWithSchedule_result result = new savePermitWithSchedule_result();
+      savePermitWithColumn_result result = new savePermitWithColumn_result();
       result.Read(iprot_);
       iprot_.ReadMessageEnd();
       if (result.Success != null) {
@@ -9084,7 +9085,7 @@ public partial class IFaceLog {
       if (result.Ex1 != null) {
         throw result.Ex1;
       }
-      throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "savePermitWithSchedule failed: unknown result");
+      throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "savePermitWithColumn failed: unknown result");
     }
 
     
@@ -10568,7 +10569,7 @@ public partial class IFaceLog {
       processMap_["saveDevice"] = saveDevice_ProcessAsync;
       processMap_["saveDeviceGroup"] = saveDeviceGroup_ProcessAsync;
       processMap_["savePermit"] = savePermit_ProcessAsync;
-      processMap_["savePermitWithSchedule"] = savePermitWithSchedule_ProcessAsync;
+      processMap_["savePermitWithColumn"] = savePermitWithColumn_ProcessAsync;
       processMap_["savePerson"] = savePerson_ProcessAsync;
       processMap_["savePersonFull"] = savePersonFull_ProcessAsync;
       processMap_["savePersonGroup"] = savePersonGroup_ProcessAsync;
@@ -15627,23 +15628,23 @@ public partial class IFaceLog {
       oprot.Transport.Flush();
     }
 
-    public async Task savePermitWithSchedule_ProcessAsync(int seqid, TProtocol iprot, TProtocol oprot)
+    public async Task savePermitWithColumn_ProcessAsync(int seqid, TProtocol iprot, TProtocol oprot)
     {
-      savePermitWithSchedule_args args = new savePermitWithSchedule_args();
+      savePermitWithColumn_args args = new savePermitWithColumn_args();
       args.Read(iprot);
       iprot.ReadMessageEnd();
-      savePermitWithSchedule_result result = new savePermitWithSchedule_result();
+      savePermitWithColumn_result result = new savePermitWithColumn_result();
       try
       {
         try
         {
-          result.Success = await iface_.savePermitWithScheduleAsync(args.DeviceGroupId.Value, args.PersonGroupId.Value, args.Schedule, args.Token);
+          result.Success = await iface_.savePermitWithColumnAsync(args.DeviceGroupId.Value, args.PersonGroupId.Value, args.Column, args.Value, args.Token);
         }
         catch (ServiceRuntimeException ex1)
         {
           result.Ex1 = ex1;
         }
-        oprot.WriteMessageBegin(new TMessage("savePermitWithSchedule", TMessageType.Reply, seqid)); 
+        oprot.WriteMessageBegin(new TMessage("savePermitWithColumn", TMessageType.Reply, seqid)); 
         result.Write(oprot);
       }
       catch (TTransportException)
@@ -15655,7 +15656,7 @@ public partial class IFaceLog {
         Console.Error.WriteLine("Error occurred in processor:");
         Console.Error.WriteLine(ex.ToString());
         TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
-        oprot.WriteMessageBegin(new TMessage("savePermitWithSchedule", TMessageType.Exception, seqid));
+        oprot.WriteMessageBegin(new TMessage("savePermitWithColumn", TMessageType.Exception, seqid));
         x.Write(oprot);
       }
       oprot.WriteMessageEnd();
@@ -16618,7 +16619,7 @@ public partial class IFaceLog {
       processMap_["saveDevice"] = saveDevice_Process;
       processMap_["saveDeviceGroup"] = saveDeviceGroup_Process;
       processMap_["savePermit"] = savePermit_Process;
-      processMap_["savePermitWithSchedule"] = savePermitWithSchedule_Process;
+      processMap_["savePermitWithColumn"] = savePermitWithColumn_Process;
       processMap_["savePerson"] = savePerson_Process;
       processMap_["savePersonFull"] = savePersonFull_Process;
       processMap_["savePersonGroup"] = savePersonGroup_Process;
@@ -21677,23 +21678,23 @@ public partial class IFaceLog {
       oprot.Transport.Flush();
     }
 
-    public void savePermitWithSchedule_Process(int seqid, TProtocol iprot, TProtocol oprot)
+    public void savePermitWithColumn_Process(int seqid, TProtocol iprot, TProtocol oprot)
     {
-      savePermitWithSchedule_args args = new savePermitWithSchedule_args();
+      savePermitWithColumn_args args = new savePermitWithColumn_args();
       args.Read(iprot);
       iprot.ReadMessageEnd();
-      savePermitWithSchedule_result result = new savePermitWithSchedule_result();
+      savePermitWithColumn_result result = new savePermitWithColumn_result();
       try
       {
         try
         {
-          result.Success = iface_.savePermitWithSchedule(args.DeviceGroupId.Value, args.PersonGroupId.Value, args.Schedule, args.Token);
+          result.Success = iface_.savePermitWithColumn(args.DeviceGroupId.Value, args.PersonGroupId.Value, args.Column, args.Value, args.Token);
         }
         catch (ServiceRuntimeException ex1)
         {
           result.Ex1 = ex1;
         }
-        oprot.WriteMessageBegin(new TMessage("savePermitWithSchedule", TMessageType.Reply, seqid)); 
+        oprot.WriteMessageBegin(new TMessage("savePermitWithColumn", TMessageType.Reply, seqid)); 
         result.Write(oprot);
       }
       catch (TTransportException)
@@ -21705,7 +21706,7 @@ public partial class IFaceLog {
         Console.Error.WriteLine("Error occurred in processor:");
         Console.Error.WriteLine(ex.ToString());
         TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
-        oprot.WriteMessageBegin(new TMessage("savePermitWithSchedule", TMessageType.Exception, seqid));
+        oprot.WriteMessageBegin(new TMessage("savePermitWithColumn", TMessageType.Exception, seqid));
         x.Write(oprot);
       }
       oprot.WriteMessageEnd();
@@ -54659,21 +54660,23 @@ public partial class IFaceLog {
   #if !SILVERLIGHT
   [Serializable]
   #endif
-  public partial class savePermitWithSchedule_args : TBase
+  public partial class savePermitWithColumn_args : TBase
   {
 
     public int DeviceGroupId { get; set; }
 
     public int PersonGroupId { get; set; }
 
-    public string Schedule { get; set; }
+    public string Column { get; set; }
+
+    public string Value { get; set; }
 
     public Token Token { get; set; }
 
-    public savePermitWithSchedule_args() {
+    public savePermitWithColumn_args() {
     }
 
-    public savePermitWithSchedule_args(int deviceGroupId, int personGroupId) : this() {
+    public savePermitWithColumn_args(int deviceGroupId, int personGroupId) : this() {
       this.DeviceGroupId = deviceGroupId;
       this.PersonGroupId = personGroupId;
     }
@@ -54713,12 +54716,19 @@ public partial class IFaceLog {
               break;
             case 3:
               if (field.Type == TType.String) {
-                Schedule = iprot.ReadString();
+                Column = iprot.ReadString();
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
               break;
             case 4:
+              if (field.Type == TType.String) {
+                Value = iprot.ReadString();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 5:
               if (field.Type == TType.Struct) {
                 Token = new Token();
                 Token.Read(iprot);
@@ -54748,7 +54758,7 @@ public partial class IFaceLog {
       oprot.IncrementRecursionDepth();
       try
       {
-        TStruct struc = new TStruct("savePermitWithSchedule_args");
+        TStruct struc = new TStruct("savePermitWithColumn_args");
         oprot.WriteStructBegin(struc);
         TField field = new TField();
         field.Name = "deviceGroupId";
@@ -54763,18 +54773,26 @@ public partial class IFaceLog {
         oprot.WriteFieldBegin(field);
         oprot.WriteI32(PersonGroupId);
         oprot.WriteFieldEnd();
-        if (Schedule != null) {
-          field.Name = "schedule";
+        if (Column != null) {
+          field.Name = "column";
           field.Type = TType.String;
           field.ID = 3;
           oprot.WriteFieldBegin(field);
-          oprot.WriteString(Schedule);
+          oprot.WriteString(Column);
+          oprot.WriteFieldEnd();
+        }
+        if (Value != null) {
+          field.Name = "value";
+          field.Type = TType.String;
+          field.ID = 4;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteString(Value);
           oprot.WriteFieldEnd();
         }
         if (Token != null) {
           field.Name = "token";
           field.Type = TType.Struct;
-          field.ID = 4;
+          field.ID = 5;
           oprot.WriteFieldBegin(field);
           Token.Write(oprot);
           oprot.WriteFieldEnd();
@@ -54789,14 +54807,18 @@ public partial class IFaceLog {
     }
 
     public override string ToString() {
-      StringBuilder __sb = new StringBuilder("savePermitWithSchedule_args(");
+      StringBuilder __sb = new StringBuilder("savePermitWithColumn_args(");
       __sb.Append(", DeviceGroupId: ");
       __sb.Append(DeviceGroupId);
       __sb.Append(", PersonGroupId: ");
       __sb.Append(PersonGroupId);
-      if (Schedule != null) {
-        __sb.Append(", Schedule: ");
-        __sb.Append(Schedule);
+      if (Column != null) {
+        __sb.Append(", Column: ");
+        __sb.Append(Column);
+      }
+      if (Value != null) {
+        __sb.Append(", Value: ");
+        __sb.Append(Value);
       }
       if (Token != null) {
         __sb.Append(", Token: ");
@@ -54812,14 +54834,14 @@ public partial class IFaceLog {
   #if !SILVERLIGHT
   [Serializable]
   #endif
-  public partial class savePermitWithSchedule_result : TBase
+  public partial class savePermitWithColumn_result : TBase
   {
 
     public PermitBean Success { get; set; }
 
     public ServiceRuntimeException Ex1 { get; set; }
 
-    public savePermitWithSchedule_result() {
+    public savePermitWithColumn_result() {
     }
 
     public void Read (TProtocol iprot)
@@ -54871,7 +54893,7 @@ public partial class IFaceLog {
       oprot.IncrementRecursionDepth();
       try
       {
-        TStruct struc = new TStruct("savePermitWithSchedule_result");
+        TStruct struc = new TStruct("savePermitWithColumn_result");
         oprot.WriteStructBegin(struc);
         TField field = new TField();
 
@@ -54900,7 +54922,7 @@ public partial class IFaceLog {
     }
 
     public override string ToString() {
-      StringBuilder __sb = new StringBuilder("savePermitWithSchedule_result(");
+      StringBuilder __sb = new StringBuilder("savePermitWithColumn_result(");
       bool __first = true;
       if (Success != null) {
         if(!__first) { __sb.Append(", "); }

@@ -3110,15 +3110,17 @@ public class IFaceLogThriftClient implements IFaceLog {
     @Override
     public PermitBean savePermit(int deviceGroupId,
         int personGroupId,
-        String schedule,
+        String column,
+        String value,
         Token token) 
         {
         net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
         try{
             return TypeTransformer.getInstance().to(
-                    instance.savePermitWithSchedule(deviceGroupId,
+                    instance.savePermitWithColumn(deviceGroupId,
                 personGroupId,
-                schedule,
+                column,
+                value,
                 TypeTransformer.getInstance().to(
                     token,
                     Token.class,

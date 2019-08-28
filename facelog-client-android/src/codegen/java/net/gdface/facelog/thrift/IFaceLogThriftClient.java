@@ -4064,7 +4064,8 @@ public class IFaceLogThriftClient implements IFaceLog {
     @Override
     public PermitBean savePermit(final int deviceGroupId,
         final int personGroupId,
-        final String schedule,
+        final String column,
+        final String value,
         final Token token) 
         {
         try{
@@ -4079,7 +4080,7 @@ public class IFaceLogThriftClient implements IFaceLog {
                 new ServiceAsyncCall<net.gdface.facelog.client.thrift.PermitBean>(){
                 @Override
                 public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<net.gdface.facelog.client.thrift.PermitBean> nativeCallback){
-                    service.savePermitWithSchedule(deviceGroupId,personGroupId,schedule,TypeTransformer.getInstance().to(
+                    service.savePermitWithColumn(deviceGroupId,personGroupId,column,value,TypeTransformer.getInstance().to(
                     token,
                     Token.class,
                     net.gdface.facelog.client.thrift.Token.class),nativeCallback);

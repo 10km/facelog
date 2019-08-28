@@ -559,7 +559,7 @@ public class FacelogDefaultImpl implements IFaceLog {
 	}
 	
 	@Override
-	public PermitBean savePermit(int deviceGroupId, int personGroupId, String schedule, Token token) {
+	public PermitBean savePermit(int deviceGroupId, int personGroupId, String column, String value, Token token) {
 		return null;
 		
 	}

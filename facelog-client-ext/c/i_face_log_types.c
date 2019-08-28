@@ -96548,18 +96548,19 @@ i_face_log_save_permit_result_get_type (void)
   return type;
 }
 
-enum _IFaceLogSavePermitWithScheduleArgsProperties
+enum _IFaceLogSavePermitWithColumnArgsProperties
 {
-  PROP_I_FACE_LOG_SAVE_PERMIT_WITH_SCHEDULE_ARGS_0,
-  PROP_I_FACE_LOG_SAVE_PERMIT_WITH_SCHEDULE_ARGS_DEVICE_GROUP_ID,
-  PROP_I_FACE_LOG_SAVE_PERMIT_WITH_SCHEDULE_ARGS_PERSON_GROUP_ID,
-  PROP_I_FACE_LOG_SAVE_PERMIT_WITH_SCHEDULE_ARGS_SCHEDULE,
-  PROP_I_FACE_LOG_SAVE_PERMIT_WITH_SCHEDULE_ARGS_TOKEN
+  PROP_I_FACE_LOG_SAVE_PERMIT_WITH_COLUMN_ARGS_0,
+  PROP_I_FACE_LOG_SAVE_PERMIT_WITH_COLUMN_ARGS_DEVICE_GROUP_ID,
+  PROP_I_FACE_LOG_SAVE_PERMIT_WITH_COLUMN_ARGS_PERSON_GROUP_ID,
+  PROP_I_FACE_LOG_SAVE_PERMIT_WITH_COLUMN_ARGS_COLUMN,
+  PROP_I_FACE_LOG_SAVE_PERMIT_WITH_COLUMN_ARGS_VALUE,
+  PROP_I_FACE_LOG_SAVE_PERMIT_WITH_COLUMN_ARGS_TOKEN
 };
 
-/* reads a i_face_log_save_permit_with_schedule_args object */
+/* reads a i_face_log_save_permit_with_column_args object */
 static gint32
-i_face_log_save_permit_with_schedule_args_read (ThriftStruct *object, ThriftProtocol *protocol, GError **error)
+i_face_log_save_permit_with_column_args_read (ThriftStruct *object, ThriftProtocol *protocol, GError **error)
 {
   gint32 ret;
   gint32 xfer = 0;
@@ -96568,7 +96569,7 @@ i_face_log_save_permit_with_schedule_args_read (ThriftStruct *object, ThriftProt
   gint16 fid;
   guint32 len = 0;
   gpointer data = NULL;
-  IFaceLogSavePermitWithScheduleArgs * this_object = I_FACE_LOG_SAVE_PERMIT_WITH_SCHEDULE_ARGS(object);
+  IFaceLogSavePermitWithColumnArgs * this_object = I_FACE_LOG_SAVE_PERMIT_WITH_COLUMN_ARGS(object);
   gboolean isset_deviceGroupId = FALSE;
   gboolean isset_personGroupId = FALSE;
 
@@ -96637,16 +96638,16 @@ i_face_log_save_permit_with_schedule_args_read (ThriftStruct *object, ThriftProt
       case 3:
         if (ftype == T_STRING)
         {
-          if (this_object->schedule != NULL)
+          if (this_object->column != NULL)
           {
-            g_free(this_object->schedule);
-            this_object->schedule = NULL;
+            g_free(this_object->column);
+            this_object->column = NULL;
           }
 
-          if ((ret = thrift_protocol_read_string (protocol, &this_object->schedule, error)) < 0)
+          if ((ret = thrift_protocol_read_string (protocol, &this_object->column, error)) < 0)
             return -1;
           xfer += ret;
-          this_object->__isset_schedule = TRUE;
+          this_object->__isset_column = TRUE;
         } else {
           if ((ret = thrift_protocol_skip (protocol, ftype, error)) < 0)
             return -1;
@@ -96654,6 +96655,25 @@ i_face_log_save_permit_with_schedule_args_read (ThriftStruct *object, ThriftProt
         }
         break;
       case 4:
+        if (ftype == T_STRING)
+        {
+          if (this_object->value != NULL)
+          {
+            g_free(this_object->value);
+            this_object->value = NULL;
+          }
+
+          if ((ret = thrift_protocol_read_string (protocol, &this_object->value, error)) < 0)
+            return -1;
+          xfer += ret;
+          this_object->__isset_value = TRUE;
+        } else {
+          if ((ret = thrift_protocol_skip (protocol, ftype, error)) < 0)
+            return -1;
+          xfer += ret;
+        }
+        break;
+      case 5:
         if (ftype == T_STRUCT)
         {
           if ((ret = thrift_struct_read (THRIFT_STRUCT (this_object->token), protocol, error)) < 0)
@@ -96703,14 +96723,14 @@ i_face_log_save_permit_with_schedule_args_read (ThriftStruct *object, ThriftProt
 }
 
 static gint32
-i_face_log_save_permit_with_schedule_args_write (ThriftStruct *object, ThriftProtocol *protocol, GError **error)
+i_face_log_save_permit_with_column_args_write (ThriftStruct *object, ThriftProtocol *protocol, GError **error)
 {
   gint32 ret;
   gint32 xfer = 0;
 
-  IFaceLogSavePermitWithScheduleArgs * this_object = I_FACE_LOG_SAVE_PERMIT_WITH_SCHEDULE_ARGS(object);
+  IFaceLogSavePermitWithColumnArgs * this_object = I_FACE_LOG_SAVE_PERMIT_WITH_COLUMN_ARGS(object);
   THRIFT_UNUSED_VAR (this_object);
-  if ((ret = thrift_protocol_write_struct_begin (protocol, "IFaceLogSavePermitWithScheduleArgs", error)) < 0)
+  if ((ret = thrift_protocol_write_struct_begin (protocol, "IFaceLogSavePermitWithColumnArgs", error)) < 0)
     return -1;
   xfer += ret;
   if ((ret = thrift_protocol_write_field_begin (protocol, "deviceGroupId", T_I32, 1, error)) < 0)
@@ -96733,17 +96753,27 @@ i_face_log_save_permit_with_schedule_args_write (ThriftStruct *object, ThriftPro
   if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
     return -1;
   xfer += ret;
-  if ((ret = thrift_protocol_write_field_begin (protocol, "schedule", T_STRING, 3, error)) < 0)
+  if ((ret = thrift_protocol_write_field_begin (protocol, "column", T_STRING, 3, error)) < 0)
     return -1;
   xfer += ret;
-  if ((ret = thrift_protocol_write_string (protocol, this_object->schedule, error)) < 0)
+  if ((ret = thrift_protocol_write_string (protocol, this_object->column, error)) < 0)
     return -1;
   xfer += ret;
 
   if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
     return -1;
   xfer += ret;
-  if ((ret = thrift_protocol_write_field_begin (protocol, "token", T_STRUCT, 4, error)) < 0)
+  if ((ret = thrift_protocol_write_field_begin (protocol, "value", T_STRING, 4, error)) < 0)
+    return -1;
+  xfer += ret;
+  if ((ret = thrift_protocol_write_string (protocol, this_object->value, error)) < 0)
+    return -1;
+  xfer += ret;
+
+  if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
+    return -1;
+  xfer += ret;
+  if ((ret = thrift_protocol_write_field_begin (protocol, "token", T_STRUCT, 5, error)) < 0)
     return -1;
   xfer += ret;
   if ((ret = thrift_struct_write (THRIFT_STRUCT (this_object->token), protocol, error)) < 0)
@@ -96764,31 +96794,38 @@ i_face_log_save_permit_with_schedule_args_write (ThriftStruct *object, ThriftPro
 }
 
 static void
-i_face_log_save_permit_with_schedule_args_set_property (GObject *object,
-                                                        guint property_id,
-                                                        const GValue *value,
-                                                        GParamSpec *pspec)
+i_face_log_save_permit_with_column_args_set_property (GObject *object,
+                                                      guint property_id,
+                                                      const GValue *value,
+                                                      GParamSpec *pspec)
 {
-  IFaceLogSavePermitWithScheduleArgs *self = I_FACE_LOG_SAVE_PERMIT_WITH_SCHEDULE_ARGS (object);
+  IFaceLogSavePermitWithColumnArgs *self = I_FACE_LOG_SAVE_PERMIT_WITH_COLUMN_ARGS (object);
 
   switch (property_id)
   {
-    case PROP_I_FACE_LOG_SAVE_PERMIT_WITH_SCHEDULE_ARGS_DEVICE_GROUP_ID:
+    case PROP_I_FACE_LOG_SAVE_PERMIT_WITH_COLUMN_ARGS_DEVICE_GROUP_ID:
       self->deviceGroupId = g_value_get_int (value);
       break;
 
-    case PROP_I_FACE_LOG_SAVE_PERMIT_WITH_SCHEDULE_ARGS_PERSON_GROUP_ID:
+    case PROP_I_FACE_LOG_SAVE_PERMIT_WITH_COLUMN_ARGS_PERSON_GROUP_ID:
       self->personGroupId = g_value_get_int (value);
       break;
 
-    case PROP_I_FACE_LOG_SAVE_PERMIT_WITH_SCHEDULE_ARGS_SCHEDULE:
-      if (self->schedule != NULL)
-        g_free (self->schedule);
-      self->schedule = g_value_dup_string (value);
-      self->__isset_schedule = TRUE;
+    case PROP_I_FACE_LOG_SAVE_PERMIT_WITH_COLUMN_ARGS_COLUMN:
+      if (self->column != NULL)
+        g_free (self->column);
+      self->column = g_value_dup_string (value);
+      self->__isset_column = TRUE;
       break;
 
-    case PROP_I_FACE_LOG_SAVE_PERMIT_WITH_SCHEDULE_ARGS_TOKEN:
+    case PROP_I_FACE_LOG_SAVE_PERMIT_WITH_COLUMN_ARGS_VALUE:
+      if (self->value != NULL)
+        g_free (self->value);
+      self->value = g_value_dup_string (value);
+      self->__isset_value = TRUE;
+      break;
+
+    case PROP_I_FACE_LOG_SAVE_PERMIT_WITH_COLUMN_ARGS_TOKEN:
       if (self->token != NULL)
         g_object_unref (self->token);
       self->token = g_value_dup_object (value);
@@ -96802,28 +96839,32 @@ i_face_log_save_permit_with_schedule_args_set_property (GObject *object,
 }
 
 static void
-i_face_log_save_permit_with_schedule_args_get_property (GObject *object,
-                                                        guint property_id,
-                                                        GValue *value,
-                                                        GParamSpec *pspec)
+i_face_log_save_permit_with_column_args_get_property (GObject *object,
+                                                      guint property_id,
+                                                      GValue *value,
+                                                      GParamSpec *pspec)
 {
-  IFaceLogSavePermitWithScheduleArgs *self = I_FACE_LOG_SAVE_PERMIT_WITH_SCHEDULE_ARGS (object);
+  IFaceLogSavePermitWithColumnArgs *self = I_FACE_LOG_SAVE_PERMIT_WITH_COLUMN_ARGS (object);
 
   switch (property_id)
   {
-    case PROP_I_FACE_LOG_SAVE_PERMIT_WITH_SCHEDULE_ARGS_DEVICE_GROUP_ID:
+    case PROP_I_FACE_LOG_SAVE_PERMIT_WITH_COLUMN_ARGS_DEVICE_GROUP_ID:
       g_value_set_int (value, self->deviceGroupId);
       break;
 
-    case PROP_I_FACE_LOG_SAVE_PERMIT_WITH_SCHEDULE_ARGS_PERSON_GROUP_ID:
+    case PROP_I_FACE_LOG_SAVE_PERMIT_WITH_COLUMN_ARGS_PERSON_GROUP_ID:
       g_value_set_int (value, self->personGroupId);
       break;
 
-    case PROP_I_FACE_LOG_SAVE_PERMIT_WITH_SCHEDULE_ARGS_SCHEDULE:
-      g_value_set_string (value, self->schedule);
+    case PROP_I_FACE_LOG_SAVE_PERMIT_WITH_COLUMN_ARGS_COLUMN:
+      g_value_set_string (value, self->column);
       break;
 
-    case PROP_I_FACE_LOG_SAVE_PERMIT_WITH_SCHEDULE_ARGS_TOKEN:
+    case PROP_I_FACE_LOG_SAVE_PERMIT_WITH_COLUMN_ARGS_VALUE:
+      g_value_set_string (value, self->value);
+      break;
+
+    case PROP_I_FACE_LOG_SAVE_PERMIT_WITH_COLUMN_ARGS_TOKEN:
       g_value_set_object (value, self->token);
       break;
 
@@ -96834,29 +96875,36 @@ i_face_log_save_permit_with_schedule_args_get_property (GObject *object,
 }
 
 static void 
-i_face_log_save_permit_with_schedule_args_instance_init (IFaceLogSavePermitWithScheduleArgs * object)
+i_face_log_save_permit_with_column_args_instance_init (IFaceLogSavePermitWithColumnArgs * object)
 {
   /* satisfy -Wall */
   THRIFT_UNUSED_VAR (object);
   object->deviceGroupId = 0;
   object->personGroupId = 0;
-  object->schedule = NULL;
-  object->__isset_schedule = FALSE;
+  object->column = NULL;
+  object->__isset_column = FALSE;
+  object->value = NULL;
+  object->__isset_value = FALSE;
   object->token = g_object_new (TYPE_TOKEN, NULL);
   object->__isset_token = FALSE;
 }
 
 static void 
-i_face_log_save_permit_with_schedule_args_finalize (GObject *object)
+i_face_log_save_permit_with_column_args_finalize (GObject *object)
 {
-  IFaceLogSavePermitWithScheduleArgs *tobject = I_FACE_LOG_SAVE_PERMIT_WITH_SCHEDULE_ARGS (object);
+  IFaceLogSavePermitWithColumnArgs *tobject = I_FACE_LOG_SAVE_PERMIT_WITH_COLUMN_ARGS (object);
 
   /* satisfy -Wall in case we don't use tobject */
   THRIFT_UNUSED_VAR (tobject);
-  if (tobject->schedule != NULL)
+  if (tobject->column != NULL)
   {
-    g_free(tobject->schedule);
-    tobject->schedule = NULL;
+    g_free(tobject->column);
+    tobject->column = NULL;
+  }
+  if (tobject->value != NULL)
+  {
+    g_free(tobject->value);
+    tobject->value = NULL;
   }
   if (tobject->token != NULL)
   {
@@ -96866,21 +96914,21 @@ i_face_log_save_permit_with_schedule_args_finalize (GObject *object)
 }
 
 static void
-i_face_log_save_permit_with_schedule_args_class_init (IFaceLogSavePermitWithScheduleArgsClass * cls)
+i_face_log_save_permit_with_column_args_class_init (IFaceLogSavePermitWithColumnArgsClass * cls)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (cls);
   ThriftStructClass *struct_class = THRIFT_STRUCT_CLASS (cls);
 
-  struct_class->read = i_face_log_save_permit_with_schedule_args_read;
-  struct_class->write = i_face_log_save_permit_with_schedule_args_write;
+  struct_class->read = i_face_log_save_permit_with_column_args_read;
+  struct_class->write = i_face_log_save_permit_with_column_args_write;
 
-  gobject_class->finalize = i_face_log_save_permit_with_schedule_args_finalize;
-  gobject_class->get_property = i_face_log_save_permit_with_schedule_args_get_property;
-  gobject_class->set_property = i_face_log_save_permit_with_schedule_args_set_property;
+  gobject_class->finalize = i_face_log_save_permit_with_column_args_finalize;
+  gobject_class->get_property = i_face_log_save_permit_with_column_args_get_property;
+  gobject_class->set_property = i_face_log_save_permit_with_column_args_set_property;
 
   g_object_class_install_property
     (gobject_class,
-     PROP_I_FACE_LOG_SAVE_PERMIT_WITH_SCHEDULE_ARGS_DEVICE_GROUP_ID,
+     PROP_I_FACE_LOG_SAVE_PERMIT_WITH_COLUMN_ARGS_DEVICE_GROUP_ID,
      g_param_spec_int ("deviceGroupId",
                        NULL,
                        NULL,
@@ -96891,7 +96939,7 @@ i_face_log_save_permit_with_schedule_args_class_init (IFaceLogSavePermitWithSche
 
   g_object_class_install_property
     (gobject_class,
-     PROP_I_FACE_LOG_SAVE_PERMIT_WITH_SCHEDULE_ARGS_PERSON_GROUP_ID,
+     PROP_I_FACE_LOG_SAVE_PERMIT_WITH_COLUMN_ARGS_PERSON_GROUP_ID,
      g_param_spec_int ("personGroupId",
                        NULL,
                        NULL,
@@ -96902,8 +96950,8 @@ i_face_log_save_permit_with_schedule_args_class_init (IFaceLogSavePermitWithSche
 
   g_object_class_install_property
     (gobject_class,
-     PROP_I_FACE_LOG_SAVE_PERMIT_WITH_SCHEDULE_ARGS_SCHEDULE,
-     g_param_spec_string ("schedule",
+     PROP_I_FACE_LOG_SAVE_PERMIT_WITH_COLUMN_ARGS_COLUMN,
+     g_param_spec_string ("column",
                           NULL,
                           NULL,
                           NULL,
@@ -96911,7 +96959,16 @@ i_face_log_save_permit_with_schedule_args_class_init (IFaceLogSavePermitWithSche
 
   g_object_class_install_property
     (gobject_class,
-     PROP_I_FACE_LOG_SAVE_PERMIT_WITH_SCHEDULE_ARGS_TOKEN,
+     PROP_I_FACE_LOG_SAVE_PERMIT_WITH_COLUMN_ARGS_VALUE,
+     g_param_spec_string ("value",
+                          NULL,
+                          NULL,
+                          NULL,
+                          G_PARAM_READWRITE));
+
+  g_object_class_install_property
+    (gobject_class,
+     PROP_I_FACE_LOG_SAVE_PERMIT_WITH_COLUMN_ARGS_TOKEN,
      g_param_spec_object ("token",
                          NULL,
                          NULL,
@@ -96920,7 +96977,7 @@ i_face_log_save_permit_with_schedule_args_class_init (IFaceLogSavePermitWithSche
 }
 
 GType
-i_face_log_save_permit_with_schedule_args_get_type (void)
+i_face_log_save_permit_with_column_args_get_type (void)
 {
   static GType type = 0;
 
@@ -96928,36 +96985,36 @@ i_face_log_save_permit_with_schedule_args_get_type (void)
   {
     static const GTypeInfo type_info = 
     {
-      sizeof (IFaceLogSavePermitWithScheduleArgsClass),
+      sizeof (IFaceLogSavePermitWithColumnArgsClass),
       NULL, /* base_init */
       NULL, /* base_finalize */
-      (GClassInitFunc) i_face_log_save_permit_with_schedule_args_class_init,
+      (GClassInitFunc) i_face_log_save_permit_with_column_args_class_init,
       NULL, /* class_finalize */
       NULL, /* class_data */
-      sizeof (IFaceLogSavePermitWithScheduleArgs),
+      sizeof (IFaceLogSavePermitWithColumnArgs),
       0, /* n_preallocs */
-      (GInstanceInitFunc) i_face_log_save_permit_with_schedule_args_instance_init,
+      (GInstanceInitFunc) i_face_log_save_permit_with_column_args_instance_init,
       NULL, /* value_table */
     };
 
     type = g_type_register_static (THRIFT_TYPE_STRUCT, 
-                                   "IFaceLogSavePermitWithScheduleArgsType",
+                                   "IFaceLogSavePermitWithColumnArgsType",
                                    &type_info, 0);
   }
 
   return type;
 }
 
-enum _IFaceLogSavePermitWithScheduleResultProperties
+enum _IFaceLogSavePermitWithColumnResultProperties
 {
-  PROP_I_FACE_LOG_SAVE_PERMIT_WITH_SCHEDULE_RESULT_0,
-  PROP_I_FACE_LOG_SAVE_PERMIT_WITH_SCHEDULE_RESULT_SUCCESS,
-  PROP_I_FACE_LOG_SAVE_PERMIT_WITH_SCHEDULE_RESULT_EX1
+  PROP_I_FACE_LOG_SAVE_PERMIT_WITH_COLUMN_RESULT_0,
+  PROP_I_FACE_LOG_SAVE_PERMIT_WITH_COLUMN_RESULT_SUCCESS,
+  PROP_I_FACE_LOG_SAVE_PERMIT_WITH_COLUMN_RESULT_EX1
 };
 
-/* reads a i_face_log_save_permit_with_schedule_result object */
+/* reads a i_face_log_save_permit_with_column_result object */
 static gint32
-i_face_log_save_permit_with_schedule_result_read (ThriftStruct *object, ThriftProtocol *protocol, GError **error)
+i_face_log_save_permit_with_column_result_read (ThriftStruct *object, ThriftProtocol *protocol, GError **error)
 {
   gint32 ret;
   gint32 xfer = 0;
@@ -96966,7 +97023,7 @@ i_face_log_save_permit_with_schedule_result_read (ThriftStruct *object, ThriftPr
   gint16 fid;
   guint32 len = 0;
   gpointer data = NULL;
-  IFaceLogSavePermitWithScheduleResult * this_object = I_FACE_LOG_SAVE_PERMIT_WITH_SCHEDULE_RESULT(object);
+  IFaceLogSavePermitWithColumnResult * this_object = I_FACE_LOG_SAVE_PERMIT_WITH_COLUMN_RESULT(object);
 
   /* satisfy -Wall in case these aren't used */
   THRIFT_UNUSED_VAR (len);
@@ -97061,14 +97118,14 @@ i_face_log_save_permit_with_schedule_result_read (ThriftStruct *object, ThriftPr
 }
 
 static gint32
-i_face_log_save_permit_with_schedule_result_write (ThriftStruct *object, ThriftProtocol *protocol, GError **error)
+i_face_log_save_permit_with_column_result_write (ThriftStruct *object, ThriftProtocol *protocol, GError **error)
 {
   gint32 ret;
   gint32 xfer = 0;
 
-  IFaceLogSavePermitWithScheduleResult * this_object = I_FACE_LOG_SAVE_PERMIT_WITH_SCHEDULE_RESULT(object);
+  IFaceLogSavePermitWithColumnResult * this_object = I_FACE_LOG_SAVE_PERMIT_WITH_COLUMN_RESULT(object);
   THRIFT_UNUSED_VAR (this_object);
-  if ((ret = thrift_protocol_write_struct_begin (protocol, "IFaceLogSavePermitWithScheduleResult", error)) < 0)
+  if ((ret = thrift_protocol_write_struct_begin (protocol, "IFaceLogSavePermitWithColumnResult", error)) < 0)
     return -1;
   xfer += ret;
   if (this_object->__isset_success == TRUE) {
@@ -97106,23 +97163,23 @@ i_face_log_save_permit_with_schedule_result_write (ThriftStruct *object, ThriftP
 }
 
 static void
-i_face_log_save_permit_with_schedule_result_set_property (GObject *object,
-                                                          guint property_id,
-                                                          const GValue *value,
-                                                          GParamSpec *pspec)
+i_face_log_save_permit_with_column_result_set_property (GObject *object,
+                                                        guint property_id,
+                                                        const GValue *value,
+                                                        GParamSpec *pspec)
 {
-  IFaceLogSavePermitWithScheduleResult *self = I_FACE_LOG_SAVE_PERMIT_WITH_SCHEDULE_RESULT (object);
+  IFaceLogSavePermitWithColumnResult *self = I_FACE_LOG_SAVE_PERMIT_WITH_COLUMN_RESULT (object);
 
   switch (property_id)
   {
-    case PROP_I_FACE_LOG_SAVE_PERMIT_WITH_SCHEDULE_RESULT_SUCCESS:
+    case PROP_I_FACE_LOG_SAVE_PERMIT_WITH_COLUMN_RESULT_SUCCESS:
       if (self->success != NULL)
         g_object_unref (self->success);
       self->success = g_value_dup_object (value);
       self->__isset_success = TRUE;
       break;
 
-    case PROP_I_FACE_LOG_SAVE_PERMIT_WITH_SCHEDULE_RESULT_EX1:
+    case PROP_I_FACE_LOG_SAVE_PERMIT_WITH_COLUMN_RESULT_EX1:
       if (self->ex1 != NULL)
         g_object_unref (self->ex1);
       self->ex1 = g_value_dup_object (value);
@@ -97136,20 +97193,20 @@ i_face_log_save_permit_with_schedule_result_set_property (GObject *object,
 }
 
 static void
-i_face_log_save_permit_with_schedule_result_get_property (GObject *object,
-                                                          guint property_id,
-                                                          GValue *value,
-                                                          GParamSpec *pspec)
+i_face_log_save_permit_with_column_result_get_property (GObject *object,
+                                                        guint property_id,
+                                                        GValue *value,
+                                                        GParamSpec *pspec)
 {
-  IFaceLogSavePermitWithScheduleResult *self = I_FACE_LOG_SAVE_PERMIT_WITH_SCHEDULE_RESULT (object);
+  IFaceLogSavePermitWithColumnResult *self = I_FACE_LOG_SAVE_PERMIT_WITH_COLUMN_RESULT (object);
 
   switch (property_id)
   {
-    case PROP_I_FACE_LOG_SAVE_PERMIT_WITH_SCHEDULE_RESULT_SUCCESS:
+    case PROP_I_FACE_LOG_SAVE_PERMIT_WITH_COLUMN_RESULT_SUCCESS:
       g_value_set_object (value, self->success);
       break;
 
-    case PROP_I_FACE_LOG_SAVE_PERMIT_WITH_SCHEDULE_RESULT_EX1:
+    case PROP_I_FACE_LOG_SAVE_PERMIT_WITH_COLUMN_RESULT_EX1:
       g_value_set_object (value, self->ex1);
       break;
 
@@ -97160,7 +97217,7 @@ i_face_log_save_permit_with_schedule_result_get_property (GObject *object,
 }
 
 static void 
-i_face_log_save_permit_with_schedule_result_instance_init (IFaceLogSavePermitWithScheduleResult * object)
+i_face_log_save_permit_with_column_result_instance_init (IFaceLogSavePermitWithColumnResult * object)
 {
   /* satisfy -Wall */
   THRIFT_UNUSED_VAR (object);
@@ -97171,9 +97228,9 @@ i_face_log_save_permit_with_schedule_result_instance_init (IFaceLogSavePermitWit
 }
 
 static void 
-i_face_log_save_permit_with_schedule_result_finalize (GObject *object)
+i_face_log_save_permit_with_column_result_finalize (GObject *object)
 {
-  IFaceLogSavePermitWithScheduleResult *tobject = I_FACE_LOG_SAVE_PERMIT_WITH_SCHEDULE_RESULT (object);
+  IFaceLogSavePermitWithColumnResult *tobject = I_FACE_LOG_SAVE_PERMIT_WITH_COLUMN_RESULT (object);
 
   /* satisfy -Wall in case we don't use tobject */
   THRIFT_UNUSED_VAR (tobject);
@@ -97190,21 +97247,21 @@ i_face_log_save_permit_with_schedule_result_finalize (GObject *object)
 }
 
 static void
-i_face_log_save_permit_with_schedule_result_class_init (IFaceLogSavePermitWithScheduleResultClass * cls)
+i_face_log_save_permit_with_column_result_class_init (IFaceLogSavePermitWithColumnResultClass * cls)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (cls);
   ThriftStructClass *struct_class = THRIFT_STRUCT_CLASS (cls);
 
-  struct_class->read = i_face_log_save_permit_with_schedule_result_read;
-  struct_class->write = i_face_log_save_permit_with_schedule_result_write;
+  struct_class->read = i_face_log_save_permit_with_column_result_read;
+  struct_class->write = i_face_log_save_permit_with_column_result_write;
 
-  gobject_class->finalize = i_face_log_save_permit_with_schedule_result_finalize;
-  gobject_class->get_property = i_face_log_save_permit_with_schedule_result_get_property;
-  gobject_class->set_property = i_face_log_save_permit_with_schedule_result_set_property;
+  gobject_class->finalize = i_face_log_save_permit_with_column_result_finalize;
+  gobject_class->get_property = i_face_log_save_permit_with_column_result_get_property;
+  gobject_class->set_property = i_face_log_save_permit_with_column_result_set_property;
 
   g_object_class_install_property
     (gobject_class,
-     PROP_I_FACE_LOG_SAVE_PERMIT_WITH_SCHEDULE_RESULT_SUCCESS,
+     PROP_I_FACE_LOG_SAVE_PERMIT_WITH_COLUMN_RESULT_SUCCESS,
      g_param_spec_object ("success",
                          NULL,
                          NULL,
@@ -97213,7 +97270,7 @@ i_face_log_save_permit_with_schedule_result_class_init (IFaceLogSavePermitWithSc
 
   g_object_class_install_property
     (gobject_class,
-     PROP_I_FACE_LOG_SAVE_PERMIT_WITH_SCHEDULE_RESULT_EX1,
+     PROP_I_FACE_LOG_SAVE_PERMIT_WITH_COLUMN_RESULT_EX1,
      g_param_spec_object ("ex1",
                          NULL,
                          NULL,
@@ -97222,7 +97279,7 @@ i_face_log_save_permit_with_schedule_result_class_init (IFaceLogSavePermitWithSc
 }
 
 GType
-i_face_log_save_permit_with_schedule_result_get_type (void)
+i_face_log_save_permit_with_column_result_get_type (void)
 {
   static GType type = 0;
 
@@ -97230,20 +97287,20 @@ i_face_log_save_permit_with_schedule_result_get_type (void)
   {
     static const GTypeInfo type_info = 
     {
-      sizeof (IFaceLogSavePermitWithScheduleResultClass),
+      sizeof (IFaceLogSavePermitWithColumnResultClass),
       NULL, /* base_init */
       NULL, /* base_finalize */
-      (GClassInitFunc) i_face_log_save_permit_with_schedule_result_class_init,
+      (GClassInitFunc) i_face_log_save_permit_with_column_result_class_init,
       NULL, /* class_finalize */
       NULL, /* class_data */
-      sizeof (IFaceLogSavePermitWithScheduleResult),
+      sizeof (IFaceLogSavePermitWithColumnResult),
       0, /* n_preallocs */
-      (GInstanceInitFunc) i_face_log_save_permit_with_schedule_result_instance_init,
+      (GInstanceInitFunc) i_face_log_save_permit_with_column_result_instance_init,
       NULL, /* value_table */
     };
 
     type = g_type_register_static (THRIFT_TYPE_STRUCT, 
-                                   "IFaceLogSavePermitWithScheduleResultType",
+                                   "IFaceLogSavePermitWithColumnResultType",
                                    &type_info, 0);
   }
 

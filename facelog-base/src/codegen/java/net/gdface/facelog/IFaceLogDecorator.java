@@ -1045,8 +1045,8 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
-    public PermitBean savePermit (int deviceGroupId,int personGroupId,String schedule,Token token) {
-        return delegate().savePermit(deviceGroupId,personGroupId,schedule,token);
+    public PermitBean savePermit (int deviceGroupId,int personGroupId,String column,String value,Token token) {
+        return delegate().savePermit(deviceGroupId,personGroupId,column,value,token);
     }
 
     @Override

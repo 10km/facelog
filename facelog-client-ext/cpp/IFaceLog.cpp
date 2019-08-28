@@ -2266,19 +2266,19 @@ IFaceLog_savePermit_presult::~IFaceLog_savePermit_presult() throw() {
 }
 
 
-IFaceLog_savePermitWithSchedule_args::~IFaceLog_savePermitWithSchedule_args() throw() {
+IFaceLog_savePermitWithColumn_args::~IFaceLog_savePermitWithColumn_args() throw() {
 }
 
 
-IFaceLog_savePermitWithSchedule_pargs::~IFaceLog_savePermitWithSchedule_pargs() throw() {
+IFaceLog_savePermitWithColumn_pargs::~IFaceLog_savePermitWithColumn_pargs() throw() {
 }
 
 
-IFaceLog_savePermitWithSchedule_result::~IFaceLog_savePermitWithSchedule_result() throw() {
+IFaceLog_savePermitWithColumn_result::~IFaceLog_savePermitWithColumn_result() throw() {
 }
 
 
-IFaceLog_savePermitWithSchedule_presult::~IFaceLog_savePermitWithSchedule_presult() throw() {
+IFaceLog_savePermitWithColumn_presult::~IFaceLog_savePermitWithColumn_presult() throw() {
 }
 
 

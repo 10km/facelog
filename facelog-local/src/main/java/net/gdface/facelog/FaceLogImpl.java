@@ -1368,10 +1368,10 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 	}
 	
 	@Override
-	public PermitBean savePermit(int deviceGroupId,int personGroupId, String schedule, Token token){
+	public PermitBean savePermit(int deviceGroupId,int personGroupId, String column, String value, Token token){
 		try{
 			Enable.PERSON_ONLY.check(tm, token);
-			return dm.daoSavePermit(deviceGroupId, personGroupId,schedule);
+			return dm.daoSavePermit(deviceGroupId, personGroupId,null, value);
 		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
 		}

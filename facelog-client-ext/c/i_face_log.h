@@ -159,7 +159,7 @@ struct _IFaceLogIfInterface
   gboolean (*save_device) (IFaceLogIf *iface, DeviceBean ** _return, const DeviceBean * deviceBean, const Token * token, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*save_device_group) (IFaceLogIf *iface, DeviceGroupBean ** _return, const DeviceGroupBean * deviceGroupBean, const Token * token, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*save_permit) (IFaceLogIf *iface, PermitBean ** _return, const PermitBean * permitBean, const Token * token, ServiceRuntimeException ** ex1, GError **error);
-  gboolean (*save_permit_with_schedule) (IFaceLogIf *iface, PermitBean ** _return, const gint32 deviceGroupId, const gint32 personGroupId, const gchar * schedule, const Token * token, ServiceRuntimeException ** ex1, GError **error);
+  gboolean (*save_permit_with_column) (IFaceLogIf *iface, PermitBean ** _return, const gint32 deviceGroupId, const gint32 personGroupId, const gchar * column, const gchar * value, const Token * token, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*save_person) (IFaceLogIf *iface, PersonBean ** _return, const PersonBean * personBean, const Token * token, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*save_person_full) (IFaceLogIf *iface, PersonBean ** _return, const PersonBean * personBean, const GByteArray * idPhoto, const GByteArray * feature, const gchar * featureVersion, const GByteArray * featureImage, const FaceBean * faceBean, const Token * token, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*save_person_group) (IFaceLogIf *iface, PersonGroupBean ** _return, const PersonGroupBean * personGroupBean, const Token * token, ServiceRuntimeException ** ex1, GError **error);
@@ -333,7 +333,7 @@ gboolean i_face_log_if_run_task (IFaceLogIf *iface, gint32* _return, const gchar
 gboolean i_face_log_if_save_device (IFaceLogIf *iface, DeviceBean ** _return, const DeviceBean * deviceBean, const Token * token, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_if_save_device_group (IFaceLogIf *iface, DeviceGroupBean ** _return, const DeviceGroupBean * deviceGroupBean, const Token * token, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_if_save_permit (IFaceLogIf *iface, PermitBean ** _return, const PermitBean * permitBean, const Token * token, ServiceRuntimeException ** ex1, GError **error);
-gboolean i_face_log_if_save_permit_with_schedule (IFaceLogIf *iface, PermitBean ** _return, const gint32 deviceGroupId, const gint32 personGroupId, const gchar * schedule, const Token * token, ServiceRuntimeException ** ex1, GError **error);
+gboolean i_face_log_if_save_permit_with_column (IFaceLogIf *iface, PermitBean ** _return, const gint32 deviceGroupId, const gint32 personGroupId, const gchar * column, const gchar * value, const Token * token, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_if_save_person (IFaceLogIf *iface, PersonBean ** _return, const PersonBean * personBean, const Token * token, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_if_save_person_full (IFaceLogIf *iface, PersonBean ** _return, const PersonBean * personBean, const GByteArray * idPhoto, const GByteArray * feature, const gchar * featureVersion, const GByteArray * featureImage, const FaceBean * faceBean, const Token * token, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_if_save_person_group (IFaceLogIf *iface, PersonGroupBean ** _return, const PersonGroupBean * personGroupBean, const Token * token, ServiceRuntimeException ** ex1, GError **error);
@@ -805,9 +805,9 @@ gboolean i_face_log_client_recv_save_device_group (IFaceLogIf * iface, DeviceGro
 gboolean i_face_log_client_save_permit (IFaceLogIf * iface, PermitBean ** _return, const PermitBean * permitBean, const Token * token, ServiceRuntimeException ** ex1, GError ** error);
 gboolean i_face_log_client_send_save_permit (IFaceLogIf * iface, const PermitBean * permitBean, const Token * token, GError ** error);
 gboolean i_face_log_client_recv_save_permit (IFaceLogIf * iface, PermitBean ** _return, ServiceRuntimeException ** ex1, GError ** error);
-gboolean i_face_log_client_save_permit_with_schedule (IFaceLogIf * iface, PermitBean ** _return, const gint32 deviceGroupId, const gint32 personGroupId, const gchar * schedule, const Token * token, ServiceRuntimeException ** ex1, GError ** error);
-gboolean i_face_log_client_send_save_permit_with_schedule (IFaceLogIf * iface, const gint32 deviceGroupId, const gint32 personGroupId, const gchar * schedule, const Token * token, GError ** error);
-gboolean i_face_log_client_recv_save_permit_with_schedule (IFaceLogIf * iface, PermitBean ** _return, ServiceRuntimeException ** ex1, GError ** error);
+gboolean i_face_log_client_save_permit_with_column (IFaceLogIf * iface, PermitBean ** _return, const gint32 deviceGroupId, const gint32 personGroupId, const gchar * column, const gchar * value, const Token * token, ServiceRuntimeException ** ex1, GError ** error);
+gboolean i_face_log_client_send_save_permit_with_column (IFaceLogIf * iface, const gint32 deviceGroupId, const gint32 personGroupId, const gchar * column, const gchar * value, const Token * token, GError ** error);
+gboolean i_face_log_client_recv_save_permit_with_column (IFaceLogIf * iface, PermitBean ** _return, ServiceRuntimeException ** ex1, GError ** error);
 gboolean i_face_log_client_save_person (IFaceLogIf * iface, PersonBean ** _return, const PersonBean * personBean, const Token * token, ServiceRuntimeException ** ex1, GError ** error);
 gboolean i_face_log_client_send_save_person (IFaceLogIf * iface, const PersonBean * personBean, const Token * token, GError ** error);
 gboolean i_face_log_client_recv_save_person (IFaceLogIf * iface, PersonBean ** _return, ServiceRuntimeException ** ex1, GError ** error);
@@ -1032,7 +1032,7 @@ struct _IFaceLogHandlerClass
   gboolean (*save_device) (IFaceLogIf *iface, DeviceBean ** _return, const DeviceBean * deviceBean, const Token * token, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*save_device_group) (IFaceLogIf *iface, DeviceGroupBean ** _return, const DeviceGroupBean * deviceGroupBean, const Token * token, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*save_permit) (IFaceLogIf *iface, PermitBean ** _return, const PermitBean * permitBean, const Token * token, ServiceRuntimeException ** ex1, GError **error);
-  gboolean (*save_permit_with_schedule) (IFaceLogIf *iface, PermitBean ** _return, const gint32 deviceGroupId, const gint32 personGroupId, const gchar * schedule, const Token * token, ServiceRuntimeException ** ex1, GError **error);
+  gboolean (*save_permit_with_column) (IFaceLogIf *iface, PermitBean ** _return, const gint32 deviceGroupId, const gint32 personGroupId, const gchar * column, const gchar * value, const Token * token, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*save_person) (IFaceLogIf *iface, PersonBean ** _return, const PersonBean * personBean, const Token * token, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*save_person_full) (IFaceLogIf *iface, PersonBean ** _return, const PersonBean * personBean, const GByteArray * idPhoto, const GByteArray * feature, const gchar * featureVersion, const GByteArray * featureImage, const FaceBean * faceBean, const Token * token, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*save_person_group) (IFaceLogIf *iface, PersonGroupBean ** _return, const PersonGroupBean * personGroupBean, const Token * token, ServiceRuntimeException ** ex1, GError **error);
@@ -1208,7 +1208,7 @@ gboolean i_face_log_handler_run_task (IFaceLogIf *iface, gint32* _return, const 
 gboolean i_face_log_handler_save_device (IFaceLogIf *iface, DeviceBean ** _return, const DeviceBean * deviceBean, const Token * token, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_handler_save_device_group (IFaceLogIf *iface, DeviceGroupBean ** _return, const DeviceGroupBean * deviceGroupBean, const Token * token, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_handler_save_permit (IFaceLogIf *iface, PermitBean ** _return, const PermitBean * permitBean, const Token * token, ServiceRuntimeException ** ex1, GError **error);
-gboolean i_face_log_handler_save_permit_with_schedule (IFaceLogIf *iface, PermitBean ** _return, const gint32 deviceGroupId, const gint32 personGroupId, const gchar * schedule, const Token * token, ServiceRuntimeException ** ex1, GError **error);
+gboolean i_face_log_handler_save_permit_with_column (IFaceLogIf *iface, PermitBean ** _return, const gint32 deviceGroupId, const gint32 personGroupId, const gchar * column, const gchar * value, const Token * token, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_handler_save_person (IFaceLogIf *iface, PersonBean ** _return, const PersonBean * personBean, const Token * token, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_handler_save_person_full (IFaceLogIf *iface, PersonBean ** _return, const PersonBean * personBean, const GByteArray * idPhoto, const GByteArray * feature, const gchar * featureVersion, const GByteArray * featureImage, const FaceBean * faceBean, const Token * token, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_handler_save_person_group (IFaceLogIf *iface, PersonGroupBean ** _return, const PersonGroupBean * personGroupBean, const Token * token, ServiceRuntimeException ** ex1, GError **error);

@@ -365,7 +365,7 @@ service IFaceLog {
   DeviceBean saveDevice(1: optional DeviceBean deviceBean, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
   DeviceGroupBean saveDeviceGroup(1: optional DeviceGroupBean deviceGroupBean, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
   PermitBean savePermit(1: optional PermitBean permitBean, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
-  PermitBean savePermitWithSchedule(1: required i32 deviceGroupId, 2: required i32 personGroupId, 3: optional string schedule, 4: optional Token token) throws (1: ServiceRuntimeException ex1);
+  PermitBean savePermitWithColumn(1: required i32 deviceGroupId, 2: required i32 personGroupId, 3: optional string column, 4: optional string value, 5: optional Token token) throws (1: ServiceRuntimeException ex1);
   PersonBean savePerson(1: optional PersonBean personBean, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
   PersonBean savePersonFull(1: optional PersonBean personBean, 2: optional binary idPhoto, 3: optional binary feature, 4: optional string featureVersion, 5: optional binary featureImage, 6: optional FaceBean faceBean, 7: optional Token token) throws (1: ServiceRuntimeException ex1);
   PersonGroupBean savePersonGroup(1: optional PersonGroupBean personGroupBean, 2: optional Token token) throws (1: ServiceRuntimeException ex1);

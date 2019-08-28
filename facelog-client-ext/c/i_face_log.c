@@ -856,9 +856,9 @@ i_face_log_if_save_permit (IFaceLogIf *iface, PermitBean ** _return, const Permi
 }
 
 gboolean
-i_face_log_if_save_permit_with_schedule (IFaceLogIf *iface, PermitBean ** _return, const gint32 deviceGroupId, const gint32 personGroupId, const gchar * schedule, const Token * token, ServiceRuntimeException ** ex1, GError **error)
+i_face_log_if_save_permit_with_column (IFaceLogIf *iface, PermitBean ** _return, const gint32 deviceGroupId, const gint32 personGroupId, const gchar * column, const gchar * value, const Token * token, ServiceRuntimeException ** ex1, GError **error)
 {
-  return I_FACE_LOG_IF_GET_INTERFACE (iface)->save_permit_with_schedule (iface, _return, deviceGroupId, personGroupId, schedule, token, ex1, error);
+  return I_FACE_LOG_IF_GET_INTERFACE (iface)->save_permit_with_column (iface, _return, deviceGroupId, personGroupId, column, value, token, ex1, error);
 }
 
 gboolean
@@ -32905,12 +32905,12 @@ gboolean i_face_log_client_save_permit (IFaceLogIf * iface, PermitBean ** _retur
   return TRUE;
 }
 
-gboolean i_face_log_client_send_save_permit_with_schedule (IFaceLogIf * iface, const gint32 deviceGroupId, const gint32 personGroupId, const gchar * schedule, const Token * token, GError ** error)
+gboolean i_face_log_client_send_save_permit_with_column (IFaceLogIf * iface, const gint32 deviceGroupId, const gint32 personGroupId, const gchar * column, const gchar * value, const Token * token, GError ** error)
 {
   gint32 cseqid = 0;
   ThriftProtocol * protocol = I_FACE_LOG_CLIENT (iface)->output_protocol;
 
-  if (thrift_protocol_write_message_begin (protocol, "savePermitWithSchedule", T_CALL, cseqid, error) < 0)
+  if (thrift_protocol_write_message_begin (protocol, "savePermitWithColumn", T_CALL, cseqid, error) < 0)
     return FALSE;
 
   {
@@ -32918,7 +32918,7 @@ gboolean i_face_log_client_send_save_permit_with_schedule (IFaceLogIf * iface, c
     gint32 xfer = 0;
 
     
-    if ((ret = thrift_protocol_write_struct_begin (protocol, "savePermitWithSchedule_args", error)) < 0)
+    if ((ret = thrift_protocol_write_struct_begin (protocol, "savePermitWithColumn_args", error)) < 0)
       return 0;
     xfer += ret;
     if ((ret = thrift_protocol_write_field_begin (protocol, "deviceGroupId", T_I32, 1, error)) < 0)
@@ -32941,17 +32941,27 @@ gboolean i_face_log_client_send_save_permit_with_schedule (IFaceLogIf * iface, c
     if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
       return 0;
     xfer += ret;
-    if ((ret = thrift_protocol_write_field_begin (protocol, "schedule", T_STRING, 3, error)) < 0)
+    if ((ret = thrift_protocol_write_field_begin (protocol, "column", T_STRING, 3, error)) < 0)
       return 0;
     xfer += ret;
-    if ((ret = thrift_protocol_write_string (protocol, schedule, error)) < 0)
+    if ((ret = thrift_protocol_write_string (protocol, column, error)) < 0)
       return 0;
     xfer += ret;
 
     if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
       return 0;
     xfer += ret;
-    if ((ret = thrift_protocol_write_field_begin (protocol, "token", T_STRUCT, 4, error)) < 0)
+    if ((ret = thrift_protocol_write_field_begin (protocol, "value", T_STRING, 4, error)) < 0)
+      return 0;
+    xfer += ret;
+    if ((ret = thrift_protocol_write_string (protocol, value, error)) < 0)
+      return 0;
+    xfer += ret;
+
+    if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
+      return 0;
+    xfer += ret;
+    if ((ret = thrift_protocol_write_field_begin (protocol, "token", T_STRUCT, 5, error)) < 0)
       return 0;
     xfer += ret;
     if ((ret = thrift_struct_write (THRIFT_STRUCT (token), protocol, error)) < 0)
@@ -32980,7 +32990,7 @@ gboolean i_face_log_client_send_save_permit_with_schedule (IFaceLogIf * iface, c
   return TRUE;
 }
 
-gboolean i_face_log_client_recv_save_permit_with_schedule (IFaceLogIf * iface, PermitBean ** _return, ServiceRuntimeException ** ex1, GError ** error)
+gboolean i_face_log_client_recv_save_permit_with_column (IFaceLogIf * iface, PermitBean ** _return, ServiceRuntimeException ** ex1, GError ** error)
 {
   gint32 rseqid;
   gchar * fname = NULL;
@@ -33009,11 +33019,11 @@ gboolean i_face_log_client_recv_save_permit_with_schedule (IFaceLogIf * iface, P
     thrift_transport_read_end (protocol->transport, NULL);
     g_set_error (error, THRIFT_APPLICATION_EXCEPTION_ERROR, THRIFT_APPLICATION_EXCEPTION_ERROR_INVALID_MESSAGE_TYPE, "invalid message type %d, expected T_REPLY", mtype);
     return FALSE;
-  } else if (strncmp (fname, "savePermitWithSchedule", 22) != 0) {
+  } else if (strncmp (fname, "savePermitWithColumn", 20) != 0) {
     thrift_protocol_skip (protocol, T_STRUCT, NULL);
     thrift_protocol_read_message_end (protocol,error);
     thrift_transport_read_end (protocol->transport, error);
-    g_set_error (error, THRIFT_APPLICATION_EXCEPTION_ERROR, THRIFT_APPLICATION_EXCEPTION_ERROR_WRONG_METHOD_NAME, "wrong method name %s, expected savePermitWithSchedule", fname);
+    g_set_error (error, THRIFT_APPLICATION_EXCEPTION_ERROR, THRIFT_APPLICATION_EXCEPTION_ERROR_WRONG_METHOD_NAME, "wrong method name %s, expected savePermitWithColumn", fname);
     if (fname) g_free (fname);
     return FALSE;
   }
@@ -33131,11 +33141,11 @@ gboolean i_face_log_client_recv_save_permit_with_schedule (IFaceLogIf * iface, P
   return TRUE;
 }
 
-gboolean i_face_log_client_save_permit_with_schedule (IFaceLogIf * iface, PermitBean ** _return, const gint32 deviceGroupId, const gint32 personGroupId, const gchar * schedule, const Token * token, ServiceRuntimeException ** ex1, GError ** error)
+gboolean i_face_log_client_save_permit_with_column (IFaceLogIf * iface, PermitBean ** _return, const gint32 deviceGroupId, const gint32 personGroupId, const gchar * column, const gchar * value, const Token * token, ServiceRuntimeException ** ex1, GError ** error)
 {
-  if (!i_face_log_client_send_save_permit_with_schedule (iface, deviceGroupId, personGroupId, schedule, token, error))
+  if (!i_face_log_client_send_save_permit_with_column (iface, deviceGroupId, personGroupId, column, value, token, error))
     return FALSE;
-  if (!i_face_log_client_recv_save_permit_with_schedule (iface, _return, ex1, error))
+  if (!i_face_log_client_recv_save_permit_with_column (iface, _return, ex1, error))
     return FALSE;
   return TRUE;
 }
@@ -38501,7 +38511,7 @@ i_face_log_if_interface_init (IFaceLogIfInterface *iface)
   iface->save_device = i_face_log_client_save_device;
   iface->save_device_group = i_face_log_client_save_device_group;
   iface->save_permit = i_face_log_client_save_permit;
-  iface->save_permit_with_schedule = i_face_log_client_save_permit_with_schedule;
+  iface->save_permit_with_column = i_face_log_client_save_permit_with_column;
   iface->save_person = i_face_log_client_save_person;
   iface->save_person_full = i_face_log_client_save_person_full;
   iface->save_person_group = i_face_log_client_save_person_group;
@@ -39556,11 +39566,11 @@ gboolean i_face_log_handler_save_permit (IFaceLogIf * iface, PermitBean ** _retu
   return I_FACE_LOG_HANDLER_GET_CLASS (iface)->save_permit (iface, _return, permitBean, token, ex1, error);
 }
 
-gboolean i_face_log_handler_save_permit_with_schedule (IFaceLogIf * iface, PermitBean ** _return, const gint32 deviceGroupId, const gint32 personGroupId, const gchar * schedule, const Token * token, ServiceRuntimeException ** ex1, GError ** error)
+gboolean i_face_log_handler_save_permit_with_column (IFaceLogIf * iface, PermitBean ** _return, const gint32 deviceGroupId, const gint32 personGroupId, const gchar * column, const gchar * value, const Token * token, ServiceRuntimeException ** ex1, GError ** error)
 {
   g_return_val_if_fail (IS_I_FACE_LOG_HANDLER (iface), FALSE);
 
-  return I_FACE_LOG_HANDLER_GET_CLASS (iface)->save_permit_with_schedule (iface, _return, deviceGroupId, personGroupId, schedule, token, ex1, error);
+  return I_FACE_LOG_HANDLER_GET_CLASS (iface)->save_permit_with_column (iface, _return, deviceGroupId, personGroupId, column, value, token, ex1, error);
 }
 
 gboolean i_face_log_handler_save_person (IFaceLogIf * iface, PersonBean ** _return, const PersonBean * personBean, const Token * token, ServiceRuntimeException ** ex1, GError ** error)
@@ -39868,7 +39878,7 @@ i_face_log_handler_i_face_log_if_interface_init (IFaceLogIfInterface *iface)
   iface->save_device = i_face_log_handler_save_device;
   iface->save_device_group = i_face_log_handler_save_device_group;
   iface->save_permit = i_face_log_handler_save_permit;
-  iface->save_permit_with_schedule = i_face_log_handler_save_permit_with_schedule;
+  iface->save_permit_with_column = i_face_log_handler_save_permit_with_column;
   iface->save_person = i_face_log_handler_save_person;
   iface->save_person_full = i_face_log_handler_save_person_full;
   iface->save_person_group = i_face_log_handler_save_person_group;
@@ -40044,7 +40054,7 @@ i_face_log_handler_class_init (IFaceLogHandlerClass *cls)
   cls->save_device = NULL;
   cls->save_device_group = NULL;
   cls->save_permit = NULL;
-  cls->save_permit_with_schedule = NULL;
+  cls->save_permit_with_column = NULL;
   cls->save_person = NULL;
   cls->save_person_full = NULL;
   cls->save_person_group = NULL;
@@ -40939,11 +40949,11 @@ i_face_log_processor_process_save_permit (IFaceLogProcessor *,
                                           ThriftProtocol *,
                                           GError **);
 static gboolean
-i_face_log_processor_process_save_permit_with_schedule (IFaceLogProcessor *,
-                                                        gint32,
-                                                        ThriftProtocol *,
-                                                        ThriftProtocol *,
-                                                        GError **);
+i_face_log_processor_process_save_permit_with_column (IFaceLogProcessor *,
+                                                      gint32,
+                                                      ThriftProtocol *,
+                                                      ThriftProtocol *,
+                                                      GError **);
 static gboolean
 i_face_log_processor_process_save_person (IFaceLogProcessor *,
                                           gint32,
@@ -41650,8 +41660,8 @@ i_face_log_processor_process_function_defs[165] = {
     i_face_log_processor_process_save_permit
   },
   {
-    "savePermitWithSchedule",
-    i_face_log_processor_process_save_permit_with_schedule
+    "savePermitWithColumn",
+    i_face_log_processor_process_save_permit_with_column
   },
   {
     "savePerson",
@@ -59053,17 +59063,17 @@ i_face_log_processor_process_save_permit (IFaceLogProcessor *self,
 }
 
 static gboolean
-i_face_log_processor_process_save_permit_with_schedule (IFaceLogProcessor *self,
-                                                        gint32 sequence_id,
-                                                        ThriftProtocol *input_protocol,
-                                                        ThriftProtocol *output_protocol,
-                                                        GError **error)
+i_face_log_processor_process_save_permit_with_column (IFaceLogProcessor *self,
+                                                      gint32 sequence_id,
+                                                      ThriftProtocol *input_protocol,
+                                                      ThriftProtocol *output_protocol,
+                                                      GError **error)
 {
   gboolean result = TRUE;
   ThriftTransport * transport;
   ThriftApplicationException *xception;
-  IFaceLogSavePermitWithScheduleArgs * args =
-    g_object_new (TYPE_I_FACE_LOG_SAVE_PERMIT_WITH_SCHEDULE_ARGS, NULL);
+  IFaceLogSavePermitWithColumnArgs * args =
+    g_object_new (TYPE_I_FACE_LOG_SAVE_PERMIT_WITH_COLUMN_ARGS, NULL);
 
   g_object_get (input_protocol, "transport", &transport, NULL);
 
@@ -59073,33 +59083,36 @@ i_face_log_processor_process_save_permit_with_schedule (IFaceLogProcessor *self,
   {
     gint deviceGroupId;
     gint personGroupId;
-    gchar * schedule;
+    gchar * column;
+    gchar * value;
     Token * token;
     ServiceRuntimeException * ex1 = NULL;
     PermitBean * return_value;
-    IFaceLogSavePermitWithScheduleResult * result_struct;
+    IFaceLogSavePermitWithColumnResult * result_struct;
 
     g_object_get (args,
                   "deviceGroupId", &deviceGroupId,
                   "personGroupId", &personGroupId,
-                  "schedule", &schedule,
+                  "column", &column,
+                  "value", &value,
                   "token", &token,
                   NULL);
 
     g_object_unref (transport);
     g_object_get (output_protocol, "transport", &transport, NULL);
 
-    result_struct = g_object_new (TYPE_I_FACE_LOG_SAVE_PERMIT_WITH_SCHEDULE_RESULT, NULL);
+    result_struct = g_object_new (TYPE_I_FACE_LOG_SAVE_PERMIT_WITH_COLUMN_RESULT, NULL);
     g_object_get (result_struct, "success", &return_value, NULL);
 
-    if (i_face_log_handler_save_permit_with_schedule (I_FACE_LOG_IF (self->handler),
-                                                      &return_value,
-                                                      deviceGroupId,
-                                                      personGroupId,
-                                                      schedule,
-                                                      token,
-                                                      &ex1,
-                                                      error) == TRUE)
+    if (i_face_log_handler_save_permit_with_column (I_FACE_LOG_IF (self->handler),
+                                                    &return_value,
+                                                    deviceGroupId,
+                                                    personGroupId,
+                                                    column,
+                                                    value,
+                                                    token,
+                                                    &ex1,
+                                                    error) == TRUE)
     {
       g_object_set (result_struct, "success", return_value, NULL);
       if (return_value != NULL)
@@ -59107,7 +59120,7 @@ i_face_log_processor_process_save_permit_with_schedule (IFaceLogProcessor *self,
 
       result =
         ((thrift_protocol_write_message_begin (output_protocol,
-                                               "savePermitWithSchedule",
+                                               "savePermitWithColumn",
                                                T_REPLY,
                                                sequence_id,
                                                error) != -1) &&
@@ -59125,7 +59138,7 @@ i_face_log_processor_process_save_permit_with_schedule (IFaceLogProcessor *self,
 
         result =
           ((thrift_protocol_write_message_begin (output_protocol,
-                                                 "savePermitWithSchedule",
+                                                 "savePermitWithColumn",
                                                  T_REPLY,
                                                  sequence_id,
                                                  error) != -1) &&
@@ -59136,7 +59149,7 @@ i_face_log_processor_process_save_permit_with_schedule (IFaceLogProcessor *self,
       else
       {
         if (*error == NULL)
-          g_warning ("IFaceLog.savePermitWithSchedule implementation returned FALSE "
+          g_warning ("IFaceLog.savePermitWithColumn implementation returned FALSE "
                      "but did not set an error");
 
         xception =
@@ -59149,7 +59162,7 @@ i_face_log_processor_process_save_permit_with_schedule (IFaceLogProcessor *self,
 
         result =
           ((thrift_protocol_write_message_begin (output_protocol,
-                                                 "savePermitWithSchedule",
+                                                 "savePermitWithColumn",
                                                  T_EXCEPTION,
                                                  sequence_id,
                                                  error) != -1) &&
@@ -59161,8 +59174,10 @@ i_face_log_processor_process_save_permit_with_schedule (IFaceLogProcessor *self,
       }
     }
 
-    if (schedule != NULL)
-      g_free (schedule);
+    if (column != NULL)
+      g_free (column);
+    if (value != NULL)
+      g_free (value);
     if (token != NULL)
       g_object_unref (token);
     g_object_unref (result_struct);

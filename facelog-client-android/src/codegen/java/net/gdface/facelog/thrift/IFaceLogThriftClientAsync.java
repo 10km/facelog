@@ -3684,11 +3684,12 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(saveDeviceGroup(deviceGroupBean,token), callback);
     }
     /**
-     * see also {@link net.gdface.facelog.IFaceLog#savePermit(int,int,java.lang.String,net.gdface.facelog.Token)}
+     * see also {@link net.gdface.facelog.IFaceLog#savePermit(int,int,java.lang.String,java.lang.String,net.gdface.facelog.Token)}
      */
     public ListenableFuture<PermitBean> savePermit(int deviceGroupId,
         int personGroupId,
-        String schedule,
+        String column,
+        String value,
         Token token){
         MethodCallback<PermitBean,net.gdface.facelog.client.thrift.PermitBean> nativeCallback = 
             new MethodCallback<PermitBean,net.gdface.facelog.client.thrift.PermitBean>(
@@ -3700,10 +3701,11 @@ public class IFaceLogThriftClientAsync {
                     net.gdface.facelog.client.thrift.PermitBean.class,
                     PermitBean.class);
                 }});
-        nativeCallback.service.savePermitWithSchedule(
+        nativeCallback.service.savePermitWithColumn(
                 deviceGroupId,
             personGroupId,
-            schedule,
+            column,
+            value,
             TypeTransformer.getInstance().to(
                     token,
                     Token.class,
@@ -3712,10 +3714,11 @@ public class IFaceLogThriftClientAsync {
     }
     public void savePermit(int deviceGroupId,
         int personGroupId,
-        String schedule,
+        String column,
+        String value,
         Token token,
         FutureCallback<PermitBean>callback){
-        factory.addCallback(savePermit(deviceGroupId,personGroupId,schedule,token), callback);
+        factory.addCallback(savePermit(deviceGroupId,personGroupId,column,value,token), callback);
     }
     /**
      * see also {@link net.gdface.facelog.IFaceLog#savePermit(net.gdface.facelog.db.PermitBean,net.gdface.facelog.Token)}

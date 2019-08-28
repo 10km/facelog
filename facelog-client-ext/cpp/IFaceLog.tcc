@@ -32433,7 +32433,7 @@ uint32_t IFaceLog_savePermit_presult::read(Protocol_* iprot) {
 
 
 template <class Protocol_>
-uint32_t IFaceLog_savePermitWithSchedule_args::read(Protocol_* iprot) {
+uint32_t IFaceLog_savePermitWithColumn_args::read(Protocol_* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -32474,13 +32474,21 @@ uint32_t IFaceLog_savePermitWithSchedule_args::read(Protocol_* iprot) {
         break;
       case 3:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readString(this->schedule);
-          this->__isset.schedule = true;
+          xfer += iprot->readString(this->column);
+          this->__isset.column = true;
         } else {
           xfer += iprot->skip(ftype);
         }
         break;
       case 4:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->value);
+          this->__isset.value = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 5:
         if (ftype == ::apache::thrift::protocol::T_STRUCT) {
           xfer += this->token.read(iprot);
           this->__isset.token = true;
@@ -32505,10 +32513,10 @@ uint32_t IFaceLog_savePermitWithSchedule_args::read(Protocol_* iprot) {
 }
 
 template <class Protocol_>
-uint32_t IFaceLog_savePermitWithSchedule_args::write(Protocol_* oprot) const {
+uint32_t IFaceLog_savePermitWithColumn_args::write(Protocol_* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IFaceLog_savePermitWithSchedule_args");
+  xfer += oprot->writeStructBegin("IFaceLog_savePermitWithColumn_args");
 
   xfer += oprot->writeFieldBegin("deviceGroupId", ::apache::thrift::protocol::T_I32, 1);
   xfer += oprot->writeI32(this->deviceGroupId);
@@ -32518,11 +32526,15 @@ uint32_t IFaceLog_savePermitWithSchedule_args::write(Protocol_* oprot) const {
   xfer += oprot->writeI32(this->personGroupId);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("schedule", ::apache::thrift::protocol::T_STRING, 3);
-  xfer += oprot->writeString(this->schedule);
+  xfer += oprot->writeFieldBegin("column", ::apache::thrift::protocol::T_STRING, 3);
+  xfer += oprot->writeString(this->column);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("token", ::apache::thrift::protocol::T_STRUCT, 4);
+  xfer += oprot->writeFieldBegin("value", ::apache::thrift::protocol::T_STRING, 4);
+  xfer += oprot->writeString(this->value);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("token", ::apache::thrift::protocol::T_STRUCT, 5);
   xfer += this->token.write(oprot);
   xfer += oprot->writeFieldEnd();
 
@@ -32533,10 +32545,10 @@ uint32_t IFaceLog_savePermitWithSchedule_args::write(Protocol_* oprot) const {
 
 
 template <class Protocol_>
-uint32_t IFaceLog_savePermitWithSchedule_pargs::write(Protocol_* oprot) const {
+uint32_t IFaceLog_savePermitWithColumn_pargs::write(Protocol_* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IFaceLog_savePermitWithSchedule_pargs");
+  xfer += oprot->writeStructBegin("IFaceLog_savePermitWithColumn_pargs");
 
   xfer += oprot->writeFieldBegin("deviceGroupId", ::apache::thrift::protocol::T_I32, 1);
   xfer += oprot->writeI32((*(this->deviceGroupId)));
@@ -32546,11 +32558,15 @@ uint32_t IFaceLog_savePermitWithSchedule_pargs::write(Protocol_* oprot) const {
   xfer += oprot->writeI32((*(this->personGroupId)));
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("schedule", ::apache::thrift::protocol::T_STRING, 3);
-  xfer += oprot->writeString((*(this->schedule)));
+  xfer += oprot->writeFieldBegin("column", ::apache::thrift::protocol::T_STRING, 3);
+  xfer += oprot->writeString((*(this->column)));
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("token", ::apache::thrift::protocol::T_STRUCT, 4);
+  xfer += oprot->writeFieldBegin("value", ::apache::thrift::protocol::T_STRING, 4);
+  xfer += oprot->writeString((*(this->value)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("token", ::apache::thrift::protocol::T_STRUCT, 5);
   xfer += (*(this->token)).write(oprot);
   xfer += oprot->writeFieldEnd();
 
@@ -32561,7 +32577,7 @@ uint32_t IFaceLog_savePermitWithSchedule_pargs::write(Protocol_* oprot) const {
 
 
 template <class Protocol_>
-uint32_t IFaceLog_savePermitWithSchedule_result::read(Protocol_* iprot) {
+uint32_t IFaceLog_savePermitWithColumn_result::read(Protocol_* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -32611,11 +32627,11 @@ uint32_t IFaceLog_savePermitWithSchedule_result::read(Protocol_* iprot) {
 }
 
 template <class Protocol_>
-uint32_t IFaceLog_savePermitWithSchedule_result::write(Protocol_* oprot) const {
+uint32_t IFaceLog_savePermitWithColumn_result::write(Protocol_* oprot) const {
 
   uint32_t xfer = 0;
 
-  xfer += oprot->writeStructBegin("IFaceLog_savePermitWithSchedule_result");
+  xfer += oprot->writeStructBegin("IFaceLog_savePermitWithColumn_result");
 
   if (this->__isset.success) {
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRUCT, 0);
@@ -32633,7 +32649,7 @@ uint32_t IFaceLog_savePermitWithSchedule_result::write(Protocol_* oprot) const {
 
 
 template <class Protocol_>
-uint32_t IFaceLog_savePermitWithSchedule_presult::read(Protocol_* iprot) {
+uint32_t IFaceLog_savePermitWithColumn_presult::read(Protocol_* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -47142,22 +47158,23 @@ void IFaceLogClientT<Protocol_>::recv_savePermit(PermitBean& _return)
 }
 
 template <class Protocol_>
-void IFaceLogClientT<Protocol_>::savePermitWithSchedule(PermitBean& _return, const int32_t deviceGroupId, const int32_t personGroupId, const std::string& schedule, const Token& token)
+void IFaceLogClientT<Protocol_>::savePermitWithColumn(PermitBean& _return, const int32_t deviceGroupId, const int32_t personGroupId, const std::string& column, const std::string& value, const Token& token)
 {
-  send_savePermitWithSchedule(deviceGroupId, personGroupId, schedule, token);
-  recv_savePermitWithSchedule(_return);
+  send_savePermitWithColumn(deviceGroupId, personGroupId, column, value, token);
+  recv_savePermitWithColumn(_return);
 }
 
 template <class Protocol_>
-void IFaceLogClientT<Protocol_>::send_savePermitWithSchedule(const int32_t deviceGroupId, const int32_t personGroupId, const std::string& schedule, const Token& token)
+void IFaceLogClientT<Protocol_>::send_savePermitWithColumn(const int32_t deviceGroupId, const int32_t personGroupId, const std::string& column, const std::string& value, const Token& token)
 {
   int32_t cseqid = 0;
-  this->oprot_->writeMessageBegin("savePermitWithSchedule", ::apache::thrift::protocol::T_CALL, cseqid);
+  this->oprot_->writeMessageBegin("savePermitWithColumn", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  IFaceLog_savePermitWithSchedule_pargs args;
+  IFaceLog_savePermitWithColumn_pargs args;
   args.deviceGroupId = &deviceGroupId;
   args.personGroupId = &personGroupId;
-  args.schedule = &schedule;
+  args.column = &column;
+  args.value = &value;
   args.token = &token;
   args.write(this->oprot_);
 
@@ -47167,7 +47184,7 @@ void IFaceLogClientT<Protocol_>::send_savePermitWithSchedule(const int32_t devic
 }
 
 template <class Protocol_>
-void IFaceLogClientT<Protocol_>::recv_savePermitWithSchedule(PermitBean& _return)
+void IFaceLogClientT<Protocol_>::recv_savePermitWithColumn(PermitBean& _return)
 {
 
   int32_t rseqid = 0;
@@ -47187,12 +47204,12 @@ void IFaceLogClientT<Protocol_>::recv_savePermitWithSchedule(PermitBean& _return
     this->iprot_->readMessageEnd();
     this->iprot_->getTransport()->readEnd();
   }
-  if (fname.compare("savePermitWithSchedule") != 0) {
+  if (fname.compare("savePermitWithColumn") != 0) {
     this->iprot_->skip(::apache::thrift::protocol::T_STRUCT);
     this->iprot_->readMessageEnd();
     this->iprot_->getTransport()->readEnd();
   }
-  IFaceLog_savePermitWithSchedule_presult result;
+  IFaceLog_savePermitWithColumn_presult result;
   result.success = &_return;
   result.read(this->iprot_);
   this->iprot_->readMessageEnd();
@@ -47205,7 +47222,7 @@ void IFaceLogClientT<Protocol_>::recv_savePermitWithSchedule(PermitBean& _return
   if (result.__isset.ex1) {
     throw result.ex1;
   }
-  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "savePermitWithSchedule failed: unknown result");
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "savePermitWithColumn failed: unknown result");
 }
 
 template <class Protocol_>
@@ -65156,41 +65173,41 @@ void IFaceLogProcessorT<Protocol_>::process_savePermit(int32_t seqid, Protocol_*
 }
 
 template <class Protocol_>
-void IFaceLogProcessorT<Protocol_>::process_savePermitWithSchedule(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+void IFaceLogProcessorT<Protocol_>::process_savePermitWithColumn(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
 {
   void* ctx = NULL;
   if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext("IFaceLog.savePermitWithSchedule", callContext);
+    ctx = this->eventHandler_->getContext("IFaceLog.savePermitWithColumn", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IFaceLog.savePermitWithSchedule");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IFaceLog.savePermitWithColumn");
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preRead(ctx, "IFaceLog.savePermitWithSchedule");
+    this->eventHandler_->preRead(ctx, "IFaceLog.savePermitWithColumn");
   }
 
-  IFaceLog_savePermitWithSchedule_args args;
+  IFaceLog_savePermitWithColumn_args args;
   args.read(iprot);
   iprot->readMessageEnd();
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postRead(ctx, "IFaceLog.savePermitWithSchedule", bytes);
+    this->eventHandler_->postRead(ctx, "IFaceLog.savePermitWithColumn", bytes);
   }
 
-  IFaceLog_savePermitWithSchedule_result result;
+  IFaceLog_savePermitWithColumn_result result;
   try {
-    iface_->savePermitWithSchedule(result.success, args.deviceGroupId, args.personGroupId, args.schedule, args.token);
+    iface_->savePermitWithColumn(result.success, args.deviceGroupId, args.personGroupId, args.column, args.value, args.token);
     result.__isset.success = true;
   } catch (ServiceRuntimeException &ex1) {
     result.ex1 = ex1;
     result.__isset.ex1 = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
-      this->eventHandler_->handlerError(ctx, "IFaceLog.savePermitWithSchedule");
+      this->eventHandler_->handlerError(ctx, "IFaceLog.savePermitWithColumn");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("savePermitWithSchedule", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    oprot->writeMessageBegin("savePermitWithColumn", ::apache::thrift::protocol::T_EXCEPTION, seqid);
     x.write(oprot);
     oprot->writeMessageEnd();
     oprot->getTransport()->writeEnd();
@@ -65199,56 +65216,56 @@ void IFaceLogProcessorT<Protocol_>::process_savePermitWithSchedule(int32_t seqid
   }
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preWrite(ctx, "IFaceLog.savePermitWithSchedule");
+    this->eventHandler_->preWrite(ctx, "IFaceLog.savePermitWithColumn");
   }
 
-  oprot->writeMessageBegin("savePermitWithSchedule", ::apache::thrift::protocol::T_REPLY, seqid);
+  oprot->writeMessageBegin("savePermitWithColumn", ::apache::thrift::protocol::T_REPLY, seqid);
   result.write(oprot);
   oprot->writeMessageEnd();
   bytes = oprot->getTransport()->writeEnd();
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postWrite(ctx, "IFaceLog.savePermitWithSchedule", bytes);
+    this->eventHandler_->postWrite(ctx, "IFaceLog.savePermitWithColumn", bytes);
   }
 }
 
 template <class Protocol_>
-void IFaceLogProcessorT<Protocol_>::process_savePermitWithSchedule(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext)
+void IFaceLogProcessorT<Protocol_>::process_savePermitWithColumn(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext)
 {
   void* ctx = NULL;
   if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext("IFaceLog.savePermitWithSchedule", callContext);
+    ctx = this->eventHandler_->getContext("IFaceLog.savePermitWithColumn", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IFaceLog.savePermitWithSchedule");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IFaceLog.savePermitWithColumn");
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preRead(ctx, "IFaceLog.savePermitWithSchedule");
+    this->eventHandler_->preRead(ctx, "IFaceLog.savePermitWithColumn");
   }
 
-  IFaceLog_savePermitWithSchedule_args args;
+  IFaceLog_savePermitWithColumn_args args;
   args.read(iprot);
   iprot->readMessageEnd();
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postRead(ctx, "IFaceLog.savePermitWithSchedule", bytes);
+    this->eventHandler_->postRead(ctx, "IFaceLog.savePermitWithColumn", bytes);
   }
 
-  IFaceLog_savePermitWithSchedule_result result;
+  IFaceLog_savePermitWithColumn_result result;
   try {
-    iface_->savePermitWithSchedule(result.success, args.deviceGroupId, args.personGroupId, args.schedule, args.token);
+    iface_->savePermitWithColumn(result.success, args.deviceGroupId, args.personGroupId, args.column, args.value, args.token);
     result.__isset.success = true;
   } catch (ServiceRuntimeException &ex1) {
     result.ex1 = ex1;
     result.__isset.ex1 = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
-      this->eventHandler_->handlerError(ctx, "IFaceLog.savePermitWithSchedule");
+      this->eventHandler_->handlerError(ctx, "IFaceLog.savePermitWithColumn");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("savePermitWithSchedule", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    oprot->writeMessageBegin("savePermitWithColumn", ::apache::thrift::protocol::T_EXCEPTION, seqid);
     x.write(oprot);
     oprot->writeMessageEnd();
     oprot->getTransport()->writeEnd();
@@ -65257,17 +65274,17 @@ void IFaceLogProcessorT<Protocol_>::process_savePermitWithSchedule(int32_t seqid
   }
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preWrite(ctx, "IFaceLog.savePermitWithSchedule");
+    this->eventHandler_->preWrite(ctx, "IFaceLog.savePermitWithColumn");
   }
 
-  oprot->writeMessageBegin("savePermitWithSchedule", ::apache::thrift::protocol::T_REPLY, seqid);
+  oprot->writeMessageBegin("savePermitWithColumn", ::apache::thrift::protocol::T_REPLY, seqid);
   result.write(oprot);
   oprot->writeMessageEnd();
   bytes = oprot->getTransport()->writeEnd();
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postWrite(ctx, "IFaceLog.savePermitWithSchedule", bytes);
+    this->eventHandler_->postWrite(ctx, "IFaceLog.savePermitWithColumn", bytes);
   }
 }
 
@@ -80878,23 +80895,24 @@ void IFaceLogConcurrentClientT<Protocol_>::recv_savePermit(PermitBean& _return, 
 }
 
 template <class Protocol_>
-void IFaceLogConcurrentClientT<Protocol_>::savePermitWithSchedule(PermitBean& _return, const int32_t deviceGroupId, const int32_t personGroupId, const std::string& schedule, const Token& token)
+void IFaceLogConcurrentClientT<Protocol_>::savePermitWithColumn(PermitBean& _return, const int32_t deviceGroupId, const int32_t personGroupId, const std::string& column, const std::string& value, const Token& token)
 {
-  int32_t seqid = send_savePermitWithSchedule(deviceGroupId, personGroupId, schedule, token);
-  recv_savePermitWithSchedule(_return, seqid);
+  int32_t seqid = send_savePermitWithColumn(deviceGroupId, personGroupId, column, value, token);
+  recv_savePermitWithColumn(_return, seqid);
 }
 
 template <class Protocol_>
-int32_t IFaceLogConcurrentClientT<Protocol_>::send_savePermitWithSchedule(const int32_t deviceGroupId, const int32_t personGroupId, const std::string& schedule, const Token& token)
+int32_t IFaceLogConcurrentClientT<Protocol_>::send_savePermitWithColumn(const int32_t deviceGroupId, const int32_t personGroupId, const std::string& column, const std::string& value, const Token& token)
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
-  this->oprot_->writeMessageBegin("savePermitWithSchedule", ::apache::thrift::protocol::T_CALL, cseqid);
+  this->oprot_->writeMessageBegin("savePermitWithColumn", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  IFaceLog_savePermitWithSchedule_pargs args;
+  IFaceLog_savePermitWithColumn_pargs args;
   args.deviceGroupId = &deviceGroupId;
   args.personGroupId = &personGroupId;
-  args.schedule = &schedule;
+  args.column = &column;
+  args.value = &value;
   args.token = &token;
   args.write(this->oprot_);
 
@@ -80907,7 +80925,7 @@ int32_t IFaceLogConcurrentClientT<Protocol_>::send_savePermitWithSchedule(const 
 }
 
 template <class Protocol_>
-void IFaceLogConcurrentClientT<Protocol_>::recv_savePermitWithSchedule(PermitBean& _return, const int32_t seqid)
+void IFaceLogConcurrentClientT<Protocol_>::recv_savePermitWithColumn(PermitBean& _return, const int32_t seqid)
 {
 
   int32_t rseqid = 0;
@@ -80936,7 +80954,7 @@ void IFaceLogConcurrentClientT<Protocol_>::recv_savePermitWithSchedule(PermitBea
         this->iprot_->readMessageEnd();
         this->iprot_->getTransport()->readEnd();
       }
-      if (fname.compare("savePermitWithSchedule") != 0) {
+      if (fname.compare("savePermitWithColumn") != 0) {
         this->iprot_->skip(::apache::thrift::protocol::T_STRUCT);
         this->iprot_->readMessageEnd();
         this->iprot_->getTransport()->readEnd();
@@ -80945,7 +80963,7 @@ void IFaceLogConcurrentClientT<Protocol_>::recv_savePermitWithSchedule(PermitBea
         using ::apache::thrift::protocol::TProtocolException;
         throw TProtocolException(TProtocolException::INVALID_DATA);
       }
-      IFaceLog_savePermitWithSchedule_presult result;
+      IFaceLog_savePermitWithColumn_presult result;
       result.success = &_return;
       result.read(this->iprot_);
       this->iprot_->readMessageEnd();
@@ -80961,7 +80979,7 @@ void IFaceLogConcurrentClientT<Protocol_>::recv_savePermitWithSchedule(PermitBea
         throw result.ex1;
       }
       // in a bad state, don't commit
-      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "savePermitWithSchedule failed: unknown result");
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "savePermitWithColumn failed: unknown result");
     }
     // seqid != rseqid
     this->sync_.updatePending(fname, mtype, rseqid);

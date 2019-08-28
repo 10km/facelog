@@ -3126,19 +3126,21 @@ public class IFaceLogThriftDecorator {
         }
     }
     /**
-     * @see {@link net.gdface.facelog.IFaceLog#savePermit(int,int,java.lang.String,net.gdface.facelog.Token)}
+     * @see {@link net.gdface.facelog.IFaceLog#savePermit(int,int,java.lang.String,java.lang.String,net.gdface.facelog.Token)}
      */
-    @ThriftMethod(value = "savePermitWithSchedule" )
-    public PermitBean savePermitWithSchedule(int deviceGroupId,
+    @ThriftMethod(value = "savePermitWithColumn" )
+    public PermitBean savePermitWithColumn(int deviceGroupId,
         int personGroupId,
-        String schedule,
+        String column,
+        String value,
         Token token) 
         throws ServiceRuntimeException{
         try{
             return TypeTransformer.getInstance().to(
                     delegate().savePermit(deviceGroupId,
                 personGroupId,
-                schedule,
+                column,
+                value,
                 TypeTransformer.getInstance().to(
                     token,
                     Token.class,

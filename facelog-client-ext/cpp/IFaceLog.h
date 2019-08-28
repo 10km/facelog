@@ -162,7 +162,7 @@ class IFaceLogIf {
   virtual void saveDevice(DeviceBean& _return, const DeviceBean& deviceBean, const Token& token) = 0;
   virtual void saveDeviceGroup(DeviceGroupBean& _return, const DeviceGroupBean& deviceGroupBean, const Token& token) = 0;
   virtual void savePermit(PermitBean& _return, const PermitBean& permitBean, const Token& token) = 0;
-  virtual void savePermitWithSchedule(PermitBean& _return, const int32_t deviceGroupId, const int32_t personGroupId, const std::string& schedule, const Token& token) = 0;
+  virtual void savePermitWithColumn(PermitBean& _return, const int32_t deviceGroupId, const int32_t personGroupId, const std::string& column, const std::string& value, const Token& token) = 0;
   virtual void savePerson(PersonBean& _return, const PersonBean& personBean, const Token& token) = 0;
   virtual void savePersonFull(PersonBean& _return, const PersonBean& personBean, const std::string& idPhoto, const std::string& feature, const std::string& featureVersion, const std::string& featureImage, const FaceBean& faceBean, const Token& token) = 0;
   virtual void savePersonGroup(PersonGroupBean& _return, const PersonGroupBean& personGroupBean, const Token& token) = 0;
@@ -678,7 +678,7 @@ class IFaceLogNull : virtual public IFaceLogIf {
   void savePermit(PermitBean& /* _return */, const PermitBean& /* permitBean */, const Token& /* token */) {
     return;
   }
-  void savePermitWithSchedule(PermitBean& /* _return */, const int32_t /* deviceGroupId */, const int32_t /* personGroupId */, const std::string& /* schedule */, const Token& /* token */) {
+  void savePermitWithColumn(PermitBean& /* _return */, const int32_t /* deviceGroupId */, const int32_t /* personGroupId */, const std::string& /* column */, const std::string& /* value */, const Token& /* token */) {
     return;
   }
   void savePerson(PersonBean& /* _return */, const PersonBean& /* personBean */, const Token& /* token */) {
@@ -18539,55 +18539,61 @@ class IFaceLog_savePermit_presult {
 
 };
 
-typedef struct _IFaceLog_savePermitWithSchedule_args__isset {
-  _IFaceLog_savePermitWithSchedule_args__isset() : schedule(false), token(false) {}
-  bool schedule :1;
+typedef struct _IFaceLog_savePermitWithColumn_args__isset {
+  _IFaceLog_savePermitWithColumn_args__isset() : column(false), value(false), token(false) {}
+  bool column :1;
+  bool value :1;
   bool token :1;
-} _IFaceLog_savePermitWithSchedule_args__isset;
+} _IFaceLog_savePermitWithColumn_args__isset;
 
-class IFaceLog_savePermitWithSchedule_args {
+class IFaceLog_savePermitWithColumn_args {
  public:
 
-  IFaceLog_savePermitWithSchedule_args(const IFaceLog_savePermitWithSchedule_args&);
-  IFaceLog_savePermitWithSchedule_args(IFaceLog_savePermitWithSchedule_args&&);
-  IFaceLog_savePermitWithSchedule_args& operator=(const IFaceLog_savePermitWithSchedule_args&);
-  IFaceLog_savePermitWithSchedule_args& operator=(IFaceLog_savePermitWithSchedule_args&&);
-  IFaceLog_savePermitWithSchedule_args() : deviceGroupId(0), personGroupId(0), schedule() {
+  IFaceLog_savePermitWithColumn_args(const IFaceLog_savePermitWithColumn_args&);
+  IFaceLog_savePermitWithColumn_args(IFaceLog_savePermitWithColumn_args&&);
+  IFaceLog_savePermitWithColumn_args& operator=(const IFaceLog_savePermitWithColumn_args&);
+  IFaceLog_savePermitWithColumn_args& operator=(IFaceLog_savePermitWithColumn_args&&);
+  IFaceLog_savePermitWithColumn_args() : deviceGroupId(0), personGroupId(0), column(), value() {
   }
 
-  virtual ~IFaceLog_savePermitWithSchedule_args() throw();
+  virtual ~IFaceLog_savePermitWithColumn_args() throw();
   int32_t deviceGroupId;
   int32_t personGroupId;
-  std::string schedule;
+  std::string column;
+  std::string value;
   Token token;
 
-  _IFaceLog_savePermitWithSchedule_args__isset __isset;
+  _IFaceLog_savePermitWithColumn_args__isset __isset;
 
   void __set_deviceGroupId(const int32_t val);
 
   void __set_personGroupId(const int32_t val);
 
-  void __set_schedule(const std::string& val);
+  void __set_column(const std::string& val);
+
+  void __set_value(const std::string& val);
 
   void __set_token(const Token& val);
 
-  bool operator == (const IFaceLog_savePermitWithSchedule_args & rhs) const
+  bool operator == (const IFaceLog_savePermitWithColumn_args & rhs) const
   {
     if (!(deviceGroupId == rhs.deviceGroupId))
       return false;
     if (!(personGroupId == rhs.personGroupId))
       return false;
-    if (!(schedule == rhs.schedule))
+    if (!(column == rhs.column))
+      return false;
+    if (!(value == rhs.value))
       return false;
     if (!(token == rhs.token))
       return false;
     return true;
   }
-  bool operator != (const IFaceLog_savePermitWithSchedule_args &rhs) const {
+  bool operator != (const IFaceLog_savePermitWithColumn_args &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IFaceLog_savePermitWithSchedule_args & ) const;
+  bool operator < (const IFaceLog_savePermitWithColumn_args & ) const;
 
   template <class Protocol_>
   uint32_t read(Protocol_* iprot);
@@ -18597,14 +18603,15 @@ class IFaceLog_savePermitWithSchedule_args {
 };
 
 
-class IFaceLog_savePermitWithSchedule_pargs {
+class IFaceLog_savePermitWithColumn_pargs {
  public:
 
 
-  virtual ~IFaceLog_savePermitWithSchedule_pargs() throw();
+  virtual ~IFaceLog_savePermitWithColumn_pargs() throw();
   const int32_t* deviceGroupId;
   const int32_t* personGroupId;
-  const std::string* schedule;
+  const std::string* column;
+  const std::string* value;
   const Token* token;
 
   template <class Protocol_>
@@ -18612,33 +18619,33 @@ class IFaceLog_savePermitWithSchedule_pargs {
 
 };
 
-typedef struct _IFaceLog_savePermitWithSchedule_result__isset {
-  _IFaceLog_savePermitWithSchedule_result__isset() : success(false), ex1(false) {}
+typedef struct _IFaceLog_savePermitWithColumn_result__isset {
+  _IFaceLog_savePermitWithColumn_result__isset() : success(false), ex1(false) {}
   bool success :1;
   bool ex1 :1;
-} _IFaceLog_savePermitWithSchedule_result__isset;
+} _IFaceLog_savePermitWithColumn_result__isset;
 
-class IFaceLog_savePermitWithSchedule_result {
+class IFaceLog_savePermitWithColumn_result {
  public:
 
-  IFaceLog_savePermitWithSchedule_result(const IFaceLog_savePermitWithSchedule_result&);
-  IFaceLog_savePermitWithSchedule_result(IFaceLog_savePermitWithSchedule_result&&);
-  IFaceLog_savePermitWithSchedule_result& operator=(const IFaceLog_savePermitWithSchedule_result&);
-  IFaceLog_savePermitWithSchedule_result& operator=(IFaceLog_savePermitWithSchedule_result&&);
-  IFaceLog_savePermitWithSchedule_result() {
+  IFaceLog_savePermitWithColumn_result(const IFaceLog_savePermitWithColumn_result&);
+  IFaceLog_savePermitWithColumn_result(IFaceLog_savePermitWithColumn_result&&);
+  IFaceLog_savePermitWithColumn_result& operator=(const IFaceLog_savePermitWithColumn_result&);
+  IFaceLog_savePermitWithColumn_result& operator=(IFaceLog_savePermitWithColumn_result&&);
+  IFaceLog_savePermitWithColumn_result() {
   }
 
-  virtual ~IFaceLog_savePermitWithSchedule_result() throw();
+  virtual ~IFaceLog_savePermitWithColumn_result() throw();
   PermitBean success;
   ServiceRuntimeException ex1;
 
-  _IFaceLog_savePermitWithSchedule_result__isset __isset;
+  _IFaceLog_savePermitWithColumn_result__isset __isset;
 
   void __set_success(const PermitBean& val);
 
   void __set_ex1(const ServiceRuntimeException& val);
 
-  bool operator == (const IFaceLog_savePermitWithSchedule_result & rhs) const
+  bool operator == (const IFaceLog_savePermitWithColumn_result & rhs) const
   {
     if (!(success == rhs.success))
       return false;
@@ -18646,11 +18653,11 @@ class IFaceLog_savePermitWithSchedule_result {
       return false;
     return true;
   }
-  bool operator != (const IFaceLog_savePermitWithSchedule_result &rhs) const {
+  bool operator != (const IFaceLog_savePermitWithColumn_result &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IFaceLog_savePermitWithSchedule_result & ) const;
+  bool operator < (const IFaceLog_savePermitWithColumn_result & ) const;
 
   template <class Protocol_>
   uint32_t read(Protocol_* iprot);
@@ -18659,21 +18666,21 @@ class IFaceLog_savePermitWithSchedule_result {
 
 };
 
-typedef struct _IFaceLog_savePermitWithSchedule_presult__isset {
-  _IFaceLog_savePermitWithSchedule_presult__isset() : success(false), ex1(false) {}
+typedef struct _IFaceLog_savePermitWithColumn_presult__isset {
+  _IFaceLog_savePermitWithColumn_presult__isset() : success(false), ex1(false) {}
   bool success :1;
   bool ex1 :1;
-} _IFaceLog_savePermitWithSchedule_presult__isset;
+} _IFaceLog_savePermitWithColumn_presult__isset;
 
-class IFaceLog_savePermitWithSchedule_presult {
+class IFaceLog_savePermitWithColumn_presult {
  public:
 
 
-  virtual ~IFaceLog_savePermitWithSchedule_presult() throw();
+  virtual ~IFaceLog_savePermitWithColumn_presult() throw();
   PermitBean* success;
   ServiceRuntimeException ex1;
 
-  _IFaceLog_savePermitWithSchedule_presult__isset __isset;
+  _IFaceLog_savePermitWithColumn_presult__isset __isset;
 
   template <class Protocol_>
   uint32_t read(Protocol_* iprot);
@@ -22158,9 +22165,9 @@ class IFaceLogClientT : virtual public IFaceLogIf {
   void savePermit(PermitBean& _return, const PermitBean& permitBean, const Token& token);
   void send_savePermit(const PermitBean& permitBean, const Token& token);
   void recv_savePermit(PermitBean& _return);
-  void savePermitWithSchedule(PermitBean& _return, const int32_t deviceGroupId, const int32_t personGroupId, const std::string& schedule, const Token& token);
-  void send_savePermitWithSchedule(const int32_t deviceGroupId, const int32_t personGroupId, const std::string& schedule, const Token& token);
-  void recv_savePermitWithSchedule(PermitBean& _return);
+  void savePermitWithColumn(PermitBean& _return, const int32_t deviceGroupId, const int32_t personGroupId, const std::string& column, const std::string& value, const Token& token);
+  void send_savePermitWithColumn(const int32_t deviceGroupId, const int32_t personGroupId, const std::string& column, const std::string& value, const Token& token);
+  void recv_savePermitWithColumn(PermitBean& _return);
   void savePerson(PersonBean& _return, const PersonBean& personBean, const Token& token);
   void send_savePerson(const PersonBean& personBean, const Token& token);
   void recv_savePerson(PersonBean& _return);
@@ -22540,8 +22547,8 @@ class IFaceLogProcessorT : public ::apache::thrift::TDispatchProcessorT<Protocol
   void process_saveDeviceGroup(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext);
   void process_savePermit(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_savePermit(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext);
-  void process_savePermitWithSchedule(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
-  void process_savePermitWithSchedule(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext);
+  void process_savePermitWithColumn(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_savePermitWithColumn(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext);
   void process_savePerson(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_savePerson(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext);
   void process_savePersonFull(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -23014,9 +23021,9 @@ class IFaceLogProcessorT : public ::apache::thrift::TDispatchProcessorT<Protocol
     processMap_["savePermit"] = ProcessFunctions(
       &IFaceLogProcessorT::process_savePermit,
       &IFaceLogProcessorT::process_savePermit);
-    processMap_["savePermitWithSchedule"] = ProcessFunctions(
-      &IFaceLogProcessorT::process_savePermitWithSchedule,
-      &IFaceLogProcessorT::process_savePermitWithSchedule);
+    processMap_["savePermitWithColumn"] = ProcessFunctions(
+      &IFaceLogProcessorT::process_savePermitWithColumn,
+      &IFaceLogProcessorT::process_savePermitWithColumn);
     processMap_["savePerson"] = ProcessFunctions(
       &IFaceLogProcessorT::process_savePerson,
       &IFaceLogProcessorT::process_savePerson);
@@ -24477,13 +24484,13 @@ class IFaceLogMultiface : virtual public IFaceLogIf {
     return;
   }
 
-  void savePermitWithSchedule(PermitBean& _return, const int32_t deviceGroupId, const int32_t personGroupId, const std::string& schedule, const Token& token) {
+  void savePermitWithColumn(PermitBean& _return, const int32_t deviceGroupId, const int32_t personGroupId, const std::string& column, const std::string& value, const Token& token) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->savePermitWithSchedule(_return, deviceGroupId, personGroupId, schedule, token);
+      ifaces_[i]->savePermitWithColumn(_return, deviceGroupId, personGroupId, column, value, token);
     }
-    ifaces_[i]->savePermitWithSchedule(_return, deviceGroupId, personGroupId, schedule, token);
+    ifaces_[i]->savePermitWithColumn(_return, deviceGroupId, personGroupId, column, value, token);
     return;
   }
 
@@ -25161,9 +25168,9 @@ class IFaceLogConcurrentClientT : virtual public IFaceLogIf {
   void savePermit(PermitBean& _return, const PermitBean& permitBean, const Token& token);
   int32_t send_savePermit(const PermitBean& permitBean, const Token& token);
   void recv_savePermit(PermitBean& _return, const int32_t seqid);
-  void savePermitWithSchedule(PermitBean& _return, const int32_t deviceGroupId, const int32_t personGroupId, const std::string& schedule, const Token& token);
-  int32_t send_savePermitWithSchedule(const int32_t deviceGroupId, const int32_t personGroupId, const std::string& schedule, const Token& token);
-  void recv_savePermitWithSchedule(PermitBean& _return, const int32_t seqid);
+  void savePermitWithColumn(PermitBean& _return, const int32_t deviceGroupId, const int32_t personGroupId, const std::string& column, const std::string& value, const Token& token);
+  int32_t send_savePermitWithColumn(const int32_t deviceGroupId, const int32_t personGroupId, const std::string& column, const std::string& value, const Token& token);
+  void recv_savePermitWithColumn(PermitBean& _return, const int32_t seqid);
   void savePerson(PersonBean& _return, const PersonBean& personBean, const Token& token);
   int32_t send_savePerson(const PersonBean& personBean, const Token& token);
   void recv_savePerson(PersonBean& _return, const int32_t seqid);

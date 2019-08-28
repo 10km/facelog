@@ -21340,10 +21340,11 @@ IFaceLog_savePermit_result.prototype.write = function(output) {
   return;
 };
 
-var IFaceLog_savePermitWithSchedule_args = function(args) {
+var IFaceLog_savePermitWithColumn_args = function(args) {
   this.deviceGroupId = null;
   this.personGroupId = null;
-  this.schedule = null;
+  this.column = null;
+  this.value = null;
   this.token = null;
   if (args) {
     if (args.deviceGroupId !== undefined && args.deviceGroupId !== null) {
@@ -21356,16 +21357,19 @@ var IFaceLog_savePermitWithSchedule_args = function(args) {
     } else {
       throw new Thrift.TProtocolException(Thrift.TProtocolExceptionType.UNKNOWN, 'Required field personGroupId is unset!');
     }
-    if (args.schedule !== undefined && args.schedule !== null) {
-      this.schedule = args.schedule;
+    if (args.column !== undefined && args.column !== null) {
+      this.column = args.column;
+    }
+    if (args.value !== undefined && args.value !== null) {
+      this.value = args.value;
     }
     if (args.token !== undefined && args.token !== null) {
       this.token = new ttypes.Token(args.token);
     }
   }
 };
-IFaceLog_savePermitWithSchedule_args.prototype = {};
-IFaceLog_savePermitWithSchedule_args.prototype.read = function(input) {
+IFaceLog_savePermitWithColumn_args.prototype = {};
+IFaceLog_savePermitWithColumn_args.prototype.read = function(input) {
   input.readStructBegin();
   while (true)
   {
@@ -21394,12 +21398,19 @@ IFaceLog_savePermitWithSchedule_args.prototype.read = function(input) {
       break;
       case 3:
       if (ftype == Thrift.Type.STRING) {
-        this.schedule = input.readString();
+        this.column = input.readString();
       } else {
         input.skip(ftype);
       }
       break;
       case 4:
+      if (ftype == Thrift.Type.STRING) {
+        this.value = input.readString();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 5:
       if (ftype == Thrift.Type.STRUCT) {
         this.token = new ttypes.Token();
         this.token.read(input);
@@ -21416,8 +21427,8 @@ IFaceLog_savePermitWithSchedule_args.prototype.read = function(input) {
   return;
 };
 
-IFaceLog_savePermitWithSchedule_args.prototype.write = function(output) {
-  output.writeStructBegin('IFaceLog_savePermitWithSchedule_args');
+IFaceLog_savePermitWithColumn_args.prototype.write = function(output) {
+  output.writeStructBegin('IFaceLog_savePermitWithColumn_args');
   if (this.deviceGroupId !== null && this.deviceGroupId !== undefined) {
     output.writeFieldBegin('deviceGroupId', Thrift.Type.I32, 1);
     output.writeI32(this.deviceGroupId);
@@ -21428,13 +21439,18 @@ IFaceLog_savePermitWithSchedule_args.prototype.write = function(output) {
     output.writeI32(this.personGroupId);
     output.writeFieldEnd();
   }
-  if (this.schedule !== null && this.schedule !== undefined) {
-    output.writeFieldBegin('schedule', Thrift.Type.STRING, 3);
-    output.writeString(this.schedule);
+  if (this.column !== null && this.column !== undefined) {
+    output.writeFieldBegin('column', Thrift.Type.STRING, 3);
+    output.writeString(this.column);
+    output.writeFieldEnd();
+  }
+  if (this.value !== null && this.value !== undefined) {
+    output.writeFieldBegin('value', Thrift.Type.STRING, 4);
+    output.writeString(this.value);
     output.writeFieldEnd();
   }
   if (this.token !== null && this.token !== undefined) {
-    output.writeFieldBegin('token', Thrift.Type.STRUCT, 4);
+    output.writeFieldBegin('token', Thrift.Type.STRUCT, 5);
     this.token.write(output);
     output.writeFieldEnd();
   }
@@ -21443,7 +21459,7 @@ IFaceLog_savePermitWithSchedule_args.prototype.write = function(output) {
   return;
 };
 
-var IFaceLog_savePermitWithSchedule_result = function(args) {
+var IFaceLog_savePermitWithColumn_result = function(args) {
   this.success = null;
   this.ex1 = null;
   if (args instanceof ttypes.ServiceRuntimeException) {
@@ -21459,8 +21475,8 @@ var IFaceLog_savePermitWithSchedule_result = function(args) {
     }
   }
 };
-IFaceLog_savePermitWithSchedule_result.prototype = {};
-IFaceLog_savePermitWithSchedule_result.prototype.read = function(input) {
+IFaceLog_savePermitWithColumn_result.prototype = {};
+IFaceLog_savePermitWithColumn_result.prototype.read = function(input) {
   input.readStructBegin();
   while (true)
   {
@@ -21498,8 +21514,8 @@ IFaceLog_savePermitWithSchedule_result.prototype.read = function(input) {
   return;
 };
 
-IFaceLog_savePermitWithSchedule_result.prototype.write = function(output) {
-  output.writeStructBegin('IFaceLog_savePermitWithSchedule_result');
+IFaceLog_savePermitWithColumn_result.prototype.write = function(output) {
+  output.writeStructBegin('IFaceLog_savePermitWithColumn_result');
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
     this.success.write(output);
@@ -32609,7 +32625,7 @@ IFaceLogClient.prototype.recv_savePermit = function(input,mtype,rseqid) {
   }
   return callback('savePermit failed: unknown result');
 };
-IFaceLogClient.prototype.savePermitWithSchedule = function(deviceGroupId, personGroupId, schedule, token, callback) {
+IFaceLogClient.prototype.savePermitWithColumn = function(deviceGroupId, personGroupId, column, value, token, callback) {
   this._seqid = this.new_seqid();
   if (callback === undefined) {
     var _defer = Q.defer();
@@ -32620,30 +32636,31 @@ IFaceLogClient.prototype.savePermitWithSchedule = function(deviceGroupId, person
         _defer.resolve(result);
       }
     };
-    this.send_savePermitWithSchedule(deviceGroupId, personGroupId, schedule, token);
+    this.send_savePermitWithColumn(deviceGroupId, personGroupId, column, value, token);
     return _defer.promise;
   } else {
     this._reqs[this.seqid()] = callback;
-    this.send_savePermitWithSchedule(deviceGroupId, personGroupId, schedule, token);
+    this.send_savePermitWithColumn(deviceGroupId, personGroupId, column, value, token);
   }
 };
 
-IFaceLogClient.prototype.send_savePermitWithSchedule = function(deviceGroupId, personGroupId, schedule, token) {
+IFaceLogClient.prototype.send_savePermitWithColumn = function(deviceGroupId, personGroupId, column, value, token) {
   var output = new this.pClass(this.output);
-  output.writeMessageBegin('savePermitWithSchedule', Thrift.MessageType.CALL, this.seqid());
+  output.writeMessageBegin('savePermitWithColumn', Thrift.MessageType.CALL, this.seqid());
   var params = {
     deviceGroupId: deviceGroupId,
     personGroupId: personGroupId,
-    schedule: schedule,
+    column: column,
+    value: value,
     token: token
   };
-  var args = new IFaceLog_savePermitWithSchedule_args(params);
+  var args = new IFaceLog_savePermitWithColumn_args(params);
   args.write(output);
   output.writeMessageEnd();
   return this.output.flush();
 };
 
-IFaceLogClient.prototype.recv_savePermitWithSchedule = function(input,mtype,rseqid) {
+IFaceLogClient.prototype.recv_savePermitWithColumn = function(input,mtype,rseqid) {
   var callback = this._reqs[rseqid] || function() {};
   delete this._reqs[rseqid];
   if (mtype == Thrift.MessageType.EXCEPTION) {
@@ -32652,7 +32669,7 @@ IFaceLogClient.prototype.recv_savePermitWithSchedule = function(input,mtype,rseq
     input.readMessageEnd();
     return callback(x);
   }
-  var result = new IFaceLog_savePermitWithSchedule_result();
+  var result = new IFaceLog_savePermitWithColumn_result();
   result.read(input);
   input.readMessageEnd();
 
@@ -32662,7 +32679,7 @@ IFaceLogClient.prototype.recv_savePermitWithSchedule = function(input,mtype,rseq
   if (null !== result.success) {
     return callback(null, result.success);
   }
-  return callback('savePermitWithSchedule failed: unknown result');
+  return callback('savePermitWithColumn failed: unknown result');
 };
 IFaceLogClient.prototype.savePerson = function(personBean, token, callback) {
   this._seqid = this.new_seqid();
@@ -39675,40 +39692,40 @@ IFaceLogProcessor.prototype.process_savePermit = function(seqid, input, output) 
     });
   }
 };
-IFaceLogProcessor.prototype.process_savePermitWithSchedule = function(seqid, input, output) {
-  var args = new IFaceLog_savePermitWithSchedule_args();
+IFaceLogProcessor.prototype.process_savePermitWithColumn = function(seqid, input, output) {
+  var args = new IFaceLog_savePermitWithColumn_args();
   args.read(input);
   input.readMessageEnd();
-  if (this._handler.savePermitWithSchedule.length === 4) {
-    Q.fcall(this._handler.savePermitWithSchedule.bind(this._handler), args.deviceGroupId, args.personGroupId, args.schedule, args.token)
+  if (this._handler.savePermitWithColumn.length === 5) {
+    Q.fcall(this._handler.savePermitWithColumn.bind(this._handler), args.deviceGroupId, args.personGroupId, args.column, args.value, args.token)
       .then(function(result) {
-        var result_obj = new IFaceLog_savePermitWithSchedule_result({success: result});
-        output.writeMessageBegin("savePermitWithSchedule", Thrift.MessageType.REPLY, seqid);
+        var result_obj = new IFaceLog_savePermitWithColumn_result({success: result});
+        output.writeMessageBegin("savePermitWithColumn", Thrift.MessageType.REPLY, seqid);
         result_obj.write(output);
         output.writeMessageEnd();
         output.flush();
       }, function (err) {
         var result;
         if (err instanceof ttypes.ServiceRuntimeException) {
-          result = new IFaceLog_savePermitWithSchedule_result(err);
-          output.writeMessageBegin("savePermitWithSchedule", Thrift.MessageType.REPLY, seqid);
+          result = new IFaceLog_savePermitWithColumn_result(err);
+          output.writeMessageBegin("savePermitWithColumn", Thrift.MessageType.REPLY, seqid);
         } else {
           result = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
-          output.writeMessageBegin("savePermitWithSchedule", Thrift.MessageType.EXCEPTION, seqid);
+          output.writeMessageBegin("savePermitWithColumn", Thrift.MessageType.EXCEPTION, seqid);
         }
         result.write(output);
         output.writeMessageEnd();
         output.flush();
       });
   } else {
-    this._handler.savePermitWithSchedule(args.deviceGroupId, args.personGroupId, args.schedule, args.token, function (err, result) {
+    this._handler.savePermitWithColumn(args.deviceGroupId, args.personGroupId, args.column, args.value, args.token, function (err, result) {
       var result_obj;
       if ((err === null || typeof err === 'undefined') || err instanceof ttypes.ServiceRuntimeException) {
-        result_obj = new IFaceLog_savePermitWithSchedule_result((err !== null || typeof err === 'undefined') ? err : {success: result});
-        output.writeMessageBegin("savePermitWithSchedule", Thrift.MessageType.REPLY, seqid);
+        result_obj = new IFaceLog_savePermitWithColumn_result((err !== null || typeof err === 'undefined') ? err : {success: result});
+        output.writeMessageBegin("savePermitWithColumn", Thrift.MessageType.REPLY, seqid);
       } else {
         result_obj = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
-        output.writeMessageBegin("savePermitWithSchedule", Thrift.MessageType.EXCEPTION, seqid);
+        output.writeMessageBegin("savePermitWithColumn", Thrift.MessageType.EXCEPTION, seqid);
       }
       result_obj.write(output);
       output.writeMessageEnd();

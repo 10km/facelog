@@ -3380,25 +3380,26 @@ public class IFaceLogSpringController {
     }
     // port-141
     /**
+     * 修改指定记录的的字段值(String类型)<br>
      * 如果记录不存在则创建deviceGroupId和personGroupId之间的MANY TO MANY 联接表(fl_permit)记录,
-     * 否则修改指定记录的通行时间安排表<br>
      * <br>{@code PERSON_ONLY}
      * @param deviceGroupId 设备组id
      * @param personGroupId 人员组id
-     * @param schedule 通行时间安排表,为{@code null}则不限制通行时间
+     * @param column 字段名，允许的字段名为'schedule','pass_limit'
+     * @param value 字段值
      * @param token 访问令牌
      * @return (fl_permit)记录
      */
     @ResponseBody
-    @RequestMapping(value = "/IFaceLog/savePermitWithSchedule", method = RequestMethod.POST)
-    @ApiOperation(value = "如果记录不存在则创建deviceGroupId和personGroupId之间的MANY TO MANY 联接表(fl_permit)记录,\n"
-+" 否则修改指定记录的通行时间安排表<br>\n"
+    @RequestMapping(value = "/IFaceLog/savePermitWithColumn", method = RequestMethod.POST)
+    @ApiOperation(value = "修改指定记录的的字段值(String类型)<br>\n"
++" 如果记录不存在则创建deviceGroupId和personGroupId之间的MANY TO MANY 联接表(fl_permit)记录,\n"
 +" <br>{@code PERSON_ONLY}",httpMethod="POST")
-    public Response savePermit( @RequestBody SavePermitWithScheduleArgs args) 
+    public Response savePermit( @RequestBody SavePermitWithColumnArgs args) 
     {
             Response response = responseFactory.newIFaceLogResponse();
             try{
-                response.onComplete(delegate().savePermit(args.deviceGroupId,args.personGroupId,args.schedule,args.token));
+                response.onComplete(delegate().savePermit(args.deviceGroupId,args.personGroupId,args.column,args.value,args.token));
             }
             catch(Exception e){
                 logger.error(e.getMessage(),e);
@@ -5360,15 +5361,17 @@ public class IFaceLogSpringController {
     }
     /**
      * argClass-141<br>
-     * wrap arguments for method {@link #savePermit(SavePermitWithScheduleArgs)}
+     * wrap arguments for method {@link #savePermit(SavePermitWithColumnArgs)}
      */
-    public static class SavePermitWithScheduleArgs{
+    public static class SavePermitWithColumnArgs{
         @ApiModelProperty(value ="设备组id" ,required=true ,dataType="int")
         public int deviceGroupId;
         @ApiModelProperty(value ="人员组id" ,required=true ,dataType="int")
         public int personGroupId;
-        @ApiModelProperty(value ="通行时间安排表,为{@code null}则不限制通行时间" ,required=true ,dataType="String")
-        public String schedule;
+        @ApiModelProperty(value ="字段名，允许的字段名为'schedule','pass_limit'" ,required=true ,dataType="String")
+        public String column;
+        @ApiModelProperty(value ="字段值" ,required=true ,dataType="String")
+        public String value;
         @ApiModelProperty(value ="访问令牌" ,required=true ,dataType="Token")
         public Token token;
     }
