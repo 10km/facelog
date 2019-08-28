@@ -838,7 +838,7 @@ public class DaoManagement extends BaseDao implements ServiceConstant,Constant{
 	private static final HashSet<Integer> allowedPermitColumns=Sets.newHashSet(FL_PERMIT_ID_SCHEDULE,
 			FL_PERMIT_ID_PASS_LIMIT);
 	/**
-	 * 修改指定记录的的字段值<br>
+	 * 修改指定记录的的字段值(String类型)<br>
 	 * 如果记录不存在则创建deviceGroupId和personGroupId之间的MANY TO MANY 联接表(fl_permit)记录,
      * @param deviceGroupId 设备组id
 	 * @param personGroupId 人员组id
