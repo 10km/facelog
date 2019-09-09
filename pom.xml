@@ -22,9 +22,9 @@
 		<common-java.version>1.1.38</common-java.version>
 		<codegen.version>1.0.24</codegen.version>
 		<idl.generator.version>1.10</idl.generator.version>
-		<dtalk.version>0.2.20</dtalk.version>
+		<dtalk.version>0.2.21</dtalk.version>
 		<thrifty.compiler.maven.plugin.version>1.1</thrifty.compiler.maven.plugin.version>
-		<simplemq.version>1.0.22</simplemq.version>
+		<simplemq.version>1.0.23</simplemq.version>
 		<swagger-annotations>1.5.22</swagger-annotations>	
 		<spring.boot.version>1.5.9.RELEASE</spring.boot.version>
 		<springfox.swagger.version>2.7.0</springfox.swagger.version>
@@ -97,11 +97,6 @@
 				<groupId>commons-lang</groupId>
 				<artifactId>commons-lang</artifactId>
 				<version>2.1</version>
-			</dependency>
-			<dependency>
-				<groupId>com.alibaba</groupId>
-				<artifactId>fastjson</artifactId>
-				<version>1.2.38</version>
 			</dependency>
 			<dependency>
 				<groupId>com.facebook.nifty</groupId>
