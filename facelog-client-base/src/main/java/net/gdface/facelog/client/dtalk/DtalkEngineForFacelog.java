@@ -1,6 +1,6 @@
 package net.gdface.facelog.client.dtalk;
 
-import gu.dtalk.engine.ItemEngine;
+import gu.dtalk.engine.ItemEngineRedisImpl;
 import gu.dtalk.engine.SampleConnector;
 import gu.dtalk.redis.RedisConfigType;
 import gu.simplemq.Channel;
@@ -26,12 +26,12 @@ public class DtalkEngineForFacelog {
 	private final SampleConnector connAdapter;
 	private final RedisSubscriber subscriber;
 	private final byte[] devMac;
-	private final ItemEngine itemAdapter;
+	private final ItemEngineRedisImpl itemAdapter;
 	public DtalkEngineForFacelog(MenuItem root, Function<Token,Integer>  ranker,RedisConfigType redisConfigType) {
 		JedisPoolLazy pool = JedisPoolLazy.getInstance(redisConfigType.readRedisParam(),false);
 		subscriber = RedisFactory.getSubscriber(pool);
 		devMac = DEVINFO_PROVIDER.getMac();
-		itemAdapter = new ItemEngine(pool).setRoot(root);
+		itemAdapter = (ItemEngineRedisImpl) new ItemEngineRedisImpl(pool).setRoot(root);
 		connAdapter = new SampleConnector(pool)
 				.setSelfMac(FaceUtilits.toHex(devMac))
 				.setItemAdapter(itemAdapter);
@@ -45,7 +45,7 @@ public class DtalkEngineForFacelog {
 	public DtalkEngineForFacelog(MenuItem root, RedisConfigType redisConfigType) {
 		this(root, null, redisConfigType);
 	}
-	public ItemEngine getItemAdapter() {
+	public ItemEngineRedisImpl getItemAdapter() {
 		return itemAdapter;
 	}
 	/**
