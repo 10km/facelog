@@ -1,0 +1,1 @@
+mvn test -Dtest=net.gdface.service.facelog.MultiCastTest -DskipTests=false %*
