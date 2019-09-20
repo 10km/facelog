@@ -87,8 +87,8 @@ public class ServiceHeartbeat implements ChannelConstant{
 				port,
 				xhrPort, 
 				hostname())
-				//.writeAddresses(ipv4AddressesOfPhysicalNICs());
-				.writeAddresses(addressesOfPhysicalNICs(FILTER_IPV4));
+				//.writeAddresses(ipv4AddressesOfNoVirtualNICs());
+				.writeAddresses(addressesOfNoVirtualNICs(FILTER_IPV4));
 		this.publisher = RedisFactory.getPublisher(checkNotNull(poolLazy,"pool is null"));
 		this.scheduledExecutor =new ScheduledThreadPoolExecutor(1,
 				new ThreadFactoryBuilder().setNameFormat("heartbeat-pool-%d").build());	
