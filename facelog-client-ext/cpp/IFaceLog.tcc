@@ -16622,6 +16622,219 @@ uint32_t IFaceLog_getImageBytes_presult::read(Protocol_* iprot) {
 
 
 template <class Protocol_>
+uint32_t IFaceLog_getImageBytesRef_args::read(Protocol_* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->primaryKey);
+          this->__isset.primaryKey = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->refType);
+          this->__isset.refType = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+template <class Protocol_>
+uint32_t IFaceLog_getImageBytesRef_args::write(Protocol_* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("IFaceLog_getImageBytesRef_args");
+
+  xfer += oprot->writeFieldBegin("primaryKey", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->primaryKey);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("refType", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString(this->refType);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+template <class Protocol_>
+uint32_t IFaceLog_getImageBytesRef_pargs::write(Protocol_* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("IFaceLog_getImageBytesRef_pargs");
+
+  xfer += oprot->writeFieldBegin("primaryKey", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->primaryKey)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("refType", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString((*(this->refType)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+template <class Protocol_>
+uint32_t IFaceLog_getImageBytesRef_result::read(Protocol_* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readBinary(this->success);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex1.read(iprot);
+          this->__isset.ex1 = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+template <class Protocol_>
+uint32_t IFaceLog_getImageBytesRef_result::write(Protocol_* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("IFaceLog_getImageBytesRef_result");
+
+  if (this->__isset.success) {
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRING, 0);
+    xfer += oprot->writeBinary(this->success);
+    xfer += oprot->writeFieldEnd();
+  } else if (this->__isset.ex1) {
+    xfer += oprot->writeFieldBegin("ex1", ::apache::thrift::protocol::T_STRUCT, 1);
+    xfer += this->ex1.write(oprot);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+template <class Protocol_>
+uint32_t IFaceLog_getImageBytesRef_presult::read(Protocol_* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readBinary((*(this->success)));
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex1.read(iprot);
+          this->__isset.ex1 = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+
+template <class Protocol_>
 uint32_t IFaceLog_getImagesAssociatedByFeature_args::read(Protocol_* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
@@ -42707,6 +42920,71 @@ void IFaceLogClientT<Protocol_>::recv_getImageBytes(std::string& _return)
 }
 
 template <class Protocol_>
+void IFaceLogClientT<Protocol_>::getImageBytesRef(std::string& _return, const std::string& primaryKey, const std::string& refType)
+{
+  send_getImageBytesRef(primaryKey, refType);
+  recv_getImageBytesRef(_return);
+}
+
+template <class Protocol_>
+void IFaceLogClientT<Protocol_>::send_getImageBytesRef(const std::string& primaryKey, const std::string& refType)
+{
+  int32_t cseqid = 0;
+  this->oprot_->writeMessageBegin("getImageBytesRef", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  IFaceLog_getImageBytesRef_pargs args;
+  args.primaryKey = &primaryKey;
+  args.refType = &refType;
+  args.write(this->oprot_);
+
+  this->oprot_->writeMessageEnd();
+  this->oprot_->getTransport()->writeEnd();
+  this->oprot_->getTransport()->flush();
+}
+
+template <class Protocol_>
+void IFaceLogClientT<Protocol_>::recv_getImageBytesRef(std::string& _return)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  this->iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(this->iprot_);
+    this->iprot_->readMessageEnd();
+    this->iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    this->iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    this->iprot_->readMessageEnd();
+    this->iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("getImageBytesRef") != 0) {
+    this->iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    this->iprot_->readMessageEnd();
+    this->iprot_->getTransport()->readEnd();
+  }
+  IFaceLog_getImageBytesRef_presult result;
+  result.success = &_return;
+  result.read(this->iprot_);
+  this->iprot_->readMessageEnd();
+  this->iprot_->getTransport()->readEnd();
+
+  if (result.__isset.success) {
+    // _return pointer has now been filled
+    return;
+  }
+  if (result.__isset.ex1) {
+    throw result.ex1;
+  }
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "getImageBytesRef failed: unknown result");
+}
+
+template <class Protocol_>
 void IFaceLogClientT<Protocol_>::getImagesAssociatedByFeature(std::vector<std::string> & _return, const std::string& featureMd5)
 {
   send_getImagesAssociatedByFeature(featureMd5);
@@ -57139,6 +57417,122 @@ void IFaceLogProcessorT<Protocol_>::process_getImageBytes(int32_t seqid, Protoco
 
   if (this->eventHandler_.get() != NULL) {
     this->eventHandler_->postWrite(ctx, "IFaceLog.getImageBytes", bytes);
+  }
+}
+
+template <class Protocol_>
+void IFaceLogProcessorT<Protocol_>::process_getImageBytesRef(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = NULL;
+  if (this->eventHandler_.get() != NULL) {
+    ctx = this->eventHandler_->getContext("IFaceLog.getImageBytesRef", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IFaceLog.getImageBytesRef");
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preRead(ctx, "IFaceLog.getImageBytesRef");
+  }
+
+  IFaceLog_getImageBytesRef_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postRead(ctx, "IFaceLog.getImageBytesRef", bytes);
+  }
+
+  IFaceLog_getImageBytesRef_result result;
+  try {
+    iface_->getImageBytesRef(result.success, args.primaryKey, args.refType);
+    result.__isset.success = true;
+  } catch (ServiceRuntimeException &ex1) {
+    result.ex1 = ex1;
+    result.__isset.ex1 = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != NULL) {
+      this->eventHandler_->handlerError(ctx, "IFaceLog.getImageBytesRef");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("getImageBytesRef", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preWrite(ctx, "IFaceLog.getImageBytesRef");
+  }
+
+  oprot->writeMessageBegin("getImageBytesRef", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postWrite(ctx, "IFaceLog.getImageBytesRef", bytes);
+  }
+}
+
+template <class Protocol_>
+void IFaceLogProcessorT<Protocol_>::process_getImageBytesRef(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext)
+{
+  void* ctx = NULL;
+  if (this->eventHandler_.get() != NULL) {
+    ctx = this->eventHandler_->getContext("IFaceLog.getImageBytesRef", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IFaceLog.getImageBytesRef");
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preRead(ctx, "IFaceLog.getImageBytesRef");
+  }
+
+  IFaceLog_getImageBytesRef_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postRead(ctx, "IFaceLog.getImageBytesRef", bytes);
+  }
+
+  IFaceLog_getImageBytesRef_result result;
+  try {
+    iface_->getImageBytesRef(result.success, args.primaryKey, args.refType);
+    result.__isset.success = true;
+  } catch (ServiceRuntimeException &ex1) {
+    result.ex1 = ex1;
+    result.__isset.ex1 = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != NULL) {
+      this->eventHandler_->handlerError(ctx, "IFaceLog.getImageBytesRef");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("getImageBytesRef", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preWrite(ctx, "IFaceLog.getImageBytesRef");
+  }
+
+  oprot->writeMessageBegin("getImageBytesRef", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postWrite(ctx, "IFaceLog.getImageBytesRef", bytes);
   }
 }
 
@@ -74570,6 +74964,98 @@ void IFaceLogConcurrentClientT<Protocol_>::recv_getImageBytes(std::string& _retu
       }
       // in a bad state, don't commit
       throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "getImageBytes failed: unknown result");
+    }
+    // seqid != rseqid
+    this->sync_.updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_.waitForWork(seqid);
+  } // end while(true)
+}
+
+template <class Protocol_>
+void IFaceLogConcurrentClientT<Protocol_>::getImageBytesRef(std::string& _return, const std::string& primaryKey, const std::string& refType)
+{
+  int32_t seqid = send_getImageBytesRef(primaryKey, refType);
+  recv_getImageBytesRef(_return, seqid);
+}
+
+template <class Protocol_>
+int32_t IFaceLogConcurrentClientT<Protocol_>::send_getImageBytesRef(const std::string& primaryKey, const std::string& refType)
+{
+  int32_t cseqid = this->sync_.generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
+  this->oprot_->writeMessageBegin("getImageBytesRef", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  IFaceLog_getImageBytesRef_pargs args;
+  args.primaryKey = &primaryKey;
+  args.refType = &refType;
+  args.write(this->oprot_);
+
+  this->oprot_->writeMessageEnd();
+  this->oprot_->getTransport()->writeEnd();
+  this->oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+template <class Protocol_>
+void IFaceLogConcurrentClientT<Protocol_>::recv_getImageBytesRef(std::string& _return, const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(&this->sync_, seqid);
+
+  while(true) {
+    if(!this->sync_.getPending(fname, mtype, rseqid)) {
+      this->iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(this->iprot_);
+        this->iprot_->readMessageEnd();
+        this->iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        this->iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        this->iprot_->readMessageEnd();
+        this->iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("getImageBytesRef") != 0) {
+        this->iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        this->iprot_->readMessageEnd();
+        this->iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      IFaceLog_getImageBytesRef_presult result;
+      result.success = &_return;
+      result.read(this->iprot_);
+      this->iprot_->readMessageEnd();
+      this->iprot_->getTransport()->readEnd();
+
+      if (result.__isset.success) {
+        // _return pointer has now been filled
+        sentry.commit();
+        return;
+      }
+      if (result.__isset.ex1) {
+        sentry.commit();
+        throw result.ex1;
+      }
+      // in a bad state, don't commit
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "getImageBytesRef failed: unknown result");
     }
     // seqid != rseqid
     this->sync_.updatePending(fname, mtype, rseqid);

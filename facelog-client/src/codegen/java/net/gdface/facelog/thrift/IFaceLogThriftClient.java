@@ -1654,6 +1654,25 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
+    public byte[] getImageBytes(String primaryKey,
+        String refType) 
+        {
+        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        try{
+            return instance.getImageBytesRef(primaryKey,
+                refType);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch(RuntimeTApplicationException e){
+            return net.gdface.thrift.ThriftUtils.returnNull(e);
+        }
+        finally{
+            factory.releaseInstance(instance);
+        }
+    }
+    @Override
     public List<String> getImagesAssociatedByFeature(String featureMd5) 
         {
         net.gdface.facelog.client.thrift.IFaceLog instance = delegate();

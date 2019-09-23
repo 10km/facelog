@@ -93,6 +93,7 @@ class IFaceLogIf {
   virtual void getGroupPermits(std::vector<PermitBean> & _return, const int32_t deviceId, const std::vector<int32_t> & personGroupIdList) = 0;
   virtual void getImage(ImageBean& _return, const std::string& imageMD5) = 0;
   virtual void getImageBytes(std::string& _return, const std::string& imageMD5) = 0;
+  virtual void getImageBytesRef(std::string& _return, const std::string& primaryKey, const std::string& refType) = 0;
   virtual void getImagesAssociatedByFeature(std::vector<std::string> & _return, const std::string& featureMd5) = 0;
   virtual void getLogBeansByPersonId(std::vector<LogBean> & _return, const int32_t personId) = 0;
   virtual void getPerson(PersonBean& _return, const int32_t personId) = 0;
@@ -456,6 +457,9 @@ class IFaceLogNull : virtual public IFaceLogIf {
     return;
   }
   void getImageBytes(std::string& /* _return */, const std::string& /* imageMD5 */) {
+    return;
+  }
+  void getImageBytesRef(std::string& /* _return */, const std::string& /* primaryKey */, const std::string& /* refType */) {
     return;
   }
   void getImagesAssociatedByFeature(std::vector<std::string> & /* _return */, const std::string& /* featureMd5 */) {
@@ -9954,6 +9958,135 @@ class IFaceLog_getImageBytes_presult {
   ServiceRuntimeException ex1;
 
   _IFaceLog_getImageBytes_presult__isset __isset;
+
+  template <class Protocol_>
+  uint32_t read(Protocol_* iprot);
+
+};
+
+typedef struct _IFaceLog_getImageBytesRef_args__isset {
+  _IFaceLog_getImageBytesRef_args__isset() : primaryKey(false), refType(false) {}
+  bool primaryKey :1;
+  bool refType :1;
+} _IFaceLog_getImageBytesRef_args__isset;
+
+class IFaceLog_getImageBytesRef_args {
+ public:
+
+  IFaceLog_getImageBytesRef_args(const IFaceLog_getImageBytesRef_args&);
+  IFaceLog_getImageBytesRef_args(IFaceLog_getImageBytesRef_args&&);
+  IFaceLog_getImageBytesRef_args& operator=(const IFaceLog_getImageBytesRef_args&);
+  IFaceLog_getImageBytesRef_args& operator=(IFaceLog_getImageBytesRef_args&&);
+  IFaceLog_getImageBytesRef_args() : primaryKey(), refType() {
+  }
+
+  virtual ~IFaceLog_getImageBytesRef_args() throw();
+  std::string primaryKey;
+  std::string refType;
+
+  _IFaceLog_getImageBytesRef_args__isset __isset;
+
+  void __set_primaryKey(const std::string& val);
+
+  void __set_refType(const std::string& val);
+
+  bool operator == (const IFaceLog_getImageBytesRef_args & rhs) const
+  {
+    if (!(primaryKey == rhs.primaryKey))
+      return false;
+    if (!(refType == rhs.refType))
+      return false;
+    return true;
+  }
+  bool operator != (const IFaceLog_getImageBytesRef_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IFaceLog_getImageBytesRef_args & ) const;
+
+  template <class Protocol_>
+  uint32_t read(Protocol_* iprot);
+  template <class Protocol_>
+  uint32_t write(Protocol_* oprot) const;
+
+};
+
+
+class IFaceLog_getImageBytesRef_pargs {
+ public:
+
+
+  virtual ~IFaceLog_getImageBytesRef_pargs() throw();
+  const std::string* primaryKey;
+  const std::string* refType;
+
+  template <class Protocol_>
+  uint32_t write(Protocol_* oprot) const;
+
+};
+
+typedef struct _IFaceLog_getImageBytesRef_result__isset {
+  _IFaceLog_getImageBytesRef_result__isset() : success(false), ex1(false) {}
+  bool success :1;
+  bool ex1 :1;
+} _IFaceLog_getImageBytesRef_result__isset;
+
+class IFaceLog_getImageBytesRef_result {
+ public:
+
+  IFaceLog_getImageBytesRef_result(const IFaceLog_getImageBytesRef_result&);
+  IFaceLog_getImageBytesRef_result(IFaceLog_getImageBytesRef_result&&);
+  IFaceLog_getImageBytesRef_result& operator=(const IFaceLog_getImageBytesRef_result&);
+  IFaceLog_getImageBytesRef_result& operator=(IFaceLog_getImageBytesRef_result&&);
+  IFaceLog_getImageBytesRef_result() : success() {
+  }
+
+  virtual ~IFaceLog_getImageBytesRef_result() throw();
+  std::string success;
+  ServiceRuntimeException ex1;
+
+  _IFaceLog_getImageBytesRef_result__isset __isset;
+
+  void __set_success(const std::string& val);
+
+  void __set_ex1(const ServiceRuntimeException& val);
+
+  bool operator == (const IFaceLog_getImageBytesRef_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex1 == rhs.ex1))
+      return false;
+    return true;
+  }
+  bool operator != (const IFaceLog_getImageBytesRef_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IFaceLog_getImageBytesRef_result & ) const;
+
+  template <class Protocol_>
+  uint32_t read(Protocol_* iprot);
+  template <class Protocol_>
+  uint32_t write(Protocol_* oprot) const;
+
+};
+
+typedef struct _IFaceLog_getImageBytesRef_presult__isset {
+  _IFaceLog_getImageBytesRef_presult__isset() : success(false), ex1(false) {}
+  bool success :1;
+  bool ex1 :1;
+} _IFaceLog_getImageBytesRef_presult__isset;
+
+class IFaceLog_getImageBytesRef_presult {
+ public:
+
+
+  virtual ~IFaceLog_getImageBytesRef_presult() throw();
+  std::string* success;
+  ServiceRuntimeException ex1;
+
+  _IFaceLog_getImageBytesRef_presult__isset __isset;
 
   template <class Protocol_>
   uint32_t read(Protocol_* iprot);
@@ -21958,6 +22091,9 @@ class IFaceLogClientT : virtual public IFaceLogIf {
   void getImageBytes(std::string& _return, const std::string& imageMD5);
   void send_getImageBytes(const std::string& imageMD5);
   void recv_getImageBytes(std::string& _return);
+  void getImageBytesRef(std::string& _return, const std::string& primaryKey, const std::string& refType);
+  void send_getImageBytesRef(const std::string& primaryKey, const std::string& refType);
+  void recv_getImageBytesRef(std::string& _return);
   void getImagesAssociatedByFeature(std::vector<std::string> & _return, const std::string& featureMd5);
   void send_getImagesAssociatedByFeature(const std::string& featureMd5);
   void recv_getImagesAssociatedByFeature(std::vector<std::string> & _return);
@@ -22409,6 +22545,8 @@ class IFaceLogProcessorT : public ::apache::thrift::TDispatchProcessorT<Protocol
   void process_getImage(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext);
   void process_getImageBytes(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_getImageBytes(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext);
+  void process_getImageBytesRef(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_getImageBytesRef(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext);
   void process_getImagesAssociatedByFeature(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_getImagesAssociatedByFeature(int32_t seqid, Protocol_* iprot, Protocol_* oprot, void* callContext);
   void process_getLogBeansByPersonId(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -22814,6 +22952,9 @@ class IFaceLogProcessorT : public ::apache::thrift::TDispatchProcessorT<Protocol
     processMap_["getImageBytes"] = ProcessFunctions(
       &IFaceLogProcessorT::process_getImageBytes,
       &IFaceLogProcessorT::process_getImageBytes);
+    processMap_["getImageBytesRef"] = ProcessFunctions(
+      &IFaceLogProcessorT::process_getImageBytesRef,
+      &IFaceLogProcessorT::process_getImageBytesRef);
     processMap_["getImagesAssociatedByFeature"] = ProcessFunctions(
       &IFaceLogProcessorT::process_getImagesAssociatedByFeature,
       &IFaceLogProcessorT::process_getImagesAssociatedByFeature);
@@ -23809,6 +23950,16 @@ class IFaceLogMultiface : virtual public IFaceLogIf {
       ifaces_[i]->getImageBytes(_return, imageMD5);
     }
     ifaces_[i]->getImageBytes(_return, imageMD5);
+    return;
+  }
+
+  void getImageBytesRef(std::string& _return, const std::string& primaryKey, const std::string& refType) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->getImageBytesRef(_return, primaryKey, refType);
+    }
+    ifaces_[i]->getImageBytesRef(_return, primaryKey, refType);
     return;
   }
 
@@ -24961,6 +25112,9 @@ class IFaceLogConcurrentClientT : virtual public IFaceLogIf {
   void getImageBytes(std::string& _return, const std::string& imageMD5);
   int32_t send_getImageBytes(const std::string& imageMD5);
   void recv_getImageBytes(std::string& _return, const int32_t seqid);
+  void getImageBytesRef(std::string& _return, const std::string& primaryKey, const std::string& refType);
+  int32_t send_getImageBytesRef(const std::string& primaryKey, const std::string& refType);
+  void recv_getImageBytesRef(std::string& _return, const int32_t seqid);
   void getImagesAssociatedByFeature(std::vector<std::string> & _return, const std::string& featureMd5);
   int32_t send_getImagesAssociatedByFeature(const std::string& featureMd5);
   void recv_getImagesAssociatedByFeature(std::vector<std::string> & _return, const int32_t seqid);

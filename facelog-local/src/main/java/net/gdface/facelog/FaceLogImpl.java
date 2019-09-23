@@ -14,6 +14,7 @@ import java.util.concurrent.Callable;
 import static com.google.common.base.Preconditions.*;
 
 import com.google.common.base.Functions;
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Predicates;
 import com.google.common.base.Strings;
 import com.google.common.base.Throwables;
@@ -31,7 +32,6 @@ import net.gdface.facelog.db.LogLightBean;
 import net.gdface.facelog.db.PermitBean;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.PersonGroupBean;
-import net.gdface.facelog.db.StoreBean;
 import net.gdface.facelog.db.TableManager;
 import net.gdface.facelog.db.exception.RuntimeDaoException;
 import net.gdface.facelog.ServiceSecurityException;
@@ -986,13 +986,19 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 	@Override
 	public byte[] getImageBytes(String imageMD5){
 		try {
-			StoreBean storeBean = dm.daoGetStore(imageMD5);
-			return null ==storeBean?null:FaceUtilits.getBytes(storeBean.getData());
+			return dm.daoGetImageBytes(imageMD5);
 		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
 		}
 	}
-
+	@Override
+	public byte[] getImageBytes(String primaryKey,String refType){
+		try {
+			return dm.daoGetImageBytes(primaryKey, RefSrcType.valueOf(MoreObjects.firstNonNull(refType,RefSrcType.DEFAULT.name())));
+		} catch (Exception e) {
+			throw wrapServiceRuntimeException(e);
+		}
+	}
 	@Override
 	public ImageBean getImage(String imageMD5){
 		try{

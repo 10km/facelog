@@ -2207,6 +2207,33 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
+    public byte[] getImageBytes(final String primaryKey,
+        final String refType) 
+        {
+        try{
+            return syncCall(new Function<okio.ByteString,byte[]>() {
+                @Override
+                public byte[] apply(okio.ByteString input) {
+                    return TypeTransformer.getInstance().to(
+                    input,
+                    okio.ByteString.class,
+                    byte[].class);
+                }},
+                new ServiceAsyncCall<okio.ByteString>(){
+                @Override
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<okio.ByteString> nativeCallback){
+                    service.getImageBytesRef(primaryKey,refType,nativeCallback);
+                }});
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);
+        }
+    }
+    @Override
     public List<String> getImagesAssociatedByFeature(final String featureMd5) 
         {
         try{

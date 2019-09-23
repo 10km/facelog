@@ -11036,6 +11036,143 @@ IFaceLog_getImageBytes_result.prototype.write = function(output) {
   return;
 };
 
+var IFaceLog_getImageBytesRef_args = function(args) {
+  this.primaryKey = null;
+  this.refType = null;
+  if (args) {
+    if (args.primaryKey !== undefined && args.primaryKey !== null) {
+      this.primaryKey = args.primaryKey;
+    }
+    if (args.refType !== undefined && args.refType !== null) {
+      this.refType = args.refType;
+    }
+  }
+};
+IFaceLog_getImageBytesRef_args.prototype = {};
+IFaceLog_getImageBytesRef_args.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+      if (ftype == Thrift.Type.STRING) {
+        this.primaryKey = input.readString();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 2:
+      if (ftype == Thrift.Type.STRING) {
+        this.refType = input.readString();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+IFaceLog_getImageBytesRef_args.prototype.write = function(output) {
+  output.writeStructBegin('IFaceLog_getImageBytesRef_args');
+  if (this.primaryKey !== null && this.primaryKey !== undefined) {
+    output.writeFieldBegin('primaryKey', Thrift.Type.STRING, 1);
+    output.writeString(this.primaryKey);
+    output.writeFieldEnd();
+  }
+  if (this.refType !== null && this.refType !== undefined) {
+    output.writeFieldBegin('refType', Thrift.Type.STRING, 2);
+    output.writeString(this.refType);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+var IFaceLog_getImageBytesRef_result = function(args) {
+  this.success = null;
+  this.ex1 = null;
+  if (args instanceof ttypes.ServiceRuntimeException) {
+    this.ex1 = args;
+    return;
+  }
+  if (args) {
+    if (args.success !== undefined && args.success !== null) {
+      this.success = args.success;
+    }
+    if (args.ex1 !== undefined && args.ex1 !== null) {
+      this.ex1 = args.ex1;
+    }
+  }
+};
+IFaceLog_getImageBytesRef_result.prototype = {};
+IFaceLog_getImageBytesRef_result.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+      if (ftype == Thrift.Type.STRING) {
+        this.success = input.readBinary();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 1:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.ex1 = new ttypes.ServiceRuntimeException();
+        this.ex1.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+IFaceLog_getImageBytesRef_result.prototype.write = function(output) {
+  output.writeStructBegin('IFaceLog_getImageBytesRef_result');
+  if (this.success !== null && this.success !== undefined) {
+    output.writeFieldBegin('success', Thrift.Type.STRING, 0);
+    output.writeBinary(this.success);
+    output.writeFieldEnd();
+  }
+  if (this.ex1 !== null && this.ex1 !== undefined) {
+    output.writeFieldBegin('ex1', Thrift.Type.STRUCT, 1);
+    this.ex1.write(output);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
 var IFaceLog_getImagesAssociatedByFeature_args = function(args) {
   this.featureMd5 = null;
   if (args) {
@@ -28996,6 +29133,59 @@ IFaceLogClient.prototype.recv_getImageBytes = function(input,mtype,rseqid) {
   }
   return callback('getImageBytes failed: unknown result');
 };
+IFaceLogClient.prototype.getImageBytesRef = function(primaryKey, refType, callback) {
+  this._seqid = this.new_seqid();
+  if (callback === undefined) {
+    var _defer = Q.defer();
+    this._reqs[this.seqid()] = function(error, result) {
+      if (error) {
+        _defer.reject(error);
+      } else {
+        _defer.resolve(result);
+      }
+    };
+    this.send_getImageBytesRef(primaryKey, refType);
+    return _defer.promise;
+  } else {
+    this._reqs[this.seqid()] = callback;
+    this.send_getImageBytesRef(primaryKey, refType);
+  }
+};
+
+IFaceLogClient.prototype.send_getImageBytesRef = function(primaryKey, refType) {
+  var output = new this.pClass(this.output);
+  output.writeMessageBegin('getImageBytesRef', Thrift.MessageType.CALL, this.seqid());
+  var params = {
+    primaryKey: primaryKey,
+    refType: refType
+  };
+  var args = new IFaceLog_getImageBytesRef_args(params);
+  args.write(output);
+  output.writeMessageEnd();
+  return this.output.flush();
+};
+
+IFaceLogClient.prototype.recv_getImageBytesRef = function(input,mtype,rseqid) {
+  var callback = this._reqs[rseqid] || function() {};
+  delete this._reqs[rseqid];
+  if (mtype == Thrift.MessageType.EXCEPTION) {
+    var x = new Thrift.TApplicationException();
+    x.read(input);
+    input.readMessageEnd();
+    return callback(x);
+  }
+  var result = new IFaceLog_getImageBytesRef_result();
+  result.read(input);
+  input.readMessageEnd();
+
+  if (null !== result.ex1) {
+    return callback(result.ex1);
+  }
+  if (null !== result.success) {
+    return callback(null, result.success);
+  }
+  return callback('getImageBytesRef failed: unknown result');
+};
 IFaceLogClient.prototype.getImagesAssociatedByFeature = function(featureMd5, callback) {
   this._seqid = this.new_seqid();
   if (callback === undefined) {
@@ -36856,6 +37046,47 @@ IFaceLogProcessor.prototype.process_getImageBytes = function(seqid, input, outpu
       } else {
         result_obj = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
         output.writeMessageBegin("getImageBytes", Thrift.MessageType.EXCEPTION, seqid);
+      }
+      result_obj.write(output);
+      output.writeMessageEnd();
+      output.flush();
+    });
+  }
+};
+IFaceLogProcessor.prototype.process_getImageBytesRef = function(seqid, input, output) {
+  var args = new IFaceLog_getImageBytesRef_args();
+  args.read(input);
+  input.readMessageEnd();
+  if (this._handler.getImageBytesRef.length === 2) {
+    Q.fcall(this._handler.getImageBytesRef.bind(this._handler), args.primaryKey, args.refType)
+      .then(function(result) {
+        var result_obj = new IFaceLog_getImageBytesRef_result({success: result});
+        output.writeMessageBegin("getImageBytesRef", Thrift.MessageType.REPLY, seqid);
+        result_obj.write(output);
+        output.writeMessageEnd();
+        output.flush();
+      }, function (err) {
+        var result;
+        if (err instanceof ttypes.ServiceRuntimeException) {
+          result = new IFaceLog_getImageBytesRef_result(err);
+          output.writeMessageBegin("getImageBytesRef", Thrift.MessageType.REPLY, seqid);
+        } else {
+          result = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
+          output.writeMessageBegin("getImageBytesRef", Thrift.MessageType.EXCEPTION, seqid);
+        }
+        result.write(output);
+        output.writeMessageEnd();
+        output.flush();
+      });
+  } else {
+    this._handler.getImageBytesRef(args.primaryKey, args.refType, function (err, result) {
+      var result_obj;
+      if ((err === null || typeof err === 'undefined') || err instanceof ttypes.ServiceRuntimeException) {
+        result_obj = new IFaceLog_getImageBytesRef_result((err !== null || typeof err === 'undefined') ? err : {success: result});
+        output.writeMessageBegin("getImageBytesRef", Thrift.MessageType.REPLY, seqid);
+      } else {
+        result_obj = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN, err.message);
+        output.writeMessageBegin("getImageBytesRef", Thrift.MessageType.EXCEPTION, seqid);
       }
       result_obj.write(output);
       output.writeMessageEnd();
