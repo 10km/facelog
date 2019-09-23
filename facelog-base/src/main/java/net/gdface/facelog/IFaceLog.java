@@ -667,7 +667,12 @@ public interface IFaceLog{
 	public byte[] getImageBytes(String imageMD5);
 
 	/**
-	 * 根据提供的主键ID,返回图像数据
+	 * 根据提供的主键ID,返回图像数据<br>
+	 * example:<br>
+	 * 获取指定日志表的现场采集照片<br>
+	 * <pre>getImageBytes(log_id,"LOG")</pre>
+	 * 获取人员标准照<br>
+	 * <pre>getImageBytes(person_id,"PERSON")</pre>
 	 * @param primaryKey 数据库表的主键值,根据 refType的类型不同，primaryKey代表不同表的主键(类型为整数的主键需要转为十进制字符串)
 	 * @param refType 指定 primaryKey 的引用类型,如下
 	 * 					<ul>
