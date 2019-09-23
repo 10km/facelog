@@ -65,6 +65,18 @@ public interface CommonConstant {
     
     /** 用户注册任务队列名 */
     public static final String TASK_REGISTER_BASE = "REGISTER_";
+    
+    /**
+     * 定义图像数据引用来源
+     */
+    public static enum RefSrcType{
+    	/** 返回 fl_image表指定的图像数据 */ 	DEFAULT,
+    	/** 返回 fl_image表指定的图像数据 */ 	IMAGE,
+    	/** 返回 fl_person表中的image_md5字段指定的图像数据 */	PERSON,
+    	/** 返回 fl_face表中的image_md5字段指定的图像数据 */	FACE,
+    	/** 返回 fl_log表中的compare_face字段间接指定的图像数据 */	LOG,
+    	/** 返回 fl_log_light视图对应fl_log表记录中的compare_face字段的图像数据 */ LIGHT_LOG,
+    }
     /**
      * 服务异常类型定义
      */

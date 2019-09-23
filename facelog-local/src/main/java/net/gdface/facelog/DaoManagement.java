@@ -3,6 +3,7 @@ package net.gdface.facelog;
 import static com.google.common.base.Preconditions.*;
 import static net.gdface.facelog.FeatureConfig.*;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -951,5 +952,55 @@ public class DaoManagement extends BaseDao implements ServiceConstant,Constant{
 			}
 		}
 		return stat;
+	}
+	/**
+	 * 根据图像的MD5校验码返回图像数据
+	 * @param imageMD5
+	 * @return 二进制数据字节数组,如果数据库中没有对应的数据则返回null
+	 */
+	protected byte[] daoGetImageBytes(String imageMD5) throws IOException{
+		StoreBean storeBean = daoGetStore(imageMD5);
+		return null ==storeBean?null:FaceUtilits.getBytes(storeBean.getData());
+	}
+	/**
+	 * 根据提供的主键ID,返回图像数据
+	 * @param primaryKey 主键
+	 * @param refType 主键引用类型
+	 * @return
+	 * @throws IOException
+	 */
+	protected byte[] daoGetImageBytes(String primaryKey,RefSrcType refType) throws IOException{
+		checkArgument(refType!=null,"refType is null");
+		if(null == primaryKey){
+			return null;
+		}
+		
+		switch (MoreObjects.firstNonNull(refType,RefSrcType.DEFAULT)) {
+		case PERSON:
+		{
+			PersonBean bean = daoGetPerson(Integer.valueOf(primaryKey));
+			return null == bean ? null : daoGetImageBytes(bean.getImageMd5());
+		}
+		case FACE:
+		{
+			FaceBean bean = daoGetFace(Integer.valueOf(primaryKey));
+			return null == bean ? null : daoGetImageBytes(bean.getImageMd5());
+		}
+		case LOG:
+		{
+			LogBean bean = daoGetLog(Integer.valueOf(primaryKey));
+			return null == bean ? null : daoGetImageBytes(bean.getCompareFace() == null ? null : bean.getCompareFace().toString(),RefSrcType.FACE);
+		}
+		case LIGHT_LOG:
+		{
+			return daoGetImageBytes(primaryKey,RefSrcType.LOG);
+		}
+		case IMAGE:
+		case DEFAULT:
+			return daoGetImageBytes(primaryKey);
+		default:
+			return null;
+		}
+		
 	}
 }

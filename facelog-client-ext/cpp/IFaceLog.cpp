@@ -1162,6 +1162,22 @@ IFaceLog_getImageBytes_presult::~IFaceLog_getImageBytes_presult() throw() {
 }
 
 
+IFaceLog_getImageBytesRef_args::~IFaceLog_getImageBytesRef_args() throw() {
+}
+
+
+IFaceLog_getImageBytesRef_pargs::~IFaceLog_getImageBytesRef_pargs() throw() {
+}
+
+
+IFaceLog_getImageBytesRef_result::~IFaceLog_getImageBytesRef_result() throw() {
+}
+
+
+IFaceLog_getImageBytesRef_presult::~IFaceLog_getImageBytesRef_presult() throw() {
+}
+
+
 IFaceLog_getImagesAssociatedByFeature_args::~IFaceLog_getImagesAssociatedByFeature_args() throw() {
 }
 

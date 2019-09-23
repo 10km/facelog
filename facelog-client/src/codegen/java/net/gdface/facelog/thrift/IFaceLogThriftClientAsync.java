@@ -1547,6 +1547,21 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(getImageBytes(imageMD5), callback);
     }
     /**
+     * see also {@link net.gdface.facelog.IFaceLog#getImageBytes(java.lang.String,java.lang.String)}
+     */
+    public ListenableFuture<byte[]> getImageBytes(String primaryKey,
+        String refType){        
+        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
+        ListenableFuture<byte[]> future = async.getImageBytesRef(primaryKey,
+            refType);
+        return factory.wrap(async,future);
+    }
+    public void getImageBytes(String primaryKey,
+        String refType,
+        FutureCallback<byte[]>callback){
+        factory.addCallback(getImageBytes(primaryKey,refType), callback);
+    }
+    /**
      * see also {@link net.gdface.facelog.IFaceLog#getImagesAssociatedByFeature(java.lang.String)}
      */
     public ListenableFuture<List<String>> getImagesAssociatedByFeature(String featureMd5){        

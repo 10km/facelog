@@ -357,6 +357,11 @@ public class FacelogDefaultImpl implements IFaceLog {
 	public byte[] getImageBytes(String imageMD5) {
 		return null;
 	}
+	
+	@Override
+	public byte[] getImageBytes(String primaryKey, String refType) {
+		return null;
+	}
 
 	@Override
 	public ImageBean getImage(String imageMD5) {

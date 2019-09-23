@@ -609,6 +609,11 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
+    public byte[] getImageBytes (String primaryKey,String refType) {
+        return delegate().getImageBytes(primaryKey,refType);
+    }
+
+    @Override
     public List<String> getImagesAssociatedByFeature (String featureMd5) {
         return delegate().getImagesAssociatedByFeature(featureMd5);
     }

@@ -442,6 +442,12 @@ i_face_log_if_get_image_bytes (IFaceLogIf *iface, GByteArray ** _return, const g
 }
 
 gboolean
+i_face_log_if_get_image_bytes_ref (IFaceLogIf *iface, GByteArray ** _return, const gchar * primaryKey, const gchar * refType, ServiceRuntimeException ** ex1, GError **error)
+{
+  return I_FACE_LOG_IF_GET_INTERFACE (iface)->get_image_bytes_ref (iface, _return, primaryKey, refType, ex1, error);
+}
+
+gboolean
 i_face_log_if_get_images_associated_by_feature (IFaceLogIf *iface, GPtrArray ** _return, const gchar * featureMd5, ServiceRuntimeException ** ex1, GError **error)
 {
   return I_FACE_LOG_IF_GET_INTERFACE (iface)->get_images_associated_by_feature (iface, _return, featureMd5, ex1, error);
@@ -17355,6 +17361,228 @@ gboolean i_face_log_client_get_image_bytes (IFaceLogIf * iface, GByteArray ** _r
   if (!i_face_log_client_send_get_image_bytes (iface, imageMD5, error))
     return FALSE;
   if (!i_face_log_client_recv_get_image_bytes (iface, _return, ex1, error))
+    return FALSE;
+  return TRUE;
+}
+
+gboolean i_face_log_client_send_get_image_bytes_ref (IFaceLogIf * iface, const gchar * primaryKey, const gchar * refType, GError ** error)
+{
+  gint32 cseqid = 0;
+  ThriftProtocol * protocol = I_FACE_LOG_CLIENT (iface)->output_protocol;
+
+  if (thrift_protocol_write_message_begin (protocol, "getImageBytesRef", T_CALL, cseqid, error) < 0)
+    return FALSE;
+
+  {
+    gint32 ret;
+    gint32 xfer = 0;
+
+    
+    if ((ret = thrift_protocol_write_struct_begin (protocol, "getImageBytesRef_args", error)) < 0)
+      return 0;
+    xfer += ret;
+    if ((ret = thrift_protocol_write_field_begin (protocol, "primaryKey", T_STRING, 1, error)) < 0)
+      return 0;
+    xfer += ret;
+    if ((ret = thrift_protocol_write_string (protocol, primaryKey, error)) < 0)
+      return 0;
+    xfer += ret;
+
+    if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
+      return 0;
+    xfer += ret;
+    if ((ret = thrift_protocol_write_field_begin (protocol, "refType", T_STRING, 2, error)) < 0)
+      return 0;
+    xfer += ret;
+    if ((ret = thrift_protocol_write_string (protocol, refType, error)) < 0)
+      return 0;
+    xfer += ret;
+
+    if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
+      return 0;
+    xfer += ret;
+    if ((ret = thrift_protocol_write_field_stop (protocol, error)) < 0)
+      return 0;
+    xfer += ret;
+    if ((ret = thrift_protocol_write_struct_end (protocol, error)) < 0)
+      return 0;
+    xfer += ret;
+
+  }
+
+  if (thrift_protocol_write_message_end (protocol, error) < 0)
+    return FALSE;
+  if (!thrift_transport_flush (protocol->transport, error))
+    return FALSE;
+  if (!thrift_transport_write_end (protocol->transport, error))
+    return FALSE;
+
+  return TRUE;
+}
+
+gboolean i_face_log_client_recv_get_image_bytes_ref (IFaceLogIf * iface, GByteArray ** _return, ServiceRuntimeException ** ex1, GError ** error)
+{
+  gint32 rseqid;
+  gchar * fname = NULL;
+  ThriftMessageType mtype;
+  ThriftProtocol * protocol = I_FACE_LOG_CLIENT (iface)->input_protocol;
+  ThriftApplicationException *xception;
+
+  if (thrift_protocol_read_message_begin (protocol, &fname, &mtype, &rseqid, error) < 0) {
+    if (fname) g_free (fname);
+    return FALSE;
+  }
+
+  if (mtype == T_EXCEPTION) {
+    if (fname) g_free (fname);
+    xception = g_object_new (THRIFT_TYPE_APPLICATION_EXCEPTION, NULL);
+    thrift_struct_read (THRIFT_STRUCT (xception), protocol, NULL);
+    thrift_protocol_read_message_end (protocol, NULL);
+    thrift_transport_read_end (protocol->transport, NULL);
+    g_set_error (error, THRIFT_APPLICATION_EXCEPTION_ERROR,xception->type, "application error: %s", xception->message);
+    g_object_unref (xception);
+    return FALSE;
+  } else if (mtype != T_REPLY) {
+    if (fname) g_free (fname);
+    thrift_protocol_skip (protocol, T_STRUCT, NULL);
+    thrift_protocol_read_message_end (protocol, NULL);
+    thrift_transport_read_end (protocol->transport, NULL);
+    g_set_error (error, THRIFT_APPLICATION_EXCEPTION_ERROR, THRIFT_APPLICATION_EXCEPTION_ERROR_INVALID_MESSAGE_TYPE, "invalid message type %d, expected T_REPLY", mtype);
+    return FALSE;
+  } else if (strncmp (fname, "getImageBytesRef", 16) != 0) {
+    thrift_protocol_skip (protocol, T_STRUCT, NULL);
+    thrift_protocol_read_message_end (protocol,error);
+    thrift_transport_read_end (protocol->transport, error);
+    g_set_error (error, THRIFT_APPLICATION_EXCEPTION_ERROR, THRIFT_APPLICATION_EXCEPTION_ERROR_WRONG_METHOD_NAME, "wrong method name %s, expected getImageBytesRef", fname);
+    if (fname) g_free (fname);
+    return FALSE;
+  }
+  if (fname) g_free (fname);
+
+  {
+    gint32 ret;
+    gint32 xfer = 0;
+    gchar *name = NULL;
+    ThriftType ftype;
+    gint16 fid;
+    guint32 len = 0;
+    gpointer data = NULL;
+    
+
+    /* satisfy -Wall in case these aren't used */
+    THRIFT_UNUSED_VAR (len);
+    THRIFT_UNUSED_VAR (data);
+
+    /* read the struct begin marker */
+    if ((ret = thrift_protocol_read_struct_begin (protocol, &name, error)) < 0)
+    {
+      if (name) g_free (name);
+      return 0;
+    }
+    xfer += ret;
+    if (name) g_free (name);
+    name = NULL;
+
+    /* read the struct fields */
+    while (1)
+    {
+      /* read the beginning of a field */
+      if ((ret = thrift_protocol_read_field_begin (protocol, &name, &ftype, &fid, error)) < 0)
+      {
+        if (name) g_free (name);
+        return 0;
+      }
+      xfer += ret;
+      if (name) g_free (name);
+      name = NULL;
+
+      /* break if we get a STOP field */
+      if (ftype == T_STOP)
+      {
+        break;
+      }
+
+      switch (fid)
+      {
+        case 0:
+          if (ftype == T_STRING)
+          {
+            if (*_return != NULL)
+            {
+              g_free(*_return);
+              *_return = NULL;
+            }
+
+            if ((ret = thrift_protocol_read_binary (protocol, &data, &len, error)) < 0)
+              return 0;
+            xfer += ret;
+            *_return = g_byte_array_new();
+            g_byte_array_append (*_return, (guint8 *) data, (guint) len);
+            g_free (data);
+          } else {
+            if ((ret = thrift_protocol_skip (protocol, ftype, error)) < 0)
+              return 0;
+            xfer += ret;
+          }
+          break;
+        case 1:
+          if (ftype == T_STRUCT)
+          {
+            /* This struct is an exception */
+            if ( *ex1 != NULL)
+            {
+              g_object_unref (*ex1);
+            }
+            *ex1 = g_object_new (TYPE_SERVICE_RUNTIME_EXCEPTION, NULL);
+            if ((ret = thrift_struct_read (THRIFT_STRUCT (*ex1), protocol, error)) < 0)
+            {
+              g_object_unref (*ex1);
+              *ex1 = NULL;
+              return 0;
+            }
+            xfer += ret;
+          } else {
+            if ((ret = thrift_protocol_skip (protocol, ftype, error)) < 0)
+              return 0;
+            xfer += ret;
+          }
+          break;
+        default:
+          if ((ret = thrift_protocol_skip (protocol, ftype, error)) < 0)
+            return 0;
+          xfer += ret;
+          break;
+      }
+      if ((ret = thrift_protocol_read_field_end (protocol, error)) < 0)
+        return 0;
+      xfer += ret;
+    }
+
+    if ((ret = thrift_protocol_read_struct_end (protocol, error)) < 0)
+      return 0;
+    xfer += ret;
+
+  }
+
+  if (thrift_protocol_read_message_end (protocol, error) < 0)
+    return FALSE;
+
+  if (!thrift_transport_read_end (protocol->transport, error))
+    return FALSE;
+
+  if (*ex1 != NULL)
+  {
+      g_set_error (error, SERVICE_RUNTIME_EXCEPTION_ERROR, SERVICE_RUNTIME_EXCEPTION_ERROR_CODE, "ServiceRuntimeException");
+      return FALSE;
+  }
+  return TRUE;
+}
+
+gboolean i_face_log_client_get_image_bytes_ref (IFaceLogIf * iface, GByteArray ** _return, const gchar * primaryKey, const gchar * refType, ServiceRuntimeException ** ex1, GError ** error)
+{
+  if (!i_face_log_client_send_get_image_bytes_ref (iface, primaryKey, refType, error))
+    return FALSE;
+  if (!i_face_log_client_recv_get_image_bytes_ref (iface, _return, ex1, error))
     return FALSE;
   return TRUE;
 }
@@ -38442,6 +38670,7 @@ i_face_log_if_interface_init (IFaceLogIfInterface *iface)
   iface->get_group_permits = i_face_log_client_get_group_permits;
   iface->get_image = i_face_log_client_get_image;
   iface->get_image_bytes = i_face_log_client_get_image_bytes;
+  iface->get_image_bytes_ref = i_face_log_client_get_image_bytes_ref;
   iface->get_images_associated_by_feature = i_face_log_client_get_images_associated_by_feature;
   iface->get_log_beans_by_person_id = i_face_log_client_get_log_beans_by_person_id;
   iface->get_person = i_face_log_client_get_person;
@@ -39081,6 +39310,13 @@ gboolean i_face_log_handler_get_image_bytes (IFaceLogIf * iface, GByteArray ** _
   g_return_val_if_fail (IS_I_FACE_LOG_HANDLER (iface), FALSE);
 
   return I_FACE_LOG_HANDLER_GET_CLASS (iface)->get_image_bytes (iface, _return, imageMD5, ex1, error);
+}
+
+gboolean i_face_log_handler_get_image_bytes_ref (IFaceLogIf * iface, GByteArray ** _return, const gchar * primaryKey, const gchar * refType, ServiceRuntimeException ** ex1, GError ** error)
+{
+  g_return_val_if_fail (IS_I_FACE_LOG_HANDLER (iface), FALSE);
+
+  return I_FACE_LOG_HANDLER_GET_CLASS (iface)->get_image_bytes_ref (iface, _return, primaryKey, refType, ex1, error);
 }
 
 gboolean i_face_log_handler_get_images_associated_by_feature (IFaceLogIf * iface, GPtrArray ** _return, const gchar * featureMd5, ServiceRuntimeException ** ex1, GError ** error)
@@ -39809,6 +40045,7 @@ i_face_log_handler_i_face_log_if_interface_init (IFaceLogIfInterface *iface)
   iface->get_group_permits = i_face_log_handler_get_group_permits;
   iface->get_image = i_face_log_handler_get_image;
   iface->get_image_bytes = i_face_log_handler_get_image_bytes;
+  iface->get_image_bytes_ref = i_face_log_handler_get_image_bytes_ref;
   iface->get_images_associated_by_feature = i_face_log_handler_get_images_associated_by_feature;
   iface->get_log_beans_by_person_id = i_face_log_handler_get_log_beans_by_person_id;
   iface->get_person = i_face_log_handler_get_person;
@@ -39985,6 +40222,7 @@ i_face_log_handler_class_init (IFaceLogHandlerClass *cls)
   cls->get_group_permits = NULL;
   cls->get_image = NULL;
   cls->get_image_bytes = NULL;
+  cls->get_image_bytes_ref = NULL;
   cls->get_images_associated_by_feature = NULL;
   cls->get_log_beans_by_person_id = NULL;
   cls->get_person = NULL;
@@ -40534,6 +40772,12 @@ i_face_log_processor_process_get_image_bytes (IFaceLogProcessor *,
                                               ThriftProtocol *,
                                               ThriftProtocol *,
                                               GError **);
+static gboolean
+i_face_log_processor_process_get_image_bytes_ref (IFaceLogProcessor *,
+                                                  gint32,
+                                                  ThriftProtocol *,
+                                                  ThriftProtocol *,
+                                                  GError **);
 static gboolean
 i_face_log_processor_process_get_images_associated_by_feature (IFaceLogProcessor *,
                                                                gint32,
@@ -41094,7 +41338,7 @@ i_face_log_processor_process_version_info (IFaceLogProcessor *,
                                            GError **);
 
 static i_face_log_processor_process_function_def
-i_face_log_processor_process_function_defs[165] = {
+i_face_log_processor_process_function_defs[166] = {
   {
     "addFeature",
     i_face_log_processor_process_add_feature
@@ -41382,6 +41626,10 @@ i_face_log_processor_process_function_defs[165] = {
   {
     "getImageBytes",
     i_face_log_processor_process_get_image_bytes
+  },
+  {
+    "getImageBytesRef",
+    i_face_log_processor_process_get_image_bytes_ref
   },
   {
     "getImagesAssociatedByFeature",
@@ -50667,6 +50915,130 @@ i_face_log_processor_process_get_image_bytes (IFaceLogProcessor *self,
 
     if (imageMD5 != NULL)
       g_free (imageMD5);
+    g_object_unref (result_struct);
+
+    if (result == TRUE)
+      result =
+        ((thrift_protocol_write_message_end (output_protocol, error) != -1) &&
+         (thrift_transport_write_end (transport, error) != FALSE) &&
+         (thrift_transport_flush (transport, error) != FALSE));
+  }
+  else
+    result = FALSE;
+
+  g_object_unref (transport);
+  g_object_unref (args);
+
+  return result;
+}
+
+static gboolean
+i_face_log_processor_process_get_image_bytes_ref (IFaceLogProcessor *self,
+                                                  gint32 sequence_id,
+                                                  ThriftProtocol *input_protocol,
+                                                  ThriftProtocol *output_protocol,
+                                                  GError **error)
+{
+  gboolean result = TRUE;
+  ThriftTransport * transport;
+  ThriftApplicationException *xception;
+  IFaceLogGetImageBytesRefArgs * args =
+    g_object_new (TYPE_I_FACE_LOG_GET_IMAGE_BYTES_REF_ARGS, NULL);
+
+  g_object_get (input_protocol, "transport", &transport, NULL);
+
+  if ((thrift_struct_read (THRIFT_STRUCT (args), input_protocol, error) != -1) &&
+      (thrift_protocol_read_message_end (input_protocol, error) != -1) &&
+      (thrift_transport_read_end (transport, error) != FALSE))
+  {
+    gchar * primaryKey;
+    gchar * refType;
+    ServiceRuntimeException * ex1 = NULL;
+    GByteArray * return_value;
+    IFaceLogGetImageBytesRefResult * result_struct;
+
+    g_object_get (args,
+                  "primaryKey", &primaryKey,
+                  "refType", &refType,
+                  NULL);
+
+    g_object_unref (transport);
+    g_object_get (output_protocol, "transport", &transport, NULL);
+
+    result_struct = g_object_new (TYPE_I_FACE_LOG_GET_IMAGE_BYTES_REF_RESULT, NULL);
+    g_object_get (result_struct, "success", &return_value, NULL);
+
+    if (i_face_log_handler_get_image_bytes_ref (I_FACE_LOG_IF (self->handler),
+                                                &return_value,
+                                                primaryKey,
+                                                refType,
+                                                &ex1,
+                                                error) == TRUE)
+    {
+      g_object_set (result_struct, "success", return_value, NULL);
+      if (return_value != NULL)
+        g_byte_array_unref (return_value);
+
+      result =
+        ((thrift_protocol_write_message_begin (output_protocol,
+                                               "getImageBytesRef",
+                                               T_REPLY,
+                                               sequence_id,
+                                               error) != -1) &&
+         (thrift_struct_write (THRIFT_STRUCT (result_struct),
+                               output_protocol,
+                               error) != -1));
+    }
+    else
+    {
+      if (ex1 != NULL)
+      {
+        g_object_set (result_struct,
+                      "ex1", ex1,
+                      NULL);
+
+        result =
+          ((thrift_protocol_write_message_begin (output_protocol,
+                                                 "getImageBytesRef",
+                                                 T_REPLY,
+                                                 sequence_id,
+                                                 error) != -1) &&
+           (thrift_struct_write (THRIFT_STRUCT (result_struct),
+                                 output_protocol,
+                                 error) != -1));
+      }
+      else
+      {
+        if (*error == NULL)
+          g_warning ("IFaceLog.getImageBytesRef implementation returned FALSE "
+                     "but did not set an error");
+
+        xception =
+          g_object_new (THRIFT_TYPE_APPLICATION_EXCEPTION,
+                        "type",    *error != NULL ? (*error)->code :
+                                   THRIFT_APPLICATION_EXCEPTION_ERROR_UNKNOWN,
+                        "message", *error != NULL ? (*error)->message : NULL,
+                        NULL);
+        g_clear_error (error);
+
+        result =
+          ((thrift_protocol_write_message_begin (output_protocol,
+                                                 "getImageBytesRef",
+                                                 T_EXCEPTION,
+                                                 sequence_id,
+                                                 error) != -1) &&
+           (thrift_struct_write (THRIFT_STRUCT (xception),
+                                 output_protocol,
+                                 error) != -1));
+
+        g_object_unref (xception);
+      }
+    }
+
+    if (primaryKey != NULL)
+      g_free (primaryKey);
+    if (refType != NULL)
+      g_free (refType);
     g_object_unref (result_struct);
 
     if (result == TRUE)
@@ -62196,7 +62568,7 @@ i_face_log_processor_init (IFaceLogProcessor *self)
   self->handler = NULL;
   self->process_map = g_hash_table_new (g_str_hash, g_str_equal);
 
-  for (index = 0; index < 165; index += 1)
+  for (index = 0; index < 166; index += 1)
     g_hash_table_insert (self->process_map,
                          i_face_log_processor_process_function_defs[index].name,
                          &i_face_log_processor_process_function_defs[index]);

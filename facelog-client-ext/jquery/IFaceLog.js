@@ -11040,6 +11040,143 @@ IFaceLog_getImageBytes_result.prototype.write = function(output) {
   return;
 };
 
+IFaceLog_getImageBytesRef_args = function(args) {
+  this.primaryKey = null;
+  this.refType = null;
+  if (args) {
+    if (args.primaryKey !== undefined && args.primaryKey !== null) {
+      this.primaryKey = args.primaryKey;
+    }
+    if (args.refType !== undefined && args.refType !== null) {
+      this.refType = args.refType;
+    }
+  }
+};
+IFaceLog_getImageBytesRef_args.prototype = {};
+IFaceLog_getImageBytesRef_args.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+      if (ftype == Thrift.Type.STRING) {
+        this.primaryKey = input.readString().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 2:
+      if (ftype == Thrift.Type.STRING) {
+        this.refType = input.readString().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+IFaceLog_getImageBytesRef_args.prototype.write = function(output) {
+  output.writeStructBegin('IFaceLog_getImageBytesRef_args');
+  if (this.primaryKey !== null && this.primaryKey !== undefined) {
+    output.writeFieldBegin('primaryKey', Thrift.Type.STRING, 1);
+    output.writeString(this.primaryKey);
+    output.writeFieldEnd();
+  }
+  if (this.refType !== null && this.refType !== undefined) {
+    output.writeFieldBegin('refType', Thrift.Type.STRING, 2);
+    output.writeString(this.refType);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+IFaceLog_getImageBytesRef_result = function(args) {
+  this.success = null;
+  this.ex1 = null;
+  if (args instanceof ServiceRuntimeException) {
+    this.ex1 = args;
+    return;
+  }
+  if (args) {
+    if (args.success !== undefined && args.success !== null) {
+      this.success = args.success;
+    }
+    if (args.ex1 !== undefined && args.ex1 !== null) {
+      this.ex1 = args.ex1;
+    }
+  }
+};
+IFaceLog_getImageBytesRef_result.prototype = {};
+IFaceLog_getImageBytesRef_result.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+      if (ftype == Thrift.Type.STRING) {
+        this.success = input.readBinary().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 1:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.ex1 = new ServiceRuntimeException();
+        this.ex1.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+IFaceLog_getImageBytesRef_result.prototype.write = function(output) {
+  output.writeStructBegin('IFaceLog_getImageBytesRef_result');
+  if (this.success !== null && this.success !== undefined) {
+    output.writeFieldBegin('success', Thrift.Type.STRING, 0);
+    output.writeBinary(this.success);
+    output.writeFieldEnd();
+  }
+  if (this.ex1 !== null && this.ex1 !== undefined) {
+    output.writeFieldBegin('ex1', Thrift.Type.STRUCT, 1);
+    this.ex1.write(output);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
 IFaceLog_getImagesAssociatedByFeature_args = function(args) {
   this.featureMd5 = null;
   if (args) {
@@ -28517,6 +28654,52 @@ IFaceLogClient.prototype.recv_getImageBytes = function() {
     return result.success;
   }
   throw 'getImageBytes failed: unknown result';
+};
+IFaceLogClient.prototype.getImageBytesRef = function(primaryKey, refType, callback) {
+  if (callback === undefined) {
+    this.send_getImageBytesRef(primaryKey, refType);
+    return this.recv_getImageBytesRef();
+  } else {
+    var postData = this.send_getImageBytesRef(primaryKey, refType, true);
+    return this.output.getTransport()
+      .jqRequest(this, postData, arguments, this.recv_getImageBytesRef);
+  }
+};
+
+IFaceLogClient.prototype.send_getImageBytesRef = function(primaryKey, refType, callback) {
+  this.output.writeMessageBegin('getImageBytesRef', Thrift.MessageType.CALL, this.seqid);
+  var params = {
+    primaryKey: primaryKey,
+    refType: refType
+  };
+  var args = new IFaceLog_getImageBytesRef_args(params);
+  args.write(this.output);
+  this.output.writeMessageEnd();
+  return this.output.getTransport().flush(callback);
+};
+
+IFaceLogClient.prototype.recv_getImageBytesRef = function() {
+  var ret = this.input.readMessageBegin();
+  var fname = ret.fname;
+  var mtype = ret.mtype;
+  var rseqid = ret.rseqid;
+  if (mtype == Thrift.MessageType.EXCEPTION) {
+    var x = new Thrift.TApplicationException();
+    x.read(this.input);
+    this.input.readMessageEnd();
+    throw x;
+  }
+  var result = new IFaceLog_getImageBytesRef_result();
+  result.read(this.input);
+  this.input.readMessageEnd();
+
+  if (null !== result.ex1) {
+    throw result.ex1;
+  }
+  if (null !== result.success) {
+    return result.success;
+  }
+  throw 'getImageBytesRef failed: unknown result';
 };
 IFaceLogClient.prototype.getImagesAssociatedByFeature = function(featureMd5, callback) {
   if (callback === undefined) {

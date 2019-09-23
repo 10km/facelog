@@ -55541,6 +55541,613 @@ i_face_log_get_image_bytes_result_get_type (void)
   return type;
 }
 
+enum _IFaceLogGetImageBytesRefArgsProperties
+{
+  PROP_I_FACE_LOG_GET_IMAGE_BYTES_REF_ARGS_0,
+  PROP_I_FACE_LOG_GET_IMAGE_BYTES_REF_ARGS_PRIMARY_KEY,
+  PROP_I_FACE_LOG_GET_IMAGE_BYTES_REF_ARGS_REF_TYPE
+};
+
+/* reads a i_face_log_get_image_bytes_ref_args object */
+static gint32
+i_face_log_get_image_bytes_ref_args_read (ThriftStruct *object, ThriftProtocol *protocol, GError **error)
+{
+  gint32 ret;
+  gint32 xfer = 0;
+  gchar *name = NULL;
+  ThriftType ftype;
+  gint16 fid;
+  guint32 len = 0;
+  gpointer data = NULL;
+  IFaceLogGetImageBytesRefArgs * this_object = I_FACE_LOG_GET_IMAGE_BYTES_REF_ARGS(object);
+
+  /* satisfy -Wall in case these aren't used */
+  THRIFT_UNUSED_VAR (len);
+  THRIFT_UNUSED_VAR (data);
+  THRIFT_UNUSED_VAR (this_object);
+
+  /* read the struct begin marker */
+  if ((ret = thrift_protocol_read_struct_begin (protocol, &name, error)) < 0)
+  {
+    if (name) g_free (name);
+    return -1;
+  }
+  xfer += ret;
+  if (name) g_free (name);
+  name = NULL;
+
+  /* read the struct fields */
+  while (1)
+  {
+    /* read the beginning of a field */
+    if ((ret = thrift_protocol_read_field_begin (protocol, &name, &ftype, &fid, error)) < 0)
+    {
+      if (name) g_free (name);
+      return -1;
+    }
+    xfer += ret;
+    if (name) g_free (name);
+    name = NULL;
+
+    /* break if we get a STOP field */
+    if (ftype == T_STOP)
+    {
+      break;
+    }
+
+    switch (fid)
+    {
+      case 1:
+        if (ftype == T_STRING)
+        {
+          if (this_object->primaryKey != NULL)
+          {
+            g_free(this_object->primaryKey);
+            this_object->primaryKey = NULL;
+          }
+
+          if ((ret = thrift_protocol_read_string (protocol, &this_object->primaryKey, error)) < 0)
+            return -1;
+          xfer += ret;
+          this_object->__isset_primaryKey = TRUE;
+        } else {
+          if ((ret = thrift_protocol_skip (protocol, ftype, error)) < 0)
+            return -1;
+          xfer += ret;
+        }
+        break;
+      case 2:
+        if (ftype == T_STRING)
+        {
+          if (this_object->refType != NULL)
+          {
+            g_free(this_object->refType);
+            this_object->refType = NULL;
+          }
+
+          if ((ret = thrift_protocol_read_string (protocol, &this_object->refType, error)) < 0)
+            return -1;
+          xfer += ret;
+          this_object->__isset_refType = TRUE;
+        } else {
+          if ((ret = thrift_protocol_skip (protocol, ftype, error)) < 0)
+            return -1;
+          xfer += ret;
+        }
+        break;
+      default:
+        if ((ret = thrift_protocol_skip (protocol, ftype, error)) < 0)
+          return -1;
+        xfer += ret;
+        break;
+    }
+    if ((ret = thrift_protocol_read_field_end (protocol, error)) < 0)
+      return -1;
+    xfer += ret;
+  }
+
+  if ((ret = thrift_protocol_read_struct_end (protocol, error)) < 0)
+    return -1;
+  xfer += ret;
+
+  return xfer;
+}
+
+static gint32
+i_face_log_get_image_bytes_ref_args_write (ThriftStruct *object, ThriftProtocol *protocol, GError **error)
+{
+  gint32 ret;
+  gint32 xfer = 0;
+
+  IFaceLogGetImageBytesRefArgs * this_object = I_FACE_LOG_GET_IMAGE_BYTES_REF_ARGS(object);
+  THRIFT_UNUSED_VAR (this_object);
+  if ((ret = thrift_protocol_write_struct_begin (protocol, "IFaceLogGetImageBytesRefArgs", error)) < 0)
+    return -1;
+  xfer += ret;
+  if ((ret = thrift_protocol_write_field_begin (protocol, "primaryKey", T_STRING, 1, error)) < 0)
+    return -1;
+  xfer += ret;
+  if ((ret = thrift_protocol_write_string (protocol, this_object->primaryKey, error)) < 0)
+    return -1;
+  xfer += ret;
+
+  if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
+    return -1;
+  xfer += ret;
+  if ((ret = thrift_protocol_write_field_begin (protocol, "refType", T_STRING, 2, error)) < 0)
+    return -1;
+  xfer += ret;
+  if ((ret = thrift_protocol_write_string (protocol, this_object->refType, error)) < 0)
+    return -1;
+  xfer += ret;
+
+  if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
+    return -1;
+  xfer += ret;
+  if ((ret = thrift_protocol_write_field_stop (protocol, error)) < 0)
+    return -1;
+  xfer += ret;
+  if ((ret = thrift_protocol_write_struct_end (protocol, error)) < 0)
+    return -1;
+  xfer += ret;
+
+  return xfer;
+}
+
+static void
+i_face_log_get_image_bytes_ref_args_set_property (GObject *object,
+                                                  guint property_id,
+                                                  const GValue *value,
+                                                  GParamSpec *pspec)
+{
+  IFaceLogGetImageBytesRefArgs *self = I_FACE_LOG_GET_IMAGE_BYTES_REF_ARGS (object);
+
+  switch (property_id)
+  {
+    case PROP_I_FACE_LOG_GET_IMAGE_BYTES_REF_ARGS_PRIMARY_KEY:
+      if (self->primaryKey != NULL)
+        g_free (self->primaryKey);
+      self->primaryKey = g_value_dup_string (value);
+      self->__isset_primaryKey = TRUE;
+      break;
+
+    case PROP_I_FACE_LOG_GET_IMAGE_BYTES_REF_ARGS_REF_TYPE:
+      if (self->refType != NULL)
+        g_free (self->refType);
+      self->refType = g_value_dup_string (value);
+      self->__isset_refType = TRUE;
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+      break;
+  }
+}
+
+static void
+i_face_log_get_image_bytes_ref_args_get_property (GObject *object,
+                                                  guint property_id,
+                                                  GValue *value,
+                                                  GParamSpec *pspec)
+{
+  IFaceLogGetImageBytesRefArgs *self = I_FACE_LOG_GET_IMAGE_BYTES_REF_ARGS (object);
+
+  switch (property_id)
+  {
+    case PROP_I_FACE_LOG_GET_IMAGE_BYTES_REF_ARGS_PRIMARY_KEY:
+      g_value_set_string (value, self->primaryKey);
+      break;
+
+    case PROP_I_FACE_LOG_GET_IMAGE_BYTES_REF_ARGS_REF_TYPE:
+      g_value_set_string (value, self->refType);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+      break;
+  }
+}
+
+static void 
+i_face_log_get_image_bytes_ref_args_instance_init (IFaceLogGetImageBytesRefArgs * object)
+{
+  /* satisfy -Wall */
+  THRIFT_UNUSED_VAR (object);
+  object->primaryKey = NULL;
+  object->__isset_primaryKey = FALSE;
+  object->refType = NULL;
+  object->__isset_refType = FALSE;
+}
+
+static void 
+i_face_log_get_image_bytes_ref_args_finalize (GObject *object)
+{
+  IFaceLogGetImageBytesRefArgs *tobject = I_FACE_LOG_GET_IMAGE_BYTES_REF_ARGS (object);
+
+  /* satisfy -Wall in case we don't use tobject */
+  THRIFT_UNUSED_VAR (tobject);
+  if (tobject->primaryKey != NULL)
+  {
+    g_free(tobject->primaryKey);
+    tobject->primaryKey = NULL;
+  }
+  if (tobject->refType != NULL)
+  {
+    g_free(tobject->refType);
+    tobject->refType = NULL;
+  }
+}
+
+static void
+i_face_log_get_image_bytes_ref_args_class_init (IFaceLogGetImageBytesRefArgsClass * cls)
+{
+  GObjectClass *gobject_class = G_OBJECT_CLASS (cls);
+  ThriftStructClass *struct_class = THRIFT_STRUCT_CLASS (cls);
+
+  struct_class->read = i_face_log_get_image_bytes_ref_args_read;
+  struct_class->write = i_face_log_get_image_bytes_ref_args_write;
+
+  gobject_class->finalize = i_face_log_get_image_bytes_ref_args_finalize;
+  gobject_class->get_property = i_face_log_get_image_bytes_ref_args_get_property;
+  gobject_class->set_property = i_face_log_get_image_bytes_ref_args_set_property;
+
+  g_object_class_install_property
+    (gobject_class,
+     PROP_I_FACE_LOG_GET_IMAGE_BYTES_REF_ARGS_PRIMARY_KEY,
+     g_param_spec_string ("primaryKey",
+                          NULL,
+                          NULL,
+                          NULL,
+                          G_PARAM_READWRITE));
+
+  g_object_class_install_property
+    (gobject_class,
+     PROP_I_FACE_LOG_GET_IMAGE_BYTES_REF_ARGS_REF_TYPE,
+     g_param_spec_string ("refType",
+                          NULL,
+                          NULL,
+                          NULL,
+                          G_PARAM_READWRITE));
+}
+
+GType
+i_face_log_get_image_bytes_ref_args_get_type (void)
+{
+  static GType type = 0;
+
+  if (type == 0) 
+  {
+    static const GTypeInfo type_info = 
+    {
+      sizeof (IFaceLogGetImageBytesRefArgsClass),
+      NULL, /* base_init */
+      NULL, /* base_finalize */
+      (GClassInitFunc) i_face_log_get_image_bytes_ref_args_class_init,
+      NULL, /* class_finalize */
+      NULL, /* class_data */
+      sizeof (IFaceLogGetImageBytesRefArgs),
+      0, /* n_preallocs */
+      (GInstanceInitFunc) i_face_log_get_image_bytes_ref_args_instance_init,
+      NULL, /* value_table */
+    };
+
+    type = g_type_register_static (THRIFT_TYPE_STRUCT, 
+                                   "IFaceLogGetImageBytesRefArgsType",
+                                   &type_info, 0);
+  }
+
+  return type;
+}
+
+enum _IFaceLogGetImageBytesRefResultProperties
+{
+  PROP_I_FACE_LOG_GET_IMAGE_BYTES_REF_RESULT_0,
+  PROP_I_FACE_LOG_GET_IMAGE_BYTES_REF_RESULT_SUCCESS,
+  PROP_I_FACE_LOG_GET_IMAGE_BYTES_REF_RESULT_EX1
+};
+
+/* reads a i_face_log_get_image_bytes_ref_result object */
+static gint32
+i_face_log_get_image_bytes_ref_result_read (ThriftStruct *object, ThriftProtocol *protocol, GError **error)
+{
+  gint32 ret;
+  gint32 xfer = 0;
+  gchar *name = NULL;
+  ThriftType ftype;
+  gint16 fid;
+  guint32 len = 0;
+  gpointer data = NULL;
+  IFaceLogGetImageBytesRefResult * this_object = I_FACE_LOG_GET_IMAGE_BYTES_REF_RESULT(object);
+
+  /* satisfy -Wall in case these aren't used */
+  THRIFT_UNUSED_VAR (len);
+  THRIFT_UNUSED_VAR (data);
+  THRIFT_UNUSED_VAR (this_object);
+
+  /* read the struct begin marker */
+  if ((ret = thrift_protocol_read_struct_begin (protocol, &name, error)) < 0)
+  {
+    if (name) g_free (name);
+    return -1;
+  }
+  xfer += ret;
+  if (name) g_free (name);
+  name = NULL;
+
+  /* read the struct fields */
+  while (1)
+  {
+    /* read the beginning of a field */
+    if ((ret = thrift_protocol_read_field_begin (protocol, &name, &ftype, &fid, error)) < 0)
+    {
+      if (name) g_free (name);
+      return -1;
+    }
+    xfer += ret;
+    if (name) g_free (name);
+    name = NULL;
+
+    /* break if we get a STOP field */
+    if (ftype == T_STOP)
+    {
+      break;
+    }
+
+    switch (fid)
+    {
+      case 0:
+        if (ftype == T_STRING)
+        {
+          if (this_object->success != NULL)
+          {
+            g_free(this_object->success);
+            this_object->success = NULL;
+          }
+
+          if ((ret = thrift_protocol_read_binary (protocol, &data, &len, error)) < 0)
+            return -1;
+          xfer += ret;
+          this_object->success = g_byte_array_new();
+          g_byte_array_append (this_object->success, (guint8 *) data, (guint) len);
+          g_free (data);
+          this_object->__isset_success = TRUE;
+        } else {
+          if ((ret = thrift_protocol_skip (protocol, ftype, error)) < 0)
+            return -1;
+          xfer += ret;
+        }
+        break;
+      case 1:
+        if (ftype == T_STRUCT)
+        {
+          /* This struct is an exception */
+          if ( this_object->ex1 != NULL)
+          {
+            g_object_unref (this_object->ex1);
+          }
+          this_object->ex1 = g_object_new (TYPE_SERVICE_RUNTIME_EXCEPTION, NULL);
+          if ((ret = thrift_struct_read (THRIFT_STRUCT (this_object->ex1), protocol, error)) < 0)
+          {
+            g_object_unref (this_object->ex1);
+            this_object->ex1 = NULL;
+            return -1;
+          }
+          xfer += ret;
+          this_object->__isset_ex1 = TRUE;
+        } else {
+          if ((ret = thrift_protocol_skip (protocol, ftype, error)) < 0)
+            return -1;
+          xfer += ret;
+        }
+        break;
+      default:
+        if ((ret = thrift_protocol_skip (protocol, ftype, error)) < 0)
+          return -1;
+        xfer += ret;
+        break;
+    }
+    if ((ret = thrift_protocol_read_field_end (protocol, error)) < 0)
+      return -1;
+    xfer += ret;
+  }
+
+  if ((ret = thrift_protocol_read_struct_end (protocol, error)) < 0)
+    return -1;
+  xfer += ret;
+
+  return xfer;
+}
+
+static gint32
+i_face_log_get_image_bytes_ref_result_write (ThriftStruct *object, ThriftProtocol *protocol, GError **error)
+{
+  gint32 ret;
+  gint32 xfer = 0;
+
+  IFaceLogGetImageBytesRefResult * this_object = I_FACE_LOG_GET_IMAGE_BYTES_REF_RESULT(object);
+  THRIFT_UNUSED_VAR (this_object);
+  if ((ret = thrift_protocol_write_struct_begin (protocol, "IFaceLogGetImageBytesRefResult", error)) < 0)
+    return -1;
+  xfer += ret;
+  if (this_object->__isset_success == TRUE) {
+    if ((ret = thrift_protocol_write_field_begin (protocol, "success", T_STRING, 0, error)) < 0)
+      return -1;
+    xfer += ret;
+    if ((ret = thrift_protocol_write_binary (protocol, this_object->success ? ((GByteArray *) this_object->success)->data : NULL, this_object->success ? ((GByteArray *) this_object->success)->len : 0, error)) < 0)
+      return -1;
+    xfer += ret;
+
+    if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
+      return -1;
+    xfer += ret;
+  }
+  if (this_object->__isset_ex1 == TRUE) {
+    if ((ret = thrift_protocol_write_field_begin (protocol, "ex1", T_STRUCT, 1, error)) < 0)
+      return -1;
+    xfer += ret;
+    if ((ret = thrift_struct_write (THRIFT_STRUCT (this_object->ex1), protocol, error)) < 0)
+      return -1;
+    xfer += ret;
+
+    if ((ret = thrift_protocol_write_field_end (protocol, error)) < 0)
+      return -1;
+    xfer += ret;
+  }
+  if ((ret = thrift_protocol_write_field_stop (protocol, error)) < 0)
+    return -1;
+  xfer += ret;
+  if ((ret = thrift_protocol_write_struct_end (protocol, error)) < 0)
+    return -1;
+  xfer += ret;
+
+  return xfer;
+}
+
+static void
+i_face_log_get_image_bytes_ref_result_set_property (GObject *object,
+                                                    guint property_id,
+                                                    const GValue *value,
+                                                    GParamSpec *pspec)
+{
+  IFaceLogGetImageBytesRefResult *self = I_FACE_LOG_GET_IMAGE_BYTES_REF_RESULT (object);
+
+  switch (property_id)
+  {
+    case PROP_I_FACE_LOG_GET_IMAGE_BYTES_REF_RESULT_SUCCESS:
+      if (self->success != NULL)
+        g_byte_array_unref (self->success);
+      self->success = g_value_dup_boxed (value);
+      self->__isset_success = TRUE;
+      break;
+
+    case PROP_I_FACE_LOG_GET_IMAGE_BYTES_REF_RESULT_EX1:
+      if (self->ex1 != NULL)
+        g_object_unref (self->ex1);
+      self->ex1 = g_value_dup_object (value);
+      self->__isset_ex1 = TRUE;
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+      break;
+  }
+}
+
+static void
+i_face_log_get_image_bytes_ref_result_get_property (GObject *object,
+                                                    guint property_id,
+                                                    GValue *value,
+                                                    GParamSpec *pspec)
+{
+  IFaceLogGetImageBytesRefResult *self = I_FACE_LOG_GET_IMAGE_BYTES_REF_RESULT (object);
+
+  switch (property_id)
+  {
+    case PROP_I_FACE_LOG_GET_IMAGE_BYTES_REF_RESULT_SUCCESS:
+      g_value_set_boxed (value, self->success);
+      break;
+
+    case PROP_I_FACE_LOG_GET_IMAGE_BYTES_REF_RESULT_EX1:
+      g_value_set_object (value, self->ex1);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+      break;
+  }
+}
+
+static void 
+i_face_log_get_image_bytes_ref_result_instance_init (IFaceLogGetImageBytesRefResult * object)
+{
+  /* satisfy -Wall */
+  THRIFT_UNUSED_VAR (object);
+  object->success = NULL;
+  object->__isset_success = FALSE;
+  object->ex1 = NULL;
+  object->__isset_ex1 = FALSE;
+}
+
+static void 
+i_face_log_get_image_bytes_ref_result_finalize (GObject *object)
+{
+  IFaceLogGetImageBytesRefResult *tobject = I_FACE_LOG_GET_IMAGE_BYTES_REF_RESULT (object);
+
+  /* satisfy -Wall in case we don't use tobject */
+  THRIFT_UNUSED_VAR (tobject);
+  if (tobject->success != NULL)
+  {
+    thrift_string_free(tobject->success);
+    tobject->success = NULL;
+  }
+  if (tobject->ex1 != NULL)
+  {
+    g_object_unref(tobject->ex1);
+    tobject->ex1 = NULL;
+  }
+}
+
+static void
+i_face_log_get_image_bytes_ref_result_class_init (IFaceLogGetImageBytesRefResultClass * cls)
+{
+  GObjectClass *gobject_class = G_OBJECT_CLASS (cls);
+  ThriftStructClass *struct_class = THRIFT_STRUCT_CLASS (cls);
+
+  struct_class->read = i_face_log_get_image_bytes_ref_result_read;
+  struct_class->write = i_face_log_get_image_bytes_ref_result_write;
+
+  gobject_class->finalize = i_face_log_get_image_bytes_ref_result_finalize;
+  gobject_class->get_property = i_face_log_get_image_bytes_ref_result_get_property;
+  gobject_class->set_property = i_face_log_get_image_bytes_ref_result_set_property;
+
+  g_object_class_install_property
+    (gobject_class,
+     PROP_I_FACE_LOG_GET_IMAGE_BYTES_REF_RESULT_SUCCESS,
+     g_param_spec_boxed ("success",
+                         NULL,
+                         NULL,
+                         G_TYPE_BYTE_ARRAY,
+                         G_PARAM_READWRITE));
+
+  g_object_class_install_property
+    (gobject_class,
+     PROP_I_FACE_LOG_GET_IMAGE_BYTES_REF_RESULT_EX1,
+     g_param_spec_object ("ex1",
+                         NULL,
+                         NULL,
+                         TYPE_SERVICE_RUNTIME_EXCEPTION,
+                         G_PARAM_READWRITE));
+}
+
+GType
+i_face_log_get_image_bytes_ref_result_get_type (void)
+{
+  static GType type = 0;
+
+  if (type == 0) 
+  {
+    static const GTypeInfo type_info = 
+    {
+      sizeof (IFaceLogGetImageBytesRefResultClass),
+      NULL, /* base_init */
+      NULL, /* base_finalize */
+      (GClassInitFunc) i_face_log_get_image_bytes_ref_result_class_init,
+      NULL, /* class_finalize */
+      NULL, /* class_data */
+      sizeof (IFaceLogGetImageBytesRefResult),
+      0, /* n_preallocs */
+      (GInstanceInitFunc) i_face_log_get_image_bytes_ref_result_instance_init,
+      NULL, /* value_table */
+    };
+
+    type = g_type_register_static (THRIFT_TYPE_STRUCT, 
+                                   "IFaceLogGetImageBytesRefResultType",
+                                   &type_info, 0);
+  }
+
+  return type;
+}
+
 enum _IFaceLogGetImagesAssociatedByFeatureArgsProperties
 {
   PROP_I_FACE_LOG_GET_IMAGES_ASSOCIATED_BY_FEATURE_ARGS_0,
