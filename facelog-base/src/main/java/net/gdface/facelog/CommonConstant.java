@@ -110,7 +110,7 @@ public interface CommonConstant {
         }
         /** 
          * 根据用户等级值返回{@link PersonRank}对象,
-         * @return  {@code rank}为{@code null}时返回{@link ${esc.hash}person},{@code rank}为无效值时返回{@code null}
+         * @return  {@code rank}为{@code null}时返回{@link #person},{@code rank}为无效值时返回{@code null}
          */
         public static final PersonRank fromRank(Integer rank){
             if(null == rank){
@@ -124,7 +124,7 @@ public interface CommonConstant {
             return null;
         }
         /**
-         * 参见{@link ${esc.hash}fromRank(Integer)}
+         * 参见{@link #fromRank(Integer)}
          * @param rank
          * @return 
          * @throws NullPointerException 当{@code rank}为无效值时

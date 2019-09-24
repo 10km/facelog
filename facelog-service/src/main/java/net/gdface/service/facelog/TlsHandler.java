@@ -77,7 +77,7 @@ public class TlsHandler extends ThriftEventHandler {
 	 * {@link Set#add(Object)}代理方法<br>
 	 * 将{@code tls}交给{@link TlsHandler}管理,当前对象会在RPC调用结束时释放TLS变量
 	 * @param tls 为{@code null}时无效
-	 * @return 
+	 * @return 成功返回{@code true},否则返回{@code false}
 	 */
 	public boolean registerTls(ThreadLocal<?> tls){		
 		return null == tls ? false : this.tlsVariables.add(tls);
@@ -86,7 +86,7 @@ public class TlsHandler extends ThriftEventHandler {
 	 * {@link Set#remove(Object)}代理方法<br>
 	 * 解除当前对象对{@code tls}的管理
 	 * @param tls 为{@code null}时无效
-	 * @return
+	 * @return 成功返回{@code true},否则返回{@code false}
 	 */
 	public boolean unregisterTls(ThreadLocal<?> tls){
 		return null == tls ? false : this.tlsVariables.remove(tls);

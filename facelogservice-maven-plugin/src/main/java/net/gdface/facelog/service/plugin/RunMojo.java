@@ -11,7 +11,7 @@ import net.gdface.service.facelog.FacelogServiceMain;
 
 /**
  * maven 插件<br>
- * 执行facelog服务启动,等同于执行{@link Main#main(String[])}
+ * 执行facelog服务启动,等同于执行{@link net.gdface.service.facelog.FacelogServiceMain#main(String[])}
  * 
  * @author guyadong
  *

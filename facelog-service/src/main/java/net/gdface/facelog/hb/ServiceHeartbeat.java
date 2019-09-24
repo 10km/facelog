@@ -126,7 +126,7 @@ public class ServiceHeartbeat implements ChannelConstant{
 	 * @param port (FRAMED)服务端口
 	 * @param xhrPort (XHR)服务端口
 	 * @param pool
-	 * @return
+	 * @return 当前对象
 	 * @throws IllegalStateException 实例已经创建
 	 */
 	public static synchronized final ServiceHeartbeat makeHeartbeat(
@@ -144,7 +144,7 @@ public class ServiceHeartbeat implements ChannelConstant{
 	 * @param serviceID 设备ID
 	 * @param port (FRAMED)服务端口
 	 * @param xhrPort (XHR)服务端口
-	 * @return
+	 * @return 当前对象
 	 * @throws IllegalStateException 实例已经创建
 	 */
 	public static synchronized final ServiceHeartbeat makeHeartbeat(
@@ -157,7 +157,7 @@ public class ServiceHeartbeat implements ChannelConstant{
 	}
 	/**
 	 * 返回已经创建的{@link ServiceHeartbeat}实例,如果实例还没有创建则抛出异常
-	 * @return
+	 * @return 当前对象
 	 * @throws IllegalStateException 实例还没有创建
 	 */
 	public static final ServiceHeartbeat getInstance(){
@@ -184,7 +184,7 @@ public class ServiceHeartbeat implements ChannelConstant{
 	 * 设置后须调用{@link #start()}才能生效
 	 * @param period 心跳周期(大于0有效)
 	 * @param unit
-	 * @return
+	 * @return 当前对象
 	 */
 	public ServiceHeartbeat setInterval(long period,TimeUnit unit){
 		if(period > 0 ){

@@ -168,7 +168,6 @@ public interface IFaceLog{
 	 * @param personIdList 人员id列表
 	 * @param expiryDate 失效日期 
 	 * @param token 访问令牌
-	 * @
 	 */
 	@DeriveMethod(methodSuffix="List")
 	public void setPersonExpiryDate(List<Integer> personIdList, long expiryDate, Token token);
@@ -670,9 +669,9 @@ public interface IFaceLog{
 	 * 根据提供的主键ID,返回图像数据<br>
 	 * example:<br>
 	 * 获取指定日志表的现场采集照片<br>
-	 * <pre>getImageBytes(log_id,"LOG")</pre>
+	 * <pre>getImageBytes(log_id,'LOG')</pre>
 	 * 获取人员标准照<br>
-	 * <pre>getImageBytes(person_id,"PERSON")</pre>
+	 * <pre>getImageBytes(person_id,'PERSON')</pre>
 	 * @param primaryKey 数据库表的主键值,根据 refType的类型不同，primaryKey代表不同表的主键(类型为整数的主键需要转为十进制字符串)
 	 * @param refType 指定 primaryKey 的引用类型,如下
 	 * 					<ul>
@@ -982,7 +981,6 @@ public interface IFaceLog{
      * 查询{@code where}条件指定的记录
      * @param where 'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录
      * @return 返回查询结果记录的主键
-     * @see 设备组ID列表
      */
     public List<Integer> loadDeviceGroupIdByWhere(String where);
     
@@ -992,7 +990,7 @@ public interface IFaceLog{
 	 * 设置fl_person_group.root_group和fl_device_group.root_group字段互相指向<br>
 	 * 没有找到personGroupId或deviceGroupId指定的记录抛出异常,
 	 * 以事务操作方式更新数据库<br>
-	 * <br>{@link TokenMangement.Enable#ROOT}<br>
+	 * <br>{@code ROOT_ONLY}<br>
 	 * @param personGroupId 人员组id
      * @param deviceGroupId 设备组id
      * @param token 访问令牌
@@ -1004,7 +1002,7 @@ public interface IFaceLog{
 	 * 以事务操作方式更新数据库<br>
 	 * 如果personGroupId和deviceGroupId不存在绑定关系则跳过,
 	 * 没有找到personGroupId或deviceGroupId指定的记录抛出异常<br>
-	 * <br>{@link TokenMangement.Enable#ROOT}<br>
+	 * <br>{@code ROOT_ONLY}<br>
 	 * @param personGroupId 人员组id
 	 * @param deviceGroupId 设备组id
 	 * @param token 访问令牌
@@ -1080,7 +1078,7 @@ public interface IFaceLog{
 	 * 获取人员组通行权限<br>
 	 * 返回{@code personGroupId}指定的人员组在{@code deviceGroupId}指定的设备组上是否允许通行,
 	 * 本方法会对{@code personGroupId}的父结点向上回溯：
-	 * {@codepersonGroupId } 及其父结点,任何一个在permit表存在与{@code deviceId}所属设备级的关联记录中就返回true，
+	 * {@code personGroupId } 及其父结点,任何一个在permit表存在与{@code deviceId}所属设备级的关联记录中就返回true，
 	 * 输入参数为{@code null}或找不到指定的记录则返回false
 	 * @param deviceGroupId
 	 * @param personGroupId
@@ -1091,7 +1089,7 @@ public interface IFaceLog{
 	 * 获取人员组通行权限<br>
 	 * 返回{@code personGroupId}指定的人员组在{@code deviceId}设备上是否允许通行,
 	 * 本方法会对{@code personGroupId}的父结点向上回溯：
-	 * {@codepersonGroupId } 及其父结点,任何一个在permit表存在与{@code deviceId}所属设备级的关联记录中就返回true，
+	 * {@code personGroupId } 及其父结点,任何一个在permit表存在与{@code deviceId}所属设备级的关联记录中就返回true，
 	 * 输入参数为{@code null}或找不到指定的记录则返回false
 	 * @param deviceId
 	 * @param personGroupId

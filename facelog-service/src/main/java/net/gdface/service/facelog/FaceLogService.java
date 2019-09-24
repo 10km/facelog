@@ -30,7 +30,7 @@ public class FaceLogService extends ThriftServerService implements CommonConstan
 	private static final IFaceLogThriftDecorator FACELOG_THRIFT_DECORATOR = new IFaceLogThriftDecorator(FACELOG_INSTANCE);
 	/**
 	 * 从配置文件中读取参数创建{@link ThriftServerConfig}实例
-	 * @return
+	 * @return 返回创建的{@link ThriftServerConfig}实例
 	 */
 	public static ThriftServerConfig makeThriftServerConfig(){
 		ThriftServerConfig thriftServerConfig = new ThriftServerConfig();
@@ -51,14 +51,14 @@ public class FaceLogService extends ThriftServerService implements CommonConstan
 	}
 	/**
 	 * 创建服务实例(frame,binary)
-	 * @return
+	 * @return 返回创建的服务实例
 	 */
 	public static synchronized final FaceLogService buildService(){
 		return service = buildService(service,makeThriftServerConfig());
 	}
 	/**
 	 * 创建HTTP服务实例(http,json)
-	 * @return
+	 * @return 返回创建的http服务实例
 	 */
 	public static synchronized final FaceLogService buildHttpService(){
 		return httpService = buildService(httpService,
