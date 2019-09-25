@@ -1767,6 +1767,30 @@ public class IFaceLogThriftDecorator {
         }
     }
     /**
+     * @see net.gdface.facelog.IFaceLog#getPerson(int,net.gdface.facelog.Token)
+     */
+    @ThriftMethod(value = "getPersonReal" )
+    public PersonBean getPersonReal(int personId,
+        Token token) 
+        throws ServiceRuntimeException{
+        try{
+            return TypeTransformer.getInstance().to(
+                    delegate().getPerson(personId,
+                TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.Token.class)),
+                    PersonBean.class,
+                    PersonBean.class);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
      * @see net.gdface.facelog.IFaceLog#getPersonByMobilePhone(java.lang.String)
      */
     @ThriftMethod(value = "getPersonByMobilePhone" )
@@ -1786,6 +1810,30 @@ public class IFaceLogThriftDecorator {
         }
     }
     /**
+     * @see net.gdface.facelog.IFaceLog#getPersonByMobilePhone(java.lang.String,net.gdface.facelog.Token)
+     */
+    @ThriftMethod(value = "getPersonByMobilePhoneReal" )
+    public PersonBean getPersonByMobilePhoneReal(String mobilePhone,
+        Token token) 
+        throws ServiceRuntimeException{
+        try{
+            return TypeTransformer.getInstance().to(
+                    delegate().getPersonByMobilePhone(mobilePhone,
+                TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.Token.class)),
+                    PersonBean.class,
+                    PersonBean.class);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
      * @see net.gdface.facelog.IFaceLog#getPersonByPapersNum(java.lang.String)
      */
     @ThriftMethod(value = "getPersonByPapersNum" )
@@ -1794,6 +1842,30 @@ public class IFaceLogThriftDecorator {
         try{
             return TypeTransformer.getInstance().to(
                     delegate().getPersonByPapersNum(papersNum),
+                    PersonBean.class,
+                    PersonBean.class);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
+     * @see net.gdface.facelog.IFaceLog#getPersonByPapersNum(java.lang.String,net.gdface.facelog.Token)
+     */
+    @ThriftMethod(value = "getPersonByPapersNumReal" )
+    public PersonBean getPersonByPapersNumReal(String papersNum,
+        Token token) 
+        throws ServiceRuntimeException{
+        try{
+            return TypeTransformer.getInstance().to(
+                    delegate().getPersonByPapersNum(papersNum,
+                TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.Token.class)),
                     PersonBean.class,
                     PersonBean.class);
         }
@@ -1940,6 +2012,33 @@ public class IFaceLogThriftDecorator {
                     idList,
                     Integer.class,
                     Integer.class)),
+                    PersonBean.class,
+                    PersonBean.class);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
+     * @see net.gdface.facelog.IFaceLog#getPersons(java.util.List,net.gdface.facelog.Token)
+     */
+    @ThriftMethod(value = "getPersonsReal" )
+    public List<PersonBean> getPersonsReal(List<Integer> idList,
+        Token token) 
+        throws ServiceRuntimeException{
+        try{
+            return TypeTransformer.getInstance().to(
+                    delegate().getPersons(TypeTransformer.getInstance().to(
+                    idList,
+                    Integer.class,
+                    Integer.class),
+                TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.Token.class)),
                     PersonBean.class,
                     PersonBean.class);
         }
@@ -2677,6 +2776,34 @@ public class IFaceLogThriftDecorator {
                     delegate().loadPersonByWhere(where,
                 startRow,
                 numRows),
+                    PersonBean.class,
+                    PersonBean.class);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
+     * @see net.gdface.facelog.IFaceLog#loadPersonByWhere(java.lang.String,int,int,net.gdface.facelog.Token)
+     */
+    @ThriftMethod(value = "loadPersonByWhereReal" )
+    public List<PersonBean> loadPersonByWhereReal(String where,
+        int startRow,
+        int numRows,
+        Token token) 
+        throws ServiceRuntimeException{
+        try{
+            return TypeTransformer.getInstance().to(
+                    delegate().loadPersonByWhere(where,
+                startRow,
+                numRows,
+                TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.Token.class)),
                     PersonBean.class,
                     PersonBean.class);
         }

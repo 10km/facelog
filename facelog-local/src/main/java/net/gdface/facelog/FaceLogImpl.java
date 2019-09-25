@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.concurrent.Callable;
 
 import static com.google.common.base.Preconditions.*;
+import static net.gdface.facelog.DaoManagement.*;
 
 import com.google.common.base.Functions;
 import com.google.common.base.MoreObjects;
@@ -182,7 +183,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 	@Override
 	public PersonBean getPerson(int personId) {
 		try{
-			return dm.daoGetPerson(personId);
+			return desensitize(dm.daoGetPerson(personId));
 		} catch (RuntimeException e) {
 			throw wrapServiceRuntimeException(e);
 		}
@@ -190,7 +191,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 	@Override
 	public List<PersonBean> getPersons(List<Integer> idList) {
 		try{
-			return dm.daoGetPersons(idList);
+			return desensitize(dm.daoGetPersons(idList));
 		} catch (RuntimeException e) {
 			throw wrapServiceRuntimeException(e);
 		}
@@ -198,7 +199,7 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 	@Override
 	public PersonBean getPersonByPapersNum(String papersNum)  {
 		try{
-			return dm.daoGetPersonByIndexPapersNum(papersNum);
+			return desensitize(dm.daoGetPersonByIndexPapersNum(papersNum));
 		} catch (RuntimeException e) {
 			throw wrapServiceRuntimeException(e);
 		}
@@ -206,8 +207,45 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 	@Override
 	public PersonBean getPersonByMobilePhone(String mobilePhone)  {
 		try{
-			return dm.daoGetPersonByIndexMobilePhone(mobilePhone);
+			return desensitize(dm.daoGetPersonByIndexMobilePhone(mobilePhone));
 		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
+	}
+	
+	@Override
+	public PersonBean getPerson(int personId,Token token) {
+		try{
+			Enable.ALL.check(tm, token);
+			return dm.daoGetPerson(personId);
+		} catch (Exception e) {
+			throw wrapServiceRuntimeException(e);
+		}
+	}
+	@Override
+	public List<PersonBean> getPersons(List<Integer> idList,Token token) {
+		try{
+			Enable.ALL.check(tm, token);
+			return dm.daoGetPersons(idList);
+		} catch (Exception e) {
+			throw wrapServiceRuntimeException(e);
+		}
+	}
+	@Override
+	public PersonBean getPersonByPapersNum(String papersNum,Token token)  {
+		try{
+			Enable.ALL.check(tm, token);
+			return dm.daoGetPersonByIndexPapersNum(papersNum);
+		} catch (Exception e) {
+			throw wrapServiceRuntimeException(e);
+		}
+	}
+	@Override
+	public PersonBean getPersonByMobilePhone(String mobilePhone,Token token)  {
+		try{
+			Enable.ALL.check(tm, token);
+			return dm.daoGetPersonByIndexMobilePhone(mobilePhone);
+		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
 		}
 	}
@@ -377,6 +415,15 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 		try{
 			return dm.daoLoadPersonByWhere(where, startRow, numRows);
 		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
+	}
+	@Override
+	public List<PersonBean> loadPersonByWhere(String where, int startRow, int numRows,Token token)  {
+		try{
+			Enable.ALL.check(tm, token);
+			return desensitize(dm.daoLoadPersonByWhere(where, startRow, numRows));
+		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
 		}
 	}

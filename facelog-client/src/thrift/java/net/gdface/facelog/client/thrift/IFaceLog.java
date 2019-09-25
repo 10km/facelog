@@ -714,12 +714,30 @@ public interface IFaceLog
             @ThriftField(value=1, name="mobilePhone", requiredness=Requiredness.OPTIONAL) final String mobilePhone
         );
 
+        @ThriftMethod(value = "getPersonByMobilePhoneReal",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1)
+                      })
+        ListenableFuture<PersonBean> getPersonByMobilePhoneReal(
+            @ThriftField(value=1, name="mobilePhone", requiredness=Requiredness.OPTIONAL) final String mobilePhone,
+            @ThriftField(value=2, name="token", requiredness=Requiredness.OPTIONAL) final Token token
+        );
+
         @ThriftMethod(value = "getPersonByPapersNum",
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
                       })
         ListenableFuture<PersonBean> getPersonByPapersNum(
             @ThriftField(value=1, name="papersNum", requiredness=Requiredness.OPTIONAL) final String papersNum
+        );
+
+        @ThriftMethod(value = "getPersonByPapersNumReal",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1)
+                      })
+        ListenableFuture<PersonBean> getPersonByPapersNumReal(
+            @ThriftField(value=1, name="papersNum", requiredness=Requiredness.OPTIONAL) final String papersNum,
+            @ThriftField(value=2, name="token", requiredness=Requiredness.OPTIONAL) final Token token
         );
 
         @ThriftMethod(value = "getPersonGroup",
@@ -772,6 +790,15 @@ public interface IFaceLog
             @ThriftField(value=2, name="personIdList", requiredness=Requiredness.OPTIONAL) final List<Integer> personIdList
         );
 
+        @ThriftMethod(value = "getPersonReal",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1)
+                      })
+        ListenableFuture<PersonBean> getPersonReal(
+            @ThriftField(value=1, name="personId", requiredness=Requiredness.REQUIRED) final int personId,
+            @ThriftField(value=2, name="token", requiredness=Requiredness.OPTIONAL) final Token token
+        );
+
         @ThriftMethod(value = "getPersons",
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
@@ -797,6 +824,15 @@ public interface IFaceLog
             @ThriftField(value=2, name="ignoreSchedule", requiredness=Requiredness.REQUIRED) final boolean ignoreSchedule,
             @ThriftField(value=3, name="excludePersonIds", requiredness=Requiredness.OPTIONAL) final List<Integer> excludePersonIds,
             @ThriftField(value=4, name="timestamp", requiredness=Requiredness.OPTIONAL) final Long timestamp
+        );
+
+        @ThriftMethod(value = "getPersonsReal",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1)
+                      })
+        ListenableFuture<List<PersonBean>> getPersonsReal(
+            @ThriftField(value=1, name="idList", requiredness=Requiredness.OPTIONAL) final List<Integer> idList,
+            @ThriftField(value=2, name="token", requiredness=Requiredness.OPTIONAL) final Token token
         );
 
         @ThriftMethod(value = "getProperties",
@@ -1087,6 +1123,17 @@ public interface IFaceLog
             @ThriftField(value=1, name="where", requiredness=Requiredness.OPTIONAL) final String where,
             @ThriftField(value=2, name="startRow", requiredness=Requiredness.REQUIRED) final int startRow,
             @ThriftField(value=3, name="numRows", requiredness=Requiredness.REQUIRED) final int numRows
+        );
+
+        @ThriftMethod(value = "loadPersonByWhereReal",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1)
+                      })
+        ListenableFuture<List<PersonBean>> loadPersonByWhereReal(
+            @ThriftField(value=1, name="where", requiredness=Requiredness.OPTIONAL) final String where,
+            @ThriftField(value=2, name="startRow", requiredness=Requiredness.REQUIRED) final int startRow,
+            @ThriftField(value=3, name="numRows", requiredness=Requiredness.REQUIRED) final int numRows,
+            @ThriftField(value=4, name="token", requiredness=Requiredness.OPTIONAL) final Token token
         );
 
         @ThriftMethod(value = "loadPersonGroupByWhere",
@@ -2219,12 +2266,30 @@ public interface IFaceLog
         @ThriftField(value=1, name="mobilePhone", requiredness=Requiredness.OPTIONAL) final String mobilePhone
     ) throws ServiceRuntimeException;
 
+    @ThriftMethod(value = "getPersonByMobilePhoneReal",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1)
+                  })
+    PersonBean getPersonByMobilePhoneReal(
+        @ThriftField(value=1, name="mobilePhone", requiredness=Requiredness.OPTIONAL) final String mobilePhone,
+        @ThriftField(value=2, name="token", requiredness=Requiredness.OPTIONAL) final Token token
+    ) throws ServiceRuntimeException;
+
     @ThriftMethod(value = "getPersonByPapersNum",
                   exception = {
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
                   })
     PersonBean getPersonByPapersNum(
         @ThriftField(value=1, name="papersNum", requiredness=Requiredness.OPTIONAL) final String papersNum
+    ) throws ServiceRuntimeException;
+
+    @ThriftMethod(value = "getPersonByPapersNumReal",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1)
+                  })
+    PersonBean getPersonByPapersNumReal(
+        @ThriftField(value=1, name="papersNum", requiredness=Requiredness.OPTIONAL) final String papersNum,
+        @ThriftField(value=2, name="token", requiredness=Requiredness.OPTIONAL) final Token token
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "getPersonGroup",
@@ -2277,6 +2342,15 @@ public interface IFaceLog
         @ThriftField(value=2, name="personIdList", requiredness=Requiredness.OPTIONAL) final List<Integer> personIdList
     ) throws ServiceRuntimeException;
 
+    @ThriftMethod(value = "getPersonReal",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1)
+                  })
+    PersonBean getPersonReal(
+        @ThriftField(value=1, name="personId", requiredness=Requiredness.REQUIRED) final int personId,
+        @ThriftField(value=2, name="token", requiredness=Requiredness.OPTIONAL) final Token token
+    ) throws ServiceRuntimeException;
+
     @ThriftMethod(value = "getPersons",
                   exception = {
                       @ThriftException(type=ServiceRuntimeException.class, id=1)
@@ -2302,6 +2376,15 @@ public interface IFaceLog
         @ThriftField(value=2, name="ignoreSchedule", requiredness=Requiredness.REQUIRED) final boolean ignoreSchedule,
         @ThriftField(value=3, name="excludePersonIds", requiredness=Requiredness.OPTIONAL) final List<Integer> excludePersonIds,
         @ThriftField(value=4, name="timestamp", requiredness=Requiredness.OPTIONAL) final Long timestamp
+    ) throws ServiceRuntimeException;
+
+    @ThriftMethod(value = "getPersonsReal",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1)
+                  })
+    List<PersonBean> getPersonsReal(
+        @ThriftField(value=1, name="idList", requiredness=Requiredness.OPTIONAL) final List<Integer> idList,
+        @ThriftField(value=2, name="token", requiredness=Requiredness.OPTIONAL) final Token token
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "getProperties",
@@ -2592,6 +2675,17 @@ public interface IFaceLog
         @ThriftField(value=1, name="where", requiredness=Requiredness.OPTIONAL) final String where,
         @ThriftField(value=2, name="startRow", requiredness=Requiredness.REQUIRED) final int startRow,
         @ThriftField(value=3, name="numRows", requiredness=Requiredness.REQUIRED) final int numRows
+    ) throws ServiceRuntimeException;
+
+    @ThriftMethod(value = "loadPersonByWhereReal",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1)
+                  })
+    List<PersonBean> loadPersonByWhereReal(
+        @ThriftField(value=1, name="where", requiredness=Requiredness.OPTIONAL) final String where,
+        @ThriftField(value=2, name="startRow", requiredness=Requiredness.REQUIRED) final int startRow,
+        @ThriftField(value=3, name="numRows", requiredness=Requiredness.REQUIRED) final int numRows,
+        @ThriftField(value=4, name="token", requiredness=Requiredness.OPTIONAL) final Token token
     ) throws ServiceRuntimeException;
 
     @ThriftMethod(value = "loadPersonGroupByWhere",

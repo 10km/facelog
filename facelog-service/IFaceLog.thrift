@@ -301,16 +301,20 @@ service IFaceLog {
   list<LogBean> getLogBeansByPersonId(1: required i32 personId) throws (1: ServiceRuntimeException ex1);
   PersonBean getPerson(1: required i32 personId) throws (1: ServiceRuntimeException ex1);
   PersonBean getPersonByMobilePhone(1: optional string mobilePhone) throws (1: ServiceRuntimeException ex1);
+  PersonBean getPersonByMobilePhoneReal(1: optional string mobilePhone, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
   PersonBean getPersonByPapersNum(1: optional string papersNum) throws (1: ServiceRuntimeException ex1);
+  PersonBean getPersonByPapersNumReal(1: optional string papersNum, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
   PersonGroupBean getPersonGroup(1: required i32 personGroupId) throws (1: ServiceRuntimeException ex1);
   list<PersonGroupBean> getPersonGroups(1: optional list<i32> groupIdList) throws (1: ServiceRuntimeException ex1);
   list<i32> getPersonGroupsBelongs(1: required i32 personId) throws (1: ServiceRuntimeException ex1);
   list<i32> getPersonGroupsPermittedBy(1: required i32 deviceGroupId) throws (1: ServiceRuntimeException ex1);
   PermitBean getPersonPermit(1: required i32 deviceId, 2: required i32 personId) throws (1: ServiceRuntimeException ex1);
   list<PermitBean> getPersonPermits(1: required i32 deviceId, 2: optional list<i32> personIdList) throws (1: ServiceRuntimeException ex1);
+  PersonBean getPersonReal(1: required i32 personId, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
   list<PersonBean> getPersons(1: optional list<i32> idList) throws (1: ServiceRuntimeException ex1);
   list<i32> getPersonsOfGroup(1: required i32 personGroupId) throws (1: ServiceRuntimeException ex1);
   list<i32> getPersonsPermittedOnDevice(1: required i32 deviceId, 2: required bool ignoreSchedule, 3: optional list<i32> excludePersonIds, 4: optional i64 timestamp) throws (1: ServiceRuntimeException ex1);
+  list<PersonBean> getPersonsReal(1: optional list<i32> idList, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
   map<string, string> getProperties(1: optional string prefix, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
   string getProperty(1: optional string key, 2: optional Token token) throws (1: ServiceRuntimeException ex1);
   map<MQParam, string> getRedisParameters(1: optional Token token) throws (1: ServiceRuntimeException ex1);
@@ -345,6 +349,7 @@ service IFaceLog {
   list<PermitBean> loadPermitByUpdate(1: required i64 timestamp) throws (1: ServiceRuntimeException ex1);
   list<PermitBean> loadPermitByUpdateTimestr(1: optional string timestamp) throws (1: ServiceRuntimeException ex1);
   list<PersonBean> loadPersonByWhere(1: optional string where, 2: required i32 startRow, 3: required i32 numRows) throws (1: ServiceRuntimeException ex1);
+  list<PersonBean> loadPersonByWhereReal(1: optional string where, 2: required i32 startRow, 3: required i32 numRows, 4: optional Token token) throws (1: ServiceRuntimeException ex1);
   list<i32> loadPersonGroupByWhere(1: optional string where, 2: required i32 startRow, 3: required i32 numRows) throws (1: ServiceRuntimeException ex1);
   list<i32> loadPersonGroupIdByWhere(1: optional string where) throws (1: ServiceRuntimeException ex1);
   list<i32> loadPersonIdByUpdateTime(1: required i64 timestamp) throws (1: ServiceRuntimeException ex1);

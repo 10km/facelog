@@ -4823,6 +4823,60 @@ GType i_face_log_get_person_by_mobile_phone_result_get_type (void);
 #define IS_I_FACE_LOG_GET_PERSON_BY_MOBILE_PHONE_RESULT_CLASS(c) (G_TYPE_CHECK_CLASS_TYPE ((c), TYPE_I_FACE_LOG_GET_PERSON_BY_MOBILE_PHONE_RESULT))
 #define I_FACE_LOG_GET_PERSON_BY_MOBILE_PHONE_RESULT_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_I_FACE_LOG_GET_PERSON_BY_MOBILE_PHONE_RESULT, IFaceLogGetPersonByMobilePhoneResultClass))
 
+/* struct IFaceLogGetPersonByMobilePhoneRealArgs */
+struct _IFaceLogGetPersonByMobilePhoneRealArgs
+{ 
+  ThriftStruct parent; 
+
+  /* public */
+  gchar * mobilePhone;
+  gboolean __isset_mobilePhone;
+  Token * token;
+  gboolean __isset_token;
+};
+typedef struct _IFaceLogGetPersonByMobilePhoneRealArgs IFaceLogGetPersonByMobilePhoneRealArgs;
+
+struct _IFaceLogGetPersonByMobilePhoneRealArgsClass
+{
+  ThriftStructClass parent;
+};
+typedef struct _IFaceLogGetPersonByMobilePhoneRealArgsClass IFaceLogGetPersonByMobilePhoneRealArgsClass;
+
+GType i_face_log_get_person_by_mobile_phone_real_args_get_type (void);
+#define TYPE_I_FACE_LOG_GET_PERSON_BY_MOBILE_PHONE_REAL_ARGS (i_face_log_get_person_by_mobile_phone_real_args_get_type())
+#define I_FACE_LOG_GET_PERSON_BY_MOBILE_PHONE_REAL_ARGS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_I_FACE_LOG_GET_PERSON_BY_MOBILE_PHONE_REAL_ARGS, IFaceLogGetPersonByMobilePhoneRealArgs))
+#define I_FACE_LOG_GET_PERSON_BY_MOBILE_PHONE_REAL_ARGS_CLASS(c) (G_TYPE_CHECK_CLASS_CAST ((c), _TYPE_I_FACE_LOG_GET_PERSON_BY_MOBILE_PHONE_REAL_ARGS, IFaceLogGetPersonByMobilePhoneRealArgsClass))
+#define IS_I_FACE_LOG_GET_PERSON_BY_MOBILE_PHONE_REAL_ARGS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_I_FACE_LOG_GET_PERSON_BY_MOBILE_PHONE_REAL_ARGS))
+#define IS_I_FACE_LOG_GET_PERSON_BY_MOBILE_PHONE_REAL_ARGS_CLASS(c) (G_TYPE_CHECK_CLASS_TYPE ((c), TYPE_I_FACE_LOG_GET_PERSON_BY_MOBILE_PHONE_REAL_ARGS))
+#define I_FACE_LOG_GET_PERSON_BY_MOBILE_PHONE_REAL_ARGS_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_I_FACE_LOG_GET_PERSON_BY_MOBILE_PHONE_REAL_ARGS, IFaceLogGetPersonByMobilePhoneRealArgsClass))
+
+/* struct IFaceLogGetPersonByMobilePhoneRealResult */
+struct _IFaceLogGetPersonByMobilePhoneRealResult
+{ 
+  ThriftStruct parent; 
+
+  /* public */
+  PersonBean * success;
+  gboolean __isset_success;
+  ServiceRuntimeException * ex1;
+  gboolean __isset_ex1;
+};
+typedef struct _IFaceLogGetPersonByMobilePhoneRealResult IFaceLogGetPersonByMobilePhoneRealResult;
+
+struct _IFaceLogGetPersonByMobilePhoneRealResultClass
+{
+  ThriftStructClass parent;
+};
+typedef struct _IFaceLogGetPersonByMobilePhoneRealResultClass IFaceLogGetPersonByMobilePhoneRealResultClass;
+
+GType i_face_log_get_person_by_mobile_phone_real_result_get_type (void);
+#define TYPE_I_FACE_LOG_GET_PERSON_BY_MOBILE_PHONE_REAL_RESULT (i_face_log_get_person_by_mobile_phone_real_result_get_type())
+#define I_FACE_LOG_GET_PERSON_BY_MOBILE_PHONE_REAL_RESULT(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_I_FACE_LOG_GET_PERSON_BY_MOBILE_PHONE_REAL_RESULT, IFaceLogGetPersonByMobilePhoneRealResult))
+#define I_FACE_LOG_GET_PERSON_BY_MOBILE_PHONE_REAL_RESULT_CLASS(c) (G_TYPE_CHECK_CLASS_CAST ((c), _TYPE_I_FACE_LOG_GET_PERSON_BY_MOBILE_PHONE_REAL_RESULT, IFaceLogGetPersonByMobilePhoneRealResultClass))
+#define IS_I_FACE_LOG_GET_PERSON_BY_MOBILE_PHONE_REAL_RESULT(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_I_FACE_LOG_GET_PERSON_BY_MOBILE_PHONE_REAL_RESULT))
+#define IS_I_FACE_LOG_GET_PERSON_BY_MOBILE_PHONE_REAL_RESULT_CLASS(c) (G_TYPE_CHECK_CLASS_TYPE ((c), TYPE_I_FACE_LOG_GET_PERSON_BY_MOBILE_PHONE_REAL_RESULT))
+#define I_FACE_LOG_GET_PERSON_BY_MOBILE_PHONE_REAL_RESULT_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_I_FACE_LOG_GET_PERSON_BY_MOBILE_PHONE_REAL_RESULT, IFaceLogGetPersonByMobilePhoneRealResultClass))
+
 /* struct IFaceLogGetPersonByPapersNumArgs */
 struct _IFaceLogGetPersonByPapersNumArgs
 { 
@@ -4874,6 +4928,60 @@ GType i_face_log_get_person_by_papers_num_result_get_type (void);
 #define IS_I_FACE_LOG_GET_PERSON_BY_PAPERS_NUM_RESULT(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_I_FACE_LOG_GET_PERSON_BY_PAPERS_NUM_RESULT))
 #define IS_I_FACE_LOG_GET_PERSON_BY_PAPERS_NUM_RESULT_CLASS(c) (G_TYPE_CHECK_CLASS_TYPE ((c), TYPE_I_FACE_LOG_GET_PERSON_BY_PAPERS_NUM_RESULT))
 #define I_FACE_LOG_GET_PERSON_BY_PAPERS_NUM_RESULT_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_I_FACE_LOG_GET_PERSON_BY_PAPERS_NUM_RESULT, IFaceLogGetPersonByPapersNumResultClass))
+
+/* struct IFaceLogGetPersonByPapersNumRealArgs */
+struct _IFaceLogGetPersonByPapersNumRealArgs
+{ 
+  ThriftStruct parent; 
+
+  /* public */
+  gchar * papersNum;
+  gboolean __isset_papersNum;
+  Token * token;
+  gboolean __isset_token;
+};
+typedef struct _IFaceLogGetPersonByPapersNumRealArgs IFaceLogGetPersonByPapersNumRealArgs;
+
+struct _IFaceLogGetPersonByPapersNumRealArgsClass
+{
+  ThriftStructClass parent;
+};
+typedef struct _IFaceLogGetPersonByPapersNumRealArgsClass IFaceLogGetPersonByPapersNumRealArgsClass;
+
+GType i_face_log_get_person_by_papers_num_real_args_get_type (void);
+#define TYPE_I_FACE_LOG_GET_PERSON_BY_PAPERS_NUM_REAL_ARGS (i_face_log_get_person_by_papers_num_real_args_get_type())
+#define I_FACE_LOG_GET_PERSON_BY_PAPERS_NUM_REAL_ARGS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_I_FACE_LOG_GET_PERSON_BY_PAPERS_NUM_REAL_ARGS, IFaceLogGetPersonByPapersNumRealArgs))
+#define I_FACE_LOG_GET_PERSON_BY_PAPERS_NUM_REAL_ARGS_CLASS(c) (G_TYPE_CHECK_CLASS_CAST ((c), _TYPE_I_FACE_LOG_GET_PERSON_BY_PAPERS_NUM_REAL_ARGS, IFaceLogGetPersonByPapersNumRealArgsClass))
+#define IS_I_FACE_LOG_GET_PERSON_BY_PAPERS_NUM_REAL_ARGS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_I_FACE_LOG_GET_PERSON_BY_PAPERS_NUM_REAL_ARGS))
+#define IS_I_FACE_LOG_GET_PERSON_BY_PAPERS_NUM_REAL_ARGS_CLASS(c) (G_TYPE_CHECK_CLASS_TYPE ((c), TYPE_I_FACE_LOG_GET_PERSON_BY_PAPERS_NUM_REAL_ARGS))
+#define I_FACE_LOG_GET_PERSON_BY_PAPERS_NUM_REAL_ARGS_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_I_FACE_LOG_GET_PERSON_BY_PAPERS_NUM_REAL_ARGS, IFaceLogGetPersonByPapersNumRealArgsClass))
+
+/* struct IFaceLogGetPersonByPapersNumRealResult */
+struct _IFaceLogGetPersonByPapersNumRealResult
+{ 
+  ThriftStruct parent; 
+
+  /* public */
+  PersonBean * success;
+  gboolean __isset_success;
+  ServiceRuntimeException * ex1;
+  gboolean __isset_ex1;
+};
+typedef struct _IFaceLogGetPersonByPapersNumRealResult IFaceLogGetPersonByPapersNumRealResult;
+
+struct _IFaceLogGetPersonByPapersNumRealResultClass
+{
+  ThriftStructClass parent;
+};
+typedef struct _IFaceLogGetPersonByPapersNumRealResultClass IFaceLogGetPersonByPapersNumRealResultClass;
+
+GType i_face_log_get_person_by_papers_num_real_result_get_type (void);
+#define TYPE_I_FACE_LOG_GET_PERSON_BY_PAPERS_NUM_REAL_RESULT (i_face_log_get_person_by_papers_num_real_result_get_type())
+#define I_FACE_LOG_GET_PERSON_BY_PAPERS_NUM_REAL_RESULT(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_I_FACE_LOG_GET_PERSON_BY_PAPERS_NUM_REAL_RESULT, IFaceLogGetPersonByPapersNumRealResult))
+#define I_FACE_LOG_GET_PERSON_BY_PAPERS_NUM_REAL_RESULT_CLASS(c) (G_TYPE_CHECK_CLASS_CAST ((c), _TYPE_I_FACE_LOG_GET_PERSON_BY_PAPERS_NUM_REAL_RESULT, IFaceLogGetPersonByPapersNumRealResultClass))
+#define IS_I_FACE_LOG_GET_PERSON_BY_PAPERS_NUM_REAL_RESULT(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_I_FACE_LOG_GET_PERSON_BY_PAPERS_NUM_REAL_RESULT))
+#define IS_I_FACE_LOG_GET_PERSON_BY_PAPERS_NUM_REAL_RESULT_CLASS(c) (G_TYPE_CHECK_CLASS_TYPE ((c), TYPE_I_FACE_LOG_GET_PERSON_BY_PAPERS_NUM_REAL_RESULT))
+#define I_FACE_LOG_GET_PERSON_BY_PAPERS_NUM_REAL_RESULT_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_I_FACE_LOG_GET_PERSON_BY_PAPERS_NUM_REAL_RESULT, IFaceLogGetPersonByPapersNumRealResultClass))
 
 /* struct IFaceLogGetPersonGroupArgs */
 struct _IFaceLogGetPersonGroupArgs
@@ -5185,6 +5293,59 @@ GType i_face_log_get_person_permits_result_get_type (void);
 #define IS_I_FACE_LOG_GET_PERSON_PERMITS_RESULT_CLASS(c) (G_TYPE_CHECK_CLASS_TYPE ((c), TYPE_I_FACE_LOG_GET_PERSON_PERMITS_RESULT))
 #define I_FACE_LOG_GET_PERSON_PERMITS_RESULT_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_I_FACE_LOG_GET_PERSON_PERMITS_RESULT, IFaceLogGetPersonPermitsResultClass))
 
+/* struct IFaceLogGetPersonRealArgs */
+struct _IFaceLogGetPersonRealArgs
+{ 
+  ThriftStruct parent; 
+
+  /* public */
+  gint32 personId;
+  Token * token;
+  gboolean __isset_token;
+};
+typedef struct _IFaceLogGetPersonRealArgs IFaceLogGetPersonRealArgs;
+
+struct _IFaceLogGetPersonRealArgsClass
+{
+  ThriftStructClass parent;
+};
+typedef struct _IFaceLogGetPersonRealArgsClass IFaceLogGetPersonRealArgsClass;
+
+GType i_face_log_get_person_real_args_get_type (void);
+#define TYPE_I_FACE_LOG_GET_PERSON_REAL_ARGS (i_face_log_get_person_real_args_get_type())
+#define I_FACE_LOG_GET_PERSON_REAL_ARGS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_I_FACE_LOG_GET_PERSON_REAL_ARGS, IFaceLogGetPersonRealArgs))
+#define I_FACE_LOG_GET_PERSON_REAL_ARGS_CLASS(c) (G_TYPE_CHECK_CLASS_CAST ((c), _TYPE_I_FACE_LOG_GET_PERSON_REAL_ARGS, IFaceLogGetPersonRealArgsClass))
+#define IS_I_FACE_LOG_GET_PERSON_REAL_ARGS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_I_FACE_LOG_GET_PERSON_REAL_ARGS))
+#define IS_I_FACE_LOG_GET_PERSON_REAL_ARGS_CLASS(c) (G_TYPE_CHECK_CLASS_TYPE ((c), TYPE_I_FACE_LOG_GET_PERSON_REAL_ARGS))
+#define I_FACE_LOG_GET_PERSON_REAL_ARGS_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_I_FACE_LOG_GET_PERSON_REAL_ARGS, IFaceLogGetPersonRealArgsClass))
+
+/* struct IFaceLogGetPersonRealResult */
+struct _IFaceLogGetPersonRealResult
+{ 
+  ThriftStruct parent; 
+
+  /* public */
+  PersonBean * success;
+  gboolean __isset_success;
+  ServiceRuntimeException * ex1;
+  gboolean __isset_ex1;
+};
+typedef struct _IFaceLogGetPersonRealResult IFaceLogGetPersonRealResult;
+
+struct _IFaceLogGetPersonRealResultClass
+{
+  ThriftStructClass parent;
+};
+typedef struct _IFaceLogGetPersonRealResultClass IFaceLogGetPersonRealResultClass;
+
+GType i_face_log_get_person_real_result_get_type (void);
+#define TYPE_I_FACE_LOG_GET_PERSON_REAL_RESULT (i_face_log_get_person_real_result_get_type())
+#define I_FACE_LOG_GET_PERSON_REAL_RESULT(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_I_FACE_LOG_GET_PERSON_REAL_RESULT, IFaceLogGetPersonRealResult))
+#define I_FACE_LOG_GET_PERSON_REAL_RESULT_CLASS(c) (G_TYPE_CHECK_CLASS_CAST ((c), _TYPE_I_FACE_LOG_GET_PERSON_REAL_RESULT, IFaceLogGetPersonRealResultClass))
+#define IS_I_FACE_LOG_GET_PERSON_REAL_RESULT(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_I_FACE_LOG_GET_PERSON_REAL_RESULT))
+#define IS_I_FACE_LOG_GET_PERSON_REAL_RESULT_CLASS(c) (G_TYPE_CHECK_CLASS_TYPE ((c), TYPE_I_FACE_LOG_GET_PERSON_REAL_RESULT))
+#define I_FACE_LOG_GET_PERSON_REAL_RESULT_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_I_FACE_LOG_GET_PERSON_REAL_RESULT, IFaceLogGetPersonRealResultClass))
+
 /* struct IFaceLogGetPersonsArgs */
 struct _IFaceLogGetPersonsArgs
 { 
@@ -5343,6 +5504,60 @@ GType i_face_log_get_persons_permitted_on_device_result_get_type (void);
 #define IS_I_FACE_LOG_GET_PERSONS_PERMITTED_ON_DEVICE_RESULT(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_I_FACE_LOG_GET_PERSONS_PERMITTED_ON_DEVICE_RESULT))
 #define IS_I_FACE_LOG_GET_PERSONS_PERMITTED_ON_DEVICE_RESULT_CLASS(c) (G_TYPE_CHECK_CLASS_TYPE ((c), TYPE_I_FACE_LOG_GET_PERSONS_PERMITTED_ON_DEVICE_RESULT))
 #define I_FACE_LOG_GET_PERSONS_PERMITTED_ON_DEVICE_RESULT_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_I_FACE_LOG_GET_PERSONS_PERMITTED_ON_DEVICE_RESULT, IFaceLogGetPersonsPermittedOnDeviceResultClass))
+
+/* struct IFaceLogGetPersonsRealArgs */
+struct _IFaceLogGetPersonsRealArgs
+{ 
+  ThriftStruct parent; 
+
+  /* public */
+  GArray * idList;
+  gboolean __isset_idList;
+  Token * token;
+  gboolean __isset_token;
+};
+typedef struct _IFaceLogGetPersonsRealArgs IFaceLogGetPersonsRealArgs;
+
+struct _IFaceLogGetPersonsRealArgsClass
+{
+  ThriftStructClass parent;
+};
+typedef struct _IFaceLogGetPersonsRealArgsClass IFaceLogGetPersonsRealArgsClass;
+
+GType i_face_log_get_persons_real_args_get_type (void);
+#define TYPE_I_FACE_LOG_GET_PERSONS_REAL_ARGS (i_face_log_get_persons_real_args_get_type())
+#define I_FACE_LOG_GET_PERSONS_REAL_ARGS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_I_FACE_LOG_GET_PERSONS_REAL_ARGS, IFaceLogGetPersonsRealArgs))
+#define I_FACE_LOG_GET_PERSONS_REAL_ARGS_CLASS(c) (G_TYPE_CHECK_CLASS_CAST ((c), _TYPE_I_FACE_LOG_GET_PERSONS_REAL_ARGS, IFaceLogGetPersonsRealArgsClass))
+#define IS_I_FACE_LOG_GET_PERSONS_REAL_ARGS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_I_FACE_LOG_GET_PERSONS_REAL_ARGS))
+#define IS_I_FACE_LOG_GET_PERSONS_REAL_ARGS_CLASS(c) (G_TYPE_CHECK_CLASS_TYPE ((c), TYPE_I_FACE_LOG_GET_PERSONS_REAL_ARGS))
+#define I_FACE_LOG_GET_PERSONS_REAL_ARGS_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_I_FACE_LOG_GET_PERSONS_REAL_ARGS, IFaceLogGetPersonsRealArgsClass))
+
+/* struct IFaceLogGetPersonsRealResult */
+struct _IFaceLogGetPersonsRealResult
+{ 
+  ThriftStruct parent; 
+
+  /* public */
+  GPtrArray * success;
+  gboolean __isset_success;
+  ServiceRuntimeException * ex1;
+  gboolean __isset_ex1;
+};
+typedef struct _IFaceLogGetPersonsRealResult IFaceLogGetPersonsRealResult;
+
+struct _IFaceLogGetPersonsRealResultClass
+{
+  ThriftStructClass parent;
+};
+typedef struct _IFaceLogGetPersonsRealResultClass IFaceLogGetPersonsRealResultClass;
+
+GType i_face_log_get_persons_real_result_get_type (void);
+#define TYPE_I_FACE_LOG_GET_PERSONS_REAL_RESULT (i_face_log_get_persons_real_result_get_type())
+#define I_FACE_LOG_GET_PERSONS_REAL_RESULT(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_I_FACE_LOG_GET_PERSONS_REAL_RESULT, IFaceLogGetPersonsRealResult))
+#define I_FACE_LOG_GET_PERSONS_REAL_RESULT_CLASS(c) (G_TYPE_CHECK_CLASS_CAST ((c), _TYPE_I_FACE_LOG_GET_PERSONS_REAL_RESULT, IFaceLogGetPersonsRealResultClass))
+#define IS_I_FACE_LOG_GET_PERSONS_REAL_RESULT(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_I_FACE_LOG_GET_PERSONS_REAL_RESULT))
+#define IS_I_FACE_LOG_GET_PERSONS_REAL_RESULT_CLASS(c) (G_TYPE_CHECK_CLASS_TYPE ((c), TYPE_I_FACE_LOG_GET_PERSONS_REAL_RESULT))
+#define I_FACE_LOG_GET_PERSONS_REAL_RESULT_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_I_FACE_LOG_GET_PERSONS_REAL_RESULT, IFaceLogGetPersonsRealResultClass))
 
 /* struct IFaceLogGetPropertiesArgs */
 struct _IFaceLogGetPropertiesArgs
@@ -7127,6 +7342,62 @@ GType i_face_log_load_person_by_where_result_get_type (void);
 #define IS_I_FACE_LOG_LOAD_PERSON_BY_WHERE_RESULT(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_I_FACE_LOG_LOAD_PERSON_BY_WHERE_RESULT))
 #define IS_I_FACE_LOG_LOAD_PERSON_BY_WHERE_RESULT_CLASS(c) (G_TYPE_CHECK_CLASS_TYPE ((c), TYPE_I_FACE_LOG_LOAD_PERSON_BY_WHERE_RESULT))
 #define I_FACE_LOG_LOAD_PERSON_BY_WHERE_RESULT_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_I_FACE_LOG_LOAD_PERSON_BY_WHERE_RESULT, IFaceLogLoadPersonByWhereResultClass))
+
+/* struct IFaceLogLoadPersonByWhereRealArgs */
+struct _IFaceLogLoadPersonByWhereRealArgs
+{ 
+  ThriftStruct parent; 
+
+  /* public */
+  gchar * where;
+  gboolean __isset_where;
+  gint32 startRow;
+  gint32 numRows;
+  Token * token;
+  gboolean __isset_token;
+};
+typedef struct _IFaceLogLoadPersonByWhereRealArgs IFaceLogLoadPersonByWhereRealArgs;
+
+struct _IFaceLogLoadPersonByWhereRealArgsClass
+{
+  ThriftStructClass parent;
+};
+typedef struct _IFaceLogLoadPersonByWhereRealArgsClass IFaceLogLoadPersonByWhereRealArgsClass;
+
+GType i_face_log_load_person_by_where_real_args_get_type (void);
+#define TYPE_I_FACE_LOG_LOAD_PERSON_BY_WHERE_REAL_ARGS (i_face_log_load_person_by_where_real_args_get_type())
+#define I_FACE_LOG_LOAD_PERSON_BY_WHERE_REAL_ARGS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_I_FACE_LOG_LOAD_PERSON_BY_WHERE_REAL_ARGS, IFaceLogLoadPersonByWhereRealArgs))
+#define I_FACE_LOG_LOAD_PERSON_BY_WHERE_REAL_ARGS_CLASS(c) (G_TYPE_CHECK_CLASS_CAST ((c), _TYPE_I_FACE_LOG_LOAD_PERSON_BY_WHERE_REAL_ARGS, IFaceLogLoadPersonByWhereRealArgsClass))
+#define IS_I_FACE_LOG_LOAD_PERSON_BY_WHERE_REAL_ARGS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_I_FACE_LOG_LOAD_PERSON_BY_WHERE_REAL_ARGS))
+#define IS_I_FACE_LOG_LOAD_PERSON_BY_WHERE_REAL_ARGS_CLASS(c) (G_TYPE_CHECK_CLASS_TYPE ((c), TYPE_I_FACE_LOG_LOAD_PERSON_BY_WHERE_REAL_ARGS))
+#define I_FACE_LOG_LOAD_PERSON_BY_WHERE_REAL_ARGS_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_I_FACE_LOG_LOAD_PERSON_BY_WHERE_REAL_ARGS, IFaceLogLoadPersonByWhereRealArgsClass))
+
+/* struct IFaceLogLoadPersonByWhereRealResult */
+struct _IFaceLogLoadPersonByWhereRealResult
+{ 
+  ThriftStruct parent; 
+
+  /* public */
+  GPtrArray * success;
+  gboolean __isset_success;
+  ServiceRuntimeException * ex1;
+  gboolean __isset_ex1;
+};
+typedef struct _IFaceLogLoadPersonByWhereRealResult IFaceLogLoadPersonByWhereRealResult;
+
+struct _IFaceLogLoadPersonByWhereRealResultClass
+{
+  ThriftStructClass parent;
+};
+typedef struct _IFaceLogLoadPersonByWhereRealResultClass IFaceLogLoadPersonByWhereRealResultClass;
+
+GType i_face_log_load_person_by_where_real_result_get_type (void);
+#define TYPE_I_FACE_LOG_LOAD_PERSON_BY_WHERE_REAL_RESULT (i_face_log_load_person_by_where_real_result_get_type())
+#define I_FACE_LOG_LOAD_PERSON_BY_WHERE_REAL_RESULT(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_I_FACE_LOG_LOAD_PERSON_BY_WHERE_REAL_RESULT, IFaceLogLoadPersonByWhereRealResult))
+#define I_FACE_LOG_LOAD_PERSON_BY_WHERE_REAL_RESULT_CLASS(c) (G_TYPE_CHECK_CLASS_CAST ((c), _TYPE_I_FACE_LOG_LOAD_PERSON_BY_WHERE_REAL_RESULT, IFaceLogLoadPersonByWhereRealResultClass))
+#define IS_I_FACE_LOG_LOAD_PERSON_BY_WHERE_REAL_RESULT(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_I_FACE_LOG_LOAD_PERSON_BY_WHERE_REAL_RESULT))
+#define IS_I_FACE_LOG_LOAD_PERSON_BY_WHERE_REAL_RESULT_CLASS(c) (G_TYPE_CHECK_CLASS_TYPE ((c), TYPE_I_FACE_LOG_LOAD_PERSON_BY_WHERE_REAL_RESULT))
+#define I_FACE_LOG_LOAD_PERSON_BY_WHERE_REAL_RESULT_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_I_FACE_LOG_LOAD_PERSON_BY_WHERE_REAL_RESULT, IFaceLogLoadPersonByWhereRealResultClass))
 
 /* struct IFaceLogLoadPersonGroupByWhereArgs */
 struct _IFaceLogLoadPersonGroupByWhereArgs

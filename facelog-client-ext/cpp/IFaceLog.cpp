@@ -1242,6 +1242,22 @@ IFaceLog_getPersonByMobilePhone_presult::~IFaceLog_getPersonByMobilePhone_presul
 }
 
 
+IFaceLog_getPersonByMobilePhoneReal_args::~IFaceLog_getPersonByMobilePhoneReal_args() throw() {
+}
+
+
+IFaceLog_getPersonByMobilePhoneReal_pargs::~IFaceLog_getPersonByMobilePhoneReal_pargs() throw() {
+}
+
+
+IFaceLog_getPersonByMobilePhoneReal_result::~IFaceLog_getPersonByMobilePhoneReal_result() throw() {
+}
+
+
+IFaceLog_getPersonByMobilePhoneReal_presult::~IFaceLog_getPersonByMobilePhoneReal_presult() throw() {
+}
+
+
 IFaceLog_getPersonByPapersNum_args::~IFaceLog_getPersonByPapersNum_args() throw() {
 }
 
@@ -1255,6 +1271,22 @@ IFaceLog_getPersonByPapersNum_result::~IFaceLog_getPersonByPapersNum_result() th
 
 
 IFaceLog_getPersonByPapersNum_presult::~IFaceLog_getPersonByPapersNum_presult() throw() {
+}
+
+
+IFaceLog_getPersonByPapersNumReal_args::~IFaceLog_getPersonByPapersNumReal_args() throw() {
+}
+
+
+IFaceLog_getPersonByPapersNumReal_pargs::~IFaceLog_getPersonByPapersNumReal_pargs() throw() {
+}
+
+
+IFaceLog_getPersonByPapersNumReal_result::~IFaceLog_getPersonByPapersNumReal_result() throw() {
+}
+
+
+IFaceLog_getPersonByPapersNumReal_presult::~IFaceLog_getPersonByPapersNumReal_presult() throw() {
 }
 
 
@@ -1354,6 +1386,22 @@ IFaceLog_getPersonPermits_presult::~IFaceLog_getPersonPermits_presult() throw() 
 }
 
 
+IFaceLog_getPersonReal_args::~IFaceLog_getPersonReal_args() throw() {
+}
+
+
+IFaceLog_getPersonReal_pargs::~IFaceLog_getPersonReal_pargs() throw() {
+}
+
+
+IFaceLog_getPersonReal_result::~IFaceLog_getPersonReal_result() throw() {
+}
+
+
+IFaceLog_getPersonReal_presult::~IFaceLog_getPersonReal_presult() throw() {
+}
+
+
 IFaceLog_getPersons_args::~IFaceLog_getPersons_args() throw() {
 }
 
@@ -1399,6 +1447,22 @@ IFaceLog_getPersonsPermittedOnDevice_result::~IFaceLog_getPersonsPermittedOnDevi
 
 
 IFaceLog_getPersonsPermittedOnDevice_presult::~IFaceLog_getPersonsPermittedOnDevice_presult() throw() {
+}
+
+
+IFaceLog_getPersonsReal_args::~IFaceLog_getPersonsReal_args() throw() {
+}
+
+
+IFaceLog_getPersonsReal_pargs::~IFaceLog_getPersonsReal_pargs() throw() {
+}
+
+
+IFaceLog_getPersonsReal_result::~IFaceLog_getPersonsReal_result() throw() {
+}
+
+
+IFaceLog_getPersonsReal_presult::~IFaceLog_getPersonsReal_presult() throw() {
 }
 
 
@@ -1943,6 +2007,22 @@ IFaceLog_loadPersonByWhere_result::~IFaceLog_loadPersonByWhere_result() throw() 
 
 
 IFaceLog_loadPersonByWhere_presult::~IFaceLog_loadPersonByWhere_presult() throw() {
+}
+
+
+IFaceLog_loadPersonByWhereReal_args::~IFaceLog_loadPersonByWhereReal_args() throw() {
+}
+
+
+IFaceLog_loadPersonByWhereReal_pargs::~IFaceLog_loadPersonByWhereReal_pargs() throw() {
+}
+
+
+IFaceLog_loadPersonByWhereReal_result::~IFaceLog_loadPersonByWhereReal_result() throw() {
+}
+
+
+IFaceLog_loadPersonByWhereReal_presult::~IFaceLog_loadPersonByWhereReal_presult() throw() {
 }
 
 

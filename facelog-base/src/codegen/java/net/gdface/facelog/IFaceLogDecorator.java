@@ -632,13 +632,28 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
+    public PersonBean getPerson (int personId,Token token) {
+        return delegate().getPerson(personId,token);
+    }
+
+    @Override
     public PersonBean getPersonByMobilePhone (String mobilePhone) {
         return delegate().getPersonByMobilePhone(mobilePhone);
     }
 
     @Override
+    public PersonBean getPersonByMobilePhone (String mobilePhone,Token token) {
+        return delegate().getPersonByMobilePhone(mobilePhone,token);
+    }
+
+    @Override
     public PersonBean getPersonByPapersNum (String papersNum) {
         return delegate().getPersonByPapersNum(papersNum);
+    }
+
+    @Override
+    public PersonBean getPersonByPapersNum (String papersNum,Token token) {
+        return delegate().getPersonByPapersNum(papersNum,token);
     }
 
     @Override
@@ -674,6 +689,11 @@ public class IFaceLogDecorator implements IFaceLog{
     @Override
     public List<PersonBean> getPersons (List<Integer> idList) {
         return delegate().getPersons(idList);
+    }
+
+    @Override
+    public List<PersonBean> getPersons (List<Integer> idList,Token token) {
+        return delegate().getPersons(idList,token);
     }
 
     @Override
@@ -854,6 +874,11 @@ public class IFaceLogDecorator implements IFaceLog{
     @Override
     public List<PersonBean> loadPersonByWhere (String where,int startRow,int numRows) {
         return delegate().loadPersonByWhere(where,startRow,numRows);
+    }
+
+    @Override
+    public List<PersonBean> loadPersonByWhere (String where,int startRow,int numRows,Token token) {
+        return delegate().loadPersonByWhere(where,startRow,numRows,token);
     }
 
     @Override

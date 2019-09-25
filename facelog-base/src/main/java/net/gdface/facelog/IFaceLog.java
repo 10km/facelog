@@ -43,32 +43,65 @@ import net.gdface.facelog.db.exception.RuntimeDaoException;
 public interface IFaceLog{
 
 	/**
-	 * 返回personId指定的人员记录
+	 * 返回personId指定的人员记录(脱敏数据)
 	 * @param personId
-	 * @return
+	 * @return 没有找到匹配的记录则返回{@code null}
 	 */
 	public PersonBean getPerson(int personId) ;
 
 	/**
-	 * 返回 list 指定的人员记录
+	 * 返回 list 指定的人员记录(脱敏数据)
 	 * @param idList 人员id列表
-	 * @return
+	 * @return 没有找到匹配的记录则返回空表
 	 */
 	public List<PersonBean> getPersons(List<Integer> idList);
 
 	/**
-	 * 根据证件号码返回人员记录
+	 * 根据证件号码返回人员记录(脱敏数据)
 	 * @param papersNum
 	 * @return 没有找到匹配的记录则返回{@code null}
 	 */
 	public PersonBean getPersonByPapersNum(String papersNum);
 
 	/**
-	 * 根据登记的手机号码返回人员记录
+	 * 根据登记的手机号码返回人员记录(脱敏数据)
 	 * @param mobilePhone
 	 * @return 没有找到匹配的记录则返回{@code null}
 	 */
 	public PersonBean getPersonByMobilePhone(String mobilePhone);
+	/**
+	 * 返回personId指定的人员记录
+	 * @param personId
+	 * @param token 访问令牌
+	 * @return 没有找到匹配的记录则返回{@code null}
+	 */
+	@DeriveMethod(methodSuffix="Real")
+	public PersonBean getPerson(int personId, Token token);
+	/**
+	 * 返回 list 指定的人员记录
+	 * @param idList 人员id列表
+	 * @param token 访问令牌
+	 * @return 没有找到匹配的记录则返回空表
+	 */
+	@DeriveMethod(methodSuffix="Real")
+	public List<PersonBean> getPersons(List<Integer> idList, Token token);
+	/**
+	 * 根据证件号码返回人员记录
+	 * @param papersNum
+	 * @param token 访问令牌
+	 * @return 没有找到匹配的记录则返回{@code null}
+	 */
+	@DeriveMethod(methodSuffix="Real")
+	public PersonBean getPersonByPapersNum(String papersNum, Token token);
+	/**
+	 * 根据登记的手机号码返回人员记录
+	 * @param mobilePhone
+	 * @param token 访问令牌
+	 * @return 没有找到匹配的记录则返回{@code null}
+	 */
+	@DeriveMethod(methodSuffix="Real")
+	public PersonBean getPersonByMobilePhone(String mobilePhone, Token token);
+
 	/**
 	 * 返回在指定设备上允许通行的所有人员记录<br>
 	 * @param deviceId 设备ID
@@ -201,13 +234,24 @@ public interface IFaceLog{
 	 */
 	public List<Integer> loadPersonIdByWhere(String where);
 	/**
+	 * 返回 where 指定的所有人员记录(脱敏数据)
+	 * @param where 'WHERE'开头的SQL条件语句,为{@code null}或空时加载所有记录
+	 * @param startRow 记录起始行号 (first row = 1, last row = -1)
+	 * @param numRows 返回记录条数 为负值是返回{@code startRow}开始的所有行
+	 * @return 人员记录列表,没有找到匹配的记录则返回空表
+	 */
+	public List<PersonBean> loadPersonByWhere(String where, int startRow, int numRows);
+	/**
 	 * 返回 where 指定的所有人员记录
 	 * @param where 'WHERE'开头的SQL条件语句,为{@code null}或空时加载所有记录
 	 * @param startRow 记录起始行号 (first row = 1, last row = -1)
 	 * @param numRows 返回记录条数 为负值是返回{@code startRow}开始的所有行
-	 * @return 人员记录列表
+	 * @param token 访问令牌
+	 * @return 人员记录列表,没有找到匹配的记录则返回空表
 	 */
-	public List<PersonBean> loadPersonByWhere(String where, int startRow, int numRows);
+	@DeriveMethod(methodSuffix="Real")
+	public List<PersonBean> loadPersonByWhere(String where, int startRow, int numRows, Token token);
+
 	/**
 	 * 返回满足{@code where}条件的日志记录(fl_person)数目
 	 * @param where 'WHERE'开头的SQL条件语句,为{@code null}时返回所有记录

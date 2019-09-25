@@ -1624,6 +1624,34 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(getPerson(personId), callback);
     }
     /**
+     * see also {@link net.gdface.facelog.IFaceLog#getPerson(int,net.gdface.facelog.Token)}
+     */
+    public ListenableFuture<PersonBean> getPerson(int personId,
+        Token token){        
+        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
+        ListenableFuture<PersonBean> future = Futures.transform(
+            async.getPersonReal(personId,
+            TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class)),
+            new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
+                @Override
+                public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
+                    return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.PersonBean.class,
+                    PersonBean.class);
+                }
+            });
+        return factory.wrap(async,future);
+    }
+    public void getPerson(int personId,
+        Token token,
+        FutureCallback<PersonBean>callback){
+        factory.addCallback(getPerson(personId,token), callback);
+    }
+    /**
      * see also {@link net.gdface.facelog.IFaceLog#getPersonByMobilePhone(java.lang.String)}
      */
     public ListenableFuture<PersonBean> getPersonByMobilePhone(String mobilePhone){        
@@ -1646,6 +1674,34 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(getPersonByMobilePhone(mobilePhone), callback);
     }
     /**
+     * see also {@link net.gdface.facelog.IFaceLog#getPersonByMobilePhone(java.lang.String,net.gdface.facelog.Token)}
+     */
+    public ListenableFuture<PersonBean> getPersonByMobilePhone(String mobilePhone,
+        Token token){        
+        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
+        ListenableFuture<PersonBean> future = Futures.transform(
+            async.getPersonByMobilePhoneReal(mobilePhone,
+            TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class)),
+            new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
+                @Override
+                public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
+                    return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.PersonBean.class,
+                    PersonBean.class);
+                }
+            });
+        return factory.wrap(async,future);
+    }
+    public void getPersonByMobilePhone(String mobilePhone,
+        Token token,
+        FutureCallback<PersonBean>callback){
+        factory.addCallback(getPersonByMobilePhone(mobilePhone,token), callback);
+    }
+    /**
      * see also {@link net.gdface.facelog.IFaceLog#getPersonByPapersNum(java.lang.String)}
      */
     public ListenableFuture<PersonBean> getPersonByPapersNum(String papersNum){        
@@ -1666,6 +1722,34 @@ public class IFaceLogThriftClientAsync {
     public void getPersonByPapersNum(String papersNum,
         FutureCallback<PersonBean>callback){
         factory.addCallback(getPersonByPapersNum(papersNum), callback);
+    }
+    /**
+     * see also {@link net.gdface.facelog.IFaceLog#getPersonByPapersNum(java.lang.String,net.gdface.facelog.Token)}
+     */
+    public ListenableFuture<PersonBean> getPersonByPapersNum(String papersNum,
+        Token token){        
+        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
+        ListenableFuture<PersonBean> future = Futures.transform(
+            async.getPersonByPapersNumReal(papersNum,
+            TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class)),
+            new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
+                @Override
+                public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
+                    return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.PersonBean.class,
+                    PersonBean.class);
+                }
+            });
+        return factory.wrap(async,future);
+    }
+    public void getPersonByPapersNum(String papersNum,
+        Token token,
+        FutureCallback<PersonBean>callback){
+        factory.addCallback(getPersonByPapersNum(papersNum,token), callback);
     }
     /**
      * see also {@link net.gdface.facelog.IFaceLog#getPersonGroup(int)}
@@ -1815,6 +1899,37 @@ public class IFaceLogThriftClientAsync {
     public void getPersons(List<Integer> idList,
         FutureCallback<List<PersonBean>>callback){
         factory.addCallback(getPersons(idList), callback);
+    }
+    /**
+     * see also {@link net.gdface.facelog.IFaceLog#getPersons(java.util.List,net.gdface.facelog.Token)}
+     */
+    public ListenableFuture<List<PersonBean>> getPersons(List<Integer> idList,
+        Token token){        
+        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
+        ListenableFuture<List<PersonBean>> future = Futures.transform(
+            async.getPersonsReal(TypeTransformer.getInstance().to(
+                    idList,
+                    Integer.class,
+                    Integer.class),
+            TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class)),
+            new Function<List<net.gdface.facelog.client.thrift.PersonBean>,List<PersonBean>>(){
+                @Override
+                public List<PersonBean> apply(List<net.gdface.facelog.client.thrift.PersonBean> input) {
+                    return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.PersonBean.class,
+                    PersonBean.class);
+                }
+            });
+        return factory.wrap(async,future);
+    }
+    public void getPersons(List<Integer> idList,
+        Token token,
+        FutureCallback<List<PersonBean>>callback){
+        factory.addCallback(getPersons(idList,token), callback);
     }
     /**
      * see also {@link net.gdface.facelog.IFaceLog#getPersonsOfGroup(int)}
@@ -2437,6 +2552,40 @@ public class IFaceLogThriftClientAsync {
         int numRows,
         FutureCallback<List<PersonBean>>callback){
         factory.addCallback(loadPersonByWhere(where,startRow,numRows), callback);
+    }
+    /**
+     * see also {@link net.gdface.facelog.IFaceLog#loadPersonByWhere(java.lang.String,int,int,net.gdface.facelog.Token)}
+     */
+    public ListenableFuture<List<PersonBean>> loadPersonByWhere(String where,
+        int startRow,
+        int numRows,
+        Token token){        
+        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
+        ListenableFuture<List<PersonBean>> future = Futures.transform(
+            async.loadPersonByWhereReal(where,
+            startRow,
+            numRows,
+            TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class)),
+            new Function<List<net.gdface.facelog.client.thrift.PersonBean>,List<PersonBean>>(){
+                @Override
+                public List<PersonBean> apply(List<net.gdface.facelog.client.thrift.PersonBean> input) {
+                    return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.PersonBean.class,
+                    PersonBean.class);
+                }
+            });
+        return factory.wrap(async,future);
+    }
+    public void loadPersonByWhere(String where,
+        int startRow,
+        int numRows,
+        Token token,
+        FutureCallback<List<PersonBean>>callback){
+        factory.addCallback(loadPersonByWhere(where,startRow,numRows,token), callback);
     }
     /**
      * see also {@link net.gdface.facelog.IFaceLog#loadPersonGroupByWhere(java.lang.String,int,int)}

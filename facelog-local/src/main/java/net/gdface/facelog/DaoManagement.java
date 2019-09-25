@@ -1003,4 +1003,44 @@ public class DaoManagement extends BaseDao implements ServiceConstant,Constant{
 		}
 		
 	}
+	
+	/**
+	 * 个人信息脱敏转换器
+	 */
+	protected static final  Function<PersonBean, PersonBean> DESENSITIZATION_TRANSFORMER= new Function<PersonBean, PersonBean>(){
+
+		@Override
+		public PersonBean apply(PersonBean input) {
+			if(input != null){
+				PersonBean output = input.clone();
+				if(null != output.getName()){
+					output.setName(output.getName().replaceAll("\\S", "*"));
+				}
+				if(null != output.getPapersNum()){
+					output.setPapersNum(output.getPapersNum().replaceAll("\\S", "*"));
+				}
+				if(null != output.getMobilePhone()){
+					output.setMobilePhone(output.getMobilePhone().replaceAll("\\S", "*"));
+				}
+				return output;
+			}
+			return input;
+		}};
+			
+		/**
+		 * 个人信息脱敏
+		 * @param input 输入数据
+		 * @return 输出脱敏数据
+		 */
+		protected static final PersonBean desensitize(PersonBean input) {		
+			return DESENSITIZATION_TRANSFORMER.apply(input);		
+		}
+		/**
+		 * 个人信息脱敏
+		 * @param input 输入数据
+		 * @return 输出脱敏数据
+		 */
+		protected static final List<PersonBean> desensitize(List<PersonBean> input) {
+			return input == null ? null : Lists.transform(input, DESENSITIZATION_TRANSFORMER);
+		}
 }

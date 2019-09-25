@@ -2126,6 +2126,34 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(getPerson(personId), callback);
     }
     /**
+     * see also {@link net.gdface.facelog.IFaceLog#getPerson(int,net.gdface.facelog.Token)}
+     */
+    public ListenableFuture<PersonBean> getPerson(int personId,
+        Token token){
+        MethodCallback<PersonBean,net.gdface.facelog.client.thrift.PersonBean> nativeCallback = 
+            new MethodCallback<PersonBean,net.gdface.facelog.client.thrift.PersonBean>(
+                new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>() {
+                        @Override
+                        public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.PersonBean.class,
+                    PersonBean.class);
+                }});
+        nativeCallback.service.getPersonReal(
+                personId,
+            TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
+    }
+    public void getPerson(int personId,
+        Token token,
+        FutureCallback<PersonBean>callback){
+        factory.addCallback(getPerson(personId,token), callback);
+    }
+    /**
      * see also {@link net.gdface.facelog.IFaceLog#getPersonByMobilePhone(java.lang.String)}
      */
     public ListenableFuture<PersonBean> getPersonByMobilePhone(String mobilePhone){
@@ -2148,6 +2176,34 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(getPersonByMobilePhone(mobilePhone), callback);
     }
     /**
+     * see also {@link net.gdface.facelog.IFaceLog#getPersonByMobilePhone(java.lang.String,net.gdface.facelog.Token)}
+     */
+    public ListenableFuture<PersonBean> getPersonByMobilePhone(String mobilePhone,
+        Token token){
+        MethodCallback<PersonBean,net.gdface.facelog.client.thrift.PersonBean> nativeCallback = 
+            new MethodCallback<PersonBean,net.gdface.facelog.client.thrift.PersonBean>(
+                new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>() {
+                        @Override
+                        public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.PersonBean.class,
+                    PersonBean.class);
+                }});
+        nativeCallback.service.getPersonByMobilePhoneReal(
+                mobilePhone,
+            TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
+    }
+    public void getPersonByMobilePhone(String mobilePhone,
+        Token token,
+        FutureCallback<PersonBean>callback){
+        factory.addCallback(getPersonByMobilePhone(mobilePhone,token), callback);
+    }
+    /**
      * see also {@link net.gdface.facelog.IFaceLog#getPersonByPapersNum(java.lang.String)}
      */
     public ListenableFuture<PersonBean> getPersonByPapersNum(String papersNum){
@@ -2168,6 +2224,34 @@ public class IFaceLogThriftClientAsync {
     public void getPersonByPapersNum(String papersNum,
         FutureCallback<PersonBean>callback){
         factory.addCallback(getPersonByPapersNum(papersNum), callback);
+    }
+    /**
+     * see also {@link net.gdface.facelog.IFaceLog#getPersonByPapersNum(java.lang.String,net.gdface.facelog.Token)}
+     */
+    public ListenableFuture<PersonBean> getPersonByPapersNum(String papersNum,
+        Token token){
+        MethodCallback<PersonBean,net.gdface.facelog.client.thrift.PersonBean> nativeCallback = 
+            new MethodCallback<PersonBean,net.gdface.facelog.client.thrift.PersonBean>(
+                new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>() {
+                        @Override
+                        public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.PersonBean.class,
+                    PersonBean.class);
+                }});
+        nativeCallback.service.getPersonByPapersNumReal(
+                papersNum,
+            TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
+    }
+    public void getPersonByPapersNum(String papersNum,
+        Token token,
+        FutureCallback<PersonBean>callback){
+        factory.addCallback(getPersonByPapersNum(papersNum,token), callback);
     }
     /**
      * see also {@link net.gdface.facelog.IFaceLog#getPersonGroup(int)}
@@ -2337,6 +2421,37 @@ public class IFaceLogThriftClientAsync {
     public void getPersons(List<Integer> idList,
         FutureCallback<List<PersonBean>>callback){
         factory.addCallback(getPersons(idList), callback);
+    }
+    /**
+     * see also {@link net.gdface.facelog.IFaceLog#getPersons(java.util.List,net.gdface.facelog.Token)}
+     */
+    public ListenableFuture<List<PersonBean>> getPersons(List<Integer> idList,
+        Token token){
+        MethodCallback<List<PersonBean>,List<net.gdface.facelog.client.thrift.PersonBean>> nativeCallback = 
+            new MethodCallback<List<PersonBean>,List<net.gdface.facelog.client.thrift.PersonBean>>(
+                new Function<List<net.gdface.facelog.client.thrift.PersonBean>,List<PersonBean>>() {
+                        @Override
+                        public List<PersonBean> apply(List<net.gdface.facelog.client.thrift.PersonBean> input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.PersonBean.class,
+                    PersonBean.class);
+                }});
+        nativeCallback.service.getPersonsReal(
+                TypeTransformer.getInstance().to(
+                    idList,
+                    Integer.class,
+                    Integer.class),
+            TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
+    }
+    public void getPersons(List<Integer> idList,
+        Token token,
+        FutureCallback<List<PersonBean>>callback){
+        factory.addCallback(getPersons(idList,token), callback);
     }
     /**
      * see also {@link net.gdface.facelog.IFaceLog#getPersonsOfGroup(int)}
@@ -3193,6 +3308,40 @@ public class IFaceLogThriftClientAsync {
         int numRows,
         FutureCallback<List<PersonBean>>callback){
         factory.addCallback(loadPersonByWhere(where,startRow,numRows), callback);
+    }
+    /**
+     * see also {@link net.gdface.facelog.IFaceLog#loadPersonByWhere(java.lang.String,int,int,net.gdface.facelog.Token)}
+     */
+    public ListenableFuture<List<PersonBean>> loadPersonByWhere(String where,
+        int startRow,
+        int numRows,
+        Token token){
+        MethodCallback<List<PersonBean>,List<net.gdface.facelog.client.thrift.PersonBean>> nativeCallback = 
+            new MethodCallback<List<PersonBean>,List<net.gdface.facelog.client.thrift.PersonBean>>(
+                new Function<List<net.gdface.facelog.client.thrift.PersonBean>,List<PersonBean>>() {
+                        @Override
+                        public List<PersonBean> apply(List<net.gdface.facelog.client.thrift.PersonBean> input) {
+                            return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.PersonBean.class,
+                    PersonBean.class);
+                }});
+        nativeCallback.service.loadPersonByWhereReal(
+                where,
+            startRow,
+            numRows,
+            TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+        return nativeCallback.feature;
+    }
+    public void loadPersonByWhere(String where,
+        int startRow,
+        int numRows,
+        Token token,
+        FutureCallback<List<PersonBean>>callback){
+        factory.addCallback(loadPersonByWhere(where,startRow,numRows,token), callback);
     }
     /**
      * see also {@link net.gdface.facelog.IFaceLog#loadPersonGroupByWhere(java.lang.String,int,int)}

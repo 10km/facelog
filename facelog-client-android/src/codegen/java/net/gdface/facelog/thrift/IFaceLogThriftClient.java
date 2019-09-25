@@ -2316,6 +2316,36 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
+    public PersonBean getPerson(final int personId,
+        final Token token) 
+        {
+        try{
+            return syncCall(new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>() {
+                @Override
+                public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
+                    return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.PersonBean.class,
+                    PersonBean.class);
+                }},
+                new ServiceAsyncCall<net.gdface.facelog.client.thrift.PersonBean>(){
+                @Override
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonBean> nativeCallback){
+                    service.getPersonReal(personId,TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                }});
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);
+        }
+    }
+    @Override
     public PersonBean getPersonByMobilePhone(final String mobilePhone) 
         {
         try{
@@ -2342,6 +2372,36 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
+    public PersonBean getPersonByMobilePhone(final String mobilePhone,
+        final Token token) 
+        {
+        try{
+            return syncCall(new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>() {
+                @Override
+                public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
+                    return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.PersonBean.class,
+                    PersonBean.class);
+                }},
+                new ServiceAsyncCall<net.gdface.facelog.client.thrift.PersonBean>(){
+                @Override
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonBean> nativeCallback){
+                    service.getPersonByMobilePhoneReal(mobilePhone,TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
+                }});
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);
+        }
+    }
+    @Override
     public PersonBean getPersonByPapersNum(final String papersNum) 
         {
         try{
@@ -2357,6 +2417,36 @@ public class IFaceLogThriftClient implements IFaceLog {
                 @Override
                 public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonBean> nativeCallback){
                     service.getPersonByPapersNum(papersNum,nativeCallback);
+                }});
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);
+        }
+    }
+    @Override
+    public PersonBean getPersonByPapersNum(final String papersNum,
+        final Token token) 
+        {
+        try{
+            return syncCall(new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>() {
+                @Override
+                public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
+                    return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.PersonBean.class,
+                    PersonBean.class);
+                }},
+                new ServiceAsyncCall<net.gdface.facelog.client.thrift.PersonBean>(){
+                @Override
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<net.gdface.facelog.client.thrift.PersonBean> nativeCallback){
+                    service.getPersonByPapersNumReal(papersNum,TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
                 }});
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
@@ -2550,6 +2640,39 @@ public class IFaceLogThriftClient implements IFaceLog {
                     idList,
                     Integer.class,
                     Integer.class),nativeCallback);
+                }});
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);
+        }
+    }
+    @Override
+    public List<PersonBean> getPersons(final List<Integer> idList,
+        final Token token) 
+        {
+        try{
+            return syncCall(new Function<List<net.gdface.facelog.client.thrift.PersonBean>,List<PersonBean>>() {
+                @Override
+                public List<PersonBean> apply(List<net.gdface.facelog.client.thrift.PersonBean> input) {
+                    return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.PersonBean.class,
+                    PersonBean.class);
+                }},
+                new ServiceAsyncCall<List<net.gdface.facelog.client.thrift.PersonBean>>(){
+                @Override
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<List<net.gdface.facelog.client.thrift.PersonBean>> nativeCallback){
+                    service.getPersonsReal(TypeTransformer.getInstance().to(
+                    idList,
+                    Integer.class,
+                    Integer.class),TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
                 }});
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
@@ -3495,6 +3618,38 @@ public class IFaceLogThriftClient implements IFaceLog {
                 @Override
                 public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<List<net.gdface.facelog.client.thrift.PersonBean>> nativeCallback){
                     service.loadPersonByWhere(where,startRow,numRows,nativeCallback);
+                }});
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);
+        }
+    }
+    @Override
+    public List<PersonBean> loadPersonByWhere(final String where,
+        final int startRow,
+        final int numRows,
+        final Token token) 
+        {
+        try{
+            return syncCall(new Function<List<net.gdface.facelog.client.thrift.PersonBean>,List<PersonBean>>() {
+                @Override
+                public List<PersonBean> apply(List<net.gdface.facelog.client.thrift.PersonBean> input) {
+                    return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.PersonBean.class,
+                    PersonBean.class);
+                }},
+                new ServiceAsyncCall<List<net.gdface.facelog.client.thrift.PersonBean>>(){
+                @Override
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<List<net.gdface.facelog.client.thrift.PersonBean>> nativeCallback){
+                    service.loadPersonByWhereReal(where,startRow,numRows,TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class),nativeCallback);
                 }});
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){

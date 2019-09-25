@@ -40,6 +40,25 @@ public class FacelogDefaultImpl implements IFaceLog {
 	}
 	
 	@Override
+	public PersonBean getPerson(int personId, Token token) {
+		return null;
+	}
+	
+	@Override
+	public List<PersonBean> getPersons(List<Integer> idList, Token token) {
+		return null;
+	}
+
+	@Override
+	public PersonBean getPersonByPapersNum(String papersNum, Token token) {
+		return null;
+	}
+	
+	@Override
+	public PersonBean getPersonByMobilePhone(String mobilePhone, Token token) {
+		return null;
+	}
+	@Override
 	public List<Integer> getPersonsPermittedOnDevice(int deviceId, boolean ignoreSchedule, List<Integer> excludePersonIds, Long timestamp) {
 		return null;
 	}
@@ -118,6 +137,11 @@ public class FacelogDefaultImpl implements IFaceLog {
 		return null;
 	}
 
+	@Override
+	public List<PersonBean> loadPersonByWhere(String where, int startRow, int numRows, Token token) {
+		return null;
+	}
+	
 	@Override
 	public int countPersonByWhere(String where) {
 		return 0;

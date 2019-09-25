@@ -1739,6 +1739,31 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
+    public PersonBean getPerson(int personId,
+        Token token) 
+        {
+        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        try{
+            return TypeTransformer.getInstance().to(
+                    instance.getPersonReal(personId,
+                TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class)),
+                    net.gdface.facelog.client.thrift.PersonBean.class,
+                    PersonBean.class);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch(RuntimeTApplicationException e){
+            return net.gdface.thrift.ThriftUtils.returnNull(e);
+        }
+        finally{
+            factory.releaseInstance(instance);
+        }
+    }
+    @Override
     public PersonBean getPersonByMobilePhone(String mobilePhone) 
         {
         net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
@@ -1759,12 +1784,62 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
+    public PersonBean getPersonByMobilePhone(String mobilePhone,
+        Token token) 
+        {
+        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        try{
+            return TypeTransformer.getInstance().to(
+                    instance.getPersonByMobilePhoneReal(mobilePhone,
+                TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class)),
+                    net.gdface.facelog.client.thrift.PersonBean.class,
+                    PersonBean.class);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch(RuntimeTApplicationException e){
+            return net.gdface.thrift.ThriftUtils.returnNull(e);
+        }
+        finally{
+            factory.releaseInstance(instance);
+        }
+    }
+    @Override
     public PersonBean getPersonByPapersNum(String papersNum) 
         {
         net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
         try{
             return TypeTransformer.getInstance().to(
                     instance.getPersonByPapersNum(papersNum),
+                    net.gdface.facelog.client.thrift.PersonBean.class,
+                    PersonBean.class);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch(RuntimeTApplicationException e){
+            return net.gdface.thrift.ThriftUtils.returnNull(e);
+        }
+        finally{
+            factory.releaseInstance(instance);
+        }
+    }
+    @Override
+    public PersonBean getPersonByPapersNum(String papersNum,
+        Token token) 
+        {
+        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        try{
+            return TypeTransformer.getInstance().to(
+                    instance.getPersonByPapersNumReal(papersNum,
+                TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class)),
                     net.gdface.facelog.client.thrift.PersonBean.class,
                     PersonBean.class);
         }
@@ -1918,6 +1993,34 @@ public class IFaceLogThriftClient implements IFaceLog {
                     idList,
                     Integer.class,
                     Integer.class)),
+                    net.gdface.facelog.client.thrift.PersonBean.class,
+                    PersonBean.class);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch(RuntimeTApplicationException e){
+            return net.gdface.thrift.ThriftUtils.returnNull(e);
+        }
+        finally{
+            factory.releaseInstance(instance);
+        }
+    }
+    @Override
+    public List<PersonBean> getPersons(List<Integer> idList,
+        Token token) 
+        {
+        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        try{
+            return TypeTransformer.getInstance().to(
+                    instance.getPersonsReal(TypeTransformer.getInstance().to(
+                    idList,
+                    Integer.class,
+                    Integer.class),
+                TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class)),
                     net.gdface.facelog.client.thrift.PersonBean.class,
                     PersonBean.class);
         }
@@ -2651,6 +2754,35 @@ public class IFaceLogThriftClient implements IFaceLog {
                     instance.loadPersonByWhere(where,
                 startRow,
                 numRows),
+                    net.gdface.facelog.client.thrift.PersonBean.class,
+                    PersonBean.class);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch(RuntimeTApplicationException e){
+            return net.gdface.thrift.ThriftUtils.returnNull(e);
+        }
+        finally{
+            factory.releaseInstance(instance);
+        }
+    }
+    @Override
+    public List<PersonBean> loadPersonByWhere(String where,
+        int startRow,
+        int numRows,
+        Token token) 
+        {
+        net.gdface.facelog.client.thrift.IFaceLog instance = delegate();
+        try{
+            return TypeTransformer.getInstance().to(
+                    instance.loadPersonByWhereReal(where,
+                startRow,
+                numRows,
+                TypeTransformer.getInstance().to(
+                    token,
+                    Token.class,
+                    net.gdface.facelog.client.thrift.Token.class)),
                     net.gdface.facelog.client.thrift.PersonBean.class,
                     PersonBean.class);
         }
