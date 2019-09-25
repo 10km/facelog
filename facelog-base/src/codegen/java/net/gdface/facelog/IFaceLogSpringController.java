@@ -958,7 +958,7 @@ public class IFaceLogSpringController {
      * <br>{@code PERSON_ONLY}
      * @param personId
      * @param token 访问令牌
-     * @return 
+     * @return 删除成功返回1,否则返回0
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/deletePerson", method = RequestMethod.POST)
@@ -1219,7 +1219,7 @@ public class IFaceLogSpringController {
     /**
      * 判断是否存在personId指定的人员记录
      * @param persionId
-     * @return 
+     * @return true if exists,otherwise false
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/existsPerson", method = RequestMethod.POST)
@@ -1864,7 +1864,7 @@ public class IFaceLogSpringController {
     /**
      * 返回 persionId 关联的所有日志记录
      * @param personId fl_person.id
-     * @return 
+     * @return 日志记录列表
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/getLogBeansByPersonId", method = RequestMethod.POST)
@@ -2315,7 +2315,7 @@ public class IFaceLogSpringController {
     /**
      * 判断 personId 指定的人员记录是否过期
      * @param personId
-     * @return 
+     * @return true if disabled,otherwise false
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/isDisable", method = RequestMethod.POST)
@@ -2577,7 +2577,7 @@ public class IFaceLogSpringController {
     // port-106
     /**
      * 返回所有人员记录
-     * @return 
+     * @return 返回 fl_person.id 列表
      */
     @ResponseBody
     @RequestMapping(value = "/IFaceLog/loadAllPerson", method = RequestMethod.POST)

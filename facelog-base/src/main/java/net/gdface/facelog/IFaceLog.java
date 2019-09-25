@@ -84,7 +84,7 @@ public interface IFaceLog{
 	 * <br>{@code PERSON_ONLY}
 	 * @param personId
 	 * @param token 访问令牌
-	 * @return
+	 * @return 删除成功返回1,否则返回0
 	 */
 	public int deletePerson(int personId, Token token);
 
@@ -119,14 +119,14 @@ public interface IFaceLog{
 	/**
 	 * 判断是否存在personId指定的人员记录
 	 * @param persionId
-	 * @return
+	 * @return true if exists,otherwise false
 	 */
 	public boolean existsPerson(int persionId);
 
 	/**
 	 * 判断 personId 指定的人员记录是否过期
 	 * @param personId
-	 * @return
+	 * @return true if disabled,otherwise false
 	 */
 	public boolean isDisable(int personId);
 
@@ -184,13 +184,13 @@ public interface IFaceLog{
 	/**
 	 * 返回 persionId 关联的所有日志记录
 	 * @param personId fl_person.id
-	 * @return
+	 * @return 日志记录列表
 	 */
 	public List<LogBean> getLogBeansByPersonId(int personId);
 
 	/**
 	 * 返回所有人员记录
-	 * @return
+	 * @return 返回 fl_person.id 列表
 	 */
 	public List<Integer> loadAllPerson();
 
