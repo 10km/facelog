@@ -1041,7 +1041,8 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 	@Override
 	public byte[] getImageBytes(String primaryKey,String refType){
 		try {
-			return dm.daoGetImageBytes(primaryKey, RefSrcType.valueOf(MoreObjects.firstNonNull(refType,RefSrcType.DEFAULT.name())));
+			return dm.daoGetImageBytes(primaryKey, 
+					RefSrcType.valueOf(MoreObjects.firstNonNull(refType,RefSrcType.DEFAULT.name())));
 		} catch (Exception e) {
 			throw wrapServiceRuntimeException(e);
 		}
@@ -1054,7 +1055,15 @@ public class FaceLogImpl implements IFaceLog,ServiceConstant {
 			throw wrapServiceRuntimeException(e);
 		}
 	}
-
+	@Override
+	public ImageBean getImage(String imageMD5,String refType){
+		try{
+			return dm.daoGetImage(imageMD5,
+					RefSrcType.valueOf(MoreObjects.firstNonNull(refType,RefSrcType.DEFAULT.name())));
+		} catch (RuntimeException e) {
+			throw wrapServiceRuntimeException(e);
+		}
+	}
 	@Override
 	public List<String> getImagesAssociatedByFeature(String featureMd5){
 		try{

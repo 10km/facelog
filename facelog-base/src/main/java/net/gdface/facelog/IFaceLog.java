@@ -717,7 +717,7 @@ public interface IFaceLog{
 	 * 获取人员标准照<br>
 	 * <pre>getImageBytes(person_id,'PERSON')</pre>
 	 * @param primaryKey 数据库表的主键值,根据 refType的类型不同，primaryKey代表不同表的主键(类型为整数的主键需要转为十进制字符串)
-	 * @param refType 指定 primaryKey 的引用类型,如下
+	 * @param refType 指定 primaryKey 的引用类型,如下:
 	 * 					<ul>
 	 * 						<li>DEFAULT 返回 fl_image表指定的图像数据</li>
 	 * 						<li>IMAGE 返回 fl_image表指定的图像数据</li>
@@ -738,6 +738,23 @@ public interface IFaceLog{
 	 * @return {@link ImageBean} ,如果没有对应记录则返回null
 	 */	
 	public ImageBean getImage(String imageMD5);
+	/**
+	 * 根据图像的MD5校验码返回图像记录
+	 * @param imageMD5 数据库表的主键值,根据 refType的类型不同，primaryKey代表不同表的主键(类型为整数的主键需要转为十进制字符串)
+	 * @param refType 指定 primaryKey 的引用类型,如下:
+	 * 					<ul>
+	 * 						<li>DEFAULT 返回 fl_image表指定的图像数据</li>
+	 * 						<li>IMAGE 返回 fl_image表指定的图像数据</li>
+	 * 						<li>PERSON 返回 fl_person表中的image_md5字段指定的图像数据</li>
+	 * 						<li>FACE 返回 fl_face表中的image_md5字段指定的图像数据</li>
+	 * 						<li>LOG 返回 fl_log表中的compare_face字段间接指定的图像数据</li>
+	 * 						<li>LIGHT_LOG 返回 fl_log_light视图对应fl_log表记录中的compare_face字段的图像数据</li>
+	 * 					</ul>
+	 * 				<br>为{@code null}则默认为DEFAULT
+	 * @return {@link ImageBean} ,如果没有对应记录则返回null
+	 */	
+	@DeriveMethod(methodSuffix="Ref")
+	public ImageBean getImage(String imageMD5, String refType);
 	
 	/**
 	 * 返回featureMd5的人脸特征记录关联的所有图像记录id(MD5) 

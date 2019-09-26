@@ -13,6 +13,7 @@ import net.gdface.facelog.IFaceLog;
 import net.gdface.facelog.IFaceLogSpringController;
 import net.gdface.facelog.Version;
 import net.gdface.facelog.IFaceLogSpringController.InstanceSupplier;
+import net.gdface.facelog.ImageContolller;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -132,6 +133,7 @@ public class RestfulService {
 			public IFaceLog instanceOfIFaceLog() {
 				return facelogInstance;
 			}});
+		ImageContolller.setFacelogInstance(facelogInstance);
 	}
 	/**
 	 * @return swaggerEnable

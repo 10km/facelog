@@ -2185,6 +2185,33 @@ public class IFaceLogThriftClient implements IFaceLog {
         }
     }
     @Override
+    public ImageBean getImage(final String imageMD5,
+        final String refType) 
+        {
+        try{
+            return syncCall(new Function<net.gdface.facelog.client.thrift.ImageBean,ImageBean>() {
+                @Override
+                public ImageBean apply(net.gdface.facelog.client.thrift.ImageBean input) {
+                    return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.ImageBean.class,
+                    ImageBean.class);
+                }},
+                new ServiceAsyncCall<net.gdface.facelog.client.thrift.ImageBean>(){
+                @Override
+                public void call(net.gdface.facelog.client.thrift.IFaceLogClient service,ServiceMethodCallback<net.gdface.facelog.client.thrift.ImageBean> nativeCallback){
+                    service.getImageRef(imageMD5,refType,nativeCallback);
+                }});
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+        catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);
+        }
+    }
+    @Override
     public byte[] getImageBytes(final String imageMD5) 
         {
         try{

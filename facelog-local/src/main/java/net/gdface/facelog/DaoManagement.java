@@ -966,10 +966,20 @@ public class DaoManagement extends BaseDao implements ServiceConstant,Constant{
 	 * 根据提供的主键ID,返回图像数据
 	 * @param primaryKey 主键
 	 * @param refType 主键引用类型
-	 * @return
+	 * @return 二进制数据字节数组,如果数据库中没有对应的数据则返回null
 	 * @throws IOException
 	 */
 	protected byte[] daoGetImageBytes(String primaryKey,RefSrcType refType) throws IOException{
+		ImageBean bean = daoGetImage(primaryKey,refType);
+		return null == bean ? null : daoGetImageBytes(bean.getMd5());		
+	}
+	/**
+	 * 根据提供的主键ID,返回图像数据记录
+	 * @param primaryKey 主键
+	 * @param refType 主键引用类型
+	 * @return 图像数据记录
+	 */
+	protected ImageBean daoGetImage(String primaryKey,RefSrcType refType) {
 		checkArgument(refType!=null,"refType is null");
 		if(null == primaryKey){
 			return null;
@@ -979,31 +989,30 @@ public class DaoManagement extends BaseDao implements ServiceConstant,Constant{
 		case PERSON:
 		{
 			PersonBean bean = daoGetPerson(Integer.valueOf(primaryKey));
-			return null == bean ? null : daoGetImageBytes(bean.getImageMd5());
+			return null == bean ? null : daoGetImage(bean.getImageMd5());
 		}
 		case FACE:
 		{
 			FaceBean bean = daoGetFace(Integer.valueOf(primaryKey));
-			return null == bean ? null : daoGetImageBytes(bean.getImageMd5());
+			return null == bean ? null : daoGetImage(bean.getImageMd5());
 		}
 		case LOG:
 		{
 			LogBean bean = daoGetLog(Integer.valueOf(primaryKey));
-			return null == bean ? null : daoGetImageBytes(bean.getCompareFace() == null ? null : bean.getCompareFace().toString(),RefSrcType.FACE);
+			return null == bean ? null : daoGetImage(bean.getCompareFace() == null ? null : bean.getCompareFace().toString(),RefSrcType.FACE);
 		}
 		case LIGHT_LOG:
 		{
-			return daoGetImageBytes(primaryKey,RefSrcType.LOG);
+			return daoGetImage(primaryKey,RefSrcType.LOG);
 		}
 		case IMAGE:
 		case DEFAULT:
-			return daoGetImageBytes(primaryKey);
+			return daoGetImage(primaryKey);
 		default:
 			return null;
 		}
 		
 	}
-	
 	/**
 	 * 个人信息脱敏转换器
 	 */

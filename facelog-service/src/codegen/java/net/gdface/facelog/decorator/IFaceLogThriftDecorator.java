@@ -1670,6 +1670,27 @@ public class IFaceLogThriftDecorator {
         }
     }
     /**
+     * @see net.gdface.facelog.IFaceLog#getImage(java.lang.String,java.lang.String)
+     */
+    @ThriftMethod(value = "getImageRef" )
+    public ImageBean getImageRef(String imageMD5,
+        String refType) 
+        throws ServiceRuntimeException{
+        try{
+            return TypeTransformer.getInstance().to(
+                    delegate().getImage(imageMD5,
+                refType),
+                    ImageBean.class,
+                    ImageBean.class);
+        }
+        catch(ServiceRuntimeException e){
+            throw e;
+        }
+        catch(RuntimeException e){
+            throw new ServiceRuntimeException(e);
+        }
+    }
+    /**
      * @see net.gdface.facelog.IFaceLog#getImageBytes(java.lang.String)
      */
     @ThriftMethod(value = "getImageBytes" )

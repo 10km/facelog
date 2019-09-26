@@ -1541,6 +1541,31 @@ public class IFaceLogThriftClientAsync {
         factory.addCallback(getImage(imageMD5), callback);
     }
     /**
+     * see also {@link net.gdface.facelog.IFaceLog#getImage(java.lang.String,java.lang.String)}
+     */
+    public ListenableFuture<ImageBean> getImage(String imageMD5,
+        String refType){        
+        net.gdface.facelog.client.thrift.IFaceLog.Async async = delegate();
+        ListenableFuture<ImageBean> future = Futures.transform(
+            async.getImageRef(imageMD5,
+            refType),
+            new Function<net.gdface.facelog.client.thrift.ImageBean,ImageBean>(){
+                @Override
+                public ImageBean apply(net.gdface.facelog.client.thrift.ImageBean input) {
+                    return TypeTransformer.getInstance().to(
+                    input,
+                    net.gdface.facelog.client.thrift.ImageBean.class,
+                    ImageBean.class);
+                }
+            });
+        return factory.wrap(async,future);
+    }
+    public void getImage(String imageMD5,
+        String refType,
+        FutureCallback<ImageBean>callback){
+        factory.addCallback(getImage(imageMD5,refType), callback);
+    }
+    /**
      * see also {@link net.gdface.facelog.IFaceLog#getImageBytes(java.lang.String)}
      */
     public ListenableFuture<byte[]> getImageBytes(String imageMD5){        

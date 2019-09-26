@@ -393,6 +393,11 @@ public class FacelogDefaultImpl implements IFaceLog {
 	}
 
 	@Override
+	public ImageBean getImage(String imageMD5, String refType) {
+		return null;
+	}
+
+	@Override
 	public List<String> getImagesAssociatedByFeature(String featureMd5) {
 		return null;
 	}

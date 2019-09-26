@@ -682,6 +682,15 @@ public interface IFaceLog
             @ThriftField(value=2, name="refType", requiredness=Requiredness.OPTIONAL) final String refType
         );
 
+        @ThriftMethod(value = "getImageRef",
+                      exception = {
+                          @ThriftException(type=ServiceRuntimeException.class, id=1)
+                      })
+        ListenableFuture<ImageBean> getImageRef(
+            @ThriftField(value=1, name="imageMD5", requiredness=Requiredness.OPTIONAL) final String imageMD5,
+            @ThriftField(value=2, name="refType", requiredness=Requiredness.OPTIONAL) final String refType
+        );
+
         @ThriftMethod(value = "getImagesAssociatedByFeature",
                       exception = {
                           @ThriftException(type=ServiceRuntimeException.class, id=1)
@@ -2231,6 +2240,15 @@ public interface IFaceLog
                   })
     byte [] getImageBytesRef(
         @ThriftField(value=1, name="primaryKey", requiredness=Requiredness.OPTIONAL) final String primaryKey,
+        @ThriftField(value=2, name="refType", requiredness=Requiredness.OPTIONAL) final String refType
+    ) throws ServiceRuntimeException;
+
+    @ThriftMethod(value = "getImageRef",
+                  exception = {
+                      @ThriftException(type=ServiceRuntimeException.class, id=1)
+                  })
+    ImageBean getImageRef(
+        @ThriftField(value=1, name="imageMD5", requiredness=Requiredness.OPTIONAL) final String imageMD5,
         @ThriftField(value=2, name="refType", requiredness=Requiredness.OPTIONAL) final String refType
     ) throws ServiceRuntimeException;
 

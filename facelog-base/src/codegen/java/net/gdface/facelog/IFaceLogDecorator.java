@@ -607,6 +607,11 @@ public class IFaceLogDecorator implements IFaceLog{
     }
 
     @Override
+    public ImageBean getImage (String imageMD5,String refType) {
+        return delegate().getImage(imageMD5,refType);
+    }
+
+    @Override
     public byte[] getImageBytes (String imageMD5) {
         return delegate().getImageBytes(imageMD5);
     }

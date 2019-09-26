@@ -4617,6 +4617,60 @@ GType i_face_log_get_image_bytes_ref_result_get_type (void);
 #define IS_I_FACE_LOG_GET_IMAGE_BYTES_REF_RESULT_CLASS(c) (G_TYPE_CHECK_CLASS_TYPE ((c), TYPE_I_FACE_LOG_GET_IMAGE_BYTES_REF_RESULT))
 #define I_FACE_LOG_GET_IMAGE_BYTES_REF_RESULT_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_I_FACE_LOG_GET_IMAGE_BYTES_REF_RESULT, IFaceLogGetImageBytesRefResultClass))
 
+/* struct IFaceLogGetImageRefArgs */
+struct _IFaceLogGetImageRefArgs
+{ 
+  ThriftStruct parent; 
+
+  /* public */
+  gchar * imageMD5;
+  gboolean __isset_imageMD5;
+  gchar * refType;
+  gboolean __isset_refType;
+};
+typedef struct _IFaceLogGetImageRefArgs IFaceLogGetImageRefArgs;
+
+struct _IFaceLogGetImageRefArgsClass
+{
+  ThriftStructClass parent;
+};
+typedef struct _IFaceLogGetImageRefArgsClass IFaceLogGetImageRefArgsClass;
+
+GType i_face_log_get_image_ref_args_get_type (void);
+#define TYPE_I_FACE_LOG_GET_IMAGE_REF_ARGS (i_face_log_get_image_ref_args_get_type())
+#define I_FACE_LOG_GET_IMAGE_REF_ARGS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_I_FACE_LOG_GET_IMAGE_REF_ARGS, IFaceLogGetImageRefArgs))
+#define I_FACE_LOG_GET_IMAGE_REF_ARGS_CLASS(c) (G_TYPE_CHECK_CLASS_CAST ((c), _TYPE_I_FACE_LOG_GET_IMAGE_REF_ARGS, IFaceLogGetImageRefArgsClass))
+#define IS_I_FACE_LOG_GET_IMAGE_REF_ARGS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_I_FACE_LOG_GET_IMAGE_REF_ARGS))
+#define IS_I_FACE_LOG_GET_IMAGE_REF_ARGS_CLASS(c) (G_TYPE_CHECK_CLASS_TYPE ((c), TYPE_I_FACE_LOG_GET_IMAGE_REF_ARGS))
+#define I_FACE_LOG_GET_IMAGE_REF_ARGS_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_I_FACE_LOG_GET_IMAGE_REF_ARGS, IFaceLogGetImageRefArgsClass))
+
+/* struct IFaceLogGetImageRefResult */
+struct _IFaceLogGetImageRefResult
+{ 
+  ThriftStruct parent; 
+
+  /* public */
+  ImageBean * success;
+  gboolean __isset_success;
+  ServiceRuntimeException * ex1;
+  gboolean __isset_ex1;
+};
+typedef struct _IFaceLogGetImageRefResult IFaceLogGetImageRefResult;
+
+struct _IFaceLogGetImageRefResultClass
+{
+  ThriftStructClass parent;
+};
+typedef struct _IFaceLogGetImageRefResultClass IFaceLogGetImageRefResultClass;
+
+GType i_face_log_get_image_ref_result_get_type (void);
+#define TYPE_I_FACE_LOG_GET_IMAGE_REF_RESULT (i_face_log_get_image_ref_result_get_type())
+#define I_FACE_LOG_GET_IMAGE_REF_RESULT(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_I_FACE_LOG_GET_IMAGE_REF_RESULT, IFaceLogGetImageRefResult))
+#define I_FACE_LOG_GET_IMAGE_REF_RESULT_CLASS(c) (G_TYPE_CHECK_CLASS_CAST ((c), _TYPE_I_FACE_LOG_GET_IMAGE_REF_RESULT, IFaceLogGetImageRefResultClass))
+#define IS_I_FACE_LOG_GET_IMAGE_REF_RESULT(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_I_FACE_LOG_GET_IMAGE_REF_RESULT))
+#define IS_I_FACE_LOG_GET_IMAGE_REF_RESULT_CLASS(c) (G_TYPE_CHECK_CLASS_TYPE ((c), TYPE_I_FACE_LOG_GET_IMAGE_REF_RESULT))
+#define I_FACE_LOG_GET_IMAGE_REF_RESULT_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_I_FACE_LOG_GET_IMAGE_REF_RESULT, IFaceLogGetImageRefResultClass))
+
 /* struct IFaceLogGetImagesAssociatedByFeatureArgs */
 struct _IFaceLogGetImagesAssociatedByFeatureArgs
 { 

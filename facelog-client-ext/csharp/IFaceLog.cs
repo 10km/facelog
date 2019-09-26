@@ -91,6 +91,7 @@ public partial class IFaceLog {
     ImageBean getImage(string imageMD5);
     byte[] getImageBytes(string imageMD5);
     byte[] getImageBytesRef(string primaryKey, string refType);
+    ImageBean getImageRef(string imageMD5, string refType);
     List<string> getImagesAssociatedByFeature(string featureMd5);
     List<LogBean> getLogBeansByPersonId(int personId);
     PersonBean getPerson(int personId);
@@ -265,6 +266,7 @@ public partial class IFaceLog {
     Task<ImageBean> getImageAsync(string imageMD5);
     Task<byte[]> getImageBytesAsync(string imageMD5);
     Task<byte[]> getImageBytesRefAsync(string primaryKey, string refType);
+    Task<ImageBean> getImageRefAsync(string imageMD5, string refType);
     Task<List<string>> getImagesAssociatedByFeatureAsync(string featureMd5);
     Task<List<LogBean>> getLogBeansByPersonIdAsync(int personId);
     Task<PersonBean> getPersonAsync(int personId);
@@ -512,6 +514,8 @@ public partial class IFaceLog {
     byte[] End_getImageBytes(IAsyncResult asyncResult);
     IAsyncResult Begin_getImageBytesRef(AsyncCallback callback, object state, string primaryKey, string refType);
     byte[] End_getImageBytesRef(IAsyncResult asyncResult);
+    IAsyncResult Begin_getImageRef(AsyncCallback callback, object state, string imageMD5, string refType);
+    ImageBean End_getImageRef(IAsyncResult asyncResult);
     IAsyncResult Begin_getImagesAssociatedByFeature(AsyncCallback callback, object state, string featureMd5);
     List<string> End_getImagesAssociatedByFeature(IAsyncResult asyncResult);
     IAsyncResult Begin_getLogBeansByPersonId(AsyncCallback callback, object state, int personId);
@@ -5070,6 +5074,65 @@ public partial class IFaceLog {
         throw result.Ex1;
       }
       throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "getImageBytesRef failed: unknown result");
+    }
+
+    
+    public IAsyncResult Begin_getImageRef(AsyncCallback callback, object state, string imageMD5, string refType)
+    {
+      return send_getImageRef(callback, state, imageMD5, refType);
+    }
+
+    public ImageBean End_getImageRef(IAsyncResult asyncResult)
+    {
+      oprot_.Transport.EndFlush(asyncResult);
+      return recv_getImageRef();
+    }
+
+    public async Task<ImageBean> getImageRefAsync(string imageMD5, string refType)
+    {
+      ImageBean retval;
+      retval = await Task.Run(() =>
+      {
+        return getImageRef(imageMD5, refType);
+      });
+      return retval;
+    }
+
+    public ImageBean getImageRef(string imageMD5, string refType)
+    {
+      var asyncResult = Begin_getImageRef(null, null, imageMD5, refType);
+      return End_getImageRef(asyncResult);
+
+    }
+    public IAsyncResult send_getImageRef(AsyncCallback callback, object state, string imageMD5, string refType)
+    {
+      oprot_.WriteMessageBegin(new TMessage("getImageRef", TMessageType.Call, seqid_));
+      getImageRef_args args = new getImageRef_args();
+      args.ImageMD5 = imageMD5;
+      args.RefType = refType;
+      args.Write(oprot_);
+      oprot_.WriteMessageEnd();
+      return oprot_.Transport.BeginFlush(callback, state);
+    }
+
+    public ImageBean recv_getImageRef()
+    {
+      TMessage msg = iprot_.ReadMessageBegin();
+      if (msg.Type == TMessageType.Exception) {
+        TApplicationException x = TApplicationException.Read(iprot_);
+        iprot_.ReadMessageEnd();
+        throw x;
+      }
+      getImageRef_result result = new getImageRef_result();
+      result.Read(iprot_);
+      iprot_.ReadMessageEnd();
+      if (result.Success != null) {
+        return result.Success;
+      }
+      if (result.Ex1 != null) {
+        throw result.Ex1;
+      }
+      throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "getImageRef failed: unknown result");
     }
 
     
@@ -10881,6 +10944,7 @@ public partial class IFaceLog {
       processMap_["getImage"] = getImage_ProcessAsync;
       processMap_["getImageBytes"] = getImageBytes_ProcessAsync;
       processMap_["getImageBytesRef"] = getImageBytesRef_ProcessAsync;
+      processMap_["getImageRef"] = getImageRef_ProcessAsync;
       processMap_["getImagesAssociatedByFeature"] = getImagesAssociatedByFeature_ProcessAsync;
       processMap_["getLogBeansByPersonId"] = getLogBeansByPersonId_ProcessAsync;
       processMap_["getPerson"] = getPerson_ProcessAsync;
@@ -13604,6 +13668,41 @@ public partial class IFaceLog {
         Console.Error.WriteLine(ex.ToString());
         TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
         oprot.WriteMessageBegin(new TMessage("getImageBytesRef", TMessageType.Exception, seqid));
+        x.Write(oprot);
+      }
+      oprot.WriteMessageEnd();
+      oprot.Transport.Flush();
+    }
+
+    public async Task getImageRef_ProcessAsync(int seqid, TProtocol iprot, TProtocol oprot)
+    {
+      getImageRef_args args = new getImageRef_args();
+      args.Read(iprot);
+      iprot.ReadMessageEnd();
+      getImageRef_result result = new getImageRef_result();
+      try
+      {
+        try
+        {
+          result.Success = await iface_.getImageRefAsync(args.ImageMD5, args.RefType);
+        }
+        catch (ServiceRuntimeException ex1)
+        {
+          result.Ex1 = ex1;
+        }
+        oprot.WriteMessageBegin(new TMessage("getImageRef", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+      }
+      catch (TTransportException)
+      {
+        throw;
+      }
+      catch (Exception ex)
+      {
+        Console.Error.WriteLine("Error occurred in processor:");
+        Console.Error.WriteLine(ex.ToString());
+        TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
+        oprot.WriteMessageBegin(new TMessage("getImageRef", TMessageType.Exception, seqid));
         x.Write(oprot);
       }
       oprot.WriteMessageEnd();
@@ -17147,6 +17246,7 @@ public partial class IFaceLog {
       processMap_["getImage"] = getImage_Process;
       processMap_["getImageBytes"] = getImageBytes_Process;
       processMap_["getImageBytesRef"] = getImageBytesRef_Process;
+      processMap_["getImageRef"] = getImageRef_Process;
       processMap_["getImagesAssociatedByFeature"] = getImagesAssociatedByFeature_Process;
       processMap_["getLogBeansByPersonId"] = getLogBeansByPersonId_Process;
       processMap_["getPerson"] = getPerson_Process;
@@ -19870,6 +19970,41 @@ public partial class IFaceLog {
         Console.Error.WriteLine(ex.ToString());
         TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
         oprot.WriteMessageBegin(new TMessage("getImageBytesRef", TMessageType.Exception, seqid));
+        x.Write(oprot);
+      }
+      oprot.WriteMessageEnd();
+      oprot.Transport.Flush();
+    }
+
+    public void getImageRef_Process(int seqid, TProtocol iprot, TProtocol oprot)
+    {
+      getImageRef_args args = new getImageRef_args();
+      args.Read(iprot);
+      iprot.ReadMessageEnd();
+      getImageRef_result result = new getImageRef_result();
+      try
+      {
+        try
+        {
+          result.Success = iface_.getImageRef(args.ImageMD5, args.RefType);
+        }
+        catch (ServiceRuntimeException ex1)
+        {
+          result.Ex1 = ex1;
+        }
+        oprot.WriteMessageBegin(new TMessage("getImageRef", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+      }
+      catch (TTransportException)
+      {
+        throw;
+      }
+      catch (Exception ex)
+      {
+        Console.Error.WriteLine("Error occurred in processor:");
+        Console.Error.WriteLine(ex.ToString());
+        TApplicationException x = new TApplicationException      (TApplicationException.ExceptionType.InternalError," Internal error.");
+        oprot.WriteMessageBegin(new TMessage("getImageRef", TMessageType.Exception, seqid));
         x.Write(oprot);
       }
       oprot.WriteMessageEnd();
@@ -40198,6 +40333,228 @@ public partial class IFaceLog {
         __first = false;
         __sb.Append("Success: ");
         __sb.Append(Success);
+      }
+      if (Ex1 != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Ex1: ");
+        __sb.Append(Ex1== null ? "<null>" : Ex1.ToString());
+      }
+      __sb.Append(")");
+      return __sb.ToString();
+    }
+
+  }
+
+
+  #if !SILVERLIGHT
+  [Serializable]
+  #endif
+  public partial class getImageRef_args : TBase
+  {
+
+    public string ImageMD5 { get; set; }
+
+    public string RefType { get; set; }
+
+    public getImageRef_args() {
+    }
+
+    public void Read (TProtocol iprot)
+    {
+      iprot.IncrementRecursionDepth();
+      try
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 1:
+              if (field.Type == TType.String) {
+                ImageMD5 = iprot.ReadString();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 2:
+              if (field.Type == TType.String) {
+                RefType = iprot.ReadString();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+      finally
+      {
+        iprot.DecrementRecursionDepth();
+      }
+    }
+
+    public void Write(TProtocol oprot) {
+      oprot.IncrementRecursionDepth();
+      try
+      {
+        TStruct struc = new TStruct("getImageRef_args");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+        if (ImageMD5 != null) {
+          field.Name = "imageMD5";
+          field.Type = TType.String;
+          field.ID = 1;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteString(ImageMD5);
+          oprot.WriteFieldEnd();
+        }
+        if (RefType != null) {
+          field.Name = "refType";
+          field.Type = TType.String;
+          field.ID = 2;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteString(RefType);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+      finally
+      {
+        oprot.DecrementRecursionDepth();
+      }
+    }
+
+    public override string ToString() {
+      StringBuilder __sb = new StringBuilder("getImageRef_args(");
+      bool __first = true;
+      if (ImageMD5 != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("ImageMD5: ");
+        __sb.Append(ImageMD5);
+      }
+      if (RefType != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("RefType: ");
+        __sb.Append(RefType);
+      }
+      __sb.Append(")");
+      return __sb.ToString();
+    }
+
+  }
+
+
+  #if !SILVERLIGHT
+  [Serializable]
+  #endif
+  public partial class getImageRef_result : TBase
+  {
+
+    public ImageBean Success { get; set; }
+
+    public ServiceRuntimeException Ex1 { get; set; }
+
+    public getImageRef_result() {
+    }
+
+    public void Read (TProtocol iprot)
+    {
+      iprot.IncrementRecursionDepth();
+      try
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 0:
+              if (field.Type == TType.Struct) {
+                Success = new ImageBean();
+                Success.Read(iprot);
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 1:
+              if (field.Type == TType.Struct) {
+                Ex1 = new ServiceRuntimeException();
+                Ex1.Read(iprot);
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+      finally
+      {
+        iprot.DecrementRecursionDepth();
+      }
+    }
+
+    public void Write(TProtocol oprot) {
+      oprot.IncrementRecursionDepth();
+      try
+      {
+        TStruct struc = new TStruct("getImageRef_result");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+
+        if (this.Success != null) {
+          field.Name = "Success";
+          field.Type = TType.Struct;
+          field.ID = 0;
+          oprot.WriteFieldBegin(field);
+          Success.Write(oprot);
+          oprot.WriteFieldEnd();
+        } else if (this.Ex1 != null) {
+          field.Name = "Ex1";
+          field.Type = TType.Struct;
+          field.ID = 1;
+          oprot.WriteFieldBegin(field);
+          Ex1.Write(oprot);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+      finally
+      {
+        oprot.DecrementRecursionDepth();
+      }
+    }
+
+    public override string ToString() {
+      StringBuilder __sb = new StringBuilder("getImageRef_result(");
+      bool __first = true;
+      if (Success != null) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Success: ");
+        __sb.Append(Success== null ? "<null>" : Success.ToString());
       }
       if (Ex1 != null) {
         if(!__first) { __sb.Append(", "); }

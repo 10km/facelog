@@ -91,6 +91,7 @@ struct _IFaceLogIfInterface
   gboolean (*get_image) (IFaceLogIf *iface, ImageBean ** _return, const gchar * imageMD5, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*get_image_bytes) (IFaceLogIf *iface, GByteArray ** _return, const gchar * imageMD5, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*get_image_bytes_ref) (IFaceLogIf *iface, GByteArray ** _return, const gchar * primaryKey, const gchar * refType, ServiceRuntimeException ** ex1, GError **error);
+  gboolean (*get_image_ref) (IFaceLogIf *iface, ImageBean ** _return, const gchar * imageMD5, const gchar * refType, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*get_images_associated_by_feature) (IFaceLogIf *iface, GPtrArray ** _return, const gchar * featureMd5, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*get_log_beans_by_person_id) (IFaceLogIf *iface, GPtrArray ** _return, const gint32 personId, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*get_person) (IFaceLogIf *iface, PersonBean ** _return, const gint32 personId, ServiceRuntimeException ** ex1, GError **error);
@@ -271,6 +272,7 @@ gboolean i_face_log_if_get_group_permits (IFaceLogIf *iface, GPtrArray ** _retur
 gboolean i_face_log_if_get_image (IFaceLogIf *iface, ImageBean ** _return, const gchar * imageMD5, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_if_get_image_bytes (IFaceLogIf *iface, GByteArray ** _return, const gchar * imageMD5, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_if_get_image_bytes_ref (IFaceLogIf *iface, GByteArray ** _return, const gchar * primaryKey, const gchar * refType, ServiceRuntimeException ** ex1, GError **error);
+gboolean i_face_log_if_get_image_ref (IFaceLogIf *iface, ImageBean ** _return, const gchar * imageMD5, const gchar * refType, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_if_get_images_associated_by_feature (IFaceLogIf *iface, GPtrArray ** _return, const gchar * featureMd5, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_if_get_log_beans_by_person_id (IFaceLogIf *iface, GPtrArray ** _return, const gint32 personId, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_if_get_person (IFaceLogIf *iface, PersonBean ** _return, const gint32 personId, ServiceRuntimeException ** ex1, GError **error);
@@ -613,6 +615,9 @@ gboolean i_face_log_client_recv_get_image_bytes (IFaceLogIf * iface, GByteArray 
 gboolean i_face_log_client_get_image_bytes_ref (IFaceLogIf * iface, GByteArray ** _return, const gchar * primaryKey, const gchar * refType, ServiceRuntimeException ** ex1, GError ** error);
 gboolean i_face_log_client_send_get_image_bytes_ref (IFaceLogIf * iface, const gchar * primaryKey, const gchar * refType, GError ** error);
 gboolean i_face_log_client_recv_get_image_bytes_ref (IFaceLogIf * iface, GByteArray ** _return, ServiceRuntimeException ** ex1, GError ** error);
+gboolean i_face_log_client_get_image_ref (IFaceLogIf * iface, ImageBean ** _return, const gchar * imageMD5, const gchar * refType, ServiceRuntimeException ** ex1, GError ** error);
+gboolean i_face_log_client_send_get_image_ref (IFaceLogIf * iface, const gchar * imageMD5, const gchar * refType, GError ** error);
+gboolean i_face_log_client_recv_get_image_ref (IFaceLogIf * iface, ImageBean ** _return, ServiceRuntimeException ** ex1, GError ** error);
 gboolean i_face_log_client_get_images_associated_by_feature (IFaceLogIf * iface, GPtrArray ** _return, const gchar * featureMd5, ServiceRuntimeException ** ex1, GError ** error);
 gboolean i_face_log_client_send_get_images_associated_by_feature (IFaceLogIf * iface, const gchar * featureMd5, GError ** error);
 gboolean i_face_log_client_recv_get_images_associated_by_feature (IFaceLogIf * iface, GPtrArray ** _return, ServiceRuntimeException ** ex1, GError ** error);
@@ -994,6 +999,7 @@ struct _IFaceLogHandlerClass
   gboolean (*get_image) (IFaceLogIf *iface, ImageBean ** _return, const gchar * imageMD5, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*get_image_bytes) (IFaceLogIf *iface, GByteArray ** _return, const gchar * imageMD5, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*get_image_bytes_ref) (IFaceLogIf *iface, GByteArray ** _return, const gchar * primaryKey, const gchar * refType, ServiceRuntimeException ** ex1, GError **error);
+  gboolean (*get_image_ref) (IFaceLogIf *iface, ImageBean ** _return, const gchar * imageMD5, const gchar * refType, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*get_images_associated_by_feature) (IFaceLogIf *iface, GPtrArray ** _return, const gchar * featureMd5, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*get_log_beans_by_person_id) (IFaceLogIf *iface, GPtrArray ** _return, const gint32 personId, ServiceRuntimeException ** ex1, GError **error);
   gboolean (*get_person) (IFaceLogIf *iface, PersonBean ** _return, const gint32 personId, ServiceRuntimeException ** ex1, GError **error);
@@ -1176,6 +1182,7 @@ gboolean i_face_log_handler_get_group_permits (IFaceLogIf *iface, GPtrArray ** _
 gboolean i_face_log_handler_get_image (IFaceLogIf *iface, ImageBean ** _return, const gchar * imageMD5, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_handler_get_image_bytes (IFaceLogIf *iface, GByteArray ** _return, const gchar * imageMD5, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_handler_get_image_bytes_ref (IFaceLogIf *iface, GByteArray ** _return, const gchar * primaryKey, const gchar * refType, ServiceRuntimeException ** ex1, GError **error);
+gboolean i_face_log_handler_get_image_ref (IFaceLogIf *iface, ImageBean ** _return, const gchar * imageMD5, const gchar * refType, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_handler_get_images_associated_by_feature (IFaceLogIf *iface, GPtrArray ** _return, const gchar * featureMd5, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_handler_get_log_beans_by_person_id (IFaceLogIf *iface, GPtrArray ** _return, const gint32 personId, ServiceRuntimeException ** ex1, GError **error);
 gboolean i_face_log_handler_get_person (IFaceLogIf *iface, PersonBean ** _return, const gint32 personId, ServiceRuntimeException ** ex1, GError **error);

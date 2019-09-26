@@ -297,6 +297,7 @@ service IFaceLog {
   ImageBean getImage(1: optional string imageMD5) throws (1: ServiceRuntimeException ex1);
   binary getImageBytes(1: optional string imageMD5) throws (1: ServiceRuntimeException ex1);
   binary getImageBytesRef(1: optional string primaryKey, 2: optional string refType) throws (1: ServiceRuntimeException ex1);
+  ImageBean getImageRef(1: optional string imageMD5, 2: optional string refType) throws (1: ServiceRuntimeException ex1);
   list<string> getImagesAssociatedByFeature(1: optional string featureMd5) throws (1: ServiceRuntimeException ex1);
   list<LogBean> getLogBeansByPersonId(1: required i32 personId) throws (1: ServiceRuntimeException ex1);
   PersonBean getPerson(1: required i32 personId) throws (1: ServiceRuntimeException ex1);
