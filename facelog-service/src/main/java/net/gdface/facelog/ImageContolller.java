@@ -1,5 +1,6 @@
 package net.gdface.facelog;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -46,14 +47,20 @@ public class ImageContolller {
 			+ "\tLOG 返回 fl_log表中的compare_face字段间接指定的图像数据"
 			+ "\tLIGHT_LOG 返回 fl_log_light视图对应fl_log表记录中的compare_face字段的图像数据"
 			+ "pk: 数据库表的主键值,根据 refType的类型不同，pk代表不同表的主键"
-			,httpMethod="GET")
+			,httpMethod="GET",produces = MediaType.TEXT_PLAIN_VALUE 
+					+ "," + MediaType.IMAGE_GIF_VALUE 
+					+","+ MediaType.IMAGE_PNG_VALUE 
+					+","+ MediaType.IMAGE_JPEG_VALUE)
 	public ResponseEntity<byte[]> getImage(@PathVariable("refType") String refType,@PathVariable("pk") String pk) {
 		checkState(facelogInstance != null,"facelogInstance is uninitizlied");
 		ImageBean bean = facelogInstance.getImage(pk, refType);
-		MediaType mediaType = MediaType.TEXT_PLAIN;
-		byte[] image = ERROR_IMAGE.get();
+		MediaType mediaType;
+		byte[] binary;
+		HttpStatus httpStatus = HttpStatus.OK;
 		if(null != bean && bean.getFormat() != null){
-			switch(bean.getFormat().toLowerCase()){
+			binary =facelogInstance.getImageBytes(bean.getMd5());
+			String format = bean.getFormat().toLowerCase();
+			switch(format){
 			case "gif":
 				mediaType = MediaType.IMAGE_GIF;
 				break;
@@ -65,12 +72,17 @@ public class ImageContolller {
 				mediaType = MediaType.IMAGE_JPEG;
 				break;
 			default:
+				httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+				mediaType = MediaType.TEXT_PLAIN;
+				binary = String.format("INVALID image format %s for image record %s",format,bean.getMd5()).getBytes();
 				break;
-			}
-		
-			image =facelogInstance.getImageBytes(bean.getMd5());		    
+			}					    
+		}else{
+			httpStatus = HttpStatus.NOT_FOUND;
+			mediaType = MediaType.IMAGE_JPEG;
+			binary = ERROR_IMAGE.get();
 		}
-		return ResponseEntity.ok().contentType(mediaType).body(image);
+		return ResponseEntity.status(httpStatus).contentType(mediaType).body(binary);
 	}
 
 	/**
