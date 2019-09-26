@@ -37,15 +37,15 @@ public class ImageContolller {
 	public ImageContolller() {
 	}
 	@RequestMapping(value = "/{refType:\\w+}/{pk:\\w+}", method = RequestMethod.GET)
-	@ApiOperation(value = "根据提供的主键ID,返回图像数据,请求格式/${refType}/${pk}\n"
-			+ "比如获取用户(id=100)的标准照路径为 /IFaceLog/image/PERSON/100"
-			+"refType: 指定 primaryKey 的引用类型,如下:\n"
-			+ "\tDEFAULT 返回 fl_image表指定的图像数据"
-			+ "\tIMAGE 返回 fl_image表指定的图像数据\n"
-			+ "\tPERSON 返回 fl_person表中的image_md5字段指定的图像数据"
-			+ "\tFACE 返回 fl_face表中的image_md5字段指定的图像数据"
-			+ "\tLOG 返回 fl_log表中的compare_face字段间接指定的图像数据"
-			+ "\tLIGHT_LOG 返回 fl_log_light视图对应fl_log表记录中的compare_face字段的图像数据"
+	@ApiOperation(value="根据提供的主键ID,返回图像数据",notes = "请求格式/${refType}/${pk}  \n"
+			+ "比如获取用户(id=100)的标准照路径为 '/IFaceLog/image/PERSON/100'<br />"
+			+"refType: 指定 pk 的引用类型,如下:  \n"
+			+ "    DEFAULT: 返回 fl_image表指定的图像数据;  \n"
+			+ "    IMAGE: 返回 fl_image表指定的图像数据;  \n"
+			+ "    PERSON: 返回 fl_person表中的image_md5字段指定的图像数据;  \n"
+			+ "    FACE: 返回 fl_face表中的image_md5字段指定的图像数据;  \n"
+			+ "    LOG: 返回 fl_log表中的compare_face字段间接指定的图像数据;  \n"
+			+ "    LIGHT_LOG: 返回 fl_log_light视图对应fl_log表记录中的compare_face字段的图像数据  \n"
 			+ "pk: 数据库表的主键值,根据 refType的类型不同，pk代表不同表的主键"
 			,httpMethod="GET",produces = MediaType.TEXT_PLAIN_VALUE 
 					+ "," + MediaType.IMAGE_GIF_VALUE 
